@@ -95,6 +95,9 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
                 return HttpResult.error(null, "该机构下拥有用户,不可禁用!");
             }
         }
+        if(CheckUtils.isNullOrEmpty(e.getExtJson())){
+            e.setExtJson(null);
+        }
         return super.update(e, check, request, response);
     }
 
