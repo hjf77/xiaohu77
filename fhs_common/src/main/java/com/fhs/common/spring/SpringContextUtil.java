@@ -78,7 +78,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         }
     }
 
-  /**
+    /**
      * 根据类名获取到bean(实际对象)
      *
      * @param <T>
@@ -88,7 +88,7 @@ public class SpringContextUtil implements ApplicationContextAware {
      */
     public static <T> T getBeanByClass(Class<T> clazz) throws BeansException {
         try {
-            return (T)getTarget(applicationContext.getBean(clazz));
+            return (T) getTarget(applicationContext.getBean(clazz));
         } catch (Exception e) {
             log.error("获取对象错误:" + e.getMessage());
             return null;
@@ -146,7 +146,7 @@ public class SpringContextUtil implements ApplicationContextAware {
      * @return
      * @throws Exception
      */
-    public static Object getTarget(Object proxy)  {
+    public static Object getTarget(Object proxy) {
         if (!AopUtils.isAopProxy(proxy)) {
             return proxy;//不是代理对象
         }

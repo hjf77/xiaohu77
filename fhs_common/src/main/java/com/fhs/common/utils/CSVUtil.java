@@ -36,19 +36,17 @@ public class CSVUtil {
     /**
      * 将检索数据输出的对应的csv列中
      */
-    public static String formatCsvData(List<?> data,String[] fields,String title) {
+    public static String formatCsvData(List<?> data, String[] fields, String title) {
 
         StringBuffer buf = new StringBuffer();
         StringBuffer bufTitle = new StringBuffer();
         bufTitle.append(title).append(CSV_RN);
         int dataCount = data.size();
         int successCount = 0;
-        for (Object obj : data)
-        {
+        for (Object obj : data) {
             Class<?> objClass = obj.getClass();
             try {
-                for (int i = 0; i < fields.length; i++)
-                {
+                for (int i = 0; i < fields.length; i++) {
                     String name = fields[i];
                     String getMethodName = "get" + toFirstLetterUpperCase(name);
                     try {
@@ -68,21 +66,20 @@ public class CSVUtil {
                         }
 
                     } catch (Exception e) {
-                        log.error("导出cvs异常:{}",e);
+                        log.error("导出cvs异常:{}", e);
                         return null;
                     }
                 }
                 buf.append(CSV_RN);
             } catch (Exception e) {
-                log.error("导出cvs异常:{}",e);
+                log.error("导出cvs异常:{}", e);
                 return null;
             }
             successCount++;
         }
-        if(dataCount<successCount)
-        {
+        if (dataCount < successCount) {
             log.error("导出数据不完整");
-            return  null;
+            return null;
         }
         bufTitle.append(buf);
         return bufTitle.toString();
@@ -91,19 +88,17 @@ public class CSVUtil {
     /**
      * 将检索数据输出的对应的csv列中
      */
-    public static String formatCsvData4Map(List<Map<String, Object>> data,String[] fields,String title) {
+    public static String formatCsvData4Map(List<Map<String, Object>> data, String[] fields, String title) {
 
         StringBuffer buf = new StringBuffer();
         StringBuffer bufTitle = new StringBuffer();
         bufTitle.append(title).append(CSV_RN);
         int dataCount = data.size();
         int successCount = 0;
-        for (Map<String, Object> map : data)
-        {
+        for (Map<String, Object> map : data) {
 
             try {
-                for (int i = 0; i < fields.length; i++)
-                {
+                for (int i = 0; i < fields.length; i++) {
                     try {
 
                         String value = ConverterUtils.toString(map.get(fields[i]));
@@ -121,21 +116,20 @@ public class CSVUtil {
                         }
 
                     } catch (Exception e) {
-                        log.error("导出cvs异常:{}",e);
+                        log.error("导出cvs异常:{}", e);
                         return null;
                     }
                 }
                 buf.append(CSV_RN);
             } catch (Exception e) {
-                log.error("导出cvs异常:{}",e);
+                log.error("导出cvs异常:{}", e);
                 return null;
             }
             successCount++;
         }
-        if(dataCount<successCount)
-        {
+        if (dataCount < successCount) {
             log.error("导出数据不完整");
-            return  null;
+            return null;
         }
         bufTitle.append(buf);
         return bufTitle.toString();
@@ -169,7 +163,7 @@ public class CSVUtil {
         FileInputStream fileInputStream = null;
         try {
             String code = codeString(f);
-            fileInputStream =  new FileInputStream(f);
+            fileInputStream = new FileInputStream(f);
             fr = new InputStreamReader(fileInputStream, code);
             br = new BufferedReader(fr);
             while ((rec = br.readLine()) != null) {

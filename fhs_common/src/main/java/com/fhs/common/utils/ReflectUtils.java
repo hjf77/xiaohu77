@@ -56,11 +56,11 @@ public class ReflectUtils {
             field.setAccessible(true);
             field.set(obj, value);
         } catch (SecurityException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalArgumentException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalAccessException e) {
-            log.error("",e);
+            log.error("", e);
         }
     }
 
@@ -74,7 +74,7 @@ public class ReflectUtils {
         try {
             return cls.newInstance();
         } catch (Exception ex) {
-            log.error("",ex);
+            log.error("", ex);
         }
         return null;
     }
@@ -178,11 +178,11 @@ public class ReflectUtils {
                 }
             }
         } catch (SecurityException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalArgumentException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalAccessException e) {
-            log.error("",e);
+            log.error("", e);
         }
         return Constant.EMPTY;
     }
@@ -218,11 +218,11 @@ public class ReflectUtils {
                 }
             }
         } catch (SecurityException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalArgumentException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalAccessException e) {
-            log.error("",e);
+            log.error("", e);
         }
         return Constant.EMPTY;
     }
@@ -293,12 +293,13 @@ public class ReflectUtils {
 
     /**
      * 根据名称获取method
+     *
      * @param clazz class
-     * @param name 方法名称
+     * @param name  方法名称
      * @return
      */
-    public static Method  getMethodd(Class<?> clazz,String name){
-        List<Method> methods = Arrays.asList(clazz.getMethods()).stream().filter(method->{
+    public static Method getMethodd(Class<?> clazz, String name) {
+        List<Method> methods = Arrays.asList(clazz.getMethods()).stream().filter(method -> {
             return name.equals(method.getName());
         }).collect(Collectors.toList());
         return methods.isEmpty() ? null : methods.get(0);

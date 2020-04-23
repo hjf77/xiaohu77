@@ -2,10 +2,9 @@ package com.fhs.common.utils;
 
 import java.util.regex.Pattern;
 
-public class HtmlUtil
-{
+public class HtmlUtil {
     public static String removeHtmlTag(String inputString) {
-        if (inputString == null){
+        if (inputString == null) {
             return null;
         }
         String htmlStr = inputString; // 含html标签的字符串
@@ -43,13 +42,13 @@ public class HtmlUtil
             p_special = Pattern.compile(regEx_special, Pattern.CASE_INSENSITIVE);
             m_special = p_special.matcher(htmlStr);
             htmlStr = m_special.replaceAll(""); // 过滤特殊标签
-            p_space = Pattern.compile(regEx_space , Pattern.CASE_INSENSITIVE);
-            m_space  = p_space.matcher(htmlStr);
+            p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
+            m_space = p_space.matcher(htmlStr);
             htmlStr = m_space.replaceAll("");
             textStr = htmlStr;
         } catch (Exception e) {
             e.printStackTrace();
         }
-            return textStr;// 返回文本字符串
-        }
+        return textStr;// 返回文本字符串
+    }
 }

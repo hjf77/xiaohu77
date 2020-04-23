@@ -31,10 +31,11 @@ public class Base64Util {
 
     /**
      * byte数组转base64字符串
+     *
      * @param bytes
      * @return
      */
-    public static String byte2Base64(byte[] bytes){
+    public static String byte2Base64(byte[] bytes) {
         try {
             return new String(Base64.getEncoder().encode(bytes), "UTF8");
         } catch (UnsupportedEncodingException e) {

@@ -3,6 +3,7 @@ package com.fhs.common.utils;
 import com.fhs.common.constant.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
@@ -44,12 +45,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @param fileName 显示的文件名
      */
     public static void download(String path, HttpServletResponse response, String fileName) {
-        download( new File(path),  response,  fileName);
+        download(new File(path), response, fileName);
     }
 
     /**
      * 下载js
-     * @param path 文件路径
+     *
+     * @param path     文件路径
      * @param response
      */
     public static void jsDownload(String path, HttpServletResponse response) {
@@ -64,6 +66,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * BufferedImage 转byte数组
+     *
      * @param bImage
      * @return
      */
@@ -108,7 +111,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             }
             toClient.flush();
         } catch (IOException ex) {
-            log.error("download error",ex);
+            log.error("download error", ex);
         } finally {
             closeInputStream(inputStream);
         }
@@ -144,7 +147,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         try {
             downloadInputStream(new FileInputStream(file), response, fileName, file.length());
         } catch (FileNotFoundException e) {
-            log.error("文件不存在",e);
+            log.error("文件不存在", e);
         }
     }
 
@@ -154,7 +157,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @param response response
      * @param fileName 文件名称
      */
-    public static void initResponseHeader(HttpServletResponse response, String fileName, long length){
+    public static void initResponseHeader(HttpServletResponse response, String fileName, long length) {
         fileName = formartFileName(fileName);
         // 清空response
         response.reset();
@@ -166,7 +169,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
                 response.setHeader("Content-Disposition",
                         disposition + ";filename=" + URLEncoder.encode(fileName, "utf-8"));
             } catch (UnsupportedEncodingException e) {
-                log.error("initResponseHeader set error",e);
+                log.error("initResponseHeader set error", e);
             }
 
         }
@@ -266,7 +269,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             try {
                 os.close();
             } catch (IOException e) {
-                log.error("关闭输出流错误",e);
+                log.error("关闭输出流错误", e);
             }
         }
     }
@@ -281,7 +284,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             try {
                 is.close();
             } catch (IOException e) {
-                log.error("关闭输入流错误",e);
+                log.error("关闭输入流错误", e);
             }
         }
     }
@@ -412,7 +415,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             }
             return true;
         } catch (IOException e) {
-            log.error("",e);
+            log.error("", e);
         }
         return false;
 
@@ -437,9 +440,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             bos.write(byteArray);
             bos.flush();
         } catch (FileNotFoundException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IOException e) {
-            log.error("",e);
+            log.error("", e);
         } finally {
             closeOutputStream(bos);
             closeOutputStream(fos);
@@ -534,15 +537,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
                 out.write(b);
                 out.flush();
             } catch (Exception e) {
-                log.error("base save error",e);
+                log.error("base save error", e);
                 return false;
-            }
-            finally {
+            } finally {
                 closeOutputStream(out);
             }
             return true;
         } catch (Exception e) {
-            log.error("base save error",e);
+            log.error("base save error", e);
             return false;
         }
     }
@@ -564,7 +566,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             }
             br.close();
         } catch (Exception e) {
-            log.error("readTxt Error",e);
+            log.error("readTxt Error", e);
         }
         return result.toString();
     }

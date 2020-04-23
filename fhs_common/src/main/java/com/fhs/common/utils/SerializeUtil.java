@@ -5,8 +5,7 @@ import java.io.*;
 /**
  * 序列化反序列化工具类
  */
-public class SerializeUtil
-{
+public class SerializeUtil {
     /**
      * 序列化
      *
@@ -57,10 +56,10 @@ public class SerializeUtil
     public static boolean serializeToFile(Object data, String filePath) {
         FileOutputStream out = null;
         ObjectOutputStream oos = null;
-        File file=new File(filePath);
+        File file = new File(filePath);
         try {
-            if(!file.exists()){
-                if(!file.getParentFile().exists()){
+            if (!file.exists()) {
+                if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
                 file.createNewFile();
@@ -77,6 +76,7 @@ public class SerializeUtil
         }
         return false;
     }
+
     /**
      * 序列化
      *
@@ -87,9 +87,9 @@ public class SerializeUtil
         FileInputStream in;
         ObjectInputStream ois;
         try {
-            File file=new File(filePath);
-            if(!file.exists()){
-               return null;
+            File file = new File(filePath);
+            if (!file.exists()) {
+                return null;
             }
             in = new FileInputStream(file);
             ois = new ObjectInputStream(in);

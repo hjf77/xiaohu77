@@ -19,16 +19,24 @@ import java.util.Set;
  */
 public class SpringClassScanner {
 
-    /** the file type to scan : .class */
+    /**
+     * the file type to scan : .class
+     */
     public static final String RESOURCE_PATTERN = "**/*.class";
 
-    /** packages to scan */
+    /**
+     * packages to scan
+     */
     private Set<String> scanPackages;
 
-    /** more filters with relation default and */
+    /**
+     * more filters with relation default and
+     */
     private Set<TypeFilter> typeFilters;
 
-    /** filterAll or filterWhether */
+    /**
+     * filterAll or filterWhether
+     */
     private boolean filterFlag = true;
 
     private SpringClassScanner() {
@@ -71,7 +79,9 @@ public class SpringClassScanner {
         }
     }
 
-    /** must to be every one of filters is matched,return true */
+    /**
+     * must to be every one of filters is matched,return true
+     */
     private boolean filterAll(MetadataReader reader, MetadataReaderFactory readerFactory) throws IOException {
         if (!this.typeFilters.isEmpty()) {
             for (TypeFilter filter : this.typeFilters) {
@@ -84,7 +94,9 @@ public class SpringClassScanner {
         return false;
     }
 
-    /** if any one of filters is matched,return true */
+    /**
+     * if any one of filters is matched,return true
+     */
     private boolean filterWhether(MetadataReader reader, MetadataReaderFactory readerFactory) throws IOException {
         if (!this.typeFilters.isEmpty()) {
             for (TypeFilter filter : this.typeFilters) {
@@ -121,7 +133,9 @@ public class SpringClassScanner {
         }
     }
 
-    /** getter and setter */
+    /**
+     * getter and setter
+     */
     public Set<String> getScanPackages() {
         return scanPackages;
     }

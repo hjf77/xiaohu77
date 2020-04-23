@@ -117,10 +117,11 @@ public class DateUtils {
 
     /**
      * 计算现在到某一个日期的间隔天数
+     *
      * @param endDate
      * @return
      */
-    public static long getSubDasy(Date endDate,Date start){
+    public static long getSubDasy(Date endDate, Date start) {
         String[] currentStr = new SimpleDateFormat("yyyy-MM-dd").format(start).split("-");
         String[] endStr = new SimpleDateFormat("yyyy-MM-dd").format(endDate).split("-");
         Integer currentYear = Integer.parseInt(currentStr[0]);
@@ -129,13 +130,14 @@ public class DateUtils {
         Integer endYear = Integer.parseInt(endStr[0]);
         Integer endMonth = Integer.parseInt(endStr[1]);
         Integer endDay = Integer.parseInt(endStr[2]);
-        LocalDate endLocalDate = LocalDate.of(endYear,endMonth,endDay);
-        LocalDate startLocalDate = LocalDate.of(currentYear,currentMonth,currentDay);
+        LocalDate endLocalDate = LocalDate.of(endYear, endMonth, endDay);
+        LocalDate startLocalDate = LocalDate.of(currentYear, currentMonth, currentDay);
         return startLocalDate.until(endLocalDate, ChronoUnit.DAYS);
     }
 
     /**
      * 获取多少天之前的日期
+     *
      * @param date  日期
      * @param count 多少天
      * @return 多少天之前的日期
@@ -149,9 +151,9 @@ public class DateUtils {
     }
 
 
-
     /**
      * 获取某天当天凌晨0点0分0秒0毫秒 的时间戳
+     *
      * @param date 日期
      * @return 当天凌晨0点0分0秒0毫秒 的时间戳
      */
@@ -331,21 +333,22 @@ public class DateUtils {
 
     /**
      * 分钟数转x天x小时x分钟
-     * @param menuts    分钟数
+     *
+     * @param menuts 分钟数
      * @return
      */
 
-    public static String timeCount(int menuts){
+    public static String timeCount(int menuts) {
         StringBuilder builder = new StringBuilder();
-        if(menuts > 0){
+        if (menuts > 0) {
             int dayMenuts = (60 * 24);
             int day = menuts / dayMenuts;
-            int hour = (menuts - (day*dayMenuts))/60 ;
-            int min = menuts -((day*dayMenuts))-hour*60 ;
+            int hour = (menuts - (day * dayMenuts)) / 60;
+            int min = menuts - ((day * dayMenuts)) - hour * 60;
             builder.append(day != 0 ? day + "天" : "");
             builder.append(hour != 0 ? hour + "小时" : "");
             builder.append(min != 0 ? min + "分钟" : "");
-        }else{
+        } else {
             builder.append("0分钟");
         }
         return builder.toString();
@@ -607,7 +610,7 @@ public class DateUtils {
      * @return source大于目录，返回true,否则返回false
      */
     public static boolean compareDate(String source, String target) {
-        return compareDate( source,  target, DATETIME_PATTERN_DATE);
+        return compareDate(source, target, DATETIME_PATTERN_DATE);
     }
 
     /**
@@ -617,7 +620,7 @@ public class DateUtils {
      * @param target target
      * @return source大于目录，返回true,否则返回false
      */
-    public static boolean compareDate(String source, String target,String formart) {
+    public static boolean compareDate(String source, String target, String formart) {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formart);
             Date sourceDate = simpleDateFormat.parse(source);
@@ -754,12 +757,13 @@ public class DateUtils {
 
     /**
      * 计算开始和结束相差的月份(小数)
-     * @param startDate  开始日期
-     * @param endDate 结束日期
+     *
+     * @param startDate   开始日期
+     * @param endDate     结束日期
      * @param dateFormart 格式化
      * @return 相差的月份
      */
-    public static BigDecimal computeMonth(String startDate, String endDate,String dateFormart) {
+    public static BigDecimal computeMonth(String startDate, String endDate, String dateFormart) {
         LocalDate beginDateTime = LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dateFormart));
         //结束时间plusDays(1)加一天
         LocalDate endDateTime = LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dateFormart)).plusDays(1);
@@ -778,27 +782,24 @@ public class DateUtils {
         return monthNum;
     }
 
-  
 
     /**
      * 集合中 多个字段的 日期格式
+     *
      * @param needFormartData 需要转换信息的
-     * @param sourceFormart 源日期格式
-     * @param targetFormart 目标日期格式
-     * @param fields 字段集合
+     * @param sourceFormart   源日期格式
+     * @param targetFormart   目标日期格式
+     * @param fields          字段集合
      * @return 转换好日期格式的集合
      */
-    public static <T> List<T> formartListFieldDate(List<T> needFormartData,String sourceFormart,String targetFormart,String... fields)
-    {
-        needFormartData.forEach(obj->{
-            for(String field:fields)
-            {
-                String dateStr = ConverterUtils.toString(ReflectUtils.getValue(obj,field),null);
-                if(dateStr==null)
-                {
+    public static <T> List<T> formartListFieldDate(List<T> needFormartData, String sourceFormart, String targetFormart, String... fields) {
+        needFormartData.forEach(obj -> {
+            for (String field : fields) {
+                String dateStr = ConverterUtils.toString(ReflectUtils.getValue(obj, field), null);
+                if (dateStr == null) {
                     continue;
                 }
-                ReflectUtils.setValue(obj,field,convert( dateStr, sourceFormart,targetFormart));
+                ReflectUtils.setValue(obj, field, convert(dateStr, sourceFormart, targetFormart));
             }
         });
         return needFormartData;
@@ -806,14 +807,14 @@ public class DateUtils {
 
     /**
      * 转换日期格式从sourceFormart 转换为targetFormart
-     * @param dateStr 日期字符串
+     *
+     * @param dateStr       日期字符串
      * @param sourceFormart 源格式
      * @param targetFormart 转换后的格式
      * @return
      */
-    public static String convert(String dateStr,String sourceFormart,String targetFormart)
-    {
-        return  DateUtils.formartDate(DateUtils.parseStr(dateStr,sourceFormart),targetFormart);
+    public static String convert(String dateStr, String sourceFormart, String targetFormart) {
+        return DateUtils.formartDate(DateUtils.parseStr(dateStr, sourceFormart), targetFormart);
     }
 
     /**

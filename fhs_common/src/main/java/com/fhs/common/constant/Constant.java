@@ -8,8 +8,7 @@ package com.fhs.common.constant;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface Constant
-{
+public interface Constant {
     /**
      * 禁用
      */
@@ -21,7 +20,7 @@ public interface Constant
     /**
      * 验证码生成几位参数
      */
-    int VERIFYING_CODE_NUM =5;
+    int VERIFYING_CODE_NUM = 5;
 
 
     /**
@@ -35,15 +34,15 @@ public interface Constant
     int INT_TRUE = 1;
 
     /**
-     *  否
+     * 否
      */
-    int  INT_FALSE = 0;
+    int INT_FALSE = 0;
     /**
      * 是
      */
     String STR_YES = "1";
     /**
-     *  否
+     * 否
      */
     String STR_NO = "0";
 
@@ -100,7 +99,7 @@ public interface Constant
     /**
      * 小
      */
-    int SMALL =-1;
+    int SMALL = -1;
 
     /**
      * 等于
@@ -134,14 +133,13 @@ public interface Constant
     String END = "end";
 
 
-
     /**
      * 接口调用成功代码
      */
     int SUCCESS_CODE = 200;
 
     /**
-     *接口调用失败代码
+     * 接口调用失败代码
      */
     int DEFEAT_CODE = 300;
 
@@ -186,7 +184,7 @@ public interface Constant
     Boolean BFALSE = false;
 
     /**
-     *是
+     * 是
      */
     String STR_TRUE = "true";
 
@@ -223,7 +221,6 @@ public interface Constant
     String VIEW = "view";
 
 
-
     /**
      * 斜杠
      */
@@ -240,12 +237,12 @@ public interface Constant
     String CENTER_LINE = "-";
 
     /**
-     *字典
+     * 字典
      */
-    String WORD_BOOK  = "wordbook";
+    String WORD_BOOK = "wordbook";
 
     /**
-     *用户信息
+     * 用户信息
      */
     String USER_INFO = "sysUser";
 
@@ -307,7 +304,6 @@ public interface Constant
      * 验证码过期
      */
     int CODE_OVERDUE = 201;
-
 
 
     /**
@@ -387,7 +383,7 @@ public interface Constant
     int GET_DATA_FAIL = 2;
 
     /**
-     *用于查询所有数据
+     * 用于查询所有数据
      */
     int PAGE_ALL = -1;
 

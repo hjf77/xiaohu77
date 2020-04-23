@@ -5,15 +5,12 @@ import java.util.UUID;
 /**
  * 格式化订单号
  */
-public class OrderNumUtils
-{
+public class OrderNumUtils {
 
-    public static String getOrderIdByUUId()
-    {
+    public static String getOrderIdByUUId() {
         int machineId = 1;// 最大支持1-9个集群机器部署
         int hashCodeV = UUID.randomUUID().toString().hashCode();
-        if (hashCodeV < 0)
-        {// 有可能是负数
+        if (hashCodeV < 0) {// 有可能是负数
             hashCodeV = -hashCodeV;
         }
         // 0 代表前面补充0
@@ -23,8 +20,7 @@ public class OrderNumUtils
     }
 
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         System.out.println(getOrderIdByUUId());
     }
 }

@@ -47,7 +47,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(byteContent);
             return Base64.encodeBase64String(result);
         } catch (Exception e) {
-            log.error("解密错误:"  + content + ",pass:" + password,e);
+            log.error("解密错误:" + content + ",pass:" + password, e);
         }
         return null;
     }
@@ -61,8 +61,8 @@ public class AESUtil {
      * @return
      * @throws BadPaddingException 解析失败,秘钥和验证码不匹配
      */
-    public static String decrypt(String content, String password)  {
-        if(password==null){
+    public static String decrypt(String content, String password) {
+        if (password == null) {
             password = "123456";
         }
         try {
@@ -77,9 +77,9 @@ public class AESUtil {
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
             cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
-            return new String(result,"utf-8"); // 加密
+            return new String(result, "utf-8"); // 加密
         } catch (Exception e) {
-            log.error("加密错误:"  + content + ",pass:" + password,e);
+            log.error("加密错误:" + content + ",pass:" + password, e);
         }
         return null;
     }

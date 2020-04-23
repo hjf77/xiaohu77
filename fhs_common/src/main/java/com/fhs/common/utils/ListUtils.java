@@ -16,20 +16,18 @@ import java.util.List;
  * @since [产品/模块版本]
  */
 @Slf4j
-public class ListUtils
-{
+public class ListUtils {
 
 
     /**
      * 将字符串集合转换成整数集合
+     *
      * @param list
      * @return
      */
-    public static List<Integer> listStringToInteger(List<String> list)
-    {
+    public static List<Integer> listStringToInteger(List<String> list) {
         List<Integer> result = new ArrayList<Integer>();
-        for (int i = 0; i < list.size(); i++)
-        {
+        for (int i = 0; i < list.size(); i++) {
             result.add(ConverterUtils.toInteger(list.get(i)));
         }
         return result;
@@ -37,15 +35,14 @@ public class ListUtils
 
     /**
      * 将list bean 中的一个字段 拼接成一个list
-     * @param list 需要转换的list
+     *
+     * @param list  需要转换的list
      * @param field 字段名字
      * @return list的每一个bean get field 的结果add到一个list中
      */
-    public static List<String> appendField(List<? extends Object> list,String field)
-    {
+    public static List<String> appendField(List<? extends Object> list, String field) {
         List<String> result = new ArrayList<>();
-        for(Object object : list)
-        {
+        for (Object object : list) {
             result.add(ConverterUtils.toString(ReflectUtils.getValue(object, field)));
         }
         return result;
@@ -53,15 +50,14 @@ public class ListUtils
 
     /**
      * 数组转list
-     * @param array  需要转list的数组
+     *
+     * @param array 需要转list的数组
      * @param <T>
      * @return list
      */
-    public static <T> List<T> array2List(T[] array)
-    {
+    public static <T> List<T> array2List(T[] array) {
         List<T> result = new ArrayList<>();
-        for(T t:array)
-        {
+        for (T t : array) {
             result.add(t);
         }
         return result;
@@ -70,13 +66,14 @@ public class ListUtils
 
     /**
      * 将entityList转换成modelList
+     *
      * @param fromList
      * @param tClass
      * @param <F>
      * @param <T>
      * @return
      */
-    public static<F,T> List<T> copyListToList(List<F> fromList, Class<T> tClass) {
+    public static <F, T> List<T> copyListToList(List<F> fromList, Class<T> tClass) {
         if (fromList.isEmpty()) {
             return new ArrayList<>();
         }
@@ -92,20 +89,21 @@ public class ListUtils
 
     /**
      * 把子类copy为父类  语法糖
-     * @param fromList  子类list
-     * @param tClass 父类class
+     *
+     * @param fromList 子类list
+     * @param tClass   父类class
      * @param <F>
      * @param <T>
      * @return
      */
-    public static<T> List<T> copyListToPararentList(List<?> fromList, Class<T> tClass){
+    public static <T> List<T> copyListToPararentList(List<?> fromList, Class<T> tClass) {
         List tempList = fromList;
         return tempList;
     }
 
-    private static<F,T> T entityToModel(F entity, Class<T> modelClass) {
+    private static <F, T> T entityToModel(F entity, Class<T> modelClass) {
         T model = null;
-        if (entity == null || modelClass ==null) {
+        if (entity == null || modelClass == null) {
             return null;
         }
         try {
