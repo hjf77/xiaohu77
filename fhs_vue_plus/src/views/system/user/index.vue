@@ -28,9 +28,9 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
+          <el-form-item label="用户名称" prop="userLoginName">
             <el-input
-              v-model="queryParams.userName"
+              v-model="queryParams.userLoginName"
               placeholder="请输入用户名称"
               clearable
               size="small"
@@ -38,9 +38,9 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="手机号码" prop="phonenumber">
+          <el-form-item label="手机号码" prop="mobile">
             <el-input
-              v-model="queryParams.phonenumber"
+              v-model="queryParams.mobile"
               placeholder="请输入手机号码"
               clearable
               size="small"
@@ -48,9 +48,9 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="状态" prop="status">
+          <el-form-item label="状态" prop="isEnable">
             <el-select
-              v-model="queryParams.status"
+              v-model="queryParams.isEnable"
               placeholder="用户状态"
               clearable
               size="small"
@@ -58,9 +58,9 @@
             >
               <el-option
                 v-for="dict in statusOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
+                :key="dict.wordbookDesc"
+                :label="dict.wordbookDesc"
+                :value="dict.wordbookCode"
               />
             </el-select>
           </el-form-item>
@@ -109,7 +109,7 @@
               size="mini"
               :disabled="multiple"
               @click="handleDelete"
-              v-hasPermi="['system:user:remove']"
+              hasPermi="['system:user:remove']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -134,16 +134,16 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="40" align="center" />
-          <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
-          <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
+          <el-table-column label="用户昵称" align="center" prop="userName" :show-overflow-tooltip="true" />
+          <el-table-column label="用户名称" align="center" prop="userLoginName" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" prop="transMap.orgName" :show-overflow-tooltip="true" />
           <el-table-column label="手机号码" align="center" prop="mobile" width="120" />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.isEnable"
-                active-value=1
-                inactive-value=0
+                :active-value="0"
+                :inactive-value="1"
                 @change="handleStatusChange(scope.row)"
               ></el-switch>
             </template>
@@ -201,18 +201,18 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户昵称" prop="nickName">
-              <el-input v-model="form.nickName" placeholder="请输入用户昵称" />
+            <el-form-item label="用户昵称" prop="userName">
+              <el-input v-model="form.userName" placeholder="请输入用户昵称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="归属部门" prop="deptId">
-              <treeselect v-model="form.deptId" :options="deptOptions" placeholder="请选择归属部门" />
+            <el-form-item label="归属部门" prop="organizationId"  >
+              <treeselect v-model="form.organizationId" :options="deptOptions" @select="selectRole"  placeholder="请选择归属部门"  :normalizer="normalizer" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phonenumber">
-              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            <el-form-item label="手机号码" prop="mobile">
+              <el-input v-model="form.mobile" placeholder="请输入手机号码" maxlength="11" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -221,12 +221,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" />
+            <el-form-item label="用户名称" prop="userLoginName">
+              <el-input v-model="form.userLoginName" placeholder="请输入用户名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
+            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="pkey">
               <el-input v-model="form.password" placeholder="请输入用户密码" type="password" />
             </el-form-item>
           </el-col>
@@ -237,17 +237,17 @@
                   v-for="dict in sexOptions"
                   :value="dict.wordbookCode"
                   :label="dict.wordbookDesc"
-                ></el-option>
+                >{{dict.wordbookDesc}}</el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
+              <el-radio-group v-model="form.isEnable">
                 <el-radio
                   v-for="dict in statusOptions"
                   :value="dict.wordbookCode"
-                  :label="dict.wordbookDesc"
+                  :label="dict.wordbookCode"
                 >{{dict.wordbookDesc}}</el-radio>
               </el-radio-group>
             </el-form-item>
@@ -261,20 +261,19 @@
                   :key="item.postId"
                   :label="item.postName"
                   :value="item.postId"
-                  :disabled="item.status == 1"
+                  :disabled="item.isEnable == 1"
                 ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="角色">
+            <el-form-item label="角色" prop="roleIds" >
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
                 <el-option
                   v-for="item in roleOptions"
                   :key="item.roleId"
                   :label="item.roleName"
                   :value="item.roleId"
-                  :disabled="item.status == 1"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -327,6 +326,7 @@
 
 <script>
 import { listUser, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
+import {getSelectOrganSysRoles } from "@/api/system/role";
 import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
@@ -375,6 +375,14 @@ export default {
         children: "children",
         label: "text"
       },
+        //给表单部门tree改别名
+       normalizer(node) {
+            return {
+                id : node.id,
+                label: node.text,
+                children: node.children,
+            }
+        },
       // 用户导入参数
       upload: {
         // 是否显示弹出层（用户导入）
@@ -394,23 +402,23 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        userName: undefined,
-        phonenumber: undefined,
-        status: undefined,
-        deptId: undefined
+        userLoginName: undefined,
+        mobile: undefined,
+        isEnable: undefined,
+        organizationId: undefined
       },
       // 表单校验
       rules: {
-        userName: [
+          userLoginName: [
           { required: true, message: "用户名称不能为空", trigger: "blur" }
         ],
-        nickName: [
+        userName: [
           { required: true, message: "用户昵称不能为空", trigger: "blur" }
         ],
-        deptId: [
+          organizationId: [
           { required: true, message: "归属部门不能为空", trigger: "blur" }
         ],
-        password: [
+          password: [
           { required: true, message: "用户密码不能为空", trigger: "blur" }
         ],
         email: [
@@ -421,14 +429,17 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        phonenumber: [
+        mobile: [
           { required: true, message: "手机号码不能为空", trigger: "blur" },
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
             message: "请输入正确的手机号码",
             trigger: "blur"
           }
-        ]
+        ],
+          roleIds: [
+              { required: true, message: "角色不能为空", trigger: "blur" }
+          ]
       }
     };
   },
@@ -436,7 +447,8 @@ export default {
     // 根据名称筛选部门树
     deptName(val) {
       this.$refs.tree.filter(val);
-    }
+    },
+      
   },
   created() {
     this.getList();
@@ -460,11 +472,18 @@ export default {
         }
       );
     },
+      /** 根据部门id查询角色*/
+      selectRole(val) {
+          this.roleOptions = [];
+          this.form.roleIds = [];
+          getSelectOrganSysRoles(val.id).then(response => {
+                  this.roleOptions = response;
+              })
+      },
     /** 查询部门下拉树结构 */
     getTreeselect() {
       treeselect().then(response => {
         this.deptOptions = response;
-
       });
     },
     // 筛选节点
@@ -474,23 +493,24 @@ export default {
     },
     // 节点单击事件
     handleNodeClick(data) {
-      this.queryParams.deptId = data.id;
+      this.queryParams.organizationId = data.id;
       this.getList();
     },
     // 用户状态修改
     handleStatusChange(row) {
-      let text = row.isEnable === 0 ? "启用" : "停用";
-      this.$confirm('确认要"' + text + '""' + row.userName + '"用户吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+    debugger
+        let text = row.isEnable === 0 ? '禁用' : '启用'
+        this.$confirm('确认要"' + text + '""' + row.name + '"部门吗?', '警告', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
         }).then(function() {
-          return changeUserStatus(row.userId, row.isEnable);
+            return updateUser(row)
         }).then(() => {
-          this.msgSuccess(text + "成功");
+            this.msgSuccess(text + '成功')
         }).catch(function() {
-          row.isEnable = row.status === 0 ? 1 : 0;
-        });
+            row.isEnable = row.isEnable === 0 ? 1 : 0
+        })
     },
     // 取消按钮
     cancel() {
@@ -503,12 +523,12 @@ export default {
         userId: undefined,
         deptId: undefined,
         userName: undefined,
-        nickName: undefined,
+        userLoginName: undefined,
         password: undefined,
-        phonenumber: undefined,
+        mobile: undefined,
         email: undefined,
         sex: undefined,
-        status: "0",
+        isEnable: '0',
         remark: undefined,
         postIds: [],
         roleIds: []
@@ -537,25 +557,30 @@ export default {
       this.reset();
       this.getTreeselect();
       this.open = true;
-      getUser().then(response => {
-        this.postOptions = response.posts;
-        this.roleOptions = response.roles;
-        this.title = "添加用户";
-        this.form.password = this.initPassword;
-      });
+      this.title = "添加用户";
+      this.form.password = this.initPassword;
+
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       this.getTreeselect();
       const userId = row.userId || this.ids;
+      this.open = true;
       getUser(userId).then(response => {
-        this.form = response.data;
-        this.postOptions = response.posts;
-        this.roleOptions = response.roles;
-        this.form.postIds = response.postIds;
-        this.form.roleIds = response.roleIds;
-        this.open = true;
+        this.form = response;
+         getSelectOrganSysRoles(response.organizationId).then(response => {
+              this.roleOptions = response;
+         });
+        var roleidArray =[];
+        var roles= response.roleList;
+        for (var item in roles){
+           var role = roles[item].replace("'"," ").replace("'"," ");
+            roleidArray.push(Number(role));
+        }
+        this.form.roleIds = roleidArray;
+          this.form.sex = response.sex.toString();
+          this.form.isEnable = response.isEnable.toString();
         this.title = "修改用户";
         this.form.password = "";
       });
@@ -579,6 +604,8 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+            var roleIds = this.form.roleIds.join(',');
+            this.form.roleIds = roleIds;
           if (this.form.userId != undefined) {
             updateUser(this.form).then(response => {
               if (response.code === 200) {
@@ -606,7 +633,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const userIds = row.userId || this.ids;
-      this.$confirm('是否确认删除用户编号为"' + userIds + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除用户的数据吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

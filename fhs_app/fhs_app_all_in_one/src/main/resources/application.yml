@@ -49,9 +49,12 @@ fhs:
 
   activiti:
     createtb: false #是否创建表
+
 spring:
   main:
     allow-bean-definition-overriding: true
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
   application:
     name: fhs_admin_app
   http:

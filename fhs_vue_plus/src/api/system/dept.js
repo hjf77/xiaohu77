@@ -12,7 +12,7 @@ export function listDept(query) {
 // 查询部门详细
 export function getDept(deptId) {
   return request({
-    url: '/system/dept/' + deptId,
+    url: '/ms/sysOrganization/info/' + deptId,
     method: 'get'
   })
 }
@@ -36,7 +36,7 @@ export function roleDeptTreeselect(roleId) {
 // 新增部门
 export function addDept(data) {
   return request({
-    url: '/system/dept',
+    url: '/ms/sysOrganization/insertOrganization',
     method: 'post',
     data: data
   })
@@ -45,7 +45,7 @@ export function addDept(data) {
 // 修改部门
 export function updateDept(data) {
   return request({
-    url: '/system/dept',
+    url: '/ms/sysOrganization/update',
     method: 'put',
     data: data
   })
@@ -54,7 +54,7 @@ export function updateDept(data) {
 // 删除部门
 export function delDept(deptId) {
   return request({
-    url: '/system/dept/' + deptId,
+    url: '/ms/sysOrganization/del?id=' + deptId,
     method: 'delete'
   })
 }
