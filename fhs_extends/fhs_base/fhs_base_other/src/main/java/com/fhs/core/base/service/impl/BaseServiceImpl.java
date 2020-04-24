@@ -5,6 +5,7 @@ import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.CacheUpdateManager;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.common.constant.Constant;
@@ -32,6 +33,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -102,6 +104,12 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
         } else if (this.getClass().isAnnotationPresent(Namespace.class)) {
             this.namespace = this.getClass().getAnnotation(Namespace.class).value();
+        }else if (this.getClass().isAnnotationPresent(AutoTrans.class)) {
+            this.namespace = this.getClass().getAnnotation(AutoTrans.class).namespace();
+        }else if (this.getTypeArgumentsClass(1).isAnnotationPresent(Table.class)) {
+            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(Table.class).name().replace("t_","");
+        }else if (this.getTypeArgumentsClass(1).isAnnotationPresent(TableName.class)) {
+            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(TableName.class).value().replace("t_","");
         }
     }
 

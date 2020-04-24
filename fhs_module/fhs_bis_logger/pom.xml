@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhs_module</artifactId>
+        <groupId>com.fhs-opensource</groupId>
+        <version>2.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <version>2.0.0</version>
+    <modules>
+        <module>fhs_bis_logger_api</module>
+        <module>fhs_bis_logger_pojo</module>
+        <module>fhs_bis_logger_service</module>
+        <module>fhs_bis_logger_web</module>
+    </modules>
+    <artifactId>fhs_bis_logger</artifactId>
+    <description>
+        系统登录日志和操作日志模块
+    </description>
+
+</project>

@@ -17,6 +17,7 @@
         <module>fhs_task</module>
         <module>fhs_front</module>
         <module>fhs_flow</module>
+        <module>fhs_bis_logger</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 
