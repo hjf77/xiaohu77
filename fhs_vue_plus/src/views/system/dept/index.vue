@@ -38,6 +38,7 @@
           hasPermi="['system:dept:add']"
         >新增
         </el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -104,7 +105,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="部门名称" prop="deptName">
+            <el-form-item label="部门名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入部门名称"/>
             </el-form-item>
           </el-col>
@@ -154,7 +155,7 @@
         statusOptions: [],
         // 查询参数
         queryParams: {
-          deptName: undefined,
+          name: undefined,
           isEnable: undefined
         },
         // 表单参数
@@ -164,8 +165,8 @@
           parentId: [
             { required: true, message: '上级部门不能为空', trigger: 'blur' }
           ],
-          ranking: [
-            { required: true, message: '菜单顺序不能为空', trigger: 'blur' }
+          name: [
+            { required: true, message: '部门名称不能为空', trigger: 'blur' }
           ],
         }
       }
@@ -204,7 +205,6 @@
       },
       // 字典状态字典翻译
       statusFormat(row, column) {
-        debugger;
         return this.selectDictLabel(this.statusOptions, row.isEnable)
       },
       // 取消按钮
@@ -225,6 +225,13 @@
       /** 搜索按钮操作 */
       handleQuery() {
         this.getList()
+      },
+      /** 重置按钮操作 */
+      resetQuery() {
+        this.queryParams.name = [];
+        this.queryParams.isEnable = [];
+        this.resetForm("queryForm");
+        this.handleQuery();
       },
       /** 新增按钮操作 */
       handleAdd(row) {
