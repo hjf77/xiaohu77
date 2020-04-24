@@ -142,8 +142,8 @@
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.isEnable"
-                active-value=1
-                inactive-value=0
+                :active-value="0"
+                :inactive-value="1"
                 @change="handleStatusChange(scope.row)"
               ></el-switch>
             </template>
@@ -207,7 +207,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="归属部门" prop="organizationId"  >
-              <treeselect v-model="form.organizationId" :options="deptOptions" placeholder="请选择归属部门"  :normalizer="normalizer" />
+              <treeselect v-model="form.organizationId" :options="deptOptions" @select="selectRole"  placeholder="请选择归属部门"  :normalizer="normalizer" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -267,7 +267,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="角色">
+            <el-form-item label="角色" prop="roleIds" >
               <el-select v-model="form.roleIds" multiple placeholder="请选择">
                 <el-option
                   v-for="item in roleOptions"
@@ -448,8 +448,7 @@ export default {
     deptName(val) {
       this.$refs.tree.filter(val);
     },
-
-      'form.organizationId': 'currDeptChange'
+      
   },
   created() {
     this.getList();
@@ -474,13 +473,12 @@ export default {
       );
     },
       /** 根据部门id查询角色*/
-      currDeptChange(val) {
-
+      selectRole(val) {
           this.roleOptions = [];
           this.form.roleIds = [];
-          getSelectOrganSysRoles(val).then(response => {
-              this.roleOptions = response;
-          });
+          getSelectOrganSysRoles(val.id).then(response => {
+                  this.roleOptions = response;
+              })
       },
     /** 查询部门下拉树结构 */
     getTreeselect() {
@@ -500,18 +498,19 @@ export default {
     },
     // 用户状态修改
     handleStatusChange(row) {
-      let text = row.isEnable === 0 ? "启用" : "停用";
-      this.$confirm('确认要"' + text + '""' + row.userName + '"用户吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+    debugger
+        let text = row.isEnable === 0 ? '禁用' : '启用'
+        this.$confirm('确认要"' + text + '""' + row.name + '"部门吗?', '警告', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
         }).then(function() {
-          return changeUserStatus(row.userId, row.isEnable);
+            return updateUser(row)
         }).then(() => {
-          this.msgSuccess(text + "成功");
+            this.msgSuccess(text + '成功')
         }).catch(function() {
-          row.isEnable = row.status === 0 ? 1 : 0;
-        });
+            row.isEnable = row.isEnable === 0 ? 1 : 0
+        })
     },
     // 取消按钮
     cancel() {
@@ -529,7 +528,7 @@ export default {
         mobile: undefined,
         email: undefined,
         sex: undefined,
-        isEnable: 0,
+        isEnable: '0',
         remark: undefined,
         postIds: [],
         roleIds: []
@@ -634,7 +633,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const userIds = row.userId || this.ids;
-      this.$confirm('是否确认删除用户编号为"' + userIds + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除用户的数据吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
