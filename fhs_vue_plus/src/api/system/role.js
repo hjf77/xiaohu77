@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 
 // 查询角色列表
 export function listRole(query) {
@@ -9,6 +9,8 @@ export function listRole(query) {
     params: query
   })
 }
+
+
 
 // 查询角色详细
 export function getRole(roleId) {
@@ -72,5 +74,12 @@ export function exportRole(query) {
     url: '/system/role/export',
     method: 'get',
     params: query
+  })
+}
+// 根据机构id获取角色下拉框数据
+export function getSelectOrganSysRoles(organizationId) {
+  return request({
+    url: '/ms/sysRole/getSelectOrganSysRoles/'+organizationId,
+    method: 'get',
   })
 }

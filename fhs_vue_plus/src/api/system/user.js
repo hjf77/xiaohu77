@@ -13,15 +13,17 @@ export function listUser(query) {
 // 查询用户详细
 export function getUser(userId) {
   return request({
-    url: '/system/user/' + praseStrEmpty(userId),
+    url: '/ms/sysUser/info/' + praseStrEmpty(userId),
     method: 'get'
   })
 }
 
+
+
 // 新增用户
 export function addUser(data) {
   return request({
-    url: '/system/user',
+    url: '/ms/sysUser/addUser',
     method: 'post',
     data: data
   })
@@ -29,8 +31,10 @@ export function addUser(data) {
 
 // 修改用户
 export function updateUser(data) {
+  debugger
+  data.roles = [];
   return request({
-    url: '/system/user',
+    url: '/ms/sysUser/updateUser',
     method: 'put',
     data: data
   })
@@ -39,7 +43,7 @@ export function updateUser(data) {
 // 删除用户
 export function delUser(userId) {
   return request({
-    url: '/system/user/' + userId,
+    url: 'ms/sysUser/delSysUser?id=' + userId,
     method: 'delete'
   })
 }
