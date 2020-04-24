@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :inline="true">
+    <el-form :model="queryParams" ref="queryForm" :inline="true">
       <el-form-item label="部门名称">
         <el-input
           v-model="queryParams.name"
@@ -228,8 +228,7 @@
       },
       /** 重置按钮操作 */
       resetQuery() {
-        this.queryParams.name = [];
-        this.queryParams.isEnable = [];
+        this.queryParams = {};
         this.resetForm("queryForm");
         this.handleQuery();
       },
