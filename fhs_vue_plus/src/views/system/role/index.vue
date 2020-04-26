@@ -132,7 +132,6 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -153,6 +152,8 @@
         roleList: [],
         // 总条数
         total: 0,
+        //顶层元素
+        fatherId: undefined,
         // 弹出层标题
         title: '',
         // 是否显示弹出层
@@ -194,20 +195,21 @@
           ],
           organizationId: [
             { required: true, message: '部门归属不能为空', trigger: 'blur' }
-          ],
-          methods: [
-            { required: true, message: '权限不能为空', trigger: 'blur' }
           ]
         }
       }
     },
     created() {
-      this.getTreeselect()
-      this.queryParams.organizationId = '001'
-      this.getList()
+      this.getTreeselect();
       this.getDicts('is_enable').then(response => {
         this.statusOptions = response
       })
+    },
+    mounted(){
+      setTimeout(() => {
+        this.queryParams.organizationId = this.fatherId
+        this.getList()
+      }, 500);
     },
     methods: {
       /** 查询角色列表 */
@@ -231,6 +233,7 @@
       getTreeselect() {
         treeselect().then(response => {
           this.deptOptions = response
+          this.fatherId = response[0].id;
         })
       },
       // 筛选节点
@@ -292,10 +295,7 @@
       handleUpdate(row) {
         this.reset()
         this.getTreeselect()
-        const roleId = row.roleId || this.ids
-        this.$nextTick(() => {
-          this.getRoleMenuTreeselect(roleId)
-        })
+        const roleId = row.roleId
         this.getMenuTreeselect()
         getRole(roleId).then(response => {
           this.form = response
