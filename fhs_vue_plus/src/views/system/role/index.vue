@@ -121,10 +121,6 @@
           </el-col>
 
           <el-col :span="24">
-           <treeTable></treeTable>
-          </el-col>
-
-          <el-col :span="24">
             <el-form-item label="备注">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
@@ -148,7 +144,7 @@
 
   export default {
     name: 'Role',
-    components: { Treeselect,TreeTableAuthor },
+    components: { Treeselect },
     data() {
       return {
         // 遮罩层
