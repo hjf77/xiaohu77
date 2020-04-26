@@ -144,7 +144,6 @@
   import { listRole, getRole, delRole, addRole, updateRole, dataScope } from '@/api/system/role'
   import { treeselect } from '@/api/system/dept'
   import Treeselect from '@riophae/vue-treeselect'
-  import TreeTableAuthor from '@/components/TreeTableAuthor'
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
   export default {
