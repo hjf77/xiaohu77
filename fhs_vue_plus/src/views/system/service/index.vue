@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="服务名称" prop="roleName">
+      <el-form-item label="服务名称" prop="serverName">
         <el-input
-          v-model="queryParams.roleName"
+          v-model="queryParams.serverName"
           placeholder="请输入服务名称"
           clearable
           size="small"
@@ -11,7 +11,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="创建时间">
+      <!--<el-form-item label="创建时间">
         <el-date-picker
           v-model="dateRange"
           size="small"
@@ -22,7 +22,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -79,13 +79,13 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center" prop="transMap.createName" :show-overflow-tooltip="true" />
+      <el-table-column label="创建人" align="center" prop="transMap.createUserUserName" :show-overflow-tooltip="true" />
       <el-table-column label="修改时间" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改人" align="center" prop="transMap.updateName" :show-overflow-tooltip="true" />
+      <el-table-column label="修改人" align="center" prop="transMap.updateUserUserName" :show-overflow-tooltip="true" />
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -94,14 +94,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            hasPermi="['system:role:edit']"
+            hasPermi="['system:service:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            hasPermi="['system:role:remove']"
+            hasPermi="['system:service:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -118,10 +118,10 @@
     <!-- 添加或修改服务配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="服务名称" prop="roleName">
+        <el-form-item label="服务名称" prop="serverName">
           <el-input v-model="form.serverName" placeholder="请输入服务名称" />
         </el-form-item>
-        <el-form-item label="服务连接" prop="roleKey">
+        <el-form-item label="服务连接" prop="serverUrl">
           <el-input v-model="form.serverUrl" placeholder="请输入服务连接" />
         </el-form-item>
       </el-form>
@@ -148,6 +148,12 @@ export default {
       total: 0,
       // 弹出层标题
       title: "",
+       // 非多个禁用
+      multiple: true,
+      // 非单个禁用
+      single: true,
+
+      serviceList: [],
       // 是否显示弹出层
       open: false,
       // 日期范围
@@ -176,6 +182,7 @@ export default {
         serverUrl: [
           { required: true, message: "服务连接不能为空", trigger: "blur" }
         ]
+
       }
     };
   },
@@ -221,7 +228,12 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-
+      // 多选框选中数据
+      handleSelectionChange(selection) {
+          this.ids = selection.map(item => item.userId);
+          this.single = selection.length != 1;
+          this.multiple = !selection.length;
+      },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -239,10 +251,11 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function() {
+
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.roleId != undefined) {
-            this.form.menuIds = this.getMenuAllCheckedKeys();
+            debugger
+          if (this.form.id != undefined) {
             updateService(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -253,7 +266,6 @@ export default {
               }
             });
           } else {
-            this.form.menuIds = this.getMenuAllCheckedKeys();
             addService(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -283,6 +295,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
+        debugger
       this.$confirm('是否确认导出所有数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",

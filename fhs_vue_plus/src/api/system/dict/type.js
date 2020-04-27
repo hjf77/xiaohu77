@@ -3,16 +3,16 @@ import request from '@/utils/request'
 // 查询字典类型列表
 export function listType(query) {
   return request({
-    url: '/system/dict/type/list',
+    url: '/ms/wordbook/findWordbookGroupForPage',
     method: 'get',
     params: query
   })
 }
 
 // 查询字典类型详细
-export function getType(dictId) {
+export function getType(groupId) {
   return request({
-    url: '/system/dict/type/' + dictId,
+    url: '/ms/wordbook/getWordbookGroupBean?groupId=' + groupId,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getType(dictId) {
 // 新增字典类型
 export function addType(data) {
   return request({
-    url: '/system/dict/type',
+    url: '/ms/wordbook/addWordbookGroup',
     method: 'post',
     data: data
   })
@@ -29,16 +29,16 @@ export function addType(data) {
 // 修改字典类型
 export function updateType(data) {
   return request({
-    url: '/system/dict/type',
+    url: '/ms/wordbook/updateWordbookGroup',
     method: 'put',
     data: data
   })
 }
 
 // 删除字典类型
-export function delType(dictId) {
+export function delType(wordbookGroupCode,groupId) {
   return request({
-    url: '/system/dict/type/' + dictId,
+    url: '/ms/wordbook/delWordbookGroup?wordbookGroupCode=' + wordbookGroupCode+'&groupId='+groupId,
     method: 'delete'
   })
 }

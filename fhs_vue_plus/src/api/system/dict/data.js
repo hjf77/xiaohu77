@@ -3,16 +3,16 @@ import request from '@/utils/request'
 // 查询字典数据列表
 export function listData(query) {
   return request({
-    url: '/system/dict/data/list',
+    url: 'ms/wordbook/findWordbookForPage',
     method: 'get',
     params: query
   })
 }
 
 // 查询字典数据详细
-export function getData(dictCode) {
+export function getData(wordbookId) {
   return request({
-    url: '/system/dict/data/' + dictCode,
+    url: '/ms/wordbook/getWordbookBean?wordbookId=' + wordbookId,
     method: 'get'
   })
 }
@@ -28,7 +28,7 @@ export function getDicts(dictType) {
 // 新增字典数据
 export function addData(data) {
   return request({
-    url: '/system/dict/data',
+    url: 'ms/wordbook/addWordbook',
     method: 'post',
     data: data
   })
@@ -37,16 +37,16 @@ export function addData(data) {
 // 修改字典数据
 export function updateData(data) {
   return request({
-    url: '/system/dict/data',
+    url: '/ms/wordbook/updateWordbook',
     method: 'put',
     data: data
   })
 }
 
 // 删除字典数据
-export function delData(dictCode) {
+export function delData(wordbookId) {
   return request({
-    url: '/system/dict/data/' + dictCode,
+    url: '/ms/wordbook/delWordbook?wordbookId=' + wordbookId,
     method: 'delete'
   })
 }
