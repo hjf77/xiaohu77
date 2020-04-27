@@ -1,6 +1,6 @@
 var modelConfig = {
     title: '涨薪', pkey: 'id', type: 'uuid', orderBy: 'update_time Desc',processDefinitionKey:'demo_salary_increase',
-    saveUrl:'${path.basePath}/ms/x/flow/demo_salary_increase/add',
+    saveUrl:'${path.basePath}/webApi/test/flow/demo_salary_increase/countersign',
     namespace: "demo_salary_increase", table: 't_demo_salary_increase',trans: true
 };
 

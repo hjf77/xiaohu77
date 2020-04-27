@@ -49,7 +49,6 @@ ESTDesigner.tool.Parser = Class.extend({
 		this._drawFigure();
 		// 画线操作必须在最后
 		this._parseConnection();
-        // this._parseExtension();
 		this._drawConnection();
 	},
 	_drawFigure : function() {
@@ -273,42 +272,6 @@ ESTDesigner.tool.Parser = Class.extend({
 		// for (var i = 0; i < connectionList.getSize(); i++) {
 		// this._loadConnectionLocation(connectionList.get(i));
 		// }
-	},
-    _parseExtension : function (listeners) {
-        listeners =  this.descriptor.find('sequenceFlow').find('extensionElements').find('activiti\\:executionListener');
-        var parsedListeners = new draw2d.util.ArrayList();
-        listeners.each(function(i) {
-            var listener = eval("new ESTDesigner.model.ConnectionListener()");
-            listener.event = $(this).attr('event');
-            var expression = $(this).attr('expression');
-            var clazz = $(this).attr('class');
-            if (expression != null && expression != "") {
-                listener.serviceType = 'expression';
-                listener.serviceExpression = expression;
-            } else if (clazz != null && clazz != "") {
-                listener.serviceType = 'javaClass';
-                listener.serviceClass = clazz;
-            }
-            var fields = $(this).find('activiti\\:field');
-            fields.each(function(i) {
-                var field = eval("new ESTDesigner.model.Field()");
-                field.name = $(this).attr('name');
-                var string = $(this).find('activiti\\:string').text();
-                var expression = $(this).find('activiti\\:expression').text();
-                if (string != null && string != "") {
-                    field.type = 'string';
-                    field.value = string;
-                } else if (expression != null && expression != "") {
-                    field.type = 'expression';
-                    field.value = expression;
-                }
-                listener.setField(field);
-            });
-            parsedListeners.add(listener);
-        });
-		var connection = canvas.createConnection(startPort, endPort);
-		connection.setLabel(name);
-		connection.setListeners(parsedListeners);
 	},
     _parseGateway : function() {
 		var exclusiveGateway = this.descriptor.find('exclusiveGateway');
@@ -693,8 +656,26 @@ ESTDesigner.tool.Parser.ServiceTaskParser = ESTDesigner.tool.Parser.TaskParser.e
 					task._type = 'delegateExpression';
 				}
 				var resultVarName = xmlNode.attr('activiti:resultVariableName');
-			},
-		});
+                var fields = xmlNode.find('extensionElements').find('activiti\\:field');
+                    task.resultVariable = resultVarName;
+                    fields.each(function(i) {
+                        var field = new ESTDesigner.model.Field();
+                        // this._parseField($(this), field);
+                        field.name = $(this).attr('name');
+                        var string = $(this).find('activiti\\:string').text();
+                        var expression = $(this).find('activiti\\:expression').text();
+                        if (string != null && string != "") {
+                            field.type = 'string';
+                            field.value = string;
+                        } else if (expression != null && expression != "") {
+                            field.type = 'expression';
+                            field.value = expression;
+                        }
+                        task.fields.add(field);
+
+                    });
+			    },
+		    });
 ESTDesigner.tool.Parser.ScriptTaskParser = ESTDesigner.tool.Parser.TaskParser.extend({
 			init : function() {
 				this._super();

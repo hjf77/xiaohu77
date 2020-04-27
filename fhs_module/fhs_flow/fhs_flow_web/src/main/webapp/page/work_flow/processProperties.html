@@ -69,13 +69,14 @@
     }
 
     function editListener(id) {
+        listenerId = id;
         _listener_win.window('open');
         _listener_win.window('refresh', '${basePath}/b/page-work_flow/processListenerConfig');
     }
 
     function deleteListener(id) {
         process.deleteListener(id);
-        loadTaskListeners();
+        loadProcessListeners();
     }
 
     function saveProcessProperties() {

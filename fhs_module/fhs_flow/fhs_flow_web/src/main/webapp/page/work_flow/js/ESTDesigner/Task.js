@@ -194,8 +194,7 @@ ESTDesigner.task.BaseTask = draw2d.shape.basic.Rectangle.extend({
 				return xml;
 			},
 			getMultiInstanceXML : function() {
-				var xml = '';
-				if (this.isSequential) {
+					var xml = '';
 					xml = xml + '<multiInstanceLoopCharacteristics ';
 					if (this._elementVariable != null && this._elementVariable != '')
 						xml = xml + 'activiti:elementVariable="' + this._elementVariable + '" ';
@@ -209,8 +208,7 @@ ESTDesigner.task.BaseTask = draw2d.shape.basic.Rectangle.extend({
 						xml = xml + '<completionCondition>' + this._completionCondition
 								+ '</completionCondition>\n'
 					xml = xml + '</multiInstanceLoopCharacteristics>\n';
-				}
-				return xml;
+					return xml;
 			},
 			getExtensionElementsXML : function() {
 				if (this.listeners.getSize() == 0)
@@ -660,13 +658,13 @@ ESTDesigner.task.MailTask = ESTDesigner.task.BaseTask.extend({
 				this._html = null;
 			},
 			getStartElementXML : function() {
-				var xml = '<mailTask ';
+				var xml = '<serviceTask ';
 				xml = xml + this.getGeneralXML();
 				xml = xml + ' activiti:type="mail">\n';
 				return xml;
 			},
 			getEndElementXML : function() {
-				var xml = '</mailTask>\n';
+				var xml = '</serviceTask>\n';
 				return xml;
 			},
 			getExtensionElementsXML : function() {
