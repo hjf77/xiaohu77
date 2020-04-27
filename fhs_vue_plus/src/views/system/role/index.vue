@@ -24,10 +24,12 @@
         <el-table v-loading="loading" :data="roleList">
           <el-table-column width="55" align="center"/>
           <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150"/>
-          <el-table-column label="状态" align="center" width="100">
+          <el-table-column label="状态" align="center" width="150">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.isEnable"
+                active-text="禁用"
+                inactive-text="启用"
                 active-value=0
                 inactive-value=1
                 @change="handleStatusChange(scope.row)"
@@ -78,6 +80,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
+
       </el-col>
     </el-row>
 
@@ -152,12 +155,12 @@
         roleList: [],
         // 总条数
         total: 0,
-        //顶层元素
-        fatherId: undefined,
         // 弹出层标题
         title: '',
         // 是否显示弹出层
         open: false,
+        //顶层元素
+        fatherId: undefined,
         // 部门树选项
         deptOptions: undefined,
         // 是否显示弹出层（数据权限）
@@ -233,6 +236,7 @@
       getTreeselect() {
         treeselect().then(response => {
           this.deptOptions = response
+          debugger;
           this.fatherId = response[0].id;
         })
       },

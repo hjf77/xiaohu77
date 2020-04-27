@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +22,6 @@ public class TreeModelVO implements Serializable {
     private String id;
     /*父节点ID*/
     private String pid;
-    /*EasyUI父节点ID*/
-    private String _parentId;
     /*节点编码*/
     private String code;
     /*节点名称*/
@@ -43,12 +43,35 @@ public class TreeModelVO implements Serializable {
     /*节点类型*/
     private String nodeType;
     /*链接地址**/
-    private String menuurl;
+    private String menuUrl;
     /*如果某节点不显示 radio，请设置 treeNode.chkDisabled */
     /*true:禁用/默认状态为启用此radio*/
     private boolean chkDisabled;
 
     private String menuType;
+
+
+    /**
+     * 子节点
+     */
+    private String menuId;
+    /**
+     * 父节点
+     */
+    private String parentId;
+    /**
+     * 节点名称
+     */
+    private String menuName;
+    /**
+     * 菜单序号
+     */
+    private String orderIndex;
+    /**
+     * 儿子集合
+     */
+    private List<TreeModelVO> children = new ArrayList<>();
+
 
 
 }

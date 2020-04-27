@@ -50,6 +50,20 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
     }
 
     /**
+     * vue- element 获取 菜单管理左侧树形结构
+     *
+     * @param request
+     * @param response
+     */
+    @RequiresPermissions("sysMenu:see")
+    @RequestMapping("getMenuTree")
+    public List<TreeModelVO> getMenuTreesData(HttpServletRequest request, HttpServletResponse response) {
+        List<TreeModelVO> menuTrees = sysMenuService.getMenuTreesData();
+        return menuTrees;
+    }
+
+
+    /**
      * 添加菜单
      *
      * @param request

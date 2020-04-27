@@ -35,6 +35,12 @@ public interface SettMsMenuService extends BaseService<SettMsMenuVO, SettMsMenuD
     List<TreeModelVO> findMenuTrees(String parentId);
 
     /**
+     * vue-element 获取菜单Tree 数据
+     * @return
+     */
+    List<TreeModelVO> getMenuTreesData();
+
+    /**
      * 获取菜单树集合并组建json
      *
      * @param menuType  根据菜单类型获取菜单树
