@@ -54,6 +54,8 @@
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.isEnable"
+            active-text="禁用"
+            inactive-text="启用"
             :active-value="0"
             :inactive-value="1"
             @change="handleStatusChange(scope.row)"

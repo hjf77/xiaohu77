@@ -48,6 +48,15 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRoleDO> {
     @NotMultiTenancyCheck
     public List<Map<String, Object>> searchButtons(UcenterMsRoleDO adminRole);
 
+    /**
+     * 查询角色的按钮信息 id
+     *
+     * @param roleId
+     * @return
+     */
+    @NotMultiTenancyCheck
+    public List<String> getRolePermissionButtons(@Param("roleId") String roleId);
+
     @NotMultiTenancyCheck
     public List<String> searchButtonId(Map<String, Object> map);
 

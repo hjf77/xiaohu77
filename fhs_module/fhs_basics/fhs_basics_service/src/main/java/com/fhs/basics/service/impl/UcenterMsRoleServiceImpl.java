@@ -86,9 +86,11 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     private String[] buildButtonArray(String[] buttons) {
         List<String> list = new ArrayList<String>();
         for (String item : buttons) {
-
             String[] itemarr = item.split("_");
-            if ("t".equalsIgnoreCase(itemarr[0])) {
+            //p前缀 直接跟的就是权限id
+            if("p".equalsIgnoreCase(itemarr[0])){
+                list.add(itemarr[1]);
+            }else if ("t".equalsIgnoreCase(itemarr[0])) {
                 String buttonId = itemarr[1].split(":")[1];
                 list.add(buttonId);
             } else {
@@ -175,6 +177,15 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     @Override
     public List<Map<String, Object>> searchButtons(UcenterMsRoleDO adminRole) {
         return mapper.searchButtons(adminRole);
+    }
+
+    /**
+     * 查询角色的按钮信息
+     */
+    @Override
+    public String[] getRolePermissionButtons(String id) {
+        List<String> rolePermissionButtons = mapper.getRolePermissionButtons(id);
+        return rolePermissionButtons.toArray(new String[rolePermissionButtons.size()]);
     }
 
     /**

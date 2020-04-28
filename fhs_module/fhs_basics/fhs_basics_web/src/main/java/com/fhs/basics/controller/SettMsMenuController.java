@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SettMsMenuDO;
 import com.fhs.basics.service.SettMsMenuService;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.TreeDataVO;
+import com.fhs.basics.vo.TreeMenuPermissionVO;
 import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
@@ -59,6 +60,15 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
     @RequestMapping("getMenuTree")
     public List<TreeModelVO> getMenuTreesData(HttpServletRequest request, HttpServletResponse response) {
         List<TreeModelVO> menuTrees = sysMenuService.getMenuTreesData();
+        return menuTrees;
+    }
+
+    /**
+     * vue - element 获取菜单权限按钮
+     */
+    @RequestMapping("getMenuPermissionTree")
+    public List<TreeMenuPermissionVO> getMenuPermissionTree(HttpServletRequest request, HttpServletResponse response) {
+        List<TreeMenuPermissionVO> menuTrees = sysMenuService.getMenuPermissionTree();
         return menuTrees;
     }
 

@@ -2,6 +2,7 @@ package com.fhs.basics.mapper;
 
 import com.fhs.basics.dox.SettMsMenuDO;
 import com.fhs.basics.vo.TreeDataVO;
+import com.fhs.basics.vo.TreeMenuPermissionVO;
 import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
@@ -110,5 +111,10 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO> {
      * 查询id,name,namespace列表
      */
     List<SettMsMenuDO> findIdAndNameAndNamespaceList();
+
+    /**
+     * 获取菜单权限按钮
+     */
+    List<TreeMenuPermissionVO> getMenuPermissionTree();
 
 }
