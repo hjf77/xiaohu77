@@ -657,7 +657,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             String[] roleList = new String[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
-            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList, true));
+            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList, false));
         } else {
             sysUser.setRoleList(new String[0]);
         }
