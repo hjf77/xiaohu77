@@ -83,7 +83,8 @@
             create_time,
             `result` useStatus,
             remark,
-            assignee_user_id createUser
+            assignee_user_id createUser,
+            task_id
         from t_flow_task_history
         where instance_id = #{instanceId}
         ORDER BY create_time

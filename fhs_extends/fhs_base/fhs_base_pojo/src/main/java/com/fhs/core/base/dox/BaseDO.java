@@ -11,6 +11,7 @@ import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -44,6 +45,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      * 创建人
      */
     @TableField("create_user")
+    @ApiModelProperty("创建人")
     @Trans(type = TransType.AUTO_TRANS, key = "sysUser#createUser")
     protected String createUser;
 
@@ -52,12 +54,14 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      */
     @Between
     @TableField("create_time")
+    @ApiModelProperty("创建时间")
     @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date createTime;
 
     /**
      * 更新人
      */
+    @ApiModelProperty("修改人")
     @TableField("update_user")
     @Trans(type = TransType.AUTO_TRANS, key = "sysUser#updateUser")
     protected String updateUser;
@@ -66,6 +70,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      * 更新时间
      */
     @Between
+    @ApiModelProperty("修改时间")
     @TableField("update_time")
     @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date updateTime;
