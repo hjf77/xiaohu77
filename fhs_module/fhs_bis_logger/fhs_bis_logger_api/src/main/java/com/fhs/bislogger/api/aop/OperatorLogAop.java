@@ -1,5 +1,6 @@
 package com.fhs.bislogger.api.aop;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
@@ -128,13 +129,13 @@ public class OperatorLogAop {
         Object[] args = joinPoint.getArgs();
         if (vo != null) {
             this.transService.transOne(vo);
-            mainVO.setReqParam(BisLoggerContext.formartJson(JsonUtils.bean2json(vo), vo.getClass()));
+            mainVO.setReqParam(BisLoggerContext.formartJson(JSONObject.toJSONString(vo), vo.getClass()));
         } else if (logMethod.reqBodyParamIndex() != LoggerConstant.INDEX_NOT) {
-            mainVO.setReqParam(BisLoggerContext.formartJson(JsonUtils.bean2json(args[logMethod.reqBodyParamIndex()]), args[logMethod.reqBodyParamIndex()].getClass()));
+            mainVO.setReqParam(BisLoggerContext.formartJson(JSONObject.toJSONString(args[logMethod.reqBodyParamIndex()]), args[logMethod.reqBodyParamIndex()].getClass()));
         } else {
             mainVO.setReqParam(JsonUtils.map2json(getParameterMap()));
         }
-        mainVO.setRespBody(e == null ? JsonUtils.object2json(result) : e.getMessage());
+        mainVO.setRespBody(e == null ? JSONObject.toJSONString(result) : e.getMessage());
         UcenterMsUserVO user = getSessionuser();
         mainVO.preInsert(user.getUserId());
         mainVO.setType(logMethod.type());
