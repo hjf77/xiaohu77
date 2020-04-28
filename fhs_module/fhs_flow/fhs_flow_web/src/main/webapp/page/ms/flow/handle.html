@@ -65,12 +65,14 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask_node"
            onclick="backTask_node()">驳回到指定操作OK</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="preAdd" onclick="preAdd()">前加签</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="afterAdd" onclick="afterAdd()">后加签</a>
         <!-- 已办状态但还未到下一步操作 -->
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="revoke" onclick="revoke()">撤销申请OK</a>
-    </div>
+            <div style="display: none">
+                <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回OK</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="preAdd" onclick="preAdd()">前加签</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="afterAdd" onclick="afterAdd()">后加签</a>
+            </div>
+        </div>
 </div>
 <div id="addOrUpdateDialog2" class="easyui-dialog" title="回退节点"
      data-options="iconCls:'icon-save'" closed="true"
@@ -98,11 +100,13 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
         $.ajax({
             async: false, //同步
             type: 'post',
-            url: '${basePath}ms/flow_instance/isRevokeApply?instanceId=' + instanceId,
+            url: '${basePath}ms/flow_instance/isRevokeApply?instanceId=' + instanceId + '&taskId='+taskId,
             success: function (res) {
                 if (res.code == 200) {
                     if (res.data == false) {
                         $("#revoke").hide();
+                    }else if (res.data == true) {
+                        $("#revoke").show();
                     }
                 }
             }

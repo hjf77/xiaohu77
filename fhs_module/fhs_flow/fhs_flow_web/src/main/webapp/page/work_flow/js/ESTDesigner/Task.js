@@ -194,21 +194,23 @@ ESTDesigner.task.BaseTask = draw2d.shape.basic.Rectangle.extend({
 				return xml;
 			},
 			getMultiInstanceXML : function() {
-					var xml = '';
-					xml = xml + '<multiInstanceLoopCharacteristics ';
-					if (this._elementVariable != null && this._elementVariable != '')
-						xml = xml + 'activiti:elementVariable="' + this._elementVariable + '" ';
-					if (this._collection != null && this._collection != '')
-						xml = xml + 'activiti:collection="' + this._collection + '" ';
-					xml = xml + '>\n'
-					if (this._loopCardinality != null && this._loopCardinality != '')
-						xml = xml + '<loopCardinality>' + this._loopCardinality
+				var xml = '';
+					if (this.isSequential){
+						xml = xml + '<multiInstanceLoopCharacteristics ';
+						if (this._elementVariable != null && this._elementVariable != '')
+							xml = xml + 'activiti:elementVariable="' + this._elementVariable + '" ';
+						if (this._collection != null && this._collection != '')
+							xml = xml + 'activiti:collection="' + this._collection + '" ';
+						xml = xml + '>\n'
+						if (this._loopCardinality != null && this._loopCardinality != '')
+							xml = xml + '<loopCardinality>' + this._loopCardinality
 								+ '</loopCardinality>\n';
-					if (this._completionCondition != null && this._completionCondition != '')
-						xml = xml + '<completionCondition>' + this._completionCondition
+						if (this._completionCondition != null && this._completionCondition != '')
+							xml = xml + '<completionCondition>' + this._completionCondition
 								+ '</completionCondition>\n'
-					xml = xml + '</multiInstanceLoopCharacteristics>\n';
-					return xml;
+						xml = xml + '</multiInstanceLoopCharacteristics>\n';
+					}
+				return xml;
 			},
 			getExtensionElementsXML : function() {
 				if (this.listeners.getSize() == 0)

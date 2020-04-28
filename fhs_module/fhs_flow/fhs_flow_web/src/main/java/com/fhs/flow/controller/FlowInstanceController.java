@@ -9,14 +9,23 @@ import com.fhs.flow.dox.FlowInstanceDO;
 import com.fhs.flow.service.FlowInstanceService;
 import com.fhs.flow.vo.FlowInstanceVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,21 +40,29 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
 
     @Autowired
     private FlowInstanceService flowInstanceService;
+    @Autowired
+    private TaskService taskService;
 
     /**
      * 是否执行完毕
      */
     @RequestMapping("isRevokeApply")
-    public HttpResult<Boolean> isRevokeApply(String instanceId, HttpServletRequest request) throws Exception {
+    public HttpResult<Boolean> isRevokeApply(String instanceId, HttpServletRequest request,String taskId) throws Exception {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         FlowInstanceVO flowInstance = new FlowInstanceVO();
         flowInstance.setActivitiProcessInstanceId(instanceId);
         flowInstance.setCreateUser(this.getSessionuser().getUserId());
         FlowInstanceVO instance = flowInstanceService.selectBean(flowInstance);
-        if (instance == null) {
-            return HttpResult.success(false);
+        String userId = super.getSessionuser().getUserId();
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String taskDefinitionKey = null;
+        if (task!=null){
+            taskDefinitionKey = task.getTaskDefinitionKey();
         }
-        return HttpResult.success(true);
+        if (instance.getCreateUser().equals(userId) && instance.getFirstDefinitionKey().equals(taskDefinitionKey)) {
+            return HttpResult.success(true);
+        }
+        return HttpResult.success(false);
     }
 
     @Override
