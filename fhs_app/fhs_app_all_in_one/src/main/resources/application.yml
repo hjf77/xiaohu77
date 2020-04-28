@@ -46,6 +46,8 @@ fhs:
       description: 项目api
       developer: fhs developers
       name: 公共接口文档
+  operator-log:
+    enable: true
 
   activiti:
     createtb: false #是否创建表
@@ -129,6 +131,7 @@ logging:
     com.fhs.basics: debug
     com.fhs.pagex: debug
     com.fhs.flow: debug
+    com.fhs.bislogger: debug
 logback:
   #这里可以配置logstash ip和端口
   elk:

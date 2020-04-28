@@ -35,6 +35,12 @@
             <artifactId>fhs_task_web</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <!--操作日志-->
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_bis_logger_web</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
         <!--工作流模块,不需要的话可以去掉-->
         <dependency>
             <groupId>com.fhs-opensource</groupId>

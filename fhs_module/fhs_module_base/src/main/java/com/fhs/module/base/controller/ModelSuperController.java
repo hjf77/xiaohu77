@@ -1,6 +1,8 @@
 package com.fhs.module.base.controller;
 
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
@@ -65,6 +67,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("findPage")
     @ResponseBody
+    @LogMethod(voParamIndex = 0)
     public Pager<V> findPage(V e, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -90,6 +93,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("findList")
     @ResponseBody
+    @LogMethod(voParamIndex = 0)
     public List<V> findList(V e, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -106,9 +110,10 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request
      * @param response
      */
-    @RequestMapping("findPageByM")
-    @LogDesc(value = " 根据map条件查询返回page對象", type = LogDesc.SEE)
+
     @ResponseBody
+    @LogMethod
+    @RequestMapping("findPageByM")
     public Pager<V> findPageByM(HttpServletRequest request, HttpServletResponse response) {
         if (isPermitted(request, "see")) {
             Map<String, Object> map = getPageTurnNum();
@@ -126,7 +131,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * 公共导出excel 03  by jackwang
      */
     @RequestMapping("pubExportExcel")
-    @LogDesc(value = "导出数据", type = LogDesc.SEE)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
     public void exportExcel() {
         /*
            1 获取参数
@@ -251,7 +256,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("info/{id}")
     @ResponseBody
-    @LogDesc(value = "根据ID集合查询对象数据", type = LogDesc.SEE)
+    @LogMethod
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
     )
@@ -274,7 +279,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("infoByM")
     @ResponseBody
-    @LogDesc(value = "根据Map集合查询对象数据", type = LogDesc.SEE)
+    @LogMethod
     public V infoByM(HttpServletRequest request)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -300,7 +305,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @NotRepeat
     @ResponseBody
     @RequestMapping("add")
-    @LogDesc(value = "添加", type = LogDesc.ADD)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
     public HttpResult<Boolean> add(@ModelAttribute@Validated(Add.class) V e, BindingResult check, HttpServletRequest request,
                                    HttpServletResponse response) {
         if (isPermitted(request, "add")) {
@@ -335,7 +340,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
     )
-    @LogDesc(value = "删除", type = LogDesc.DEL)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
     public HttpResult<Boolean> del(@RequestParam("id") String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
             baseService.deleteById(id);
@@ -352,7 +357,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("update")
     @ResponseBody
-    @LogDesc(value = "更新", type = LogDesc.UPDATE)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e, BindingResult check, HttpServletRequest request,
                                       HttpServletResponse response) {
         if (isPermitted(request, "update")) {
@@ -400,6 +405,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("findListData")
     @ResponseBody
+    @LogMethod(voParamIndex = 0)
     public List<V> findListData(V e, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (isPermitted(request, "see")) {
             List<V> list = baseService.findForList((D) e);

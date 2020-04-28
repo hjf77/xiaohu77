@@ -1,9 +1,13 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.LeftMenuVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
@@ -31,6 +35,7 @@ import java.util.Map;
  * @author jianbo.qin
  */
 @RestController
+@LogNamespace(namespace = BaseTransConstant.USER_INFO,module = "用户管理")
 @RequestMapping("ms/sysUser")
 public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserDO> {
 
@@ -51,6 +56,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param userId 用户id
      */
     @RequestMapping("getUserById")
+    @LogMethod
     public void getUserById(String userId){
         super.outJsonp(JsonUtils.bean2json(sysUserService.selectById(userId)));
     }
@@ -60,6 +66,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param
      */
     @RequestMapping("getUserByIdList")
+    @LogMethod
     public void getUserByIdList(String userIds){
         if(CheckUtils.isNullOrEmpty(userIds)){
             super.outJsonp("[]");
@@ -80,7 +87,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @NotRepeat
     @RequiresPermissions("sysUser:add")
     @RequestMapping("addUser")
-    @LogDesc(type = LogDesc.ADD, value = "添加后台用户")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult addUser(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser,
                               RedirectAttributes attr) {
         // 添加用户信息
@@ -127,6 +134,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param request
      */
     @RequestMapping("findUsers")
+    @LogMethod
     public void findUsersJsonp(HttpServletRequest request){
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         UcenterMsUserDO queryParam = UcenterMsUserDO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
@@ -144,7 +152,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @RequiresPermissions("sysUser:del")
     @RequestMapping("/delSysUser")
-    @LogDesc(value = "删除", type = LogDesc.DEL)
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
     public HttpResult<Boolean> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
         UcenterMsUserVO sysUser = sysUserService.selectById(id);
         if (sysUser.getIsAdmin() == sysUserService.SYS_USER_IS_ADMIN) {
@@ -164,12 +172,11 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @RequiresPermissions("sysUser:update")
     @RequestMapping("updateUser")
-    @LogDesc(type = LogDesc.UPDATE, value = "修改后台用户")
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
     public HttpResult<Boolean> update(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);
         }
-        // 删除原有的角色
         sysUserService.updateUser(sysUser);
         return HttpResult.success(Boolean.TRUE);
     }
@@ -195,6 +202,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param sysUser 前端用户信息
      */
     @RequestMapping("updatePass")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2,desc = "修改个人密码")
     public void updatePass(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         UcenterMsUserVO user = super.getSessionuser();
         sysUser.setUserId(user.getUserId());
@@ -208,6 +216,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param formSysUser 前端参数
      */
     @RequestMapping("updateOwnUserInfo")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2,desc = "修改个人信息")
     public void updateOwnUserInfo(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO formSysUser) {
         UcenterMsUserVO user = super.getSessionuser();
         formSysUser.setUserName(formSysUser.getUserName());
@@ -254,6 +263,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @RequiresPermissions("sysUser:see")
     @RequestMapping("/findPage/{organizationId}")
     @ResponseBody
+    @LogMethod
     public Pager<UcenterMsUserVO> findPage(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, UcenterMsUserVO sysUser) {
         if (!CheckUtils.isNullOrEmpty(organizationId)) sysUser.setOrganizationId(organizationId);
         PageSizeInfo pgeSizeInfo = getPageSizeInfo();

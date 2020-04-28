@@ -81,5 +81,11 @@ public class LogOperatorExtParamDO extends BaseDO<LogOperatorExtParamDO> {
     @ApiModelProperty(value = "historyid")
     private String hisId;
 
+    /**
+     *操作类型 0 新增1修改2删除
+     */
+    @NotNull(message = "操作类型字段不可为null", groups = {Update.class, Delete.class})
+    @TableField("operator_type")
+    private Integer operatorType;
 
 }

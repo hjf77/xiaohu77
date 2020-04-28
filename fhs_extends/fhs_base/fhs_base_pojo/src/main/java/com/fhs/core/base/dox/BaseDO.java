@@ -7,6 +7,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.SuperBean;
+import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
@@ -25,7 +26,7 @@ import java.util.*;
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @SuppressWarnings("rawtypes")
-public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
+public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements VO {
 
     /**
      *

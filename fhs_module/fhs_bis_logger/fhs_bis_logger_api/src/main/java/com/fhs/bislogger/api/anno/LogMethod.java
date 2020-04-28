@@ -37,4 +37,10 @@ public @interface LogMethod {
      * @return
      */
     int reqBodyParamIndex() default LoggerConstant.INDEX_NOT;
+
+    /**
+     * 主键索引
+     * @return
+     */
+    int pkeyParamIndex() default LoggerConstant.INDEX_NOT;
 }

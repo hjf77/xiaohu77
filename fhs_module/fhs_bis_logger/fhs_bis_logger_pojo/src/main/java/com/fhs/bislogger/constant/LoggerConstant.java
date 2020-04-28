@@ -38,5 +38,30 @@ public interface LoggerConstant {
      * 没有vo
      */
     int INDEX_NOT = -1;
+
+    /**
+     * 新增
+     */
+    int OPERATOR_TYPE_ADD = 0;
+
+    /**
+     * 修改
+     */
+    int OPERATOR_TYPE_UPDATE = 1;
+
+    /**
+     * 删除
+     */
+    int OPERATOR_TYPE_DEL = 2;
+
+    /**
+     * 成功的日志
+     */
+    int LOG_STATE_SUCCESS = 0;
+
+    /**
+     * 失败的日志
+     */
+    int LOG_STATE_ERROR = 1;
 }
 

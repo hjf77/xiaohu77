@@ -14,6 +14,12 @@ import com.fhs.core.cache.annotation.Namespace;
 @Namespace("log_history_data")
 public interface LogHistoryDataService extends BaseService<LogHistoryDataVO,LogHistoryDataDO>{
 
-    
+    /**
+     * 获取某个主键某个namespace最后一个版本的数据
+     * @param pkey  主键
+     * @param namespace namespace
+     * @return 最后版本的数据
+     */
+    LogHistoryDataVO getLastVersionData(String pkey,String namespace);
 
 }

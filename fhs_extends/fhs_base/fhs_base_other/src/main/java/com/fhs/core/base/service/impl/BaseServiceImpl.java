@@ -8,6 +8,8 @@ import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fhs.bislogger.api.context.BisLoggerContext;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
@@ -38,6 +40,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 业务层base类，主要提供对数据库的CRUD操作
@@ -104,12 +107,12 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
         } else if (this.getClass().isAnnotationPresent(Namespace.class)) {
             this.namespace = this.getClass().getAnnotation(Namespace.class).value();
-        }else if (this.getClass().isAnnotationPresent(AutoTrans.class)) {
+        } else if (this.getClass().isAnnotationPresent(AutoTrans.class)) {
             this.namespace = this.getClass().getAnnotation(AutoTrans.class).namespace();
-        }else if (this.getTypeArgumentsClass(1).isAnnotationPresent(Table.class)) {
-            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(Table.class).name().replace("t_","");
-        }else if (this.getTypeArgumentsClass(1).isAnnotationPresent(TableName.class)) {
-            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(TableName.class).value().replace("t_","");
+        } else if (this.getTypeArgumentsClass(1).isAnnotationPresent(Table.class)) {
+            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(Table.class).name().replace("t_", "");
+        } else if (this.getTypeArgumentsClass(1).isAnnotationPresent(TableName.class)) {
+            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(TableName.class).value().replace("t_", "");
         }
     }
 
@@ -123,6 +126,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int add(D bean) {
         int result = baseMapper.insertSelective(bean);
+        BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
+        BisLoggerContext.addHistoryData(bean, this.namespace);
         this.refreshCache();
         this.addCache(bean);
         return result;
@@ -138,6 +143,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public boolean update(D bean) {
         boolean result = this.updateJpa(bean);
+        if (BisLoggerContext.isNeedLogger()) {
+            BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
+            BisLoggerContext.addHistoryData(this.selectById(bean.getPkey()), this.namespace);
+        }
         this.refreshCache();
         this.updateCache(bean);
         return result;
@@ -146,6 +155,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public boolean updateJpa(D bean) {
         boolean result = baseMapper.updateSelectiveById(bean) > 0;
+        if (BisLoggerContext.isNeedLogger()) {
+            BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
+            BisLoggerContext.addHistoryData(this.selectById(bean.getPkey()), this.namespace);
+        }
         this.refreshCache();
         this.updateCache(bean);
         return result;
@@ -161,6 +174,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public boolean delete(D bean) {
         boolean result = baseMapper.deleteBean(bean) > 0;
+        BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         this.refreshCache();
         return result;
     }
@@ -250,6 +264,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         addCache(entity);
         int result = baseMapper.insertSelective(entity);
         this.refreshCache();
+        BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
+        BisLoggerContext.addHistoryData(entity, this.namespace);
         return result;
     }
 
@@ -262,7 +278,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
                 if (field.get(entity) == null && field.getType() == String.class) {
                     field.set(entity, StringUtil.getUUID());
                 }
-                if(entity.getCreateTime()==null){
+                if (entity.getCreateTime() == null) {
                     entity.setCreateTime(new Date());
                     entity.setUpdateTime(new Date());
                 }
@@ -326,10 +342,17 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int batchInsert(List<D> list) {
+        if(list == null || list.isEmpty()){
+            return 0;
+        }
         for (D d : list) {
             initPkeyAndIsDel(d);
         }
         int result = baseMapper.batchInsert(list);
+        for (D d : list) {
+            BisLoggerContext.addExtParam(this.namespace, d.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
+            BisLoggerContext.addHistoryData(d, this.namespace);
+        }
         this.refreshCache();
         return result;
     }
@@ -343,14 +366,18 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         autoDelService.deleteItemTBL(this.nameSpace, primaryValue);
         this.refreshCache();
         removeCache(primaryValue);
+        BisLoggerContext.addExtParam(this.namespace, primaryValue, LoggerConstant.OPERATOR_TYPE_DEL);
         return result;
     }
 
-    public int deleteByIdsMp(Collection<? extends Serializable> idList){
+    public int deleteByIdsMp(Collection<? extends Serializable> idList) {
+        for (Serializable id : idList) {
+            BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
+        }
         return baseMapper.deleteBatchIds(idList);
     }
 
-    public int deleteMp( Wrapper<D> wrapper){
+    public int deleteMp(Wrapper<D> wrapper) {
         return baseMapper.delete(wrapper);
     }
 
@@ -358,7 +385,12 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     public int updateSelectiveById(D entity) {
         updateCache(entity);
         this.refreshCache();
-        return baseMapper.updateSelectiveById(entity);
+        int reuslt = baseMapper.updateSelectiveById(entity);
+        if (BisLoggerContext.isNeedLogger()) {
+            BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
+            BisLoggerContext.addHistoryData(this.selectById(entity.getPkey()), this.namespace);
+        }
+        return reuslt;
     }
 
     /**
@@ -382,6 +414,15 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         int result = baseMapper.batchUpdateById(entitys);
         for (D entity : entitys) {
             updateCache(entity);
+        }
+
+        if (BisLoggerContext.isNeedLogger()) {
+            List<Object> ids = entitys.stream().map(D::getPkey).collect(Collectors.toList());
+            List<V> vos = this.findByIds(ids);
+            for (V vo : vos) {
+                BisLoggerContext.addExtParam(this.namespace, vo.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
+                BisLoggerContext.addHistoryData(this.selectById(vo.getPkey()), this.namespace);
+            }
         }
         this.refreshCache();
         return result;
@@ -454,6 +495,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             d.setIsDelete(Constant.INT_TRUE);
             autoDelService.deleteCheck(this.nameSpace, d.getPkey());
             autoDelService.deleteItemTBL(this.nameSpace, d.getPkey());
+            BisLoggerContext.addExtParam(this.namespace, d.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         }
         //批量修改为已删除
         return baseMapper.batchUpdateById(dos);
@@ -494,6 +536,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         for (Object id : idList) {
             autoDelService.deleteCheck(this.nameSpace, id);
             autoDelService.deleteItemTBL(this.nameSpace, id);
+            BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
         }
         List<D> dos = baseMapper.selectByIds(idList);
         if (dos.isEmpty()) {

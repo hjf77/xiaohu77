@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,13 +24,13 @@ public class LogAddOperatorLogVO {
     /**
      * 扩展参数,修改或者删除的时候会有
      */
-    private List<LogOperatorExtParamVO> operatorExtParamVOList;
+    private List<LogOperatorExtParamVO> operatorExtParamVOList = new ArrayList<>();
 
 
     /**
      * 历史数据
      */
-    private List<LogHistoryDataVO> historyDataVOList;
+    private List<LogHistoryDataVO> historyDataVOList = new ArrayList<>();
 
 
 }

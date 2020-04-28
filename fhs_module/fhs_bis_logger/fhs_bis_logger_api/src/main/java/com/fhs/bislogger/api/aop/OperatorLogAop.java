@@ -2,11 +2,16 @@ package com.fhs.bislogger.api.aop;
 
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.api.context.BisLoggerContext;
+import com.fhs.bislogger.api.rpc.FeignBisLoggerApiService;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.bislogger.vo.LogAddOperatorLogVO;
 import com.fhs.bislogger.vo.LogHistoryDataVO;
+import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.service.impl.TransService;
@@ -29,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 拦截action请求，添加操作日志AOP
@@ -49,10 +56,15 @@ public class OperatorLogAop {
     @Autowired
     private TransService transService;
 
+    private FeignBisLoggerApiService bisLoggerApiService;
+
+    private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+
+
     /**
      * 定义切入点,所有标记这个的控制器
      */
-    @Pointcut("@annotation(com.fhs.bislogger.api.anno.LogNamespace)")
+    @Pointcut("@annotation(com.fhs.bislogger.api.anno.LogMethod)")
     public void operatorLogAopPoint() {
 
     }
@@ -63,12 +75,17 @@ public class OperatorLogAop {
      */
     @Around("operatorLogAopPoint()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (bisLoggerApiService == null) {
+            bisLoggerApiService = SpringContextUtil.getBeanByClassForApi(FeignBisLoggerApiService.class);
+        }
+        String mainId = StringUtil.getUUID();
+        BisLoggerContext.init(mainId);
         String methodName = joinPoint.getSignature().getName();
         Class<?> classTarget = joinPoint.getTarget().getClass();
         Class<?>[] par = ((MethodSignature) joinPoint.getSignature()).getParameterTypes();
         Method method = classTarget.getMethod(methodName, par);
         // 如果不包含直接放行
-        if (!method.isAnnotationPresent(LogMethod.class)) {
+        if (!method.isAnnotationPresent(LogMethod.class) || !classTarget.isAnnotationPresent(LogNamespace.class)) {
             return joinPoint.proceed();
         }
         Object result = null;
@@ -80,88 +97,22 @@ public class OperatorLogAop {
             error = e;
             throw e;
         } finally {
-
-
+            addLog(joinPoint, method, classTarget, result, error);
+            BisLoggerContext.clear();
         }
 
-
-
-        /*
-          新增,如果是vo
-
-
-
-         */
-
-       /* // 获取请求uri
-        String uri = request.getRequestURI();
-        // 如果不是以ms开头就不拦截
-        if (!uri.contains("/ms/")) {
-            // 执行方法
-            return joinPoint.proceed();
-        }
-
-        // 获取菜单name及nameSpace
-        if (namesapceMenuMap.isEmpty()) {
-            HttpResult<List<SysMenuVo>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
-            List<SysMenuVo> sysMenuList = result.getData();
-            for (SysMenuVo adminMenu : sysMenuList) {
-                namesapceMenuMap.put(adminMenu.getNamespace(), adminMenu);
-            }
-        }
-
-        // 判断方法上是否包含LogDesc注解
-        if (method.isAnnotationPresent(LogDesc.class)) {
-            // 获取该注解的内容
-            LogDesc annotation = method.getAnnotation(LogDesc.class);
-            String operation = annotation.value();
-            int type = annotation.type();
-
-            // 获取请求参数
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            String paramsJson = "";
-            if (parameterMap.containsKey("password")) {
-                Map<String, String[]> parameterUnLockMap = new HashMap<>();
-                for(Map.Entry<String, String[]> entry : parameterMap.entrySet()){
-                    if(!entry.getKey().equals("password")) {
-                        parameterUnLockMap.put(entry.getKey(), entry.getValue());
-                    }
-                }
-                paramsJson = JsonUtils.map2json(parameterUnLockMap);
-            }else {
-                paramsJson = JsonUtils.map2json(parameterMap);
-            }
-            //获取用户ip
-            String ip = NetworkUtil.getIpAddress(request);
-            // 获取请求用户id
-            SysUserVo adminUser = (SysUserVo) request.getSession().getAttribute(Constant.SESSION_USER);
-            String userId = adminUser.getUserId();
-
-            // 创建LogAdminOperatorLog 对象,并给各属性赋值
-            LogAdminOperatorLogVo log = new LogAdminOperatorLogVo();
-            log.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATE_FULL_STR_SSS));
-            log.setUrl(uri);
-            log.setOperatorId(userId);
-            log.setReqParam(paramsJson);
-            log.setNetworkIp(ip);
-            log.setLogType(type);
-            log.setGroupCode(adminUser.getGroupCode());
-            String namespace = uri.substring(uri.indexOf("/", uri.indexOf("/") + 1) + 1, uri.lastIndexOf("/"));
-            SysMenuVo menu = namesapceMenuMap.get(namespace);
-            if (menu != null) {
-                log.setMenuId(menu.getMenuId());
-                log.setOperatDesc(menu.getMenuName() + ":" + operation);
-                feignlogAdminOperatorLogApiService.addLogAdminOperatorLog(log);
-            } else {
-                LOGGER.warnMsg("namespace:{} 没有找到对应的菜单", namespace);
-            }
-            // 执行方法
-            return joinPoint.proceed();
-        }
-        return joinPoint.proceed();*/
     }
 
 
+    /**
+     * 添加操作日志
+     *
+     * @param joinPoint   切入点对象
+     * @param method      方法
+     * @param classTarget 目标类
+     * @param result      方法返回值
+     * @param e           异常
+     */
     public void addLog(ProceedingJoinPoint joinPoint, Method method, Class<?> classTarget, Object result, Exception e) {
         LogMethod logMethod = method.getAnnotation(LogMethod.class);
         LogOperatorMainVO mainVO = new LogOperatorMainVO();
@@ -174,31 +125,47 @@ public class OperatorLogAop {
         }
         mainVO.setReqMethod(request.getMethod());
         VO vo = getReqParamVO(joinPoint, method, logMethod);
+        Object[] args = joinPoint.getArgs();
         if (vo != null) {
             this.transService.transOne(vo);
-            mainVO.setReqParam(formartJson(JsonUtils.bean2json(vo), vo.getClass()));
+            mainVO.setReqParam(BisLoggerContext.formartJson(JsonUtils.bean2json(vo), vo.getClass()));
         } else if (logMethod.reqBodyParamIndex() != LoggerConstant.INDEX_NOT) {
-            Object[] args = joinPoint.getArgs();
-            mainVO.setReqParam(formartJson(JsonUtils.bean2json(args[logMethod.reqBodyParamIndex()]), args[logMethod.reqBodyParamIndex()].getClass()));
+            mainVO.setReqParam(BisLoggerContext.formartJson(JsonUtils.bean2json(args[logMethod.reqBodyParamIndex()]), args[logMethod.reqBodyParamIndex()].getClass()));
         } else {
             mainVO.setReqParam(JsonUtils.map2json(getParameterMap()));
         }
-        mainVO.setRespBody(result != null ? JsonUtils.object2json(request) : e.getMessage());
+        mainVO.setRespBody(e == null ? JsonUtils.object2json(result) : e.getMessage());
         UcenterMsUserVO user = getSessionuser();
         mainVO.preInsert(user.getUserId());
         mainVO.setType(logMethod.type());
-
+        mainVO.setState(e == null ? LoggerConstant.LOG_STATE_SUCCESS : LoggerConstant.LOG_STATE_ERROR);
+        LogNamespace logNamespace = classTarget.getAnnotation(LogNamespace.class);
+        mainVO.setModel(logNamespace.module());
+        mainVO.setNamespace(logNamespace.namespace());
+        LogAddOperatorLogVO operatorLogVO = new LogAddOperatorLogVO();
+        operatorLogVO.setOperatorMainVO(mainVO);
+        operatorLogVO.setHistoryDataVOList(BisLoggerContext.getLogHistoryDataVOList());
+        operatorLogVO.setOperatorExtParamVOList(BisLoggerContext.getLogOperatorExtParamList());
+        this.addLog(operatorLogVO);
     }
 
 
-    public LogAddOperatorLogVO handleAdd(VO vo) {
-        LogAddOperatorLogVO result = new LogAddOperatorLogVO();
-        if (vo != null) {
-            LogHistoryDataVO historyDataVO = new LogHistoryDataVO();
+    /**
+     * 异步入库
+     *
+     * @param log
+     */
+    private void addLog(LogAddOperatorLogVO log) {
+        singleThreadExecutor.submit(() -> {
+            try{
+                bisLoggerApiService.addLog(log);
+            }catch (Exception e){
+                LOGGER.error("日志插入错误",e);
+            }
 
-        }
-        return result;
+        });
     }
+
 
     /**
      * 获取session里面的user
@@ -224,23 +191,6 @@ public class OperatorLogAop {
             resultMap.put(key, request.getParameter(key));
         }
         return resultMap;
-    }
-
-    /**
-     * 格式化json
-     *
-     * @param json  json
-     * @param clazz 类
-     * @return
-     */
-    public String formartJson(String json, Class clazz) {
-        List<Field> fieldList = ReflectUtils.getAnnotationField(clazz, ApiModelProperty.class);
-        ApiModelProperty apiModelProperty = null;
-        for (Field field : fieldList) {
-            apiModelProperty = field.getAnnotation(ApiModelProperty.class);
-            json = json.replace(field.getName(), apiModelProperty.value());
-        }
-        return json;
     }
 
 
@@ -281,19 +231,5 @@ public class OperatorLogAop {
 
     private Map<Method, Integer> VO_INDEX_MAP = new HashMap<>();
 
-    /* Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-        if (parameterAnnotations != null && parameterAnnotations.length != 0) {
-            int index = 0;
-            for (Annotation[] parameterAnnotation : parameterAnnotations) {
-                for (Annotation annotation : parameterAnnotation) {
-                    // 如果用此标记代表是参数
-                    if (annotation instanceof LogParam) {
-
-                    }
-                }
-                index++;
-            }
-        }
-        return "";*/
 
 }

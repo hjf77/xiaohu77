@@ -89,5 +89,11 @@ public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
     @ApiModelProperty(value = "0 新增 1 修改 2删除 3 查询 4 导入  5 导出")
     private Integer type;
 
+    /**
+     * 命名空间
+     */
+    @TableField("namespace")
+    @ApiModelProperty(value = "命名空间")
+    private String namespace;
 
 }
