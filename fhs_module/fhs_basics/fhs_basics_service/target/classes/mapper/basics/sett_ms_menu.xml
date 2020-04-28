@@ -88,7 +88,13 @@
 		<!-- TRIM(t.menu_type) AS menuType, -->
 		image,
 		'd' AS
-		nodeType
+		nodeType,
+        menu_id as menuId,
+        father_menu_id AS parentId,
+        menu_name as menuName,
+        order_index as orderIndex,
+        menu_url as menuUrl,
+        is_enable as isEnable
 		FROM `t_sett_ms_menu` t
 		<where>
 		    t.is_delete = 0

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询定时任务调度列表
 export function listJob(query) {
   return request({
-    url: '/monitor/job/list',
+    url: 'ms/task/list',
     method: 'get',
     params: query
   })
@@ -20,7 +20,7 @@ export function getJob(jobId) {
 // 新增定时任务调度
 export function addJob(data) {
   return request({
-    url: '/monitor/job',
+    url: 'ms/task/add',
     method: 'post',
     data: data
   })
@@ -36,9 +36,9 @@ export function updateJob(data) {
 }
 
 // 删除定时任务调度
-export function delJob(jobId) {
+export function delJob(jobName,jobGroup) {
   return request({
-    url: '/monitor/job/' + jobId,
+    url: 'ms/task/remove?jobName=' + jobName+'&jobGroup='+jobGroup,
     method: 'delete'
   })
 }
@@ -66,15 +66,26 @@ export function changeJobStatus(jobId, status) {
 }
 
 
-// 定时任务立即执行一次
-export function runJob(jobId, jobGroup) {
-  const data = {
-    jobId,
-    jobGroup
-  }
+// 定时任务触发
+export function runJob(jobName, jobGroup) {
   return request({
-    url: '/monitor/job/run',
-    method: 'put',
-    data: data
+    url: 'ms/task/trigger?jobName=' + jobName+'&jobGroup='+jobGroup,
+    method: 'get'
+  })
+}
+
+// 定时任务暂停
+export function timeOutJob(jobName, jobGroup) {
+  return request({
+    url: 'ms/task/pause?jobName=' + jobName + '&jobGroup=' + jobGroup,
+    method: 'get'
+  })
+}
+
+// 定时任务恢复
+export function restoreJob(jobName, jobGroup) {
+  return request({
+    url: 'ms/task/resume?jobName=' + jobName + '&jobGroup=' + jobGroup,
+    method: 'get'
   })
 }

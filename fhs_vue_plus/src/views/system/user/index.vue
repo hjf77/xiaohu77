@@ -109,7 +109,7 @@
               size="mini"
               :disabled="multiple"
               @click="handleDelete"
-              hasPermi="['system:user:remove']"
+              v-hasPermi="['system:user:remove']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -133,7 +133,6 @@
         </el-row>
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="40" align="center" />
           <el-table-column label="用户昵称" align="center" prop="userName" :show-overflow-tooltip="true" />
           <el-table-column label="用户名称" align="center" prop="userLoginName" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" prop="transMap.orgName" :show-overflow-tooltip="true" />
@@ -448,7 +447,7 @@ export default {
     deptName(val) {
       this.$refs.tree.filter(val);
     },
-      
+
   },
   created() {
     this.getList();
@@ -489,7 +488,7 @@ export default {
     // 筛选节点
     filterNode(value, data) {
       if (!value) return true;
-      return data.label.indexOf(value) !== -1;
+      return data.text.indexOf(value) !== -1;
     },
     // 节点单击事件
     handleNodeClick(data) {
@@ -632,8 +631,8 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const userIds = row.userId || this.ids;
-      this.$confirm('是否确认删除用户的数据吗?', "警告", {
+      const userIds = row.userId
+      this.$confirm('是否确认删除用户昵称为"' + row.userName + '"的数据项', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

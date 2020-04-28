@@ -77,6 +77,33 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
     }
 
     /**
+     * 根据父Id获取树集合
+     *
+     * @return 返回树节点对象集合
+     * @paramparentId 父Id
+     */
+    @Override
+    public List<TreeModelVO> getMenuTreesData() {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        List<TreeModelVO> allMenu = mapper.findMenuTrees(paramMap);
+        //找不到爸爸的才会放到此里面
+        List<TreeModelVO> result = new ArrayList<>();
+
+        Map<String, TreeModelVO> map = new HashMap<>();
+        for(TreeModelVO tree : allMenu){
+            map.put(tree.getId(),tree);
+            //找爸爸
+            if(map.containsKey(tree.getParentId())){
+                //把树对象 放入到爸爸 List集合里
+                map.get(tree.getParentId()).getChildren().add(tree);
+            }else{
+                result.add(tree);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 获取菜单树json 数据
      */
     @Override

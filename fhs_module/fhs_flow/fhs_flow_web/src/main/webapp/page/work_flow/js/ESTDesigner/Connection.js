@@ -100,7 +100,6 @@ ESTDesigner.connection.Connection = draw2d.Connection.extend({
 						});
 			},
 			contextmenuHandler : function() {
-				;
 				if (this.callback != undefined && this.callback != null
 						&& typeof this.callback == "function") {
 					this.callback();

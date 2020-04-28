@@ -62,8 +62,8 @@ Mock.mock(Config.Url.Get_Candidate_Groups, [ {
 } ]);
 // 获取Task Listener class列表
 Mock.mock(new RegExp(Config.Url.Get_Task_Listener_Classes), [ {
-    value : 'com.lish.mock.task.Listener1',
-    label : 'com.lish.mock.task.Listener1'
+    value : 'com.fhs.app.test.TestListenerController',
+    label : 'com.fhs.app.test.TestListenerController'
 }, {
     value : 'com.lish.mock.task.Listener2',
     label : 'com.lish.mock.task.Listener2'
@@ -73,8 +73,8 @@ Mock.mock(new RegExp(Config.Url.Get_Task_Listener_Classes), [ {
 } ]);
 //获取Execution Listener class列表
 Mock.mock(new RegExp(Config.Url.Get_Execution_Listener_Classes), [ {
-    value : 'com.lish.mock.execution.Listener1',
-    label : 'com.lish.mock.execution.Listener1'
+    value : 'com.fhs.app.test.TestListenerController',
+    label : 'com.fhs.app.test.TestListenerController'
 }, {
     value : 'com.lish.mock.execution.Listener2',
     label : 'com.lish.mock.execution.Listener2'
@@ -84,8 +84,8 @@ Mock.mock(new RegExp(Config.Url.Get_Execution_Listener_Classes), [ {
 } ]);
 //获取Process Listener class列表
 Mock.mock(new RegExp(Config.Url.Get_Process_Listener_Classes), [ {
-    value : 'com.lish.mock.process.Listener1',
-    label : 'com.lish.mock.process.Listener1'
+    value : 'com.fhs.app.test.TestListenerController',
+    label : 'com.fhs.app.test.TestListenerController'
 }, {
     value : 'com.lish.mock.process.Listener2',
     label : 'com.lish.mock.process.Listener2'
@@ -95,8 +95,8 @@ Mock.mock(new RegExp(Config.Url.Get_Process_Listener_Classes), [ {
 } ]);
 //获取Flow Listener class列表
 Mock.mock(new RegExp(Config.Url.Get_Flow_Listener_Classes), [ {
-    value : 'com.lish.mock.flow.Listener1',
-    label : 'com.lish.mock.flow.Listener1'
+    value : 'com.fhs.app.test.TestListenerController',
+    label : 'com.fhs.app.test.TestListenerController'
 }, {
     value : 'com.lish.mock.flow.Listener2',
     label : 'com.lish.mock.flow.Listener2'

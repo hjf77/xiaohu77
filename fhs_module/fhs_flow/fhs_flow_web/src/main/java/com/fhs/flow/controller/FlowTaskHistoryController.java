@@ -11,11 +11,14 @@ import com.fhs.flow.service.FlowTaskHistoryService;
 import com.fhs.flow.vo.FlowTaskHistoryVO;
 import com.fhs.flow.vo.TaskHistoryVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +37,9 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
 
     @Autowired
     private TransService transService;
+
+    @Autowired
+    private HistoryService historyService;
 
     /**
      * 办理历史
@@ -61,6 +67,18 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
     public void getApprovalRecord(String instanceId) {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         List<TaskHistoryVO> approvalRecord = flowTaskHistoryService.findApprovalRecord(instanceId);
+        List<HistoricTaskInstance> histList =
+                historyService.createHistoricTaskInstanceQuery().processInstanceId(instanceId).taskDeleteReason("deleted").list();
+        TaskHistoryVO taskHistoryVO = null;
+        for (HistoricTaskInstance historicTaskInstance : histList) {
+            taskHistoryVO = new TaskHistoryVO();
+            taskHistoryVO.setCreateTime(DateUtils.doConvertToString(historicTaskInstance.getStartTime()));
+            taskHistoryVO.setTaskFinishTime(DateUtils.doConvertToString(historicTaskInstance.getEndTime()));
+            taskHistoryVO.setCreateUser(historicTaskInstance.getAssignee());
+            taskHistoryVO.setTaskName(historicTaskInstance.getName());
+            taskHistoryVO.setTaskId(historicTaskInstance.getId());
+            approvalRecord.add(taskHistoryVO);
+        }
         transService.transMore(approvalRecord);
         super.outJsonp(new Pager(approvalRecord.size(), approvalRecord).asJson());
     }
