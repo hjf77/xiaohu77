@@ -365,5 +365,27 @@
 			t_sett_ms_menu
 	</select>
 
+    <select id="getMenuPermissionTree" resultType="com.fhs.basics.vo.TreeMenuPermissionVO">
+		SELECT
+			menu_id AS id,
+			father_menu_id AS parentId,
+			menu_name AS name
+		FROM
+			t_sett_ms_menu
+		WHERE is_delete = 0
+
+		UNION  ALL
+
+		SELECT
+			CONCAT("p_", p.permission_id) AS id,
+			p.menu_id AS parentId,
+			p.permission_name AS name
+		FROM
+			t_sett_ms_menu_permission p
+		INNER JOIN t_sett_ms_menu m ON m.menu_id = p.menu_id
+		WHERE p.is_delete = 0
+		AND m.is_delete = 0
+    </select>
+
 </mapper>
 

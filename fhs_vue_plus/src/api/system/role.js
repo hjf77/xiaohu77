@@ -19,7 +19,6 @@ export function getRole(roleId) {
 
 // 新增角色
 export function addRole(data) {
-  debugger;
   return request({
     url: '/ms/sysRole/addSysRole',
     method: 'post',
@@ -39,21 +38,8 @@ export function updateRole(data) {
 // 角色数据权限
 export function dataScope() {
   return request({
-    url: '/ms/sysMenu/findMenuRootTrees',
+    url: '/ms/sysMenu/getMenuPermissionTree',
     method: 'put',
-  })
-}
-
-// 角色状态修改
-export function changeRoleStatus(roleId, status) {
-  const data = {
-    roleId,
-    status
-  }
-  return request({
-    url: '/system/role/changeStatus',
-    method: 'put',
-    data: data
   })
 }
 
@@ -71,5 +57,13 @@ export function getSelectOrganSysRoles(organizationId) {
   return request({
     url: '/ms/sysRole/getSelectOrganSysRoles/'+organizationId,
     method: 'get',
+  })
+}
+
+// 根据角色id获取菜单权限数据
+export function getPermissionByRoleId(roleId) {
+  return request({
+    url: '/ms/sysRole/getRolePermissionButtons?roleId='+roleId,
+    method: 'POST',
   })
 }

@@ -97,6 +97,16 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     }
 
     /**
+     * vue - element 查询角色的按钮信息
+     *
+     * @param roleId
+     */
+    @RequestMapping("getRolePermissionButtons")
+    public String[] getRolePermissionButtons(String roleId) {
+        return sysRoleService.getRolePermissionButtons(roleId);
+    }
+
+    /**
      * @desc 新增修改后台用户  获取当前机构下的角色数据
      */
     @RequestMapping("/getCurrentOrganizationSysRoles")

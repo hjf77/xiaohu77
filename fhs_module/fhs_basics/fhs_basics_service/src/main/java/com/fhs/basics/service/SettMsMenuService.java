@@ -3,6 +3,7 @@ package com.fhs.basics.service;
 import com.fhs.basics.dox.SettMsMenuDO;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.TreeDataVO;
+import com.fhs.basics.vo.TreeMenuPermissionVO;
 import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.core.base.service.BaseService;
 
@@ -39,6 +40,12 @@ public interface SettMsMenuService extends BaseService<SettMsMenuVO, SettMsMenuD
      * @return
      */
     List<TreeModelVO> getMenuTreesData();
+
+    /**
+     * 获取菜单权限按钮
+     * @return
+     */
+    List<TreeMenuPermissionVO> getMenuPermissionTree();
 
     /**
      * 获取菜单树集合并组建json

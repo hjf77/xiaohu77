@@ -11,6 +11,7 @@ import com.fhs.basics.service.SettMsMenuService;
 import com.fhs.basics.service.UcenterMsTenantService;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.TreeDataVO;
+import com.fhs.basics.vo.TreeMenuPermissionVO;
 import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
@@ -88,9 +89,33 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
         List<TreeModelVO> allMenu = mapper.findMenuTrees(paramMap);
         //找不到爸爸的才会放到此里面
         List<TreeModelVO> result = new ArrayList<>();
-
         Map<String, TreeModelVO> map = new HashMap<>();
         for(TreeModelVO tree : allMenu){
+            map.put(tree.getId(),tree);
+            //找爸爸
+            if(map.containsKey(tree.getParentId())){
+                //把树对象 放入到爸爸 List集合里
+                map.get(tree.getParentId()).getChildren().add(tree);
+            }else{
+                result.add(tree);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 根据父Id获取树集合
+     *
+     * @return 返回树节点对象集合
+     * @paramparentId 父Id
+     */
+    @Override
+    public List<TreeMenuPermissionVO> getMenuPermissionTree() {
+        List<TreeMenuPermissionVO> TreeMenuPermissionVO = mapper.getMenuPermissionTree();
+        //找不到爸爸的才会放到此里面
+        List<TreeMenuPermissionVO> result = new ArrayList<>();
+        Map<String, TreeMenuPermissionVO> map = new HashMap<>();
+        for(TreeMenuPermissionVO tree : TreeMenuPermissionVO){
             map.put(tree.getId(),tree);
             //找爸爸
             if(map.containsKey(tree.getParentId())){

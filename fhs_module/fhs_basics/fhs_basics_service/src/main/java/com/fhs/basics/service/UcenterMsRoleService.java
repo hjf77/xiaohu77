@@ -79,6 +79,14 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
     List<Map<String, Object>> searchButtons(UcenterMsRoleDO adminRole);
 
     /**
+     * 查询角色的按钮信息列表
+     *
+     * @param roleId
+     * @return
+     */
+    String[] getRolePermissionButtons(String roleId);
+
+    /**
      * 根据角色查询按钮id
      *
      * @param map

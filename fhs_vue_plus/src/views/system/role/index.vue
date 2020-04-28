@@ -139,7 +139,7 @@
 </template>
 
 <script>
-  import { listRole, getRole, delRole, addRole, updateRole, dataScope } from '@/api/system/role'
+  import { listRole, getRole, delRole, addRole, updateRole, dataScope,getPermissionByRoleId } from '@/api/system/role'
   import { treeselect } from '@/api/system/dept'
   import Treeselect from '@riophae/vue-treeselect'
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -236,7 +236,6 @@
       getTreeselect() {
         treeselect().then(response => {
           this.deptOptions = response
-          debugger;
           this.fatherId = response[0].id;
         })
       },
@@ -273,8 +272,8 @@
       },
       // 表单重置
       reset() {
-        if (this.$refs.menu != undefined) {
-          this.$refs.menu.setCheckedKeys([])
+        if (this.$refs.name != undefined) {
+          this.$refs.name.setCheckedKeys([])
         }
         this.form = {
           roleId: undefined,
@@ -299,17 +298,35 @@
       handleUpdate(row) {
         this.reset()
         this.getTreeselect()
-        const roleId = row.roleId
         this.getMenuTreeselect()
+        const roleId = row.roleId
         getRole(roleId).then(response => {
           this.form = response
           this.form.isEnable = response.isEnable.toString()
-          this.open = true
           this.title = '修改角色'
         })
+        this.open = true
+        /** 根据角色ID查询菜单树结构 **/
+        this.$nextTick(() => {
+          getPermissionByRoleId(roleId).then(response => {
+            this.$nextTick(() => {
+              this.$refs.name.setCheckedKeys(response);
+            });
+          });
+        });
       },
       /** 提交按钮 */
       submitForm: function() {
+        var treeKeys = this.$refs.name.getCheckedKeys()
+        var ids = []
+        var methods = []
+        this.getTreeNodes(treeKeys, ids)
+        ids.forEach(function(id) {
+          if(id.startsWith("p_")){
+            methods.push(id)
+          }
+        })
+        this.form.methods = methods
         this.$refs['form'].validate(valid => {
           if (valid) {
             if (this.form.roleId != undefined) {
@@ -349,6 +366,24 @@
           this.msgSuccess('删除成功')
         }).catch(function() {
         })
+      },
+      // 获取选中的树节点
+      getTreeNodes (childNodes, ids) {
+        // 将所有选中的子节点保存
+        for (var i = 0; i < childNodes.length; i++) {
+          ids.push(childNodes[i])
+          // 获取父级节点
+          this.getTreeParentNode(childNodes[i], ids)
+        }
+      },
+      // 递归查询所有上级数据
+      getTreeParentNode (id, ids) {
+        // 获取当前节点的上级节点id
+        var parentId = this.$refs.name.getNode(id).parent.data.id
+        if (parentId && parentId !== null) {
+          ids.push(parentId)
+          this.getTreeParentNode(parentId, ids)
+        }
       }
     }
   }
