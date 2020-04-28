@@ -35,7 +35,7 @@ ESTDesigner.gateway.ParallelGateway=ESTDesigner.event.BaseEvent.extend({
 		if(this.id.indexOf("parallelGateway")<0){
 			this.id = "parallelGateway"+this.id;
 		}
-		var xml='<parallelGateway id="'+this.id+'" name="'+this.id+'"></parallelGateway>\n';
+		var xml='<parallelGateway id="'+this.id+'" name=" "></parallelGateway>\n';
 		return xml;
 	}
 });
@@ -53,7 +53,7 @@ ESTDesigner.gateway.ExclusiveGateway=ESTDesigner.event.BaseEvent.extend({
 		if(this.id.indexOf("exclusiveGateway")<0){
 			this.id  = "exclusiveGateway"+this.id;
 		}
-		var xml='<exclusiveGateway id="'+this.id+'" name="'+this.id+'"></exclusiveGateway>\n';
+		var xml='<exclusiveGateway id="'+this.id+'" name=" "></exclusiveGateway>\n';
 		return xml;
 	}
 });

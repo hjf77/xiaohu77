@@ -744,6 +744,8 @@ ESTDesigner.tool.Parser.CallActivityParser = ESTDesigner.tool.Parser.TaskParser.
 				this._super();
 			},
 			_parseCustomizeProp : function(xmlNode, task) {
+			    var element = xmlNode.attr("calledElement");
+			    task.callElement = element;
 				var inParams = xmlNode.find('extensionElements').find('activiti\\:in');
 				this._parseInputParams(inParams, task);
 				var outParams = xmlNode.find('extensionElements').find('activiti\\:out');
@@ -752,21 +754,20 @@ ESTDesigner.tool.Parser.CallActivityParser = ESTDesigner.tool.Parser.TaskParser.
 			_parseInputParams : function(xmlNode, task) {
 				xmlNode.each(function(i) {
 							var param = new ESTDesigner.task.CallActivityTask.Parameter.InputParameter();
-							this._parseParam($(this), param);
+							param.source = $(this).attr('source');
+							param.sourceExpression = $(this).attr('sourceExpression');
+							param.target = $(this).attr('target');
 							task.inputParams.add(param);
 						})
 			},
 			_parseOutputParams : function(xmlNode, task) {
 				xmlNode.each(function(i) {
 							var param = new ESTDesigner.task.CallActivityTask.Parameter.OutputParameter();
-							this._parseParam($(this), param);
+							param.source = $(this).attr('source');
+							param.sourceExpression = $(this).attr('sourceExpression');
+							param.target = $(this).attr('target');
 							task.outputParams.add(param);
 						})
-			},
-			_parseParam : function(xmlNode, param) {
-				param.source = xmlNode.attr('source');
-				param.sourceExpression = xmlNode.attr('sourceExpression');
-				param.target = xmlNode.attr('target');
 			}
 		});
 ESTDesigner.tool.Parser.BPMNShape = Class.extend({
@@ -835,6 +836,7 @@ ESTDesigner.tool.Parser.ContainerParser = ESTDesigner.tool.Parser.BaseParser.ext
 					var collection = multiInstance.attr('activiti:collection');
 					var loopCardinality = multiInstance.find('loopCardinality').text();
 					var completionCondition = multiInstance.find('completionCondition').text();
+
 					container._elementVariable = elementVariable;
 					container._collection = collection;
 					container._loopCardinality = loopCardinality;

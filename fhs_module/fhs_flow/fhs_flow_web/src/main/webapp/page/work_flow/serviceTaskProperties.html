@@ -225,10 +225,13 @@
         controlTaskTypeDisplay(task._type);
         if (task._type == 'javaClass') {
             $('#serviceClass').val(task._javaClass);
+            $('#javaClassType').prop('checked', true);
         } else if (task._type == 'expression') {
             $('#_expression').val(task._expression);
+            $('#expressionType').prop('checked', true);
         } else if (task._type == 'delegateExpression') {
             $('#delegateExpression').val(task.delegateExpression);
+            $('#delegateExpressionType').prop('checked', true);
         }
         $('#resultVariable').val(task.resultVariable);
         loadTaskFields();

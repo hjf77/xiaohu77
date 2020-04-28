@@ -220,10 +220,10 @@ ESTDesigner.container.BaseContainer=draw2d.shape.composite.Raft.extend({
             xml = xml + '>\n'
             if (this._loopCardinality != null && this._loopCardinality != '')
                 xml = xml + '<loopCardinality>' + this._loopCardinality
-                        + '</loopCardinality>\n';
+                    + '</loopCardinality>\n';
             if (this._completionCondition != null && this._completionCondition != '')
                 xml = xml + '<completionCondition>' + this._completionCondition
-                        + '</completionCondition>\n'
+                    + '</completionCondition>\n'
             xml = xml + '</multiInstanceLoopCharacteristics>\n';
         }
         return xml;
@@ -275,6 +275,35 @@ ESTDesigner.container.SubProcess=ESTDesigner.container.BaseContainer.extend({
         this.candidateGroups = new draw2d.util.ArrayList();
         this.formProperties = new draw2d.util.ArrayList();
         this.taskListeners = new draw2d.util.ArrayList();
+        this.on("contextmenu", function(emitter, event) {
+
+            if(event.figure!=null)return;
+            $.contextMenu({
+                selector : 'body',
+                events : {
+                    hide : function() {
+                        $.contextMenu('destroy');
+                    }
+                },
+                callback : $.proxy(function(key, options) {
+                    switch (key) {
+                        case "Properties":
+                            emitter.contextmenuHandler(emitter.id);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }, this),
+                x : event.x,
+                y : event.y,
+                items : {
+                    "Properties" : {
+                        name : "属性"
+                    }
+                }
+            });
+        })
     },
     getStartElementXML : function() {
         var xml = '<subProcess ';
