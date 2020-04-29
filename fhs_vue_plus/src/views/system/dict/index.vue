@@ -58,6 +58,15 @@
           v-hasPermi="['system:dict:remove']"
         >删除</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          icon="el-icon-edit"
+          size="mini"
+          @click="refreshCache"
+          hasPermi="['system:dict:edit']"
+        >刷新所有字典缓存</el-button>
+      </el-col>
 
     </el-row>
 
@@ -86,6 +95,13 @@
             @click="handleDelete(scope.row)"
             hasPermi="['system:dict:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="refreshCache(scope.row)"
+            hasPermi="['system:dict:remove']"
+          >刷新字典缓存</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -117,7 +133,7 @@
 </template>
 
 <script>
-import { listType, getType, delType, addType, updateType,  } from "@/api/system/dict/type";
+import { listType, getType, delType, addType, updateType, refresh } from "@/api/system/dict/type";
 
 export default {
   name: "Dict",
@@ -270,6 +286,26 @@ export default {
           this.msgSuccess("删除成功");
         }).catch(function() {});
     },
+      /** 刷新字典缓存按钮操作 */
+      refreshCache(row) {
+          debugger
+          let wordbookGroupCode ='';
+          if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
+              wordbookGroupCode = row.wordbookGroupCode;
+          }else {
+              wordbookGroupCode = '';
+          }
+          refresh(wordbookGroupCode).then(response => {
+              if (response.code === 200) {
+                  this.msgSuccess("操作成功");
+                  this.open = false;
+                  this.getList();
+              } else {
+                  this.msgError(response.msg);
+              }
+          });
+
+      },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
