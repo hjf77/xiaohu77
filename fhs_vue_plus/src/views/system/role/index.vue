@@ -117,6 +117,7 @@
                 show-checkbox
                 ref="name"
                 node-key="id"
+                :default-expanded-keys="expandedKeys"
                 empty-text="加载中，请稍后"
                 :props="menuProps"
               ></el-tree>
@@ -169,6 +170,8 @@
         statusOptions: [],
         // 菜单列表
         menuOptions: [],
+        //tree 默认展开节点
+        expandedKeys:[],
         // 查询参数
         queryParams: {
           organizationId: undefined
@@ -226,10 +229,11 @@
           }
         )
       },
-      /** 查询菜单树结构 */
+      /** 查询菜单权限树结构 */
       getMenuTreeselect() {
         dataScope().then(response => {
           this.menuOptions = response
+          this.expandedKeys.push(response[0].id)
         })
       },
       /** 查询部门下拉树结构 */
