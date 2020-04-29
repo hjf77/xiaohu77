@@ -3,12 +3,14 @@
     <el-row :gutter="20">
       <el-col :span="14" :xs="24">
 
+        <!--default-expand-all  默认展开属性-->
         <el-table
           v-loading="loading"
           :data="menuList"
           row-key="id"
+          :expand-row-keys="expandedKeys"
           border highlight-current-row
-          default-expand-all @row-click="getPermissionClick"
+          @row-click="getPermissionClick"
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
         >
           <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="200"></el-table-column>
@@ -55,7 +57,8 @@
               size="mini"
               @click="getPermissionAdd"
               v-hasPermi="['sysMenuPermission:add']"
-            >批量添加增删改查权限</el-button>
+            >批量添加增删改查权限
+            </el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -64,13 +67,14 @@
               size="mini"
               @click="permissionHandleAdd"
               v-hasPermi="['sysMenuPermission:add']"
-            >新增</el-button>
+            >新增
+            </el-button>
           </el-col>
         </el-row>
         <el-table v-loading="loading" :data="permissionList">
           <el-table-column prop="permissionName" label="权限名称" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="method" label="方法名称" :show-overflow-tooltip="true" ></el-table-column>
-          <el-table-column prop="transMap.isEnableName" label="状态" :show-overflow-tooltip="true" ></el-table-column>
+          <el-table-column prop="method" label="方法名称" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="transMap.isEnableName" label="状态" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button size="mini"
@@ -236,8 +240,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="菜单类型" prop="permissionType" >
-              <el-select v-model="permissionForm.permissionType" placeholder="请选择菜单类型" @change="menuTypeChange" >
+            <el-form-item label="菜单类型" prop="permissionType">
+              <el-select v-model="permissionForm.permissionType" placeholder="请选择菜单类型" @change="menuTypeChange">
                 <el-option
                   v-for="item in permissionTypeOptions"
                   :key="item.wordbookCode"
@@ -249,7 +253,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
-              <el-radio-group v-model="permissionForm.isEnable " >
+              <el-radio-group v-model="permissionForm.isEnable ">
                 <el-radio
                   v-for="dict in visibleOptions"
                   :value="dict.wordbookCode"
@@ -270,7 +274,7 @@
 </template>
 
 <style>
-  .el-table__body tr.current-row>td {
+  .el-table__body tr.current-row > td {
     background: #f57878 !important;
   }
 </style>
@@ -320,6 +324,8 @@
         systemOptions: [],
         //菜单所在服务统数据字典
         serverOptions: [],
+        //默认展开元素
+        expandedKeys: [],
 
         /****************************** start 以下权限相关 **************** **/
         //权限外键：菜单id
@@ -377,7 +383,7 @@
           ],
           permissionType: [
             { required: true, message: '菜单类型不能为空', trigger: 'blur' }
-          ],
+          ]
         }
       }
     },
@@ -399,7 +405,6 @@
         this.serverOptions = response
       })
       getSystemOptions().then(response => {
-        debugger;
         this.systemOptions = response
       })
     },
@@ -413,6 +418,7 @@
         this.loading = true
         listMenu(this.queryParams).then(response => {
           this.menuList = response
+          this.expandedKeys.push(response[0].id)
           this.loading = false
         })
       },
@@ -551,16 +557,16 @@
         })
       },
       /** 批量增加增删改查权限 **/
-      getPermissionAdd(){
+      getPermissionAdd() {
         if (this.permissionMenuId == null) {
-          this.msgError("请选择菜单");
-          return;
+          this.msgError('请选择菜单')
+          return
         }
         addAllPermission(this.permissionMenuId).then(response => {
           if (response.result) {
             this.msgSuccess('新增成功')
             this.open = false
-            this.getPermissionClick(this.permissionMenuId);
+            this.getPermissionClick(this.permissionMenuId)
           } else {
             this.msgError(response.msg)
           }
@@ -569,8 +575,8 @@
       /** 新增按钮操作 */
       permissionHandleAdd(row) {
         if (this.permissionMenuId == null) {
-          this.msgError("请选择菜单");
-          return;
+          this.msgError('请选择菜单')
+          return
         }
         this.permissionReset()
         this.permissionOpen = true
@@ -631,9 +637,9 @@
         })
       },
       /** 下拉选中事件 **/
-      menuTypeChange(index){
-       var data =  this.permissionTypeOptions[index - 1]
-      },
+      menuTypeChange(index) {
+        var data = this.permissionTypeOptions[index - 1]
+      }
     }
   }
 </script>
