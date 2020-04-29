@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO;
 import com.fhs.basics.vo.SettMsMenuPermissionUrlRelaVO;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
 import com.fhs.core.base.service.BaseService;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -68,4 +69,11 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
      * @return
      */
     boolean delUrl(SettMsMenuPermissionUrlRelaDO sysMenuPermissionUrlRela);
+
+    /**
+     * 根据角色Ids 查询出权限 namespace:mothd
+     * @param roleIds
+     * @return
+     */
+    List<String> getRolePermisssionByRoleId(String roleIds);
 }

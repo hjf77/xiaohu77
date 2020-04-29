@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="部门名称">
+      <el-form-item >
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入部门名称"
+          placeholder="部门名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态">
+      <el-form-item >
         <el-select v-model="queryParams.isEnable" placeholder="部门状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
@@ -35,7 +35,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          hasPermi="['system:dept:add']"
+          v-hasPermi="['sysOrganization:add']"
         >新增
         </el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -74,7 +74,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            hasPermi="['system:dept:edit']"
+            v-hasPermi="['sysOrganization:update']"
           >修改
           </el-button>
           <el-button
@@ -82,7 +82,7 @@
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
-            hasPermi="['system:dept:add']"
+            v-hasPermi="['sysOrganization:add']"
           >新增
           </el-button>
           <el-button v-if="scope.row.parentId != 0"
@@ -90,7 +90,7 @@
                      type="text"
                      icon="el-icon-delete"
                      @click="handleDelete(scope.row)"
-                     hasPermi="['system:dept:remove']"
+                     v-hasPermi="['sysOrganization:del']"
           >删除
           </el-button>
         </template>
@@ -134,12 +134,12 @@
 </template>
 
 <script>
-  import { listDept, getDept, delDept, addDept, updateDept } from '@/api/system/dept'
+  import { listDept, getDept, delDept, addDept, updateDept } from '@/api/system/sysOrganization'
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
   export default {
-    name: 'Dept',
+    name: 'sysOrganization',
     components: { Treeselect },
     data() {
       return {

@@ -1,37 +1,37 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="任务名称" prop="jobName">
+      <el-form-item  prop="jobName">
         <el-input
           v-model="queryParams.jobName"
-          placeholder="请输入任务名称"
+          placeholder="任务名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务分组" prop="jobGroup">
+      <el-form-item  prop="jobGroup">
         <el-input
           v-model="queryParams.jobGroup"
-          placeholder="请输入任务分组"
+          placeholder="任务分组"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务描述" prop="description">
+      <el-form-item  prop="description">
         <el-input
           v-model="queryParams.description"
-          placeholder="请输入任务描述"
+          placeholder="任务描述"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务类名" prop="jobClassName">
+      <el-form-item  prop="jobClassName">
         <el-input
           v-model="queryParams.jobClassName"
-          placeholder="请输入任务类名"
+          placeholder="任务类名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -51,7 +51,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-         hasPermi="['monitor:job:add']"
+         v-hasPermi="['task:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -61,7 +61,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['monitor:job:edit']"
+          v-hasPermi="['task:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,7 +71,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:job:remove']"
+          v-hasPermi="['task:del']"
         >删除</el-button>
       </el-col>
     </el-row>
@@ -90,28 +90,28 @@
             type="text"
             icon="el-icon-caret-right"
             @click="handleRun(scope.row)"
-            hasPermi="['monitor:job:edit']"
+            v-hasPermi="['task:add']"
           >触发</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-view"
             @click="handleTimeOut(scope.row)"
-            hasPermi="['monitor:job:edit']"
+            v-hasPermi="['task:add']"
           >暂停</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-view"
             @click="handleRestore(scope.row)"
-            hasPermi="['monitor:job:edit']"
+            v-hasPermi="['task:add']"
           >恢复</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-caret-right"
             @click="handleDelete(scope.row)"
-            hasPermi="['monitor:job:remove']"
+            v-hasPermi="['task:del']"
           >删除</el-button>
         </template>
       </el-table-column>

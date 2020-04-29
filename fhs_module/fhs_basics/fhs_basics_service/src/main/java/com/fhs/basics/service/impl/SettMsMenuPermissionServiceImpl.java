@@ -85,6 +85,11 @@ public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuP
         return count > 0;
     }
 
+    @Override
+    public List<String> getRolePermisssionByRoleId(String roleIds) {
+        return mapper.getRolePermisssionByRoleId(roleIds);
+    }
+
     /**
      * 获取基础权限的数据，组装为map，key为权限，value为权限的信息
      *

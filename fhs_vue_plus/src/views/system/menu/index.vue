@@ -20,7 +20,7 @@
                          type="text"
                          icon="el-icon-edit"
                          @click="handleUpdate(scope.row)"
-                         hasPermi="['system:menu:edit']"
+                         v-hasPermi="['sysMenu:update']"
               >修改
               </el-button>
               <el-button
@@ -28,7 +28,7 @@
                 type="text"
                 icon="el-icon-plus"
                 @click="handleAdd(scope.row)"
-                hasPermi="['system:menu:add']"
+                v-hasPermi="['sysMenu:add']"
               >新增
               </el-button>
               <el-button
@@ -36,7 +36,7 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                hasPermi="['system:menu:remove']"
+                v-hasPermi="['sysMenu:del']"
               >删除
               </el-button>
             </template>
@@ -54,7 +54,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="getPermissionAdd"
-              hasPermi="['system:menu:add']"
+              v-hasPermi="['sysMenuPermission:add']"
             >批量添加增删改查权限</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -63,7 +63,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="permissionHandleAdd"
-              hasPermi="['system:user:add']"
+              v-hasPermi="['sysMenuPermission:add']"
             >新增</el-button>
           </el-col>
         </el-row>
@@ -77,7 +77,7 @@
                          type="text"
                          icon="el-icon-edit"
                          @click="permissionHandleUpdate(scope.row)"
-                         hasPermi="['system:menu:edit']"
+                         v-hasPermi="['sysMenuPermission:update']"
               >修改
               </el-button>
               <el-button
@@ -85,7 +85,7 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="permissionHandleDelete(scope.row)"
-                hasPermi="['system:menu:remove']"
+                v-hasPermi="['sysMenuPermission:del']"
               >删除
               </el-button>
             </template>
@@ -296,7 +296,7 @@
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
   export default {
-    name: 'Menu',
+    name: 'sysMenu',
     components: { Treeselect },
     data() {
       return {

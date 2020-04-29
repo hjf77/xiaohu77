@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO;
 import com.fhs.basics.vo.SettMsMenuPermissionUrlRelaVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -98,4 +99,11 @@ public interface SettMsMenuPermissionMapper extends FhsBaseMapper<SettMsMenuPerm
      * @return
      */
     Integer delUrl(SettMsMenuPermissionUrlRelaDO sysMenuPermissionUrlRela);
+
+    /**
+     * 根据角色Ids 查询出权限 namespace:mothd
+     * @param roleIds
+     * @return
+     */
+    List<String> getRolePermisssionByRoleId(@Param("roleIds") String roleIds);
 }

@@ -50,7 +50,7 @@
                 type="text"
                 icon="el-icon-plus"
                 @click="handleAdd(scope.row)"
-                hasPermi="['system:dept:add']"
+                v-hasPermi="['sysRole:add']"
               >新增
               </el-button>
               <el-button
@@ -58,7 +58,7 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                hasPermi="['system:role:edit']"
+                v-hasPermi="['sysRole:update']"
               >修改
               </el-button>
               <el-button
@@ -66,7 +66,7 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                hasPermi="['system:role:remove']"
+                v-hasPermi="['sysRole:del']"
               >删除
               </el-button>
             </template>
@@ -140,7 +140,7 @@
 
 <script>
   import { listRole, getRole, delRole, addRole, updateRole, dataScope,getPermissionByRoleId } from '@/api/system/role'
-  import { treeselect } from '@/api/system/dept'
+  import { treeselect } from '@/api/system/sysOrganization'
   import Treeselect from '@riophae/vue-treeselect'
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 

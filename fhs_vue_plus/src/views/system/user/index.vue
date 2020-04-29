@@ -6,7 +6,7 @@
         <div class="head-container">
           <el-input
             v-model="deptName"
-            placeholder="请输入部门名称"
+            placeholder="部门名称"
             clearable
             size="small"
             prefix-icon="el-icon-search"
@@ -28,27 +28,27 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-          <el-form-item label="用户名称" prop="userLoginName">
+          <el-form-item prop="userLoginName">
             <el-input
               v-model="queryParams.userLoginName"
-              placeholder="请输入用户名称"
+              placeholder="用户名称"
               clearable
               size="small"
               style="width: 240px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="手机号码" prop="mobile">
+          <el-form-item  prop="mobile">
             <el-input
               v-model="queryParams.mobile"
-              placeholder="请输入手机号码"
+              placeholder="手机号码"
               clearable
               size="small"
               style="width: 240px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="状态" prop="isEnable">
+          <el-form-item  prop="isEnable">
             <el-select
               v-model="queryParams.isEnable"
               placeholder="用户状态"
@@ -64,7 +64,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间">
+          <el-form-item >
             <el-date-picker
               v-model="dateRange"
               size="small"
@@ -89,7 +89,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-              hasPermi="['system:user:add']"
+              v-hasPermi="['sysUser:add']"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -99,7 +99,7 @@
               size="mini"
               :disabled="single"
               @click="handleUpdate"
-              v-hasPermi="['system:user:edit']"
+              v-hasPermi="['sysUser:edit']"
             >修改</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -109,7 +109,7 @@
               size="mini"
               :disabled="multiple"
               @click="handleDelete"
-              v-hasPermi="['system:user:remove']"
+              v-hasPermi="['sysUser:del']"
             >删除</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -118,7 +118,7 @@
               icon="el-icon-upload2"
               size="mini"
               @click="handleImport"
-              v-hasPermi="['system:user:import']"
+              v-hasPermi="['sysUser:import']"
             >导入</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -127,7 +127,7 @@
               icon="el-icon-download"
               size="mini"
               @click="handleExport"
-              v-hasPermi="['system:user:export']"
+              v-hasPermi="['sysUser:export']"
             >导出</el-button>
           </el-col>
         </el-row>
@@ -164,7 +164,7 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-               hasPermi="['system:user:edit']"
+               v-hasPermi="['sysUser:update']"
               >修改</el-button>
               <el-button
                 v-if="scope.row.userId !== 1"
@@ -172,14 +172,14 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                v-hasPermi="['system:user:remove']"
+                v-hasPermi="['sysUser:del']"
               >删除</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-key"
                 @click="handleResetPwd(scope.row)"
-                v-hasPermi="['system:user:resetPwd']"
+                v-hasPermi="['sysUser:resetPwd']"
               >重置</el-button>
             </template>
           </el-table-column>
@@ -327,7 +327,7 @@
 import { listUser, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
 import {getSelectOrganSysRoles } from "@/api/system/role";
 import { getToken } from "@/utils/auth";
-import { treeselect } from "@/api/system/dept";
+import { treeselect } from "@/api/system/sysOrganization";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -581,7 +581,8 @@ export default {
           this.form.sex = response.sex.toString();
           this.form.isEnable = response.isEnable.toString();
         this.title = "修改用户";
-        this.form.password = "";
+        debugger;
+        this.form.password = row.password;
       });
     },
     /** 重置密码按钮操作 */
