@@ -31,7 +31,6 @@ export function addUser(data) {
 
 // 修改用户
 export function updateUser(data) {
-  debugger
   data.roles = [];
   return request({
     url: '/ms/sysUser/updateUser',

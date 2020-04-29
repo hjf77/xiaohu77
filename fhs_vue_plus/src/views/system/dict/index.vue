@@ -288,7 +288,6 @@ export default {
     },
       /** 刷新字典缓存按钮操作 */
       refreshCache(row) {
-          debugger
           let wordbookGroupCode ='';
           if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
               wordbookGroupCode = row.wordbookGroupCode;

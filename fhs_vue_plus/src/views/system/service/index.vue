@@ -254,7 +254,6 @@ export default {
 
       this.$refs["form"].validate(valid => {
         if (valid) {
-            debugger
           if (this.form.id != undefined) {
             updateService(this.form).then(response => {
               if (response.code === 200) {
@@ -295,7 +294,6 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-        debugger
       this.$confirm('是否确认导出所有数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",

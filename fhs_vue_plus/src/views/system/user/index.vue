@@ -497,7 +497,6 @@ export default {
     },
     // 用户状态修改
     handleStatusChange(row) {
-    debugger
         let text = row.isEnable === 0 ? '禁用' : '启用'
         this.$confirm('确认要"' + text + '""' + row.name + '"部门吗?', '警告', {
             confirmButtonText: '确定',
@@ -581,7 +580,6 @@ export default {
           this.form.sex = response.sex.toString();
           this.form.isEnable = response.isEnable.toString();
         this.title = "修改用户";
-        debugger;
         this.form.password = row.password;
       });
     },

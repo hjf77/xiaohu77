@@ -491,7 +491,6 @@ export default {
 
       this.$refs["form"].validate(valid => {
         if (valid) {
-            debugger
           if (this.form.id != undefined) {
             updateService(this.form).then(response => {
               if (response.code === 200) {
@@ -646,7 +645,6 @@ export default {
       },
       /**驳回到指定节点*/
       turnDownForm(){
-          debugger
           const taskId = this.instanceDetails.taskId
           const id = this.nodeForm.id
           const remark = this.nodeForm.remark

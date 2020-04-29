@@ -29,7 +29,6 @@ export function addService(data) {
 
 // 修改角色
 export function updateService(data) {
-  debugger
   return request({
     url: '/ms/x/sett_ms_menu_server/update/'+data.id,
     method: 'put',

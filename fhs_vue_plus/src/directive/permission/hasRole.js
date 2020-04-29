@@ -10,7 +10,6 @@ export default {
     const { value } = binding
     const super_admin = "admin";
     const roles = store.getters && store.getters.roles
-    debugger;
 
     if (value && value instanceof Array && value.length > 0) {
       const roleFlag = value
