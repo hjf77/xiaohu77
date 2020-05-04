@@ -248,6 +248,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/page/**", "anon");
         //4.登录过的不拦截
         filterChainDefinitionMap.put("/ms/**", "authc");
+        filterChainDefinitionMap.put("/druid/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 
