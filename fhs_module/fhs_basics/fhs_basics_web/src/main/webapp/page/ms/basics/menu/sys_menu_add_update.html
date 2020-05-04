@@ -17,7 +17,7 @@ include("/page/tags/form_include.html"){}
       textField= 'serverName' />
     <#InputFormTag  name='orderIndex' title='菜单序号' required='true' dataType="n"/>
    </div>
-   <#UploadFormTag  name='image' title='LOGO'  placeholder="请上传菜单LOGO"/>
+   <#BigInputFormTag  name='image' placeholder="请将logo放到basics/images/menu下这里只写文件名" title='logo'  />
    <div class="fitem">
       <#SelectFormTag  name='systemId' title='子系统' url='${basePath}/ms/sett_ms_system/findList' required='true' valueField= 'id'
       textField= 'name' />

@@ -97,6 +97,7 @@ public class IndexController {
             } else {
                 modelAndView.setViewName("redirect:" + serviceURL);
             }
+            request.getSession().setAttribute("serviceURL",null);
             return modelAndView;
         }
 

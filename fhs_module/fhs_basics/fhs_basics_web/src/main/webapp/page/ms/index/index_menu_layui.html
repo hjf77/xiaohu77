@@ -133,7 +133,7 @@
 			lay-href="<@=_temp_menu['serverUrl']@>ms/redirect?call=<@=_temp_menu['url']@>"  title="<@=_temp_menu['name']@>"
 		<@}@>
 		  >
-			<i class="layui-icon left-menu-icon" style="background-image:url(${fhs_file_url}/downLoad/file?fileId=<@=_temp_menu['image']@>)"></i>
+			<i class="layui-icon left-menu-icon " style="background-image:url(${basePath}/images/menu/<@=_temp_menu['image']@>.png)"></i>
 			<cite><@=_temp_menu['name']@></cite>
 		</a>
 		<@if(_temp_menu.sonMenu&&_temp_menu.sonMenu.length>0)
