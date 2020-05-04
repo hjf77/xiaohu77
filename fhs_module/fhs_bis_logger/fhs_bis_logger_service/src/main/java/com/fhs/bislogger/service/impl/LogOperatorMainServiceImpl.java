@@ -42,6 +42,12 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addLog(LogAddOperatorLogVO logAddOperatorLogVO) {
+        //添加或者修改的时候,如果只有一个,history,则吧history放到reqparam中
+        if ((logAddOperatorLogVO.getOperatorMainVO().getType() == LoggerConstant.METHOD_TYPE_UPATE
+                || logAddOperatorLogVO.getOperatorMainVO().getType() == LoggerConstant.METHOD_TYPE_ADD)
+                && logAddOperatorLogVO.getHistoryDataVOList() != null && logAddOperatorLogVO.getHistoryDataVOList().size() == 1) {
+            logAddOperatorLogVO.getOperatorMainVO().setReqParam(logAddOperatorLogVO.getHistoryDataVOList().get(0).getData());
+        }
         super.insertSelective(logAddOperatorLogVO.getOperatorMainVO());
         Map<String, LogHistoryDataVO> hisMap = new HashMap<>();
         for (LogOperatorExtParamVO extParamVO : logAddOperatorLogVO.getOperatorExtParamVOList()) {

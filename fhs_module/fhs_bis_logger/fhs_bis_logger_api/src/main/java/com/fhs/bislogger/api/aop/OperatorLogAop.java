@@ -118,7 +118,7 @@ public class OperatorLogAop {
         LogMethod logMethod = method.getAnnotation(LogMethod.class);
         LogOperatorMainVO mainVO = new LogOperatorMainVO();
         HttpServletRequest request = getRequest();
-        mainVO.setUrl(request.getRequestURL().toString());
+        mainVO.setUrl(request.getRequestURI().toString());
         try {
             mainVO.setIp(NetworkUtil.getIpAddress(request));
         } catch (IOException ex) {
