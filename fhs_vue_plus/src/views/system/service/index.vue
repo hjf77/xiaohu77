@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="服务名称" prop="serverName">
+      <el-form-item  prop="serverName">
         <el-input
           v-model="queryParams.serverName"
-          placeholder="请输入服务名称"
+          placeholder="入服务名称"
           clearable
           size="small"
           style="width: 240px"
@@ -36,7 +36,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          hasPermi="['system:service:add']"
+          v-hasPermi="['sett_ms_menu_server:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -46,7 +46,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          hasPermi="['system:service:edit']"
+          v-hasPermi="['sett_ms_menu_server:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -56,7 +56,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          hasPermi="['system:service:remove']"
+          v-hasPermi="['sett_ms_menu_server:del']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -65,7 +65,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          hasPermi="['system:service:export']"
+          v-hasPermi="['sett_ms_menu_server:export']"
         >导出</el-button>
       </el-col>
     </el-row>
@@ -94,14 +94,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            hasPermi="['system:service:edit']"
+            v-hasPermi="['sett_ms_menu_server:update']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            hasPermi="['system:service:remove']"
+            v-hasPermi="['sett_ms_menu_server:del']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -254,7 +254,6 @@ export default {
 
       this.$refs["form"].validate(valid => {
         if (valid) {
-            debugger
           if (this.form.id != undefined) {
             updateService(this.form).then(response => {
               if (response.code === 200) {
@@ -295,7 +294,6 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-        debugger
       this.$confirm('是否确认导出所有数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",

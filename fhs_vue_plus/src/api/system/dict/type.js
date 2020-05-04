@@ -59,3 +59,11 @@ export function optionselect() {
     method: 'get'
   })
 }
+
+// 刷新字典缓存
+export function refresh(wordbookGroupCode) {
+  return request({
+    url: '/ms/wordbook/refreshRedisCache?wordbookGroupCode='+wordbookGroupCode,
+    method: 'get'
+  })
+}

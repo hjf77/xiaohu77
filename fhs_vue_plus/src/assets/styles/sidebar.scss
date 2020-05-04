@@ -63,7 +63,7 @@
       width: 100% !important;
     }
 
-    // menu hover
+    // sysMenu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
       &:hover {
@@ -172,7 +172,7 @@
   }
 }
 
-// when menu collapsed
+// when sysMenu collapsed
 .el-menu--vertical {
   &>.el-menu {
     .svg-icon {

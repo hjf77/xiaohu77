@@ -50,7 +50,7 @@
                 type="text"
                 icon="el-icon-plus"
                 @click="handleAdd(scope.row)"
-                hasPermi="['system:dept:add']"
+                v-hasPermi="['sysRole:add']"
               >新增
               </el-button>
               <el-button
@@ -58,7 +58,7 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                hasPermi="['system:role:edit']"
+                v-hasPermi="['sysRole:update']"
               >修改
               </el-button>
               <el-button
@@ -66,7 +66,7 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                hasPermi="['system:role:remove']"
+                v-hasPermi="['sysRole:del']"
               >删除
               </el-button>
             </template>
@@ -117,6 +117,7 @@
                 show-checkbox
                 ref="name"
                 node-key="id"
+                :default-expanded-keys="expandedKeys"
                 empty-text="加载中，请稍后"
                 :props="menuProps"
               ></el-tree>
@@ -140,7 +141,7 @@
 
 <script>
   import { listRole, getRole, delRole, addRole, updateRole, dataScope,getPermissionByRoleId } from '@/api/system/role'
-  import { treeselect } from '@/api/system/dept'
+  import { treeselect } from '@/api/system/sysOrganization'
   import Treeselect from '@riophae/vue-treeselect'
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -169,6 +170,8 @@
         statusOptions: [],
         // 菜单列表
         menuOptions: [],
+        //tree 默认展开节点
+        expandedKeys:[],
         // 查询参数
         queryParams: {
           organizationId: undefined
@@ -226,10 +229,11 @@
           }
         )
       },
-      /** 查询菜单树结构 */
+      /** 查询菜单权限树结构 */
       getMenuTreeselect() {
         dataScope().then(response => {
           this.menuOptions = response
+          this.expandedKeys.push(response[0].id)
         })
       },
       /** 查询部门下拉树结构 */

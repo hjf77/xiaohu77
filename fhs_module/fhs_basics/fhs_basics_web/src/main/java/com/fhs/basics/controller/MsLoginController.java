@@ -1,8 +1,11 @@
 package com.fhs.basics.controller;
 
 import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.service.SettMsSystemService;
+import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.vo.VueRouterVO;
 import com.fhs.common.constant.Constant;
@@ -20,6 +23,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
 import org.apache.shiro.web.util.WebUtils;
+import org.checkerframework.checker.units.qual.A;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,11 +34,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 非分布式运行时候的登录登出
@@ -65,6 +69,12 @@ public class MsLoginController extends BaseController {
      */
     @Autowired
     private SettMsSystemService sysSystemService;
+
+    @Autowired
+    private SettMsMenuPermissionService settMsMenuPermissionService;
+
+    @Autowired
+    private UcenterMsRoleService roleService;
 
     /**
      * 登录地址
@@ -163,8 +173,16 @@ public class MsLoginController extends BaseController {
         }
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("user", user);
-        resultMap.put("permissions", Arrays.asList("*:*:*"));
-        resultMap.put("roles", Arrays.asList("admin"));
+        if (user.getIsAdmin() == Constant.INT_TRUE) {
+            resultMap.put("roles", Arrays.asList("admin"));
+            resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(null));
+        }else {
+            List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(user.getUserId());
+            List<String> collect = roleList.stream().map(UcenterMsRoleVO::getRoleName).collect(Collectors.toList());
+            String roles = roleList.stream().map(UcenterMsRoleVO::getRoleId).map(Objects::toString).collect(Collectors.joining(",","'","'"));
+            resultMap.put("roles", collect);
+            resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(roles));
+        }
         return HttpResult.success(resultMap);
     }
 

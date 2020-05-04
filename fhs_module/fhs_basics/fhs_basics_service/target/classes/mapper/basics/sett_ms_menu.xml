@@ -105,6 +105,7 @@
 				AND father_menu_id =#{menuId}
 			</if>
 		</where>
+        ORDER BY pid
 	</select>
 
 
@@ -366,13 +367,16 @@
 	</select>
 
     <select id="getMenuPermissionTree" resultType="com.fhs.basics.vo.TreeMenuPermissionVO">
-		SELECT
+		(SELECT
 			menu_id AS id,
 			father_menu_id AS parentId,
 			menu_name AS name
 		FROM
 			t_sett_ms_menu
 		WHERE is_delete = 0
+		ORDER BY parentId
+		LIMIT 0, 1000
+		)
 
 		UNION  ALL
 

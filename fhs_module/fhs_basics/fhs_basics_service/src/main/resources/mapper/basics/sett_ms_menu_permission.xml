@@ -135,8 +135,23 @@
 		FROM t_sett_ms_menu_permission_url_rela
 		WHERE permission_id = #{permissionId}
 	</select>
-	
-	<!--添加权限URL-->
+
+    <select id="getRolePermisssionByRoleId" resultType="java.lang.String">
+		SELECT
+			CONCAT(namespace,":", method) AS parmission
+		FROM t_ucenter_ms_role_permission r
+		LEFT JOIN t_sett_ms_menu_permission p on p.permission_id = r.permission_id
+		LEFT JOIN t_sett_ms_menu m on  m.menu_id = p.menu_id
+		WHERE r.is_delete = 0
+		AND m.is_delete = 0
+		AND m.is_enable = 1
+		AND p.is_delete = 0
+        <if test="roleIds != null and roleIds != ''">
+            AND r.role_id IN (${roleIds})
+        </if>
+    </select>
+
+    <!--添加权限URL-->
 	<insert id="addUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
 		INSERT INTO t_sett_ms_menu_permission_url_rela
 		(

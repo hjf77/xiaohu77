@@ -5,7 +5,7 @@ export default {
     }
   },
   mounted() {
-    // In order to fix the click on menu on the ios device will trigger the mouseleave bug
+    // In order to fix the click on sysMenu on the ios device will trigger the mouseleave bug
     this.fixBugIniOS()
   },
   methods: {

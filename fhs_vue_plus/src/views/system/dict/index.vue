@@ -1,20 +1,20 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="分组名称" prop="groupName">
+      <el-form-item  prop="groupName">
         <el-input
           v-model="queryParams.groupName"
-          placeholder="请输入分组名称"
+          placeholder="分组名称"
           clearable
           size="small"
           style="width: 240px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="分组code" prop="wordbookGroupCode">
+      <el-form-item  prop="wordbookGroupCode">
         <el-input
           v-model="queryParams.wordbookGroupCode"
-          placeholder="请输入分组code"
+          placeholder="分组code"
           clearable
           size="small"
           style="width: 240px"
@@ -35,7 +35,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          hasPermi="['system:dict:add']"
+          v-hasPermi="['wordbook:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -45,7 +45,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:dict:edit']"
+          v-hasPermi="['wordbook:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,8 +55,17 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:dict:remove']"
+          v-hasPermi="['wordbook:del']"
         >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          icon="el-icon-edit"
+          size="mini"
+          @click="refreshCache"
+          v-hasPermi="['wordbook:refreshRedisCache']"
+        >刷新所有字典缓存</el-button>
       </el-col>
 
     </el-row>
@@ -77,15 +86,22 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            hasPermi="['system:dict:edit']"
+            v-hasPermi="['wordbook:update']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            hasPermi="['system:dict:remove']"
+            v-hasPermi="['wordbook:del']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="refreshCache(scope.row)"
+            v-hasPermi="['wordbook:refreshRedisCache']"
+          >刷新字典缓存</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -117,7 +133,7 @@
 </template>
 
 <script>
-import { listType, getType, delType, addType, updateType,  } from "@/api/system/dict/type";
+import { listType, getType, delType, addType, updateType, refresh } from "@/api/system/dict/type";
 
 export default {
   name: "Dict",
@@ -270,6 +286,25 @@ export default {
           this.msgSuccess("删除成功");
         }).catch(function() {});
     },
+      /** 刷新字典缓存按钮操作 */
+      refreshCache(row) {
+          let wordbookGroupCode ='';
+          if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
+              wordbookGroupCode = row.wordbookGroupCode;
+          }else {
+              wordbookGroupCode = '';
+          }
+          refresh(wordbookGroupCode).then(response => {
+              if (response.code === 200) {
+                  this.msgSuccess("操作成功");
+                  this.open = false;
+                  this.getList();
+              } else {
+                  this.msgError(response.msg);
+              }
+          });
+
+      },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
