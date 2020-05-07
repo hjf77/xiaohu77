@@ -1,9 +1,12 @@
 package com.fhs.bislogger.mapper;
 
 import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * (LogOperatorMain)表数据库访问层
@@ -14,5 +17,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @MapperDefinition(domainClass = LogOperatorMainDO.class, orderBy = " update_time DESC")
 public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> {
+
+    /**
+     * 查询模块列表
+     * @return
+     */
+    List<LogOperatorMainVO> getLoggerModelList();
+
+
 
 }

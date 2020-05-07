@@ -60,8 +60,6 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
 
     //保存数据
     function save() {
-        console.log($("input[name='password']").val());
-        console.log($("#passWd").val());
         onSaveFuns.forEach(function (_function, index, array) {
             if (!_function()) {
                 return
@@ -116,6 +114,6 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
         reloadRoles(info.organizationId);
         $("input[name='password']").val('defaultPass');
         url_save = "${basePath}ms/sysUser/updateUser?userId=${parameter.id}";
-
+        console.log("-----")
     }
 </script>

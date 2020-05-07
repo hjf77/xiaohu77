@@ -1,10 +1,16 @@
 package com.fhs.bislogger.controller;
 
 import com.fhs.bislogger.dox.LogOperatorExtParamDO;
+import com.fhs.bislogger.service.LogOperatorExtParamService;
 import com.fhs.bislogger.vo.LogOperatorExtParamVO;
+import com.fhs.core.base.pojo.pager.Pager;
+import com.fhs.core.trans.service.impl.TransService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.fhs.module.base.controller.ModelSuperController;
 import io.swagger.annotations.Api;
+
+import java.util.List;
 
 /**
  * (LogOperatorExtParam)表控制层
@@ -17,6 +23,6 @@ import io.swagger.annotations.Api;
 @Api(tags={""})
 @RequestMapping("/ms/logOperatorExtParam")
 public class LogOperatorExtParamController extends ModelSuperController<LogOperatorExtParamVO,LogOperatorExtParamDO> {
-   
+
 
 }

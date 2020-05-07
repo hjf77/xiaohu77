@@ -5,6 +5,8 @@ import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Namespace;
 
+import java.util.List;
+
 /**
  * (LogOperatorMain)}表服务接口
  *
@@ -14,6 +16,10 @@ import com.fhs.core.cache.annotation.Namespace;
 @Namespace("log_operator_main")
 public interface LogOperatorMainService extends BaseService<LogOperatorMainVO,LogOperatorMainDO>{
 
-    
+    /**
+     * 查询模块列表
+     * @return
+     */
+    List<LogOperatorMainVO> getLoggerModelList();
 
 }

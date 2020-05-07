@@ -21,6 +21,7 @@ import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.mybatis.jpa.annotation.Like;
 import com.mybatis.jpa.annotation.RLike;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -57,6 +58,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @Id
     @NotNull(message = "{test.userId.null}", groups = {Update.class, Delete.class})
     @Column(name = "user_id")
+    @ApiModelProperty("用户id")
     private String userId;
 
 
@@ -66,6 +68,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @NotNull(message = "{test.userLoginName.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.userLoginName.length}", max = 20, min = 0)
     @Column(name = "user_login_name")
+    @ApiModelProperty("登录名")
     private String userLoginName;
 
     /**
@@ -75,6 +78,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @Length(message = "{test.userName.length}", max = 20, min = 0)
     @Like
     @Column(name = "user_name")
+    @ApiModelProperty("用户名")
     private String userName;
 
     /**
@@ -89,12 +93,14 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
      */
     @NotNull(message = "{test.mobile.null}", groups = {Update.class, Add.class})
     @Column(name = "mobile")
+    @ApiModelProperty("手机号")
     private String mobile;
 
     /**
      * 集团编码-saas模式适用
      */
     @Column(name = "group_code")
+    @ApiModelProperty("集团编码")
     private String groupCode;
 
     /**
@@ -103,6 +109,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @NotNull(message = "{test.email.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.email.length}", max = 255, min = 0)
     @Column(name = "email")
+    @ApiModelProperty("邮箱")
     private String email;
 
     /**
@@ -112,11 +119,13 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.WORD_BOOK, key = "is_enable")
+    @ApiModelProperty("是否禁用")
     private Integer isEnable;
 
     /**
      * 是否超管 0:否 1:是
      */
+    @ApiModelProperty("是管理员")
     private Integer isAdmin;
 
 
@@ -128,6 +137,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @Min(message = "前端用户的sex字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
     @Column(name = "sex", length = 11)
     @Trans(type = TransType.WORD_BOOK, key = "sex")
+    @ApiModelProperty("性别")
     private Integer sex;
 
     /**
@@ -137,6 +147,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
     @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG )
+    @ApiModelProperty("组织机构编号")
     private String organizationId;
 
     @Column(name = "header")
@@ -146,36 +157,43 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
      * 状态
      */
     @Transient
+    @ApiModelProperty("状态")
     private String state;
 
     /**
      * 当前用户的角色
      */
     @Transient
+    @ApiModelProperty("用户角色")
     private String[] roleList;
 
     /**
      * 角色id逗号分隔
      */
     @Transient
+    @ApiModelProperty("角色编号")
     private String roleIds;
 
     /**
      * 原始密码
      */
     @Transient
+    @ApiModelProperty("原始密码")
     private String oldPassword;
 
     /**
      * 新密码
      */
     @Transient
+    @ApiModelProperty("新密码")
     private String newPassword;
 
     @Transient
+    @ApiModelProperty("菜单类型")
     private Integer menuType;
 
     @Transient
+    @ApiModelProperty("角色")
     private List<UcenterMsRoleDO> roles;
 
     public String[] getRoleList(){

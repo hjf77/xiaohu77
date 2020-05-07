@@ -1,6 +1,7 @@
 package com.fhs.bislogger.mapper;
 
 import com.fhs.bislogger.dox.LogHistoryDataDO;
+import com.fhs.bislogger.vo.LogHistoryDataVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;

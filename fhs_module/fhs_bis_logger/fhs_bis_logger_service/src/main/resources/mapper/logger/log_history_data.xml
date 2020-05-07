@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fhs.bislogger.mapper.LogHistoryDataMapper">
+    <select id="getLogHistoryData" resultType="com.fhs.bislogger.vo.LogHistoryDataVO">
+        SELECT his_id,namespace,pkey,main_id,`data`,version,
+        create_user,create_time,update_user,update_time
+        FROM t_log_history_data
+        WHERE pkey = #{pkey} AND version = #{version}
+    </select>
 
-    
 
 </mapper>

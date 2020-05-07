@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fhs.bislogger.mapper.LogOperatorExtParamMapper">
-
+    <select id="getLogExtParamList" resultType="com.fhs.bislogger.vo.LogOperatorExtParamVO">
+        SELECT ext_param_id,namespace,pkey,version,main_id,
+        create_user,create_time,update_user,update_time,his_id,operator_type
+        FROM t_log_operator_ext_param
+    </select>
     
 
 </mapper>

@@ -3,6 +3,8 @@ package com.fhs.bislogger.dox;
 import java.io.Serializable;
 
 import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.*;
 import com.fhs.core.valid.group.*;
 
@@ -86,6 +88,7 @@ public class LogOperatorExtParamDO extends BaseDO<LogOperatorExtParamDO> {
      */
     @NotNull(message = "操作类型字段不可为null", groups = {Update.class, Delete.class})
     @TableField("operator_type")
+    @Trans(type = TransType.WORD_BOOK, key = "operator_type")
     private Integer operatorType;
 
 }
