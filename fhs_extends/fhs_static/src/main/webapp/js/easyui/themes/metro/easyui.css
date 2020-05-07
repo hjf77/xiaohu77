@@ -21,7 +21,6 @@
 	-moz-border-left-colors: none;
 	-moz-border-right-colors: none;
 	-moz-border-top-colors: none;
-	background-color: #fff;
 	height: auto;
 	line-height: auto;
 	padding: 0px;
@@ -33,7 +32,6 @@
 	-moz-border-left-colors: none;
 	-moz-border-right-colors: none;
 	-moz-border-top-colors: none;
-	background-color: #fff;
 	-webkit-border-image: none;
 	-o-border-image: none;
 	margin-bottom: 0;
@@ -42,7 +40,6 @@
 	color: #333;
 	text-indent:8px;
 	padding: 10px 0px 6px;
-	background: #e7e9ec;
 }
 
 .panel-header-noborder {
@@ -159,7 +156,7 @@
 	/*update--end--author:zhangjiaqiang date:20170622 for:濠⒀呭仜婵偞绋夐埀顒佺▔椤忓懐澹夌�殿喖绻愮槐鈺呮偨閿燂拷*/
 	.panel-header {
 	border:1px solid #ddd;
-	background-color: #e7e9ec;
+	background-color: white;
 	background-repeat: repeat-x;
 	height: 40px;
 	line-height: 24px;
@@ -1206,7 +1203,7 @@ a.easyui-linkbutton {
 	padding: 8px 17px !important;
 	font-size: 12px;
     font-weight: 400;
-    background-color: #009688 !important;
+    background-color: #409eff !important;
     margin: 10px 0 0 10px !important;
     /*border: 1px #1AB394 solid;*/
 	border-radius: 2px !important;
@@ -1498,6 +1495,9 @@ easyui-table:1366x768;
 	cursor: default;
 	border-width: 0 0 1px 0;
 	border-style: solid;
+	background-color: #fafafa;
+
+
 }
 
 .datagrid-header-inner {
@@ -1507,12 +1507,12 @@ easyui-table:1366x768;
 /*update-begin--Author:xuelin  Date:20170517 for闁挎稒鐡朅SK#1969::闁靛棙锟界煼缂傚洤楠哥�垫煡濡撮幈锟�+濡炲瀛╅悧鍛婄▔鐎ｅ墎绀夐柛鎺擃殙閵嗗啴寮紙鐘电Ъ濡炲瀛╅悧鎼佸嫉婢跺苯浠柣蹇ユ嫹------------------- */
 .datagrid-header-row {
 	font-weight: bold;
-	height: 35px;
+	height: 46px;
+
 }
 /*update-end--Author:xuelin  Date:20170517 for闁挎稒鐡朅SK#1969::闁靛棙锟界煼缂傚洤楠哥�垫煡濡撮幈锟�+濡炲瀛╅悧鍛婄▔鐎ｅ墎绀夐柛鎺擃殙閵嗗啴寮紙鐘电Ъ濡炲瀛╅悧鎼佸嫉婢跺苯浠柣蹇ユ嫹------------------- */
 .datagrid-row {
-	height: 35px;
-	background-color: #f9f9f9;
+	height: 45px;
 }
 
 .datagrid-header td {
@@ -1524,6 +1524,7 @@ easyui-table:1366x768;
 	padding-top:2px;
 	padding-bottom:2px;
 	overflow: hidden;
+	color:rgba(0,0,0,.85);
 }
 
 .datagrid-body td, .datagrid-footer td {
@@ -1660,7 +1661,7 @@ easyui-table:1366x768;
 	background: #fff url('images/loading.gif') no-repeat scroll 5px center;
 }
 
-.datagrid-header, .datagrid-td-rownumber {
+ .datagrid-td-rownumber {
 	background-color: #ffffff;
 }
 
@@ -1719,7 +1720,7 @@ easyui-table:1366x768;
 }
 /*update-end--Author:xuelin  Date:20170613 for闁挎稒鐡朅SK #2100 闁靛棙鍔曢崹顏嗘偘閵婏妇澹夌�殿喖绻掔欢銊╁礌閺嶃儮鍋撻幋娆屽亾閹邦厾澹夌�殿喖绻嬬粭鎾达紣濡硶鍋撻幈姊昬cg妤犵偛鍟胯ぐ瀛樼鐠囨彃顫� ---4闁告帗顨夐妴鍐┿亜閻㈠憡妗ㄩ柨娑樻湰鐎垫粓鏌﹂鍏煎闁告帗顨夐妴鍐儍閸曨偆鎽熷ù锝忔嫹 闁告瑥鍊介埀顒�鍎籷grid---------------------- */
 .datagrid-body td, .datagrid-footer td {
-	border-color: #e7e7e7;
+	border-color: #e8e8e8;
 }
 
 .datagrid-htable, .datagrid-btable, .datagrid-ftable {
@@ -1753,6 +1754,11 @@ easyui-table:1366x768;
 	border-color: #ddd;
 }
 
+.datagrid-body {
+	color:rgba(0,0,0,.65);
+	font-size:14px;
+	font-variant:tabular-nums;
+}
 .propertygrid .datagrid-view1 .datagrid-body td {
 	padding-bottom: 1px;
 	border-width: 0 1px 0 0;
