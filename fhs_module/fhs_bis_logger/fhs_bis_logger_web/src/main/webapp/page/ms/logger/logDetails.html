@@ -1,0 +1,137 @@
+<%
+include("/page/tags/form_include.html"){}
+%>
+<form id="logDetailForm" method="post">
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>模块:</label>
+            <input type='text' autocomplete='off' dataType='*' nullmsg='模块不能为空' class='easyui-validatebox ' id='model'
+                   name='model'/>
+        </div>
+        <div class="fitemDiv">
+            <label>主键:</label>
+            <input type="text" name="logId"/>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>namespace:</label>
+            <input type="text" name="namespace"/>
+        </div>
+        <div class="fitemDiv">
+            <label>操作人:</label>
+            <input type="text" id="userName" name="createUser"/>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>操作时间:</label>
+            <input type="text" name="createTime"/>
+        </div>
+        <div class="fitemDiv">
+            <label>状态:</label>
+            <input type="text" id="state" name="state"/>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>类型:</label>
+            <input type="text" id="type" name="type"/>
+        </div>
+        <div class="fitemDiv">
+            <label>请求地址:</label>
+            <input type="text" name="url"/>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>ip:</label>
+            <input type="text" name="ip"/>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="bigLabelDiv"><label>请求参数:</label></div>
+        <div class="bigContent"><textarea
+                class="form_textarea " id="reqParam" name="reqParam" style="height: 30%"></textarea>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="bigLabelDiv"><label>返回值:</label></div>
+        <div class="bigContent"><textarea
+                class="form_textarea " id="respBody" name="respBody" style="height: 30%"></textarea>
+        </div>
+    </div>
+
+</form>
+
+<div class="infoGroup">
+    <legend>扩展参数</legend>
+</div>
+<div>
+    <table id="extended_parameters" class="easyui-datagrid"
+           url="${basePath}ms/logOperatorMain/getLoggerList?mainId=${parameter.logId}" rownumbers="true">
+        <thead>
+        <tr>
+            <th field="model" width="17%" align="center">模块</th>
+            <th field="namespace" width="17%" align="center">namespace</th>
+            <th field="transMap.operatorTypeName" width="16%" align="center">类型</th>
+            <th field="pkey" width="16%" align="center">主键</th>
+            <th field="version" width="16%" align="center">版本</th>
+            <th field="opera" width="16%" data-options="formatter:opera" align="center">操作</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<div id="logDialog" class="easyui-dialog" title="回退节点"
+     data-options="iconCls:'icon-save'" closed="true"
+     style="width: 80%; height: 90%; padding: 10px" buttons="#dlg-buttons">
+</div>
+
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" onclick="closeDialogExtParamDetail()">返回</a>
+</div>
+
+<script>
+    var logId = "${parameter.logId}"
+
+    $('#logDetailForm').form({
+        onLoadSuccess :function (info) {
+            $("#userName").val(info.transMap.createUserUserName);
+            $("#state").val(info.transMap.stateName);
+            $("#type").val(info.transMap.typeName);
+            renderView('logDetailForm');
+        }
+    });
+    $('#logDetailForm').form('load','${basePath}ms/logOperatorMain/getLogger?logId=' + logId);
+
+
+
+    // 打开dialog
+    function openDialogExtParamDetail(url, title) {
+        $('#logDialog').load(url, function () {
+            $('#logDialog').dialog('open').dialog('setTitle', title);
+            $.parser.parse($('#logDialog'));
+        });
+    }
+
+    function opera(val, row, index) {
+        return '<a href="#" onclick=logView("'+ row.pkey+ '",' + row.version + ')>查看</a>';
+    }
+
+    function logView(pkey, version) {
+        if (version == 1) {
+            openDialogExtParamDetail(
+                '${basePath}/b/page-ms-logger/logView?pkey=' + pkey + '&version=' + version, '查看');
+        }else {
+            openDialogExtParamDetail(
+                '${basePath}/b/page-ms-logger/logModifyView?pkey=' + pkey + '&version=' + version, '查看');
+        }
+
+    }
+
+    // 关闭dialog
+    function closeDialogExtParamDetail() {
+        $('#logDialog').dialog('close');
+    }
+
+</script>

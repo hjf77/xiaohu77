@@ -5,6 +5,8 @@ import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Namespace;
 
+import java.util.List;
+
 /**
  * (LogOperatorExtParam)}表服务接口
  *
@@ -14,6 +16,6 @@ import com.fhs.core.cache.annotation.Namespace;
 @Namespace("log_operator_ext_param")
 public interface LogOperatorExtParamService extends BaseService<LogOperatorExtParamVO,LogOperatorExtParamDO>{
 
-    
+
 
 }

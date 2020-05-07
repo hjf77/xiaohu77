@@ -1,11 +1,26 @@
 package com.fhs.bislogger.controller;
 
+import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.dox.LogHistoryDataDO;
+import com.fhs.bislogger.dox.LogOperatorExtParamDO;
 import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.service.LogHistoryDataService;
+import com.fhs.bislogger.service.LogOperatorExtParamService;
+import com.fhs.bislogger.service.LogOperatorMainService;
+import com.fhs.bislogger.vo.LogHistoryDataVO;
+import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
+import com.fhs.core.base.pojo.pager.Pager;
+import com.fhs.core.trans.service.impl.TransService;
+import io.swagger.models.auth.In;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.fhs.module.base.controller.ModelSuperController;
 import io.swagger.annotations.Api;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -19,6 +34,17 @@ import java.util.*;
 @Api(tags = {""})
 @RequestMapping("/ms/logOperatorMain")
 public class LogOperatorMainController extends ModelSuperController<LogOperatorMainVO, LogOperatorMainDO> {
+
+    @Autowired
+    private LogOperatorMainService logOperatorMainService;
+    @Autowired
+    private LogOperatorExtParamService logOperatorExtParamService;
+    @Autowired
+    private TransService transService;
+    @Autowired
+    private UcenterMsUserService ucenterMsUserService;
+    @Autowired
+    private LogHistoryDataService logHistoryDataService;
 
     /**
      * 模型缓存,用于前端下拉
@@ -35,16 +61,87 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
      */
     private Map<String, String> namespaceModuleMap = new HashMap<>();
 
+
+    @RequestMapping("/moduleSelect")
     public List<LogOperatorMainVO> getModuleSelect(){
+        long time = modelSelectCachedTime.getTime();
+        long timeMillis = System.currentTimeMillis();
+        long oneHour = 3600000;
         if(modelSelectCache.isEmpty()){
             //doto 执行sql
+            modelSelectCache = logOperatorMainService.getLoggerModelList();
         }else{
             //判断当前时间和  modelSelectCachedTime 是否大于一个小时,是的话执行刷新缓存
-            new Thread(()->{
-                //查询..
-            }).start();
+            if ((timeMillis-time)>oneHour){
+                new Thread(()->{
+                    //查询..
+                    modelSelectCache = logOperatorMainService.getLoggerModelList();
+                }).start();
+            }
+        }
+        for (LogOperatorMainVO logOperatorMainVO : modelSelectCache) {
+            namespaceModuleMap.put(logOperatorMainVO.getNamespace(),logOperatorMainVO.getModel());
         }
         return modelSelectCache;
+    }
+
+    /**
+     * 根据日志id查询日志
+     * @param logId
+     * @return
+     */
+    @RequestMapping("/getLogger")
+    public LogOperatorMainVO getLogger(String logId){
+        LogOperatorMainVO logOperatorMainVO = logOperatorMainService.selectById(logId);
+        return logOperatorMainVO;
+    }
+
+    /**
+     * 扩展参数列表
+     */
+    @RequestMapping("/getLoggerList")
+    public void getExtendedParameters(String mainId){
+        List<LogOperatorExtParamVO> logExtParamList =
+                logOperatorExtParamService.findForList(LogOperatorExtParamDO.builder().mainId(mainId).build());
+        for (LogOperatorExtParamVO logOperatorExtParamVO : logExtParamList) {
+            if (namespaceModuleMap!=null){
+                String model = namespaceModuleMap.get(logOperatorExtParamVO.getNamespace());
+                logOperatorExtParamVO.setModel(model);
+            }
+        }
+        transService.transMore(logExtParamList);
+        super.outJsonp(new Pager(logExtParamList.size(), logExtParamList).asJson());
+    }
+
+    /**
+     * 查询人员列表
+     * @param request
+     * @return
+     */
+    @RequestMapping("/getUserList")
+    public List<UcenterMsUserVO> getUserList(HttpServletRequest request){
+        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
+        UcenterMsUserDO queryParam = UcenterMsUserDO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
+        List<UcenterMsUserVO> users = ucenterMsUserService.selectPage(queryParam,
+                pageSizeInfo.getPageStart(),pageSizeInfo.getPageSize());
+        return users;
+    }
+
+    /**
+     * 根据主键和版本获取数据
+     * @param pkey
+     * @param version
+     * @return
+     */
+    @RequestMapping("/getLogHistoryData")
+    public LogHistoryDataVO getLogHistoryData(String pkey, Integer version){
+        LogHistoryDataVO logHistoryData =
+                logHistoryDataService.selectBean(LogHistoryDataDO.builder().pkey(pkey).version(version).build());
+        if (namespaceModuleMap!=null){
+            String model = namespaceModuleMap.get(logHistoryData.getNamespace());
+            logHistoryData.setModel(model);
+        }
+        return logHistoryData;
     }
 
 }

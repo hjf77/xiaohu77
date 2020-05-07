@@ -21,6 +21,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +39,9 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
 
     @Autowired
     private LogHistoryDataService logHistoryDataService;
+
+    @Autowired
+    private LogOperatorMainMapper logOperatorMainMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -83,5 +87,12 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
         }
         logHistoryDataService.batchInsert(ListUtils.copyListToPararentList(logAddOperatorLogVO.getHistoryDataVOList(),
                 LogHistoryDataDO.class));
+    }
+
+    @Override
+    public List<LogOperatorMainVO> getLoggerModelList() {
+        List<LogOperatorMainVO> loggerModelList =
+                logOperatorMainMapper.getLoggerModelList();
+        return loggerModelList;
     }
 }

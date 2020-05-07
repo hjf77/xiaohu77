@@ -3,6 +3,8 @@ package com.fhs.bislogger.dox;
 import java.io.Serializable;
 
 import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.*;
 import com.fhs.core.valid.group.*;
 
@@ -80,6 +82,7 @@ public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
      */
     @TableField("state")
     @ApiModelProperty(value = "状态")
+    @Trans(type = TransType.WORD_BOOK, key = "state")
     private Integer state;
 
     /**
@@ -87,6 +90,7 @@ public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
      */
     @TableField("type")
     @ApiModelProperty(value = "0 新增 1 修改 2删除 3 查询 4 导入  5 导出")
+    @Trans(type = TransType.WORD_BOOK, key = "type")
     private Integer type;
 
     /**

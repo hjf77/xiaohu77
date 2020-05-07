@@ -1,0 +1,52 @@
+<%
+include("/page/tags/form_include.html"){}
+%>
+<form id="logModifyViewFrom" method="post">
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>模型:</label>
+            <input type="text" name="model"/>
+        </div>
+        <div class="fitemDiv">
+            <label>namespace:</label>
+            <input type="text" name="namespace"/>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>主键:</label>
+            <input type="text" name="pkey"/>
+        </div>
+        <div class="fitemDiv">
+            <label>版本:</label>
+            <input type="text" name="version"/>
+        </div>
+    </div>
+    </div>
+    <div class="fitem">
+        <div class="bigLabelDiv"><label>修改后内容:</label></div>
+        <div class="bigContent"><textarea
+                class="form_textarea " id="data" name="data" style="height: 30%"></textarea>
+        </div>
+    </div>
+    <div class="fitem">
+        <div class="bigLabelDiv"><label>修改的内容:</label></div>
+        <div class="bigContent"><textarea
+                class="form_textarea " id="modifyData" name="modifyData" style="height: 30%"></textarea>
+        </div>
+    </div>
+</form>
+
+<script>
+    var pkey = "${parameter.pkey}"
+    var version = "${parameter.version}"
+
+    $('#logModifyViewFrom').form({
+        onLoadSuccess :function (info) {
+            renderView('logModifyViewFrom');
+        }
+    });
+    $("#logModifyViewFrom").form('load',
+        '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + version);
+
+</script>

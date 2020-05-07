@@ -119,6 +119,7 @@ public class OperatorLogAop {
         LogOperatorMainVO mainVO = new LogOperatorMainVO();
         HttpServletRequest request = getRequest();
         mainVO.setUrl(request.getRequestURI().toString());
+        mainVO.setLogId(BisLoggerContext.getTranceId());
         try {
             mainVO.setIp(NetworkUtil.getIpAddress(request));
         } catch (IOException ex) {

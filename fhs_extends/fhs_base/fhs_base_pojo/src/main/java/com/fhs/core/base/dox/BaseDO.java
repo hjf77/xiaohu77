@@ -76,6 +76,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
     protected Date updateTime;
 
     @TableField("is_delete")
+    @ApiModelProperty("是否删除")
     protected Integer isDelete;
 
 

@@ -22,4 +22,5 @@ public interface LogHistoryDataService extends BaseService<LogHistoryDataVO,LogH
      */
     LogHistoryDataVO getLastVersionData(String pkey,String namespace);
 
+
 }
