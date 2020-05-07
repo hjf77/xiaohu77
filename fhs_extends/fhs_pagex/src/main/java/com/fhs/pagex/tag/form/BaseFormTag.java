@@ -139,10 +139,6 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
      */
     public abstract  boolean isNewRow();
 
-    /**
-     * document ready的时候执行的js
-     */
-    public abstract  String readyJs();
 
     /**
      * 页面表单渲染成功时候的js

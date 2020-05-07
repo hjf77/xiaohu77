@@ -1,5 +1,6 @@
 package com.fhs.pagex.service.xsimpl;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
@@ -61,7 +62,8 @@ public class PagexListService implements IPageXService, InitializingBean {
         // 普通的过滤条件参数 map包含name和val 2个key其中val为此过滤条件的获取值的代码
         List<Map<String, String>> filterParams = new ArrayList<>();
         List<Map<String, String>> filterParamsForBetween = new ArrayList<>();
-        String filtersHtml = createFiltersHtml(request, response, listPageSett, filterParams, filterParamsForBetween);
+        List<String> readyJsListList = new ArrayList<>();
+        String filtersHtml = createFiltersHtml(request, response, listPageSett, filterParams, filterParamsForBetween,readyJsListList);
         try {
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("filtersHtml", filtersHtml);
@@ -76,6 +78,7 @@ public class PagexListService implements IPageXService, InitializingBean {
             paramMap.put("filterParams", filterParams);
             paramMap.put("filterParamsForBetween", filterParamsForBetween);
             paramMap.put("otherFunctions", listPageSett.getOtherFunctions());
+            paramMap.put("tagReadyJsList", readyJsListList);
             String resultHtml = BeetlUtil.renderBeelt(getListTemplate(), paramMap);
             PagexDataService.SIGNEL.getListPageHtmlCache().put(namespace, resultHtml);
             return resultHtml;
@@ -131,7 +134,7 @@ public class PagexListService implements IPageXService, InitializingBean {
      * @return ToolsBar html
      */
     public String createFiltersHtml(HttpServletRequest request, HttpServletResponse response,
-                                    PagexListSettVO pagexListSettDTO, List<Map<String, String>> filterParams, List<Map<String, String>> filterParamsForBetween) {
+                                    PagexListSettVO pagexListSettDTO, List<Map<String, String>> filterParams, List<Map<String, String>> filterParamsForBetween, List<String> readyJsListList) {
         String type = null;
         Class gridTagClass = null;
         BaseGridTag gridTag = null;
@@ -152,6 +155,9 @@ public class PagexListService implements IPageXService, InitializingBean {
                 gridTag = (BaseGridTag) gridTagClass.newInstance();
                 gridTag.setTagSett(field, request, response);
                 gridTag.initReloadParam(filterParams, filterParamsForBetween);
+                if(!CheckUtils.isNullOrEmpty(gridTag.readyJs())){
+                    readyJsListList.add(gridTag.readyJs());
+                }
                 filtersBuilder.append(gridTag.getHtmlForToolsBar());
             } catch (InstantiationException e) {
                 LOG.error(this, e);

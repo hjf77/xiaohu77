@@ -41,6 +41,14 @@ public abstract class BaseEasyuiComboGridTag extends BaseGridTag {
     }
 
     @Override
+    public String readyJs() {
+        String id = ConverterUtils.toBoolean(tagSett.get("multiple")) ? super.tagSett.get("name") + "_select" :
+                ConverterUtils.toString(super.tagSett.get("name"));
+        return "$('#" + id + "').combobox('initClear');";
+    }
+
+
+    @Override
     public void initReloadParam(List<Map<String, String>> filterParams, List<Map<String, String>> filterParamsForBetween) {
         Map<String,String> reloadParam = new HashMap<>();
         reloadParam.put("name", ConverterUtils.toString(super.tagSett.get("name")));

@@ -28,6 +28,9 @@
           href="${fhs_static_url}js/easyui/themes/metro/easyui.css"/>
     <link rel="stylesheet" type="text/css"
           href="${fhs_static_url}js/easyui/themes/icon.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${fhs_static_url}css/easyui_fhs_extends.css" />
+    <script src="${fhs_static_url}/js/easyui/easyui_fhs_extends.js"></script>
     <!--easyui end-->
     <script type="text/javascript" src="${basePath}js/systemConfig.js"></script>
     <script type="text/javascript" src="${fhs_static_url}js/ecommon.js"></script>
@@ -277,6 +280,10 @@
         }
         var _btn = document.getElementById('columnSettLogo');
         _btn.onclick = showColumnSett;
+        <!--每个tag在ready的时候执行的方法-->
+        <% for(readyJs in tagReadyJsList){ %>
+                ${readyJs};
+        <% } %>
     });
 
     // 去掉禁用的按钮

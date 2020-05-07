@@ -163,4 +163,9 @@ public abstract class PagexBaseTag extends Tag {
     protected abstract  String[] getHandelKeys();
 
 
+    public String readyJs() {
+        //当document.ready 的时候执行这里的js代码，比如文件服务的initFileupalod那些代码，比如UE的初始化代码等等，比如百度地图的一些代码
+        return "";
+    }
+
 }
