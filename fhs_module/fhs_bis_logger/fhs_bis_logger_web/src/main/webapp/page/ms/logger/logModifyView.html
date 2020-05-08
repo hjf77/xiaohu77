@@ -44,6 +44,29 @@ include("/page/tags/form_include.html"){}
     $('#logModifyViewFrom').form({
         onLoadSuccess :function (info) {
             renderView('logModifyViewFrom');
+            $.ajax({
+                url: '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version='+(version-1),
+                dataType: 'json',
+                type: 'POST',
+                data: {},
+                success: function (data) {
+                    var initialData = JSON.parse(data.data);
+                    var updateData = JSON.parse(info.data);
+                    var str = "";
+                    for (var key in initialData) {
+                        if (Array.isArray(initialData[key]) && Array.isArray(updateData[key])){
+                            if (JSON.stringify(initialData[key]) != JSON.stringify(updateData[key]) && initialData[key].length > 0 && updateData[key].length >0){
+                                str += key + ": 由 " + initialData[key] + " 变为 "+ updateData[key]+"\n"
+                            }
+                        }else {
+                            if (JSON.stringify(initialData[key]) != JSON.stringify(updateData[key])){
+                                str += key + ": 由 " + JSON.stringify(initialData[key]) + " 变为 "+ JSON.stringify(updateData[key])+"\n"
+                            }
+                        }
+                    }
+                    $("#modifyData").val(str)
+                }
+            })
         }
     });
     $("#logModifyViewFrom").form('load',

@@ -20,11 +20,11 @@ var listPage = {
     filters: function () {
         return [
             {name: 'model', type: 'select',url:'${path.basePath}/ms/logOperatorMain/moduleSelect',
-                    valuefield:'logId',textfield:'model',showAll:'true',filterType:'like',title: '用户管理'},
+                    valuefield:'model',textfield:'model',filterType:'like',title: '用户管理'},
             {name: 'log_id', type: 'input', title: 'id',filterType: 'like'},
-            {name: 'type', type: 'book', title: '操作类型',code:'type',showAll:'true'},
+            {name: 'type', type: 'book', title: '操作类型',code:'type'},
             {name: 'create_user', type: 'select', title: '操作人',url:'${path.basePath}/ms/logOperatorMain/getUserList',
-                valuefield:'userId',textfield:'userName',showAll:'true',filterType:'like'},
+                valuefield:'userId',textfield:'userName',filterType:'like'},
             {name: 'create_time', type: 'dateBT', title: '起止日期',isBT: true},
         ];
     },

@@ -104,7 +104,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
         List<LogOperatorExtParamVO> logExtParamList =
                 logOperatorExtParamService.findForList(LogOperatorExtParamDO.builder().mainId(mainId).build());
         for (LogOperatorExtParamVO logOperatorExtParamVO : logExtParamList) {
-            if (namespaceModuleMap!=null){
+            if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
                 String model = namespaceModuleMap.get(logOperatorExtParamVO.getNamespace());
                 logOperatorExtParamVO.setModel(model);
             }
@@ -137,7 +137,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     public LogHistoryDataVO getLogHistoryData(String pkey, Integer version){
         LogHistoryDataVO logHistoryData =
                 logHistoryDataService.selectBean(LogHistoryDataDO.builder().pkey(pkey).version(version).build());
-        if (namespaceModuleMap!=null){
+        if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
             String model = namespaceModuleMap.get(logHistoryData.getNamespace());
             logHistoryData.setModel(model);
         }
