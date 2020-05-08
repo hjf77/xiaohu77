@@ -529,14 +529,15 @@ input{
 }
 
 .combobox-item-hover {
-	background-color: #E6E6E6;
+	background-color: #e6f7ff;
 	color: #444;
 	cursor:hand;
 }
 
 .combobox-item-selected {
-	background-color: #5FB878;
-    color: #fff;
+	color: #0092e8;
+	font-weight: bold;
+	background-color: #fafafa;
 }
 
 .layout {
