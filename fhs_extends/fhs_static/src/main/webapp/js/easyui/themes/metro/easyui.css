@@ -40,6 +40,7 @@
 	color: #333;
 	text-indent:8px;
 	padding: 10px 0px 6px;
+	border-bottom: 1px solid #ddd;
 }
 
 .panel-header-noborder {
