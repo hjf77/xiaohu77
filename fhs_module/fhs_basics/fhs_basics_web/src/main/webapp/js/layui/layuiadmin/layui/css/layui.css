@@ -3606,7 +3606,6 @@ body .layui-table-tips .layui-layer-content {
 
 .layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this {
     background-color: #5FB878;
-    color: #fff
 }
 
 .layui-nav-child dd.layui-this:after {
@@ -3649,7 +3648,6 @@ body .layui-table-tips .layui-layer-content {
 
 .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-this > a:hover {
     background-color: #e6f7ff;
-    color: #1890ff
 }
 
 .layui-nav-tree .layui-this:after {

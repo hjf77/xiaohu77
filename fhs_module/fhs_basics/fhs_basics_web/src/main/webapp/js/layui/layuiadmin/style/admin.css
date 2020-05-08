@@ -613,7 +613,7 @@ html {
 }
 
 .layadmin-setTheme-side,.layui-side-menu {
-    background-color: #20222A;
+    /*background-color: #20222A;*/
     color: #fff
 }
 
