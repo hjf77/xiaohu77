@@ -40,7 +40,7 @@ fhs:
     packages: com.fhs.**.service.impl
   disable-apollo: true
   swagger: # ip:port/doc.html 是swagger-ui的地址,本插件用的是swagger-bootstrap-ui
-    enable: true
+    enable: false
     basepackage: com.fhs
     service:
       description: 项目api
@@ -51,8 +51,6 @@ fhs:
 
   activiti:
     createtb: false #是否创建表
-  druid-monitor:
-    enable: true
 
 spring:
   main:
@@ -68,14 +66,21 @@ spring:
       enabled: true
   redis:
     database: 0
+    # 最大连接数
+    maxTotal: 5000
+    # 最大空闲连接数
+    maxIdle: 1000
+    # 建立连接时，最大等待时间
+    maxWaitMillis: 60000
     lettuce:
       pool:
         max-active: 10
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 172.16.57.109
-    port: 6379
+    host: 192.168.0.241
+    password: 123456
+    port: 6636
     timeout: 6000
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -93,9 +98,9 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.16.57.109:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.241:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: 123456
     validationQuery: select 'x'
 
   quartz:
@@ -161,4 +166,4 @@ jetcache:
       valueEncoder: java
       valueDecoder: java
       uri:
-        - redis://172.16.57.109:6379/1  #redis://密码@IP:端口/库
+        - redis://123456@192.168.0.241:6636/1  #redis://密码@IP:端口/库
