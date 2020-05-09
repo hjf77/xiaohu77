@@ -8,6 +8,8 @@ import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.vo.VueRouterVO;
+import com.fhs.bislogger.constant.LoggerConstant;
+import com.fhs.bislogger.service.LogLoginService;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
@@ -15,26 +17,20 @@ import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
-import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.shiro.StatelessSubject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
-import org.apache.shiro.web.util.WebUtils;
-import org.checkerframework.checker.units.qual.A;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,6 +72,9 @@ public class MsLoginController extends BaseController {
     @Autowired
     private UcenterMsRoleService roleService;
 
+    @Autowired
+    private LogLoginService logLoginService;
+
     /**
      * 登录地址
      */
@@ -96,14 +95,18 @@ public class MsLoginController extends BaseController {
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
         if (null == sessionIdentify)//session 失效
         {
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID);
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode)) {
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE);
             throw new ParamException("验证码错误，请重新输入");
         }
         request.getSession().setAttribute("identifyCode", null);
+        String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
+            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER);
             throw new ParamException("用户名或者密码错误");
         }
         //如果不是admin就去加载全部的数据
@@ -118,6 +121,7 @@ public class MsLoginController extends BaseController {
         // 显示调用，让程序重新去加载授权数据
         subjects.isPermitted("init");
         request.getSession().setAttribute(Constant.SESSION_USER, sysUser);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null);
         return HttpResult.success(true);
     }
 
@@ -129,14 +133,18 @@ public class MsLoginController extends BaseController {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
         if (null == sessionIdentify) {
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID);
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode)) {
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE);
             throw new ParamException("验证码错误，请重新输入");
         }
         sysUser.setPassword(Md5Util.MD5(sysUser.getPassword()));
+        String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
+            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER);
             throw new ParamException("用户名或者密码错误");
         }
         String tokenStr = StringUtil.getUUID();
@@ -159,6 +167,7 @@ public class MsLoginController extends BaseController {
         redisCacheService.expire(USER_KEY + tokenStr, sesstionTimeout);
         Map<String, String> result = new HashMap<>();
         result.put("token", tokenStr);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null);
         return HttpResult.success(result);
     }
 
@@ -166,20 +175,20 @@ public class MsLoginController extends BaseController {
      * vue获取用户信息
      */
     @RequestMapping("/getUserForVue")
-    public HttpResult<Map<String,Object>> getUserInfo(HttpServletRequest request) {
-        UcenterMsUserVO user = getSessionuser() ;
+    public HttpResult<Map<String, Object>> getUserInfo(HttpServletRequest request) {
+        UcenterMsUserVO user = getSessionuser();
         if (user == null) {
             throw new ParamException("token失效");
         }
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("user", user);
         if (user.getIsAdmin() == Constant.INT_TRUE) {
             resultMap.put("roles", Arrays.asList("admin"));
             resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(null));
-        }else {
+        } else {
             List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(user.getUserId());
             List<String> collect = roleList.stream().map(UcenterMsRoleVO::getRoleName).collect(Collectors.toList());
-            String roles = roleList.stream().map(UcenterMsRoleVO::getRoleId).map(Objects::toString).collect(Collectors.joining(",","'","'"));
+            String roles = roleList.stream().map(UcenterMsRoleVO::getRoleId).map(Objects::toString).collect(Collectors.joining(",", "'", "'"));
             resultMap.put("roles", collect);
             resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(roles));
         }
@@ -188,16 +197,18 @@ public class MsLoginController extends BaseController {
 
     /**
      * 获取路由
+     *
      * @return
      */
     @RequestMapping("/getRouters")
-    public HttpResult<List<VueRouterVO>>  getRouters(){
-        UcenterMsUserVO user = getSessionuser() ;
-        return HttpResult.success(sysUserService.getRouters(user,Constant.MENU_TYPE_VUE));
+    public HttpResult<List<VueRouterVO>> getRouters() {
+        UcenterMsUserVO user = getSessionuser();
+        return HttpResult.success(sysUserService.getRouters(user, Constant.MENU_TYPE_VUE));
     }
 
     /**
      * 获取用户信息
+     *
      * @return
      */
     protected UcenterMsUserVO getSessionuser() {

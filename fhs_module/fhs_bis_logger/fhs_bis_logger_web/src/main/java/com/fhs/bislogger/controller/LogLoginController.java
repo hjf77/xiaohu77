@@ -23,16 +23,5 @@ import java.io.IOException;
 @Api(tags = {"登录日志"})
 @RequestMapping("/ms/logLogin")
 public class LogLoginController extends ModelSuperController<LogLoginVO, LogLoginDO> {
-    @Autowired
-    private LogLoginService logLoginService;
-
-    /**
-     * 获取当前登录用户信息
-     */
-    @RequestMapping("getLoginUserMsg")
-    public void getLoginUserMsg() throws IOException {
-        HttpServletRequest request = getRequest();
-        logLoginService.getLoginUserMsg(request);
-    }
 
 }

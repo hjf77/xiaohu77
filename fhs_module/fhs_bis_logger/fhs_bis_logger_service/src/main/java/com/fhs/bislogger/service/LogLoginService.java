@@ -19,5 +19,12 @@ import java.io.UnsupportedEncodingException;
 public interface LogLoginService extends BaseService<LogLoginVO,LogLoginDO>{
 
 
-    void getLoginUserMsg(HttpServletRequest request) throws IOException;
+    /**
+     * 添加登录日志信息
+     * @param request
+     * @param userName
+     * @param isError 登录失败穿true;
+     * @param errorType
+     */
+    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isError, Integer errorType);
 }

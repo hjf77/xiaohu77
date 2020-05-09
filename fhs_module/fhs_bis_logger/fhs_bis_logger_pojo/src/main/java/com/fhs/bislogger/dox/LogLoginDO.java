@@ -36,6 +36,9 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
     @ApiModelProperty(value = "${column.comment}")
     private String logId;
 
+    @TableId(value = "visit_number", type = IdType.AUTO)
+    private Integer visitNumber;
+
     /**
      * 用户id
      */
@@ -107,5 +110,7 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
     @TableField("login_name")
     @ApiModelProperty(value = "登录名")
     private String loginName;
+
+
 
 }

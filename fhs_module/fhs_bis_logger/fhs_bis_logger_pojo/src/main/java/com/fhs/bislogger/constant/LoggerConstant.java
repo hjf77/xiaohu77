@@ -63,5 +63,30 @@ public interface LoggerConstant {
      * 失败的日志
      */
     int LOG_STATE_ERROR = 1;
+
+    /**
+     * 登录成功
+     */
+    int LOG_LOGIN_TRUE = 0;
+
+    /**
+     * 登录成功
+     */
+    int LOG_LOGIN_ERROR = 1;
+
+    /**
+     * 登录失败，验证码失效
+     */
+    int LOG_LOGIN_ERROR_CODE_INVALID = 3;
+
+    /**
+     * 登录失败，验证码错误
+     */
+    int LOG_LOGIN_ERROR_CODE = 2;
+
+    /**
+     * 登录失败，用户名或者密码错误
+     */
+    int LOG_LOGIN_ERROR_USER = 1;
 }
 
