@@ -1,18 +1,20 @@
 package com.fhs.bislogger.dox;
 
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.dox.BaseDO;
-import com.mybatis.jpa.annotation.*;
-import com.fhs.core.valid.group.*;
-
-import javax.validation.constraints.*;
-
-import org.hibernate.validator.constraints.Length;
-import com.baomidou.mybatisplus.annotation.*;
+import com.fhs.core.valid.group.Add;
+import com.fhs.core.valid.group.Delete;
+import com.fhs.core.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * 登录日志(LogLogin)实体类
@@ -92,5 +94,18 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
     @ApiModelProperty(value = "类型0 登入 1 登出")
     private Integer type;
 
+    /**
+     * 0 用户名不存在 1 密码错误 2 验证码错误 3 验证码失效 4 其他
+     */
+    @TableField("error_info")
+    @ApiModelProperty(value = "0 用户名不存在 1 密码错误 2 验证码错误 3 验证码失效 4 其他")
+    private Integer errorInfo;
+
+    /**
+     * 登录名
+     */
+    @TableField("login_name")
+    @ApiModelProperty(value = "登录名")
+    private String loginName;
 
 }
