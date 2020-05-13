@@ -357,7 +357,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("update")
     @ResponseBody
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e, BindingResult check, HttpServletRequest request,
                                       HttpServletResponse response) {
         if (isPermitted(request, "update")) {

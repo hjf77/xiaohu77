@@ -241,6 +241,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_END );
             msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_COMPLATE);
         }
+        FlowInstanceVO flowInstanceVO = new FlowInstanceVO();
+        flowInstanceVO.setFinishTime(new Date());
+        flowInstanceService.insertSelective(flowInstanceVO);
         commitProcess(taskId, variables, endActivity.getId());
 
         msgMap.put("instanceId", flowInstance.getActivitiProcessInstanceId());
@@ -350,14 +353,14 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         } else {
             history = this.taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId());
             history.setTaskId(taskId);
-            history.setTaskFinishTime(new Date());
+            history.setCreateTime(new Date());
             history.setTitle(task.getName());
             history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
             history.setAssigneeUserId(task.getAssignee());
             history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
             history.setRemark(ConverterUtils.toString(variables.get("remark")));
             history.setResult(ConverterUtils.toInteger(variables.get("result")));
-            history.setCreateTime(new Date());
+            history.setTaskFinishTime(new Date());
             history.setTaskId(task.getId());
             taskHistoryService.insertSelective(history);
         }
@@ -476,11 +479,11 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
                     //看最后一个任务的结果，如果是撤回的话，那么实例状态就为撤回
                     Integer finalTaskResult = histories.get(0).getResult();
                     if (FlowConstant.RESULT_REVOKE == finalTaskResult) {
-                        this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowConstant.BUSINESS_INSTANCE_STATUS_REVOKE).build());
+                        this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowConstant.BUSINESS_INSTANCE_STATUS_REVOKE).finishTime(new Date()).build());
                         return;
                     }
                 }
-                this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowConstant.BUSINESS_INSTANCE_STATUS_END).build());
+                this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowConstant.BUSINESS_INSTANCE_STATUS_END).finishTime(new Date()).build());
                 Map<String, Object> msgMap = new HashMap<>();
                 msgMap.put("instanceId", instance.getActivitiProcessInstanceId());
                 msgMap.put("businessKey", instance.getFormPkey());

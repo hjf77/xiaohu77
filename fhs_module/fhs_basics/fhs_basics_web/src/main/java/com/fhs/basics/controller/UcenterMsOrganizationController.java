@@ -81,6 +81,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> update(UcenterMsOrganizationVO e, BindingResult check, HttpServletRequest request, HttpServletResponse response) {
         UcenterMsOrganizationVO oldOrg = sysOrganizationService.selectById(e.getId());
         // 如果是启用改为禁用
@@ -113,6 +114,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
     public HttpResult del(String id, HttpServletRequest request) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("organizationId", id);

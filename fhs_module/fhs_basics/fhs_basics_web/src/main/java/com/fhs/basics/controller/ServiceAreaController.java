@@ -1,8 +1,10 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.ServiceAreaDO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
+import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,6 +32,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/area")
+@LogNamespace(namespace = BaseTransConstant.AREA,module = "地区管理")
 public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaDO> {
     @Autowired
     private ServiceAreaService areaService;

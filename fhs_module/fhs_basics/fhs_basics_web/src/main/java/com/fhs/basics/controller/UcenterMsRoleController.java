@@ -68,6 +68,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * 获取角色列表jsonp
      */
     @RequestMapping("getRolesForJsonp")
+    @LogMethod
     public void getRolesForJsonp(HttpServletRequest request){
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         UcenterMsRoleDO roleName = UcenterMsRoleDO.builder().roleName(request.getParameter("roleName")).build();
@@ -210,7 +211,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:del")
     @RequestMapping("delSysRole")
-    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 2)
     public HttpResult<Boolean> del(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         sysRoleService.deleteRole(sysRole);
         return HttpResult.success(true);

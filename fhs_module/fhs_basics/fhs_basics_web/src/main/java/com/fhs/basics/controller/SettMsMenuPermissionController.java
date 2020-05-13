@@ -1,8 +1,12 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.SettMsMenuPermissionDO;
 import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.module.base.controller.ModelSuperController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/sysMenuPermission")
+@LogNamespace(namespace = BaseTransConstant.MENU_INFO_PERMISSION,module = "菜单权限管理")
 public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionDO> {
 
 
@@ -33,6 +38,7 @@ public class SettMsMenuPermissionController extends ModelSuperController<SettMsM
      * @paramreponse
      */
     @RequestMapping("addBaseMenuBatch")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
     public void addBaseMenuBatch(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = super.getParameterMap();
         boolean result = sysMenuPermissionService.addBaseMenuBatch(map);

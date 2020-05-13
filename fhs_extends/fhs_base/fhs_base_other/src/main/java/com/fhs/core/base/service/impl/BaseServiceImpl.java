@@ -370,6 +370,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
+    @Override
     public int deleteByIdsMp(Collection<? extends Serializable> idList) {
         for (Serializable id : idList) {
             BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
@@ -377,6 +378,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return baseMapper.deleteBatchIds(idList);
     }
 
+    @Override
     public int deleteMp(Wrapper<D> wrapper) {
         return baseMapper.delete(wrapper);
     }

@@ -18,8 +18,13 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value ="LogOperatorMainDO",description ="LogOperatorMain参数")
+@ApiModel(value = "LogOperatorMainDO", description = "LogOperatorMain参数")
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class LogOperatorMainVO extends LogOperatorMainDO implements VO {
-    
- }
+
+    /**
+     * 访问次数
+     */
+    private Integer visits;
+
+}

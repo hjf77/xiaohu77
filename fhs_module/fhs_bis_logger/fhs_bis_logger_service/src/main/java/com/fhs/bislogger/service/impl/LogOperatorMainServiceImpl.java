@@ -95,4 +95,23 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
                 logOperatorMainMapper.getLoggerModelList();
         return loggerModelList;
     }
+
+    @Override
+    public List<LogOperatorMainVO> getAccessManyList(Map<String, Object> paramMap) {
+        List<LogOperatorMainVO> accessManyList =
+                logOperatorMainMapper.getAccessManyList(paramMap);
+        return accessManyList;
+    }
+
+    @Override
+    public int getLogCount(Map<String, Object> paramMap) {
+        int logCount = logOperatorMainMapper.getLogCount(paramMap);
+        return logCount;
+    }
+
+    @Override
+    public int getReportCount(Map<String, Object> paramMap) {
+        int reportCount = logOperatorMainMapper.getReportCount(paramMap);
+        return reportCount;
+    }
 }

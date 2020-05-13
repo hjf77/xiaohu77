@@ -6,6 +6,7 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Namespace;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (LogOperatorMain)}表服务接口
@@ -21,5 +22,27 @@ public interface LogOperatorMainService extends BaseService<LogOperatorMainVO,Lo
      * @return
      */
     List<LogOperatorMainVO> getLoggerModelList();
+
+
+    /**
+     * 根据时间段查询数据
+     * @param paramMap
+     * @return
+     */
+    List<LogOperatorMainVO> getAccessManyList(Map<String, Object> paramMap);
+
+    /**
+     * 根据url查询接口调用多少次
+     * @param paramMap
+     * @return
+     */
+    int getLogCount(Map<String, Object> paramMap);
+
+    /**
+     * 查询分组后的总记录数
+     * @param paramMap
+     * @return
+     */
+    int getReportCount(Map<String, Object> paramMap);
 
 }

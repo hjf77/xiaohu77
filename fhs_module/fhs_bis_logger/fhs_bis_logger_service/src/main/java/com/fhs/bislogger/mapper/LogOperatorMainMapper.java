@@ -7,6 +7,7 @@ import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (LogOperatorMain)表数据库访问层
@@ -25,5 +26,25 @@ public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> 
     List<LogOperatorMainVO> getLoggerModelList();
 
 
+    /**
+     * 根据时间段查询数据
+     * @param paramMap
+     * @return
+     */
+    List<LogOperatorMainVO> getAccessManyList(Map<String, Object> paramMap);
+
+    /**
+     * 根据url查询接口调用多少次
+     * @param paramMap
+     * @return
+     */
+    int getLogCount(Map<String, Object> paramMap);
+
+    /**
+     * 查询分组后的总记录数
+     * @param paramMap
+     * @return
+     */
+    int getReportCount(Map<String, Object> paramMap);
 
 }

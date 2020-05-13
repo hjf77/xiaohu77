@@ -32,6 +32,10 @@ public interface BaseTransConstant {
      */
     String  MENU_INFO = "sysMenu";
     /**
+     * 菜单权限管理
+     */
+    String  MENU_INFO_PERMISSION = "sysMenuPermission";
+    /**
      * 地区
      */
     String AREA = "area";

@@ -1,21 +1,26 @@
 package com.fhs.flow.dox;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.*;
+import com.mybatis.jpa.annotation.Between;
 import com.mybatis.jpa.annotation.Like;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * fhs的流程实例，为activiti的实例扩展表(FlowInstance)实体类
@@ -99,5 +104,10 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
     @Trans(type = TransType.AUTO_TRANS,key = Constant.USER_INFO + "#ccToUser")
     @TableField("cc_to")
     private String ccTo;
+
+    @Between
+    @TableField("finish_time")
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
+    private Date finishTime;
 
 }
