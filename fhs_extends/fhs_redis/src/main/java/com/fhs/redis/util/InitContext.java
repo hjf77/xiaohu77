@@ -53,6 +53,8 @@ public class InitContext extends RedisApplication implements Constant  {
             StringRedisSerializer keySerializer = new StringRedisSerializer();
             redisTemplate.setValueSerializer(keySerializer);
             redisTemplate.setKeySerializer(keySerializer);
+			redisTemplate.setHashKeySerializer(keySerializer);
+			redisTemplate.setHashValueSerializer(keySerializer);
             redisTemplate.afterPropertiesSet();
 			createRedisConnection(name, host, port, possword,redisTemplate);
 

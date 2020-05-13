@@ -20,6 +20,18 @@ public interface BaseTransConstant {
     String USER_INFO = "sysUser";
 
     /**
+     * 角色管理
+     */
+    String ROLE_INFO = "sysRole";
+    /**
+     * 机构管理
+     */
+    String  ORG_INFO = "sysOrganization";
+    /**
+     * 菜单管理
+     */
+    String  MENU_INFO = "sysMenu";
+    /**
      * 地区
      */
     String AREA = "area";

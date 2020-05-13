@@ -1,4 +1,4 @@
-package com.fhs.redis.action;
+package com.fhs.redis.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,40 +12,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.workcenter.common.response.WorkcenterResponseBodyJson;
 
-import com.fhs.redis.service.ListService;
+import com.fhs.redis.service.StringService;
 import com.fhs.redis.util.Constant;
 import com.fhs.redis.util.RedisApplication;
 
 @Controller
-@RequestMapping("/list")
-public class ListConroller extends RedisApplication implements Constant {
+@RequestMapping("/string")
+public class StringConroller extends RedisApplication implements Constant {
 	
 	@Autowired
-	private ListService listService;
+	private StringService stringService;
 	
-	@RequestMapping(value="/delListValue", method=RequestMethod.POST)
+	@RequestMapping(value="/delValue", method=RequestMethod.POST)
 	@ResponseBody
-	public Object delListValue(HttpServletRequest request, HttpServletResponse response,
+	public Object delValue(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
 			@RequestParam String dataType) {
 		
-		listService.delListValue(serverName, dbIndex, key);
+		stringService.delValue(serverName, dbIndex, key);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}
 	
-	@RequestMapping(value="/updateListValue", method=RequestMethod.POST)
+	@RequestMapping(value="/updateValue", method=RequestMethod.POST)
 	@ResponseBody
-	public Object updateListValue(HttpServletRequest request, HttpServletResponse response,
+	public Object updateValue(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
 			@RequestParam String dataType,
 			@RequestParam String value) {
 		
-		listService.updateListValue(serverName, dbIndex, key, value);
+		stringService.updateValue(serverName, dbIndex, key, value);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}

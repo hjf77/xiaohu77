@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
@@ -8,6 +9,9 @@ import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.vo.TreeModelVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
@@ -34,6 +38,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/sysOrganization")
+@LogNamespace(namespace = BaseTransConstant.ORG_INFO,module = "机构管理")
 public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationDO> {
 
     /**
@@ -76,7 +81,6 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
-    @LogDesc(type = LogDesc.UPDATE, value = "更新")
     public HttpResult<Boolean> update(UcenterMsOrganizationVO e, BindingResult check, HttpServletRequest request, HttpServletResponse response) {
         UcenterMsOrganizationVO oldOrg = sysOrganizationService.selectById(e.getId());
         // 如果是启用改为禁用
@@ -109,7 +113,6 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
-    @LogDesc(type = LogDesc.DEL, value = "删除")
     public HttpResult del(String id, HttpServletRequest request) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("organizationId", id);
@@ -137,7 +140,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @RequiresPermissions("sysOrganization:add")
     @RequestMapping("insertOrganization")
-    @LogDesc(type = LogDesc.ADD, value = "添加")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult insertOrganization(HttpServletRequest request, HttpServletResponse response,
                                          UcenterMsOrganizationVO sysOrganization) {
         if (!CheckUtils.isNullOrEmpty(sysOrganization.getParentId())) {

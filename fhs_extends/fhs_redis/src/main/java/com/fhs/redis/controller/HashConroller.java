@@ -1,4 +1,4 @@
-package com.fhs.redis.action;
+package com.fhs.redis.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,41 +12,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.workcenter.common.response.WorkcenterResponseBodyJson;
 
-import com.fhs.redis.service.SetService;
+import com.fhs.redis.service.HashService;
 import com.fhs.redis.util.Constant;
 import com.fhs.redis.util.RedisApplication;
 
 @Controller
-@RequestMapping("/set")
-public class SetConroller extends RedisApplication implements Constant {
+@RequestMapping("/hash")
+public class HashConroller extends RedisApplication implements Constant {
 	
 	@Autowired
-	private SetService setService;
+	private HashService hashService;
 	
-	@RequestMapping(value="/delSetValue", method=RequestMethod.POST)
+	@RequestMapping(value="/delHashField", method=RequestMethod.POST)
 	@ResponseBody
-	public Object delSetValue(HttpServletRequest request, HttpServletResponse response,
+	public Object delHashField(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
 			@RequestParam String dataType,
-			@RequestParam String value) {
+			@RequestParam String field) {
 		
-		setService.delSetValue(serverName, dbIndex, key, value);
+		hashService.delHashField(serverName, dbIndex, key, field);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}
 	
-	@RequestMapping(value="/updateSetValue", method=RequestMethod.POST)
+	@RequestMapping(value="/updateHashField", method=RequestMethod.POST)
 	@ResponseBody
-	public Object updateSetValue(HttpServletRequest request, HttpServletResponse response,
+	public Object updateHashField(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
 			@RequestParam String dataType,
+			@RequestParam String field,
 			@RequestParam String value) {
 		
-		setService.updateSetValue(serverName, dbIndex, key, value);
+		hashService.updateHashField(serverName, dbIndex, key, field, value);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}

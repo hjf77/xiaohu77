@@ -26,5 +26,5 @@ public interface LogLoginService extends BaseService<LogLoginVO,LogLoginDO>{
      * @param isError 登录失败穿true;
      * @param errorType
      */
-    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isError, Integer errorType);
+    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isError, Integer errorType,String userId);
 }

@@ -31,7 +31,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
 
 
     @Override
-    public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType){
+    public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType,String userId){
         LogLoginVO logLoginVO = new LogLoginVO();
         int count = this.findCount(logLoginVO);
         GetLoginUserMsgUtil getLoginUserMsgUtil = new GetLoginUserMsgUtil();
@@ -49,6 +49,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
         Map<String, String> userAgent = getLoginUserMsgUtil.getUserAgent(request);
         //获取当前登录人操作系统信息
         String os = getLoginUserMsgUtil.getOsInfo(request);
+        logLoginVO.setUserId(userId);
         logLoginVO.setLogId(StringUtil.getUUID());
         logLoginVO.setIpAddress(ip);
         logLoginVO.setIpInfo(addresses);

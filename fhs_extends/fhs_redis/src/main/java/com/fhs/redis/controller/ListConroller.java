@@ -1,4 +1,4 @@
-package com.fhs.redis.action;
+package com.fhs.redis.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,42 +12,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.workcenter.common.response.WorkcenterResponseBodyJson;
 
-import com.fhs.redis.service.ZSetService;
+import com.fhs.redis.service.ListService;
 import com.fhs.redis.util.Constant;
 import com.fhs.redis.util.RedisApplication;
 
 @Controller
-@RequestMapping("/zset")
-public class ZSetConroller extends RedisApplication implements Constant {
+@RequestMapping("/list")
+public class ListConroller extends RedisApplication implements Constant {
 	
 	@Autowired
-	private ZSetService zsetService;
+	private ListService listService;
 	
-	@RequestMapping(value="/delZSetValue", method=RequestMethod.POST)
+	@RequestMapping(value="/delListValue", method=RequestMethod.POST)
 	@ResponseBody
-	public Object delZSetValue(HttpServletRequest request, HttpServletResponse response,
+	public Object delListValue(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
-			@RequestParam String dataType,
-			@RequestParam String member) {
+			@RequestParam String dataType) {
 		
-		zsetService.delZSetValue(serverName, dbIndex, key, member);
+		listService.delListValue(serverName, dbIndex, key);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}
 	
-	@RequestMapping(value="/updateZSetValue", method=RequestMethod.POST)
+	@RequestMapping(value="/updateListValue", method=RequestMethod.POST)
 	@ResponseBody
-	public Object updateZSetValue(HttpServletRequest request, HttpServletResponse response,
+	public Object updateListValue(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
 			@RequestParam String dataType,
-			@RequestParam double score,
-			@RequestParam String member) {
+			@RequestParam String value) {
 		
-		zsetService.updateZSetValue(serverName, dbIndex, key, score, member);
+		listService.updateListValue(serverName, dbIndex, key, value);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}

@@ -95,18 +95,18 @@ public class MsLoginController extends BaseController {
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
         if (null == sessionIdentify)//session 失效
         {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(),true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID,sysUser.getUserId() );
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode)) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE,sysUser.getUserId() );
             throw new ParamException("验证码错误，请重新输入");
         }
         request.getSession().setAttribute("identifyCode", null);
         String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
-            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER);
+            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER,sysUser.getUserId() );
             throw new ParamException("用户名或者密码错误");
         }
         //如果不是admin就去加载全部的数据
@@ -121,7 +121,7 @@ public class MsLoginController extends BaseController {
         // 显示调用，让程序重新去加载授权数据
         subjects.isPermitted("init");
         request.getSession().setAttribute(Constant.SESSION_USER, sysUser);
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null,sysUser.getUserId() );
         return HttpResult.success(true);
     }
 
@@ -133,18 +133,18 @@ public class MsLoginController extends BaseController {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
         if (null == sessionIdentify) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID,sysUser.getUserId() );
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode)) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE,sysUser.getUserId() );
             throw new ParamException("验证码错误，请重新输入");
         }
         sysUser.setPassword(Md5Util.MD5(sysUser.getPassword()));
         String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
-            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER);
+            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER,sysUser.getUserId() );
             throw new ParamException("用户名或者密码错误");
         }
         String tokenStr = StringUtil.getUUID();
@@ -167,7 +167,7 @@ public class MsLoginController extends BaseController {
         redisCacheService.expire(USER_KEY + tokenStr, sesstionTimeout);
         Map<String, String> result = new HashMap<>();
         result.put("token", tokenStr);
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null,sysUser.getUserId());
         return HttpResult.success(result);
     }
 

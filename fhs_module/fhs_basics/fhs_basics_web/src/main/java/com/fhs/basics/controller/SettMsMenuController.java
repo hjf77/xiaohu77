@@ -1,12 +1,16 @@
 package com.fhs.basics.controller;
 
 ;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.SettMsMenuDO;
 import com.fhs.basics.service.SettMsMenuService;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.TreeDataVO;
 import com.fhs.basics.vo.TreeMenuPermissionVO;
 import com.fhs.basics.vo.TreeModelVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.result.HttpResult;
@@ -30,6 +34,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("ms/sysMenu")
+@LogNamespace(namespace = BaseTransConstant.MENU_INFO,module = "菜单管理")
 public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuDO> {
 
     private static final Logger LOG = Logger.getLogger(SettMsMenuController.class);
@@ -83,6 +88,7 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
     @NotRepeat
     @RequiresPermissions("sysMenu:add")
     @RequestMapping("addMenu")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SettMsMenuVO adminMenu) {
         try {
             String url = adminMenu.getMenuUrl();
@@ -109,6 +115,7 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
      */
     @RequiresPermissions("sysMenu:update")
     @RequestMapping("updateMenu")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
     public HttpResult<Boolean> updateMenu(HttpServletRequest request, HttpServletResponse reponse, SettMsMenuVO adminMenu) {
         String url = adminMenu.getMenuUrl();
         if (!CheckUtils.isNullOrEmpty(url)) {

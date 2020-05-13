@@ -1,4 +1,4 @@
-package com.fhs.redis.action;
+package com.fhs.redis.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,40 +12,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.workcenter.common.response.WorkcenterResponseBodyJson;
 
-import com.fhs.redis.service.StringService;
+import com.fhs.redis.service.ZSetService;
 import com.fhs.redis.util.Constant;
 import com.fhs.redis.util.RedisApplication;
 
 @Controller
-@RequestMapping("/string")
-public class StringConroller extends RedisApplication implements Constant {
+@RequestMapping("/zset")
+public class ZSetConroller extends RedisApplication implements Constant {
 	
 	@Autowired
-	private StringService stringService;
+	private ZSetService zsetService;
 	
-	@RequestMapping(value="/delValue", method=RequestMethod.POST)
+	@RequestMapping(value="/delZSetValue", method=RequestMethod.POST)
 	@ResponseBody
-	public Object delValue(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam String serverName, 
-			@RequestParam int dbIndex,
-			@RequestParam String key,
-			@RequestParam String dataType) {
-		
-		stringService.delValue(serverName, dbIndex, key);
-		
-		return WorkcenterResponseBodyJson.custom().build();
-	}
-	
-	@RequestMapping(value="/updateValue", method=RequestMethod.POST)
-	@ResponseBody
-	public Object updateValue(HttpServletRequest request, HttpServletResponse response,
+	public Object delZSetValue(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String serverName, 
 			@RequestParam int dbIndex,
 			@RequestParam String key,
 			@RequestParam String dataType,
-			@RequestParam String value) {
+			@RequestParam String member) {
 		
-		stringService.updateValue(serverName, dbIndex, key, value);
+		zsetService.delZSetValue(serverName, dbIndex, key, member);
+		
+		return WorkcenterResponseBodyJson.custom().build();
+	}
+	
+	@RequestMapping(value="/updateZSetValue", method=RequestMethod.POST)
+	@ResponseBody
+	public Object updateZSetValue(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam String serverName, 
+			@RequestParam int dbIndex,
+			@RequestParam String key,
+			@RequestParam String dataType,
+			@RequestParam double score,
+			@RequestParam String member) {
+		
+		zsetService.updateZSetValue(serverName, dbIndex, key, score, member);
 		
 		return WorkcenterResponseBodyJson.custom().build();
 	}

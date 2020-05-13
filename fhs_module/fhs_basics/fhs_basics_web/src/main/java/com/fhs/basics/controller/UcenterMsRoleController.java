@@ -1,9 +1,13 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsRoleDO;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
@@ -30,6 +34,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("ms/sysRole")
+@LogNamespace(namespace = BaseTransConstant.ROLE_INFO,module = "角色管理")
 public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRoleDO> {
 
     /**
@@ -45,6 +50,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:see")
     @RequestMapping("/listData/{organizationId}")
+    @LogMethod
     public Pager<UcenterMsRoleVO> listData(@PathVariable(value = "organizationId") String organizationId) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         Map<String, Object> map = super.getPageTurnNum();
@@ -155,7 +161,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * @paramadminRole
      */
     @ResponseBody
-    @LogDesc(value = "更新", type = LogDesc.UPDATE)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
     @RequestMapping("updateSysRole")
     @RequiresPermissions("sysRole:update")
     public HttpResult<Boolean> updateSysRole(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
@@ -185,7 +191,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:add")
     @RequestMapping("addSysRole")
-    @LogDesc(type = LogDesc.ADD, value = "添加角色")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult<Boolean> add(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setCreateUser(sysUser.getUserId());
@@ -204,6 +210,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:del")
     @RequestMapping("delSysRole")
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
     public HttpResult<Boolean> del(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         sysRoleService.deleteRole(sysRole);
         return HttpResult.success(true);

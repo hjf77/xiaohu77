@@ -1,4 +1,4 @@
-package com.fhs.redis.action;
+package com.fhs.redis.controller;
 
 import java.util.Set;
 
