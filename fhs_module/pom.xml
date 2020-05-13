@@ -18,6 +18,7 @@
         <module>fhs_front</module>
         <module>fhs_flow</module>
         <module>fhs_bis_logger</module>
+        <module>fhs_redis</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 
