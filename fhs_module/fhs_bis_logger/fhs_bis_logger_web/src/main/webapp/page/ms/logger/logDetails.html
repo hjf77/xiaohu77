@@ -100,7 +100,7 @@ include("/page/tags/form_include.html"){}
     }
 
     function logView(pkey, version,operatorType) {
-        if (operatorType != 1) {
+        if (operatorType != 1 || (operatorType == 1&&version==1)) {
             openDialogExtParamDetail(
                 '${basePath}/b/page-ms-logger/logView?isView=true&pkey=' + pkey + '&version=' + version, '查看');
         } else {

@@ -109,7 +109,7 @@ public interface FlowConstant {
     int RESULT_DELEGATE = 5;
 
     /**
-     * 正在审批
+     * 正在处理
      */
     int APPROVING = 7;
 }

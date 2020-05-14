@@ -69,6 +69,9 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
                         break;
                     case LoggerConstant.OPERATOR_TYPE_DEL:
                         extParamVO.setVersion(historyDataVO == null ? 0 : historyDataVO.getVersion() + 1);
+                        break;
+                    default:
+                        break;
                 }
             }
             extParamVO.preInsert(logAddOperatorLogVO.getOperatorMainVO().getCreateUser());

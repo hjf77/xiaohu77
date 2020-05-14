@@ -1,5 +1,8 @@
 package com.fhs.flow.controller;
 
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.pojo.pager.Pager;
@@ -31,6 +34,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/ms/flowTaskHistory")
+@LogNamespace(namespace = "flow_task_history",module = "流程任务日志管理")
 public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHistoryVO, FlowTaskHistoryDO> {
 
     @Autowired
@@ -49,6 +53,7 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
      * @return
      */
     @RequestMapping("getTaskHistoryList")
+    @LogMethod
     public void getTaskHistoryList(HttpServletRequest request) {
         Map<String, Object> paramMap = super.getPageTurnNum();
         paramMap.put("userId", this.getSessionuser().getUserId());
@@ -65,6 +70,7 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
      * 审批历史
      */
     @RequestMapping("getApprovalRecord")
+    @LogMethod
     public void getApprovalRecord(String instanceId) {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         List<TaskHistoryVO> approvalRecord = flowTaskHistoryService.findApprovalRecord(instanceId);

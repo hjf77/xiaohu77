@@ -604,6 +604,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
      * @return
      * @throws Exception
      */
+    @Override
     public TaskEntity findTaskById(String taskId) {
         TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(
                 taskId).singleResult();

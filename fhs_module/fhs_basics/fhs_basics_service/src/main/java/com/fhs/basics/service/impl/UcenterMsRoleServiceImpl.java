@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.api.rpc.FeignSysRoleApiService;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsRoleDO;
 import com.fhs.basics.mapper.UcenterMsRoleMapper;
 import com.fhs.basics.service.UcenterMsRoleService;
@@ -14,6 +15,7 @@ import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -33,6 +35,7 @@ import java.util.Map;
 @Primary
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.ROLE_INFO, fields = "roleName")
 public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, UcenterMsRoleDO> implements UcenterMsRoleService, FeignSysRoleApiService {
 
     private static final Logger LOG = Logger.getLogger(UcenterMsRoleServiceImpl.class);

@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/sysOrganization")
-@LogNamespace(namespace = BaseTransConstant.ORG_INFO,module = "机构管理")
+@LogNamespace(namespace = BaseTransConstant.ORG,module = "机构管理")
 public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationDO> {
 
     /**

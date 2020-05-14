@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.SettMsMenuPermissionDO;
 import com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO;
 import com.fhs.basics.mapper.SettMsMenuPermissionMapper;
@@ -9,6 +10,7 @@ import com.fhs.basics.vo.SettMsMenuPermissionVO;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.MENU_INFO_PERMISSION, fields = "permissionName")
 public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuPermissionVO, SettMsMenuPermissionDO>
         implements SettMsMenuPermissionService {
     @Autowired

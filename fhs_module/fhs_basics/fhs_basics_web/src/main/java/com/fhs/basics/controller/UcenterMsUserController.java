@@ -282,6 +282,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @RequestMapping("getOwnUserInfo")
     @ResponseBody
+    @LogMethod
     public UcenterMsUserVO getOwnUserInfo(HttpServletRequest request) {
         return sysUserService.selectById(super.getSessionuser().getUserId());
     }

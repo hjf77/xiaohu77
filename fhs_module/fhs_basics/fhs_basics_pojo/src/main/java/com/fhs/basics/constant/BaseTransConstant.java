@@ -23,10 +23,7 @@ public interface BaseTransConstant {
      * 角色管理
      */
     String ROLE_INFO = "sysRole";
-    /**
-     * 机构管理
-     */
-    String  ORG_INFO = "sysOrganization";
+
     /**
      * 菜单管理
      */

@@ -92,7 +92,7 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
 </body>
 <script>
     $("#dlg-buttons").hide();
-    var taskId = "${parameter.taskId!}";
+    var taskId = "${parameter.taskId}";
     var instanceId = "${parameter.instanceId}"
     var formUrl = null;
     $(function () {

@@ -1,5 +1,8 @@
 package com.fhs.flow.controller;
 
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.pojo.pager.Pager;
@@ -36,6 +39,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/ms/flow_instance")
+@LogNamespace(namespace = "flow_instance",module = "流程实例管理")
 public class FlowInstanceController extends ModelSuperController<FlowInstanceVO, FlowInstanceDO> {
 
     @Autowired
@@ -47,6 +51,7 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
      * 是否执行完毕
      */
     @RequestMapping("isRevokeApply")
+    @LogMethod
     public HttpResult<Boolean> isRevokeApply(String instanceId, HttpServletRequest request,String taskId) throws Exception {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         FlowInstanceVO flowInstance = new FlowInstanceVO();
@@ -77,6 +82,7 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
      * @return
      */
     @RequestMapping("updateCCTo")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "更新抄送人")
     public HttpResult updateCCTo(String ccTo, String instanceId) {
         ParamChecker.isNotNull(ccTo, "抄送人不能为空");
         ParamChecker.isNotNull(instanceId, "instanceId不能为空");

@@ -75,6 +75,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
                 new Thread(()->{
                     //查询..
                     modelSelectCache = logOperatorMainService.getLoggerModelList();
+                    namespaceModuleMap.clear();
                 }).start();
             }
         }
