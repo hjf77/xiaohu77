@@ -148,6 +148,23 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
         return logHistoryData;
     }
 
+    /**
+     * 根据namespace和pkey查询数据列表
+     * @param nameSpace
+     * @param pkey
+     * @param logHistoryDataDO
+     * @return
+     */
+    @RequestMapping("/getLogHistoryDataList")
+    public Pager<LogHistoryDataVO> getLogHistoryDataList(String nameSpace,String pkey,LogHistoryDataDO logHistoryDataDO){
+        PageSizeInfo pgeSizeInfo = getPageSizeInfo();
+        List<LogHistoryDataVO> logHistoryDataList =
+                logHistoryDataService.findForList(LogHistoryDataDO.builder().namespace(nameSpace).pkey(pkey).build(),pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+        int countJpa = logHistoryDataService.findCountJpa(logHistoryDataDO);
+        return new Pager<>(countJpa,logHistoryDataList);
+    }
+
+
 
     /**
      * 根据时间段查询
@@ -159,7 +176,6 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     public Pager<LogOperatorMainVO> getAccessManyList(String startTime,String endTime){
         Map<String, Object> paramMap = super.getPageTurnNum();
         List<LogOperatorMainVO> accessManyList = null;
-        List<LogOperatorMainVO> loggerList = null;
         if (startTime!=null && endTime!=null && startTime!="" && endTime!=""){
             paramMap.put("startTime",startTime);
             paramMap.put("endTime",endTime);
