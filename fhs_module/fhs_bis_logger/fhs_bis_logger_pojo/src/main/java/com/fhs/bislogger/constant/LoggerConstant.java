@@ -88,5 +88,15 @@ public interface LoggerConstant {
      * 登录失败，用户名或者密码错误
      */
     int LOG_LOGIN_ERROR_USER = 1;
+
+    /**
+     * 登录 ：登入
+     */
+    int LOG_LOGIN_IN = 0;
+
+    /**
+     * 登录 ：登入
+     */
+    int LOG_LOGIN_OUT = 1;
 }
 

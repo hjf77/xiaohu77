@@ -111,6 +111,4 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
     @ApiModelProperty(value = "登录名")
     private String loginName;
 
-
-
 }
