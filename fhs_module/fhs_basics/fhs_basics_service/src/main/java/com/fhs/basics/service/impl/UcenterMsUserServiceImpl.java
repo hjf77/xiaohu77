@@ -39,6 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ * 用户(ucenterMsUser)表服务实现类
+ * @author user
+ * @date 2020-05-18 16:46:36
+ */
+
 @Primary
 @Service("ucenterMsUserService")
 @DataSource("base_business")

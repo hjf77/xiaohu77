@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 /**
- * (LogOperatorExtParam)实体类
+ * 扩展参数(LogOperatorExtParam)实体类 vo
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59

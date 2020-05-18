@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * 核心跨域跳转Controller
  * @author qh
+ * @since 2019-05-18 11:36:23
  */
 @Controller
 public class RedirectController {

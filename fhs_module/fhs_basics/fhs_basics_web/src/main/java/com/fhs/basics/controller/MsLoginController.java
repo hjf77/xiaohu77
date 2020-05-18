@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 
 /**
  * 非分布式运行时候的登录登出
+ * @author user
+ * @date 2020-05-18 16:49:49
  */
 @RestController
 @RequestMapping("/")
@@ -93,7 +95,8 @@ public class MsLoginController extends BaseController {
     public HttpResult<Boolean> securityLogin(UcenterMsUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
-        if (null == sessionIdentify)//session 失效
+        //session 失效
+        if (null == sessionIdentify)
         {
             logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID,null, false);
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
@@ -254,8 +257,12 @@ public class MsLoginController extends BaseController {
         }
     }
 
+
     /**
      * 退出
+     * @param request
+     * @param response
+     * @throws IOException
      */
     @RequestMapping("ms/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {

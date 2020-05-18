@@ -12,6 +12,7 @@ import java.util.Map;
  * 用户service
  *
  * @author jianbo.qin
+ * @date 2020-05-18 16:38:36
  */
 public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, UcenterMsUserDO> {
 
@@ -20,6 +21,11 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     Integer SYS_USER_IS_ADMIN = 1;
 
+    /**
+     * 登陆
+     * @param adminUser
+     * @return
+     */
     public UcenterMsUserVO login(UcenterMsUserDO adminUser);
 
     /**

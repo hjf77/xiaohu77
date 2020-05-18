@@ -33,10 +33,10 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> {
     /**
      * 编号
      */
-
     @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @Id
     private String id;
+
     /**
      * 机构名称
      */
@@ -44,6 +44,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> {
     @Length(message = "机构名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "name")
     private String name;
+
     /**
      * 父类编号
      */
@@ -51,6 +52,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> {
     @Length(message = "父类编号字段的长度最大为32", groups = {Add.class, Update.class}, max = 255)
     @Column(name = "parent_id")
     private String parentId;
+
     /**
      * 同级菜单排行第几
      */
@@ -58,6 +60,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> {
     @Length(message = "同级菜单排行第几字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "ranking")
     private String ranking;
+
     /**
      * 是否启用(0:启用 1:禁用)
      */

@@ -8,6 +8,8 @@ import lombok.*;
 
 /**
  * 前端用户绑定 openidvo
+ * @author user
+ * @since 2019-05-18 11:49:21
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

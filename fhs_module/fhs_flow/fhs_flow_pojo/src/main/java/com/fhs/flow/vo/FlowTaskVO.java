@@ -8,6 +8,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * 任务-主要用于待办和待签收vo
+ *
+ * @author Jackwong
+ * @date 2019 -11-11 16:37:44
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

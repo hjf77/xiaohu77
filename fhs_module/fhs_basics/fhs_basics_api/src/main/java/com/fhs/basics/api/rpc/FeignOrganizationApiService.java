@@ -10,6 +10,8 @@ import java.util.Map;
 
 /**
  * 机构管理rest接口
+ * @author user
+ * @date 2020-05-18 14:39:22
  */
 @FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
 public interface FeignOrganizationApiService {

@@ -26,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * c端用户登录过滤器
+ * @author user
+ * @since 2019-05-18 11:40:05
  */
 @WebFilter(urlPatterns = {"/front/*", "/page/h5/*", "/page/pc/*", "/b/*"}, filterName = "userFilter", asyncSupported = true)
 public class FrontUserFilter implements Filter {

@@ -8,6 +8,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * 流程列表-xml vo
+ * @author user
+ * @since 2019-05-18 12:00:05
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

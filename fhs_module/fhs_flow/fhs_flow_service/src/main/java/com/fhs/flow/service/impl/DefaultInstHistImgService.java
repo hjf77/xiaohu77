@@ -24,6 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  流程历史
+ * @author user
+ * @date 2020-05-18 14:02:00
+ */
 @Service
 public class DefaultInstHistImgService implements BpmImageService {
 

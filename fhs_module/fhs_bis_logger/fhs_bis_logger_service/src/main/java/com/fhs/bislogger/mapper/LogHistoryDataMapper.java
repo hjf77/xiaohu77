@@ -7,7 +7,7 @@ import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
 /**
- * (LogHistoryData)表数据库访问层
+ * 日志历史(LogHistoryData)表数据库访问层
  *
  * @author wanglei
  * @since 2020-04-23 14:27:43

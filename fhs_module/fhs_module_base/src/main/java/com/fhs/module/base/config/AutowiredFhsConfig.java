@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 自动注入配置
+ * @author user
+ * @since 2019-05-18 11:29:35
  */
 @Configuration
 public class AutowiredFhsConfig {

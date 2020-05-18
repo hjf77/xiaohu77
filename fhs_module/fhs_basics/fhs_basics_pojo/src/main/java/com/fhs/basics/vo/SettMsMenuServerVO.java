@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 服务器vo
+ * @author user
+ * @date 2020-05-18 15:34:21
  */
 @Data
 @NoArgsConstructor

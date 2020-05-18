@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 
 /**
- * (LogHistoryData)表服务实现类
+ * 日志历史(LogHistoryData)表服务实现类
  *
  * @author wanglei
  * @since 2020-04-23 14:27:40

@@ -8,6 +8,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * fhs的流程实例，为activiti的实例扩展表 vo
+ * @author user
+ * @since 2019-05-18 11:59:49
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

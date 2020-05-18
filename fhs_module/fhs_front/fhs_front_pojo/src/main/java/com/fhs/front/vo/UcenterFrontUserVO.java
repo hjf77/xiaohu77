@@ -10,6 +10,8 @@ import java.util.Map;
 
 /**
  * 前端用户vo
+ * @author user
+ * @since 2019-05-18 11:49:33
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

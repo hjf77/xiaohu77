@@ -8,10 +8,12 @@ import lombok.*;
 
 /**
  * 区域
+ * @author user
+ * @date 2020-05-18 15:27:36
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class ServiceAreaVO extends ServiceAreaDO implements VO {
 

@@ -34,9 +34,6 @@ import java.io.Serializable;
 @Table(name = "t_pub_file")
 public class PubFileDO extends BaseDO<PubFileDO> implements Serializable
 {
-    /**
-     * serialVersionUID
-     */
     private static final long serialVersionUID = 7096338027750227520L;
 
     /**

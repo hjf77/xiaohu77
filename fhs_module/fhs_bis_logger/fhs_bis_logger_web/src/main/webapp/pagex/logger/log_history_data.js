@@ -33,7 +33,7 @@ var listPage = {
         return {
             details: function (row) {
                 if (row.version != 1) {
-                    openDialog('${path.basePath}/b/page-ms-logger/logModifyView?isView=true&pkey=' + row.pkey + '&version=' + row.version,
+                    openDialog('${path.basePath}/b/page-ms-logger/logHistoryModifyData?isView=true&pkey=' + row.pkey + '&version=' + row.version,
                         '详情');
                 } else {
                     openDialog('${path.basePath}/b/page-ms-logger/logView?isView=true&pkey=' + row.pkey + '&version=' + row.version,

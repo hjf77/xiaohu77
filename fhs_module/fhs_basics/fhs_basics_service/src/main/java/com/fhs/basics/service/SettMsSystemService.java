@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author qixiaobo
  * @version [版本号, 2018-09-26]
- * @Description:
+ * @Description: 子系统服务
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
 public interface SettMsSystemService extends BaseService<SettMsSystemVO, SettMsSystemDO> {

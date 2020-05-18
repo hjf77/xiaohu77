@@ -1,8 +1,10 @@
 package com.fhs.basics.dox;
 
 import com.fhs.core.base.dox.BaseDO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import com.fhs.core.valid.group.Add;
@@ -24,6 +26,8 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_wordbook_group")
 public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
@@ -63,54 +67,5 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_group_code")
     private String wordbookGroupCode;
-
-
-    /**
-     * 获取加密ID
-     */
-    public String getGroupIdE() {
-        return groupIdE;
-    }
-
-
-    /**
-     * 获取ID
-     */
-    public Integer getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
-    }
-
-
-    /**
-     * 给分组名称赋值
-     */
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    /**
-     * 获取分组名称
-     */
-    public String getGroupName() {
-        return groupName;
-    }
-
-    /**
-     * 给分组编码赋值
-     */
-    public void setWordbookGroupCode(String wordbookGroupCode) {
-        this.wordbookGroupCode = wordbookGroupCode;
-    }
-
-    /**
-     * 获取分组编码
-     */
-    public String getWordbookGroupCode() {
-        return wordbookGroupCode;
-    }
 
 }

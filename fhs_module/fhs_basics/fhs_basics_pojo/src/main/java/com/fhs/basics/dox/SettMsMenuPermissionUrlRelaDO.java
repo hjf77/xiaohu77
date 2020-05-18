@@ -5,9 +5,7 @@ import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -21,10 +19,12 @@ import javax.validation.constraints.NotNull;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Data
+@Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_sett_ms_menu_permission_url_rela")
-@Entity
 public class SettMsMenuPermissionUrlRelaDO extends BaseDO<SettMsMenuPermissionUrlRelaDO> {
 
     private static final long serialVersionUID = 1L;
@@ -32,10 +32,10 @@ public class SettMsMenuPermissionUrlRelaDO extends BaseDO<SettMsMenuPermissionUr
     /**
      * 权限id
      */
-
     @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @Id
     private Integer permissionId;
+
     /**
      * 关联url
      */
@@ -45,17 +45,10 @@ public class SettMsMenuPermissionUrlRelaDO extends BaseDO<SettMsMenuPermissionUr
     @Column(name = "url")
     private String url;
 
+    /**
+     * 旧的url
+     */
     @Transient
     private String oldUrl;
-
-    public SettMsMenuPermissionUrlRelaDO() {
-    }
-
-    public SettMsMenuPermissionUrlRelaDO(Integer permissionId, String url, String oldUrl) {
-        super();
-        this.permissionId = permissionId;
-        this.url = url;
-        this.oldUrl = oldUrl;
-    }
 
 }

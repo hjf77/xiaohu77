@@ -32,8 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * &lt;描述一下Bean&gt;
- *
+ *  菜单(SettMsMenu)实体类
  * @author 朱俊
  * @version [版本号, 2015/08/13 11:37:31]
  * @see [相关类/方法]
@@ -45,9 +44,7 @@ import java.util.List;
 @Table(name = "t_sett_ms_menu")
 public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -161,6 +158,9 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     @TableField(exist = false)
     private List<SettMsMenuDO> sonMenu;
 
+    /**
+     * 菜单状态
+     */
     private Integer menuState;
 
     public List<SettMsMenuDO> getSonMenu() {
@@ -170,6 +170,9 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
         return sonMenu;
     }
 
+    /**
+     * 图片
+     */
     private String image;
 
     /**

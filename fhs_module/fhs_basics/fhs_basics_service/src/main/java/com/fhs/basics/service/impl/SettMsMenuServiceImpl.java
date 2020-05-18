@@ -35,8 +35,9 @@ import java.util.*;
  * 菜单业务实现类
  *
  * @author Administrator
+ * @date 2020-05-18 16:42:36
  */
-@Service()
+@Service
 @DataSource("base_business")
 @AutoDel(mainServiceSetts = {
         @AutoDelSett(namespace = "sett_ms_system", isChecker = true, field = "systemId", desc = "菜单")

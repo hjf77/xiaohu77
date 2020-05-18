@@ -28,9 +28,9 @@ import java.util.List;
 
 
 /**
- * 系统菜单Action
- *
+ * 系统菜单controller
  * @author jianbo.qin
+ * @date 2020-05-18 16:53:48
  */
 @RestController
 @RequestMapping("ms/sysMenu")

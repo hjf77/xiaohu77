@@ -6,6 +6,11 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 定时任务数据库访问层
+ * @author user
+ * @since 2020-05-18 11:05:43
+ */
 @Mapper
 public interface TaskMapper {
 

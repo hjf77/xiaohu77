@@ -105,6 +105,9 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
     @TableField("cc_to")
     private String ccTo;
 
+    /**
+     * 完成时间
+     */
     @Between
     @TableField("finish_time")
     @JSONField(format = DateUtils.DATETIME_PATTERN)

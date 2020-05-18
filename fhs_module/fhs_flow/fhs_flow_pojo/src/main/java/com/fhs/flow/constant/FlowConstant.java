@@ -2,6 +2,8 @@ package com.fhs.flow.constant;
 
 /**
  * 工作流常量
+ * @author user
+ * @since 2019-05-18 11:57:49
  */
 public interface FlowConstant {
 

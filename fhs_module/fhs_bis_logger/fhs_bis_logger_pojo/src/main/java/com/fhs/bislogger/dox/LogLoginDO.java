@@ -32,10 +32,17 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 public class LogLoginDO extends BaseDO<LogLoginDO> {
     private static final long serialVersionUID = 330446860714574816L;
+
+    /**
+     * 日志id
+     */
     @TableId(value = "log_id", type = IdType.UUID)
     @ApiModelProperty(value = "${column.comment}")
     private String logId;
 
+    /**
+     * 访问次数
+     */
     @TableId(value = "visit_number", type = IdType.AUTO)
     private Integer visitNumber;
 

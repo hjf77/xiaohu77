@@ -15,6 +15,8 @@ import java.util.Set;
 
 /**
  * 初始化模板引擎中的参数
+ * @author user
+ * @since 2019-05-18 11:35:23
  */
 @WebFilter(urlPatterns = {"/*"}, filterName = "templateConfigSettFilter", asyncSupported = true)
 public class TemplateConfigSettFilter implements Filter {

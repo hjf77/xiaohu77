@@ -8,6 +8,8 @@ import lombok.*;
 
 /**
  * 用户vo
+ * @author user
+ * @date 2020-05-18 15:49:03
  */
 @Data
 @NoArgsConstructor

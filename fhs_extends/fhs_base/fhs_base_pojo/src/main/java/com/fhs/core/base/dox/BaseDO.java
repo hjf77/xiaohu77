@@ -106,6 +106,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      *
      * @return 主键
      */
+    @Override
     public Object getPkey() {
         Field idField = getIdField(true);
         try {
@@ -174,6 +175,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
         this.updateTime = updateTime;
     }
 
+    @Override
     public Integer getIsDelete() {
         return isDelete;
     }

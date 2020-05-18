@@ -8,10 +8,12 @@ import lombok.*;
 
 /**
  * 组织机构
+ * @author user
+ * @date 2020-05-18 15:47:28
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class UcenterMsOrganizationVO extends UcenterMsOrganizationDO implements VO {
 

@@ -6,10 +6,12 @@ import lombok.*;
 
 /**
  * 字典分组vo
+ * @author user
+ * @date 2020-05-18 15:28:36
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ServiceWordbookGroupVO extends ServiceWordbookGroupDO implements VO {
 
 }

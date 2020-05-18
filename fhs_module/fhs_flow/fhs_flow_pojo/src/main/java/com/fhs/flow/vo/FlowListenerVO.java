@@ -8,6 +8,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * 监听器vo
+ * @author user
+ * @since 2019-05-18 13:33:05
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

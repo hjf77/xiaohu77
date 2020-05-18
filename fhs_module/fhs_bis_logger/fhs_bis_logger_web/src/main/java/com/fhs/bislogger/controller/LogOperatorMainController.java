@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * (LogOperatorMain)表控制层
+ * 操作日志(LogOperatorMain)表控制层
  *
  * @author wanglei
  * @since 2020-04-23 13:59:14

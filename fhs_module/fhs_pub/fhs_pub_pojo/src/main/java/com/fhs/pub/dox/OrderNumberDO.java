@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 public class OrderNumberDO extends BaseDO<OrderNumberDO> {
     private static final long serialVersionUID = 1L;
     /**
-     *
+     * 主键id
      */
     @NotNull(message = "pubservice的id字段 不可为null ", groups = {Update.class, Delete.class})
     @Id
@@ -40,21 +40,21 @@ public class OrderNumberDO extends BaseDO<OrderNumberDO> {
     private String id;
 
     /**
-     *
+     * 类型
      */
     @Length(message = "pubservice的type字段的长度最大为20", groups = {Add.class, Update.class}, max = 20, min = 0)
     @Column(name = "type", nullable = true, length = 20)
     private String type;
 
     /**
-     *
+     * 时间
      */
     @Length(message = "pubservice的time字段的长度最大为50", groups = {Add.class, Update.class}, max = 50, min = 0)
     @Column(name = "time", nullable = true, length = 50)
     private String time;
 
     /**
-     *
+     * 数字
      */
     @Max(message = "{pubservice的number字段大于int最大值}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{pubservice的number字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})

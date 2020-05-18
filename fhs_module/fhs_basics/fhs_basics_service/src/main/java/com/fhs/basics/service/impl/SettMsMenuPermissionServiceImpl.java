@@ -19,6 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 菜单权限(SettMsMenuPermission)表服务实现类
+ * @author user
+ * @date 2020-05-18 16:40:36
+ */
 @Service
 @DataSource("base_business")
 @AutoTrans(namespace = BaseTransConstant.MENU_INFO_PERMISSION, fields = "permissionName")

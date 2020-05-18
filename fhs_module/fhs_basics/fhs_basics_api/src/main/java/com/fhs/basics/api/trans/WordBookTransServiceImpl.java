@@ -32,6 +32,7 @@ import java.util.Map;
  * 字典翻译服务
  *
  * @author jackwong
+ * @date 2020-05-18 14:41:20
  */
 @Service
 public class WordBookTransServiceImpl implements ITransTypeService, InitializingBean, ApplicationRunner {

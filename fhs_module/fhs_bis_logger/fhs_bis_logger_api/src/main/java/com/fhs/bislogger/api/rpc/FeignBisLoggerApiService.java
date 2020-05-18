@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 日志服务
+ * @author user
+ * @date 2020-05-18 14:21:06
  */
 @FeignClient(value = "bizl", configuration = FeignConfiguration.class,primary = false)
 public interface FeignBisLoggerApiService {

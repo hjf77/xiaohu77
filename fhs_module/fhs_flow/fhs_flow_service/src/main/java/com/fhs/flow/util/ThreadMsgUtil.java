@@ -9,6 +9,7 @@ import java.util.List;
  * 消息Util工具类,在线程变量中添加消息,消息使用list存放。
  *
  * @author aschs
+ * @date 2020-05-18 14:14:14
  */
 public class ThreadMsgUtil {
     private static ThreadLocal<List<String>> localMsg = new ThreadLocal<>();

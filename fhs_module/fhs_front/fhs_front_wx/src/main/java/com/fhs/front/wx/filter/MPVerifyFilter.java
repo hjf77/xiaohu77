@@ -13,6 +13,8 @@ import java.io.IOException;
 
 /**
  * 微信txt验证
+ * @author user
+ * @since 2019-05-18 11:52:21
  */
 @WebFilter(urlPatterns = {"*"},filterName = "mpVerifyFilter" ,asyncSupported = true)
 public class MPVerifyFilter implements Filter {

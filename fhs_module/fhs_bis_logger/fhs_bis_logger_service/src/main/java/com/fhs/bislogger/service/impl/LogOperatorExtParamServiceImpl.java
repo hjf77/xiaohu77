@@ -12,7 +12,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import java.util.List;
 
 /**
- * (LogOperatorExtParam)表服务实现类
+ * 扩展参数(LogOperatorExtParam)表服务实现类
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59

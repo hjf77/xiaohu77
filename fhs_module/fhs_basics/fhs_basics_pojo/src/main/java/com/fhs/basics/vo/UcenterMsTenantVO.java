@@ -10,10 +10,12 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * 租户vo
+ * @author user
+ * @date 2020-05-18 15:48:56
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK})
 public class UcenterMsTenantVO extends UcenterMsTenantDO implements VO {
 

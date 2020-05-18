@@ -16,8 +16,10 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -29,23 +31,22 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * &lt;描述一下Bean&gt;
- *
+ *  菜单权限(SettMsMenuPermission)实体类
  * @author 朱俊
  * @version [版本号, 2015/08/13 11:37:45]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Entity
 @Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_sett_ms_menu_permission")
 public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
+
     /**
      * 按钮id
      */
@@ -54,6 +55,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Max(message = "{test.permissionId.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.permissionId.min}", value = -2147483648, groups = {Add.class, Update.class})
     private Integer permissionId;
+
     /**
      * 加密主键
      */
@@ -61,6 +63,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Length(message = "{test.permissionIdE.length}", max = 10, min = 0)
     @Transient
     private String permissionIdE;
+
     /**
      * 按钮名称
      */
@@ -68,7 +71,11 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Length(message = "{test.permissionName.length}", max = 64, min = 0)
     private String permissionName;
 
+    /**
+     * 方法名
+     */
     private String method;
+
     /**
      * 菜单id
      */
@@ -76,6 +83,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Max(message = "{test.menuId.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.menuId.min}", value = -2147483648, groups = {Add.class, Update.class})
     private Integer menuId;
+
     /**
      * 是否禁用 0:启用 1:禁用
      */
@@ -84,6 +92,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.WORD_BOOK,key = "is_enable")
     private Integer isEnable;
+
     /**
      * 按钮类型12345，查询，添加，修改，删除，其他
      */

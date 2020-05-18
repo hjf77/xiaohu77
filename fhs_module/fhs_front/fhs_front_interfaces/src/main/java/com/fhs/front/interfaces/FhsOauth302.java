@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 指的是通过外部openid来进行登录的第三方集成，比如微信公众号，支付宝服务号
  * 此接口需要跳转到相关url，在跳转回来，从url获取code/其他 要素来认证用户
+ * @author user
+ * @since 2019-05-18 11:40:33
  */
 public interface FhsOauth302 {
     /**

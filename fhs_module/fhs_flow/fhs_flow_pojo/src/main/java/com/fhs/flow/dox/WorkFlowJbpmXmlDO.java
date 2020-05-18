@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @TableName("t_work_flow_jbpm_xml")
 public class WorkFlowJbpmXmlDO extends BaseDO<WorkFlowJbpmXmlDO> {
     /**
-     *
+     * 主键id
      */
     @NotNull(message = "{workflow.id.null}", groups = {Update.class, Delete.class})
     @Max(message = "{workflow.id.max}", value = 2147483647, groups = {Delete.class, Update.class})

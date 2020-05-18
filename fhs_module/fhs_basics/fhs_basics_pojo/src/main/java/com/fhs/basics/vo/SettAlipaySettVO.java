@@ -8,10 +8,12 @@ import lombok.*;
 
 /**
  * 支付宝设置vo
+ * @author user
+ * @date 2020-05-18 15:32:23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK})
 public class SettAlipaySettVO extends SettAlipaySettDO implements VO {
 

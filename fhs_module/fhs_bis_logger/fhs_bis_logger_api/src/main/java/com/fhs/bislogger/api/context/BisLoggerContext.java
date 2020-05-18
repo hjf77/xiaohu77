@@ -19,6 +19,8 @@ import java.util.Map;
 
 /**
  * 日志上下文
+ * @author user
+ * @date 2020-05-18 14:20:14
  */
 public class BisLoggerContext {
 

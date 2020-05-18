@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * (UcenterFrontUserBind)实体类
+ * 前端用户绑定(UcenterFrontUserBind)实体类
  *
  * @author jackwong
  * @since 2019-03-11 14:37:18
@@ -32,24 +32,34 @@ public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     @TableId(value = "id", type = IdType.UUID)
     private String id;
 
-    //用户id
+    /**
+     * 用户id
+     */
     @NotEmpty
     @NotNull(message = "用户id字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "用户id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("user_id")
     private String userId;
-    //openId
+
+    /**
+     * openId
+     */
     @NotEmpty
     @NotNull(message = "openId字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "openId字段的长度最大为50", groups = {Add.class, Update.class}, max = 50)
     @TableField("auth_openId")
     private String authOpenid;
-    //0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app
+
+    /**
+     *0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app
+     */
     @NotNull(message = "0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app字段不可为null", groups = {Update.class, Delete.class})
     @TableField("auth_openId_type")
     private Integer authOpenidType;
 
-    //创建时间
+    /**
+     * 创建时间
+     */
     @NotEmpty
     @NotNull(message = "创建时间字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "创建时间字段的长度最大为20", groups = {Add.class, Update.class}, max = 20)

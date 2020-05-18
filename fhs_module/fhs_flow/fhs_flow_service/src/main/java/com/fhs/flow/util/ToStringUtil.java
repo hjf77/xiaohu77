@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
  * 日期:2018年3月8日 上午9:37:48
  * 版权:summer
  * </pre>
+ * @author aschs
  */
 public class ToStringUtil {
     @Override
@@ -28,11 +29,13 @@ public class ToStringUtil {
      */
     public static <C> String toString(C c) {
         Class<?> cls = c.getClass();
-        if (c instanceof String) {// 是字符串本身则结束
+        // 是字符串本身则结束
+        if (c instanceof String) {
             return c + "";
         }
         try {
-            Method toStringMethod = cls.getMethod("toString");// 没有toString方法 则是基础类型
+            // 没有toString方法 则是基础类型
+            Method toStringMethod = cls.getMethod("toString");
             if (toStringMethod == null) {
                 return c + "";
             }

@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 省市区字典action
+ * 省市区字典controller
  *
- * @Filename: AreaAction.java
+ * @Filename: serviceAreaController.java
  * @Description:
  * @Version: 1.0
  * @Author: qixiaobo

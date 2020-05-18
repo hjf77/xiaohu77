@@ -7,7 +7,7 @@ import com.fhs.module.base.controller.ModelSuperController;
 import io.swagger.annotations.Api;
 
 /**
- * (LogHistoryData)表控制层
+ * 日志历史(LogHistoryData)表控制层
  *
  * @author wanglei
  * @since 2020-04-23 14:27:40

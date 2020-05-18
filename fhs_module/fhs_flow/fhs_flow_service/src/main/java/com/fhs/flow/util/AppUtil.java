@@ -23,6 +23,8 @@ import java.util.Map;
  * 在spring配置文件中做如下配置。
  * &lt;bean id="appUtil" class="com.dstz.base.core.util.AppUtil" />
  * </pre>
+ * @author user
+ * @date 2020-05-18 14:07:14
  */
 @Component
 public class AppUtil implements ApplicationContextAware {

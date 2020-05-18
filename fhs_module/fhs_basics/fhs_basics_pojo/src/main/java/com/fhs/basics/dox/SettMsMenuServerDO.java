@@ -6,20 +6,25 @@ import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author jianbo.qin
- * @version [版本号, 2018-06-01]
- * @Description:
- * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
+ * 菜单服务(SettMsMenuServer)实体类
+ *
+ * @author user
+ * @since 2020-05-18 15:09:29
  */
-@Entity
+
 @Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK})
 @Table(name = "t_sett_ms_menu_server")
@@ -44,13 +49,4 @@ public class SettMsMenuServerDO extends BaseDO<SettMsMenuServerDO> {
     @Column(name = "server_url", nullable = true, length = 500)
     private String serverUrl;
 
-    public SettMsMenuServerDO() {
-
-    }
-
-    public SettMsMenuServerDO(String id, String serverName, String serverUrl) {
-        this.id = id;
-        this.serverName = serverName;
-        this.serverUrl = serverUrl;
-    }
 }

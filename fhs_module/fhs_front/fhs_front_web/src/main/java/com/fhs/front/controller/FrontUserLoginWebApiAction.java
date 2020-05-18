@@ -17,11 +17,15 @@ import java.io.IOException;
 
 /**
  * 前段用户登录注册 by jackwong
+ * @author jackwong
+ * @since 2019-05-18 11:51:21
  */
 @RestController
 @RequestMapping("/webApi/front")
 public class FrontUserLoginWebApiAction {
-    //日志
+    /**
+     *  日志
+     */
     private static final Logger LOGGER = Logger.getLogger(FrontUserLoginWebApiAction.class);
 
 

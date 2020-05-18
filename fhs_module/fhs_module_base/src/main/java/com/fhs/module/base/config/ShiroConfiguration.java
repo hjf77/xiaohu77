@@ -36,6 +36,8 @@ import java.util.Map;
 
 /**
  * shiro 配置包含单点登录支持
+ * @author user
+ * @since 2019-05-18 11:33:45
  */
 @Configuration
 @Order(2)

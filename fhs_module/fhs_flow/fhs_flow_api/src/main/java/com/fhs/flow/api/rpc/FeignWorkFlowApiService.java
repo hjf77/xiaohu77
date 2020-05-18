@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * 工作流服务
+ * @author user
+ * @since 2019-05-18 11:55:49
  */
 @FeignClient(value = "flow", configuration = FeignConfiguration.class,primary = false)
 public interface FeignWorkFlowApiService {

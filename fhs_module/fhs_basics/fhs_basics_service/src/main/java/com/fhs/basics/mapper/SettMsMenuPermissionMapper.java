@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 系统权限DAO
- *
+ * 系统权限mapper
  * @author jianbo.qin
+ * @date 2020-05-18 16:16:03
  */
-@MapperDefinition(domainClass = SettMsMenuPermissionDO.class)
 @Repository
+@MapperDefinition(domainClass = SettMsMenuPermissionDO.class)
 public interface SettMsMenuPermissionMapper extends FhsBaseMapper<SettMsMenuPermissionDO> {
     /**
      * 根据按钮类型获取按钮集合

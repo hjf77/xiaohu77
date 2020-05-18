@@ -13,7 +13,7 @@ import io.swagger.annotations.Api;
 import java.util.List;
 
 /**
- * (LogOperatorExtParam)表控制层
+ * 扩展参数(LogOperatorExtParam)表控制层
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59

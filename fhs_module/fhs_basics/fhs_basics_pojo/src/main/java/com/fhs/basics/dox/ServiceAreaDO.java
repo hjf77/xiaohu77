@@ -8,8 +8,10 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import com.mybatis.jpa.annotation.Like;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -34,6 +36,8 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_area")
 public class ServiceAreaDO extends BaseDO<ServiceAreaDO> {
@@ -110,19 +114,4 @@ public class ServiceAreaDO extends BaseDO<ServiceAreaDO> {
     @Column(name = "init_addr", nullable = true, length = 16)
     private String initAddr;
 
-    public ServiceAreaDO() {
-
-    }
-
-    public ServiceAreaDO(Integer id,String areaName,String areaShort,String areaIsHot,String areaCode, Integer areaSequence, Integer areaParentId, String initDate, String initAddr) {
-        this.id = id;
-        this.areaName = areaName;
-        this.areaCode = areaCode;
-        this.areaShort = areaShort;
-        this.areaIsHot = areaIsHot;
-        this.areaSequence = areaSequence;
-        this.areaParentId = areaParentId;
-        this.initDate = initDate;
-        this.initAddr = initAddr;
-    }
 }

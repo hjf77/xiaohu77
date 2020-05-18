@@ -12,6 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+/**
+ * 文件服务配置类
+ * @author user
+ * @since 2019-05-18 11:21:18
+ */
 @Configuration
 public class FileServiceConfig implements WebMvcConfigurer {
 

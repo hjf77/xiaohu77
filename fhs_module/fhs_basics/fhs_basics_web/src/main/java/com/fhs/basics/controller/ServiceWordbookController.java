@@ -31,9 +31,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 字典管理Action
+ * 字典管理controller
  *
  * @author jianbo.qin
+ * @date 2020-05-18 16:52:33
  */
 @RestController
 @RequestMapping("ms/wordbook")

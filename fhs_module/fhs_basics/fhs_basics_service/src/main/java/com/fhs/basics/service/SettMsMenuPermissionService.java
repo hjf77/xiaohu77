@@ -12,6 +12,8 @@ import java.util.Map;
 
 /**
  * 系统菜单和权限
+ * @author user
+ * @date 2020-05-18 16:27:00
  */
 public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermissionVO, SettMsMenuPermissionDO> {
     /**

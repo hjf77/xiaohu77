@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * 服务器公共服务
+ * @author user
+ * @date 2020-05-18 14:40:16
  */
 @FeignClient(value = "basics", configuration = FeignConfiguration.class,primary = false)
 public interface FeignServerApiService {

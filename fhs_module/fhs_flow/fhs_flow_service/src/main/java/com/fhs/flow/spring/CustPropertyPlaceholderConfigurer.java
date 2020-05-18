@@ -10,6 +10,8 @@ import java.util.Set;
 /**
  * 系统配置属性
  * TODO 支持加密、支持不同环境配置
+ * @author user
+ * @date 2020-05-18 14:04:23
  */
 public class CustPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer implements IProperty {
 
@@ -38,6 +40,7 @@ public class CustPropertyPlaceholderConfigurer extends PropertyPlaceholderConfig
     /**
      * 根据建获取属性中的值。
      */
+    @Override
     public String getValue(String key) {
         return properties.get(key);
     }

@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 /**
- * (LogOperatorExtParam)实体类
+ * 日志扩展参数(LogOperatorExtParam)实体类
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59

@@ -8,6 +8,8 @@ import lombok.*;
 
 /**
  * 系统菜单vo
+ * @author user
+ * @date 2020-05-18 15:36:38
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

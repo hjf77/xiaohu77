@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author user
+ * @date 2020-05-18 16:50:05
+ */
 @RestController
 @RequestMapping("webApi/area")
 public class ServiceAreaOpenWebApiController extends BaseController {

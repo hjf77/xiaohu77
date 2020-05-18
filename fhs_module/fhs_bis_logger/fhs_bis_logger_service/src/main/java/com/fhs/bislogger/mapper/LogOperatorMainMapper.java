@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * (LogOperatorMain)表数据库访问层
+ * 操作日志(LogOperatorMain)表数据库访问层
  *
  * @author wanglei
  * @since 2020-04-23 13:59:14

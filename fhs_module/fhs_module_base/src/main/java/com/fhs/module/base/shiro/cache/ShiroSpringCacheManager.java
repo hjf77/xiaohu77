@@ -7,6 +7,8 @@ import org.apache.shiro.util.Destroyable;
 
 /**
  * 自定义缓存管理器
+ * @author user
+ * @since 2019-05-18 11:37:23
  */
 public class ShiroSpringCacheManager implements CacheManager, Destroyable {
 

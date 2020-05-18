@@ -22,6 +22,8 @@ import java.util.Map;
 
 /**
  * 数据库以及请求监控
+ * @author user
+ * @since 2019-05-18 11:30:35
  */
 @Configuration("druidMonitorConfig")
 @ConditionalOnProperty(prefix = "fhs.druid-monitor", name = "enable", havingValue = "true", matchIfMissing = false)

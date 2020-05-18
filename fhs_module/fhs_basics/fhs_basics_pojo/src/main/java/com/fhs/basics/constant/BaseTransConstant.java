@@ -2,6 +2,8 @@ package com.fhs.basics.constant;
 
 /**
  * 翻译服务静态常量
+ * @author user
+ * @date 2020-05-18 14:42:20
  */
 public interface BaseTransConstant {
     /**

@@ -7,6 +7,7 @@ import org.activiti.engine.history.HistoricTaskInstance;
  * 历史任务
  *
  * @author wanglei
+ * @date 2020-05-18 13:40:00
  */
 public class HistoryTaskVO {
 

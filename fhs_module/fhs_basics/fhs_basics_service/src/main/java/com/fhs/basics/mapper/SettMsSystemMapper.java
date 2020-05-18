@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author qixiaobo
  * @version [版本号, 2018-09-26]
- * @Description: Mapper 接口
+ * @Description: 子系统Mapper 接口
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
 @MapperDefinition(domainClass = SettMsSystemDO.class, orderBy = "sort ASC")

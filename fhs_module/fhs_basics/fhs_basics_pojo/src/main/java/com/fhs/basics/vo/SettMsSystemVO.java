@@ -8,10 +8,12 @@ import lombok.*;
 
 /**
  * 子系统vo
+ * @author user
+ * @date 2020-05-18 15:37:57
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK})
 public class SettMsSystemVO extends SettMsSystemDO implements VO {
 

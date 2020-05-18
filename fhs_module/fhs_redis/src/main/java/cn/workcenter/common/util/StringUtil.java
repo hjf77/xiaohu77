@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 
+/**
+ * 字符串工具类
+ * @author user
+ * @since 2020-05-18 11:11:12
+ */
 public class StringUtil {
 	
 	public static void main(String[] args) {

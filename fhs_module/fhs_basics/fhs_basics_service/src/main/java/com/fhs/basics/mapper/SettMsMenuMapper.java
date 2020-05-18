@@ -15,6 +15,7 @@ import java.util.Map;
  * 菜单DAO
  *
  * @author jianbo.qin
+ * @date 2020-05-18 15:52:33
  */
 @Repository
 @MapperDefinition(domainClass = SettMsMenuDO.class)
@@ -99,21 +100,28 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO> {
 
     /**
      * 根据id 查询菜单url
+     * @param parmMap
+     * @return
      */
     Map<String, Object> getUrlById(Map<String, Object> parmMap);
 
+
     /**
      * 查询菜单是否配置在主页显示
+     * @param paramMap
+     * @return
      */
     Map<String, Object> getConfigurationHomeMenu(Map<String, Object> paramMap);
 
     /**
      * 查询id,name,namespace列表
+     * @return
      */
     List<SettMsMenuDO> findIdAndNameAndNamespaceList();
 
     /**
      * 获取菜单权限按钮
+     * @return
      */
     List<TreeMenuPermissionVO> getMenuPermissionTree();
 

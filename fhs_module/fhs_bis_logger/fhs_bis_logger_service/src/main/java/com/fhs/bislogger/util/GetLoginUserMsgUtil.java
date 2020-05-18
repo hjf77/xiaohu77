@@ -11,6 +11,11 @@ import java.util.regex.Pattern;
 
 import static com.fhs.core.trans.service.impl.AutoTransService.LOGGER;
 
+/**
+ * 用户登陆信息工具类
+ * @author user
+ * @date 2020-05-18 14:35:22
+ */
 public class GetLoginUserMsgUtil {
     /**
      * 根据IP地址获取详细的地域信息

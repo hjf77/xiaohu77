@@ -8,7 +8,7 @@ import com.fhs.core.cache.annotation.Namespace;
 import java.util.List;
 
 /**
- * (LogOperatorExtParam)}表服务接口
+ * 扩展参数(LogOperatorExtParam)}表服务接口
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59

@@ -28,6 +28,8 @@ import java.io.IOException;
 
 /**
  * 微信mp接入
+ * @author user
+ * @since 2019-05-18 11:53:15
  */
 @Component
 public class WxMpOauth implements FhsOauth302, InitializingBean {

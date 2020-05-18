@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * (LogOperatorExtParam)表数据库访问层
+ * 扩展参数(LogOperatorExtParam)表数据库访问层
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59

@@ -30,9 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 系统用户管理Action
+ * 系统用户管理controller
  *
  * @author jianbo.qin
+ * @date 2020-05-18 16:55:05
  */
 @RestController
 @LogNamespace(namespace = BaseTransConstant.USER_INFO,module = "用户管理")

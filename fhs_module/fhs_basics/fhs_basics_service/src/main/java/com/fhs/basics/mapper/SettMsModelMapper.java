@@ -6,9 +6,7 @@ import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
 /**
- * <p>
- * 系统模块DAO
- * </p>
+ * 系统模块mapper
  *
  * @author jianbo.qin
  * @since 2018-05-29

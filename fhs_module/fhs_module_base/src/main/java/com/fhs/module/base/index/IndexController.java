@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 首页请求action
+ * 首页请求controller
  *
  * @Filename: IndexController.java
  * @Description:
