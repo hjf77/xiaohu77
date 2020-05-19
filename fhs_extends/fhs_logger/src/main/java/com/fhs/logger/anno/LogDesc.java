@@ -34,13 +34,28 @@ public @interface LogDesc
      */
     int type();
 
+    /**
+     * 增加
+     */
     int ADD = 0;
 
+    /**
+     * 删除
+     */
     int DEL = 1;
 
+    /**
+     * 修改
+     */
     int UPDATE = 2;
 
+    /**
+     * 查询
+     */
     int SEE = 3;
 
+    /**
+     * 其他
+     */
     int OTHER = 4;
 }

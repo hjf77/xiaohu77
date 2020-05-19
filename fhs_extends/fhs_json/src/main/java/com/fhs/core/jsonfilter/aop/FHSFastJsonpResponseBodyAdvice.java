@@ -21,6 +21,8 @@ import java.util.HashSet;
  * update from https://github.com/Liuyis/jsonfilter
  * by jackwong
  * json转换器前置解析注解内容
+ * @author jackwong
+ * @date 2020-05-19 14:44:21
  */
 @Order(1)
 @ControllerAdvice

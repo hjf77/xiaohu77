@@ -4,6 +4,8 @@ import java.lang.annotation.*;
 
 /**
  * json过滤器
+ * @author user
+ * @date 2020-05-19 14:36:33
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

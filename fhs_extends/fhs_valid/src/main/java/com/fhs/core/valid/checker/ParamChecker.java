@@ -5,6 +5,8 @@ import com.fhs.core.exception.ParamException;
 
 /**
  * 用来检查参数的
+ * @author user
+ * @date 2020-05-19 10:04:26
  */
 public class ParamChecker {
 

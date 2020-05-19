@@ -4,6 +4,8 @@ import java.util.Map;
 
 /**
  * 实际刷新消息的干活的方法
+ * @author user
+ * @date 2020-05-19 10:22:39
  */
 @FunctionalInterface
 public interface TransRefresher {

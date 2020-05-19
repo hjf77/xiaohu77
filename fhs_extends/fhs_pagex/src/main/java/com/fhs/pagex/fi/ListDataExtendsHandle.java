@@ -7,6 +7,8 @@ import java.util.Map;
 /**
  * 处理字段数据 的pagex数据处理器
  * 勇于数据格式化
+ * @author user
+ * @date 2020-05-19 14:01:22
  */
 @FunctionalInterface
 public interface ListDataExtendsHandle {

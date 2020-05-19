@@ -28,6 +28,8 @@ import java.util.Map;
 
 /**
  * pagex处理前段业务逻辑的公共代码
+ * @author user
+ * @date 2020-05-19 13:59:30
  */
 public class PageXBaseController extends BaseController {
 

@@ -2,6 +2,8 @@ package com.fhs.pagex.listener;
 
 /**
  * 刷新js的handel
+ * @author user
+ * @date 2020-05-19 14:02:20
  */
 @FunctionalInterface
 public interface JsRefreshListener {

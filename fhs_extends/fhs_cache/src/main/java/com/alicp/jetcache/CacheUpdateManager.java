@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 /**
  * 缓存刷新管理器
  * 在项目启动完成后获取所有的@AutoRefresCache  标记的方法
+ * @author user
+ * @date 2020-05-19 16:14:18
  */
 @Data
 @Component

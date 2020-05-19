@@ -10,6 +10,7 @@ import java.util.*;
  * by jackwong
  * json过滤器
  * @author jackwong
+ * @date 2020-05-19 15:03:18
  */
 public class SimpleSerializerFilter extends SimplePropertyPreFilter{
 

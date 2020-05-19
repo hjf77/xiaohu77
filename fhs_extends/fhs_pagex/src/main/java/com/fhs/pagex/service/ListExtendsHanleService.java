@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
  * pagex 列表数据扩展处理
  * 比如分钟转几天几小时显示
  * 比如根据结束日期获取结束日期距离现在的时长
+ * @author user
+ * @date 2020-05-19 14:04:49
  */
 @Service
 public class ListExtendsHanleService implements InitializingBean {

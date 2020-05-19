@@ -10,6 +10,8 @@ import java.util.Map;
 /**
  * 所有的VO DO都需要继承此类
  *
+ * @author user
+ * @date 2020-05-19 11:51:55
  * @param <T>
  */
 @SuppressWarnings({"serial", "rawtypes"})

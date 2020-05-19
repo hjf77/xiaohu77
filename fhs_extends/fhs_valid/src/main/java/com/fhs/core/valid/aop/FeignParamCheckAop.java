@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.*;
  *
  * spring cloud接口调用参数校验aop
  * @author qh
+ * @date 2020-05-19 09:54:36
  */
 @Aspect
 public class FeignParamCheckAop extends ParamCheckAop{

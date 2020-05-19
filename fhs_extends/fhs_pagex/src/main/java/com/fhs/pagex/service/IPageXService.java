@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
  * pagex service
  * 实现了此接口可以自己扩展pagex的页面模板
  * 比如你想自己写一个公共流的页面模板
+ * @author user
+ * @date 2020-05-19 14:03:20
  */
 public interface IPageXService {
 

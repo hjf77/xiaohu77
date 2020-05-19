@@ -11,6 +11,8 @@ import java.util.Map;
 
 /**
  * 支持vo 即可进行翻译
+ * @author user
+ * @date 2020-05-19 11:51:08
  */
 public interface VO {
     /**

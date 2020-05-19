@@ -18,6 +18,8 @@ import java.io.OutputStream;
  * update from https://github.com/Liuyis/jsonfilter
  * by jackwong
  * json转换器
+ * @author jackwong
+ * @date 2020-05-19 14:48:18
  */
 public class JsonFilterHttpMessageConverter extends FastJsonHttpMessageConverter{
 

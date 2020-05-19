@@ -65,7 +65,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     public List<LogOperatorMainVO> getModuleSelect(){
         long time = modelSelectCachedTime.getTime();
         long timeMillis = System.currentTimeMillis();
-        long oneHour = 3600000;
+        double oneHour = 60 * 60 * 1000;
         if(modelSelectCache.isEmpty()){
             //doto 执行sql
             modelSelectCache = logOperatorMainService.getLoggerModelList();

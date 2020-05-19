@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * 标记方法不可重入
+ * @author user
+ * @date 2020-05-19 11:17:15
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

@@ -6,6 +6,8 @@ import java.util.Map;
 
 /**
  * 一对多tag
+ * @author user
+ * @date 2020-05-19 14:06:33
  */
 public interface IOne2XTag {
     /**

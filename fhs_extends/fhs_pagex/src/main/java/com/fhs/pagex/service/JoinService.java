@@ -27,6 +27,8 @@ import java.util.*;
 
 /**
  * 表关联查询服务
+ * @author user
+ * @date 2020-05-19 14:04:24
  */
 @Service
 public class JoinService implements InitializingBean {

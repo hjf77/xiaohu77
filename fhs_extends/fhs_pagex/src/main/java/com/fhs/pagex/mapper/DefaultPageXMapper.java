@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  此DAO没什么用
+ *  此mapper没什么用
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.dao
  * @ClassName: DefaultPageXDAO
