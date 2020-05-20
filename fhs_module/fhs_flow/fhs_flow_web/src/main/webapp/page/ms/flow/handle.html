@@ -216,12 +216,13 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
                     url: '${basePath}ms/flowTaskHistory/getApprovalRecord?instanceId=' + instanceId,
                     pagination: false,
                     columns: [[
-                        {field: 'taskName', title: '任务名称', width: '30%', align: 'center'},
-                        {field: 'createTime', title: '任务创建时间', width: '16%', align: 'center'},
-                        {field: 'taskFinishTime', title: '处理时间', width: '16%', align: 'center'},
+                        {field: 'taskName', title: '任务名称', width: '20%', align: 'center'},
+                        {field: 'createTime', title: '任务创建时间', width: '15%', align: 'center'},
+                        {field: 'taskFinishTime', title: '处理时间', width: '15%', align: 'center'},
+                        {field: 'useTime', title: '处理用时', width: '15%', align: 'center'},
                         {field: 'transMap.userName', title: '处理人', width: '10%', align: 'center'},
                         {field: 'transMap.useStatusName', title: '处理状态', width: '10%', align: 'center'},
-                        {field: 'remark', title: '备注/意见', width: '20%', align: 'center'},
+                        {field: 'remark', title: '备注/意见', width: '18%', align: 'center'},
                     ]]
                 });
 

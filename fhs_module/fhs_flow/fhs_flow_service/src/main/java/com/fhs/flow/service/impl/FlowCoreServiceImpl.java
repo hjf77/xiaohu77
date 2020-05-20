@@ -112,8 +112,10 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             taskService.complete(task.getId(), variables);
             taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
                     .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowConstant.RESULT_SUBMIT).build();
+            HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery().taskId(task.getId()).singleResult();
             taskHistory.setOrderNum(1);
             taskHistory.setCode("001");
+            taskHistory.setCreateTime(currTask.getStartTime());
             taskHistory.setDefinitionKey(task.getTaskDefinitionKey());
             taskHistory.preInsert(userId);
             taskHistory.setAssigneeUserId(userId);
@@ -352,8 +354,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             //创建一个扔进去
         } else {
             history = this.taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId());
+            HistoricTaskInstance result = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
             history.setTaskId(taskId);
-            history.setCreateTime(new Date());
+            history.setCreateTime(result.getStartTime());
             history.setTitle(task.getName());
             history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
             history.setAssigneeUserId(task.getAssignee());

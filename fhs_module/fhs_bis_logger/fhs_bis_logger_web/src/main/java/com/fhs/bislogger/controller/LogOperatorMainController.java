@@ -14,6 +14,7 @@ import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.fhs.module.base.controller.ModelSuperController;
@@ -86,7 +87,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     }
 
     /**
-     * 根据日志id查询日志
+     * 根据日志id查询数据
      * @param logId
      * @return
      */
@@ -101,14 +102,14 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
      */
     @RequestMapping("/getLoggerList")
     public void getExtendedParameters(String mainId){
+        ParamChecker.isNotNullOrEmpty(mainId,"mainId不能为空");
         List<LogOperatorExtParamVO> logExtParamList =
                 logOperatorExtParamService.findForList(LogOperatorExtParamDO.builder().mainId(mainId).build());
-        if (logExtParamList != null && logExtParamList.size()>0){
-            for (LogOperatorExtParamVO logOperatorExtParamVO : logExtParamList) {
-                if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
-                    String model = namespaceModuleMap.get(logOperatorExtParamVO.getNamespace());
-                    logOperatorExtParamVO.setModel(model);
-                }
+        ParamChecker.isNotNull(logExtParamList,"mainId不存在");
+        for (LogOperatorExtParamVO logOperatorExtParamVO : logExtParamList) {
+            if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
+                String model = namespaceModuleMap.get(logOperatorExtParamVO.getNamespace());
+                logOperatorExtParamVO.setModel(model);
             }
         }
         transService.transMore(logExtParamList);
@@ -150,16 +151,17 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 根据namespace和pkey查询数据列表
-     * @param nameSpace
+     * @param namespace
      * @param pkey
      * @param logHistoryDataDO
      * @return
      */
     @RequestMapping("/getLogHistoryDataList")
-    public Pager<LogHistoryDataVO> getLogHistoryDataList(String nameSpace,String pkey,LogHistoryDataDO logHistoryDataDO){
+    public Pager<LogHistoryDataVO> getLogHistoryDataList(String namespace,String pkey,LogHistoryDataDO logHistoryDataDO){
         PageSizeInfo pgeSizeInfo = getPageSizeInfo();
         List<LogHistoryDataVO> logHistoryDataList =
-                logHistoryDataService.findForList(LogHistoryDataDO.builder().namespace(nameSpace).pkey(pkey).build(),pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+                logHistoryDataService.findForList(LogHistoryDataDO.builder().namespace(namespace).pkey(pkey).build(),pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+        ParamChecker.isNotNull(logHistoryDataList,"namespace或pkey不存在");
         int countJpa = logHistoryDataService.findCountJpa(logHistoryDataDO);
         return new Pager<>(countJpa,logHistoryDataList);
     }

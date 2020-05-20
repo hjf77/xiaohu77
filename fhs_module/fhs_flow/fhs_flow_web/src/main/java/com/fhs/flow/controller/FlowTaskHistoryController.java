@@ -79,7 +79,12 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
         TaskHistoryVO taskHistoryVO = null;
         for (HistoricTaskInstance historicTaskInstance : histList) {
             for (TaskHistoryVO historyVO : approvalRecord) {
-                historyVO.setCreateTime(DateUtils.doConvertToString(historicTaskInstance.getStartTime()));
+                if (historyVO.getTaskFinishTime()!=null){
+                    long finishTime = DateUtils.parseStr(historyVO.getTaskFinishTime(), DateUtils.DATETIME_PATTERN).getTime();
+                    long createTime = DateUtils.parseStr(historyVO.getCreateTime(), DateUtils.DATETIME_PATTERN).getTime();
+                    long useTime = (finishTime - createTime) / 1000 / 60;
+                    historyVO.setUseTime(DateUtils.timeCount(ConverterUtils.toInt(useTime)));
+                }
             }
             taskHistoryVO = new TaskHistoryVO();
             if (!("completed".equals(historicTaskInstance.getDeleteReason()))){

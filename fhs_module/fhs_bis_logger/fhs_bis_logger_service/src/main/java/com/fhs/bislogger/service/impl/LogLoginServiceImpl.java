@@ -46,7 +46,10 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
             //获取当前登录人ip信息
             ip = getLoginUserMsgUtil.getIpAddress(request);
             //获取当前登录人地址信息
-            if(!ip.equals("0:0:0:0:0:0:0:1")|| !ip.substring(0,4).equals("172.") || !ip.substring(0,4).equals( "192.")) {
+            System.out.println(!ip.equals("0:0:0:0:0:0:0:1"));
+            if("0:0:0:0:0:0:0:1".equals(ip)|| "172.".equals(ip.substring(0,4)) || "192.".equals(ip.substring(0,4))) {
+
+            }else {
                 addresses = getLoginUserMsgUtil.getAddresses("ip=" + ip, "utf-8");
             }
         } catch (IOException e) {
