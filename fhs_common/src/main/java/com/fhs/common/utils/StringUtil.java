@@ -442,7 +442,7 @@ public class StringUtil {
     }
 
     /**
-     * 将字符串格集合式化为 sql 可以in的
+     * 将字符串集合格式化为 sql 可以in的
      *
      * @param list 需要格式化的字符串
      * @return 可以in的字符串
@@ -458,7 +458,7 @@ public class StringUtil {
     }
 
     /**
-     * 将字符串格集合式化为 sql 可以in的
+     * 将字符串集合格式化为 sql 可以in的
      *
      * @param set 需要格式化的字符串
      * @return 可以in的字符串
@@ -471,7 +471,7 @@ public class StringUtil {
     }
 
     /**
-     * 将字符串格集合式化为 sql 可以in的
+     * 将字符串集格合式化为 sql 可以in的
      *
      * @param strs 需要格式化的字符串
      * @return 可以in的字符串
@@ -576,8 +576,9 @@ public class StringUtil {
      * @return
      */
     public static boolean isInteger(String str) {
-        if (str == null || str.length() == 0)
+        if (str == null || str.length() == 0) {
             return false;
+        }
         return Pattern.compile("^\\d+$").matcher(str).matches();
     }
 

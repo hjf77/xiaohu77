@@ -145,7 +145,7 @@ public class JsonUtils {
     }
 
     /**
-     * <把数组对象转换为json字符串>
+     * <把map对象转换为json字符串>
      *
      * @param map map对象
      * @return json字符串
@@ -218,6 +218,11 @@ public class JsonUtils {
         return sb.toString();
     }
 
+    /**
+     * 把json字符串转换为list
+     * @param jsonStr
+     * @return
+     */
     public static List<Map<String, Object>> parseJSON2List(String jsonStr) {
         JSONArray jsonArr = JSONArray.parseArray(jsonStr);
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -284,7 +289,8 @@ public class JsonUtils {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.println(json);// 返回json格式数据
+            // 返回json格式数据
+            out.println(json);
             out.flush();
             out.close();
         } catch (IOException e) {
