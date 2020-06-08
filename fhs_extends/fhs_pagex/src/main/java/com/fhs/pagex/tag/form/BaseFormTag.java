@@ -237,4 +237,32 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
     /*
       Beetl 支持 end
      */
+
+    /*
+      高级搜索支持start
+     */
+
+
+    /**
+     * 组件是否支持高级搜索
+     * @return
+     */
+    public boolean isSupportAdvanceSearch(){
+        return false;
+    }
+
+    /**
+     * 高级搜索配置
+     * @return
+     */
+    public String getAdvanceSearchSett(){
+        return "{name:'"+this.tagSett.get("name")+"',title:'"+this.tagSett.get("title")+"',type:'" +  (ConverterUtils.toString(tagSett.get("datatype")).contains("n")
+                ? "number" : "input")+   "'}";
+    }
+
+     /*
+      高级搜索支持end
+     */
+
+
 }

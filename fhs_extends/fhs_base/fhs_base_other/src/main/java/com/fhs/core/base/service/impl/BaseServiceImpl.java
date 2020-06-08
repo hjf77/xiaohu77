@@ -11,10 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.bislogger.api.context.BisLoggerContext;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.ListUtils;
-import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.autodel.service.AutoDelService;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
@@ -194,7 +191,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int findCountJpa(D bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        return (int) baseMapper.selectCountJpa(bean);
+        String extWhereSql = bean.getAdvanceSearchSql();
+        if(CheckUtils.isNullOrEmpty(extWhereSql)){
+            extWhereSql = null;
+        }
+        return (int)baseMapper.selectCountAdvance(bean,extWhereSql);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -455,7 +456,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy) {
         entity.setIsDelete(Constant.INT_FALSE);
-        return dos2vos(baseMapper.selectPageForOrder(entity, pageStart, pageSize, orderBy));
+        String extWhereSql = entity.getAdvanceSearchSql();
+        if(CheckUtils.isNullOrEmpty(extWhereSql)){
+            extWhereSql = null;
+        }
+        return dos2vos(baseMapper.selectAdvance(entity, extWhereSql,pageStart, pageSize, orderBy));
     }
 
 

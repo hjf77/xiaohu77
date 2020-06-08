@@ -52,4 +52,9 @@ public class UMFormTag extends InputFormTag {
     protected String[] getHandelKeys() {
         return new String[]{};
     }
+
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
+    }
 }

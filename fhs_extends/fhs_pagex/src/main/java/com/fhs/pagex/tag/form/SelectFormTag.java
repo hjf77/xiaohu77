@@ -1,5 +1,6 @@
 package com.fhs.pagex.tag.form;
 
+import com.fhs.common.utils.ConverterUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,4 +28,13 @@ public class SelectFormTag extends BaseEasyuiCombo implements IOne2XTag {
     }
 
 
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
+    }
+
+    @Override
+    public String getAdvanceSearchSett() {
+        return "{name:'" + this.tagSett.get("name") + "',title:'" + this.tagSett.get("title") + "',type:'select'}";
+    }
 }

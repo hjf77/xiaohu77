@@ -161,6 +161,8 @@
             <a href="javascript:void(0)" class="easyui-linkbutton searchBTN"
                iconCls="icon-search" plain="true" onclick="reload()">查询</a>
         </#shiro>
+        <a href="javascript:void(0)" class="easyui-linkbutton searchBTN"
+           iconCls="icon-search" plain="true" onclick="openAdvance()">高级查询</a>
         <#shiro name="${namespace}:add">
             <a href="javascript:void(0)" class="easyui-linkbutton addBTN"
                iconCls="icon-add" plain="true" onclick="add()">添加</a>
@@ -223,6 +225,22 @@
     <a href="#" class="easyui-linkbutton" onclick="closeDialog()">返回</a>
 </div>
 
+<!--高级搜索-->
+
+<%
+ if(isAdvanceSearch){
+%>
+<script>
+    var advanceConfig = ${advanceSearchConfig};
+    if (isExitsFunction("advanceSearchSettFun")) {
+        var advanceSearchSettCusSett = advanceSearchSettFun();
+        advanceConfig.concat(advanceSearchSettCusSett);
+    }
+</script>
+<%
+layout("/pagex/advance_search.html",{}){}
+%>
+<% } %>
 
 </body>
 <script type="text/javascript" src="${fhs_static_url}js/pop_menu/pop_menu.js"></script>

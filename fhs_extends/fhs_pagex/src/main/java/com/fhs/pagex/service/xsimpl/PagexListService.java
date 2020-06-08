@@ -9,6 +9,8 @@ import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.service.HandelPageXService;
 import com.fhs.pagex.service.IPageXService;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.tag.form.BaseFormTag;
+import com.fhs.pagex.tag.form.FormTagFactory;
 import com.fhs.pagex.tag.grid.BaseGridTag;
 import com.fhs.pagex.tag.grid.GridTagFactory;
 import com.fhs.pagex.vo.PagexListSettVO;
@@ -62,6 +64,7 @@ public class PagexListService implements IPageXService, InitializingBean {
         // 普通的过滤条件参数 map包含name和val 2个key其中val为此过滤条件的获取值的代码
         List<Map<String, String>> filterParams = new ArrayList<>();
         List<Map<String, String>> filterParamsForBetween = new ArrayList<>();
+        String advanceSearchConfig = getAdvanceSearchConfig(fieldSettList);
         List<String> readyJsListList = new ArrayList<>();
         String filtersHtml = createFiltersHtml(request, response, listPageSett, filterParams, filterParamsForBetween,readyJsListList);
         try {
@@ -79,6 +82,8 @@ public class PagexListService implements IPageXService, InitializingBean {
             paramMap.put("filterParamsForBetween", filterParamsForBetween);
             paramMap.put("otherFunctions", listPageSett.getOtherFunctions());
             paramMap.put("tagReadyJsList", readyJsListList);
+            paramMap.put("advanceSearchConfig", advanceSearchConfig);
+            paramMap.put("isAdvanceSearch", ConverterUtils.toBoolean(listPageSett.getModelConfig().get("isAdvanceSearch")));
             String resultHtml = BeetlUtil.renderBeelt(getListTemplate(), paramMap);
             PagexDataService.SIGNEL.getListPageHtmlCache().put(namespace, resultHtml);
             return resultHtml;
@@ -86,6 +91,37 @@ public class PagexListService implements IPageXService, InitializingBean {
             LOG.error(this, e);
             throw new BusinessException("页面解析错误");
         }
+    }
+
+    private String getAdvanceSearchConfig(List<Map<String, Object>> fieldSettList){
+        StringBuilder advanceConfigResult = new StringBuilder("[");
+        String type = null;
+        Class fromTagClass = null;
+        BaseFormTag formTag = null;
+        // 获取所有的表单字段
+        for (Map<String, Object> field : fieldSettList) {
+            type = ConverterUtils.toString(field.get("type"));
+            if (CheckUtils.isNullOrEmpty(type) ||"one2x".equals(type)) {
+                continue;
+            }
+            fromTagClass = FormTagFactory.getTag(type);
+            try {
+                formTag = (BaseFormTag) fromTagClass.newInstance();
+                Map<String,Object> fieldSettMap = new HashMap<>();
+                fieldSettMap.putAll(field);
+                fieldSettMap.put("name", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(fieldSettMap.get("name"))));
+                formTag.setTagSett(fieldSettMap, null, null);
+                if(!formTag.isSupportAdvanceSearch()){
+                    continue;
+                }
+                advanceConfigResult.append(formTag.getAdvanceSearchSett() + ",\n");
+            }catch (Exception e){
+                LOG.error("拼接高级搜索配置错误",e);
+            }
+
+        }
+        advanceConfigResult.append("]");
+        return advanceConfigResult.toString();
     }
 
     /**

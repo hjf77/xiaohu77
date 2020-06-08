@@ -48,4 +48,9 @@ public class BigInputFormTag extends  EmptyFormTag{
         // 哪些参数是你这个控件特有的，我这个input没啥特有的控件，所以返回了空数组
         return new String[]{};
     }
+
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
+    }
 }

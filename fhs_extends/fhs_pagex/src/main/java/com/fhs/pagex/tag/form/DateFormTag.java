@@ -1,5 +1,6 @@
 package com.fhs.pagex.tag.form;
 
+import com.fhs.common.utils.ConverterUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -63,6 +64,18 @@ public class DateFormTag extends EmptyFormTag implements IOne2XTag {
     protected String[] getHandelKeys() {
         // 哪些参数是你这个控件特有的，我这个input没啥特有的控件，所以返回了空数组
         return new String[]{"args","formart","onpicked"};
+    }
+
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
+    }
+
+    @Override
+    public String getAdvanceSearchSett() {
+          return "{name:'"+this.tagSett.get("name")+"',title:'"+this.tagSett.get("title")+"',type:'"
+                  +  (ConverterUtils.toString(tagSett.get("formart")).contains("HH")
+                ? "datetime" : "date")+   "'}";
     }
 
 

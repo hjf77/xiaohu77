@@ -1,0 +1,160 @@
+<script type="text/javascript" src="${fhs_static_url}js/baidutemplate.js"></script>
+<script type="text/javascript"
+        src="${fhs_static_url}js/My97DatePicker/WdatePicker.js"></script>
+<script>
+
+
+    //记录每个index是类型是什么
+    var indexType = {};
+
+    var advnaceIsInit= false;
+
+    var filter_index = 0;
+
+
+    function openAdvance(){
+        if(!advnaceIsInit){
+            addFilter();
+            advnaceIsInit = true;
+        }
+        $('#advanceDialog').dialog('open').dialog('setTitle', '高级搜索');
+    }
+
+
+    //添加一个过滤条件
+    function addFilter(){
+        var _html = baidu.template('rowTemplate',{filterIndex:filter_index});
+        $('#advanceFormDiv').append(_html);
+        $.parser.parse('#filter' + filter_index);
+        filter_index = filter_index + 1;
+    }
+
+
+    //修改右侧内容
+    function filterFieldChange(_tempIndex,_record){
+        var _tempHtml = '';
+        indexType[_tempIndex] = _record;
+        var _needSetFilterTypeReadonly = false;
+        if(_record.type=='input' || _record.type=='number'){
+            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"/>';
+        }
+        else if(_record.type=='date'){
+            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '" readonly onclick="WdatePicker()"/>';
+        }
+        else if(_record.type=='datetime'){
+            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  readonly onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})"/>';
+        }
+        else if(_record.type=='book'){
+            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
+                ' url="${fhs_basics_url}/webApi/wordbook/getData?wordbookGroupCode=' + _record.code + '&jsonpCallback=?" valueField="wordbookCode"  textField="wordbookDesc"/>';
+            _needSetFilterTypeReadonly = true;
+        }
+        else if(_record.type=='select'){
+            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
+                ' url="' + _record.url + '" valueField="'+_record.valueField+'"  textField="'+_record.textField+'"/>';
+            _needSetFilterTypeReadonly = true;
+        }
+        if(_record.type=='searchKey'){
+            _needSetFilterTypeReadonly = true;
+        }
+        if(_needSetFilterTypeReadonly){
+            $('#advanceFilterType' + _tempIndex).combobox('setValue','0');
+            $('#advanceFilterType' + _tempIndex).combobox('readonly',true);
+        }else{
+            $('#advanceFilterType' + _tempIndex).combobox('readonly',false);
+        }
+        $('#advanceFilterValLable' + _tempIndex).html(_tempHtml);
+        $.parser.parse('#advanceFilterValLable' + _tempIndex);
+    }
+
+
+    var extAdvanceFilterParam = [];
+    function  execAdvanceSearch(){
+        extAdvanceFilterParam = [];
+        for(i=0;i<filter_index;i++){
+            if($('#advanceFilterField' + i).length>0 && $('#advanceFilterField' + i).combobox('getValue')){
+                var _val = '';
+                if(indexType[i].type!=='book' && indexType[i].type!=='select'){
+                    _val = $('#advanceFilterVal' + i).val();
+                }else{
+                    _val = $('#advanceFilterVal' + i).combobox('getValue');
+                }
+                if(_val){
+                    extAdvanceFilterParam.push({name:indexType[i].name,val:_val,
+                        filterType:$('#advanceFilterType' + i).combobox('getValue'),
+                        searchKeyType:indexType[i].searchKeyType,
+                        fieldName:indexType[i].fieldName});
+                }
+            }
+        }
+        $('#listGrid').datagrid('load', {
+            extAdvanceFilterParam:JSON.stringify({filterType:$('#advanceFilterType').combobox('getValue'),extAdvanceFilterParamArray:extAdvanceFilterParam})
+        });
+       //reload();
+        console.log(extAdvanceFilterParam);
+    }
+
+
+
+</script>
+
+<script id="rowTemplate" type="text/html">
+    <div class="fitem" id="filter<@=filterIndex@>">
+        <div class='bigLabelDiv'><label>选择字段：</label></div>
+        <div class='bigContent'>
+            <select class="easyui-combobox" id="advanceFilterField<@=filterIndex@>" data-options="
+                    onSelect:function(_record){
+                            var _tempIndex = <@=filterIndex@>;
+                            filterFieldChange(_tempIndex,_record);
+                    },
+                    data:advanceConfig,
+                    valueField:'name',
+                    textField:'title',
+            ">
+            </select>
+            <select class="easyui-combobox" id="advanceFilterType<@=filterIndex@>">
+                <option value="0" checked="checked">等于</option>
+                <option value="1">包含</option>
+                <option value="2">不等于</option>
+                <option value="3">大于等于</option>
+                <option value="4">小于等于</option>
+                <option value="5">大于</option>
+                <option value="6">小于</option>
+                <option value="7">以什么开始</option>
+                <option value="8">以什么结尾</option>
+            </select>
+            <lable id="advanceFilterValLable<@=filterIndex@>">
+
+            </lable>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#filter<@=filterIndex@>').remove()">删除</a>
+        </div>
+    </div>
+</script>
+<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 40%; padding: 10px" closed="true">
+    <div id="advanceFormDiv">
+        <div class="fitem">
+            <div class='bigLabelDiv'><label>过滤条件匹配：</label></div>
+            <div class='bigContent'>
+                <select class="easyui-combobox" id="advanceFilterType">
+                    <option value="and" checked="checked">AND(满足下面所有的条件)</option>
+                    <option value="or">OR(满足下面一个条件即可)</option>
+                </select>
+                <a href="javascript:void(0)" class="easyui-linkbutton"  onclick="addFilter()">添加</a>
+            </div>
+        </div>
+    </div>
+    <div class="fitem">
+        <center>  <a href="javascript:void(0)" class="easyui-linkbutton"  onclick="execAdvanceSearch()">搜索</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"  onclick="closeAdvanceSearch()">关闭</a></center>
+    </div>
+</div>
+
+
+<script>
+
+    function closeAdvanceSearch(){
+        $('#advanceDialog').dialog('close');
+    }
+
+
+</script>

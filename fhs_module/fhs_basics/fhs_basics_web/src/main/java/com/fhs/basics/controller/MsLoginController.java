@@ -17,6 +17,7 @@ import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.shiro.StatelessSubject;
 import org.apache.shiro.SecurityUtils;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 
 /**
  * 非分布式运行时候的登录登出
+ *
  * @author user
  * @date 2020-05-18 16:49:49
  */
@@ -95,21 +97,26 @@ public class MsLoginController extends BaseController {
     public HttpResult<Boolean> securityLogin(UcenterMsUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
+        ParamChecker.isNotNull(sysUser.getUserLoginName(), "登录名不可为空");
+        ParamChecker.isNotNull(sysUser.getPassword(), "密码不可为空");
+        UcenterMsUserVO tempUser = sysUserService.findBean(UcenterMsUserDO.builder().userLoginName(sysUser.getUserLoginName()).build());
+        if (tempUser == null) {
+            throw new ParamException("用户名或者密码输入错误");
+        }
         //session 失效
-        if (null == sessionIdentify)
-        {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID,null, false);
+        if (null == sessionIdentify) {
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, tempUser.getUserId(), false);
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode)) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE,null, false);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, tempUser.getUserId(), false);
             throw new ParamException("验证码错误，请重新输入");
         }
         request.getSession().setAttribute("identifyCode", null);
         String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
-            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER,null, false);
+            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, tempUser.getUserId(), false);
             throw new ParamException("用户名或者密码错误");
         }
         //如果不是admin就去加载全部的数据
@@ -124,7 +131,7 @@ public class MsLoginController extends BaseController {
         // 显示调用，让程序重新去加载授权数据
         subjects.isPermitted("init");
         request.getSession().setAttribute(Constant.SESSION_USER, sysUser);
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null,sysUser.getUserId(), false);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         return HttpResult.success(true);
     }
 
@@ -136,18 +143,18 @@ public class MsLoginController extends BaseController {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
         if (null == sessionIdentify) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID,null, false);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
             throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode)) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE,null, false);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
             throw new ParamException("验证码错误，请重新输入");
         }
         sysUser.setPassword(Md5Util.MD5(sysUser.getPassword()));
         String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
-            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER,null, false);
+            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, null, false);
             throw new ParamException("用户名或者密码错误");
         }
         String tokenStr = StringUtil.getUUID();
@@ -170,7 +177,7 @@ public class MsLoginController extends BaseController {
         redisCacheService.expire(USER_KEY + tokenStr, sesstionTimeout);
         Map<String, String> result = new HashMap<>();
         result.put("token", tokenStr);
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null,sysUser.getUserId(), false);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         return HttpResult.success(result);
     }
 
@@ -260,6 +267,7 @@ public class MsLoginController extends BaseController {
 
     /**
      * 退出
+     *
      * @param request
      * @param response
      * @throws IOException
@@ -267,7 +275,7 @@ public class MsLoginController extends BaseController {
     @RequestMapping("ms/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UcenterMsUserVO sysUser = this.getSessionuser();
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null,sysUser.getUserId(), true);
+        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), true);
         request.getSession().removeAttribute(Constant.SESSION_USER);
         SecurityUtils.getSubject().logout();
         response.sendRedirect(EConfig.getPathPropertiesValue("basePath") + shrioLoginUrl);

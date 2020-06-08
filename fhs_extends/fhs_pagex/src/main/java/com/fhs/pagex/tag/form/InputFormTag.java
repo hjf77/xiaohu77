@@ -49,5 +49,9 @@ public class InputFormTag extends EmptyFormTag implements IOne2XTag {
         return new String[]{};
     }
 
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
+    }
 
 }
