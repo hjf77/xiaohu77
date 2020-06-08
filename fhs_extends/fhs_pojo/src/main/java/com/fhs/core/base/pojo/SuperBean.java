@@ -115,6 +115,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
         String sqlField = null;
         String tempVal = null;
         StringBuilder whereSql = new StringBuilder(isOr ? " AND (" : " AND ");
+        boolean isHashWhere = false;
         for (int i = 0; i < extAdvanceFilterParamArray.size(); i++) {
             tempAFilter = extAdvanceFilterParamArray.getJSONObject(i);
             field = ReflectUtils.getDeclaredField(this.getClass(), tempAFilter.getString("name"));
@@ -133,6 +134,10 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
                 whereSql.append(filterType);
             }
             whereSql.append(sqlField + SIMPLE_OPERATOR.get(tempAFilter.getString("filterType")) + tempVal + " ");
+            isHashWhere = true;
+        }
+        if(!isHashWhere){
+            return "";
         }
         whereSql.append(isOr ? ")" : "");
         return whereSql.toString();
