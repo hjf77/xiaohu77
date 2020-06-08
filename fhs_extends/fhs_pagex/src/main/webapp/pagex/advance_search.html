@@ -13,6 +13,9 @@
 
 
     function openAdvance(){
+        for(i=0;i<advanceConfig.length;i++){
+            advanceConfig[i].index = i;
+        }
         if(!advnaceIsInit){
             addFilter();
             advnaceIsInit = true;
@@ -39,10 +42,11 @@
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"/>';
         }
         else if(_record.type=='date'){
-            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '" readonly onclick="WdatePicker()"/>';
-        }
-        else if(_record.type=='datetime'){
-            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  readonly onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})"/>';
+            if(!_record.formart){
+                _record.formart = 'yyyy-MM-dd';
+            }
+            console.log(_record.formart);
+            _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '" readonly onclick="WdatePicker({dateFmt:\'' + _record.formart + '\'})"/>';
         }
         else if(_record.type=='book'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
@@ -62,6 +66,9 @@
             $('#advanceFilterType' + _tempIndex).combobox('readonly',true);
         }else{
             $('#advanceFilterType' + _tempIndex).combobox('readonly',false);
+        }
+        if(_record.searchKeyType =='str'){
+            $('#advanceFilterType' + _tempIndex).combobox('setValue','1');
         }
         $('#advanceFilterValLable' + _tempIndex).html(_tempHtml);
         $.parser.parse('#advanceFilterValLable' + _tempIndex);
@@ -108,7 +115,7 @@
                             filterFieldChange(_tempIndex,_record);
                     },
                     data:advanceConfig,
-                    valueField:'name',
+                    valueField:'index',
                     textField:'title',
             ">
             </select>

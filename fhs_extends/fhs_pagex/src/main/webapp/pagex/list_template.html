@@ -40,14 +40,14 @@
           href="${fhs_static_url}js/sweetalert/sweetalert2.css" />
 
     <!--my97 start-->
-<% if(strutil.contain(formFieldTypes,'date')){ %>
+    <% if(strutil.contain(formFieldTypes,'date')){ %>
     <script type="text/javascript"
             src="${fhs_static_url}js/My97DatePicker/WdatePicker.js"></script>
-<% } %>
+    <% } %>
     <!--my97 end-->
 
     <!--upload start-->
-<% if(strutil.contain(formFieldTypes,'up') || strutil.contain(formFieldTypes,'ups')){ %>
+    <% if(strutil.contain(formFieldTypes,'up') || strutil.contain(formFieldTypes,'ups')){ %>
     <link rel="stylesheet" type="text/css"
           href="${fhs_static_url}js/uploadfive/uploadifive.css" />
     <script type="text/javascript"
@@ -60,7 +60,7 @@
             src="${fhs_static_url}js/uploadfive/jquery.uploadifive.js"></script>
     <script type="text/javascript" src="${fhs_static_url}js/listUploadFiles.js"></script>
     <script type="text/javascript" src="${fhs_static_url}js/uploadUtil.js"></script>
-<% } %>
+    <% } %>
     <!--upload end-->
     <!--toast start-->
     <script type="text/javascript" src="${fhs_static_url}js/jquery.toast.js"></script>
@@ -69,8 +69,8 @@
     <!--toast end-->
     <!--lc_switch start-->
     <% if(strutil.contain(formFieldTypes, 'switch')){ %>
-        <script src="${fhs_static_url}/js/switch/lc_switch.js" type="text/javascript"></script>
-        <link href="${fhs_static_url}/js/switch/lc_switch.css" rel="stylesheet"/>
+    <script src="${fhs_static_url}/js/switch/lc_switch.js" type="text/javascript"></script>
+    <link href="${fhs_static_url}/js/switch/lc_switch.css" rel="stylesheet"/>
     <% } %>
     <!--lc_switch end-->
     <!--validform start-->
@@ -80,84 +80,84 @@
     <!--validform end-->
     <!--time start-->
     <% if(strutil.contain(formFieldTypes, 'time')){ %>
-        <link rel="stylesheet" type="text/css"
-              href="${fhs_static_url}js/time/timedropper.css"/>
-        <script type="text/javascript" src="${fhs_static_url}js/time/timedropper.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="${fhs_static_url}js/time/timedropper.css"/>
+    <script type="text/javascript" src="${fhs_static_url}js/time/timedropper.js"></script>
     <% } %>
     <!--time end-->
     <script type="text/javascript" src="${fhs_static_url}js/baidutemplate.js"></script>
     <script type="text/javascript" src="${fhs_static_url}js/jquery.qrcode.min.js"></script>
     <!-- um start -->
     <% if(strutil.contain(formFieldTypes, 'um')){ %>
-        <script type="text/javascript" src="${fhs_static_url}/js/um/third-party/template.min.js"></script>
-        <script type="text/javascript" charset="utf-8"
-                src="${fhs_static_url}/js/um/umeditor.config.js"> </script>
-        <script type="text/javascript" charset="utf-8"
-                src="${fhs_static_url}/js/um/umeditor.min.js"></script>
-        <link href="${fhs_static_url}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="${fhs_static_url}/js/um/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8"
+            src="${fhs_static_url}/js/um/umeditor.config.js"> </script>
+    <script type="text/javascript" charset="utf-8"
+            src="${fhs_static_url}/js/um/umeditor.min.js"></script>
+    <link href="${fhs_static_url}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
     <% } %>
     <!--um end-->
     <!-- bmap start -->
     <% if(strutil.contain(formFieldTypes, 'address')){ %>
-        <script type="text/javascript" charset="utf-8"
-                src="http://api.map.baidu.com/api?v=2.0&ak=NAGEfysPQEek4fLb8WBNkwjjteWZi1Aj" ></script>
+    <script type="text/javascript" charset="utf-8"
+            src="http://api.map.baidu.com/api?v=2.0&ak=NAGEfysPQEek4fLb8WBNkwjjteWZi1Aj" ></script>
     <% } %>
     <!--bmap end-->
 
     <!--扩展js和css引入 start-->
     <% if(strutil.contain(formFieldTypes,'excss')){ %>
-        <% for(href in excss){ %>
-            <link type="text/css" rel="stylesheet" href="${href}"/>
-        <% } %>
+    <% for(href in excss){ %>
+    <link type="text/css" rel="stylesheet" href="${href}"/>
+    <% } %>
     <% } %>
     <% if(strutil.contain(formFieldTypes,'exjs')){ %>
-        <% for(src in exjs){ %>
-            <script type="text/javascript" charset="utf-8" src="${src}"></script>
-        <% } %>
+    <% for(src in exjs){ %>
+    <script type="text/javascript" charset="utf-8" src="${src}"></script>
+    <% } %>
     <% } %>
     <!--扩展js和css引入 end-->
 </head>
 <body>
 <table id="listGrid" title="${modelConfig.title}列表"
        fit="true" style="width: 90%;"
-        <% if(isEmpty(parameter.loadDft)){ %>
-         class="easyui-datagrid"
-         url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
-        <% } %>
-        <% if(isEmpty(parameter.disablePager)){ %>
-            pagination="true"
-        <% } %>
-       rownumbers="true" fitColumns="true"
-       singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
-    <thead>
-    <tr>
-        <!--遍历列表字段-->
-        <% for(field in listFields){ %>
-            <th data-options="${field.otherAttr}"
-            <% if(field.showField == null){ %>
-                field="${field.camelName}"
-            <% } %>
-            <% if(field.showField != null){ %>
-                field="${field.showField}"
-            <% } %>
-            <% if(field.formart != null){ %>
-                formatter="${field.formart}"
-            <% } %>
-            <% if(field.showTips == true){ %>
-                formatter="formatTips"
-            <% } %>
-            >${field.title}</th>
-        <% } %>
-    </tr>
-    </thead>
+<% if(isEmpty(parameter.loadDft)){ %>
+class="easyui-datagrid"
+url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
+<% } %>
+<% if(isEmpty(parameter.disablePager)){ %>
+pagination="true"
+<% } %>
+rownumbers="true" fitColumns="true"
+singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
+<thead>
+<tr>
+    <!--遍历列表字段-->
+    <% for(field in listFields){ %>
+    <th data-options="${field.otherAttr}"
+    <% if(field.showField == null){ %>
+    field="${field.camelName}"
+    <% } %>
+    <% if(field.showField != null){ %>
+    field="${field.showField}"
+    <% } %>
+    <% if(field.formart != null){ %>
+    formatter="${field.formart}"
+    <% } %>
+    <% if(field.showTips == true){ %>
+    formatter="formatTips"
+    <% } %>
+    >${field.title}</th>
+    <% } %>
+</tr>
+</thead>
 </table>
 
 
 <div id="toolbar">
     <div style="margin-bottom: 5px;">
         <div style="float: left;">
-        ${filtersHtml}
-        <#shiro name="${namespace}:see">
+            ${filtersHtml}
+            <#shiro name="${namespace}:see">
             <a href="javascript:void(0)" class="easyui-linkbutton searchBTN"
                iconCls="icon-search" plain="true" onclick="reload()">查询</a>
         </#shiro>
@@ -168,55 +168,55 @@
            iconCls="icon-search" plain="true" onclick="openAdvance()">高级查询</a>
         <%}%>
         <#shiro name="${namespace}:add">
-            <a href="javascript:void(0)" class="easyui-linkbutton addBTN"
-               iconCls="icon-add" plain="true" onclick="add()">添加</a>
-        </#shiro>
+        <a href="javascript:void(0)" class="easyui-linkbutton addBTN"
+           iconCls="icon-add" plain="true" onclick="add()">添加</a>
+    </#shiro>
 
-        <#shiro name="${namespace}:see">
-            <a href="javascript:void(0)" class="easyui-linkbutton viewBTN"
-               iconcls="icon-view" plain="true"
-               onclick="addSelectRowFun('listGrid',view);">查看</a>&nbsp;&nbsp;&nbsp;
-        </#shiro>
+    <#shiro name="${namespace}:see">
+    <a href="javascript:void(0)" class="easyui-linkbutton viewBTN"
+       iconcls="icon-view" plain="true"
+       onclick="addSelectRowFun('listGrid',view);">查看</a>&nbsp;&nbsp;&nbsp;
+</#shiro>
 
 
-        <#shiro name="${namespace}:update">
-            <a href="javascript:void(0)" class="easyui-linkbutton  updateBTN"
-               plain="true"
-               onclick="addSelectRowFun('listGrid',update);">修改</a>
-        </#shiro>
+<#shiro name="${namespace}:update">
+<a href="javascript:void(0)" class="easyui-linkbutton  updateBTN"
+   plain="true"
+   onclick="addSelectRowFun('listGrid',update);">修改</a>
+</#shiro>
 
-        <#shiro name="${namespace}:del">
-            <a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"
-               iconCls="icon-remove" plain="true"
-               onclick="pubDel('listGrid','${modelConfig.delUrl}','${modelConfig.pkeyCamel}');">删除</a>
-        </#shiro>
+<#shiro name="${namespace}:del">
+<a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"
+   iconCls="icon-remove" plain="true"
+   onclick="pubDel('listGrid','${modelConfig.delUrl}','${modelConfig.pkeyCamel}');">删除</a>
+</#shiro>
 
-        <#shiro name="${namespace}:see">
-            <a href="javascript:void(0)" class="easyui-linkbutton exportBTN"
-               iconCls="icon-remove" plain="true"
-               onclick="exportExcel();">导出</a>
-        </#shiro>
+<#shiro name="${namespace}:see">
+<a href="javascript:void(0)" class="easyui-linkbutton exportBTN"
+   iconCls="icon-remove" plain="true"
+   onclick="exportExcel();">导出</a>
+</#shiro>
 
-        <!--自定义按钮-->
-        <% for(button in buttons){ %>
-            <#shiro name="${button.permissionsCode}">
-                <a href="javascript:void(0)" class="easyui-linkbutton"
-                   iconcls="icon-view" plain="true" id="${button.id}"
-                <% if(nvl(button.isRow,false)  && nvl(button.fun,'false')!='false'){ %>
-                    onclick="addSelectRowFun('listGrid',${button.fun});"
-                <% } %>
-                <% if(!nvl(button.isRow,false) && nvl(button.fun,'false')!='false'){ %>
-                    onclick="${button.fun}();"
-                <% } %>
-                >${button.title}</a>
-            </#shiro>
-        <% } %>
-        </div>
-        <div style="float: right">
-            <img src="${fhs_static_url}/images/sett.png" width="30" style="padding-top: 10px;padding-left: 10px;" height="30"  id="columnSettLogo"/>
-        </div>
-        <div style="clear: both"></div>
-    </div>
+<!--自定义按钮-->
+<% for(button in buttons){ %>
+<#shiro name="${button.permissionsCode}">
+<a href="javascript:void(0)" class="easyui-linkbutton"
+   iconcls="icon-view" plain="true" id="${button.id}"
+<% if(nvl(button.isRow,false)  && nvl(button.fun,'false')!='false'){ %>
+onclick="addSelectRowFun('listGrid',${button.fun});"
+<% } %>
+<% if(!nvl(button.isRow,false) && nvl(button.fun,'false')!='false'){ %>
+onclick="${button.fun}();"
+<% } %>
+>${button.title}</a>
+</#shiro>
+<% } %>
+</div>
+<div style="float: right">
+    <img src="${fhs_static_url}/images/sett.png" width="30" style="padding-top: 10px;padding-left: 10px;" height="30"  id="columnSettLogo"/>
+</div>
+<div style="clear: both"></div>
+</div>
 </div>
 <div id="addOrUpdateDialog" class="easyui-dialog" title="添加/修改${modelConfig.title}"
      data-options="iconCls:'icon-save'" closed="true"
@@ -228,17 +228,20 @@
     <a href="#" id="subBtn" class="easyui-linkbutton" onclick="save()">保存</a>
     <a href="#" class="easyui-linkbutton" onclick="closeDialog()">返回</a>
 </div>
-
+<script>
+    //其他的自定义的方法
+    ${otherFunctions}
+</script>
 <!--高级搜索-->
 
 <%
- if(isAdvanceSearch){
+if(isAdvanceSearch){
 %>
 <script>
     var advanceConfig = ${advanceSearchConfig};
     if (isExitsFunction("advanceSearchSettFun")) {
         var advanceSearchSettCusSett = advanceSearchSettFun();
-        advanceConfig.concat(advanceSearchSettCusSett);
+        advanceConfig = advanceConfig.concat(advanceSearchSettCusSett);
     }
 </script>
 <%
@@ -264,7 +267,7 @@ layout("/pagex/advance_search.html",{}){}
         }else{
             $("#listGrid").datagrid("hideColumn", _field); // 设置隐藏列
         }
-       localStorage.setItem('datagrid_columnsett_${namespace}',json2str(columnStatus));
+        localStorage.setItem('datagrid_columnsett_${namespace}',json2str(columnStatus));
     }
 
     //显示列设置
@@ -272,9 +275,9 @@ layout("/pagex/advance_search.html",{}){}
         var items = [
             <% for(field in listFields){ %>
 
-                { title: '${field.title}',  fn: setColumn, clickFun: 'setColumn',val:<% if(field.showField == null){ %>_fieldName='${field.camelName}'<% }else{%>'${field.showField}'<% } %> },
-            <% } %>
-        ];
+            { title: '${field.title}',  fn: setColumn, clickFun: 'setColumn',val:<% if(field.showField == null){ %>_fieldName='${field.camelName}'<% }else{%>'${field.showField}'<% } %> },
+        <% } %>
+    ];
         basicContext.show(items, e)
         $('.cloumnCheckbox').prop('checked',true);
         $('.cloumnCheckbox').each(function(){
@@ -303,14 +306,14 @@ layout("/pagex/advance_search.html",{}){}
         var _btn = document.getElementById('columnSettLogo');
         _btn.onclick = showColumnSett;
         <!--每个tag在ready的时候执行的方法-->
-        <% for(readyJs in tagReadyJsList){ %>
-                ${readyJs};
+    <% for(readyJs in tagReadyJsList){ %>
+            ${readyJs};
         <% } %>
     });
 
     // 去掉禁用的按钮
     $(function () {
-        <% for(buttonId in disableButtons){ %>
+    <% for(buttonId in disableButtons){ %>
             $('.${buttonId}BTN').remove();
         <% } %>
     });
@@ -405,8 +408,7 @@ layout("/pagex/advance_search.html",{}){}
             onListPageReady();
         }
     })
-    //其他的自定义的方法
-    ${otherFunctions}
+
 </script>
 </html>
 <script type="text/javascript">

@@ -133,7 +133,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
             if (whereSql.length() > 6) {
                 whereSql.append(filterType);
             }
-            whereSql.append(sqlField + SIMPLE_OPERATOR.get(tempAFilter.getString("filterType")) + tempVal + " ");
+            whereSql.append(sqlField + ("searchKey".equals(field.getName()) ? " LIKE " : SIMPLE_OPERATOR.get(tempAFilter.getString("filterType"))) + tempVal + " ");
             isHashWhere = true;
         }
         if(!isHashWhere){
@@ -160,11 +160,11 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
         if (!CheckUtils.isNullOrEmpty(searchKeyType)) {
             if ("str".equals(searchKeyType)) {
                 // 字符串直接是字段名
-                return " CONCAT('%','" + fieldName + "':\'" + val + "\'','%') ";
+                return " CONCAT('%','\"" + fieldName + "\"','%','" + val + "','%') ";
             } else if ("date".equals(searchKeyType)) {
-                return " CONCAT('%','" + fieldName + "':\'" + val + "','%') ";
+                return " CONCAT('%','\"" + fieldName + "\":" + val + "','%') ";
             } else if ("int".equals(searchKeyType)) {
-                return " CONCAT('%','" + fieldName + "':" + val + "','%') ";
+                return " CONCAT('%','\"" + fieldName + "\":\"" + val + "\"','%') ";
             }
         }
         //只有字符串才有like 需要特殊处理
