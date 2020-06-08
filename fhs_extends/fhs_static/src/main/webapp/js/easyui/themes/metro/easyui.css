@@ -246,7 +246,6 @@
 .window .window-body {
 	border-width: 1px;
 	border-style: solid;
-	border-top-width: 0px;
 }
 
 .window .window-body-noheader {
