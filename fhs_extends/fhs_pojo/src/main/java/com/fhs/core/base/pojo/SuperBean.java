@@ -157,12 +157,14 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
         }
         Class<?> type = field.getType();
         String result = null;
+        // 字符串直接是字段名
         if (!CheckUtils.isNullOrEmpty(searchKeyType)) {
             if ("str".equals(searchKeyType)) {
-                // 字符串直接是字段名
                 return " CONCAT('%','\"" + fieldName + "\"','%','" + val + "','%') ";
+            } if ("streq".equals(searchKeyType)) {
+                return " CONCAT('%','\"" + fieldName + "\":\"" + val + "\"','%') ";
             } else if ("date".equals(searchKeyType)) {
-                return " CONCAT('%','\"" + fieldName + "\":" + val + "','%') ";
+                return " CONCAT('%','\"" + fieldName + "\":\"" + val + "','%') ";
             } else if ("int".equals(searchKeyType)) {
                 return " CONCAT('%','\"" + fieldName + "\":\"" + val + "\"','%') ";
             }
