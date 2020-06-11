@@ -30,6 +30,10 @@ include("/page/tags/form_include.html"){}
             return;
         }
         initError('addOrUpdateDialog');
+        <!--每个tag在ready的时候执行的方法-->
+         <% for(readyJs in tagReadyJsList){ %>
+            ${readyJs};
+        <% } %>
         // 如果是编辑页面，就初始化一些数据
         if (isEdit) {
             // student/update?id=1  || student/update/1
@@ -37,10 +41,7 @@ include("/page/tags/form_include.html"){}
             loadForm();
             return;
         }
-        <!--每个tag在ready的时候执行的方法-->
-        <% for(readyJs in tagReadyJsList){ %>
-            ${readyJs};
-        <% } %>
+
     });
 
 
