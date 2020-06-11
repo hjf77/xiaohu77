@@ -100,5 +100,15 @@ public interface LoggerConstant {
      * 登录 ：登入
      */
     int LOG_LOGIN_OUT = 1;
+
+    /*
+     * 是软删除
+     */
+    int SOFT_DEL = 0;
+
+    /**
+     * 已经软删除
+     */
+    int HAS_SOFT_DEL = 1;
 }
 

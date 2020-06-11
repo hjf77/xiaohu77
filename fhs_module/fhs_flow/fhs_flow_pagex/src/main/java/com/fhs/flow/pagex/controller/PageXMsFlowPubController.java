@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.context.BisLoggerContext;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.EMap;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
@@ -17,6 +16,7 @@ import com.fhs.flow.api.rpc.FeignWorkFlowApiService;
 import com.fhs.flow.constant.FlowConstant;
 import com.fhs.flow.vo.ReSubmitVO;
 import com.fhs.flow.vo.StartProcessInstanceVO;
+import com.fhs.logger.Logger;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.pagex.common.ExcelExportTools;
 import com.fhs.pagex.controller.PageXBaseController;
@@ -64,31 +64,40 @@ public class PageXMsFlowPubController extends PageXBaseController {
     public HttpResult<Boolean> add(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) {
         checkPermiessAndNamespace(namespace, "add");
         EMap<String, Object> paramMap = super.getParameterMap();
-        UcenterMsUserVO user = getSessionUser(request);
-        paramMap.put("createUser", user.getUserId());
-        paramMap.put("groupCode", user.getGroupCode());
-        paramMap.put("updateUser", user.getUserId());
-        paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
-        String pkey = StringUtil.getUUID();
-        paramMap.put("pkey", pkey);
-        super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-        addLog(namespace, "添加", paramMap, request, LogDesc.ADD);
-        PagexListSettVO listPageSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
-        StartProcessInstanceVO startProcessInstanceVO = new StartProcessInstanceVO();
-        startProcessInstanceVO.setBusinessKey(pkey);
-        // 流程key要在js中配置
-        startProcessInstanceVO.setProcessDefinitionKey(ConverterUtils.toString(listPageSett.getModelConfig().get("processDefinitionKey")));
-        startProcessInstanceVO.setVariables(paramMap);
-        startProcessInstanceVO.setExtFormParam(new HashMap<>());
-        startProcessInstanceVO.setUserId(getSessionUser(request).getUserId());
-        HttpResult<String> rpcResult = feignWorkFlowApiService.startProcessInstanceForApi(startProcessInstanceVO);
-        if(rpcResult.getCode() != Constant.SUCCESS_CODE){
-            throw new ParamException("调用流程启动错误");
+        HttpResult result = errorResult;
+        Exception exception = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try{
+            UcenterMsUserVO user = getSessionUser(request);
+            paramMap.put("createUser", user.getUserId());
+            paramMap.put("groupCode", user.getGroupCode());
+            paramMap.put("updateUser", user.getUserId());
+            paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
+            String pkey = StringUtil.getUUID();
+            paramMap.put("pkey", pkey);
+            super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
+            PagexListSettVO listPageSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
+            StartProcessInstanceVO startProcessInstanceVO = new StartProcessInstanceVO();
+            startProcessInstanceVO.setBusinessKey(pkey);
+            // 流程key要在js中配置
+            startProcessInstanceVO.setProcessDefinitionKey(ConverterUtils.toString(listPageSett.getModelConfig().get("processDefinitionKey")));
+            startProcessInstanceVO.setVariables(paramMap);
+            startProcessInstanceVO.setExtFormParam(new HashMap<>());
+            startProcessInstanceVO.setUserId(getSessionUser(request).getUserId());
+            HttpResult<String> rpcResult = feignWorkFlowApiService.startProcessInstanceForApi(startProcessInstanceVO);
+            if(rpcResult.getCode() != Constant.SUCCESS_CODE){
+                throw new ParamException("调用流程启动错误");
+            }
+            paramMap.put("instanceId",rpcResult.getData());
+            service.insert(paramMap, namespace);
+            refreshPageXTransCache(namespace);
+        }catch (Exception e){
+            exception = e;
+        }finally {
+            addLog(namespace,JsonUtils.object2json(result),paramMap,request,LoggerConstant.METHOD_TYPE_ADD,exception);
         }
-        paramMap.put("instanceId",rpcResult.getData());
-        service.insert(paramMap, namespace);
-        refreshPageXTransCache(namespace);
-        return HttpResult.success(true);
+        BisLoggerContext.clear();
+        return result;
 
     }
 
@@ -105,20 +114,31 @@ public class PageXMsFlowPubController extends PageXBaseController {
     public HttpResult<Boolean> reSubmit(@PathVariable("namespace") String namespace,  @PathVariable("taskId") String taskId,@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
         checkPermiessAndNamespace(namespace, "update");
         EMap<String, Object> paramMap = super.getParameterMap();
-        paramMap.put("id", id);
-        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
-        paramMap.put("updateUser", getSessionUser(request).getUserId());
-        addLog(namespace, "更新", paramMap, request, LogDesc.UPDATE);
-        super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-        paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
-        int i = service.update(paramMap, namespace);
-        ReSubmitVO reSubmitVO = new ReSubmitVO();
-        paramMap.put("result",FlowConstant.RESULT_SUBMIT);
-        reSubmitVO.setVariablesMap(paramMap);
-        reSubmitVO.setTaskId(taskId);
-        feignWorkFlowApiService.reSubmit(reSubmitVO);
-        refreshPageXTransCache(namespace);
-        return HttpResult.success(i != 0);
+        HttpResult result = errorResult;
+        Exception exception = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try{
+            paramMap.put("id", id);
+            paramMap.put("groupCode", MultiTenancyContext.getProviderId());
+            paramMap.put("updateUser", getSessionUser(request).getUserId());
+            //addLog(namespace, "更新", paramMap, request, LogDesc.UPDATE);
+            super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
+            paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
+            int i = service.update(paramMap, namespace);
+            ReSubmitVO reSubmitVO = new ReSubmitVO();
+            paramMap.put("result",FlowConstant.RESULT_SUBMIT);
+            reSubmitVO.setVariablesMap(paramMap);
+            reSubmitVO.setTaskId(taskId);
+            feignWorkFlowApiService.reSubmit(reSubmitVO);
+            refreshPageXTransCache(namespace);
+            result = i>0?successResult:errorResult;
+        }catch (Exception e){
+            exception = e;
+        }finally {
+            addLog(namespace, JsonUtils.object2json(request),paramMap,request, LoggerConstant.METHOD_TYPE_UPATE,exception);
+        }
+        BisLoggerContext.clear();
+        return result;
     }
 
 }
