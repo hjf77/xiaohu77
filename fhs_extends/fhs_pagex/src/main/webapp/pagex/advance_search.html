@@ -13,8 +13,13 @@
 
 
     function openAdvance(){
+        advanceConfig = advanceConfig.filter(function(val){
+            return !(!val || val === "");
+        });
         for(i=0;i<advanceConfig.length;i++){
-            advanceConfig[i].index = i;
+            if(advanceConfig[i]){
+                advanceConfig[i].index = (i+1);
+            }
         }
         if(!advnaceIsInit){
             addFilter();
