@@ -66,7 +66,7 @@ public class TestMultilnstanceController extends PageXBaseController {
         String pkey = StringUtil.getUUID();
         paramMap.put("pkey", pkey);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-        addLog(namespace, "添加", paramMap, request, LogDesc.ADD);
+        //addLog(namespace, "添加", paramMap, request, LogDesc.ADD);
         PagexListSettVO listPageSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         Map<String, Object> map = new HashMap<>();
         ArrayList<String> userIdList = new ArrayList<>();

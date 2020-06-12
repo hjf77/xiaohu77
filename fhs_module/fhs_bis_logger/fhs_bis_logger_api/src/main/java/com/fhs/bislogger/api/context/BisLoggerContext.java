@@ -65,6 +65,7 @@ public class BisLoggerContext {
 
 
     /**
+     * 添加扩展参数
      * @param namespace
      * @param pkey
      * @param operatorType

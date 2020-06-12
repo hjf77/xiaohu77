@@ -3,6 +3,7 @@ package com.fhs.core.base.pojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fhs.common.utils.*;
 import lombok.Data;
@@ -38,33 +39,40 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      * 数据权限
      */
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private Map<String, String> dataPermissin = new HashMap<>();
 
     /**
      * 配合mybatis jpa between注解过滤条件使用
      */
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private Map<String, String> between = new HashMap<>();
 
     /**
      * 配合mybatis jpa in注解使用
      */
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private Map<String, String> inFilter = new HashMap<>();
 
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private Map<String, Object> userInfo = new HashMap<>();
 
     /**
      * 高级搜索过滤条件
      */
-    @Transient
+    @TableField(exist = false)
+    @JSONField(serialize = false)
     private String extAdvanceFilterParam;
 
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private Integer start;
 
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private Integer PageSize;
 
 
@@ -98,6 +106,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      *
      * @return
      */
+    @JSONField(serialize = false)
     public String getAdvanceSearchSql() {
         if (extAdvanceFilterParam == null) {
             return null;

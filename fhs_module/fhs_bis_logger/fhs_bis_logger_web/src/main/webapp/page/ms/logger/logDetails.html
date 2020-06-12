@@ -73,7 +73,7 @@ include("/page/tags/form_include.html"){}
     $('#logDetailForm').form('load', '${basePath}ms/logOperatorMain/getLogger?logId=' + logId);
 
     function loadFormSuccess(info) {
-        $("#userName").val(info.transMap.createUserUserName);
+        $("#createUser").val(info.transMap.createUserUserName);
         $("#state").val(info.transMap.stateName);
         $("#type").val(info.transMap.typeName);
         if (isView) {

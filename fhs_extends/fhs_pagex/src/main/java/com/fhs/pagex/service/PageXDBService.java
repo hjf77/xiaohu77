@@ -79,6 +79,8 @@ public class PageXDBService {
      */
     private Map<String, Class> namespaceClassMap = new ConcurrentHashMap<>();
 
+
+
     /**
      * 插入一条数据到db
      *
@@ -186,33 +188,47 @@ public class PageXDBService {
         final List<VO> superBeans = new ArrayList<>();
         // List map 转List SuperBean
         rows.forEach(row -> {
-            try {
-                Object tempObj = clazz.newInstance();
-                VO tempSuperBenn = (VO) tempObj;
-                Field field = null;
-                for (String key : row.keySet()) {
-                    field = ReflectUtils.getDeclaredField(clazz, key);
-                    if (field.getType() == Date.class) {
-                        ReflectUtils.setValue(tempObj, key, DateUtils.parseStr(row.get(key).toString(),DateUtils.DATETIME_PATTERN));
-                    } else if (field.getType() == Integer.class) {
-                        ReflectUtils.setValue(tempObj, key, ConverterUtils.toInteger(row.get(key)));
-                    }
-                    else{
-                        ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(row.get(key)));
-                    }
-                }
-                superBeans.add(tempSuperBenn);
-            } catch (InstantiationException e) {
-                LOG.error(this, e);
-                throw new BusinessException("findListPager反射错误");
-            } catch (IllegalAccessException e) {
-                LOG.error(this, e);
-                throw new BusinessException("findListPager反射错误参数错误");
-            }
+            superBeans.add(map2VO(row, clazz));
         });
         transService.transMore(superBeans);
         return JsonUtils.list2json(superBeans);
     }
+
+    /**
+     * map的数据转换为vo
+     * @param mapData
+     * @param clazz
+     * @return
+     */
+    public VO map2VO(Map<String, Object> mapData,Class clazz){
+        try {
+            Object tempObj = clazz.newInstance();
+            VO tempSuperBenn = (VO) tempObj;
+            Field field = null;
+            for (String key : mapData.keySet()) {
+                field = ReflectUtils.getDeclaredField(clazz, key);
+                if(field == null){
+                    continue;
+                }
+                if (field.getType() == Date.class) {
+                    ReflectUtils.setValue(tempObj, key, DateUtils.parseStr(mapData.get(key).toString(),DateUtils.DATETIME_PATTERN));
+                } else if (field.getType() == Integer.class) {
+                    ReflectUtils.setValue(tempObj, key, ConverterUtils.toInteger(mapData.get(key)));
+                }
+                else{
+                    ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(mapData.get(key)));
+                }
+            }
+            return tempSuperBenn;
+        } catch (InstantiationException e) {
+            LOG.error(this, e);
+            throw new BusinessException("findListPager反射错误");
+        } catch (IllegalAccessException e) {
+            LOG.error(this, e);
+            throw new BusinessException("findListPager反射错误参数错误");
+        }
+    }
+
 
     /**
      * 查询总数
@@ -236,6 +252,19 @@ public class PageXDBService {
     public String findBean(Map<String, Object> param, String namespace) {
         return JsonUtils.bean2json(sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param));
     }
+
+    /**
+     * 获取bean的map
+     *
+     * @param param     过滤参数
+     * @param namespace namespace
+     * @return bean的json
+     */
+    public Map<String,Object> findBeanMap(Map<String, Object> param, String namespace) {
+        return sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param);
+    }
+
+
 
     /**
      * 获取bena的json
