@@ -937,7 +937,6 @@ public class ExcelUtils {
             // 空值
             case BLANK:
                 value = "";
-                log.error("excel出现空值");
                 break;
             // 故障
             case ERROR:
