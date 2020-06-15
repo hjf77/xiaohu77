@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,4 +46,10 @@ public class SettMsMenuPermissionController extends ModelSuperController<SettMsM
         super.outToClient(result);
     }
 
+    @RequestMapping("findMapListByType")
+    public List<Map<String, Object>> findMapListByType(){
+        Map<String, Object> map = super.getParameterMap();
+        List<Map<String, Object>> mapListByType = sysMenuPermissionService.findMapListByType(map);
+        return mapListByType;
+    }
 }
