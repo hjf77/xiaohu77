@@ -52,6 +52,10 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
                 && logAddOperatorLogVO.getHistoryDataVOList() != null && logAddOperatorLogVO.getHistoryDataVOList().size() == 1) {
             logAddOperatorLogVO.getOperatorMainVO().setReqParam(logAddOperatorLogVO.getHistoryDataVOList().get(0).getData());
         }
+        //返回值最多保留6000个字符
+        if(logAddOperatorLogVO.getOperatorMainVO().getRespBody()!=null && logAddOperatorLogVO.getOperatorMainVO().getRespBody().length()>6000){
+            logAddOperatorLogVO.getOperatorMainVO().setRespBody(logAddOperatorLogVO.getOperatorMainVO().getRespBody().substring(0,6000));
+        }
         super.insertSelective(logAddOperatorLogVO.getOperatorMainVO());
         Map<String, LogHistoryDataVO> hisMap = new HashMap<>();
         for (LogOperatorExtParamVO extParamVO : logAddOperatorLogVO.getOperatorExtParamVOList()) {
