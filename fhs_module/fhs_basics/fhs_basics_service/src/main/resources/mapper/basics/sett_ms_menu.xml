@@ -20,6 +20,7 @@
 		select  id,name,1 as parentid  from
 		t_sett_ms_system
 		<where>
+				AND is_delete = 0
 			<if test="systemIds != null and systemIds != ''">
 				AND id IN(${systemIds})
 			</if>
