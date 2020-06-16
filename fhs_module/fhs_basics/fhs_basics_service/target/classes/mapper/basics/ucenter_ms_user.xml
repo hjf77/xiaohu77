@@ -181,10 +181,11 @@
 		rt.permission_id = b.permission_id
 		LEFT JOIN `t_ucenter_ms_role_user_rela` ru ON
 		rt.role_id = ru.role_id
-		LEFT JOIN `t_ucenter_ms_user` u ON u.user_id =
-		ru.user_id
+		LEFT JOIN `t_ucenter_ms_user` u ON u.user_id = ru.user_id
 		LEFT JOIN `t_sett_ms_menu_server` s ON s.id = m.server_name_id
+		LEFT JOIN `t_ucenter_ms_role` r ON  ru.role_id = r.role_id
 		WHERE m.is_enable = 1
+		AND r.is_delete = 0
 		AND m.is_enable = b.is_enable
 		AND u.user_id = #{userId}
 		ORDER BY

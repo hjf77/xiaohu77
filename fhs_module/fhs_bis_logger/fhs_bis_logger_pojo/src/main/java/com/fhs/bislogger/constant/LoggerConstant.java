@@ -72,7 +72,7 @@ public interface LoggerConstant {
     int LOG_LOGIN_TRUE = 0;
 
     /**
-     * 登录成功
+     * 登录失败
      */
     int LOG_LOGIN_ERROR = 1;
 
