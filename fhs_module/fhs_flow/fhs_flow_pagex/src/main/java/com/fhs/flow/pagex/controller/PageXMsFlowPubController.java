@@ -51,6 +51,8 @@ import java.util.*;
 @RequestMapping("/ms/x/flow")
 public class PageXMsFlowPubController extends PageXBaseController {
 
+    private static Logger LOGGER = Logger.getLogger(PageXMsFlowPubController.class);
+
     @AutowiredFhs
     private FeignWorkFlowApiService feignWorkFlowApiService;
 
@@ -67,7 +69,7 @@ public class PageXMsFlowPubController extends PageXBaseController {
         HttpResult result = errorResult;
         Exception exception = null;
         BisLoggerContext.init(StringUtil.getUUID());
-        try{
+        try {
             UcenterMsUserVO user = getSessionUser(request);
             paramMap.put("createUser", user.getUserId());
             paramMap.put("groupCode", user.getGroupCode());
@@ -85,22 +87,23 @@ public class PageXMsFlowPubController extends PageXBaseController {
             startProcessInstanceVO.setExtFormParam(new HashMap<>());
             startProcessInstanceVO.setUserId(getSessionUser(request).getUserId());
             HttpResult<String> rpcResult = feignWorkFlowApiService.startProcessInstanceForApi(startProcessInstanceVO);
-            if(rpcResult.getCode() != Constant.SUCCESS_CODE){
+            if (rpcResult.getCode() != Constant.SUCCESS_CODE) {
                 throw new ParamException("调用流程启动错误");
             }
-            paramMap.put("instanceId",rpcResult.getData());
+            paramMap.put("instanceId", rpcResult.getData());
             service.insert(paramMap, namespace);
             refreshPageXTransCache(namespace);
-        }catch (Exception e){
+            return successResult;
+        } catch (Exception e) {
             exception = e;
-        }finally {
-            addLog(namespace,JsonUtils.object2json(result),paramMap,request,LoggerConstant.METHOD_TYPE_ADD,exception);
+            LOGGER.error("", e);
+        } finally {
+            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_ADD, exception);
         }
         BisLoggerContext.clear();
         return result;
 
     }
-
 
 
     /**
@@ -111,13 +114,13 @@ public class PageXMsFlowPubController extends PageXBaseController {
      */
     @RequestMapping("{namespace}/reSubmit/{taskId}/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public HttpResult<Boolean> reSubmit(@PathVariable("namespace") String namespace,  @PathVariable("taskId") String taskId,@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> reSubmit(@PathVariable("namespace") String namespace, @PathVariable("taskId") String taskId, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
         checkPermiessAndNamespace(namespace, "update");
         EMap<String, Object> paramMap = super.getParameterMap();
         HttpResult result = errorResult;
         Exception exception = null;
         BisLoggerContext.init(StringUtil.getUUID());
-        try{
+        try {
             paramMap.put("id", id);
             paramMap.put("groupCode", MultiTenancyContext.getProviderId());
             paramMap.put("updateUser", getSessionUser(request).getUserId());
@@ -126,16 +129,17 @@ public class PageXMsFlowPubController extends PageXBaseController {
             paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
             int i = service.update(paramMap, namespace);
             ReSubmitVO reSubmitVO = new ReSubmitVO();
-            paramMap.put("result",FlowConstant.RESULT_SUBMIT);
+            paramMap.put("result", FlowConstant.RESULT_SUBMIT);
             reSubmitVO.setVariablesMap(paramMap);
             reSubmitVO.setTaskId(taskId);
             feignWorkFlowApiService.reSubmit(reSubmitVO);
             refreshPageXTransCache(namespace);
-            result = i>0?successResult:errorResult;
-        }catch (Exception e){
+            result = i > 0 ? successResult : errorResult;
+        } catch (Exception e) {
             exception = e;
-        }finally {
-            addLog(namespace, JsonUtils.object2json(request),paramMap,request, LoggerConstant.METHOD_TYPE_UPATE,exception);
+            LOGGER.error("", e);
+        } finally {
+            addLog(namespace, JsonUtils.object2json(request), paramMap, request, LoggerConstant.METHOD_TYPE_UPATE, exception);
         }
         BisLoggerContext.clear();
         return result;

@@ -58,17 +58,17 @@
     <div class="handle-button">
         <!-- 待认领状态下只显示认领按钮后才会有其他操作 -->
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="claimTask"
-           onclick="claimTask()">认领OK</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="complateTask" onclick="complateTask()">同意OK</a>
+           onclick="claimTask()">认领</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="complateTask" onclick="complateTask()">同意</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="ccTo" onclick="addCCTo()">抄送</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="delegate" onclick="addDelegate()">委派</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask_node"
            onclick="backTask_node()">驳回到指定操作OK</a>
         <!-- 已办状态但还未到下一步操作 -->
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="revoke" onclick="revoke()">撤销申请OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="revoke" onclick="revoke()">撤销申请</a>
             <div style="display: none">
-                <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回OK</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="preAdd" onclick="preAdd()">前加签</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="afterAdd" onclick="afterAdd()">后加签</a>
             </div>
@@ -142,7 +142,7 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
             })
 
             isClaimTask();
-
+            initFlowButtons();
         <%}%>
         <%
         if(nvl(parameter.isView,'false') == 'true'){
@@ -203,6 +203,23 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
         })
     }
 
+    //初始化自定义按钮
+    function initFlowButtons(){
+        //获取表单
+        $.ajax({
+            async: false, //同步
+            url: '${basePath}ms/myWorks/getFlowTaskButtons?instanceId=' + instanceId + '&taskId=' + taskId,
+            dataType:'json',
+            success: function (res) {
+                if (res.code == 200) {
+                    for(i=0;i<res.data.length;i++){
+                        $('.handle-button').append('<a href="javascript:void(0)" class="easyui-linkbutton" plain="true" onclick="complateTask({'+ res.data[i].variablesKey+':\'' + res.data[i].variablesVal + '\'})">'+res.data[i].buttonName+'</a>');
+                    }
+                    $.parser.parse('.handle-button');
+                }
+            }
+        })
+    }
 
 
     $('#tt').tabs({
@@ -293,11 +310,17 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
     }
 
     //同意
-    function complateTask() {
+    function complateTask(_extParam) {
+        var _param = {taskId: taskId, remark: $("#remark").val()};
+        if(_extParam){
+            for (var key in _extParam) {
+                _param[key] = _extParam[key];
+            }
+        }
         $.ajax({
             type: 'post',
             url: '${basePath}ms/myWorks/complateTask',
-            data: {taskId: taskId, remark: $("#remark").val()},
+            data: _param,
             success: function (res) {
                 if (res.code == 200) {
                     Ealert("操作成功");

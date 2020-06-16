@@ -23,6 +23,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.flow.constant.FlowConstant;
 import com.fhs.flow.dox.FlowInstanceDO;
+import com.fhs.flow.dox.FlowJbmpXmlButtonDO;
 import com.fhs.flow.dox.FlowTaskHistoryDO;
 import com.fhs.flow.service.*;
 import com.fhs.flow.vo.*;
@@ -292,6 +293,25 @@ public class MyWorksController extends BaseController {
         Map<String, Object> paramMap = super.getParameterMap();
         flowCoreService.updatePassProcess(taskId, paramMap);
         return HttpResult.success(true);
+    }
+
+    @Autowired
+    private FlowJbmpXmlButtonService flowJbmpXmlButtonService;
+
+    /**
+     * 根据taskid和instanceId获取自定义按钮
+     * @param taskId 任务id
+     * @param instanceId 实例id
+     * @return
+     */
+    @RequestMapping("/getFlowTaskButtons")
+    public HttpResult<List<FlowJbmpXmlButtonVO>> getFlowTaskButtons(String taskId,String instanceId){
+        ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
+        ParamChecker.isNotNullOrEmpty(instanceId, "实例id不能为空");
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        FlowInstanceVO flowInstanceVO = instanceService.findBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
+        List<FlowJbmpXmlButtonVO>  buttons = flowJbmpXmlButtonService.findForList(FlowJbmpXmlButtonDO.builder().xmlId(flowInstanceVO.getXmlId()).taskName(task.getName()).build());
+        return HttpResult.success(buttons);
     }
 
     /**

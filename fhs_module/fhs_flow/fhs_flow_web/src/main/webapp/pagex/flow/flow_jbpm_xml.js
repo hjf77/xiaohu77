@@ -25,6 +25,7 @@ var listPage={
         return [
             {title:'编辑流程实例',permissionsCode:'flow_jbpm_xml:add',isRow:true,id:'editXml'},
             {title:'发布流程',fun:'publishFlow',permissionsCode:'flow_jbpm_xml:add',isRow:true},
+            {title:'自定义按钮',fun:'buttons_manager',permissionsCode:'flow_jbpm_xml:add',isRow:true},
         ];
     },
     disableButtons:function(){
@@ -33,7 +34,6 @@ var listPage={
     otherFunctions:function(){
         return {
             onListPageReady:function(){
-
                 $('#listGrid').datagrid({
                     onClickRow:function( rowIndex, rowData){
                         console.log(rowData);
@@ -42,16 +42,12 @@ var listPage={
                     }
                 });
             },
-            createFlow:function (row) {
-                var content = '<iframe id="processIframe" src="' + "${path.basePath}/b/page-work_flow/index?xmlId=" + row.id  + "&processKey="+row.processKey+"&processName="+row.name+'" width="99%" height="100%" frameborder="0" scrolling="no" data-id="'+row.id+'"></iframe>';
-                $('#addOrUpdateDialog').dialog({
-                    title:'编辑流程实例',
-                    content: content,
-                    with:'95%',
-                });
-                setTimeout(function(){
-                    $('#addOrUpdateDialog').dialog('open');
-                },500);
+            buttons_manager:function(row){
+                var _openMarketMsg = {
+                    url: '/ms/pagex/flow_jbmp_xml_button_list.jsp?xml_id=' + row.id,
+                    title: row.name + '的自定义按钮'
+                }
+                top.postMessage(_openMarketMsg, '*');
             },
             publishFlow:function (row) {
                 if(row.status==1){
