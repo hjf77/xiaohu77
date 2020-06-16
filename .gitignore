@@ -66,3 +66,10 @@
 /fhs_module/fhs_flow/fhs_flow_pojo/target
 /fhs_module/fhs_flow/fhs_flow_service/target
 /fhs_module/fhs_redis/target
+/fhs_extends/fhs_feign/target
+/fhs_extends/fhs_listener/target
+/fhs_extends/fhs_safe/target
+/fhs_module/fhs_bis_logger/fhs_bis_logger_pojo/target
+/fhs_module/fhs_front/fhs_front_api/target
+/fhs_module/fhs_pub/fhs_pub_api/target
+/fhs_module/fhs_pub/fhs_pub_pojo/target
