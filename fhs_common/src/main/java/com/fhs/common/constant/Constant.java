@@ -252,6 +252,16 @@ public interface Constant {
     int ONE = 1;
 
     /**
+     * 2
+     */
+    int TWO = 2;
+
+    /**
+     * 3
+     */
+    int THREE = 3;
+
+    /**
      * 0
      */
     int ZERO = 0;
