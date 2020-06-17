@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * pagex自动生成前端接口  by jackwong
+ *  pagex自动生成前端接口 by jackwong
  * @author user
  * @date 2020-05-19 14:00:00
  */
