@@ -53,7 +53,7 @@ nullmsg="请上传${tagSett.title}"/>
     function uploadsFileLoadSuccess_${tagSett.name}(info){
         if(info.${tagSett.name})
         {
-            initFiles("${tagSett.name}File", info.${tagSett.name});
+            initFiles("${tagSett.name}File", info.${tagSett.name},"",${parameter.isView});
         }
     }
     //上传文件赋值

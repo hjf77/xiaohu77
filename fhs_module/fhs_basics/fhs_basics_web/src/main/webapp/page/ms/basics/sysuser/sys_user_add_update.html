@@ -12,7 +12,7 @@ include("/page/tags/form_include.html"){}
     </div>
     <input type="hidden" id="passWd" name="passWd"/>
     <div class="fitem">
-        <#PasswordFormTag name='password' title='密码' required='true' autocomplete='off' readonly='true'/>
+        <#PasswordFormTag name='password' title='密码' required='true' autocomplete='off' readonly='true' dataType='*6-16'/>
         <#WordBookFormTag name='isEnable' title='状态' code='is_enable' required='true' />
     </div>
     <div class="fitem">
