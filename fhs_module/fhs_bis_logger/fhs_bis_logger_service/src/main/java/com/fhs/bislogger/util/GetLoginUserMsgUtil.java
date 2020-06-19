@@ -1,44 +1,39 @@
 package com.fhs.bislogger.util;
 
+import com.fhs.common.utils.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.fhs.core.trans.service.impl.AutoTransService.LOGGER;
 
 /**
  * 用户登陆信息工具类
  * @author user
  * @date 2020-05-18 14:35:22
  */
+@Slf4j
 public class GetLoginUserMsgUtil {
-    /**
-     * 根据IP地址获取详细的地域信息
-     *
-     * @project:personGocheck
-     * @class:AddressUtils.java
-     * @author:heguanhua E-mail:37809893@qq.com
-     * @date：Nov 14, 2012 6:38:25 PM
-     */
 
         /**
-         * @param content        请求的参数 格式为：name=xxx&pwd=xxx
-         * @param encodingString 服务器端请求编码。如GBK,UTF-8等
+         * @param ip
          * @return
          * @throws UnsupportedEncodingException
          */
-        public  String getAddresses(String content, String encodingString)
+        public  String getAddresses(String ip)
                 throws UnsupportedEncodingException {
             // 这里调用pconline的接口
-            String urlStr = "http://ip.taobao.com/service/getIpInfo.php";
+            String urlStr = "http://ip.taobao.com/service/getIpInfo.php?ip=";
             // 从http://whois.pconline.com.cn取得IP所在的省市区信息
-            String returnStr = this.getResult(urlStr, content, encodingString);
+            String returnStr = HttpUtils.doGet(urlStr + ip);
             if (returnStr != null) {
+                if(returnStr.contains("the request over max qps for user")){
+                    return "";
+                }
                 // 处理返回的省市区信息
                 System.out.println(returnStr);
                 String[] temp = returnStr.split(",");
@@ -85,49 +80,7 @@ public class GetLoginUserMsgUtil {
             return null;
         }
 
-        /**
-         * @param urlStr   请求的地址
-         * @param content  请求的参数 格式为：name=xxx&pwd=xxx
-         * @param encoding 服务器端请求编码。如GBK,UTF-8等
-         * @return
-         */
-        private String getResult(String urlStr, String content, String encoding) {
-            URL url = null;
-            HttpURLConnection connection = null;
-            try {
-                url = new URL(urlStr);
-                connection = (HttpURLConnection) url.openConnection();// 新建连接实例
-                connection.setConnectTimeout(2000);// 设置连接超时时间，单位毫秒
-                connection.setReadTimeout(2000);// 设置读取数据超时时间，单位毫秒
-                connection.setDoOutput(true);// 是否打开输出流 true|false
-                connection.setDoInput(true);// 是否打开输入流true|false
-                connection.setRequestMethod("POST");// 提交方法POST|GET
-                connection.setUseCaches(false);// 是否缓存true|false
-                connection.connect();// 打开连接端口
-                DataOutputStream out = new DataOutputStream(connection
-                        .getOutputStream());// 打开输出流往对端服务器写数据
-                out.writeBytes(content);// 写数据,也就是提交你的表单 name=xxx&pwd=xxx
-                out.flush();// 刷新
-                out.close();// 关闭输出流
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        connection.getInputStream(), encoding));// 往对端写完数据对端服务器返回数据
-                // ,以BufferedReader流来读取
-                StringBuffer buffer = new StringBuffer();
-                String line = "";
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-                reader.close();
-                return buffer.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();// 关闭连接
-                }
-            }
-            return null;
-        }
+
 
         /**
          * unicode 转换成 中文
@@ -209,9 +162,8 @@ public class GetLoginUserMsgUtil {
             String ip = "125.76.177.214";
             String address = "";
             try {
-                address = addressUtils.getAddresses("ip=" + ip, "utf-8");
+                address = addressUtils.getAddresses(ip);
             } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             System.out.println(address);
@@ -219,61 +171,7 @@ public class GetLoginUserMsgUtil {
 
     }
 
-    /**
-     * 获取当前的登录人ip地址
-     * @param request
-     * @return
-     * @throws IOException
-     */
-    public  String getIpAddress(HttpServletRequest request) throws IOException {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("getIpAddress(HttpServletRequest) - X-Forwarded-For - String ip=" + ip);
-        }
 
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("getIpAddress(HttpServletRequest) - Proxy-Client-IP - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("getIpAddress(HttpServletRequest) - WL-Proxy-Client-IP - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_CLIENT_IP");
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("getIpAddress(HttpServletRequest) - HTTP_CLIENT_IP - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("getIpAddress(HttpServletRequest) - HTTP_X_FORWARDED_FOR - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getRemoteAddr();
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("getIpAddress(HttpServletRequest) - getRemoteAddr - String ip=" + ip);
-                }
-            }
-        } else if (ip.length() > 15) {
-            String[] ips = ip.split(",");
-            for (int index = 0; index < ips.length; index++) {
-                String strIp = (String) ips[index];
-                if (!("unknown".equalsIgnoreCase(strIp))) {
-                    ip = strIp;
-                    break;
-                }
-            }
-        }
-        return ip;
-    }
 
     /**
      * 获取当前登录人浏览器信息

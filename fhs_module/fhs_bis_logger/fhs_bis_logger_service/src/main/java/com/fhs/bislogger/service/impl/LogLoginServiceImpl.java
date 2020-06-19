@@ -8,6 +8,7 @@ import com.fhs.bislogger.service.LogLoginService;
 import com.fhs.bislogger.util.GetLoginUserMsgUtil;
 import com.fhs.bislogger.vo.LogLoginVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.NetworkUtil;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
@@ -44,13 +45,11 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
         String addresses = null;
         try {
             //获取当前登录人ip信息
-            ip = getLoginUserMsgUtil.getIpAddress(request);
-            //获取当前登录人地址信息
-            System.out.println(!ip.equals("0:0:0:0:0:0:0:1"));
+            ip = NetworkUtil.getIpAddress(request);
             if("0:0:0:0:0:0:0:1".equals(ip)|| "172.".equals(ip.substring(0,4)) || "192.".equals(ip.substring(0,4))) {
 
             }else {
-                addresses = getLoginUserMsgUtil.getAddresses("ip=" + ip, "utf-8");
+                addresses = getLoginUserMsgUtil.getAddresses( ip);
             }
         } catch (IOException e) {
             log.error("获取当前登录人信息失败 : ",e);
