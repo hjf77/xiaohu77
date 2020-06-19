@@ -76,10 +76,13 @@
 
     <!-- 获取角色数量 -->
     <select id="findCountFromMap" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(1) AS count FROM t_ucenter_ms_role where 1=1
-        <if test="organizationId != null and organizationId.length != ''">
-            and organization_id LIKE CONCAT(#{organizationId}, '%')
-        </if>
+        SELECT COUNT(1) AS count FROM t_ucenter_ms_role
+            <where>
+                    AND is_delete = 0
+                <if test="organizationId != null and organizationId.length != ''">
+                    AND organization_id LIKE CONCAT(#{organizationId}, '%')
+                </if>
+            </where>
     </select>
 
 
