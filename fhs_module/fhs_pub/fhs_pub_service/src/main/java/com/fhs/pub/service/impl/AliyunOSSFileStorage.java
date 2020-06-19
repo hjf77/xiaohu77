@@ -76,7 +76,7 @@ public class AliyunOSSFileStorage implements FileStorage {
 
     @Override
     public void downloadFile(PubFileDO serviceFile, HttpServletResponse response) {
-        download(serviceFile.getFileId(),  response,serviceFile.getFileName());
+        download(serviceFile.getFileId(),  response,serviceFile.getFileName().substring(0,serviceFile.getFileName().indexOf(".")));
     }
 
     private void download(String token, HttpServletResponse response,String fileName)

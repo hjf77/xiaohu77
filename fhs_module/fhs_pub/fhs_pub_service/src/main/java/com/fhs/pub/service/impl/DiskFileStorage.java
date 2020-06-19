@@ -61,7 +61,7 @@ public class DiskFileStorage<mian> implements FileStorage {
     public void downloadFile(PubFileDO serviceFile, HttpServletResponse response) {
         File file = getFile( serviceFile, null);
         if (file.exists()) {
-            FileUtils.download(file, response, serviceFile.getFileName());
+            FileUtils.download(file, response, serviceFile.getFileName().substring(0,serviceFile.getFileName().indexOf(".")));
             return;
         }
         throw new ParamException("文件不存在：" + serviceFile.getFileId());
