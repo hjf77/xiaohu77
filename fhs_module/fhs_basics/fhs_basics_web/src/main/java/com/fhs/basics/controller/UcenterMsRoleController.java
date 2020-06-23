@@ -79,7 +79,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     }
 
     /**
-     * 根据
+     * 根据角色ids获取角色列表
      * @param ids
      */
     @RequestMapping("getRoleForJsonpByIds")
@@ -195,6 +195,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult<Boolean> add(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
+        sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
         sysRole.setCreateTime(new Date());
         sysRole.setGroupCode(sysUser.getGroupCode());
