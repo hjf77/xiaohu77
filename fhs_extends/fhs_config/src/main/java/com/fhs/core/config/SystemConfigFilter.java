@@ -111,6 +111,9 @@ public class SystemConfigFilter implements Filter {
             if (val.contains("fhs_file_url")) {
                 val = val.replace("${fhs_file_url}", fileServiceUrl);
             }
+            if (val.contains("fhs_static_url")) {
+                val = val.replace("${fhs_static_url}", EConfig.getPathPropertiesValue("fhs_static_url"));
+            }
             if (name.endsWith("_REG")) {
                 jsBuilder.append("var " + name + " = " + val + ";");
             } else {
