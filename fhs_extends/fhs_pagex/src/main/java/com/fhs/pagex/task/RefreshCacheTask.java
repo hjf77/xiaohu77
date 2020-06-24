@@ -18,6 +18,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 /**
@@ -126,6 +129,23 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
                 String path = resource.getURL().getPath();
                 path = path.substring(path.indexOf("/pagex/"));
                 PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().put(resource.getFilename().replace(".html",""),path);
+            }
+            //获取该路径下的js文件刷新到缓存
+            String pagexJsPath = EConfig.getPathPropertiesValue("pagex_js_path");
+            if(CheckUtils.isNullOrEmpty(pagexJsPath)){
+                return;
+            }
+            File dir = new File(pagexJsPath);
+            if (dir.exists()){
+                File[] files = dir.listFiles(new FilenameFilter(){
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return name.endsWith(".js");
+                    }
+                });
+                for (File fileJs : files) {
+                    PagexDataService.SIGNEL.refreshJsFile( fileJs.getName(), FileUtils.readTxtFile(new FileInputStream(fileJs)));
+                }
             }
 
         } catch (IOException e) {
