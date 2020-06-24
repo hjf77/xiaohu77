@@ -1,6 +1,7 @@
 package com.fhs.basics.dox;
 
 import com.fhs.core.base.dox.BaseDO;
+import com.mybatis.jpa.annotation.Like;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,6 +56,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     /**
      * 分组编码
      */
+    @Like
     @NotNull(message = "groupName字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "groupName字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "group_name")
@@ -63,6 +65,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     /**
      * 分组编码
      */
+    @Like
     @NotNull(message = "wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_group_code")
