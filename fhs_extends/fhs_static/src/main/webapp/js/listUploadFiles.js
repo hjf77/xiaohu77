@@ -259,7 +259,7 @@
 			if (!isImgType)
 			{
 				rows.push("<a   pid='" + $(this).attr("id") + "'  fileSaveName='" + item.fileSaveName + "' fileName='" + item.fileName + "' onclick=\'$(this).listUploadFile().download()' href='javascript:void(0)'>");
-				rows.push("<img src='" + fhs_static_url +"/images/" + fileClassName + ".png' class='imgbac'/>");
+				rows.push("<img src='" + fhs_static_url +"/images/" + fileClassName + ".png' class='imgbac notImg'/>");
 			}
 			else
 			{
@@ -276,7 +276,10 @@
 			if(!_options[pid].viewer)
 			{
 				var viewer = new Viewer(document.getElementById('ul' + pid), {
-					url: 'data-original'
+					url: 'data-original',
+					filter:function(_img){
+						return !$(_img).hasClass('notImg');
+					},
 				});
 				_options[pid].viewer=viewer;
 			}
