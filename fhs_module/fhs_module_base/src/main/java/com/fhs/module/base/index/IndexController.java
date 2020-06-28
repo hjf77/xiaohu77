@@ -54,7 +54,7 @@ public class IndexController {
     @Autowired
     private RedisCacheService redisCacheService;
 
-    @Value("${fhs.login.enable-cas}")
+    @Value("${fhs.login.enable-cas:false}")
     private boolean isEnableCas;
 
     /**
@@ -140,7 +140,7 @@ public class IndexController {
         CookieUtil.writeCookie("jackToken", uuid, response);
         request.getSession().setAttribute("jackToken", uuid);
         request.getSession().removeAttribute("serviceURL");
-        if (CheckUtils.isNotEmpty(serviceURL)) {
+        if (CheckUtils.isNotEmpty(serviceURL) && isEnableCas) {
             modelAndView.setViewName("redirect:" + serviceURL);
         } else {
             modelAndView.setViewName("page/ms/index/index_menu_layui");
