@@ -1,5 +1,6 @@
 package com.fhs.bislogger.util;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -179,57 +180,50 @@ public class GetLoginUserMsgUtil {
      * @return
      */
     public Map<String,String> getUserAgent(HttpServletRequest req){
-        Map<String,String> Sys= new HashMap<String, String>();
+        Map<String,String> sys = new HashMap<String, String>();
         String ua = req.getHeader("User-Agent").toLowerCase();
+        if(CheckUtils.isNullOrEmpty(ua)){
+            return sys;
+        }
         String s;
         String msieP = "msie ([\\d.]+)";
         String firefoxP = "firefox\\/([\\d.]+)";
         String chromeP = "chrome\\/([\\d.]+)";
-        String operaP = "opera.([\\d.]+)/)";
         String safariP = "version\\/([\\d.]+).*safari";
-
         Pattern pattern = Pattern.compile(msieP);
         Matcher mat = pattern.matcher(ua);
         if(mat.find()){
             s=mat.group();
-            Sys.put("type", "ie");
-            Sys.put("version", s.split(" ")[1]);
-            return Sys;
+            sys.put("type", "ie");
+            sys.put("version", s.split(" ")[1]);
+            return sys;
         }
         pattern = Pattern.compile(firefoxP);
         mat=pattern.matcher(ua);
         if(mat.find()){
             s=mat.group();
             System.out.println(s);
-            Sys.put("type", "firefox");
-            Sys.put("version", s.split("/")[1]);
-            return Sys;
+            sys.put("type", "firefox");
+            sys.put("version", s.split("/")[1]);
+            return sys;
         }
         pattern = Pattern.compile(chromeP);
         mat=pattern.matcher(ua);
         if(mat.find()){
             s=mat.group();
-            Sys.put("type", "chrome");
-            Sys.put("version", s.split("/")[1]);
-            return Sys;
-        }
-        pattern = Pattern.compile(operaP);
-        mat=pattern.matcher(ua);
-        if(mat.find()){
-            s=mat.group();
-            Sys.put("type", "opera");
-            Sys.put("version", s.split("\\.")[1]);
-            return Sys;
+            sys.put("type", "chrome");
+            sys.put("version", s.split("/")[1]);
+            return sys;
         }
         pattern = Pattern.compile(safariP);
         mat=pattern.matcher(ua);
         if(mat.find()){
             s=mat.group();
-            Sys.put("type", "safari");
-            Sys.put("version", s.split("/")[1].split(".")[0]);
-            return Sys;
+            sys.put("type", "safari");
+            sys.put("version", s.split("/")[1].split(".")[0]);
+            return sys;
         }
-        return Sys;
+        return sys;
     }
 
     /**
