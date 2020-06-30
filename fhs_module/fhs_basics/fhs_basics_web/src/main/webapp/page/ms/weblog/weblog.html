@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <%
+    layout("/page/tags/js_css_include.html",{}){}
+    layout("/page/tags/rende_loading.html",{}){}
+    %>
+</head>
+<body>
+<div id="p" class="easyui-panel" title="系统日志" style="width:100%;height: 100%;">
+    <div style="padding-top: 10px">
+        <input class="easyui-combobox"
+               id="serviceId"
+               prompt="请选择服务"
+               data-options="
+					url:'${basePath}/ms/sett_ms_menu_server/getMenuServersJsonp',
+					valueField:'id',
+					textField:'serverName',
+					panelHeight:'auto',
+					onSelect:changeLog,
+					onLoadSuccess:loadFirst
+			">
+        <a href="javascript:void(0)" id="newWindowOpen"  href="#" target="_blank"
+           class="easyui-linkbutton btn btn-can l-btn l-btn-small" >新窗口打开</a>
+    </div>
+    <div style="padding-left: 10px;padding-top: 10px;">
+        <iframe width="98%" height="1000px" frameborder="no" border="0"
+                marginwidth="0" marginheight="0" scrolling="auto"
+                allowtransparency="yes" id="swaggerMainFrame"></iframe>
+    </div>
+</div>
+</body>
+<script>
+    function changeLog(record){
+        $('#swaggerMainFrame').attr('src',record.serverUrl + '/b/page-ms-weblog/log_index');
+        $('#newWindowOpen').attr('href',record.serverUrl + '/b/page-ms-weblog/log_index');
+    }
+
+    function loadFirst(){
+        $('#serviceId').combobox('setValue',$('#serviceId').combobox('getData')[0].id)
+        changeLog($('#serviceId').combobox('getData')[0]);
+    }
+</script>
+</html>
