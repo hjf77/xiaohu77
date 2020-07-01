@@ -95,7 +95,7 @@ spring:
 
 
 logging:
-  config: classpath:logback-spring.xml
+  config: classpath:logback-fhs.xml
   level:
     com.fhs.basics: debug
     com.fhs.pagex: debug

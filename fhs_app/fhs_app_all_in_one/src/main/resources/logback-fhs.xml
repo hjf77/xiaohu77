@@ -13,7 +13,7 @@
     <springProperty scope="context" name="log_dir" source="logback.file.dir"/>
     <springProperty scope="context" name="elk_host" source="logback.elk.host"/>
     <springProperty scope="context" name="root_level" source="logback.root.level"/>
-    <!--  <property name="log_dir" value="c:/logs/basics"/>-->
+
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="30"/>
 
@@ -32,12 +32,14 @@
     </appender>
 
 
-    <!-- ELK推送日志-->
-  <!--  <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>${elk_host}</destination>
 
-        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
-    </appender>-->
+    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${elk_host}</destination>
+        <includeCallerData>true</includeCallerData>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeCallerData>true</includeCallerData>
+        </encoder>
+    </appender>
 
     <!-- ERROR级别日志 -->
     <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender-->
@@ -218,6 +220,6 @@
         <appender-ref ref="WARN" />
         <appender-ref ref="DEBUG" />
         <appender-ref ref="TRACE" />
-      <!--  <appender-ref ref="stash" />-->
+        <appender-ref ref="stash" />
     </root>
 </configuration>

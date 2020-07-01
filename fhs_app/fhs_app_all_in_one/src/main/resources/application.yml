@@ -133,7 +133,7 @@ spring:
     ext:
       database-schema-update: false
 logging:
-  config: classpath:logback-spring.xml
+  config: classpath:logback-fhs.xml
   level:
     com.fhs.basics: debug
     com.fhs.pagex: debug
@@ -142,7 +142,7 @@ logging:
 logback:
   #这里可以配置logstash ip和端口
   elk:
-    host: 172.16.57.109:9250
+    host: 192.168.0.213:5044
   root:
     level: INFO
   file:
