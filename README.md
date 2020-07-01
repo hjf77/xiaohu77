@@ -6,7 +6,7 @@
 #### 1. 项目技术架构
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/104222_be2c1c69_339743.jpeg "技术架构.jpg")
 #### 2. 思维导图
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/104726_1101e179_339743.jpeg "思维导图.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0701/092840_63cea85d_339743.jpeg "思维导图.jpg")
 #### 2. 技术栈
 - 前端:Easyui(美化过的Easyui),Layui(首页)，Validform，My 97(定制过主题)。
 - 后端校验：hibernate vilidator。
@@ -107,4 +107,8 @@
 官方QQ 群：976278956
 
 体验地址：http://114.116.21.147:8081/   admin  123456
+
+#### 写到最后
+
+目前国内有很多快速开发平台，每个也有每个不同的特色，FHS不一定是最好的，但是我们愿意做百花齐放的快开平台的一朵鲜花，和很多脑子一热写个快开平台或者打算以此盈利不同，FHS 是长久维护的，也是全开源的，希望路过的同学给个Star 抱拳拉！
          
