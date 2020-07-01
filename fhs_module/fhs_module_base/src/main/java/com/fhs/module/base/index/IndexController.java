@@ -92,10 +92,10 @@ public class IndexController {
         // 如果有其他的进程已经放了用户，则直接302
         if (request.getSession().getAttribute(Constant.SESSION_USER) != null) {
             // 如果url为空则到子系统选择页面
-            if (serviceURL == null) {
-                modelAndView.setViewName("page/ms/index/index_menu_layui");
-            } else {
+            if (CheckUtils.isNotEmpty(serviceURL) && isEnableCas) {
                 modelAndView.setViewName("redirect:" + serviceURL);
+            } else {
+                modelAndView.setViewName("page/ms/index/index_menu_layui");
             }
             request.getSession().setAttribute("serviceURL",null);
             return modelAndView;
