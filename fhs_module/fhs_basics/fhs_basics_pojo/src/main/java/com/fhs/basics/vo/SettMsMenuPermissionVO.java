@@ -4,7 +4,9 @@ import com.fhs.basics.dox.SettMsMenuPermissionDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.trans.constant.TransType;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -14,7 +16,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@TransTypes(types = {TransType.WORD_BOOK})
+@EqualsAndHashCode(callSuper = true)
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value ="SettMsMenuPermissionVO",description ="SettMsMenuPermission参数")
 public class SettMsMenuPermissionVO extends SettMsMenuPermissionDO implements VO {
 
 }

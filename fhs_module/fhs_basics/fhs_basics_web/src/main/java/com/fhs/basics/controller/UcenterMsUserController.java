@@ -17,6 +17,7 @@ import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,9 @@ import java.util.Map;
  * @date 2020-05-18 16:55:05
  */
 @RestController
-@LogNamespace(namespace = BaseTransConstant.USER_INFO,module = "用户管理")
+@Api(tags = {"系统用户"})
 @RequestMapping("ms/sysUser")
+@LogNamespace(namespace = BaseTransConstant.USER_INFO,module = "用户管理")
 public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserDO> {
 
 

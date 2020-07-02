@@ -12,6 +12,7 @@ import com.fhs.flow.dox.FlowInstanceDO;
 import com.fhs.flow.service.FlowInstanceService;
 import com.fhs.flow.vo.FlowInstanceVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -38,6 +39,7 @@ import java.util.Set;
  * @since 2019-11-11 19:40:44
  */
 @RestController
+@Api(tags = {"流程实例"})
 @RequestMapping("/ms/flow_instance")
 @LogNamespace(namespace = "flow_instance",module = "流程实例管理")
 public class FlowInstanceController extends ModelSuperController<FlowInstanceVO, FlowInstanceDO> {

@@ -4,6 +4,7 @@ import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.trans.constant.TransType;
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 /**
@@ -15,6 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value ="UcenterMsOrganizationVO",description ="UcenterMsOrganization参数")
 public class UcenterMsOrganizationVO extends UcenterMsOrganizationDO implements VO {
 
 }

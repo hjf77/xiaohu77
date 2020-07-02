@@ -37,7 +37,7 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
      * 日志id
      */
     @TableId(value = "log_id", type = IdType.UUID)
-    @ApiModelProperty(value = "${column.comment}")
+    @ApiModelProperty(value = "主键id")
     private String logId;
 
     /**

@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @RestController
-@Api(tags={""})
+@Api(tags={"日志扩展参数"})
 @RequestMapping("/ms/logOperatorExtParam")
 public class LogOperatorExtParamController extends ModelSuperController<LogOperatorExtParamVO,LogOperatorExtParamDO> {
 

@@ -7,6 +7,7 @@ import com.fhs.basics.vo.ServiceAreaVO;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/area")
+@Api(tags = {"省市区信息"})
 @LogNamespace(namespace = BaseTransConstant.AREA,module = "地区管理")
 public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaDO> {
     @Autowired

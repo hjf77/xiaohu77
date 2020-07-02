@@ -33,7 +33,7 @@ import lombok.*;
 public class LogOperatorExtParamDO extends BaseDO<LogOperatorExtParamDO> {
     private static final long serialVersionUID = -88643840123395899L;
     @TableId(value = "ext_param_id", type = IdType.UUID)
-    @ApiModelProperty(value = "${column.comment}")
+    @ApiModelProperty(value = "扩展id")
     private String extParamId;
 
     /**

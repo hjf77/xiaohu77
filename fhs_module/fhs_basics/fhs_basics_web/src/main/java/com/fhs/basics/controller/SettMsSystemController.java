@@ -6,6 +6,7 @@ import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.util.List;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @RestController
+@Api(tags = {"子系统"})
 @RequestMapping("ms/sett_ms_system")
 public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemDO> {
 

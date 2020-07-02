@@ -20,6 +20,7 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -43,8 +44,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_role")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "UcenterMsRoleDO", description = "UcenterMsRole参数")
 public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
 
     private static final long serialVersionUID = 1L;
@@ -121,6 +123,7 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
      * 状态
      */
     @Transient
+    @ApiModelProperty("状态")
     private String state;
 
 }

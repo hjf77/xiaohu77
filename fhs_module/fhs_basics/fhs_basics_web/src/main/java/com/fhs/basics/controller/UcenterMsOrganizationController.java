@@ -18,6 +18,7 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -37,6 +38,7 @@ import java.util.Map;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @RestController
+@Api(tags = {"后台组织机构"})
 @RequestMapping("ms/sysOrganization")
 @LogNamespace(namespace = BaseTransConstant.ORG,module = "机构管理")
 public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationDO> {

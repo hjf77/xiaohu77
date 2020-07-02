@@ -17,6 +17,8 @@ import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.sf.jsqlparser.statement.update.Update;
@@ -40,8 +42,9 @@ import java.util.List;
  */
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_sett_ms_menu")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "SettMsMenuDO", description = "SettMsMenu参数")
 public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
 
 
@@ -54,6 +57,7 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     @NotNull(message = "{test.menuId.null}", groups = {Update.class, Delete.class})
     @Max(message = "{test.menuId.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.menuId.min}", value = 0, groups = {Add.class, Update.class})
+    @ApiModelProperty("菜单id")
     private Integer menuId;
 
 
@@ -62,6 +66,7 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
      */
     @NotNull(message = "{test.menuName.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.menuName.length}", max = 20, min = 0)
+    @ApiModelProperty("菜单名称")
     private String menuName;
 
     /**
@@ -70,33 +75,39 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     @NotNull(message = "{test.fatherMenuId.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.fatherMenuId.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.fatherMenuId.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @ApiModelProperty("父菜单id")
     private Integer fatherMenuId;
 
     /**
      * 服务器地址
      */
     @TableField(exist = false)
+    @ApiModelProperty("服务器地址")
     private String serverUrl;
 
     /**
      * 链接地址
      */
+    @ApiModelProperty("链接地址")
     private String menuUrl;
 
     /**
      * Namespace
      */
+    @ApiModelProperty("namespace")
     private String namespace;
 
     /**
      * 菜单等级-1根0一级1二级2三级....
      */
     @TableField(exist = false)
+    @ApiModelProperty("菜单等级")
     private Integer menuLevel;
 
     /**
      * 所属系统
      */
+    @ApiModelProperty("所属系统")
     private String systemId;
 
 
@@ -104,6 +115,7 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
      * 菜单类型0 物业公司菜单1 物业集团菜单2 平台菜单
      */
     @Trans(type = TransType.WORD_BOOK, key = "menu_type")
+    @ApiModelProperty("菜单类型")
     private String menuType;
 
 
@@ -114,6 +126,7 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
      * 适配的主页菜单
      */
     @TableField(exist = false)
+    @ApiModelProperty("适配的主页菜单")
     private String configurationHomeMenu;
 
     @TableField(exist = false)
@@ -147,6 +160,7 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @ApiModelProperty("是否禁用")
     private Integer isEnable;
 
 
@@ -156,11 +170,13 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
      * 子菜单
      */
     @TableField(exist = false)
+    @ApiModelProperty("子菜单")
     private List<SettMsMenuDO> sonMenu;
 
     /**
      * 菜单状态
      */
+    @ApiModelProperty("菜单状态")
     private Integer menuState;
 
     public List<SettMsMenuDO> getSonMenu() {
@@ -173,11 +189,13 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     /**
      * 图片
      */
+    @ApiModelProperty("图片")
     private String image;
 
     /**
      * 是否关注
      */
+    @ApiModelProperty("是否关注")
     private String isAttention;
 
     private Integer serverNameId = 1;
@@ -185,11 +203,13 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     /**
      * 排序
      */
+    @ApiModelProperty("排序")
     private Integer orderIndex;
 
     /**
      * 排序
      */
+    @ApiModelProperty("图标")
     private String icon;
 
     /**

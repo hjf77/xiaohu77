@@ -14,6 +14,7 @@ import com.fhs.flow.dox.FlowJbpmXmlDO;
 import com.fhs.flow.service.FlowJbpmXmlService;
 import com.fhs.flow.vo.FlowJbpmXmlVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-11-11 14:29:04
  */
 @RestController
+@Api(tags = {"流程列表"})
 @RequestMapping("/ms/flow_jbpm_xml")
 @LogNamespace(namespace = "flow_jbpm_xml",module = "流程列表")
 public class FlowJbpmXmlController extends ModelSuperController<FlowJbpmXmlVO, FlowJbpmXmlDO> {

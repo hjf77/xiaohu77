@@ -8,6 +8,7 @@ import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/sysMenuPermission")
+@Api(tags = {"菜单权限"})
 @LogNamespace(namespace = BaseTransConstant.MENU_INFO_PERMISSION,module = "菜单权限管理")
 public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionDO> {
 

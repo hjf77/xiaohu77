@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SettMsMenuServerDO;
 import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @RestController
+@Api(tags = {"微服务"})
 @RequestMapping("ms/sett_ms_menu_server")
 public class SettMsMenuServerController extends ModelSuperController<SettMsMenuServerVO, SettMsMenuServerDO> {
     /**

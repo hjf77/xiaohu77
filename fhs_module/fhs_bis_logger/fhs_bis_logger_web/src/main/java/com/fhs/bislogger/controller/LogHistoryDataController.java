@@ -14,7 +14,7 @@ import io.swagger.annotations.Api;
  */
 
 @RestController
-@Api(tags={""})
+@Api(tags={"日志历史"})
 @RequestMapping("/ms/logHistoryData")
 public class LogHistoryDataController extends ModelSuperController<LogHistoryDataVO,LogHistoryDataDO> {
    

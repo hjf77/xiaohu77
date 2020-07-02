@@ -16,6 +16,8 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,6 +45,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_sett_ms_menu_permission")
+@ApiModel(value = "SettMsMenuPermissionDO", description = "SettMsMenuPermission参数")
 public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +57,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @NotNull(message = "{test.permissionId.null}", groups = {Update.class, Delete.class})
     @Max(message = "{test.permissionId.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.permissionId.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @ApiModelProperty("按钮id")
     private Integer permissionId;
 
     /**
@@ -62,6 +66,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @NotNull(message = "{test.permissionIdE.null}")
     @Length(message = "{test.permissionIdE.length}", max = 10, min = 0)
     @Transient
+    @ApiModelProperty("加密主键")
     private String permissionIdE;
 
     /**
@@ -69,11 +74,13 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
      */
     @NotNull(message = "{test.permissionName.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.permissionName.length}", max = 64, min = 0)
+    @ApiModelProperty("按钮名称")
     private String permissionName;
 
     /**
      * 方法名
      */
+    @ApiModelProperty("方法名")
     private String method;
 
     /**
@@ -82,6 +89,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @NotNull(message = "{test.menuId.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.menuId.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.menuId.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @ApiModelProperty("菜单id")
     private Integer menuId;
 
     /**
@@ -91,6 +99,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.WORD_BOOK,key = "is_enable")
+    @ApiModelProperty("是否禁用 0:启用 1:禁用")
     private Integer isEnable;
 
     /**
@@ -99,12 +108,14 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @NotNull(message = "{test.permissionType.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.permissionType.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.permissionType.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @ApiModelProperty("按钮类型")
     private Integer permissionType;
 
     /**
      * 状态
      */
     @Transient
+    @ApiModelProperty("状态")
     private String state;
 
 

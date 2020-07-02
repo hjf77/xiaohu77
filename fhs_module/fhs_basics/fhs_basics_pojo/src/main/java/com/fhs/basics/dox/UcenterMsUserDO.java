@@ -21,6 +21,7 @@ import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.mybatis.jpa.annotation.Like;
 import com.mybatis.jpa.annotation.RLike;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -44,8 +45,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_user")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
 public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
 
     private static final long serialVersionUID = 1L;
@@ -83,6 +85,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
      */
     @Column(name = "password")
     @JSONField(serialize = false)
+    @ApiModelProperty("密码")
     private String password;
 
     /**
@@ -149,6 +152,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
      * 头像
      */
     @Column(name = "header")
+    @ApiModelProperty("头像")
     private String header;
 
     /**

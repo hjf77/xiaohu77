@@ -15,6 +15,7 @@ import com.fhs.flow.service.FlowTaskHistoryService;
 import com.fhs.flow.vo.FlowTaskHistoryVO;
 import com.fhs.flow.vo.TaskHistoryVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import java.util.Map;
  * @since 2019-11-12 14:40:34
  */
 @RestController
+@Api(tags = {"流程任务日志"})
 @RequestMapping("/ms/flowTaskHistory")
 @LogNamespace(namespace = "flow_task_history",module = "流程任务日志管理")
 public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHistoryVO, FlowTaskHistoryDO> {

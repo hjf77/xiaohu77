@@ -2,6 +2,8 @@ package com.fhs.basics.dox;
 
 import com.fhs.core.base.dox.BaseDO;
 import com.mybatis.jpa.annotation.Like;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +33,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_wordbook_group")
+@ApiModel(value = "ServiceWordbookGroupDO", description = "ServiceWordbookGroup参数")
 public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     /**
      * serialVersionUID
@@ -40,10 +43,11 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     /**
      * ID
      */
+    @Id
     @NotNull(message = "{wordbook.groupId.null}", groups = {Update.class, Delete.class})
     @Max(message = "{wordbook.groupId.max}", value = 2147483647, groups = {Delete.class, Update.class})
     @Min(message = "{wordbook.groupId.min}", value = -2147483648, groups = {Delete.class, Update.class})
-    @Id
+    @ApiModelProperty("主键id")
     private Integer groupId;
 
     /**
@@ -51,15 +55,17 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
      */
     @NotNull(message = "{wordbook.groupIdE.null}")
     @Transient
+    @ApiModelProperty("加密id")
     private String groupIdE;
 
     /**
-     * 分组编码
+     * 分组名称
      */
     @Like
     @NotNull(message = "groupName字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "groupName字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "group_name")
+    @ApiModelProperty("分组名称")
     private String groupName;
 
     /**
@@ -69,6 +75,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     @NotNull(message = "wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_group_code")
+    @ApiModelProperty("分组编码")
     private String wordbookGroupCode;
 
 }

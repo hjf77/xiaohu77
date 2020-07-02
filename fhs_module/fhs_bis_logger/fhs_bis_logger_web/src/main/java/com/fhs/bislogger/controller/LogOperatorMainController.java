@@ -31,7 +31,7 @@ import java.util.*;
  */
 
 @RestController
-@Api(tags = {""})
+@Api(tags = {"操作日志"})
 @RequestMapping("/ms/logOperatorMain")
 public class LogOperatorMainController extends ModelSuperController<LogOperatorMainVO, LogOperatorMainDO> {
 

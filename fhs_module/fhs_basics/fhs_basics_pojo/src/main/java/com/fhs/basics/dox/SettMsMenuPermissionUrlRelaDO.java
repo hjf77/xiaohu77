@@ -5,6 +5,8 @@ import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -25,6 +27,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_sett_ms_menu_permission_url_rela")
+@ApiModel(value = "SettMsMenuPermissionUrlRelaDO", description = "SettMsMenuPermissionUrlRela参数")
 public class SettMsMenuPermissionUrlRelaDO extends BaseDO<SettMsMenuPermissionUrlRelaDO> {
 
     private static final long serialVersionUID = 1L;
@@ -32,8 +35,9 @@ public class SettMsMenuPermissionUrlRelaDO extends BaseDO<SettMsMenuPermissionUr
     /**
      * 权限id
      */
-    @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @Id
+    @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
+    @ApiModelProperty("权限id")
     private Integer permissionId;
 
     /**
@@ -43,12 +47,14 @@ public class SettMsMenuPermissionUrlRelaDO extends BaseDO<SettMsMenuPermissionUr
     @NotNull(message = "关联url字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "关联url字段的长度最大为200", groups = {Add.class, Update.class}, max = 200)
     @Column(name = "url")
+    @ApiModelProperty("关联url")
     private String url;
 
     /**
      * 旧的url
      */
     @Transient
+    @ApiModelProperty("旧的url")
     private String oldUrl;
 
 }

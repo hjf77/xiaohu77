@@ -2,6 +2,7 @@ package com.fhs.basics.vo;
 
 import com.fhs.basics.dox.ServiceWordbookGroupDO;
 import com.fhs.core.base.pojo.vo.VO;
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 /**
@@ -12,6 +13,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ApiModel(value ="ServiceWordbookGroupVO",description ="ServiceWordbookGroup参数")
 public class ServiceWordbookGroupVO extends ServiceWordbookGroupDO implements VO {
 
 }
