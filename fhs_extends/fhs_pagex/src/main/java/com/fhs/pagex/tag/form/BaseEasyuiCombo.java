@@ -83,7 +83,7 @@ public abstract class BaseEasyuiCombo extends EmptyFormTag {
 
     @Override
     public String readyJs() {
-        if (!isOne2XModel) {
+        if (!isOne2XModel && !ConverterUtils.toBoolean(tagSett.get("multiple"))) {
             return "$('#" +   ConverterUtils.toString(super.tagSett.get("name")) + "').combobox('initClear');";
         }
         return "";
