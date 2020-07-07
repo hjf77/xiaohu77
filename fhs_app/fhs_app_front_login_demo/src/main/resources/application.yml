@@ -46,6 +46,8 @@ fhs:
       description: 项目api
       developer: fhs developers
       name: 公共接口文档
+  front:
+    snsapi: snsapi_userinfo
   wxmp:
     appid: wx32fbbf2d4bdcac42
     secret: 1a2b1f3626b8fd6dafa9a1b1c6e28f9d
@@ -67,7 +69,8 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 172.16.57.109
+    host: 192.168.0.213
+    password: 123456
     port: 6379
     timeout: 6000
   datasource:
@@ -86,9 +89,9 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.16.57.109:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.213:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: 123456
     validationQuery: select 'x'
 
 
@@ -127,4 +130,4 @@ jetcache:
       valueEncoder: java
       valueDecoder: java
       uri:
-        - redis://172.16.57.109:6379/1  #redis://密码@IP:端口/库
+        - redis://123456@192.168.0.213:6379/3  #redis://密码@IP:端口/库

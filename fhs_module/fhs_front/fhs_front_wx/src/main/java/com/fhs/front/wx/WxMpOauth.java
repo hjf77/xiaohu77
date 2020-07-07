@@ -19,6 +19,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,9 @@ public class WxMpOauth implements FhsOauth302, InitializingBean {
     @Autowired
     private LoginService loginService;
 
+    @Value("${fhs.front.snsapi:snsapi_userinfo}")
+    private String defaultSnsapi;
+
     @Override
     public String getUA() {
         return "micromessenger";
@@ -64,7 +68,7 @@ public class WxMpOauth implements FhsOauth302, InitializingBean {
             // 不存在的时候 构建地址 让用户去请求openId
             String url = EConfig.getPathPropertiesValue("basePath") + "/webApi/front/complateLogin";
             String wxUrl = wxTools.getWxMpService().oauth2buildAuthorizationUrl(url,
-                    "snsapi_base",
+                    defaultSnsapi,
                     null);
             return wxUrl;
         }
