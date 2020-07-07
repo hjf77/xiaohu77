@@ -10,7 +10,7 @@ fillFormExtends.uiplugins.Wdate={
         }
     },
     matching:function(_node){
-        $(_node).hasClass('Wdate');
+        return $(_node).hasClass('Wdate');
     }
 };
 
@@ -25,7 +25,7 @@ fillFormExtends.uiplugins.combobox={
         $(_node).combobox('setValue',_val);
     },
     matching:function(_node){
-        $(_node).hasClass('easyui-combobox');
+        return $(_node).hasClass('easyui-combobox');
     }
 };
 

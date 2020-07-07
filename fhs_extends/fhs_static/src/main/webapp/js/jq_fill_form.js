@@ -78,7 +78,6 @@ var fillFormExtends = {uiplugins:{}};
             });
         },
         getDftVal:function(){
-            debugger
             var _node = this;
             var _dataType = $(_node).attr('datatype');
             // 0- 190的随机数
