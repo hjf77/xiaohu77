@@ -55,9 +55,7 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
      * 角色id
      */
     @Id
-    @NotNull(message = "{test.roleId.null}", groups = {Update.class, Delete.class})
-    @Max(message = "{test.roleId.max}", value = 2147483647, groups = {Add.class, Update.class})
-    @Min(message = "{test.roleId.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @Column(name = "role_id")
     @ApiModelProperty("角色id")
     private Integer roleId;
 

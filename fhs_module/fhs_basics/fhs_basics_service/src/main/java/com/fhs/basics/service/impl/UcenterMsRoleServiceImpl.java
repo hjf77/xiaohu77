@@ -57,7 +57,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     @Override
     public boolean addRole(UcenterMsRoleDO adminRole) {
         // 插入角色信息
-        int count = mapper.insertJpa(adminRole);
+        int count = super.insertSelective(adminRole);
         if (count > 0) {
             return saveButtons(adminRole);
         }
@@ -161,7 +161,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
         boolean count = deleteButtons(adminRole);
         if (count) {
             // 修改当前角色信息
-            int result = mapper.updateSelectiveById(adminRole);
+            int result = super.updateSelectiveById(adminRole);
             if (result > 0) {
                 if (adminRole.getMethods().length > 0) {
                     // 构建按钮列表

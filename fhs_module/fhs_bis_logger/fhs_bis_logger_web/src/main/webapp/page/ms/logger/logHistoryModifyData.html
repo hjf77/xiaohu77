@@ -33,19 +33,20 @@ include("/page/tags/form_include.html"){}
 <script>
     var pkey = "${parameter.pkey}";
     var version = "${parameter.version}";
+    var namespace = "${parameter.namespace}"
 
     $('#logHistoryModifyDataForm').form({
         onLoadSuccess: loadFormSuccess
     });
     $("#logHistoryModifyDataForm").form('load',
-        '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + version);
+        '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + version + '&namespace='+namespace);
 
     function loadFormSuccess(info) {
         if (isView) {
             renderView('logHistoryModifyDataForm');
         }
         $.ajax({
-            url: '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + (version - 1),
+            url: '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + (version - 1) + '&namespace='+namespace,
             dataType: 'json',
             type: 'POST',
             data: {},

@@ -140,10 +140,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public boolean update(D bean) {
         boolean result = this.updateJpa(bean);
-        if (BisLoggerContext.isNeedLogger()) {
-            BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
-            BisLoggerContext.addHistoryData(this.selectById(bean.getPkey()), this.namespace);
-        }
         this.refreshCache();
         this.updateCache(bean);
         return result;

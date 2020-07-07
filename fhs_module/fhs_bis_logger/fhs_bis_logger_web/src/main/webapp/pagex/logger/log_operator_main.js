@@ -20,8 +20,8 @@ var listPage = {
     },
     filters: function () {
         return [
-            {name: 'model', type: 'select',url:'${path.basePath}/ms/logOperatorMain/moduleSelect',
-                    valuefield:'model',textfield:'model',title: '用户管理',showAll:'false'},
+            {name: 'namespace', type: 'select',url:'${path.basePath}/ms/logOperatorMain/moduleSelect',
+                    valuefield:'namespace',textfield:'model',title: '用户管理',showAll:'true'},
             {name: 'log_id', type: 'input', title: 'id',filterType: 'like'},
             {name: 'type', type: 'book', title: '操作类型',code:'type',showAll:'true'},
             {name: 'create_user', type: 'select', title: '操作人',url:'${path.basePath}/ms/logOperatorMain/getUserList',

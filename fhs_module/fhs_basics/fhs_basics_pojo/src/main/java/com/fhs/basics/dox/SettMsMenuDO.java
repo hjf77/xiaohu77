@@ -161,6 +161,7 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
     @ApiModelProperty("是否禁用")
+    @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     private Integer isEnable;
 
 
@@ -171,12 +172,14 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
      */
     @TableField(exist = false)
     @ApiModelProperty("子菜单")
+    @Trans(type = TransType.AUTO_TRANS, key = "sett_ms_system")
     private List<SettMsMenuDO> sonMenu;
 
     /**
      * 菜单状态
      */
     @ApiModelProperty("菜单状态")
+    @Trans(type = TransType.WORD_BOOK, key = "yesOrNo")
     private Integer menuState;
 
     public List<SettMsMenuDO> getSonMenu() {

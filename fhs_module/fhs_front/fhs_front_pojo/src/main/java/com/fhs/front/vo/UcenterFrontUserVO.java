@@ -4,6 +4,7 @@ import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.front.dox.UcenterFrontUserDO;
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 import java.util.Map;
@@ -14,10 +15,11 @@ import java.util.Map;
  * @since 2019-05-18 11:49:33
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@TransTypes(types = {TransType.WORD_BOOK})
+@EqualsAndHashCode(callSuper = true)
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value ="UcenterFrontUserVO",description ="UcenterFrontUser参数")
 public class UcenterFrontUserVO extends UcenterFrontUserDO implements VO {
 
     /**

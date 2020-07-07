@@ -93,19 +93,19 @@ include("/page/tags/form_include.html"){}
     function opera(val, row, index) {
         if (row.operatorType != 2){
             return '<a href="#" class="easyui-linkbutton" style="color:white !important"' +
-                'onclick=logView("' + row.pkey + '",' + row.version + ','+row.operatorType +')>查看</a>';
+                'onclick=logView("' + row.pkey + '",' + row.version +',"'+row.namespace+ '",'+row.operatorType +')>查看</a>';
         }else{
             return  '<a href="#">已删除</a>'
         }
     }
 
-    function logView(pkey, version,operatorType) {
+    function logView(pkey, version,namespace,operatorType) {
         if (operatorType != 1 || (operatorType == 1&&version==1)) {
             openDialogExtParamDetail(
-                '${basePath}/b/page-ms-logger/logView?isView=true&pkey=' + pkey + '&version=' + version, '查看');
+                '${basePath}/b/page-ms-logger/logView?isView=true&pkey=' + pkey + '&version=' + version+'&namespace='+namespace, '查看');
         } else {
             openDialogExtParamDetail(
-                '${basePath}/b/page-ms-logger/logModifyView?isView=true&pkey=' + pkey + '&version=' + version, '查看');
+                '${basePath}/b/page-ms-logger/logModifyView?isView=true&pkey=' + pkey + '&version=' + version+'&namespace='+namespace, '查看');
         }
 
     }

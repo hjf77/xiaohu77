@@ -88,7 +88,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 根据日志id查询数据
-     * @param logId
+     * @param logId 日志id
      * @return
      */
     @RequestMapping("/getLogger")
@@ -97,8 +97,10 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
         return logOperatorMainVO;
     }
 
+
     /**
      * 扩展参数列表
+     * @param mainId 主日志id
      */
     @RequestMapping("/getLoggerList")
     public void getExtendedParameters(String mainId){
@@ -116,30 +118,30 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
         super.outJsonp(new Pager(logExtParamList.size(), logExtParamList).asJson());
     }
 
+
     /**
      * 查询人员列表
-     * @param request
      * @return
      */
     @RequestMapping("/getUserList")
-    public List<UcenterMsUserVO> getUserList(HttpServletRequest request){
-        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
-        UcenterMsUserDO queryParam = UcenterMsUserDO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
-        List<UcenterMsUserVO> users = ucenterMsUserService.selectPage(queryParam,
-                pageSizeInfo.getPageStart(),pageSizeInfo.getPageSize());
+    public List<UcenterMsUserVO> getUserList(){
+        List<UcenterMsUserVO> users =
+                ucenterMsUserService.findForList(UcenterMsUserDO.builder().build());
         return users;
     }
 
+
     /**
      * 根据主键和版本获取数据
-     * @param pkey
-     * @param version
+     * @param pkey  主键
+     * @param version 版本号
+     * @param namespace namespace
      * @return
      */
     @RequestMapping("/getLogHistoryData")
-    public LogHistoryDataVO getLogHistoryData(String pkey, Integer version){
+    public LogHistoryDataVO getLogHistoryData(String pkey, Integer version,String namespace){
         LogHistoryDataVO logHistoryData =
-                logHistoryDataService.selectBean(LogHistoryDataDO.builder().pkey(pkey).version(version).build());
+                logHistoryDataService.selectBean(LogHistoryDataDO.builder().pkey(pkey).version(version).namespace(namespace).build());
         if (logHistoryData != null){
             if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
                 String model = namespaceModuleMap.get(logHistoryData.getNamespace());
@@ -151,8 +153,8 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 根据namespace和pkey查询数据列表
-     * @param namespace
-     * @param pkey
+     * @param namespace namespace
+     * @param pkey 主键
      * @param logHistoryDataDO
      * @return
      */
@@ -170,8 +172,8 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 根据时间段查询
-     * @param startTime
-     * @param endTime
+     * @param startTime 开始时间
+     * @param endTime 结束时间
      * @return
      */
     @RequestMapping("/getAccessManyList")

@@ -8,9 +8,9 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -24,12 +24,16 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @TableName("t_ucenter_front_user_bind")
+@ApiModel(value = "UcenterFrontUserBindDO", description = "UcenterFrontUserBind参数")
 public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     private static final long serialVersionUID = 920530665191970437L;
     @TableId(value = "id", type = IdType.UUID)
+    @ApiModelProperty(value = "主键id")
     private String id;
 
     /**
@@ -39,6 +43,7 @@ public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     @NotNull(message = "用户id字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "用户id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("user_id")
+    @ApiModelProperty(value = "用户id")
     private String userId;
 
     /**
@@ -48,6 +53,7 @@ public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     @NotNull(message = "openId字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "openId字段的长度最大为50", groups = {Add.class, Update.class}, max = 50)
     @TableField("auth_openId")
+    @ApiModelProperty(value = "openId")
     private String authOpenid;
 
     /**
@@ -55,29 +61,8 @@ public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
      */
     @NotNull(message = "0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app字段不可为null", groups = {Update.class, Delete.class})
     @TableField("auth_openId_type")
+    @ApiModelProperty(value = "类型")
     private Integer authOpenidType;
-
-    /**
-     * 创建时间
-     */
-    @NotEmpty
-    @NotNull(message = "创建时间字段不可为null", groups = {Update.class, Delete.class})
-    @Length(message = "创建时间字段的长度最大为20", groups = {Add.class, Update.class}, max = 20)
-
-
-    public UcenterFrontUserBindDO() {
-    }
-
-    public UcenterFrontUserBindDO(
-            String id,
-            String userId,
-            String authOpenid,
-            Integer authOpenidType) {
-        this.id = id;
-        this.userId = userId;
-        this.authOpenid = authOpenid;
-        this.authOpenidType = authOpenidType;
-    }
 
 
 }
