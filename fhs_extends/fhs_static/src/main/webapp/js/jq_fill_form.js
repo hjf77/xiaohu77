@@ -45,7 +45,7 @@ var fillFormExtends = {uiplugins:{}};
                 }
                 curform.nodes.push(_node);
             });
-            $(this).append('<a href="javascript:void(0)" class="fillAll">填充所有</a><a href="javascript:void(0)" class="fillRequired">填充必填</a>');
+            $(this).prepend('<center><a href="javascript:void(0)" class="fillAll">填充所有</a>&nbsp;&nbsp;<a href="javascript:void(0)" class="fillRequired">填充必填</a></center><br/>');
             $('.fillAll').click(function(){
                 FillForm.util.fillData.call(this,curform.nodes,false);
             });
