@@ -10,9 +10,14 @@
             initHandler();
         }
         $('#subBtn').show();
+        document.getElementById('addUpdateForm').scrollTop = 0;
         addUpdateForm = $('#addUpdateForm').Validform({
             tiptype : 5
         });
+        //开发者模式打开自动填充
+        if(typeof isDev != "undefined" && isDev ){
+            $('#addUpdateForm').FillForm({});
+        }
         if (isView) {
             $('#subBtn').hide();
             url_save = '';
