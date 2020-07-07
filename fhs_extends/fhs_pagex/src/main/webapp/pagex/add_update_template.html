@@ -24,7 +24,11 @@ include("/page/tags/form_include.html"){}
         addUpdateForm = $('#addUpdateForm').Validform({
             tiptype : 5
         });
-        formFill = $('#addUpdateForm').FillForm({});
+        //开发者模式打开自动填充
+        if(typeof isDev != "undefined" && isDev ){
+            formFill = $('#addUpdateForm').FillForm({});
+        }
+
         if (isView) {
             $('#subBtn').hide();
             url_save = '';
