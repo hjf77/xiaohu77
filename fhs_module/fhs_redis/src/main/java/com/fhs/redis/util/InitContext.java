@@ -2,6 +2,7 @@ package com.fhs.redis.util;
 
 import javax.annotation.PostConstruct;
 
+import com.fhs.common.utils.StringUtil;
 import com.fhs.redis.config.RedisConfigs;
 import com.fhs.redis.exception.RedisInitException;
 import org.apache.commons.logging.Log;
@@ -46,6 +47,11 @@ public class InitContext extends RedisApplication implements Constant  {
 			Integer port = Integer.valueOf(properties.getProperty(REDISPROPERTIES_PORT_PROFIXKEY));
 			String possword = properties.getProperty(REDISPROPERTIES_PASSWORD_PROFIXKEY);
 			currentServerName = host;
+			if (StringUtil.isEmpty(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY))){
+				DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY,0);
+			}else {
+				DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY,Integer.valueOf(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY)));
+			}
 			//redisTemplate反序列化报错、
             RedisTemplate redisTemplate = new RedisTemplate();
             redisTemplate.setConnectionFactory(factory);
@@ -57,7 +63,6 @@ public class InitContext extends RedisApplication implements Constant  {
 			redisTemplate.setHashValueSerializer(keySerializer);
             redisTemplate.afterPropertiesSet();
 			createRedisConnection(name, host, port, possword,redisTemplate);
-
 			//runUpdateLimit();
 		} catch (NumberFormatException e) {
 			log.error("initRedisServers: " + currentServerName+" occur NumberFormatException :" + e.getMessage());

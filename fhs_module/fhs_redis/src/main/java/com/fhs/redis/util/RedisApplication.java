@@ -108,9 +108,7 @@ public abstract class RedisApplication implements Constant{
 	}
 	
 	private void initRedisKeysCache(RedisTemplate redisTemplate, String name) {
-		for(int i=0;i<=REDIS_DEFAULT_DB_SIZE;i++) {
-			initRedisKeysCache(redisTemplate, name, i);
-		}
+		initRedisKeysCache(redisTemplate, name, DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
 	}
 	
 	

@@ -9,9 +9,7 @@ import com.fhs.redis.util.RKey;
 public class RedisZtreeUtil implements Constant{
 
 	public static void initRedisNavigateZtree(String serverName) {
-		for(int i=0;i<=REDIS_DEFAULT_DB_SIZE;i++) {
-			initRedisNavigateZtree(serverName, i);
-		}
+		initRedisNavigateZtree(serverName, DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
 		
 	}
 
@@ -38,9 +36,7 @@ public class RedisZtreeUtil implements Constant{
 			redisNavigateZtree.remove(serverZnodeIndex);
 		}
 		redisNavigateZtree.add(serverZnode);
-		for(int i=0;i<=REDIS_DEFAULT_DB_SIZE;i++) {
-			refreshRedisNavigateZtree(serverZnode, serverName, i);
-		}
+		refreshRedisNavigateZtree(serverZnode, serverName, DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
 	}
 	
 	private static ZNode refreshRedisNavigateZtree(ZNode serverZnode, String serverName, int dbIndex) {

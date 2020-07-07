@@ -57,11 +57,11 @@ public class ViewServiceImpl extends RedisApplication implements ViewService, Co
 logCurrentTime("try {");
 				for(Map<String, Object> redisServerMap : RedisApplication.redisServerCache) {
 logCurrentTime("refreshKeys(" + (String)redisServerMap.get("name"));
-					for(int i=0;i<=REDIS_DEFAULT_DB_SIZE;i++) {
-						refreshKeys((String)redisServerMap.get("name"), i);
-					}
+
+						refreshKeys((String)redisServerMap.get("name"), DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
+
 logCurrentTime("refreshServerTree(" + (String)redisServerMap.get("name"));
-					zTree = refreshServerTree((String)redisServerMap.get("name"), DEFAULT_DBINDEX);
+					zTree = refreshServerTree((String)redisServerMap.get("name"), DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
 					// test limit flow System.out.println("yes permit");
 logCurrentTime("continue");
 				}
@@ -80,9 +80,7 @@ logCurrentTime("finally {");
 		boolean permit = getUpdatePermition();
 		try {
 			for(Map<String, Object> redisServerMap : RedisApplication.redisServerCache) {
-				for(int i=0;i<=REDIS_DEFAULT_DB_SIZE;i++) {
-					refreshKeys((String)redisServerMap.get("name"), i);
-				}
+					refreshKeys((String)redisServerMap.get("name"), DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
 			}
 		} finally {
 			finishUpdate();

@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fhs.redis.config.RedisConfigs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,13 +36,17 @@ public class RedisController extends RedisApplication implements Constant{
 	private ViewService viewService;
 	@Autowired
 	private RedisService redisService;
+
+	@Autowired
+	private RedisConfigs redisConfigs;
+
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public Object home(HttpServletRequest request, HttpServletResponse response) {
 		String defaultServerName = (String) (RedisApplication.redisServerCache.get(0)==null?"":RedisApplication.redisServerCache.get(0).get("name"));
 		request.setAttribute("serverName", defaultServerName);
-		request.setAttribute("dbIndex", DEFAULT_DBINDEX);
-		return "redirect:/redis/stringList/"+defaultServerName + "/" +DEFAULT_DBINDEX;
+		request.setAttribute("dbIndex", DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
+		return "redirect:/redis/stringList/"+defaultServerName + "/" +DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY);
 	}
 	
 	@RequestMapping(value="/index", method=RequestMethod.GET)
@@ -51,7 +56,7 @@ public class RedisController extends RedisApplication implements Constant{
 		
 		String defaultServerName = (String) (RedisApplication.redisServerCache.get(0)==null?"":RedisApplication.redisServerCache.get(0).get("name"));
 		request.setAttribute("serverName", defaultServerName);
-		request.setAttribute("dbIndex", DEFAULT_DBINDEX);
+		request.setAttribute("dbIndex", DEFAULT_DBINDEX.get(REDISPROPERTIES_DBINDEX_PROFIXKEY));
 		return "page/ms/redis/main";
 	}
 	

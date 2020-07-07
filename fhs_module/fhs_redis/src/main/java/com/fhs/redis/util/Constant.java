@@ -33,12 +33,13 @@ public interface Constant {
 	public static final String REDISPROPERTIES_NAME_PROFIXKEY								= 	"redis.name.";
 	public static final String REDISPROPERTIES_PORT_PROFIXKEY								= 	"redis.port.";
 	public static final String REDISPROPERTIES_PASSWORD_PROFIXKEY							= 	"redis.password.";
+	public static final String REDISPROPERTIES_DBINDEX_PROFIXKEY							= 	"redis.database.";
 	
 	
 	/** default **/
 	//public static final String DEFAULT_REDISSERVERNAME 										= "default";
-	public static final int DEFAULT_DBINDEX 												= 0;
-	
+	public static final Map<String, Integer> DEFAULT_DBINDEX 						     = new HashMap<>();
+
 	/** query key **/
 	public static final String MIDDLE_KEY													= "middle";
 	public static final String HEAD_KEY 													= "head";
