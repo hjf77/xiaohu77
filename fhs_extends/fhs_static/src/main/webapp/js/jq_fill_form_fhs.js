@@ -29,3 +29,13 @@ fillFormExtends.uiplugins.combobox={
     }
 };
 
+fillFormExtends.uiplugins.password={
+    getDftVal:function(){
+        return '123456';
+    },
+    matching:function(_node){
+        return $(_node).attr('type')==='password';
+    }
+};
+
+

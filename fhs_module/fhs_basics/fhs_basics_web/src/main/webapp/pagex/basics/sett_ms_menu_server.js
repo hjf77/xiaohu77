@@ -40,7 +40,7 @@ var add = {
     formFields: function () {
         return [
             {name: 'server_name', title: '服务名称', required: true, type: 'input'},
-            {name: 'server_url', title: '服务链接', required: true, type: 'input'},
+            {name: 'server_url', title: '服务链接', required: true, type: 'input',dataType:'url'},
         ];
     },
     otherFunctions: function () {
