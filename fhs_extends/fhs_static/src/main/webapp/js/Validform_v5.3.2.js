@@ -821,7 +821,7 @@
 				{
 					//失去焦点事件时触发吐司提示
 					if(msg){
-						console.log(msg);
+						//console.log(msg);
 						$.toast({
 						    heading: '警告',
 						    text: msg,
