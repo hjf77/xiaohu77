@@ -21,7 +21,7 @@ public class PasswordFormTag extends  EmptyFormTag{
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='password' autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("easyui-validatebox"));
+        resultHtmlBuilder.append(formartClass("easyui-validatebox fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
