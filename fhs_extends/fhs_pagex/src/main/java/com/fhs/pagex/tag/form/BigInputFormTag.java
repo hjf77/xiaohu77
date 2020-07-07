@@ -28,7 +28,7 @@ public class BigInputFormTag extends  EmptyFormTag{
         resultHtmlBuilder.append("<div class=\"fitem\">");
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("big_text"));
+        resultHtmlBuilder.append(formartClass("big_text fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");

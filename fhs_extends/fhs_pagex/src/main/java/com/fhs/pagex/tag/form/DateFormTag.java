@@ -40,7 +40,7 @@ public class DateFormTag extends EmptyFormTag implements IOne2XTag {
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' readonly autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("Wdate"));
+        resultHtmlBuilder.append(formartClass("Wdate fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");

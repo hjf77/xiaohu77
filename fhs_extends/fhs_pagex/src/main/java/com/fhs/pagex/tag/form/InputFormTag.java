@@ -28,7 +28,7 @@ public class InputFormTag extends EmptyFormTag implements IOne2XTag {
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("easyui-validatebox"));
+        resultHtmlBuilder.append(formartClass("easyui-validatebox fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
