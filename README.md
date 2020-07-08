@@ -101,6 +101,12 @@
 
  &#8194;&#8194;&#8194;&#8194;2  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages?sort_id=2052774&doc_id=333929
 
+视频:
+https://www.bilibili.com/video/BV1DK4y1s7AL/  基础介绍和翻译服务使用
+https://www.bilibili.com/video/BV1Hi4y1V7pW/  pagex的使用
+https://www.bilibili.com/video/BV1eh411o7Td/  新项目使用fhs     
+https://www.bilibili.com/video/BV115411Y7NR/  代码生成器使用1
+https://www.bilibili.com/video/BV1vK4y1s7hT/  代码生成器使用2
   
 
 #### 参与贡献获取技术支持
