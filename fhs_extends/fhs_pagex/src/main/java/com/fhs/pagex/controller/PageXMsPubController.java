@@ -83,6 +83,7 @@ public class PageXMsPubController extends PageXBaseController {
         }catch (Exception except){
             e = except;
             LOG.error("add出错" + namespace + ",param:" + paramMap,e);
+            throw  except;
         }finally {
             addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_ADD,e);
         }
@@ -115,7 +116,7 @@ public class PageXMsPubController extends PageXBaseController {
      * @param id        id
      */
     @RequestMapping("{namespace}/info/{id}")
-    public JSONObject info(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public JSONObject info(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         checkPermiessAndNamespace(namespace, "see");
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
@@ -129,6 +130,7 @@ public class PageXMsPubController extends PageXBaseController {
         }catch (Exception e){
             exception = e;
             LOG.error("info出错" + namespace + ",id:" + id,e);
+            throw  exception;
         }finally {
             addLog(namespace, JSONObject.toJSONString(result), paramMap, request, LoggerConstant.METHOD_TYPE_VIEW,exception);
         }
@@ -143,7 +145,7 @@ public class PageXMsPubController extends PageXBaseController {
      * @param id        id
      */
     @RequestMapping("{namespace}/update/{id}")
-    public HttpResult<Boolean> update(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> update(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         checkPermiessAndNamespace(namespace, "update");
         EMap<String, Object> paramMap = super.getParameterMap();
         paramMap.put("id", id);
@@ -162,11 +164,11 @@ public class PageXMsPubController extends PageXBaseController {
         }catch (Exception e){
             exception = e;
             LOG.error("更新出错",e);
+            throw  exception;
         }finally {
             addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_UPATE,exception);
+            BisLoggerContext.clear();
         }
-        BisLoggerContext.clear();
-        return result;
     }
 
 
@@ -177,7 +179,7 @@ public class PageXMsPubController extends PageXBaseController {
      * @param id        id
      */
     @RequestMapping("{namespace}/del/{id}")
-    public HttpResult<Boolean> del(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> del(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (id.contains("jackToken")) {
             id = id.substring(0, id.indexOf("&amp;"));
         }
@@ -196,11 +198,11 @@ public class PageXMsPubController extends PageXBaseController {
         }catch (Exception e){
             exception = e;
             LOG.error(e);
+            throw  exception;
         }finally {
             addLog(namespace,JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_DEL,exception);
+            BisLoggerContext.clear();
         }
-        BisLoggerContext.clear();
-        return result;
     }
 
     /**
@@ -284,7 +286,7 @@ public class PageXMsPubController extends PageXBaseController {
      */
     @RequestMapping("{namespace}/pubExportExcel")
     @LogDesc(value = "导出数据", type = LogDesc.SEE)
-    public void exportExcel(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) {
+    public void exportExcel(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> paramMap = (Map<String, Object>) request.getSession().getAttribute(this.getClass() + "preLoadParam");
         if (paramMap == null) {
             paramMap = new HashMap<>();
@@ -311,6 +313,7 @@ public class PageXMsPubController extends PageXBaseController {
         }catch (Exception e){
             exception = e;
             LOG.error(e);
+            throw  exception;
         }finally {
             addLog(namespace,Constant.STR_TRUE,paramMap,request,LoggerConstant.METHOD_TYPE_EXPORT,exception);
         }
