@@ -53,20 +53,16 @@ public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements Wo
     	{
     		return new ArrayList<>();
     	}
-        List<Wordbook> list = redisService.getList(BASE_KEY + wordbookGroupCode);
-        if (CheckUtils.checkCollectionIsNullOrEmpty(list))
+        Set<Wordbook> set = redisService.getSet(BASE_KEY + wordbookGroupCode);
+        if (CheckUtils.checkCollectionIsNullOrEmpty(set))
         {
             Wordbook bean = new Wordbook();
             bean.setWordbookGroupCode(wordbookGroupCode);
             this.initWordBookDataCache(bean);
-            list = redisService.getList(BASE_KEY + wordbookGroupCode);
+            set = redisService.getSet(BASE_KEY + wordbookGroupCode);
         }
-        Collections.sort(list, new Comparator<Wordbook>(){
-            @Override
-            public int compare(Wordbook book1,Wordbook book2) {
-                return  book1.getOrderNum() - book2.getOrderNum();
-            }
-        });
+        List<Wordbook> list = new ArrayList(set);
+        Collections.sort(list, Comparator.comparingInt(Wordbook::getOrderNum));
         return list;
     }
 

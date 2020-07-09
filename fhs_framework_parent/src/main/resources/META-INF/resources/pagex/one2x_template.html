@@ -71,9 +71,13 @@
 
     function ${xnamespace}_onload(_info)
     {
+        var one2xListUrl = '${modelConfig.one2xListUrl}';
+        if(!one2xListUrl){
+            one2xListUrl = '${basePath}/ms/x/${xnamespace}/findListData';
+        }
         //ajax查询列表调用addrow，然后初始化数据
         $.ajax({
-           url:'${basePath}/ms/x/${xnamespace}/findListData?${modelConfig.fkey}=' + _info.${sourceModelConfig.pkey},
+           url:one2xListUrl+ '?${modelConfig.fkey}=' + _info.${sourceModelConfig.pkey},
            dataType:'json',
            success:function(_res){
                _res.forEach(function(_item){

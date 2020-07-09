@@ -5,10 +5,7 @@ import com.fhs.redis.service.RedisCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -98,10 +95,10 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     @Override
     public void addSet(String key, E[] objs)
     {
-        ListOperations<String, E> list = redisTemplate.opsForList();
+        SetOperations<String, E> set = redisTemplate.opsForSet();
         for (E obj : objs)
         {
-            list.leftPush(key, obj);
+            set.add(key,obj);
         }
     }
 
