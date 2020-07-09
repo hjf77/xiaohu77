@@ -72,8 +72,10 @@
             simpleData : {
                 idKey : "${modelConfig.pkeyCamel}", //主键id
                 pIdKey : "${keySett.fidkey}",//父id字段
-                name : "${keySett.namekey}",//显示哪个字段
                 enable : true
+            },
+            key:{
+                name:'${keySett.namekey}',//显示哪个字段
             }
         },
         async:{
