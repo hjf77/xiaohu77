@@ -152,7 +152,8 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
 
     @JSONField(serialize=false)
     public BaseService getBaseService(){
-        Type[] types  = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
+        Class clazz = this instanceof VO ? this.getClass().getSuperclass() : this.getClass();
+        Type[] types  = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
         BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class,types[0].getTypeName(),1);
         return baseService;
     }
