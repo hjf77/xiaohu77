@@ -23,7 +23,7 @@ import com.fhs.core.trans.service.AutoTransAble;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAble<V> {
+public interface BaseService<V extends VO,D extends BaseDO>{
 
     /**
      * 将一个map里面的数据插入到数据库

@@ -12,6 +12,7 @@ import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -27,6 +28,7 @@ import java.util.*;
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @SuppressWarnings("rawtypes")
+@Data
 public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements VO {
 
     /**
@@ -144,44 +146,4 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
         return fieldList.get(0);
     }
 
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 }

@@ -22,6 +22,7 @@ import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.service.AutoTransAble;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.mybatis.jpa.annotation.CatTableFlag;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, AutoTransAble<V>,  InitializingBean {
 
     protected final Logger log = Logger.getLogger(this.getClass());
 
