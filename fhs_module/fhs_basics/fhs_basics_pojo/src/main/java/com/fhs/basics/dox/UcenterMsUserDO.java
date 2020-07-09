@@ -12,7 +12,6 @@ package com.fhs.basics.dox;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fhs.common.utils.CheckUtils;
-import com.fhs.core.base.activerecord.ActiveRecordAble;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
@@ -49,7 +48,7 @@ import java.util.List;
 @Table(name = "t_ucenter_ms_user")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
-public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> implements ActiveRecordAble<UcenterMsUserDO> {
+public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
 
     private static final long serialVersionUID = 1L;
 
