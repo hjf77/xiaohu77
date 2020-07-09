@@ -4,10 +4,12 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.base.service.BaseService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
@@ -15,6 +17,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -144,6 +148,70 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
         fieldList.get(0).setAccessible(true);
         ID_FIELD_CACHE_MAP.put(this.getClass(), fieldList.get(0));
         return fieldList.get(0);
+    }
+
+    @JSONField(serialize=false)
+    public BaseService getBaseService(){
+        Type[] types  = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
+        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class,types[0].getTypeName(),1);
+        return baseService;
+    }
+
+    /**
+     * 插入
+     * @return
+     */
+    public int insert(){
+        return this.getBaseService().insertSelective((BaseDO) this);
+    }
+
+    /**
+     * 以自己当做参数查询
+     * @return
+     */
+    public  <V> List<V> findForList(){
+        return this.getBaseService().findForList((BaseDO) this);
+    }
+
+    /**
+     * 根据主键修改 不包含null
+     * @return
+     */
+    public boolean updateSelectiveById(){
+        return this.getBaseService().updateJpa((BaseDO) this);
+    }
+
+    /**
+     * 根据主键修改 包含null
+     * @return
+     */
+    public boolean updateByPkey(){
+        return this.getBaseService().update((BaseDO) this);
+    }
+
+
+    /**
+     * 把自己当做参数做删除
+     * @return
+     */
+    public boolean deleteByPkey(){
+        return this.getBaseService().delete((BaseDO) this);
+    }
+
+    /**
+     * 查询总数
+     * @return
+     */
+    public int findCount(){
+        return this.getBaseService().findCount((BaseDO) this);
+    }
+
+    /**
+     * 查询单个
+     * @return
+     */
+    public <V> V findOne(){
+        return (V) this.getBaseService().findBean((BaseDO) this);
     }
 
 }
