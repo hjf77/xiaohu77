@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import com.fhs.core.trans.service.AutoTransAble;
 
 /**
  * 所有的service 都必须实现此service 如果是简单的CRUD操作，
