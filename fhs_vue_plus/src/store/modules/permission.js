@@ -1,6 +1,7 @@
 import { constantRoutes } from '@/router'
 import { getRouters } from '@/api/menu'
 import Layout from '@/layout/index'
+const view = path => resolve => require([`@/views/${path}`], resolve)
 
 const permission = {
   state: {
@@ -40,7 +41,7 @@ function filterAsyncRouter(asyncRouterMap) {
       if (route.component === 'Layout') {
         route.component = Layout
       } else {
-        route.component = loadView(route.component)
+        route.component = view(route.component)
       }
     }
     if (route.children != null && route.children && route.children.length) {
