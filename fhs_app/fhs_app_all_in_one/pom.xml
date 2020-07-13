@@ -56,7 +56,11 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_redis</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_web_log_view</artifactId>
