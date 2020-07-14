@@ -74,7 +74,7 @@ public interface RedisCacheService<E>
      * @param key key
      * @param list 需要添加的集合数据
      */
-    void addSet(String key, List<E> list);
+    void addList(String key, List<E> list);
 
     /**
      * 判断set中有无value 有true

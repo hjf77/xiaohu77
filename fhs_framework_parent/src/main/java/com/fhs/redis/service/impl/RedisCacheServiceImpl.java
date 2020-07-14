@@ -117,9 +117,13 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addSet(String key, List<E> objSet)
+    public void addList(String key, List<E> objList)
     {
-        this.addSet(key, (E[])objSet.toArray());
+        ListOperations<String, E> list = redisTemplate.opsForList();
+        for (E obj : objList)
+        {
+            list.leftPush(key, obj);
+        }
     }
 
     @Override

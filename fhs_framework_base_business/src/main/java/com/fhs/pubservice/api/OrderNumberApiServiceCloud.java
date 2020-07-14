@@ -82,7 +82,7 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
         serviceOrderLog.setNumber(orderIndex);
         serviceOrderLogService.updateSelectiveById(serviceOrderLog);
         List<String> orderList =  orderNumList(minOrderIndex ,date);
-        redisCacheService.addSet(REDIS_KEY + ":" + type, orderList);
+        redisCacheService.addList(REDIS_KEY + ":" + type, orderList);
         // 设定redis失效时间
         redisCacheService.expire(REDIS_KEY + ":" + type, this.getExpireTime());
     }
