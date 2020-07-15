@@ -140,9 +140,6 @@ var add = {
 
             },
             onSave: function () {
-                if(!isEdit){
-
-                }
             },
             saveSucess: function () {
 
