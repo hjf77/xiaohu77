@@ -1,7 +1,35 @@
+<p align="center">
+    <img src="https://images.gitee.com/uploads/images/2020/0715/160619_de86772a_339743.png" width="300">
 
-#    FHS-Framework 简介
- **fhs-framwork是一个集成了国内外诸多优秀开源项目的快速开发平台，除了在常规快速开发平台提供 用户，角色，权限，菜单，字典，操作日志，代码生成器 还拥有一些特殊能力。**
- 
+    <p align="center">
+        FHS-Framwork是一个集成了国内外诸多优秀开源项目的快速开发平台，除了在常规快速开发平台提供 用户，角色，权限，菜单，字典，操作日志，代码生成器 还拥有一些特殊能力。    
+        <span>
+            <span>
+                FHS-Framwork官方交流群：976278956
+            </span>
+        </span>
+        <a href="https://easyweb.vip/">
+            <img src="https://img.shields.io/badge/easyweb-3.1.5-green.svg" alt="bootstrap">
+        </a> 
+        <a href="https://www.layui.com">
+            <img src="https://img.shields.io/badge/layui-2.5.5-blue.svg" alt="bootstrap">
+        </a>  
+        +
+        <a href="http://spring.io/projects/spring-boot">
+            <img src="https://img.shields.io/badge/spring--boot-2.1.6-green.svg" alt="spring-boot">
+        </a>
+        <a href="http://mp.baomidou.com">
+            <img src="https://img.shields.io/badge/mybatis--plus-3.0-blue.svg" alt="mybatis-plus">
+        </a>  
+        <a href="http://ibeetl.com/">
+            <img src="https://img.shields.io/badge/beetl-2.9.3-yellow.svg" alt="beetl">
+        </a> 
+    </p>
+</p>
+
+-----------------------------------------------------------------------------------------------
+
+
  
 #### 1. 项目技术架构
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/104222_be2c1c69_339743.jpeg "技术架构.jpg")
