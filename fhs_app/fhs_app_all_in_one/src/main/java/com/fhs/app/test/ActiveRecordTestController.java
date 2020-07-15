@@ -11,9 +11,9 @@ public class ActiveRecordTestController {
 
     @RequestMapping("/test")
     public HttpResult test(){
-    /*    UcenterMsUserDO.builder().userId("10").userName("wangelixxx222").password("1").userLoginName("wangelixxx").mobile("13455555555")
-                .build().updateByPkey();*/
+       UcenterMsUserDO.builder().userId("10").userName("wangelixxx222").password("1").userLoginName("wangelixxx").mobile("13455555555")
+                .build().insert();
 
-        return HttpResult.success( UcenterMsUserDO.builder().userId("10").build().deleteByPkey());
+        return HttpResult.success();
     }
 }
