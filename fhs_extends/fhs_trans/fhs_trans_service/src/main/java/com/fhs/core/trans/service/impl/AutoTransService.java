@@ -205,7 +205,11 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
                 this.transSettMap.put(autoTransSett.namespace(), autoTransSett);
             }
         }
-        refreshCache(new HashMap<>());
+        new Thread(()->{
+            Thread.currentThread().setName("refresh auto trans cache");
+            refreshCache(new HashMap<>());
+        }).start();
+
     }
 
     /**
