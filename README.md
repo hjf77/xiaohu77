@@ -3,7 +3,7 @@
     <br>      
     <br>      
     <p align="center">
-         FHS-Framwork是一个集成了国内外诸多优秀开源项目的快速开发平台，除了在常规快速开发平台提供 用户，角色，权限，菜单，字典，操作日志，代码生成器 还拥有一些特殊能力。
+         FHS-Framwork是一个集成了国内外诸多优秀开源项目的快速开发平台，除了在常规快速开发平台提供 用户，角色，权限，菜单，字典，审计日志，代码生成器 还拥有可以让您更少写SQL和前端代码的翻译服务以及PAGEX服务。
         <br>      
         <br>      
         <span>
@@ -13,28 +13,32 @@
         </span>
         <br>
         <br>
-        <a href="https://easyweb.vip/">
-            <img src="https://img.shields.io/badge/easyweb-3.1.5-green.svg" alt="bootstrap">
+        <a href="http://www.jeasyui.net/">
+            <img src="https://img.shields.io/badge/easyui-1.4.3-green.svg" alt="bootstrap">
         </a> 
         <a href="https://www.layui.com">
             <img src="https://img.shields.io/badge/layui-2.5.5-blue.svg" alt="bootstrap">
         </a>  
         +
         <a href="http://spring.io/projects/spring-boot">
-            <img src="https://img.shields.io/badge/spring--boot-2.1.6-green.svg" alt="spring-boot">
+            <img src="https://img.shields.io/badge/spring--boot-2.2.5-green.svg" alt="spring-boot">
         </a>
         <a href="http://mp.baomidou.com">
             <img src="https://img.shields.io/badge/mybatis--plus-3.0-blue.svg" alt="mybatis-plus">
         </a>  
         <a href="http://ibeetl.com/">
-            <img src="https://img.shields.io/badge/beetl-2.9.3-yellow.svg" alt="beetl">
+            <img src="https://img.shields.io/badge/beetl-3.0.11-yellow.svg" alt="beetl">
         </a> 
     </p>
 </p>
 
 -----------------------------------------------------------------------------------------------
+#### 体验地址
 
+http://114.116.21.147:8081/   admin  123456
 
+#### 预览图
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/110012_1d20674d_339743.png "fhs1.png")
  
 #### 1. 项目技术架构
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/104222_be2c1c69_339743.jpeg "技术架构.jpg")
@@ -127,8 +131,7 @@
        }
     }
 ```
-#### 预览图
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/110012_1d20674d_339743.png "fhs1.png")
+
 #### 使用说明
 
 
@@ -142,10 +145,7 @@
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1vK4y1s7hT/  代码生成器使用2
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1sf4y1R7dH/  base类中的方法介绍以及activeRecord模式适用
 
-#### 参与贡献获取技术支持
-官方QQ 群：976278956
 
-体验地址：http://114.116.21.147:8081/   admin  123456
 
 #### 写到最后
 
