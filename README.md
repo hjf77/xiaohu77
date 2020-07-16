@@ -177,7 +177,7 @@ var add = {
  &#8194;&#8194;&#8194;&#8194; C 修改fhs_app/fhs_app_all_in_one/src/main/resources/application.yml redis(2处，jetcache和spring的redis)和mysql配置 <br/>
  &#8194;&#8194;&#8194;&#8194; C 启动fhs_app/fhs_app_all_in_one/src/main/java/com/fhs/app/SingleApplication.java <br/>
  
- &#8194;&#8194;&#8194;&#8194;3  视频:
+ &#8194;&#8194;&#8194;&#8194;4  视频:<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1DK4y1s7AL/  基础介绍和翻译服务使用<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1Hi4y1V7pW/  pagex的使用<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1eh411o7Td/  新项目使用fhs<br/>
