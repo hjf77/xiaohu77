@@ -56,7 +56,7 @@ http://114.116.21.147:8081/   admin  123456
 - 分布式任务：shedlock
 - 文档:swagger
 
-####3. 和其他框架差异化特性
+#### 3. 和其他框架差异化特性
 ##### -&#8194;&#8194; 翻译服务
 &#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;  无需表关联,将id 翻译为其他表的title/name 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/105618_248af047_339743.jpeg "微信图片_20200430153628.jpg")
@@ -153,12 +153,31 @@ var add = {
 };
 ```
 
+##### - &#8194;&#8194;&#8194;&#8194;更好用的校验框架
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;集成了validate-springboot-starter，在兼容hibernate Validator和javax validation的同时，支持了更多自定义玩法。
+内置常用验证规则：比如手机号验证，正则验证，ip,邮箱，长度，范围，数字，小数，中国车牌号，身份证，长度， url, 图书ISBN编号,文件后缀,文件大小 等常用验证规则
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/091910_067bf345_339743.png "v1.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/092128_5cfa06b3_339743.png "v2.png")
+
+##### - &#8194;&#8194;&#8194;&#8194;可能是首创的表单填充框架
+在开发和测试阶段，测试表单或者做测试数据的时候都要频繁的给表单录入数据，有了表单填充框架，可以在测试和开发的时候一键填充测试数据，然后在根据情况修改下少数字段的值即可，可以节约很多时间来造无聊的数据(主要根据校验规则去造对应的数据，邮箱，姓名，身份证号，手机号通过字典+随机数生成数据，下拉默认选中第一个)。
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/092456_f084f69a_339743.png "tianchong.png")
+
 #### 使用说明
 
 
  &#8194;&#8194;&#8194;&#8194;1  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages?sort_id=2052774&doc_id=333929
-
- &#8194;&#8194;&#8194;&#8194;2  视频:
+ 
+ &#8194;&#8194;&#8194;&#8194;2  word格式的文档 在sql&docs目录
+ 
+ &#8194;&#8194;&#8194;&#8194;3  quik start
+ 
+ &#8194;&#8194;&#8194;&#8194; A 准备好redis和mysql
+ &#8194;&#8194;&#8194;&#8194; B 创建数据库，导入sql&docs 下的fhs-demo.sql （如果遇到部分sql执行失败，请手动执行）
+ &#8194;&#8194;&#8194;&#8194; C 修改fhs_app/fhs_app_all_in_one/src/main/resources/application.yml redis(2处，jetcache和spring的redis)和mysql配置
+ &#8194;&#8194;&#8194;&#8194; C 启动fhs_app/fhs_app_all_in_one/src/main/java/com/fhs/app/SingleApplication.java
+ 
+ &#8194;&#8194;&#8194;&#8194;3  视频:
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1DK4y1s7AL/  基础介绍和翻译服务使用</br>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1Hi4y1V7pW/  pagex的使用</br>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1eh411o7Td/  新项目使用fhs</br>
