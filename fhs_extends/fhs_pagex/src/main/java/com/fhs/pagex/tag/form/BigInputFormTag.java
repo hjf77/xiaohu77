@@ -28,7 +28,7 @@ public class BigInputFormTag extends  EmptyFormTag{
         resultHtmlBuilder.append("<div class=\"fitem\">");
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("big_text"));
+        resultHtmlBuilder.append(formartClass("big_text fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
@@ -47,5 +47,10 @@ public class BigInputFormTag extends  EmptyFormTag{
     protected String[] getHandelKeys() {
         // 哪些参数是你这个控件特有的，我这个input没啥特有的控件，所以返回了空数组
         return new String[]{};
+    }
+
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
     }
 }

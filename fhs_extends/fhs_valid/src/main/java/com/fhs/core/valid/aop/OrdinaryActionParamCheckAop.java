@@ -6,6 +6,8 @@ import org.aspectj.lang.annotation.*;
 
 /**
  * 其他的控制器校验aop
+ * @author user
+ * @date 2020-05-19 09:55:26
  */
 @Aspect
 public class OrdinaryActionParamCheckAop extends ParamCheckAop {

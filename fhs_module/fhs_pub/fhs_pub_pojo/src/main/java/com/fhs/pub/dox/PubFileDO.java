@@ -11,8 +11,12 @@
 package com.fhs.pub.dox;
 
 import com.fhs.core.base.dox.BaseDO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,42 +32,47 @@ import java.io.Serializable;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_pub_file")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "PubFileDO", description = "PubFile参数")
 public class PubFileDO extends BaseDO<PubFileDO> implements Serializable
 {
-    /**
-     * serialVersionUID
-     */
     private static final long serialVersionUID = 7096338027750227520L;
 
     /**
      * id
      */
     @Id
+    @ApiModelProperty("主键id")
     private String fileId;
     
     /**
      * 文件名
      */
+    @ApiModelProperty("文件名")
     private String fileName;
     
     /**
      * 后缀
      */
+    @ApiModelProperty("后缀")
     private String fileSuffix;
 
     /**
      * 文件上传时间
      */
+    @ApiModelProperty("文件上传时间")
     private String uploadDate;
 
     /**
      * 时间长度
      */
     @Transient
+    @ApiModelProperty("时间长度")
     private Long timeLength;
 
 }

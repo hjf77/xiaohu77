@@ -29,6 +29,8 @@ import java.util.Set;
 
 /**
  * pagex的翻译服务实现
+ * @author user
+ * @date 2020-05-19 14:15:20
  */
 @Component
 public class PageXTransServiceImpl implements ITransTypeService, InitializingBean {

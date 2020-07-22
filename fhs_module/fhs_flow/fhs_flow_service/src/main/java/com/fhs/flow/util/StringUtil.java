@@ -7,6 +7,8 @@ import java.util.Collections;
 
 /**
  * 字符串工具类
+ * @author user
+ * @date 2020-05-18 14:12:33
  */
 public class StringUtil {
     /**
@@ -33,7 +35,7 @@ public class StringUtil {
     /**
      * 把字符串的第一个字母转为大写
      *
-     * @param str字符串
+     * @param str
      * @return
      */
     public static String upperFirst(String str) {
@@ -58,9 +60,13 @@ public class StringUtil {
      */
     public static boolean isEmpty(String str) {
 
-        if (str == null) return true;
+        if (str == null) {
+            return true;
+        }
 
-        if (str.trim().equals("")) return true;
+        if (str.trim().equals("")) {
+            return true;
+        }
 
         return false;
     }
@@ -80,7 +86,9 @@ public class StringUtil {
      */
     public static boolean isZeroEmpty(String tmp) {
         boolean isEmpty = StringUtil.isEmpty(tmp);
-        if (isEmpty) return true;
+        if (isEmpty) {
+            return true;
+        }
 
         return "0".equals(tmp);
     }
@@ -113,8 +121,9 @@ public class StringUtil {
      * @return
      */
     public static String toFirst(String str, boolean isUpper) {
-        if (StringUtils.isEmpty(str))
+        if (StringUtils.isEmpty(str)) {
             return "";
+        }
         char first = str.charAt(0);
         String firstChar = new String(new char[]{first});
         firstChar = isUpper ? firstChar.toUpperCase() : firstChar.toLowerCase();
@@ -173,8 +182,9 @@ public class StringUtil {
      * @return
      */
     public static String join(String[] vals, String separator) {
-        if (ArrayUtil.isEmpty(vals))
+        if (ArrayUtil.isEmpty(vals)) {
             return "";
+        }
         String val = "";
         for (int i = 0; i < vals.length; i++) {
             if (i == 0) {

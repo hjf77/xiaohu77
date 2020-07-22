@@ -1,6 +1,7 @@
 var modelConfig = {
     title: '服务管理', pkey: 'id', type: 'uuid', orderBy: 'update_time Desc',
-    namespace: "sett_ms_menu_server", table: 't_sett_ms_menu_server',trans: true};
+    namespace: "sett_ms_menu_server", table: 't_sett_ms_menu_server',trans: true,dataGridUrl:'${path.basePath}/ms/sett_ms_menu_server/findPage',
+    isAdvanceSearch:true};
 var listPage = {
     listFieldSett: function () {
         return [
@@ -27,7 +28,11 @@ var listPage = {
         return [];
     },
     otherFunctions: function () {
-        return {}
+        return {
+            advanceSearchSettFun:function(){
+                
+            }
+        }
     }
 };
 
@@ -35,7 +40,7 @@ var add = {
     formFields: function () {
         return [
             {name: 'server_name', title: '服务名称', required: true, type: 'input'},
-            {name: 'server_url', title: '服务链接', required: true, type: 'input'},
+            {name: 'server_url', title: '服务链接', required: true, type: 'input',dataType:'url'},
         ];
     },
     otherFunctions: function () {

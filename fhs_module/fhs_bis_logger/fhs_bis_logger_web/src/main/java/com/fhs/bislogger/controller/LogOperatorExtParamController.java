@@ -13,14 +13,14 @@ import io.swagger.annotations.Api;
 import java.util.List;
 
 /**
- * (LogOperatorExtParam)表控制层
+ * 扩展参数(LogOperatorExtParam)表控制层
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59
  */
 
 @RestController
-@Api(tags={""})
+@Api(tags={"日志扩展参数"})
 @RequestMapping("/ms/logOperatorExtParam")
 public class LogOperatorExtParamController extends ModelSuperController<LogOperatorExtParamVO,LogOperatorExtParamDO> {
 

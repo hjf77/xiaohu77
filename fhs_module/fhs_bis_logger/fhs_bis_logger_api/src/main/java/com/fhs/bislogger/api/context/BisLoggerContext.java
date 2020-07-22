@@ -12,13 +12,12 @@ import com.fhs.core.cache.service.RedisCacheService;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 日志上下文
+ * @author user
+ * @date 2020-05-18 14:20:14
  */
 public class BisLoggerContext {
 
@@ -27,6 +26,8 @@ public class BisLoggerContext {
     private static ThreadLocal<List<LogOperatorExtParamVO>> logOperatorExtParamList = new ThreadLocal<>();
 
     private static ThreadLocal<List<LogHistoryDataVO>> logHistoryDataVOList = new ThreadLocal<>();
+
+    private static ThreadLocal<Set<Object>> logHistoryDataPKeySet = new ThreadLocal<>();
 
     /**
      * 模型map key namespace value 模型
@@ -37,6 +38,7 @@ public class BisLoggerContext {
         BisLoggerContext.traceId.set(traceId);
         BisLoggerContext.logOperatorExtParamList.set(new ArrayList<>());
         BisLoggerContext.logHistoryDataVOList.set(new ArrayList<>());
+        BisLoggerContext.logHistoryDataPKeySet.set(new HashSet<Object>());
     }
 
     public static List<LogOperatorExtParamVO> getLogOperatorExtParamList() {
@@ -63,6 +65,7 @@ public class BisLoggerContext {
 
 
     /**
+     * 添加扩展参数
      * @param namespace
      * @param pkey
      * @param operatorType
@@ -85,6 +88,17 @@ public class BisLoggerContext {
         if (namespace == null || vo.getPkey() == null || !isNeedLogger()) {
             return;
         }
+        String pkey = vo.getPkey().toString();
+        if(BisLoggerContext.logHistoryDataPKeySet.get().contains(vo.getPkey().toString())){
+           List<LogHistoryDataVO> extParamVOS =   BisLoggerContext.logHistoryDataVOList.get();
+           for(int i =0;i<extParamVOS.size();i++){
+               if(extParamVOS.get(i).getPkey().equals(pkey)){
+                   extParamVOS.remove(i);
+                   break;
+               }
+           }
+        }
+        BisLoggerContext.logHistoryDataPKeySet.get().add(pkey);
         LogHistoryDataVO historyDataVO = new LogHistoryDataVO();
         historyDataVO.setPkey(vo.getPkey().toString());
         historyDataVO.setData(formartJson(JsonUtils.bean2json(vo), vo.getClass()));

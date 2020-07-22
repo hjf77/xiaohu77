@@ -16,6 +16,8 @@ import java.io.IOException;
 
 /**
  * api鉴权
+ * @author user
+ * @since 2019-05-18 11:34:59
  */
 @WebFilter(urlPatterns = {"*"}, filterName = "aVueFilter", asyncSupported = true)
 public class AVueFilter implements Filter {

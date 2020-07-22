@@ -20,6 +20,8 @@ import java.util.List;
 
 /**
  * 生成订单号服务
+ * @author user
+ * @since 2019-05-18 11:24:25
  */
 @RestController
 @RequestMapping("api/orderNumber")

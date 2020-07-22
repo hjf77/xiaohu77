@@ -15,6 +15,8 @@ import java.io.IOException;
 
 /**
  * api鉴权
+ * @author user
+ * @since 2019-05-18 11:34:35
  */
 @WebFilter(urlPatterns = {"/api/*"},filterName = "apiAuthFilter" ,asyncSupported = true)
 public class ApiAuthFilter implements Filter {

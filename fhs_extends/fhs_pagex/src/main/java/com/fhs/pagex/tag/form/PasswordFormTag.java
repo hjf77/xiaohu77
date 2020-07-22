@@ -2,6 +2,11 @@ package com.fhs.pagex.tag.form;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * input type是密码 表单tag
+ * @author user
+ * @date 2020-05-19 14:08:20
+ */
 @Component
 public class PasswordFormTag extends  EmptyFormTag{
 
@@ -16,7 +21,7 @@ public class PasswordFormTag extends  EmptyFormTag{
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='password' autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("easyui-validatebox"));
+        resultHtmlBuilder.append(formartClass("easyui-validatebox fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");

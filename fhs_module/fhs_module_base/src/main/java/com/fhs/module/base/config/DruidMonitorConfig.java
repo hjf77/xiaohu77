@@ -1,27 +1,25 @@
 package com.fhs.module.base.config;
 
 
-import com.alibaba.druid.filter.logging.Log4jFilter;
 import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 数据库以及请求监控
+ * @author user
+ * @since 2019-05-18 11:30:35
  */
 @Configuration("druidMonitorConfig")
 @ConditionalOnProperty(prefix = "fhs.druid-monitor", name = "enable", havingValue = "true", matchIfMissing = false)

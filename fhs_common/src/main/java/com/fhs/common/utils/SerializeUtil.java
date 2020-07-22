@@ -4,6 +4,8 @@ import java.io.*;
 
 /**
  * 序列化反序列化工具类
+ * @author jackwong
+ * @date 2020-05-21 13:40:16
  */
 public class SerializeUtil {
     /**
@@ -34,7 +36,7 @@ public class SerializeUtil {
      * @param bytes
      * @return
      */
-    public static Object unserialize(byte[] bytes) {
+    public static Object unSerialize(byte[] bytes) {
         ByteArrayInputStream bais = null;
         try {
             // 反序列化
@@ -47,10 +49,11 @@ public class SerializeUtil {
         return null;
     }
 
+
     /**
      * 序列化
-     *
-     * @param object
+     * @param data
+     * @param filePath
      * @return
      */
     public static boolean serializeToFile(Object data, String filePath) {
@@ -77,13 +80,13 @@ public class SerializeUtil {
         return false;
     }
 
+
     /**
      * 序列化
-     *
-     * @param object
+     * @param filePath
      * @return
      */
-    public static Object unserializeFromFile(String filePath) {
+    public static Object unSerializeFromFile(String filePath) {
         FileInputStream in;
         ObjectInputStream ois;
         try {

@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 角色DAO
- *
+ * 角色mapper 接口
  * @author jianbo.qin
+ * @date 2020-05-18 16:21:03
  */
 @Repository
 @MultiTenancyCheck

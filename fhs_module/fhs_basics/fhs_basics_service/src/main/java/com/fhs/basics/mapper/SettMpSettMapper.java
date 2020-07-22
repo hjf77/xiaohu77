@@ -7,7 +7,7 @@ import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
 /**
- * 公众号配置(UcenterMpSett)表数据库访问层
+ * 公众号配置(settMpSett)表数据库访问层
  *
  * @author jackwong
  * @since 2019-03-11 14:09:24

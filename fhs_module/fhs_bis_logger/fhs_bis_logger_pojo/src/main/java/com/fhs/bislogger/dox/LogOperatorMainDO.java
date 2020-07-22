@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 /**
- * (LogOperatorMain)实体类
+ * 操作日志(LogOperatorMain)实体类
  *
  * @author wanglei
  * @since 2020-04-23 13:59:14
@@ -33,7 +33,7 @@ import lombok.*;
 public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
     private static final long serialVersionUID = -83321483098557581L;
     @TableId(value = "log_id", type = IdType.UUID)
-    @ApiModelProperty(value = "${column.comment}")
+    @ApiModelProperty(value = "主键id")
     private String logId;
 
     /**
@@ -67,11 +67,17 @@ public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
     @ApiModelProperty(value = "请求方法 0 get 1post 2 put 3 delete 4 head 5 connect 6 options 7 race 8 patch")
     private String reqMethod;
 
+    /**
+     * 请求参数
+     */
     @Length(message = "请求参数字段的长度最大为-1", groups = {Add.class, Update.class}, max = -1)
     @TableField("req_param")
     @ApiModelProperty(value = "请求参数")
     private String reqParam;
 
+    /**
+     * 返回数据
+     */
     @Length(message = "返回数据字段的长度最大为-1", groups = {Add.class, Update.class}, max = -1)
     @TableField("resp_body")
     @ApiModelProperty(value = "返回数据")

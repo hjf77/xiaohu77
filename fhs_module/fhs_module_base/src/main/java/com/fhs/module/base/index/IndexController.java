@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 首页请求action
+ * 首页请求controller
  *
  * @Filename: IndexController.java
  * @Description:
@@ -54,7 +54,7 @@ public class IndexController {
     @Autowired
     private RedisCacheService redisCacheService;
 
-    @Value("${fhs.login.enable-cas}")
+    @Value("${fhs.login.enable-cas:false}")
     private boolean isEnableCas;
 
     /**
@@ -92,10 +92,10 @@ public class IndexController {
         // 如果有其他的进程已经放了用户，则直接302
         if (request.getSession().getAttribute(Constant.SESSION_USER) != null) {
             // 如果url为空则到子系统选择页面
-            if (serviceURL == null) {
-                modelAndView.setViewName("page/ms/index/index_menu_layui");
-            } else {
+            if (CheckUtils.isNotEmpty(serviceURL) && isEnableCas) {
                 modelAndView.setViewName("redirect:" + serviceURL);
+            } else {
+                modelAndView.setViewName("page/ms/index/index_menu_layui");
             }
             request.getSession().setAttribute("serviceURL",null);
             return modelAndView;
@@ -140,7 +140,7 @@ public class IndexController {
         CookieUtil.writeCookie("jackToken", uuid, response);
         request.getSession().setAttribute("jackToken", uuid);
         request.getSession().removeAttribute("serviceURL");
-        if (CheckUtils.isNotEmpty(serviceURL)) {
+        if (CheckUtils.isNotEmpty(serviceURL) && isEnableCas) {
             modelAndView.setViewName("redirect:" + serviceURL);
         } else {
             modelAndView.setViewName("page/ms/index/index_menu_layui");

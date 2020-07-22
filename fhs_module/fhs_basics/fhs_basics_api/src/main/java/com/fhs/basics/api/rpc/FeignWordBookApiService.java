@@ -12,6 +12,8 @@ import java.util.List;
 
 /**
  * 字典公共服务
+ * @author user
+ * @date 2020-05-18 14:40:58
  */
 @FeignClient(value = "basics", configuration = FeignConfiguration.class,primary = false)
 public interface FeignWordBookApiService {

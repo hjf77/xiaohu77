@@ -8,6 +8,11 @@ import com.fhs.core.exception.*;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.result.PubResult;
 import com.fhs.logger.Logger;
+import com.github.liangbaika.validate.exception.ParamsInValidException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -19,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 /**
  * 控制器异常统一处理器
@@ -59,7 +65,25 @@ public class ControllerExceptionAdvice {
             httpResult.setMessage(ex.getMessage());
             JsonUtils.outJson(response, httpResult.asJson(), ((HttpException) ex).getHttpCode());
             return null;
-        } else if (ex instanceof BusinessException) {
+        }  else if (ex instanceof ParamsInValidException) {
+            httpResult.setMessage(ex.getMessage());
+            JsonUtils.outJson(response, httpResult.asJson());
+            return null;
+        } else if (ex instanceof MethodArgumentNotValidException) {
+            BindingResult bindingResult = ((MethodArgumentNotValidException)(ex)).getBindingResult();
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            StringBuilder errMsg = new StringBuilder();
+            for (ObjectError allError : allErrors) {
+                FieldError fieldError = (FieldError) allError;
+                String field = fieldError.getField();
+                String defaultMessage = fieldError.getDefaultMessage();
+                errMsg.append(field + ":" + defaultMessage + ";  ");
+            }
+            httpResult.setMessage(errMsg.toString());
+            JsonUtils.outJson(response, httpResult.asJson());
+            return null;
+        }
+        else if (ex instanceof BusinessException) {
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode(((BusinessException) ex).getCode());

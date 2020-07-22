@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * beetl工具类
+ * @author user
+ * @date 2020-05-19 13:38:29
+ */
 public class BeetlUtil {
 
     private static BeetlGroupUtilConfiguration beetlGroupUtilConfiguration;

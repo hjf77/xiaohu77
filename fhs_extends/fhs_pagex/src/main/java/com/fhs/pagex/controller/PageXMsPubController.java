@@ -6,13 +6,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.api.rpc.FeignSysMenuApiService;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.context.BisLoggerContext;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.logger.Logger;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.pagex.common.ExcelExportTools;
 import com.fhs.pagex.service.PagexDataService;
@@ -45,6 +50,11 @@ import java.util.*;
 @RequestMapping("/ms/x/")
 public class PageXMsPubController extends PageXBaseController {
 
+    private static Logger LOG = Logger.getLogger(PageXMsPubController.class);
+
+    @Autowired
+    private TransService transService;
+
     /**
      * 添加-后台只做重复校验，不做参数格式校验
      *
@@ -59,13 +69,43 @@ public class PageXMsPubController extends PageXBaseController {
         paramMap.put("createUser", user.getUserId());
         paramMap.put("groupCode", user.getGroupCode());
         paramMap.put("updateUser", user.getUserId());
-        paramMap.put("pkey", StringUtil.getUUID());
+        String pkey =  StringUtil.getUUID();
+        paramMap.put("pkey", pkey);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-        addLog(namespace, "添加", paramMap, request, LogDesc.ADD);
-        service.insert(paramMap, namespace);
-        refreshPageXTransCache(namespace);
-        return HttpResult.success(true);
+        HttpResult result = errorResult;
+        Exception e = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try {
+            service.insert(paramMap, namespace);
+            refreshPageXTransCache(namespace);
+            result = successResult;
+            addHistoryAndExtParam( pkey, namespace, LoggerConstant.METHOD_TYPE_ADD);
+        }catch (Exception except){
+            e = except;
+            LOG.error("add出错" + namespace + ",param:" + paramMap,e);
+            throw  except;
+        }finally {
+            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_ADD,e);
+        }
+        BisLoggerContext.clear();
+        return result;
+    }
 
+    /**
+     * 添加历史log和扩展参数
+     * @param pkey  主键
+     * @param namespace namespace
+     * @param type 操作类型 见LoggerConstant
+     */
+    private void addHistoryAndExtParam(String pkey,String namespace,int type){
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("id", pkey);
+        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
+        Map<String,Object>  rowData = service.findBeanMap(paramMap, namespace);
+        VO vo = service.map2VO(rowData,service.getNamespaceClassMap().get(namespace));
+        transService.transOne(vo);
+        BisLoggerContext.addExtParam(namespace,pkey,type);
+        BisLoggerContext.addHistoryData(vo,namespace);
     }
 
 
@@ -76,14 +116,26 @@ public class PageXMsPubController extends PageXBaseController {
      * @param id        id
      */
     @RequestMapping("{namespace}/info/{id}")
-    public JSONObject info(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public JSONObject info(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         checkPermiessAndNamespace(namespace, "see");
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-        addLog(namespace, "查看", paramMap, request, LogDesc.SEE);
-        return JSONObject.parseObject(service.findBean(paramMap, namespace));
+        JSONObject result = null;
+        Exception exception = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try{
+            result = JSONObject.parseObject(service.findBean(paramMap, namespace));
+        }catch (Exception e){
+            exception = e;
+            LOG.error("info出错" + namespace + ",id:" + id,e);
+            throw  exception;
+        }finally {
+            addLog(namespace, JSONObject.toJSONString(result), paramMap, request, LoggerConstant.METHOD_TYPE_VIEW,exception);
+        }
+        BisLoggerContext.clear();
+        return result;
     }
 
     /**
@@ -93,17 +145,30 @@ public class PageXMsPubController extends PageXBaseController {
      * @param id        id
      */
     @RequestMapping("{namespace}/update/{id}")
-    public HttpResult<Boolean> update(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> update(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         checkPermiessAndNamespace(namespace, "update");
         EMap<String, Object> paramMap = super.getParameterMap();
         paramMap.put("id", id);
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         paramMap.put("updateUser", getSessionUser(request).getUserId());
-        addLog(namespace, "更新", paramMap, request, LogDesc.UPDATE);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-        int i = service.update(paramMap, namespace);
-        refreshPageXTransCache(namespace);
-        return HttpResult.success(i != 0);
+        HttpResult result = errorResult;
+        Exception exception = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try{
+            service.update(paramMap, namespace);
+            refreshPageXTransCache(namespace);
+            result = successResult;
+            addHistoryAndExtParam( id, namespace, LoggerConstant.METHOD_TYPE_UPATE);
+            return result;
+        }catch (Exception e){
+            exception = e;
+            LOG.error("更新出错",e);
+            throw  exception;
+        }finally {
+            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_UPATE,exception);
+            BisLoggerContext.clear();
+        }
     }
 
 
@@ -114,7 +179,7 @@ public class PageXMsPubController extends PageXBaseController {
      * @param id        id
      */
     @RequestMapping("{namespace}/del/{id}")
-    public HttpResult<Boolean> del(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> del(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (id.contains("jackToken")) {
             id = id.substring(0, id.indexOf("&amp;"));
         }
@@ -122,10 +187,22 @@ public class PageXMsPubController extends PageXBaseController {
         super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
-        addLog(namespace, "删除", paramMap, request, LogDesc.DEL);
-        int i = service.del(id, namespace);
-        refreshPageXTransCache(namespace);
-        return HttpResult.success(i != 0);
+        HttpResult result = errorResult;
+        Exception exception = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try{
+            service.del(id, namespace);
+            refreshPageXTransCache(namespace);
+            result = successResult;
+            return result;
+        }catch (Exception e){
+            exception = e;
+            LOG.error(e);
+            throw  exception;
+        }finally {
+            addLog(namespace,JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_DEL,exception);
+            BisLoggerContext.clear();
+        }
     }
 
     /**
@@ -209,28 +286,38 @@ public class PageXMsPubController extends PageXBaseController {
      */
     @RequestMapping("{namespace}/pubExportExcel")
     @LogDesc(value = "导出数据", type = LogDesc.SEE)
-    public void exportExcel(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) {
+    public void exportExcel(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> paramMap = (Map<String, Object>) request.getSession().getAttribute(this.getClass() + "preLoadParam");
         if (paramMap == null) {
             paramMap = new HashMap<>();
         }
-        //去掉分页
-        paramMap.remove("start");
-        paramMap.remove("end");
-        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
-        paramMap.put("start", Constant.PAGE_ALL);
-        paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
-        addLog(namespace, "导出了", paramMap, request, LogDesc.OTHER);
-        super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
-        String resultJson = service.findListPage(paramMap, namespace);
-        List<JSONObject> dataList = new ArrayList<>();
-        JSONArray jsonArray = JSON.parseArray(resultJson);
-        jsonArray = joinService.initJoinData(jsonArray, namespace);
-        listExtendsHanleService.processingData(namespace, jsonArray);
-        for (int i = 0; i < jsonArray.size(); i++) {
-            dataList.add(jsonArray.getJSONObject(i));
+        Exception exception = null;
+        BisLoggerContext.init(StringUtil.getUUID());
+        try{
+            //去掉分页
+            paramMap.remove("start");
+            paramMap.remove("end");
+            paramMap.put("groupCode", MultiTenancyContext.getProviderId());
+            paramMap.put("start", Constant.PAGE_ALL);
+            paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
+            super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
+            String resultJson = service.findListPage(paramMap, namespace);
+            List<JSONObject> dataList = new ArrayList<>();
+            JSONArray jsonArray = JSON.parseArray(resultJson);
+            jsonArray = joinService.initJoinData(jsonArray, namespace);
+            listExtendsHanleService.processingData(namespace, jsonArray);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                dataList.add(jsonArray.getJSONObject(i));
+            }
+            ExcelExportTools.exportExcel(dataList, request, response);
+        }catch (Exception e){
+            exception = e;
+            LOG.error(e);
+            throw  exception;
+        }finally {
+            addLog(namespace,Constant.STR_TRUE,paramMap,request,LoggerConstant.METHOD_TYPE_EXPORT,exception);
         }
-        ExcelExportTools.exportExcel(dataList, request, response);
+        BisLoggerContext.clear();
     }
 
     /**

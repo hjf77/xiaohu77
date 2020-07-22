@@ -18,6 +18,7 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -37,8 +38,9 @@ import java.util.Map;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @RestController
+@Api(tags = {"后台组织机构"})
 @RequestMapping("ms/sysOrganization")
-@LogNamespace(namespace = BaseTransConstant.ORG_INFO,module = "机构管理")
+@LogNamespace(namespace = BaseTransConstant.ORG,module = "机构管理")
 public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationDO> {
 
     /**
@@ -81,6 +83,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> update(UcenterMsOrganizationVO e, BindingResult check, HttpServletRequest request, HttpServletResponse response) {
         UcenterMsOrganizationVO oldOrg = sysOrganizationService.selectById(e.getId());
         // 如果是启用改为禁用
@@ -113,6 +116,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
     public HttpResult del(String id, HttpServletRequest request) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("organizationId", id);

@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author user
+ * @date 2020-05-18 16:50:05
+ */
 @RestController
 @RequestMapping("webApi/area")
 public class ServiceAreaOpenWebApiController extends BaseController {
@@ -24,11 +28,22 @@ public class ServiceAreaOpenWebApiController extends BaseController {
     private ServiceAreaService areaService;
 
     /**
+     * 省市区接口,传递areaParentId即可,顶级传递0
+     *
+     * @param area
+     */
+    @RequestMapping("getProvinceData")
+    @ResponseBody
+    public void getProvinceData( ServiceAreaVO area) {
+        getProvinceList(area);
+    }
+
+    /**
      * 前端浏览器获取省市区的接口
      *
      * @param area 省市区过滤条件
      */
-    @RequestMapping("getProvinceData")
+    @RequestMapping("getProvinceList")
     public void getProvinceList(ServiceAreaVO area) {
         List<ServiceAreaVO> areaList = areaService.findForList(area);
         super.outJsonp(JsonUtils.list2json(areaList));

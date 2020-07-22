@@ -16,6 +16,8 @@ import java.util.Map;
 
 /**
  * 类缓存
+ * @author user
+ * @date 2020-05-19 11:14:15
  */
 public class ClassInfo implements Serializable {
 

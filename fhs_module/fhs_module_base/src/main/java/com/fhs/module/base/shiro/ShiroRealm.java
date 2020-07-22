@@ -20,6 +20,8 @@ import java.util.List;
 /**
  * fhs 非cas的时候使用
  * by jackwong
+ * @author jackwong
+ * @since 2019-05-18 11:38:05
  */
 public class ShiroRealm extends AuthorizingRealm
 {

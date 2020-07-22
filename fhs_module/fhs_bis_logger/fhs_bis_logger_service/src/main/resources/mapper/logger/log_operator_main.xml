@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fhs.bislogger.mapper.LogOperatorMainMapper">
-    <select id="getLoggerModelList" resultType="com.fhs.bislogger.vo.LogOperatorMainVO">
+    <select id="getLoggerModelList" parameterType="map" resultType="com.fhs.bislogger.vo.LogOperatorMainVO">
       SELECT log_id,model,url,
       ip,req_method,req_param,
       resp_body,state,create_user,
@@ -9,6 +9,41 @@
       type,namespace
       FROM t_log_operator_main GROUP BY namespace,model
     </select>
-    
 
+    <select id="getAccessManyList" resultType="com.fhs.bislogger.vo.LogOperatorMainVO">
+        SELECT model,url,req_method,req_param,create_time,namespace,count(url)
+        FROM t_log_operator_main
+        <where>
+            <if test="startTime !=null and startTime !=''">
+                and create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+        GROUP BY url
+        order by count(url) DESC
+        <if test="start !=null and end !=null">
+            LIMIT ${start},${end}
+        </if>
+    </select>
+
+    <select id="getLogCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM t_log_operator_main
+        <where>
+            <if test="url !=null and url !=''">
+                and url = #{url}
+            </if>
+            <if test="startTime !=null and startTime !=''">
+                and create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getReportCount" parameterType="map" resultType="int">
+        select count(*) from (SELECT count(*) FROM t_log_operator_main
+        <where>
+            <if test="startTime !=null and startTime !=''">
+                and create_time BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+        GROUP BY url ) a
+    </select>
 </mapper>

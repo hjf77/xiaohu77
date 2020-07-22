@@ -18,10 +18,14 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 /**
  * 自动读取js内容，刷新到缓存中定时任务
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.task
  * @ClassName: RefreshCacheTask
@@ -33,9 +37,8 @@ import java.io.IOException;
  */
 @Component
 @DependsOn("persistentEnhancerScaner")
-public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationContextAware {
+public class RefreshCacheTask implements InitializingBean, Runnable, ApplicationContextAware {
     private ApplicationContext applicationContext;
-
 
 
     private static final Logger LOG = Logger.getLogger(RefreshCacheTask.class);
@@ -53,7 +56,6 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     private boolean isDisablePagex;
 
 
-
     /**
      * 资源加载器
      */
@@ -61,27 +63,21 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if(this.isDisablePagex){
+        if (this.isDisablePagex) {
             return;
         }
         //先去刷新一遍，然后判断是否是开发者模式如果是，则继续刷新
-        try
-        {
+        try {
             new Thread(() -> {
                 this.refresh();
-
+                //正式环境不需要配置
+                if (CheckUtils.isNotEmpty(EConfig.getOtherConfigPropertiesValue("isDevModel"))) {
+                    new Thread(this).start();
+                }
             }).start();
+        } catch (Exception e) {
+            LOG.error("刷新文件出错:", e);
         }
-        catch(Exception e)
-        {
-            LOG.error("刷新文件出错:",e);
-        }
-        //正式环境不需要配置
-        if(CheckUtils.isNotEmpty(EConfig.getOtherConfigPropertiesValue("isDevModel")))
-        {
-            new Thread(this).start();
-        }
-
     }
 
 
@@ -89,17 +85,14 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
      * 刷新js->page的任务
      */
     @Override
-    public void run(){
-        while(true)
-        {
+    public void run() {
+        while (true) {
 
             try {
-                try
-                {
+                try {
                     refresh();
-                }catch (Exception e)
-                {
-                    LOG.error("刷新文件出错:",e);
+                } catch (Exception e) {
+                    LOG.error("刷新文件出错:", e);
                 }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -111,21 +104,36 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     /**
      * 遍历所有的js文件刷新到内存中
      */
-    public void refresh(){
+    public void refresh() {
         try {
             Resource[] resources = resolver.getResources("classpath*:META-INF/resources/pagex/**/*.js");
             String fileName = null;
-            for(Resource resource : resources)
-            {
+            for (Resource resource : resources) {
                 //刷新缓存中的js文件
-                PagexDataService.SIGNEL.refreshJsFile( resource.getFilename(), FileUtils.readTxtFile(resource.getInputStream()));
+                PagexDataService.SIGNEL.refreshJsFile(resource.getFilename(), FileUtils.readTxtFile(resource.getInputStream()));
             }
             resources = resolver.getResources("classpath*:META-INF/resources/pagex/**/*.html");
-            for(Resource resource : resources)
-            {
+            for (Resource resource : resources) {
                 String path = resource.getURL().getPath();
                 path = path.substring(path.indexOf("/pagex/"));
-                PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().put(resource.getFilename().replace(".html",""),path);
+                PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().put(resource.getFilename().replace(".html", ""), path);
+            }
+            //获取该路径下的js文件刷新到缓存
+            String pagexJsPath = EConfig.getPathPropertiesValue("pagex_js_path");
+            if (CheckUtils.isNullOrEmpty(pagexJsPath)) {
+                return;
+            }
+            File dir = new File(pagexJsPath);
+            if (dir.exists()) {
+                File[] files = dir.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return name.endsWith(".js");
+                    }
+                });
+                for (File fileJs : files) {
+                    PagexDataService.SIGNEL.refreshJsFile(fileJs.getName(), FileUtils.readTxtFile(new FileInputStream(fileJs)));
+                }
             }
 
         } catch (IOException e) {

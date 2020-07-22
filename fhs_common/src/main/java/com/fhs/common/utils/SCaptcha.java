@@ -12,6 +12,8 @@ import java.util.Random;
 /**
  * 验证码工具类
  * Linux 会报错，需要开启awt支持方可解决
+ * @author jackwong
+ * @date 2020-05-21 13:36:22
  */
 public class SCaptcha {
     // 图片的宽度。
@@ -169,12 +171,14 @@ public class SCaptcha {
         }
 
         private byte[] hex2byte(String str) {
-            if (str == null)
+            if (str == null) {
                 return null;
+            }
             str = str.trim();
             int len = str.length();
-            if (len == 0 || len % 2 == 1)
+            if (len == 0 || len % 2 == 1) {
                 return null;
+            }
 
             byte[] b = new byte[len / 2];
             try {

@@ -2,6 +2,8 @@ package com.fhs.bislogger.constant;
 
 /**
  * 日志模块常量
+ * @author user
+ * @date 2020-05-18 14:21:23
  */
 public interface LoggerConstant {
     /**
@@ -70,7 +72,7 @@ public interface LoggerConstant {
     int LOG_LOGIN_TRUE = 0;
 
     /**
-     * 登录成功
+     * 登录失败
      */
     int LOG_LOGIN_ERROR = 1;
 
@@ -88,5 +90,25 @@ public interface LoggerConstant {
      * 登录失败，用户名或者密码错误
      */
     int LOG_LOGIN_ERROR_USER = 1;
+
+    /**
+     * 登录 ：登入
+     */
+    int LOG_LOGIN_IN = 0;
+
+    /**
+     * 登录 ：登入
+     */
+    int LOG_LOGIN_OUT = 1;
+
+    /*
+     * 是软删除
+     */
+    int SOFT_DEL = 0;
+
+    /**
+     * 已经软删除
+     */
+    int HAS_SOFT_DEL = 1;
 }
 

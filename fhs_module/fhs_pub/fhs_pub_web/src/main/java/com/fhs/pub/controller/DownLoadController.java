@@ -3,6 +3,7 @@ package com.fhs.pub.controller;
 import com.fhs.common.utils.*;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.pub.dox.PubFileDO;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,7 @@ import java.util.Map;
 /**
  * @author qiuhang
  * @des 文件下载action
+ * @since 2019-05-18 11:25:25
  */
 @RestController
 @RequestMapping("downLoad")
@@ -83,16 +86,13 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
 
     /**
      * 文件列表
-     *
      * @param request
-     * @param response
      * @return
      */
     @RequestMapping(value = "listData", method = RequestMethod.GET)
-    public void listData(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> param = new HashMap<String, Object>();
-        param.put("fileIds", StringUtil.getStrToIn(request.getParameter("fileIds")));
-        List<PubFileVO> list = pubFileService.findForListFromMap(param);
+    public void listData(HttpServletRequest request) {
+        ParamChecker.isNotNullOrEmpty(request.getParameter("fileIds"),"文件id不可为空");
+        List<PubFileVO> list = pubFileService.findByIds(Arrays.asList(request.getParameter("fileIds").split(",")));
         String json = JsonUtils.list2json(list);
         this.outJsonp(json);
     }

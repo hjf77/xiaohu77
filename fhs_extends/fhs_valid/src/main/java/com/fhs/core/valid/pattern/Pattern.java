@@ -1,5 +1,10 @@
 package com.fhs.core.valid.pattern;
 
+/**
+ * 校验格式
+ * @author user
+ * @date 2020-05-19 10:07:26
+ */
 public interface Pattern
 {
     /**

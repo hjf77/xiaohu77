@@ -20,6 +20,8 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * pagex 自动生成java代码控制器
+ * @author user
+ * @date 2020-05-19 13:56:33
  */
 @RestController()
 @RequestMapping("/pagex/")

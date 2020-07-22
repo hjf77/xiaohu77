@@ -4,16 +4,21 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.base.service.BaseService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -27,6 +32,7 @@ import java.util.*;
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @SuppressWarnings("rawtypes")
+@Data
 public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements VO {
 
     /**
@@ -76,6 +82,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
     protected Date updateTime;
 
     @TableField("is_delete")
+    @JSONField(serialize = false)
     @ApiModelProperty("是否删除")
     protected Integer isDelete;
 
@@ -106,6 +113,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      *
      * @return 主键
      */
+    @Override
     public Object getPkey() {
         Field idField = getIdField(true);
         try {
@@ -142,43 +150,70 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
         return fieldList.get(0);
     }
 
-    public String getCreateUser() {
-        return createUser;
+    @JSONField(serialize=false)
+    public BaseService getBaseService(){
+        // 如果父类直接是basedo代表是个do如果父类不是basedo代表应是个vo
+        Class clazz = this.getClass().getSuperclass() == BaseDO.class ? this.getClass() : this.getClass().getSuperclass();
+        Type[] types  = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
+        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class,types[0].getTypeName(),1);
+        return baseService;
     }
 
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
+    /**
+     * 插入
+     * @return
+     */
+    public int insert(){
+        return this.getBaseService().insertSelective((BaseDO) this);
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    /**
+     * 以自己当做参数查询
+     * @return
+     */
+    public  <V> List<V> findForList(){
+        return this.getBaseService().findForList((BaseDO) this);
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    /**
+     * 根据主键修改 不包含null
+     * @return
+     */
+    public boolean updateSelectiveById(){
+        return this.getBaseService().updateJpa((BaseDO) this);
     }
 
-    public String getUpdateUser() {
-        return updateUser;
+    /**
+     * 根据主键修改 包含null
+     * @return
+     */
+    public boolean updateByPkey(){
+        return this.getBaseService().update((BaseDO) this);
     }
 
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
+
+    /**
+     * 把自己当做参数做删除
+     * @return
+     */
+    public boolean deleteByPkey(){
+        return this.getBaseService().delete((BaseDO) this);
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    /**
+     * 查询总数
+     * @return
+     */
+    public int findCount(){
+        return this.getBaseService().findCount((BaseDO) this);
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    /**
+     * 查询单个
+     * @return
+     */
+    public <V> V findOne(){
+        return (V) this.getBaseService().findBean((BaseDO) this);
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 }

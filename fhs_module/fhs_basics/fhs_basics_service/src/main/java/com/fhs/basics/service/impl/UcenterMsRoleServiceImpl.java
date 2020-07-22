@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.api.rpc.FeignSysRoleApiService;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsRoleDO;
 import com.fhs.basics.mapper.UcenterMsRoleMapper;
 import com.fhs.basics.service.UcenterMsRoleService;
@@ -14,6 +15,7 @@ import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -29,10 +31,13 @@ import java.util.Map;
 /**
  * 系统角色实现
  * 老代码待优化
+ * @author user
+ * @date 2020-05-18 16:43:36
  */
 @Primary
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.ROLE_INFO, fields = "roleName")
 public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, UcenterMsRoleDO> implements UcenterMsRoleService, FeignSysRoleApiService {
 
     private static final Logger LOG = Logger.getLogger(UcenterMsRoleServiceImpl.class);
@@ -52,7 +57,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     @Override
     public boolean addRole(UcenterMsRoleDO adminRole) {
         // 插入角色信息
-        int count = mapper.insertJpa(adminRole);
+        int count = super.insertSelective(adminRole);
         if (count > 0) {
             return saveButtons(adminRole);
         }
@@ -156,7 +161,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
         boolean count = deleteButtons(adminRole);
         if (count) {
             // 修改当前角色信息
-            int result = mapper.updateSelectiveById(adminRole);
+            int result = super.updateSelectiveById(adminRole);
             if (result > 0) {
                 if (adminRole.getMethods().length > 0) {
                     // 构建按钮列表

@@ -7,6 +7,7 @@ package com.fhs.core.exception;
  * jackwong
  * 2017年9月27日 下午1:17:28
  *
+ * @author jackwong
  * @version 1.0.0
  *
  */

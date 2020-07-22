@@ -12,16 +12,23 @@ import java.util.Collection;
  * json格式化 实现
  * by wanglei
  * @author jackwong
+ * @date 2020-05-19 15:01:18
  */
 public class JsonFormatterFilter extends BeforeFilter {
 
-    //本来的key
+    /**
+     * 本来的key
+     */
     private static final Integer KEY = 0;
 
-    //as后的key
+    /**
+     * as后的key
+     */
     private static final Integer AS_KEY = 1;
 
-    //转换器配置
+    /**
+     * 转换器配置
+     */
     private VoConverterObject converterObject;
 
     public JsonFormatterFilter(VoConverterObject converterObject) {

@@ -2,6 +2,8 @@ import com.fhs.pagex.vo.BasePagexVO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.swagger.annotations.ApiModelProperty;
+
 @TransTypes(types = {${po.transTypes}})
 public class ${po.className} extends BasePagexVO<${po.className}>
 {
@@ -12,6 +14,7 @@ public class ${po.className} extends BasePagexVO<${po.className}>
     <%if(isNotEmpty(field.trans)){%>
         @Trans(type = "${field.trans.type}", key = "${field.trans.key}")
     <%}%>
+    @ApiModelProperty("${field.title}")
     public String ${field.camelName};
 <%}%>
 }

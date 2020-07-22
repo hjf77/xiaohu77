@@ -21,6 +21,8 @@ import java.util.List;
 
 /**
  * cas单点登录器
+ * @author user
+ * @since 2019-05-18 11:37:44
  */
 public class ShiroCasRealm extends Pac4jRealm {
 

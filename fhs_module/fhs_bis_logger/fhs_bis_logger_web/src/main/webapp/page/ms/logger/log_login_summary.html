@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <%
+    layout("/page/tags/js_css_include.html",{}){}
+    %>
+</head>
+
+<body>
+<table id="voDataGrid" title="地区列表" class="easyui-datagrid"
+       fit="true" style="width: 100%;"
+       url="" pagination="true"
+       rownumbers="true" fitcolumns="true" singleselect="true" pagesize="20"
+       toolbar="#toolbar" striped="true">
+    <thead>
+    <tr>
+        <th align="center" field="userName" width="24%">用户姓名</th>
+        <th align="center" field="loginName" width="25%">登录名称</th>
+        <th align="center" field="count" width="25%">数量</th>
+    </tr>
+    </thead>
+</table>
+</div>
+
+<script>
+    /** * 加载数据 */
+    $(function () {
+        var startTime = "2020-05-11 09:00:00";
+        var endTime = "2020-05-11 13:00:00";
+        $('#voDataGrid').datagrid({
+            url: "${path.basePath}/ms/logLogin/getloginIogSummary?startTime=" + startTime +"&endTime=" + endTime
+        })
+    });
+
+</script>
+</body>
+</html>

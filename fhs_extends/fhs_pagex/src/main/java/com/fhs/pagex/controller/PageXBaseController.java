@@ -4,15 +4,25 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.context.BisLoggerContext;
+import com.fhs.bislogger.api.rpc.FeignBisLoggerApiService;
+import com.fhs.bislogger.constant.LoggerConstant;
+import com.fhs.bislogger.vo.LogAddOperatorLogVO;
+import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.EMap;
 import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.NetworkUtil;
 import com.fhs.core.base.controller.BaseController;
+import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.ReadWriteDataSourceDecision;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.service.JoinService;
 import com.fhs.pagex.service.ListExtendsHanleService;
 import com.fhs.pagex.service.PageXDBService;
@@ -22,14 +32,27 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * pagex处理前段业务逻辑的公共代码
+ * @author user
+ * @date 2020-05-19 13:59:30
  */
 public class PageXBaseController extends BaseController {
+
+    private final Logger LOG = Logger.getLogger(PageXBaseController.class);
+
+    protected static HttpResult errorResult = HttpResult.error(Constant.BFALSE);
+
+    protected static HttpResult successResult = HttpResult.success(Constant.BTRUE);
+
+    // 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行.
+    private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
 
     @Autowired
     protected PageXDBService service;
@@ -43,6 +66,8 @@ public class PageXBaseController extends BaseController {
 
     @Autowired
     protected ListExtendsHanleService listExtendsHanleService;
+
+    private FeignBisLoggerApiService feignBisLoggerApiService;
 
     /**
      * namesapce:menu map
@@ -110,42 +135,52 @@ public class PageXBaseController extends BaseController {
      * 添加日志
      *
      * @param namespace namespace
-     * @param desc      描述
+     * @param result      描述
      * @param paramMap  参数
      * @param request   request
      * @param type      操作类型
      */
-    protected void addLog(String namespace, String desc, Map<String, Object> paramMap, HttpServletRequest request, int type) {
+    protected void addLog(String namespace, String result, Map<String, Object> paramMap, HttpServletRequest request, int type,Exception e) {
+        if (feignBisLoggerApiService == null) {
+            feignBisLoggerApiService = SpringContextUtil.getBeanByClassForApi(FeignBisLoggerApiService.class);
+        }
+        UcenterMsUserVO user = getSessionUser(request);
+        LogOperatorMainVO logMainVO = new LogOperatorMainVO();
+        logMainVO.setLogId(BisLoggerContext.getTranceId());
+        logMainVO.preInsert(user.getUserId());
+        logMainVO.setModel(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("title").toString());
+        logMainVO.setUrl(request.getRequestURI());
+        logMainVO.setType(type);
+        logMainVO.setNamespace(namespace);
+        logMainVO.setReqParam(JsonUtils.map2json(paramMap));
+        logMainVO.setReqMethod(request.getMethod());
+        logMainVO.setRespBody(e == null ? JsonUtils.object2json(result) : e.getMessage());
+        logMainVO.setState(e == null ? LoggerConstant.LOG_STATE_SUCCESS : LoggerConstant.LOG_STATE_ERROR);
+        logMainVO.setIsDelete((e == null && type == LoggerConstant.METHOD_TYPE_DEL)?LoggerConstant.HAS_SOFT_DEL:LoggerConstant.SOFT_DEL);
+        try {
+            logMainVO.setIp(NetworkUtil.getIpAddress(request));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        LogAddOperatorLogVO logVO = new LogAddOperatorLogVO();
+        logVO.setOperatorMainVO(logMainVO);
+        logVO.setOperatorExtParamVOList(BisLoggerContext.getLogOperatorExtParamList());
+        logVO.setHistoryDataVOList(BisLoggerContext.getLogHistoryDataVOList());
+        addLog(logVO);
+    }
 
-       /* // 获取菜单name及nameSpace
-        if (namesapceMenuMap.isEmpty()) {
-            HttpResult<List<SettMsMenuVO>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
-            List<SettMsMenuVO> sysMenuList = result.getData();
-            for (SettMsMenuVO adminMenu : sysMenuList) {
-                namesapceMenuMap.put(adminMenu.getNamespace(), adminMenu);
+    /**
+     * 异步入库
+     * @param log
+     */
+    private void addLog(LogAddOperatorLogVO log) {
+        singleThreadExecutor.submit(() -> {
+            try{
+                feignBisLoggerApiService.addLog(log);
+            }catch (Exception e){
+                LOG.error("日志插入错误",e);
             }
-        }
-        if(!namesapceMenuMap.containsKey(namespace))
-        {
-            return;
-        }
-        UcenterMsUserVO user = getSessionUser(request);*/
-        // 创建LogAdminOperatorLog 对象,并给各属性赋值
-//        LogAdminOperatorLogVo log = new LogAdminOperatorLogVo();
-//        log.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATE_FULL_STR_SSS));
-//        log.setUrl(request.getRequestURI());
-//        log.setOperatDesc(desc + "了" + PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("title"));
-//        log.setOperatorId(user.getUserId());
-//        log.setMenuId(namesapceMenuMap.get(namespace).getMenuId());
-//        log.setReqParam(JsonUtils.map2json(paramMap));
-//        try {
-//            log.setNetworkIp(NetworkUtil.getIpAddress(request));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        log.setLogType(type);
-//        log.setGroupCode(user.getGroupCode());
-//        feignlogAdminOperatorLogApiService.addLogAdminOperatorLog(log);
+        });
     }
 
     /**

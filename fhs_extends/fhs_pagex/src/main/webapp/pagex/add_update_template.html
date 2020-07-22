@@ -13,8 +13,9 @@ include("/page/tags/form_include.html"){}
 
     var url_save =  '${modelConfig.saveUrl}';
     var addUpdateForm = null;
-
+    var formFill = null;
     $(function() {
+        document.getElementById('addUpdateForm').scrollTop = 0;
         //初始化加载
         if (isExitsFunction("ready")) {
             ready();
@@ -23,6 +24,11 @@ include("/page/tags/form_include.html"){}
         addUpdateForm = $('#addUpdateForm').Validform({
             tiptype : 5
         });
+        //开发者模式打开自动填充
+        if(typeof isDev != "undefined" && isDev ){
+            formFill = $('#addUpdateForm').FillForm({});
+        }
+
         if (isView) {
             $('#subBtn').hide();
             url_save = '';
@@ -30,6 +36,10 @@ include("/page/tags/form_include.html"){}
             return;
         }
         initError('addOrUpdateDialog');
+        <!--每个tag在ready的时候执行的方法-->
+         <% for(readyJs in tagReadyJsList){ %>
+            ${readyJs};
+        <% } %>
         // 如果是编辑页面，就初始化一些数据
         if (isEdit) {
             // student/update?id=1  || student/update/1
@@ -37,10 +47,7 @@ include("/page/tags/form_include.html"){}
             loadForm();
             return;
         }
-        <!--每个tag在ready的时候执行的方法-->
-        <% for(readyJs in tagReadyJsList){ %>
-            ${readyJs};
-        <% } %>
+
     });
 
 

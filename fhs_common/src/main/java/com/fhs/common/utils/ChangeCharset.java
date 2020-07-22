@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * 转换字符串的编码
+ * @author user
+ * @date 2020-05-19 17:54:26
  */
 public class ChangeCharset {
     /**

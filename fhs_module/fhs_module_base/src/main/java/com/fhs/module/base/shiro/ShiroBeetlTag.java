@@ -12,6 +12,8 @@ import java.util.Map;
 
 /**
  * 为shiro 添加beetls模板引擎适配
+ * @author user
+ * @since 2019-05-18 11:37:33
  */
 @Component
 public class ShiroBeetlTag extends Tag implements InitializingBean {

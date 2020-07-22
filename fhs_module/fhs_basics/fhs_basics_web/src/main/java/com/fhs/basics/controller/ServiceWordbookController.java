@@ -1,11 +1,15 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.service.ServiceWordBookService;
 import com.fhs.basics.service.ServiceWordbookAndGroupService;
 import com.fhs.basics.service.ServiceWordbookGroupService;
 import com.fhs.basics.vo.ServiceWordbookGroupVO;
 import com.fhs.basics.vo.ServiceWordbookVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.controller.BaseController;
@@ -13,6 +17,7 @@ import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +32,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 字典管理Action
+ * 字典管理controller
  *
  * @author jianbo.qin
+ * @date 2020-05-18 16:52:33
  */
 @RestController
 @RequestMapping("ms/wordbook")
+@Api(tags = {"字典"})
+@LogNamespace(namespace = BaseTransConstant.WORD_BOOK,module = "字典管理")
 public class ServiceWordbookController extends BaseController {
 
     private static final Logger LOG = Logger.getLogger(ServiceWordbookController.class);
@@ -56,6 +64,7 @@ public class ServiceWordbookController extends BaseController {
      * @param reponse
      */
     @RequestMapping("findWordbookForPage")
+    @LogMethod
     public Pager<ServiceWordbookVO> findWordbookForPage(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse reponse) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         int count = wordBookService.findCountJpa(wordbook);
@@ -72,6 +81,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbook")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
     public HttpResult<Boolean> addWordbook(@Valid ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
         wordbookAndGroupService.addWordbook(wordbook);
         return HttpResult.success(true);
@@ -87,6 +97,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbook")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> updateWordbook(@Valid ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
         wordbookAndGroupService.updateWordbook(wordbook);
         return HttpResult.success(true);
@@ -101,6 +112,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:del")
     @RequestMapping("delWordbook")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 0)
     public HttpResult<Boolean> delWordbook(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
         wordbookAndGroupService.delWordbook(wordbook);
         return HttpResult.success(true);
@@ -115,6 +127,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:see")
     @RequestMapping("getWordbookBean")
+    @LogMethod
     public ServiceWordbookVO getWordbookBean(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
         ServiceWordbookVO bean = wordbookAndGroupService.getWordbookBean(wordbook);
         return bean;
@@ -128,6 +141,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:see")
     @RequestMapping("getWordbookGroupBean")
+    @LogMethod
     public ServiceWordbookGroupVO getWordbookGroupBean(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
                                                        HttpServletResponse response) {
         return wordbookAndGroupService.getWordbookGroupBean(wordbookGroup);
@@ -140,6 +154,7 @@ public class ServiceWordbookController extends BaseController {
      * @param reponse
      */
     @RequestMapping("findWordbookGroupForPage")
+    @LogMethod
     public Pager<ServiceWordbookGroupVO> findWordbookGroupForPage(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
                                                                   HttpServletResponse reponse) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
@@ -157,6 +172,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbookGroup")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
     public HttpResult<Boolean> addWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
                                                 HttpServletResponse response) {
         wordbookGroup.preInsert(((UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER)).getUserId());
@@ -173,6 +189,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbookGroup")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public  HttpResult<Boolean> updateWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
                                                     HttpServletResponse response) {
         wordbookAndGroupService.updateWordbookGroup(wordbookGroup);
@@ -188,6 +205,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:del")
     @RequestMapping("delWordbookGroup")
+    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL,voParamIndex = 0)
     public  HttpResult<Boolean> delWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
                                                  HttpServletResponse response) {
         wordbookAndGroupService.delWordbookGroup(wordbookGroup);

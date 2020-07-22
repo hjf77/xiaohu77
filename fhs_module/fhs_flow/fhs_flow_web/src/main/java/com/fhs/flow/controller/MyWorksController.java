@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.api.rpc.FeignServerApiService;
 import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.FileUtils;
@@ -20,6 +23,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.flow.constant.FlowConstant;
 import com.fhs.flow.dox.FlowInstanceDO;
+import com.fhs.flow.dox.FlowJbmpXmlButtonDO;
 import com.fhs.flow.dox.FlowTaskHistoryDO;
 import com.fhs.flow.service.*;
 import com.fhs.flow.vo.*;
@@ -44,10 +48,12 @@ import java.util.*;
  * 个人工作
  *
  * @author wanglei
+ * @date 2020-05-18 14:16:14
  */
 @RestController
 @AutowiredFhs
 @RequestMapping("/ms/myWorks")
+@LogNamespace(namespace ="myWorks",module = "我的工作")
 public class MyWorksController extends BaseController {
 
     @Autowired
@@ -96,6 +102,7 @@ public class MyWorksController extends BaseController {
      * @throws Exception
      */
     @RequestMapping("getNeedComplateTask")
+    @LogMethod
     public Pager<FlowTaskVO> getNeedComplateTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> paramMap = super.getPageTurnNum();
         paramMap.put("loginUserId", this.getSessionuser(request).getUserId());
@@ -113,6 +120,7 @@ public class MyWorksController extends BaseController {
      */
     @RequestMapping("delegate")
     @Transactional(rollbackFor = Exception.class)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
     public HttpResult delegate(String taskId, String userId, String userName, HttpServletRequest request) {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不可为空");
         ParamChecker.isNotNullOrEmpty(userId, "用户id不可为空");
@@ -142,6 +150,7 @@ public class MyWorksController extends BaseController {
      * @throws Exception
      */
     @RequestMapping("getNeedClaimTask")
+    @LogMethod
     public Pager<FlowTaskVO> getNeedClaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         UcenterMsUserVO userVO = getSessionuser(request);
@@ -160,6 +169,7 @@ public class MyWorksController extends BaseController {
      * @throws Exception
      */
     @RequestMapping("claimTask")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
     public HttpResult<Boolean> claimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
         if (task.getAssignee() == null) {
@@ -174,6 +184,7 @@ public class MyWorksController extends BaseController {
      * 是否被签收
      */
     @RequestMapping("isClaimTask")
+    @LogMethod
     public HttpResult<Boolean> isclaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
         // 判断任务是否已经被签收
@@ -202,6 +213,7 @@ public class MyWorksController extends BaseController {
      * @throws Exception
      */
     @RequestMapping("getHistoryTask")
+    @LogMethod
     public Pager<Map<String, Object>> getHistoryTask(String processInstanceId) throws Exception {
         ParamChecker.isNotNullOrEmpty(processInstanceId, "流程实例id不能为空");
         List<HistoricTaskInstance> list = historyService
@@ -235,6 +247,7 @@ public class MyWorksController extends BaseController {
      * @return 是否撤回成功
      */
     @RequestMapping("withdraw")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
     public HttpResult<Boolean> withdraw(String taskId, HttpServletRequest request) throws Exception {
         flowCoreService.updateWithdraw(taskId, this.getSessionuser(request).getUserId(), super.getParameterMap());
         return HttpResult.success(true);
@@ -247,6 +260,7 @@ public class MyWorksController extends BaseController {
      * @return 是否撤回成功
      */
     @RequestMapping("revoke")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
     public HttpResult<Boolean> revoke(String taskId, HttpServletRequest request) throws Exception {
         this.flowCoreService.updateEndSuccessProcess(taskId, super.getParameterMap(), true, this.getSessionuser(request).getUserId());
         // 撤销申请
@@ -273,11 +287,31 @@ public class MyWorksController extends BaseController {
      * @return
      */
     @RequestMapping("complateTask")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
     public HttpResult<Boolean> complateTask(String taskId, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
         Map<String, Object> paramMap = super.getParameterMap();
         flowCoreService.updatePassProcess(taskId, paramMap);
         return HttpResult.success(true);
+    }
+
+    @Autowired
+    private FlowJbmpXmlButtonService flowJbmpXmlButtonService;
+
+    /**
+     * 根据taskid和instanceId获取自定义按钮
+     * @param taskId 任务id
+     * @param instanceId 实例id
+     * @return
+     */
+    @RequestMapping("/getFlowTaskButtons")
+    public HttpResult<List<FlowJbmpXmlButtonVO>> getFlowTaskButtons(String taskId,String instanceId){
+        ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
+        ParamChecker.isNotNullOrEmpty(instanceId, "实例id不能为空");
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        FlowInstanceVO flowInstanceVO = instanceService.findBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
+        List<FlowJbmpXmlButtonVO>  buttons = flowJbmpXmlButtonService.findForList(FlowJbmpXmlButtonDO.builder().xmlId(flowInstanceVO.getXmlId()).taskName(task.getName()).build());
+        return HttpResult.success(buttons);
     }
 
     /**
@@ -291,6 +325,7 @@ public class MyWorksController extends BaseController {
      */
     @RequestMapping("backTask")
     @Transactional(rollbackFor = Exception.class)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
     public HttpResult<Boolean> backProcess(String taskId, String activityId, boolean isPre, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
         if (CheckUtils.isNullOrEmpty(activityId)) {
@@ -334,6 +369,7 @@ public class MyWorksController extends BaseController {
      * @throws Exception
      */
     @RequestMapping("getWorkFlowImg")
+    @LogMethod
     public void getWorkFlowImg(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //processInstanceId
         String instanceId = request.getParameter("instanceId");
@@ -355,6 +391,7 @@ public class MyWorksController extends BaseController {
      * @return 工作流实例详情
      */
     @RequestMapping("findInstanceById")
+    @LogMethod
     public void findInstanceById(String instanceId) {
         ParamChecker.isNotNull(instanceId, "instanceId为必传");
         FlowInstanceVO instance = this.instanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());

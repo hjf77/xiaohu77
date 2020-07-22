@@ -6,7 +6,7 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Namespace;
 
 /**
- * (LogHistoryData)}表服务接口
+ * 日志历史(LogHistoryData)}表服务接口
  *
  * @author wanglei
  * @since 2020-04-23 14:27:40

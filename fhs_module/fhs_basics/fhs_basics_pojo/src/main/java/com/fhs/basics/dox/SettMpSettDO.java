@@ -8,88 +8,98 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 /**
- * 公众号配置(UcenterMpSett)实体类
+ * 公众号配置(settMpSett)实体类
  *
  * @author jackwong
  * @since 2019-03-11 14:24:39
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("t_sett_mp_sett")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "SettMpSettDO", description = "SettMpSett参数")
 public class SettMpSettDO extends BaseDO<SettMpSettDO> {
     private static final long serialVersionUID = 296286961263761719L;
     @TableId(value = "id", type = IdType.UUID)
+    @ApiModelProperty("主键id")
     private String id;
 
-    //公众号名称
+    /**
+     * 公众号名称
+     */
     @NotEmpty
     @NotNull(message = "公众号名称字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "公众号名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("name")
+    @ApiModelProperty("公众号名称")
     private String name;
-    //appid
+
+    /**
+     * appid
+     */
     @NotEmpty
     @NotNull(message = "appid字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "appid字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("app_id")
+    @ApiModelProperty("appid")
     private String appId;
-    //密钥
+
+    /**
+     * 密钥
+     */
     @NotEmpty
     @NotNull(message = "密钥字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "密钥字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("app_secret")
+    @ApiModelProperty("密钥")
     private String appSecret;
-    //管理员
+
+    /**
+     * 管理员
+     */
     @NotEmpty
     @NotNull(message = "管理员字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "管理员字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("contacts")
+    @ApiModelProperty("管理员")
     private String contacts;
-    //第三方编码(做多个公众号的时候使用)
+
+    /**
+     * 第三方编码(做多个公众号的时候使用)
+     */
     @Length(message = "第三方编码(做多个公众号的时候使用)字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("extends_code")
+    @ApiModelProperty("第三方编码")
     private String extendsCode;
-    //token
+
+    /**
+     * token
+     */
     @Length(message = "token字段的长度最大为50", groups = {Add.class, Update.class}, max = 50)
     @TableField("token")
+    @ApiModelProperty("token")
     private String token;
-    //aeskey
+
+    /**
+     * aeskey
+     */
     @Length(message = "aeskey字段的长度最大为50", groups = {Add.class, Update.class}, max = 50)
     @TableField("aes_key")
+    @ApiModelProperty("aeskey")
     private String aesKey;
-
-    public SettMpSettDO() {
-    }
-
-    public SettMpSettDO(
-            String id,
-            String name,
-            String appId,
-            String appSecret,
-            String contacts,
-            String extendsCode,
-            String token,
-            String aesKey) {
-        this.id = id;
-        this.name = name;
-        this.appId = appId;
-        this.appSecret = appSecret;
-        this.contacts = contacts;
-        this.extendsCode = extendsCode;
-        this.token = token;
-        this.aesKey = aesKey;
-    }
-
 
 }

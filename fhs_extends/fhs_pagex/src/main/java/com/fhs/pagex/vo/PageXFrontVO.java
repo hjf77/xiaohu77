@@ -15,6 +15,8 @@ import java.util.Map;
 
 /**
  * pagex 前端配置 DTO
+ * @author user
+ * @date 2020-05-19 14:18:18
  */
 @Data
 public class PageXFrontVO extends PagexBaseVO {

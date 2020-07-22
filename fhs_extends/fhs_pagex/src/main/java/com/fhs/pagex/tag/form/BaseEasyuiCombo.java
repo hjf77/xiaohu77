@@ -48,7 +48,7 @@ public abstract class BaseEasyuiCombo extends EmptyFormTag {
         }
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("easyui-" + getEasyuiComboType()));
+        resultHtmlBuilder.append(formartClass("easyui-" + getEasyuiComboType() + " fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartEasyuiDataOptions());
@@ -83,7 +83,7 @@ public abstract class BaseEasyuiCombo extends EmptyFormTag {
 
     @Override
     public String readyJs() {
-        if (!isOne2XModel) {
+        if (!isOne2XModel && !ConverterUtils.toBoolean(tagSett.get("multiple"))) {
             return "$('#" +   ConverterUtils.toString(super.tagSett.get("name")) + "').combobox('initClear');";
         }
         return "";

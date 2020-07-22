@@ -48,7 +48,7 @@ public abstract class PagexBaseTag extends Tag {
         DEFAULT_HANDEL_KEYS.add("type");
         DEFAULT_HANDEL_KEYS.add("id");
         DEFAULT_HANDEL_KEYS.add("camelName");
-
+        DEFAULT_HANDEL_KEYS.add("errormsg");
     }
 
 

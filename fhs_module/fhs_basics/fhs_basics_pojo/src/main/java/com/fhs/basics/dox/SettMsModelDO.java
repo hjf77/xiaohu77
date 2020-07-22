@@ -2,21 +2,28 @@ package com.fhs.basics.dox;
 
 
 import com.fhs.core.base.dox.BaseDO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 /**
- * @author jianbo.qin
- * @version [版本号, 2018-06-01]
- * @Description:
- * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
+ * 模块(SettMsModel)实体类
+ *
+ * @author jackwong
+ * @since 2020-05-18 15:10:29
  */
-@Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_sett_ms_model")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "SettMsModelDO", description = "SettMsModel参数")
 public class SettMsModelDO extends BaseDO<SettMsModelDO> {
 
     private static final long serialVersionUID = 1L;
@@ -25,42 +32,20 @@ public class SettMsModelDO extends BaseDO<SettMsModelDO> {
      * 模块编号
      */
     @Id
+    @ApiModelProperty("主键id")
     private String id;
     /**
      * 模块名称
      */
     @Column(name = "model_name", nullable = true, length = 255)
+    @ApiModelProperty("模块名称")
     private String modelName;
     /**
      * 服务编号
      */
     @Column(name = "model_server_id", nullable = true, length = 32)
+    @ApiModelProperty("服务编号")
     private String modelServerId;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getModelName() {
-        return modelName;
-    }
-
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
-    }
-
-    public String getModelServerId() {
-        return modelServerId;
-    }
-
-    public void setModelServerId(String modelServerId) {
-        this.modelServerId = modelServerId;
-    }
 
 
     @Override

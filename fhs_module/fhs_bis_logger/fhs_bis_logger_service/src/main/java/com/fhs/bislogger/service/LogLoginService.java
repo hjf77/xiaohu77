@@ -8,6 +8,8 @@ import com.fhs.core.cache.annotation.Namespace;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 登录日志(LogLogin)}表服务接口
@@ -23,8 +25,18 @@ public interface LogLoginService extends BaseService<LogLoginVO,LogLoginDO>{
      * 添加登录日志信息
      * @param request
      * @param userName
-     * @param isError 登录失败穿true;
+     * @param isLogin 登录失败 = true;
      * @param errorType
+     * @param userId
+     * @param typeOut 登出 = true
      */
-    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isError, Integer errorType,String userId);
+    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, String userId, boolean typeOut);
+
+    /**
+     * 汇总前20名 登录玩家的登录次数，根基时间段查询
+     * @param statTime
+     * @param endTime
+     * @return
+     */
+    List<LogLoginVO> getLoginIogSummary(Date statTime, Date endTime);
 }

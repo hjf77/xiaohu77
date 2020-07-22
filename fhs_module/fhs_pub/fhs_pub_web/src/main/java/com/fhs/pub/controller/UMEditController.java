@@ -15,7 +15,8 @@ import java.util.Arrays;
 
 /**
  * um编辑器图片上传处理
- * by jackwong
+ * @author jackwong
+ * @since 2019-05-18 11:27:25
  */
 @RequestMapping("um")
 @Controller

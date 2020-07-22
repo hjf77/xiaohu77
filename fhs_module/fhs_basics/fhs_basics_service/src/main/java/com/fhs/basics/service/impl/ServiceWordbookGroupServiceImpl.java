@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.ServiceWordbookDO;
 import com.fhs.basics.dox.ServiceWordbookGroupDO;
 import com.fhs.basics.mapper.ServiceWordbookGroupMapper;
@@ -8,6 +9,7 @@ import com.fhs.basics.service.ServiceWordbookGroupService;
 import com.fhs.basics.vo.ServiceWordbookGroupVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.WORD_BOOK, fields = "wordbookCode")
 public class ServiceWordbookGroupServiceImpl extends BaseServiceImpl<ServiceWordbookGroupVO, ServiceWordbookGroupDO> implements ServiceWordbookGroupService {
 
 

@@ -1,21 +1,20 @@
 <div class='fitem'>
     <div class='fitemDiv'>
         <div class='uploadLableDiv'>
-            <label class='uploadLable'>${tagSett.title}:</label>
+            <label class='uploadLable'><%  if(nvl(tagSett.required,false)){ %><span class="form-field-required">*</span><%}%>${tagSett.title}:</label>
         </div>
-
         <input type='file' id='${tagSett.name}File'/>
     </div>
 </div>
+<%  if(nvl(tagSett.placeholder,false)){ %>
 <div class='fitem'>
     <div class='bigLabelDiv'>
         <label>&nbsp;</label>
     </div>
     &nbsp;&nbsp;&nbsp;&nbsp;${tagSett.placeholder}
-    <%  if(nvl(tagSett.required,false)){ %>
-    <span class="form-field-required">*</span>
-    <%}%>
+
 </div>
+<%}%>
 <div class='fitem'>
     <div class='bigLabelDiv'>
         <label>&nbsp;</label>
@@ -53,7 +52,7 @@ nullmsg="请上传${tagSett.title}"/>
     function uploadsFileLoadSuccess_${tagSett.name}(info){
         if(info.${tagSett.name})
         {
-            initFiles("${tagSett.name}File", info.${tagSett.name});
+            initFiles("${tagSett.name}File", info.${tagSett.name},"",${parameter.isView});
         }
     }
     //上传文件赋值

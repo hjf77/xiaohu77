@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 /**
- * (LogOperatorExtParam)实体类
+ * 日志扩展参数(LogOperatorExtParam)实体类
  *
  * @author wanglei
  * @since 2020-04-23 13:58:59
@@ -33,7 +33,7 @@ import lombok.*;
 public class LogOperatorExtParamDO extends BaseDO<LogOperatorExtParamDO> {
     private static final long serialVersionUID = -88643840123395899L;
     @TableId(value = "ext_param_id", type = IdType.UUID)
-    @ApiModelProperty(value = "${column.comment}")
+    @ApiModelProperty(value = "扩展id")
     private String extParamId;
 
     /**

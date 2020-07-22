@@ -11,10 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.bislogger.api.context.BisLoggerContext;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.ListUtils;
-import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.autodel.service.AutoDelService;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
@@ -25,6 +22,7 @@ import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.service.AutoTransAble;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.mybatis.jpa.annotation.CatTableFlag;
@@ -50,7 +48,7 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, AutoTransAble<V>,  InitializingBean {
 
     protected final Logger log = Logger.getLogger(this.getClass());
 
@@ -143,10 +141,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public boolean update(D bean) {
         boolean result = this.updateJpa(bean);
-        if (BisLoggerContext.isNeedLogger()) {
-            BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
-            BisLoggerContext.addHistoryData(this.selectById(bean.getPkey()), this.namespace);
-        }
         this.refreshCache();
         this.updateCache(bean);
         return result;
@@ -194,7 +188,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int findCountJpa(D bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        return (int) baseMapper.selectCountJpa(bean);
+        String extWhereSql = bean.getAdvanceSearchSql();
+        if(CheckUtils.isNullOrEmpty(extWhereSql)){
+            extWhereSql = null;
+        }
+        return (int)baseMapper.selectCountAdvance(bean,extWhereSql);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -370,6 +368,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
+    @Override
     public int deleteByIdsMp(Collection<? extends Serializable> idList) {
         for (Serializable id : idList) {
             BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
@@ -377,6 +376,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return baseMapper.deleteBatchIds(idList);
     }
 
+    @Override
     public int deleteMp(Wrapper<D> wrapper) {
         return baseMapper.delete(wrapper);
     }
@@ -453,7 +453,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy) {
         entity.setIsDelete(Constant.INT_FALSE);
-        return dos2vos(baseMapper.selectPageForOrder(entity, pageStart, pageSize, orderBy));
+        String extWhereSql = entity.getAdvanceSearchSql();
+        if(CheckUtils.isNullOrEmpty(extWhereSql)){
+            extWhereSql = null;
+        }
+        return dos2vos(baseMapper.selectAdvance(entity, extWhereSql,pageStart, pageSize, orderBy));
     }
 
 

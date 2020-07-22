@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
+ * 服务管理(settMsMenuServerService)表服务实现类
  * @author jianbo.qin
  * @version [版本号, 2018/03/23 14:19:21]
  * @Description:服务器配置

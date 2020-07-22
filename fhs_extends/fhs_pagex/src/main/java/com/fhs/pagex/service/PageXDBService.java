@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alicp.jetcache.CacheUpdateManager;
+import com.fhs.bislogger.api.context.BisLoggerContext;
+import com.fhs.bislogger.constant.LoggerConstant;
+import com.fhs.bislogger.vo.LogHistoryDataVO;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.autodel.service.AutoDelService;
 import com.fhs.core.base.pojo.SuperBean;
@@ -16,6 +19,7 @@ import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.dox.DefaultPageXDO;
 import com.fhs.pagex.vo.PagexAddVO;
+import com.google.gson.JsonObject;
 import com.mybatis.jpa.cache.JpaTools;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -75,6 +79,8 @@ public class PageXDBService {
      */
     private Map<String, Class> namespaceClassMap = new ConcurrentHashMap<>();
 
+
+
     /**
      * 插入一条数据到db
      *
@@ -98,8 +104,6 @@ public class PageXDBService {
     private void insertAndUpdateX(EMap<String, Object> paramMap, String namespace, boolean isAdd) {
         PagexAddVO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
         Map<String, Object> modelConfig = addDTO.getModelConfig();
-
-
         //是否存在一对多
         if (ConverterUtils.toBoolean(addDTO.getModelConfig().get("isOne2X"))) {
             String createUser = isAdd ? paramMap.getStr("createUser") : paramMap.getStr("updateUser");
@@ -109,7 +113,6 @@ public class PageXDBService {
             List<Map<String, Object>> fields = addDTO.getFormFieldSett();
             //把所有的namespace拿到
             for (Map<String, Object> field : fields) {
-
                 if ("one2x".equals(field.get("type"))) {
                     Object allowEdit = field.get("allowEdit");
                     if(allowEdit == null || (boolean)allowEdit){
@@ -123,8 +126,12 @@ public class PageXDBService {
             deleteFKeyParam.put("fkey", pkey);
             //遍历一对多的数据然后插入
             for (String xNamespace : namespaces) {
-
-                sqlsession.delete(getSqlNamespace() + xNamespace + "_delFkeyPageX", deleteFKeyParam);
+                int n = sqlsession.delete(getSqlNamespace() + xNamespace + "_delFkeyPageX", deleteFKeyParam);
+                // 数据库有改动才会产生日志
+                if (n > 0 && BisLoggerContext.isNeedLogger()) {
+                    BisLoggerContext.addExtParam(xNamespace,pkey,LoggerConstant.OPERATOR_TYPE_DEL);
+                    BisLoggerContext.addHistoryData(JSON.parseObject(JSON.toJSONString(deleteFKeyParam),LogHistoryDataVO.class),xNamespace);
+                }
                 //取出fkey的列名字
                 String fkeyField = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("fkey")));
                 String pkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("pkey"));
@@ -141,6 +148,10 @@ public class PageXDBService {
                     extendsChild.put("createUser", createUser);
                     extendsChild.put("groupCode", groupCode);
                     sqlsession.insert(getSqlNamespace() + xNamespace + "_insertPageX", extendsChild);
+                    if (BisLoggerContext.isNeedLogger()) {
+                        BisLoggerContext.addExtParam(xNamespace, extendsChild.get(fkeyField), isAdd?LoggerConstant.OPERATOR_TYPE_ADD:LoggerConstant.OPERATOR_TYPE_UPDATE);
+                        BisLoggerContext.addHistoryData(JSONObject.parseObject(extendsChild.toJSONString(),LogHistoryDataVO.class),xNamespace);
+                    }
                 }
             }
         }
@@ -177,33 +188,47 @@ public class PageXDBService {
         final List<VO> superBeans = new ArrayList<>();
         // List map 转List SuperBean
         rows.forEach(row -> {
-            try {
-                Object tempObj = clazz.newInstance();
-                VO tempSuperBenn = (VO) tempObj;
-                Field field = null;
-                for (String key : row.keySet()) {
-                    field = ReflectUtils.getDeclaredField(clazz, key);
-                    if (field.getType() == Date.class) {
-                        ReflectUtils.setValue(tempObj, key, row.get(key));
-                    } else if (field.getType() == Integer.class) {
-                        ReflectUtils.setValue(tempObj, key, ConverterUtils.toInteger(row.get(key)));
-                    }
-                    else{
-                        ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(row.get(key)));
-                    }
-                }
-                superBeans.add(tempSuperBenn);
-            } catch (InstantiationException e) {
-                LOG.error(this, e);
-                throw new BusinessException("findListPager反射错误");
-            } catch (IllegalAccessException e) {
-                LOG.error(this, e);
-                throw new BusinessException("findListPager反射错误参数错误");
-            }
+            superBeans.add(map2VO(row, clazz));
         });
         transService.transMore(superBeans);
         return JsonUtils.list2json(superBeans);
     }
+
+    /**
+     * map的数据转换为vo
+     * @param mapData
+     * @param clazz
+     * @return
+     */
+    public VO map2VO(Map<String, Object> mapData,Class clazz){
+        try {
+            Object tempObj = clazz.newInstance();
+            VO tempSuperBenn = (VO) tempObj;
+            Field field = null;
+            for (String key : mapData.keySet()) {
+                field = ReflectUtils.getDeclaredField(clazz, key);
+                if(field == null){
+                    continue;
+                }
+                if (field.getType() == Date.class) {
+                    ReflectUtils.setValue(tempObj, key, DateUtils.parseStr(mapData.get(key).toString(),DateUtils.DATETIME_PATTERN));
+                } else if (field.getType() == Integer.class) {
+                    ReflectUtils.setValue(tempObj, key, ConverterUtils.toInteger(mapData.get(key)));
+                }
+                else{
+                    ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(mapData.get(key)));
+                }
+            }
+            return tempSuperBenn;
+        } catch (InstantiationException e) {
+            LOG.error(this, e);
+            throw new BusinessException("findListPager反射错误");
+        } catch (IllegalAccessException e) {
+            LOG.error(this, e);
+            throw new BusinessException("findListPager反射错误参数错误");
+        }
+    }
+
 
     /**
      * 查询总数
@@ -227,6 +252,19 @@ public class PageXDBService {
     public String findBean(Map<String, Object> param, String namespace) {
         return JsonUtils.bean2json(sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param));
     }
+
+    /**
+     * 获取bean的map
+     *
+     * @param param     过滤参数
+     * @param namespace namespace
+     * @return bean的json
+     */
+    public Map<String,Object> findBeanMap(Map<String, Object> param, String namespace) {
+        return sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param);
+    }
+
+
 
     /**
      * 获取bena的json

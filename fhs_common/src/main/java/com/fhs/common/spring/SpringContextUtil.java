@@ -243,6 +243,37 @@ public class SpringContextUtil implements ApplicationContextAware {
     }
 
 
+    /**
+     * 泛型注入
+     * @param clazz clazz
+     * @param actualTypeArgument 泛型类名
+     * @param index 泛型的索引
+     * @param <T>
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getBeanByClass(Class<T> clazz, String actualTypeArgument,int index) {
+        // 获取候选人id
+        String[] candidateNames = applicationContext.getBeanNamesForType(clazz);
+        Object object = null;
+        Type[] types = null;
+        //遍历所有的候选人，看候选人的泛型
+        for (String candidateName : candidateNames) {
+            object = getBean(candidateName);
+            if (object.getClass().getName().contains("EnhancerBySpringCGLIB")) {
+                types = ((ParameterizedType) object.getClass().getSuperclass().getGenericSuperclass()).getActualTypeArguments();
+            } else {
+                types = ((ParameterizedType) object.getClass().getGenericSuperclass()).getActualTypeArguments();
+
+            }
+            if(actualTypeArgument.equals(types[index].getTypeName())){
+                return  (T) object;
+            }
+        }
+        return null;
+    }
+
+
     public static boolean containsBean(String name) {
         return applicationContext.containsBean(name);
     }

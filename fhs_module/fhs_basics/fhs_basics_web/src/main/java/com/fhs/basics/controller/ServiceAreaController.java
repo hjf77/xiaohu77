@@ -1,10 +1,13 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.ServiceAreaDO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
+import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 省市区字典action
+ * 省市区字典controller
  *
- * @Filename: AreaAction.java
+ * @Filename: serviceAreaController.java
  * @Description:
  * @Version: 1.0
  * @Author: qixiaobo
@@ -30,6 +33,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("ms/area")
+@Api(tags = {"省市区信息"})
+@LogNamespace(namespace = BaseTransConstant.AREA,module = "地区管理")
 public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaDO> {
     @Autowired
     private ServiceAreaService areaService;

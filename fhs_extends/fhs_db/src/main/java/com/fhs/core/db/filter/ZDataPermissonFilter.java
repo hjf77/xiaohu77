@@ -15,6 +15,8 @@ import java.util.Map;
 /**
  * 数据权限过滤器
  * 会给DataPermissonContext设置数据权限
+ * @author user
+ * @date 2020-05-19 15:31:19
  */
 @WebFilter(urlPatterns = {"/ms/*"},filterName = "zDataPermissonFilter" ,asyncSupported = true)
 public class ZDataPermissonFilter implements Filter {

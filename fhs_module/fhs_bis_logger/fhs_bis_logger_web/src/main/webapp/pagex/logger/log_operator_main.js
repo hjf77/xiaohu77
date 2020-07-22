@@ -1,5 +1,6 @@
 var modelConfig = {
     title: '日志管理', pkey: 'log_id', type: 'uuid', orderBy: 'update_time Desc',
+    exjs:'${path.basePath}/js/My97DatePicker/WdatePicker.js',
     namespace: "log_operator_main", table: 't_log_operator_main',trans: true};
 var listPage = {
     listFieldSett: function () {
@@ -19,18 +20,18 @@ var listPage = {
     },
     filters: function () {
         return [
-            {name: 'model', type: 'select',url:'${path.basePath}/ms/logOperatorMain/moduleSelect',
-                    valuefield:'model',textfield:'model',filterType:'like',title: '用户管理'},
+            {name: 'namespace', type: 'select',url:'${path.basePath}/ms/logOperatorMain/moduleSelect',
+                    valuefield:'namespace',textfield:'model',title: '用户管理',showAll:'true'},
             {name: 'log_id', type: 'input', title: 'id',filterType: 'like'},
-            {name: 'type', type: 'book', title: '操作类型',code:'type'},
+            {name: 'type', type: 'book', title: '操作类型',code:'type',showAll:'true'},
             {name: 'create_user', type: 'select', title: '操作人',url:'${path.basePath}/ms/logOperatorMain/getUserList',
-                valuefield:'userId',textfield:'userName',filterType:'like'},
-            {name: 'create_time', type: 'dateBT', title: '起止日期',isBT: true},
+                valuefield:'userId',textfield:'userName',filterType:'like',showAll:'true'},
+            {name: 'create_time', type: 'dateBT', title: '起止日期',isBT: true}
         ];
     },
     buttons: function () {
         return [
-             {title: '详情', fun: 'details', permissionsCode: 'log_operator_main:see', isRow: true},
+             {title: '详情', fun: 'details', permissionsCode: 'log_operator_main:see', isRow: true}
         ];
     },
     disableButtons: function () {

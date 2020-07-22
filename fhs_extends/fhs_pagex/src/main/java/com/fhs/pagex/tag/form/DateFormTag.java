@@ -1,9 +1,11 @@
 package com.fhs.pagex.tag.form;
 
+import com.fhs.common.utils.ConverterUtils;
 import org.springframework.stereotype.Component;
 
 /**
- *  日期选择
+ * 日期选择
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DateFormTag extends EmptyFormTag implements IOne2XTag {
 
-    static{
+    static {
         FormTagFactory.regTag("date", DateFormTag.class);
         FormTagFactory.regOne2XTag("date", DateFormTag.class);
     }
@@ -24,27 +26,21 @@ public class DateFormTag extends EmptyFormTag implements IOne2XTag {
     @Override
     public String getContentHtml() {
         //支持args formart 和默认3种，默认是yyyy-MM-dd格式
-        if(super.tagSett.containsKey("args"))
-        {
-            super.tagSett.put("onfocus","WdatePicker(" + super.tagSett.get("args") + ")");
-        }
-        else if(super.tagSett.containsKey("formart"))
-        {
+        if (super.tagSett.containsKey("args")) {
+            super.tagSett.put("onfocus", "WdatePicker(" + super.tagSett.get("args") + ")");
+        } else if (super.tagSett.containsKey("formart")) {
             String onpickedSett = "";
-            if(super.tagSett.containsKey("onpicked"))
-            {
+            if (super.tagSett.containsKey("onpicked")) {
                 onpickedSett = ",onpicked:" + super.tagSett.get("onpicked");
             }
-            super.tagSett.put("onfocus","WdatePicker({dateFmt:\"" + super.tagSett.get("formart") + "\""+onpickedSett+"})");
-        }
-        else
-        {
-            super.tagSett.put("onfocus","WdatePicker()");
+            super.tagSett.put("onfocus", "WdatePicker({dateFmt:\"" + super.tagSett.get("formart") + "\"" + onpickedSett + "})");
+        } else {
+            super.tagSett.put("onfocus", "WdatePicker()");
         }
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' readonly autocomplete='off' " + super.formartDataType());
-        resultHtmlBuilder.append(formartClass("Wdate"));
+        resultHtmlBuilder.append(formartClass("Wdate fill"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
@@ -62,7 +58,17 @@ public class DateFormTag extends EmptyFormTag implements IOne2XTag {
     @Override
     protected String[] getHandelKeys() {
         // 哪些参数是你这个控件特有的，我这个input没啥特有的控件，所以返回了空数组
-        return new String[]{"args","formart","onpicked"};
+        return new String[]{"args", "formart", "onpicked"};
+    }
+
+    @Override
+    public boolean isSupportAdvanceSearch() {
+        return true;
+    }
+
+    @Override
+    public String getAdvanceSearchSett() {
+        return "{name:'" + this.tagSett.get("name") + "',title:'" + this.tagSett.get("title") + "',type:'date',formart:'" + tagSett.get("formart") + "'}";
     }
 
 

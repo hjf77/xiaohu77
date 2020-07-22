@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * 翻译服务redis消息接收转发器
+ * @author user
+ * @date 2020-05-19 10:22:15
  */
 @Component
 public class TransMessageListener {
@@ -22,7 +24,7 @@ public class TransMessageListener {
     private static Map<String,TransRefresher> transRefresherMap = new HashMap<>();
 
     /**
-     *
+     * 处理消息
      * @param message
      */
     public void handelMsg(String message){

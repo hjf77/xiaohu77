@@ -673,7 +673,7 @@ public class ExcelUtils {
      * @param colNum      总列数
      * @return Map 包含单元格数据内容的Map对象
      */
-    private static Object[][] readExcelContent07(String filePath, int titleRowNum, int colNum) {
+    public static Object[][] readExcelContent07(String filePath, int titleRowNum, int colNum) {
         XSSFWorkbook wb = getWorkbook07(filePath);
         XSSFSheet sheet;
 
@@ -732,7 +732,7 @@ public class ExcelUtils {
      * @param colNum      一共多少列
      * @return 数据
      */
-    private static Object[][] readExcelContent03(InputStream is, int titleRowNum, int colNum) throws IOException {
+    public static Object[][] readExcelContent03(InputStream is, int titleRowNum, int colNum) throws IOException {
         return readExcelContent03(new HSSFWorkbook(is), titleRowNum, colNum);
     }
 
@@ -744,7 +744,7 @@ public class ExcelUtils {
      * @param colNum      一共多少列
      * @return 数据
      */
-    private static Object[][] readExcelContent03(HSSFWorkbook wb, int titleRowNum, int colNum) {
+    public static Object[][] readExcelContent03(HSSFWorkbook wb, int titleRowNum, int colNum) {
         HSSFSheet sheet;
 
         // 获取sheet个数
@@ -796,6 +796,79 @@ public class ExcelUtils {
         }
         return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
     }
+
+    /**
+     * 读取excel内容支持 xlsx格式
+     *
+     * @param is          excel inputstream
+     * @param titleRowNum 行号
+     * @param colNum      一共多少列
+     * @return 数据
+     */
+    public static Object[][] readExcelContent04(InputStream is, int titleRowNum, int colNum) throws IOException {
+        return readExcelContent04(new XSSFWorkbook(is), titleRowNum, colNum);
+    }
+    /**
+     * 读取excel内容 支持 xlsx
+     *
+     * @param wb          excel
+     * @param titleRowNum 行号
+     * @param colNum      一共多少列
+     * @return 数据
+     */
+    public static Object[][] readExcelContent04(XSSFWorkbook wb, int titleRowNum, int colNum) {
+        XSSFSheet sheet;
+
+        // 获取sheet个数
+        int sheetNO = wb.getNumberOfSheets();
+        String[] name = null;
+        name = new String[sheetNO + 1];
+        sheet = wb.getSheetAt(0);
+
+        // 得到数据的总行数
+        int rowNum = sheet.getLastRowNum();
+
+        // 如果该sheet没有数据，跳过当前循环
+        if (0 == rowNum) {
+            return null;
+        }
+        XSSFRow row = sheet.getRow(titleRowNum + 1);
+        if (null == row) {
+            return null;
+        }
+
+        // 正文内容应该从第二行开始,第一行为表头的标题
+        Object[][] dataArray = new Object[rowNum - titleRowNum][colNum];
+        // 添加到数组的行数，
+        int dataRow = 0;
+        // 空行数
+        int nullRows = 0;
+        for (int i = titleRowNum + 1; i <= rowNum; i++) {
+            row = sheet.getRow(i);
+            if (null == row) {
+                nullRows++;
+                continue;
+            }
+            int j = 0;
+            // 是否是空行，如果为空行，则赋值的数组行数不会变，下一次循环会覆盖
+            boolean isNullFlag = true;
+            while (j < colNum) {
+
+                dataArray[dataRow][j] = getCellValue(row.getCell(j));
+                j++;
+                if (!"".equals(getCellValue(row.getCell(j)))) {
+                    isNullFlag = false;
+                }
+            }
+            if (isNullFlag) {
+                nullRows++;
+            } else {
+                dataRow++;
+            }
+        }
+        return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
+    }
+
 
     /**
      * 读取Excel数据内容
@@ -864,7 +937,6 @@ public class ExcelUtils {
             // 空值
             case BLANK:
                 value = "";
-                log.error("excel出现空值");
                 break;
             // 故障
             case ERROR:

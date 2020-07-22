@@ -123,14 +123,12 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         // 获取所有的表单字段
         for (Map<String, Object> field : pageAddSett.getFormFieldSett()) {
             type = ConverterUtils.toString(field.get("type"));
-            if (CheckUtils.isNullOrEmpty(type))
-            {
+            if (CheckUtils.isNullOrEmpty(type)) {
                 continue;
             }
-            if("one2x".equals(type))
-            {
-                formFieldBuilder.append(handelOne2X( readyJsListList ,loadSuccessList, onSaveList, overallJsList,
-                         pageAddSett, field, request,  response,paramMap));
+            if ("one2x".equals(type)) {
+                formFieldBuilder.append(handelOne2X(readyJsListList, loadSuccessList, onSaveList, overallJsList,
+                        pageAddSett, field, request, response, paramMap));
                 continue;
             }
             fromTagClass = FormTagFactory.getTag(type);

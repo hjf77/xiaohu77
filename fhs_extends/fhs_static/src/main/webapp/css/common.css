@@ -390,7 +390,7 @@ testFileImg{
 }
 /**
 
-**aceÐÞ¸Ä
+**aceï¿½Þ¸ï¿½
 
 */
 .sidebar{
@@ -534,16 +534,16 @@ width:95% !important;
 	margin-left: 13px;width: 100px;height:80px;
 }
 
-a:link{text-decoration:none;   /* Ö¸Õý³£µÄÎ´±»·ÃÎÊ¹ýµÄÁ´½Ó*/
+a:link{text-decoration:none;   /* Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
-}a:visited{text-decoration:none; /*Ö¸ÒÑ¾­·ÃÎÊ¹ýµÄÁ´½Ó*/
-
-}
-a:hover{text-decoration:none;/*Ö¸Êó±êÔÚÁ´½Ó*/}
-a:active{text-decoration:none;/* Ö¸ÕýÔÚµãµÄÁ´½Ó*/
+}a:visited{text-decoration:none; /*Ö¸ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 }
-/*ÎÄ¼þÉÏ´«*/
+a:hover{text-decoration:none;/*Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/}
+a:active{text-decoration:none;/* Ö¸ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+
+}
+/*ï¿½Ä¼ï¿½ï¿½Ï´ï¿½*/
 .fileShowLi {
 	margin-top:10px;
 	padding:0;
@@ -566,7 +566,6 @@ a:active{text-decoration:none;/* Ö¸ÕýÔÚµãµÄÁ´½Ó*/
 }
 .img_dis{
 	float:left;
-	margin-top: 30px;
 }
 /*.img_dis:nth-child(2) li{
 	float:left;
@@ -595,8 +594,8 @@ a:active{text-decoration:none;/* Ö¸ÕýÔÚµãµÄÁ´½Ó*/
 }
 .imgbac{
 	overflow:hidden;
-	width:200px;
-	height:100px;
+	width:50px;
+	height:50px;
 }
 
 .btnBlu{

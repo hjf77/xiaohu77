@@ -40,7 +40,6 @@
 	color: #333;
 	text-indent:8px;
 	padding: 10px 0px 6px;
-	border-bottom: 1px solid #ddd;
 }
 
 .panel-header-noborder {
@@ -50,6 +49,7 @@
 .panel-body {
 	overflow: auto;
 	border-top-width: 0px;
+	border-bottom: 1px solid #ddd;
 }
 
 .panel-body-noheader {
@@ -246,7 +246,6 @@
 .window .window-body {
 	border-width: 1px;
 	border-style: solid;
-	border-top-width: 0px;
 }
 
 .window .window-body-noheader {

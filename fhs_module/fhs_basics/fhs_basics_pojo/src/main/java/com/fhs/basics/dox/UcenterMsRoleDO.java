@@ -20,10 +20,9 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -33,7 +32,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * &lt;描述一下Bean&gt;
+ * 角色表(UcenterMsRole)实体类
  *
  * @author 朱俊
  * @version [版本号, 2015/08/13 11:37:58]
@@ -43,25 +42,22 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @Entity
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_ucenter_ms_role")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "UcenterMsRoleDO", description = "UcenterMsRole参数")
 public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
-    /**
-     *
-     */
+
     private static final long serialVersionUID = 1L;
 
     /**
      * 角色id
      */
     @Id
-    @NotNull(message = "{test.roleId.null}", groups = {Update.class, Delete.class})
-    @Max(message = "{test.roleId.max}", value = 2147483647, groups = {Add.class, Update.class})
-    @Min(message = "{test.roleId.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @Column(name = "role_id")
     @ApiModelProperty("角色id")
     private Integer roleId;
-
-
 
     /**
      * 角色名称
@@ -115,37 +111,17 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
     @ApiModelProperty("集团编码")
     private String groupCode;
 
-
     /**
      * 菜单按钮数据
      */
     @Transient
     private String[] methods;
 
-
     /**
      * 状态
      */
     @Transient
+    @ApiModelProperty("状态")
     private String state;
 
-
-
-
-
-
-    public UcenterMsRoleDO() {
-    }
-
-    public UcenterMsRoleDO(Integer roleId, String roleName, String remark, Integer isEnable, String organizationId, String dataPermissions, String groupCode, String[] methods, String state) {
-        this.roleId = roleId;
-        this.roleName = roleName;
-        this.remark = remark;
-        this.isEnable = isEnable;
-        this.organizationId = organizationId;
-        this.dataPermissions = dataPermissions;
-        this.groupCode = groupCode;
-        this.methods = methods;
-        this.state = state;
-    }
 }

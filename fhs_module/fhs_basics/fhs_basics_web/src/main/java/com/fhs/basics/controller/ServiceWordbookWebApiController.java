@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author user
+ * @date 2020-05-18 16:53:08
+ */
 @RestController
 @RequestMapping("webApi/wordbook")
 public class ServiceWordbookWebApiController extends BaseController {

@@ -5,6 +5,8 @@ import java.lang.annotation.*;
 /**
  * VO转换器
  * by wanglei
+ * @author wanglei
+ * @date 2020-05-19 14:37:21
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

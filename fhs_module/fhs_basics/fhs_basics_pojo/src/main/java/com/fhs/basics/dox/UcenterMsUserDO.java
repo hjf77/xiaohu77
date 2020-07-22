@@ -21,6 +21,7 @@ import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.mybatis.jpa.annotation.Like;
 import com.mybatis.jpa.annotation.RLike;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -32,24 +33,23 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * &lt;描述一下Bean&gt;
+ * 用户管理(UcenterMsUser)实体类
  *
  * @author 朱俊
  * @version [版本号, 2015/08/13 11:31:39]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Entity
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_user")
-public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
-    /**
-     *
-     */
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
+public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -60,7 +60,6 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @Column(name = "user_id")
     @ApiModelProperty("用户id")
     private String userId;
-
 
     /**
      * 登录名
@@ -86,6 +85,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
      */
     @Column(name = "password")
     @JSONField(serialize = false)
+    @ApiModelProperty("密码")
     private String password;
 
     /**
@@ -128,8 +128,6 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @ApiModelProperty("是管理员")
     private Integer isAdmin;
 
-
-
     /**
      * 性别
      */
@@ -150,7 +148,11 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @ApiModelProperty("组织机构编号")
     private String organizationId;
 
+    /**
+     * 头像
+     */
     @Column(name = "header")
+    @ApiModelProperty("头像")
     private String header;
 
     /**
@@ -188,10 +190,16 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @ApiModelProperty("新密码")
     private String newPassword;
 
+    /**
+     * 菜单类型
+     */
     @Transient
     @ApiModelProperty("菜单类型")
     private Integer menuType;
 
+    /**
+     * 角色集合
+     */
     @Transient
     @ApiModelProperty("角色")
     private List<UcenterMsRoleDO> roles;

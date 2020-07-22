@@ -109,9 +109,9 @@ public enum PagexDataService {
             pagexAddDtoCache.remove(namespace);
             pagexListSettDTOCache.remove(namespace);
             pageXTreeDTOCache.remove(namespace);
-            jsRefreshListenerList.forEach(listener -> {
-                listener.jsRefresh(namespace, fileContent);
-            });
+            for (int i =0;i<jsRefreshListenerList.size();i++) {
+                jsRefreshListenerList.get(i).jsRefresh(namespace, fileContent);
+            }
             if (isOldNamespace) {
                 LOG.info("正在刷新:" + namespace);
                 try {

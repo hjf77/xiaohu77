@@ -65,7 +65,7 @@ spring:
       charset: utf-8
       enabled: true
   redis:
-    database: 0
+    database: 3
     # 最大连接数
     maxTotal: 5000
     # 最大空闲连接数
@@ -78,12 +78,11 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 192.168.0.241
-    password: 123456
-    port: 6636
+    host: localhost
+    port: 6379
     timeout: 6000
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     filters: stat
     initialSize: 1
     maxActive: 20
@@ -98,9 +97,9 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.0.241:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: 123456
+    password: root
     validationQuery: select 'x'
 
   quartz:
@@ -133,7 +132,7 @@ spring:
     ext:
       database-schema-update: false
 logging:
-  config: classpath:logback-spring.xml
+  config: classpath:logback-fhs.xml
   level:
     com.fhs.basics: debug
     com.fhs.pagex: debug
@@ -142,7 +141,7 @@ logging:
 logback:
   #这里可以配置logstash ip和端口
   elk:
-    host: 172.16.57.109:9250
+    host: localhost:5044
   root:
     level: INFO
   file:
@@ -165,5 +164,6 @@ jetcache:
       keyConvertor: fastjson
       valueEncoder: java
       valueDecoder: java
+      asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://123456@192.168.0.241:6636/1  #redis://密码@IP:端口/库
+        - redis://@localhost:6379/3  #redis://密码@IP:端口/库

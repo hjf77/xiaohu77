@@ -10,6 +10,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ *
+ * @author user
+ * @since 2019-05-18 11:18:12
+ */
 public class ThumbnailatorUtils
 {
 

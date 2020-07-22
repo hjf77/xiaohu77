@@ -7,7 +7,9 @@ import java.io.File;
 import java.util.List;
 
 /**
- *
+ * 文件服务器业务
+ * @author user
+ * @since 2019-05-18 11:22:55
  */
 public interface FileServerBusiness {
     /** filep */

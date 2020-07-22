@@ -19,6 +19,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * pagex工作流监听器
+ * @author user
+ * @since 2019-05-18 11:52:49
+ */
 @Component
 public class PagexFlowListener implements DistributedListener {
 

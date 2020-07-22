@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.api.rpc.FeignWordBookApiService;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.ServiceWordbookDO;
 import com.fhs.basics.mapper.ServiceWordbookMapper;
 import com.fhs.basics.service.ServiceWordBookService;
@@ -12,6 +13,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import java.util.Map.Entry;
 @Primary
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.WORD_BOOK, fields = "wordbookCode")
 public class ServiceWordBookServiceImpl extends BaseServiceImpl<ServiceWordbookVO, ServiceWordbookDO> implements ServiceWordBookService, FeignWordBookApiService {
     /**
      * redis获取下拉的key

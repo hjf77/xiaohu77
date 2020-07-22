@@ -273,6 +273,29 @@ public class CheckUtils {
     }
 
     /**
+     * 校验sql是否有关键字
+     * @param str sql字符串
+     * @return true 代表有 false字表没有
+     */
+    public static boolean checkSQL(String str) {
+        // 统一转为小写
+        str = str.toLowerCase();
+        String badStr = "\'|\"|and|exec|execute|insert|select|delete|update|count|drop|*|%|chr|mid|master|truncate|"
+                + "char|declare|sitename|net user|xp_cmdshell|;|or|,|like'|and|exec|execute|insert|create|drop|"
+                + "table|from|grant|use|group_concat|column_name|xp_shell|(|)|"
+                + "information_schema.columns|table_schema|union|where|select|delete|update|order|count|*|"
+                + "chr|mid|master|truncate|char|declare|--|+|,|like|//|/|%|#";// 过滤掉的sql关键字，可以手动添加
+        String[] badStrs = badStr.split("\\|");
+        for (int i = 0; i < badStrs.length; i++) {
+            // 循环检测，判断在请求参数当中是否包含SQL关键字
+            if (str.indexOf(badStrs[i]) >= 0 || str.indexOf("\\|\\|") >= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 利用正则表达式判断对象是否是数字
      *
      * @param obj 对象

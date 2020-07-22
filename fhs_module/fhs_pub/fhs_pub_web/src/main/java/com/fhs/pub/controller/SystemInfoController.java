@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 获取系统信息
  * 感谢guns作者 stylefeng 老哥
+ * @author
+ * @since 2019-05-18 11:26:25
  */
 @RestController
 @RequestMapping("ms/sys")

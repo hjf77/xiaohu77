@@ -9,6 +9,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 类管理器
+ * @author user
+ * @date 2020-05-19 11:15:23
+ */
 public class ClassManager implements Serializable {
 
     private static final long serialVersionUID = 1L;

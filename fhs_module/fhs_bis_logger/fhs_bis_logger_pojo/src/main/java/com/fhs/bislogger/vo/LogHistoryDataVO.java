@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 /**
- * (LogHistoryData)实体类
+ * 日志历史(LogHistoryData)实体类 vo
  *
  * @author wanglei
  * @since 2020-04-23 14:27:43

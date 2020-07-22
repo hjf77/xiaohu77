@@ -11,6 +11,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.mybatis.jpa.context.MultiTenancyContext;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-05-15 14:21:04
  */
 @RestController
+@Api(tags = {"租户"})
 @RequestMapping("/ms/tenant")
 public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantDO> {
 

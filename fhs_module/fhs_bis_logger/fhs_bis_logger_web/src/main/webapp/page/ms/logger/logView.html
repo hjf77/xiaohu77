@@ -3,30 +3,18 @@ include("/page/tags/form_include.html"){}
 %>
 <form id="LogViewForm" method="post">
     <div class="fitem">
-        <div class="fitemDiv">
-            <label>模型:</label>
-            <input type="text" name="model"/>
-        </div>
-        <div class="fitemDiv">
-            <label>namespace:</label>
-            <input type="text" name="namespace"/>
-        </div>
+        <#InputFormTag name='model' title='模块' required='true' />
+        <#InputFormTag name='namespace' title='namespace' required='true' />
     </div>
     <div class="fitem">
-        <div class="fitemDiv">
-            <label>主键:</label>
-            <input type="text" name="pkey"/>
-        </div>
-        <div class="fitemDiv">
-            <label>版本:</label>
-            <input type="text" name="version"/>
-        </div>
+        <#InputFormTag name='pkey' title='主键' required='true' />
+        <#InputFormTag name='version' title='版本' required='true' />
     </div>
     <div class="fitem">
-            <div class="bigLabelDiv"><label>内容:</label></div>
-            <div class="bigContent"><textarea
-                    class="form_textarea " id="data" name="data" style="height: 53%"></textarea>
-            </div>
+        <div class="bigLabelDiv"><label>内容:</label></div>
+        <div class="bigContent"><textarea
+                class="form_textarea " id="data" name="data" style="height: 53%"></textarea>
+        </div>
     </div>
 </form>
 
@@ -34,15 +22,19 @@ include("/page/tags/form_include.html"){}
 
     var pkey = "${parameter.pkey}"
     var version = "${parameter.version}"
+    var namespace = "${parameter.namespace}"
 
     $('#LogViewForm').form({
-        onLoadSuccess :function (info) {
-            renderView('LogViewForm');
-        }
+        onLoadSuccess: loadFormSuccess
     });
     $("#LogViewForm").form('load',
-        '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + version);
+        '${basePath}ms/logOperatorMain/getLogHistoryData?pkey=' + pkey + '&version=' + version + '&namespace='+namespace);
+
+    function loadFormSuccess() {
+        if (isView) {
+            renderView('LogViewForm');
+        }
+    }
 
 </script>
 
-</html>

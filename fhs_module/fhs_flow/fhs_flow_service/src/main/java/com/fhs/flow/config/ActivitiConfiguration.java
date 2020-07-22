@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,13 @@ public class ActivitiConfiguration {
 
     @Value("${fhs.activiti.createtb}:false")
     private String autoActivitiCreatTbl;
+
+    @Primary
+    @Bean
+    public TaskExecutor primaryTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        return executor;
+    }
 
     @Bean
     public ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer() {

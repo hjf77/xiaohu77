@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.*;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -24,11 +26,13 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @TableName("t_flow_listener")
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "FlowListenerDO", description = "FlowListener参数")
 public class FlowListenerDO extends BaseDO<FlowListenerDO> {
     private static final long serialVersionUID = -34427919221391088L;
     @TableId(value = "id", type = IdType.UUID)
+    @ApiModelProperty("主键id")
     private String id;
 
     /**
@@ -38,6 +42,7 @@ public class FlowListenerDO extends BaseDO<FlowListenerDO> {
     @NotNull(message = "标题字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "标题字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("title")
+    @ApiModelProperty("标题")
     private String title;
 
     /**
@@ -47,6 +52,7 @@ public class FlowListenerDO extends BaseDO<FlowListenerDO> {
     @NotNull(message = "url字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "url字段的长度最大为255", groups = {Add.class, Update.class}, max = 255)
     @TableField("uri")
+    @ApiModelProperty("url")
     private String uri;
 
     /**
@@ -54,6 +60,7 @@ public class FlowListenerDO extends BaseDO<FlowListenerDO> {
      */
     @Length(message = "备注字段的长度最大为255", groups = {Add.class, Update.class}, max = 255)
     @TableField("remark")
+    @ApiModelProperty("备注")
     private String remark;
 
     /**
@@ -61,6 +68,7 @@ public class FlowListenerDO extends BaseDO<FlowListenerDO> {
      */
     @NotNull(message = "类型0 全局 2 连线 3 节点字段不可为null", groups = {Update.class, Delete.class})
     @TableField("type")
+    @ApiModelProperty("类型")
     private Integer type;
 
     /**
@@ -68,6 +76,7 @@ public class FlowListenerDO extends BaseDO<FlowListenerDO> {
      */
     @NotNull(message = "在哪个服务器上字段不可为null", groups = {Update.class, Delete.class})
     @TableField("server")
+    @ApiModelProperty("在哪个服务器上")
     private Integer server;
 
 

@@ -11,6 +11,8 @@ import java.io.Serializable;
 
 /**
  * 自定义subject
+ * @author user
+ * @since 2019-05-18 11:38:36
  */
 public class StatelessSubject extends WebDelegatingSubject implements Serializable {
     public StatelessSubject(PrincipalCollection principals, boolean authenticated, String host, Session session,

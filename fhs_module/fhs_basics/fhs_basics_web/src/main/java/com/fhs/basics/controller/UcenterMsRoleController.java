@@ -15,6 +15,7 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ import java.util.*;
  * @author Administrator
  */
 @RestController
+@Api(tags = {"角色"})
 @RequestMapping("ms/sysRole")
 @LogNamespace(namespace = BaseTransConstant.ROLE_INFO,module = "角色管理")
 public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRoleDO> {
@@ -68,6 +70,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * 获取角色列表jsonp
      */
     @RequestMapping("getRolesForJsonp")
+    @LogMethod
     public void getRolesForJsonp(HttpServletRequest request){
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         UcenterMsRoleDO roleName = UcenterMsRoleDO.builder().roleName(request.getParameter("roleName")).build();
@@ -78,7 +81,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     }
 
     /**
-     * 根据
+     * 根据角色ids获取角色列表
      * @param ids
      */
     @RequestMapping("getRoleForJsonpByIds")
@@ -194,6 +197,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult<Boolean> add(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
+        sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
         sysRole.setCreateTime(new Date());
         sysRole.setGroupCode(sysUser.getGroupCode());
@@ -210,7 +214,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:del")
     @RequestMapping("delSysRole")
-    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
+    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 2)
     public HttpResult<Boolean> del(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         sysRoleService.deleteRole(sysRole);
         return HttpResult.success(true);

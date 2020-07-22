@@ -5,15 +5,16 @@ var modelConfig = {
 var listPage = {
     listFieldSett: function () {
         return [
-            {name: 'visit_number', title: '访问编码', width: '10%', align: 'center'},
+            {name: 'visit_number', title: '访问编码', width: '5%', align: 'center'},
             {name: 'login_name', title: '用户名称', width: '10%', align: 'center'},
             {name: 'ip_address', title: '登陆地址', width: '10%', align: 'center'},
             {name: 'ip_info', title: '登陆地点', width: '10%', align: 'center'},
             {name: 'browser', title: '浏览器', width: '10%', align: 'center'},
             {name: 'os', title: '操作系统', width: '10%', align: 'center'},
-            {name: 'type', title: '登录状态', width: '10%', align: 'center',key:'log_login_type',trans:'book',showField:'transMap.typeName'},
-            {name: 'error_info', title: '错误信息', width: '14%', align: 'center',key:'log_login_error',trans:'book',showField:'transMap.errorInfoName'},
-            {name: 'create_time', title: '登录日期', width: '14%', align: 'center'},
+            {name: 'state', title: '登录状态', width: '10%', align: 'center',key:'log_login_state',trans:'book',showField:'transMap.stateName'},
+            {name: 'type', title: '登录类型', width: '10%', align: 'center',key:'log_login_type',trans:'book',showField:'transMap.typeName'},
+            {name: 'error_info', title: '错误信息', width: '12%', align: 'center',key:'log_login_error',trans:'book',showField:'transMap.errorInfoName'},
+            {name: 'create_time', title: '登录日期', width: '12%', align: 'center'},
         ]
     },
     isColumnButton: function () {

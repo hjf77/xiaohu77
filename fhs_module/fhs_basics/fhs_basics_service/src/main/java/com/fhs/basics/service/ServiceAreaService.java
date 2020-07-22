@@ -21,9 +21,12 @@ import java.util.Map;
 
 public interface ServiceAreaService extends BaseService<ServiceAreaVO, ServiceAreaDO> {
 
+
     /**
      * 返回完整的省市区地址
      * map参数：provinceId，cityId，areaId
+     * @param map
+     * @return
      */
     String findAddressById(Map<String, Object> map);
 

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * (LogOperatorMain)表服务实现类
+ * 操作日志(LogOperatorMain)表服务实现类
  *
  * @author wanglei
  * @since 2020-04-23 13:59:14
@@ -52,6 +52,10 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
                 && logAddOperatorLogVO.getHistoryDataVOList() != null && logAddOperatorLogVO.getHistoryDataVOList().size() == 1) {
             logAddOperatorLogVO.getOperatorMainVO().setReqParam(logAddOperatorLogVO.getHistoryDataVOList().get(0).getData());
         }
+        //返回值最多保留6000个字符
+        if(logAddOperatorLogVO.getOperatorMainVO().getRespBody()!=null && logAddOperatorLogVO.getOperatorMainVO().getRespBody().length()>6000){
+            logAddOperatorLogVO.getOperatorMainVO().setRespBody(logAddOperatorLogVO.getOperatorMainVO().getRespBody().substring(0,6000));
+        }
         super.insertSelective(logAddOperatorLogVO.getOperatorMainVO());
         Map<String, LogHistoryDataVO> hisMap = new HashMap<>();
         for (LogOperatorExtParamVO extParamVO : logAddOperatorLogVO.getOperatorExtParamVOList()) {
@@ -69,6 +73,9 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
                         break;
                     case LoggerConstant.OPERATOR_TYPE_DEL:
                         extParamVO.setVersion(historyDataVO == null ? 0 : historyDataVO.getVersion() + 1);
+                        break;
+                    default:
+                        break;
                 }
             }
             extParamVO.preInsert(logAddOperatorLogVO.getOperatorMainVO().getCreateUser());
@@ -94,5 +101,24 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
         List<LogOperatorMainVO> loggerModelList =
                 logOperatorMainMapper.getLoggerModelList();
         return loggerModelList;
+    }
+
+    @Override
+    public List<LogOperatorMainVO> getAccessManyList(Map<String, Object> paramMap) {
+        List<LogOperatorMainVO> accessManyList =
+                logOperatorMainMapper.getAccessManyList(paramMap);
+        return accessManyList;
+    }
+
+    @Override
+    public int getLogCount(Map<String, Object> paramMap) {
+        int logCount = logOperatorMainMapper.getLogCount(paramMap);
+        return logCount;
+    }
+
+    @Override
+    public int getReportCount(Map<String, Object> paramMap) {
+        int reportCount = logOperatorMainMapper.getReportCount(paramMap);
+        return reportCount;
     }
 }

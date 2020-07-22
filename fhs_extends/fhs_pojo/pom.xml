@@ -16,6 +16,11 @@
             <artifactId>mybatis-plus-annotation</artifactId>
             <version>${fhs.mp-anno.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.liangbaika</groupId>
+            <artifactId>validate-spring-boot-starter</artifactId>
+            <version>0.9.4</version>
+        </dependency>
     </dependencies>
 
 </project>

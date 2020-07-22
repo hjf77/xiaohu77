@@ -11,6 +11,7 @@ import java.util.Map;
  * 常量的工具类
  *
  * @author aschs
+ * @date 2020-05-18 14:08:33
  */
 public class ConstantUtil {
     private ConstantUtil() {
@@ -41,7 +42,6 @@ public class ConstantUtil {
      * </pre>
      *
      * @param classPath
-     * @param key
      * @return 返回map:{key:{key:"字段名",value:"字段值",type:"字段的类型"},key1:{key:"字段名1",value:"字段值1",type:"字段的类型1"}}
      */
     public static Map<String, JSONObject> get(String classPath) {

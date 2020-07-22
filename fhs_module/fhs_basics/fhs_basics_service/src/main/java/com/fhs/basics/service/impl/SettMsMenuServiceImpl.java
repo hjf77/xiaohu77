@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.api.rpc.FeignSysMenuApiService;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
 import com.fhs.basics.dox.SettMsMenuDO;
 import com.fhs.basics.dox.SettMsMenuPermissionDO;
@@ -24,6 +25,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +35,14 @@ import java.util.*;
  * 菜单业务实现类
  *
  * @author Administrator
+ * @date 2020-05-18 16:42:36
  */
 @Service
 @DataSource("base_business")
 @AutoDel(mainServiceSetts = {
         @AutoDelSett(namespace = "sett_ms_system", isChecker = true, field = "systemId", desc = "菜单")
 })
+@AutoTrans(namespace = BaseTransConstant.MENU_INFO, fields = "menuName")
 public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsMenuDO> implements SettMsMenuService, FeignSysMenuApiService {
 
     @Autowired

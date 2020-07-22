@@ -1,6 +1,5 @@
 package com.fhs.basics.controller;
 
-;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.SettMsMenuDO;
 import com.fhs.basics.service.SettMsMenuService;
@@ -17,6 +16,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.controller.ModelSuperController;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +28,13 @@ import java.util.List;
 
 
 /**
- * 系统菜单Action
- *
+ * 系统菜单controller
  * @author jianbo.qin
+ * @date 2020-05-18 16:53:48
  */
 @RestController
 @RequestMapping("ms/sysMenu")
+@Api(tags = {"菜单"})
 @LogNamespace(namespace = BaseTransConstant.MENU_INFO,module = "菜单管理")
 public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuDO> {
 

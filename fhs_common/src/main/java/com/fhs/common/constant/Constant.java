@@ -252,6 +252,16 @@ public interface Constant {
     int ONE = 1;
 
     /**
+     * 2
+     */
+    int TWO = 2;
+
+    /**
+     * 3
+     */
+    int THREE = 3;
+
+    /**
      * 0
      */
     int ZERO = 0;
@@ -401,5 +411,22 @@ public interface Constant {
      * vue菜单
      */
     String MENU_TYPE_VUE = "3";
+
+    /**
+     * 级别
+     */
+    String LEVEL_TWO = "2";
+    /**
+     *
+     */
+    String LEVEL_THREE = "3";
+    /**
+     *
+     */
+    String LEVEL_FOUR = "4";
+    /**
+     *
+     */
+    String LEVEL_FIVES = "5";
 
 }

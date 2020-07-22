@@ -6,6 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/**
+ * 文件储存
+ * @author user
+ * @since 2019-05-18 11:24:25
+ */
 public interface FileStorage {
 
     /**

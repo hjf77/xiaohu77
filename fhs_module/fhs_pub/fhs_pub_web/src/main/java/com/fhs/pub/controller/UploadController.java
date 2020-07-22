@@ -19,8 +19,8 @@ import java.util.Arrays;
 
 /**
  * @author qiuhang
- * @des 文件上传action
- *
+ * @des 文件上传controller
+ * @since 2019-05-18 11:26:44
  */
 @RestController
 @RequestMapping("upload")

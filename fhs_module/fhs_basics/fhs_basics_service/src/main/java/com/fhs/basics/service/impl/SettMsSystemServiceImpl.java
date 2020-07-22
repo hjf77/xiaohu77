@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.SettMsSystemDO;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.mapper.SettMsSystemMapper;
@@ -8,6 +9,7 @@ import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import java.util.List;
  */
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace ="sett_ms_system", fields = "name")
 public class SettMsSystemServiceImpl extends BaseServiceImpl<SettMsSystemVO, SettMsSystemDO> implements SettMsSystemService {
 
     @Autowired

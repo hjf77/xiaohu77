@@ -1,5 +1,8 @@
 package com.fhs.task.controller;
 
+import com.fhs.bislogger.api.anno.LogMethod;
+import com.fhs.bislogger.api.anno.LogNamespace;
+import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
@@ -23,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/ms/task")
+@LogNamespace(namespace ="task",module = "定時任务管理")
 public class TaskController extends BaseController {
     private final static Logger LOGGER = Logger.getLogger(TaskController.class);
 
@@ -42,6 +46,7 @@ public class TaskController extends BaseController {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @PostMapping("/add")
     @RequiresPermissions("task:add")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
     public HttpResult<Boolean> save(@Validated  TaskVO quartz) throws SchedulerException {
         if(quartz.getOldJobGroup() != null) {
             JobKey key = new JobKey(quartz.getOldJobName(), quartz.getOldJobGroup());
@@ -77,6 +82,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("task:see")
+    @LogMethod
     public Pager<TaskVO> list(TaskVO quartz) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         List<TaskVO> list = taskService.getTaskVO(quartz, pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
@@ -92,6 +98,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/trigger")
     @RequiresPermissions("task:update")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "手动触发任务")
     public HttpResult<Boolean> trigger(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         JobKey key = new JobKey(quartz.getJobName(), quartz.getJobGroup());
         scheduler.triggerJob(key);
@@ -107,6 +114,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/pause")
     @RequiresPermissions("task:update")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "暂停执行任务")
     public HttpResult pause(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         JobKey key = new JobKey(quartz.getJobName(), quartz.getJobGroup());
         scheduler.pauseJob(key);
@@ -122,6 +130,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/resume")
     @RequiresPermissions("task:update")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "恢复执行")
     public HttpResult resume(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         JobKey key = new JobKey(quartz.getJobName(), quartz.getJobGroup());
         scheduler.resumeJob(key);
@@ -137,6 +146,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/remove")
     @RequiresPermissions("task:del")
+    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL)
     public HttpResult remove(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         TriggerKey triggerKey = TriggerKey.triggerKey(quartz.getJobName(), quartz.getJobGroup());
         // 停止触发器

@@ -17,6 +17,8 @@ import java.io.IOException;
 /**
  * by wanglei
  * 后台用户登录filter
+ * @author wanglei
+ * @since 2019-05-18 11:28:35
  */
 @WebFilter(urlPatterns = {"*"},filterName = "zLoginFilter" ,asyncSupported = true)
 public class LoginFilter implements Filter{

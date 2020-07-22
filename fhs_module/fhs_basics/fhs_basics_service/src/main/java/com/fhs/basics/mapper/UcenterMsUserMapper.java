@@ -16,9 +16,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 系统用户DAO
- *
+ * 系统用户mapper
  * @author jianbo.qin
+ * @date 2020-05-18 16:23:28
  */
 @Repository
 @MultiTenancyCheck

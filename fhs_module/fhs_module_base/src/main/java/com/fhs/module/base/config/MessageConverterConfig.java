@@ -15,6 +15,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 消息转换器配置
+ * @author user
+ * @since 2019-05-18 11:33:35
+ */
 @Configuration
 public class MessageConverterConfig extends  WebMvcConfigurerAdapter
 {

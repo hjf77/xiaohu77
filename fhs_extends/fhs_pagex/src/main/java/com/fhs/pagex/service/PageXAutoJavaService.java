@@ -8,6 +8,7 @@ import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.config.BeetlConf;
 import com.fhs.pagex.loader.MemoryClassLoader;
+import com.fhs.pagex.vo.PagexAddVO;
 import com.fhs.pagex.vo.PagexListSettVO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,6 @@ public class PageXAutoJavaService {
         for(Map<String,Object> row : pagexListSettDTO.getListSett())
         {
             tempField =  new HashMap<>();
-
             if(filedNameSet.contains(row.get("name")))
             {
                 continue;
@@ -112,6 +112,21 @@ public class PageXAutoJavaService {
                 tempField.put("trans",tempTransMap);
             }
             tempField.put("camelName",row.get("camelName"));
+            tempField.put("title",row.get("title"));
+            javaFieldList.add(tempField);
+        }
+        PagexAddVO pagexAddVO = new PagexAddVO(js);
+        for(Map<String,Object> row : pagexAddVO.getFormFieldSett()) {
+            tempField = new HashMap<>();
+            if(CheckUtils.isNullOrEmpty(row.get("name")) || CheckUtils.isNullOrEmpty(row.get("title"))){
+                continue;
+            }
+            if (filedNameSet.contains(row.get("name"))) {
+                continue;
+            }
+            filedNameSet.add(ConverterUtils.toString(row.get("name")));
+            tempField.put("camelName",row.get("camelName"));
+            tempField.put("title",row.get("title"));
             javaFieldList.add(tempField);
         }
         poMap.put("transTypes",transTypes);

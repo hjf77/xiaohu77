@@ -7,7 +7,9 @@ import javax.script.ScriptException;
 import java.util.Map;
 
 /**
- * pagex TREE配置 DTO
+ * pagex TREE配置 VO
+ * @author user
+ * @date 2020-05-19 14:19:20
  */
 @Data
 public class PageXTreeVO extends  PagexBaseVO {

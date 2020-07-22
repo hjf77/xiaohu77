@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 /**
  * 缓存刷新管理器
  * 在项目启动完成后获取所有的@AutoRefresCache  标记的方法
+ * @author user
+ * @date 2020-05-19 16:14:18
  */
 @Data
 @Component
@@ -39,7 +41,7 @@ public class CacheUpdateManager implements ApplicationContextAware, ApplicationL
      * service的包路径
      */
     @Value("${fhs.cache.packages:com.**.service.**}")
-    private String[] packageNames = new String[]{};
+    private String packageNames;
     @Autowired
     private ConfigMap cacheConfigMap;
     private ApplicationContext applicationContext;
@@ -112,7 +114,7 @@ public class CacheUpdateManager implements ApplicationContextAware, ApplicationL
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         //spring容器初始化完成之后，就会自行此方法。
-        Set<Class<?>> entitySet = ScannerUtils.scan(AutoClearCache.class, packageNames);
+        Set<Class<?>> entitySet = ScannerUtils.scan(AutoClearCache.class, packageNames.split(";"));
         // 遍历所有class，获取所有用@autowareYLM注释的字段
         if (entitySet != null) {
             String[] namespaces = null;
