@@ -36,21 +36,6 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
 
 
     /**
-     * 省市区接口,传递areaParentId即可,顶级传递0
-     *
-     * @param request
-     * @param response
-     * @param area
-     */
-    @RequestMapping("getProvinceData")
-    public List<ServiceAreaVO> getProvinceData(HttpServletRequest request, HttpServletResponse response, ServiceAreaVO area) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        int areaParentId = area.getAreaParentId();
-        map.put("areaParentId", areaParentId);
-        return areaService.findForListFromMap(map);
-    }
-
-    /**
      * 刷新区域缓存
      */
     @RequiresPermissions("area:refreshRedisCache")

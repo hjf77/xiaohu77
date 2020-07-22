@@ -24,30 +24,13 @@ public class ServiceAreaOpenWebApiController extends BaseController {
     private ServiceAreaService areaService;
 
     /**
-     * 省市区接口,传递areaParentId即可,顶级传递0
-     *
-     * @param request
-     * @param response
-     * @param area
-     */
-    @RequestMapping("getProvinceData")
-    @ResponseBody
-    public void getProvinceData(HttpServletRequest request, HttpServletResponse response, ServiceAreaVO area) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        int areaParentId = area.getAreaParentId();
-        map.put("areaParentId", areaParentId);
-        List<ServiceAreaVO> areaList = areaService.findForListFromMap(map);
-        super.outJsonp(JsonUtils.list2json(areaList));
-    }
-
-    /**
      * 前端浏览器获取省市区的接口
      *
      * @param area 省市区过滤条件
      */
-    @RequestMapping("getProvinceList")
+    @RequestMapping("getProvinceData")
     public void getProvinceList(ServiceAreaVO area) {
         List<ServiceAreaVO> areaList = areaService.findForList(area);
-        super.outJsonp(JSONUtils.toJSONString(areaList));
+        super.outJsonp(JsonUtils.list2json(areaList));
     }
 }
