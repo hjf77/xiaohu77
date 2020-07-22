@@ -77,12 +77,18 @@ function setCookie(name, value) {
 
 // 获取grid选中的行，然后执行 funName
 function addSelectRowFun(gridId, funName) {
-    var row = $('#' + gridId).datagrid('getSelected');
-    if (row) {
-        funName(row);
-    } else {
+    debugger
+    var row = $('#' + gridId).datagrid('getSelections');
+    if (row.length == 1){
+        funName(row[0]);
+    }
+    if (row.length == 0){
         swal('操作提示', '您必须在列表中选中一条数据后才能进行操作', 'warning');
     }
+    if (row.length > 1){
+        swal('操作提示', '您只能选择一条后才能进行操作', 'warning');
+    }
+
 }
 
 // 将当前的window url改为为url
