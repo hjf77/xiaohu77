@@ -112,18 +112,12 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
             return null;
         }
         JSONObject extAdvanceFilterParamJson = JSON.parseObject(extAdvanceFilterParam);
-        String filterType = " OR ";
-        boolean isOr = true;
-        if (extAdvanceFilterParamJson.getString("filterType").equals("and")) {
-            filterType = " AND ";
-            isOr = false;
-        }
         JSONArray extAdvanceFilterParamArray = extAdvanceFilterParamJson.getJSONArray("extAdvanceFilterParamArray");
         JSONObject tempAFilter = null;
         Field field = null;
         String sqlField = null;
         String tempVal = null;
-        StringBuilder whereSql = new StringBuilder(isOr ? " AND (" : " AND ");
+        StringBuilder whereSql = new StringBuilder(" AND (");
         boolean isHashWhere = false;
         for (int i = 0; i < extAdvanceFilterParamArray.size(); i++) {
             tempAFilter = extAdvanceFilterParamArray.getJSONObject(i);
@@ -140,7 +134,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
                 continue;
             }
             if (whereSql.length() > 6) {
-                whereSql.append(filterType);
+                whereSql.append(tempAFilter.getString("connector")+" ");
             }
             whereSql.append(sqlField + ("searchKey".equals(field.getName()) ? " LIKE " : SIMPLE_OPERATOR.get(tempAFilter.getString("filterType"))) + tempVal + " ");
             isHashWhere = true;
@@ -148,7 +142,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
         if(!isHashWhere){
             return "";
         }
-        whereSql.append(isOr ? ")" : "");
+        whereSql.append( ")");
         return whereSql.toString();
     }
 
