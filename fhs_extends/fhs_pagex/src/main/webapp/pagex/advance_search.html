@@ -28,8 +28,9 @@
             advnaceIsInit = true;
         }
         $('#advanceDialog').dialog('open').dialog('setTitle', '高级搜索');
-        if (divLength == 1){
-            $("#filterDiv").hide()
+        if (divLength >= 1){
+            $('#advanceFormDiv').children(":first").children("label").hide();
+
         }
 
     }
@@ -48,6 +49,7 @@
         }
         $.parser.parse('#filter' + filter_index);
         filter_index = filter_index + 1;
+
     }
 
     var noBookAndSelect = [
@@ -214,11 +216,11 @@
             <lable id="advanceFilterValLable<@=filterIndex@>">
 
             </lable>
-            <a href="javascript:void(0)" id="removeBTN" class="easyui-linkbutton" onclick="if ($('#advanceFormDiv').children('div').length == 2) {$('#removeBTN').hide()};$('#filter<@=filterIndex@>').remove()">删除</a>
+            <a href="javascript:void(0)" id="removeBTN" class="easyui-linkbutton" onclick="removeBtn('<@=filterIndex @>')">删除</a>
         </div>
     </div>
 </script>
-<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 40%; padding: 10px" closed="true">
+<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 60%; padding: 10px" closed="true">
     <div class="fitem">
         <div class='bigLabelDiv'>过滤条件添加：</div>
         <div class='bigContent'>
@@ -236,6 +238,24 @@
 
 
 <script>
+
+    function removeBtn(index){
+       /* if ($('#advanceFormDiv').children('div').length == 2){
+             $('#removeBTN').hide()
+        };*/
+
+        //判断是否有元素
+
+        if ($('#advanceFormDiv').children("div").length === 2){
+            $('#filter'+index).remove()
+            $('#advanceFormDiv').children(":first").children("div:last-child").children("a:last-child").hide();
+        }
+        if ($('#advanceFormDiv').children("div").length >= 1){
+            $('#filter'+index).remove()
+            $('#advanceFormDiv').children(":first").children("label").attr("style","display:none");
+
+        }
+    }
 
     function closeAdvanceSearch(){
         $('#advanceDialog').dialog('close');
