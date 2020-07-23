@@ -16,7 +16,7 @@
 
     function openAdvance(){
         advanceConfig = advanceConfig.filter(function(val){
-            return !(!val || val === "");
+            return !(!val.name || val.name === "" ||val.title === null);
         });
         for(i=0;i<advanceConfig.length;i++){
             if(advanceConfig[i]){
@@ -220,7 +220,7 @@
         </div>
     </div>
 </script>
-<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 60%; padding: 10px" closed="true">
+<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 45%; padding: 10px" closed="true">
     <div class="fitem">
         <div class='bigLabelDiv'>过滤条件添加：</div>
         <div class='bigContent'>
@@ -240,9 +240,6 @@
 <script>
 
     function removeBtn(index){
-       /* if ($('#advanceFormDiv').children('div').length == 2){
-             $('#removeBTN').hide()
-        };*/
 
         //判断是否有元素
 
@@ -252,7 +249,7 @@
         }
         if ($('#advanceFormDiv').children("div").length >= 1){
             $('#filter'+index).remove()
-            $('#advanceFormDiv').children(":first").children("label").attr("style","display:none");
+            $('#advanceFormDiv').children(":first").children("label").hide();
 
         }
     }

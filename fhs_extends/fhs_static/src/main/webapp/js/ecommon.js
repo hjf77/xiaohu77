@@ -77,7 +77,6 @@ function setCookie(name, value) {
 
 // 获取grid选中的行，然后执行 funName
 function addSelectRowFun(gridId, funName) {
-    debugger
     var row = $('#' + gridId).datagrid('getSelections');
     if (row.length == 1){
         funName(row[0]);
