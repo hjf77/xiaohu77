@@ -64,6 +64,23 @@
         {"value":"0","text":"等于"},
         {"value":"2","text":"不等于"}
     ]
+    
+    function nineSelect(_selector) {
+        $(_selector).combobox("clear");
+        $(_selector).combobox({
+            data:noBookAndSelect,
+            valueField:'value',
+            textField:'text',
+        });
+    }
+    function twoSelect(_selector) {
+        $(_selector).combobox("clear");
+        $(_selector).combobox({
+            data:bookAndSelect,
+            valueField:'value',
+            textField:'text',
+        });
+    }
 
     //修改右侧内容
     function filterFieldChange(_tempIndex,_record){
@@ -75,12 +92,7 @@
 
         if(_record.type=='input' || _record.type=='number'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"/>';
-            $("#advanceFilterType" + _tempIndex).combobox("clear");
-            $("#advanceFilterType" + _tempIndex).combobox({
-                data:noBookAndSelect,
-                valueField:'value',
-                textField:'text',
-            });
+            nineSelect("#advanceFilterType" + _tempIndex);
         }
         else if(_record.type=='date'){
             if(!_record.formart){
@@ -88,34 +100,19 @@
             }
             console.log(_record.formart);
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '" readonly onclick="WdatePicker({dateFmt:\'' + _record.formart + '\'})"/>';
-            $("#advanceFilterType" + _tempIndex).combobox("clear");
-            $("#advanceFilterType" + _tempIndex).combobox({
-                data:noBookAndSelect,
-                valueField:'value',
-                textField:'text',
-            });
+            nineSelect("#advanceFilterType" + _tempIndex);
         }
         else if(_record.type=='book'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
                 ' url="${fhs_basics_url}/webApi/wordbook/getData?wordbookGroupCode=' + _record.code + '&jsonpCallback=?" valueField="wordbookCode"  textField="wordbookDesc"/>';
             _onlyEqNeq = true;
-            $("#advanceFilterType" + _tempIndex).combobox("clear");
-            $("#advanceFilterType" + _tempIndex).combobox({
-                data:bookAndSelect,
-                valueField:'value',
-                textField:'text',
-            });
+            twoSelect("#advanceFilterType" + _tempIndex);
         }
         else if(_record.type=='select'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
                 ' url="' + _record.url + '" valueField="'+_record.valueField+'"  textField="'+_record.textField+'"/>';
             _onlyEqNeq = true;
-            $("#advanceFilterType" + _tempIndex).combobox("clear");
-            $("#advanceFilterType" + _tempIndex).combobox({
-                data:bookAndSelect,
-                valueField:'value',
-                textField:'text',
-            });
+            twoSelect("#advanceFilterType" + _tempIndex);
         }
 
 
