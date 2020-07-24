@@ -16,7 +16,7 @@
 
     function openAdvance(){
         advanceConfig = advanceConfig.filter(function(val){
-            return !(!val.name || val.name === "" ||val.title === null);
+            return !(!val.name || val.name === "" ||val.title === "null");
         });
         for(i=0;i<advanceConfig.length;i++){
             if(advanceConfig[i]){
@@ -41,11 +41,8 @@
         var _html = baidu.template('rowTemplate',{filterIndex:filter_index});
         $('#advanceFormDiv').append(_html);
         divLength = $('#advanceFormDiv').children('div').length;
-        if (divLength == 1) {
-            $("#removeBTN").hide();
-            $("#filterDiv").hide()
-        }else {
-            $("#removeBTN").show()
+        if (divLength != 1) {
+            $('#advanceFormDiv').children(":first").children("div:last-child").children("a:last-child").show();
         }
         $.parser.parse('#filter' + filter_index);
         filter_index = filter_index + 1;
@@ -240,9 +237,6 @@
 <script>
 
     function removeBtn(index){
-
-        //判断是否有元素
-
         if ($('#advanceFormDiv').children("div").length === 2){
             $('#filter'+index).remove()
             $('#advanceFormDiv').children(":first").children("div:last-child").children("a:last-child").hide();
