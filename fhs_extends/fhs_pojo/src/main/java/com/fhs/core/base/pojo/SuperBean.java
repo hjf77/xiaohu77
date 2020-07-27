@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      * 翻译map 给transervice用的
      */
     @TableField(exist = false)
+    @JsonIgnore
     private Map<String, String> transMap = new HashMap<>();
 
     /**
@@ -40,6 +42,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private Map<String, String> dataPermissin = new HashMap<>();
 
     /**
@@ -47,6 +50,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private Map<String, String> between = new HashMap<>();
 
     /**
@@ -54,10 +58,12 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private Map<String, String> inFilter = new HashMap<>();
 
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private Map<String, Object> userInfo = new HashMap<>();
 
     /**
@@ -65,14 +71,17 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private String extAdvanceFilterParam;
 
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private Integer start;
 
     @TableField(exist = false)
     @JSONField(serialize = false)
+    @JsonIgnore
     private Integer PageSize;
 
 
@@ -107,6 +116,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      * @return
      */
     @JSONField(serialize = false)
+    @JsonIgnore
     public String getAdvanceSearchSql() {
         if (extAdvanceFilterParam == null) {
             return null;
