@@ -3,6 +3,7 @@ package com.fhs.core.base.dox;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.DateUtils;
@@ -45,6 +46,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      * 子类id字段缓存
      */
     @TableField(exist = false)
+    @JsonIgnore
     private static final Map<Class<?>, Field> ID_FIELD_CACHE_MAP = new HashMap<>();
 
     /**
@@ -114,6 +116,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      * @return 主键
      */
     @Override
+    @JsonIgnore
     public Object getPkey() {
         Field idField = getIdField(true);
         try {
@@ -151,6 +154,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
     }
 
     @JSONField(serialize=false)
+    @JsonIgnore
     public BaseService getBaseService(){
         // 如果父类直接是basedo代表是个do如果父类不是basedo代表应是个vo
         Class clazz = this.getClass().getSuperclass() == BaseDO.class ? this.getClass() : this.getClass().getSuperclass();
