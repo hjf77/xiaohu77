@@ -11,10 +11,12 @@
 
     var filter_index = 0;
 
+    var divLength = 0;
+
 
     function openAdvance(){
         advanceConfig = advanceConfig.filter(function(val){
-            return !(!val || val === "");
+            return !(!val.name || val.name === "" ||val.title === "null");
         });
         for(i=0;i<advanceConfig.length;i++){
             if(advanceConfig[i]){
@@ -26,6 +28,11 @@
             advnaceIsInit = true;
         }
         $('#advanceDialog').dialog('open').dialog('setTitle', '高级搜索');
+        if (divLength >= 1){
+            $('#advanceFormDiv').children(":first").children("label").hide();
+
+        }
+
     }
 
 
@@ -33,18 +40,59 @@
     function addFilter(){
         var _html = baidu.template('rowTemplate',{filterIndex:filter_index});
         $('#advanceFormDiv').append(_html);
+        divLength = $('#advanceFormDiv').children('div').length;
+        if (divLength != 1) {
+            $('#advanceFormDiv').children(":first").children("div:last-child").children("a:last-child").show();
+        }
         $.parser.parse('#filter' + filter_index);
         filter_index = filter_index + 1;
+
     }
 
+    var noBookAndSelect = [
+        {"value":"0","text":"等于"},
+        {"value":"1","text":"包含"},
+        {"value":"2","text":"不等于"},
+        {"value":"3","text":"大于等于"},
+        {"value":"4","text":"小于等于"},
+        {"value":"5","text":"大于"},
+        {"value":"6","text":"小于"},
+        {"value":"7","text":"以什么开始"},
+        {"value":"8","text":"以什么结尾"}
+    ]
+    var bookAndSelect = [
+        {"value":"0","text":"等于"},
+        {"value":"2","text":"不等于"}
+    ]
+    
+    function nineSelect(_selector) {
+        $(_selector).combobox("clear");
+        $(_selector).combobox({
+            data:noBookAndSelect,
+            valueField:'value',
+            textField:'text',
+        });
+    }
+    function twoSelect(_selector) {
+        $(_selector).combobox("clear");
+        $(_selector).combobox({
+            data:bookAndSelect,
+            valueField:'value',
+            textField:'text',
+        });
+    }
 
     //修改右侧内容
     function filterFieldChange(_tempIndex,_record){
         var _tempHtml = '';
         indexType[_tempIndex] = _record;
         var _needSetFilterTypeReadonly = false;
+
+        var _onlyEqNeq = false;
+
         if(_record.type=='input' || _record.type=='number'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"/>';
+            nineSelect("#advanceFilterType" + _tempIndex);
         }
         else if(_record.type=='date'){
             if(!_record.formart){
@@ -52,24 +100,33 @@
             }
             console.log(_record.formart);
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '" readonly onclick="WdatePicker({dateFmt:\'' + _record.formart + '\'})"/>';
+            nineSelect("#advanceFilterType" + _tempIndex);
         }
         else if(_record.type=='book'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
                 ' url="${fhs_basics_url}/webApi/wordbook/getData?wordbookGroupCode=' + _record.code + '&jsonpCallback=?" valueField="wordbookCode"  textField="wordbookDesc"/>';
-            _needSetFilterTypeReadonly = true;
+            _onlyEqNeq = true;
+            twoSelect("#advanceFilterType" + _tempIndex);
         }
         else if(_record.type=='select'){
             _tempHtml = '<input type="text" id="advanceFilterVal'  + _tempIndex +  '"  class="easyui-combobox"' +
                 ' url="' + _record.url + '" valueField="'+_record.valueField+'"  textField="'+_record.textField+'"/>';
-            _needSetFilterTypeReadonly = true;
+            _onlyEqNeq = true;
+            twoSelect("#advanceFilterType" + _tempIndex);
         }
+
+
+
         if(_record.name=='searchKey'){
             _needSetFilterTypeReadonly = true;
         }
-        if(_needSetFilterTypeReadonly){
+         if(_needSetFilterTypeReadonly){
             $('#advanceFilterType' + _tempIndex).combobox('setValue','0');
             $('#advanceFilterType' + _tempIndex).combobox('readonly',true);
-        }else{
+         }else if(_onlyEqNeq){
+             //隐藏'#advanceFilterType' + _tempIndex 展示NEQ的那个
+             $('#advanceFilterType' + _tempIndex).combobox('readonly',false);
+         }else{
             $('#advanceFilterType' + _tempIndex).combobox('readonly',false);
         }
         if(_record.searchKeyType =='str'){
@@ -95,12 +152,14 @@
                     extAdvanceFilterParam.push({name:indexType[i].name,val:_val,
                         filterType:$('#advanceFilterType' + i).combobox('getValue'),
                         searchKeyType:indexType[i].searchKeyType,
-                        fieldName:indexType[i].fieldName});
+                        fieldName:indexType[i].fieldName,
+                        connector:$('#advanceFilterType' + i + 'AndOr').combobox('getValue')
+                    });
                 }
             }
         }
         $('#listGrid').datagrid('load', {
-            extAdvanceFilterParam:JSON.stringify({filterType:$('#advanceFilterType').combobox('getValue'),extAdvanceFilterParamArray:extAdvanceFilterParam})
+            extAdvanceFilterParam:JSON.stringify({extAdvanceFilterParamArray:extAdvanceFilterParam})
         });
        //reload();
         console.log(extAdvanceFilterParam);
@@ -112,6 +171,17 @@
 
 <script id="rowTemplate" type="text/html">
     <div class="fitem" id="filter<@=filterIndex@>">
+        <label id="filterDiv">
+            <div class="fitem">
+                <div class='bigLabelDiv'><label>过滤条件匹配：</label></div>
+                <div class='bigContent'>
+                    <select class="easyui-combobox" id="advanceFilterType<@=filterIndex@>AndOr">
+                        <option value="and" checked="checked">AND(满足所有)</option>
+                        <option value="or">OR(满足一个)</option>
+                    </select>
+                </div>
+            </div>
+        </label>
         <div class='bigLabelDiv'><label>选择字段：</label></div>
         <div class='bigContent'>
             <select class="easyui-combobox" id="advanceFilterField<@=filterIndex@>" data-options="
@@ -124,36 +194,35 @@
                     textField:'title',
             ">
             </select>
-            <select class="easyui-combobox" id="advanceFilterType<@=filterIndex@>">
-                <option value="0" checked="checked">等于</option>
-                <option value="1">包含</option>
-                <option value="2">不等于</option>
-                <option value="3">大于等于</option>
-                <option value="4">小于等于</option>
-                <option value="5">大于</option>
-                <option value="6">小于</option>
-                <option value="7">以什么开始</option>
-                <option value="8">以什么结尾</option>
-            </select>
+            <label id="select<@=filterIndex@>">
+                <select class="easyui-combobox" id="advanceFilterType<@=filterIndex@>">
+                    <option value="0" checked="checked">等于</option>
+                    <option value="1">包含</option>
+                    <option value="2">不等于</option>
+                    <option value="3">大于等于</option>
+                    <option value="4">小于等于</option>
+                    <option value="5">大于</option>
+                    <option value="6">小于</option>
+                    <option value="7">以什么开始</option>
+                    <option value="8">以什么结尾</option>
+                </select>
+            </label>
             <lable id="advanceFilterValLable<@=filterIndex@>">
 
             </lable>
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#filter<@=filterIndex@>').remove()">删除</a>
+            <a href="javascript:void(0)" id="removeBTN" class="easyui-linkbutton" onclick="removeBtn('<@=filterIndex @>')">删除</a>
         </div>
     </div>
 </script>
-<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 40%; padding: 10px" closed="true">
-    <div id="advanceFormDiv">
-        <div class="fitem">
-            <div class='bigLabelDiv'><label>过滤条件匹配：</label></div>
-            <div class='bigContent'>
-                <select class="easyui-combobox" id="advanceFilterType">
-                    <option value="and" checked="checked">AND(满足所有)</option>
-                    <option value="or">OR(满足一个)</option>
-                </select>
-                <a href="javascript:void(0)" class="easyui-linkbutton"  onclick="addFilter()">添加</a>
-            </div>
+<div class="easyui-dialog" id = "advanceDialog"   style="width: 80%; height: 45%; padding: 10px" closed="true">
+    <div class="fitem">
+        <div class='bigLabelDiv'>过滤条件添加：</div>
+        <div class='bigContent'>
+            <a href="javascript:void(0)" class="easyui-linkbutton"  onclick="addFilter()">添加</a>
         </div>
+    </div>
+    <div id="advanceFormDiv">
+
     </div>
     <div class="fitem">
         <center>  <a href="javascript:void(0)" class="easyui-linkbutton"  onclick="execAdvanceSearch()">搜索</a>
@@ -163,6 +232,18 @@
 
 
 <script>
+
+    function removeBtn(index){
+        if ($('#advanceFormDiv').children("div").length === 2){
+            $('#filter'+index).remove()
+            $('#advanceFormDiv').children(":first").children("div:last-child").children("a:last-child").hide();
+        }
+        if ($('#advanceFormDiv').children("div").length >= 1){
+            $('#filter'+index).remove()
+            $('#advanceFormDiv').children(":first").children("label").hide();
+
+        }
+    }
 
     function closeAdvanceSearch(){
         $('#advanceDialog').dialog('close');

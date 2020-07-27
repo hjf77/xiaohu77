@@ -78,7 +78,8 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: localhost
+    host: 192.168.0.213
+    password: 123456
     port: 6379
     timeout: 6000
   datasource:
@@ -97,9 +98,9 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.213:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: 123456
     validationQuery: select 'x'
 
   quartz:
@@ -141,7 +142,7 @@ logging:
 logback:
   #这里可以配置logstash ip和端口
   elk:
-    host: localhost:5044
+    host: 192.168.0.213:5044
   root:
     level: INFO
   file:
@@ -166,4 +167,4 @@ jetcache:
       valueDecoder: java
       asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://@localhost:6379/3  #redis://密码@IP:端口/库
+        - redis://123456@192.168.0.213:6379/3  #redis://密码@IP:端口/库
