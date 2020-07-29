@@ -59,11 +59,11 @@
         {"value":"6","text":"小于"},
         {"value":"7","text":"以什么开始"},
         {"value":"8","text":"以什么结尾"}
-    ]
+    ];
     var bookAndSelect = [
         {"value":"0","text":"等于"},
         {"value":"2","text":"不等于"}
-    ]
+    ];
     
     function nineSelect(_selector) {
         $(_selector).combobox("clear");
@@ -163,6 +163,7 @@
         });
        //reload();
         console.log(extAdvanceFilterParam);
+        $('#advanceDialog').dialog('close');
     }
 
 
@@ -235,11 +236,11 @@
 
     function removeBtn(index){
         if ($('#advanceFormDiv').children("div").length === 2){
-            $('#filter'+index).remove()
+            $('#filter'+index).remove();
             $('#advanceFormDiv').children(":first").children("div:last-child").children("a:last-child").hide();
         }
         if ($('#advanceFormDiv').children("div").length >= 1){
-            $('#filter'+index).remove()
+            $('#filter'+index).remove();
             $('#advanceFormDiv').children(":first").children("label").hide();
 
         }
