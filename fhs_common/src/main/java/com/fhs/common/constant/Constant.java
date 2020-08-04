@@ -413,20 +413,12 @@ public interface Constant {
     String MENU_TYPE_VUE = "3";
 
     /**
-     * 级别
+     * 已删除
      */
-    String LEVEL_TWO = "2";
+    int YES_DELETE = 1;
     /**
-     *
+     * 未删除
      */
-    String LEVEL_THREE = "3";
-    /**
-     *
-     */
-    String LEVEL_FOUR = "4";
-    /**
-     *
-     */
-    String LEVEL_FIVES = "5";
+    int NO_DELETE = 0;
 
 }

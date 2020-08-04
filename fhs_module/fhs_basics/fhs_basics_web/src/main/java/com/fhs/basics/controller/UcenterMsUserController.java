@@ -55,6 +55,17 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
     /**
+     * 获取用户List
+     */
+    @RequestMapping("getUserList")
+    public List<UcenterMsUserVO>  getUserList() {
+        UcenterMsUserVO ucenterMsUserVO = new UcenterMsUserVO();
+        ucenterMsUserVO.setIsDelete(Constant.NO_DELETE);
+        ucenterMsUserVO.setGroupCode(super.getSessionuser().getGroupCode());
+        return sysUserService.findForList(ucenterMsUserVO);
+    }
+
+    /**
      * 根据用户id获取用户详情
      * @param userId 用户id
      */
