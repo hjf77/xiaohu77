@@ -115,6 +115,7 @@ public class MsLoginController extends BaseController {
         request.getSession().setAttribute("identifyCode", null);
         String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
+        sysUserService.loginErrorTimes(userName,sysUser);
         if (sysUser == null) {
             logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, tempUser.getUserId(), false);
             throw new ParamException("用户名或者密码错误");

@@ -214,6 +214,12 @@ public class PageXMsPubController extends PageXBaseController {
     public Map<String, Object> findPager(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) {
         checkPermiessAndNamespace(namespace, "see");
         Map<String, Object> paramMap = super.getPageTurnNum();
+        if (paramMap.containsKey("sortTzwName")){
+            Boolean isTransMap = paramMap.get("sortTzwName").toString().contains("transMap");
+            if (isTransMap){
+                paramMap.remove("sortTzwName");
+            }
+        }
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         request.getSession().setAttribute(this.getClass() + "preLoadParam", paramMap);
