@@ -7,9 +7,11 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.logger.Logger;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.system.ApplicationHome;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -26,7 +28,7 @@ import java.util.Set;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Component
+@Component("eConfig")
 public class EConfig implements InitializingBean, CommandLineRunner {
 
     private static final Logger LOG = Logger.getLogger(EConfig.class);
@@ -59,10 +61,14 @@ public class EConfig implements InitializingBean, CommandLineRunner {
     @Value("${fhs.disable-apollo:false}")
     private boolean isDisableApollo;
 
+    @Autowired
+    private Environment environment;
+
     /**
      * 配置文件改变的监听集合
      */
     private List<ConfigChangeListener> configValueChangeListenerList = new ArrayList();
+
 
     @Override
     public void afterPropertiesSet() throws Exception {

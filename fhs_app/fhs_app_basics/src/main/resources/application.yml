@@ -8,22 +8,6 @@ server:
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
   type-aliases-package: com.fhs.basics.dox;
-eureka:
-  instance:
-    hostname: eureka.fhs.xhb.com
-    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
-    preferIpAddress: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:20881/eureka/
-  http:
-    encoding:
-      charset: UTF-8
-      force: true
-      enabled: true
-
 
 fhs:
   autoware:
@@ -35,7 +19,7 @@ fhs:
     enable-cas: true
     cas:
       client-base-path: http://localhost:8082/ #当前项目的访问路径
-      server-url: http://114.115.211.214/cas # cas地址
+      server-url: http://cas.fhs.xhb.com # cas地址
   mybatis-jpa:
     #多个用;分隔
     entity-package: com.**.**.dox
@@ -63,6 +47,10 @@ fhs:
       developer: fhs developers
       name: 公共接口文档
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos.fhs.xhb.com:8848
   main:
     allow-bean-definition-overriding: true
   application:
@@ -80,11 +68,12 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 172.16.57.109
+    host: 192.168.0.213
+    password: 123456
     port: 6379
     timeout: 6000
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     filters: stat
     initialSize: 1
     maxActive: 20
@@ -99,9 +88,9 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.16.57.109:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.213:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: 123456
     validationQuery: select 'x'
 
 
@@ -139,5 +128,6 @@ jetcache:
       keyConvertor: fastjson
       valueEncoder: java
       valueDecoder: java
+      asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://172.16.57.109:6379/1  #redis://密码@IP:端口/库
+        - redis://123456@192.168.0.213:6379/3  #redis://密码@IP:端口/库
