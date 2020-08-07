@@ -51,7 +51,7 @@ http://114.116.21.147:8081/   admin  123456
 - ORM：Mybatis JPA Mybatis Plus
 - 模板引擎：beetl
 - 无后端业务的快速开发引擎:PAGEX
-- 分布式配置：Apollo
+- 分布式配置：Nacos
 - 缓存：jetcache+spring data cache
 - 分布式任务：shedlock
 - 文档:swagger
