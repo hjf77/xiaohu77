@@ -1,6 +1,5 @@
 package com.fhs.pub.vo;
 
-import com.ctrip.framework.apollo.core.utils.NetUtil;
 import com.fhs.common.utils.NetworkUtil;
 import com.fhs.common.utils.NumberUtil;
 import lombok.Data;

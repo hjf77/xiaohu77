@@ -34,7 +34,7 @@ public class DiskFileStorage<mian> implements FileStorage {
      */
     private File getFile(PubFileDO serviceFile, String token) {
         String fileName = (null == token ? serviceFile.getFileId() : token) + serviceFile.getFileSuffix();
-        return new File(EConfig.getPathPropertiesValue("saveFilePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
+        return new File(EConfig.getPathPropertiesValue("fileSavePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
     }
 
     @Override

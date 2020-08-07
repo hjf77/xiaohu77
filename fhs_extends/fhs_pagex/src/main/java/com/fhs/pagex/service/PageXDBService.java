@@ -19,7 +19,6 @@ import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.dox.DefaultPageXDO;
 import com.fhs.pagex.vo.PagexAddVO;
-import com.google.gson.JsonObject;
 import com.mybatis.jpa.cache.JpaTools;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -47,6 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class PageXDBService {
 
+    private static final String DO_CACHE_KEY = "docache:";
 
     private static final Logger LOG = Logger.getLogger(PageXDBService.class);
 
@@ -63,7 +63,7 @@ public class PageXDBService {
     @Autowired
     private RedisCacheService redisCacheService;
 
-    private static final String DO_CACHE_KEY = "docache:";
+
 
     @Autowired
     private CacheUpdateManager cacheUpdateManager;

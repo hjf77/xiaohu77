@@ -46,6 +46,20 @@ fhs:
       description: 项目api
       developer: fhs developers
       name: 公共接口文档
+  path: "{
+          'basePath': 'http://localhost:8082/',
+          'fhs_static_url': 'http://localhost:8082/',
+          'fhs_basics_url': 'http://localhost:8082/',
+          'fileSavePath': 'c:/flies',
+          'loginOutUrl': 'http://cas.fhs.xhb.com/logout',
+          'fhs_file_url': 'http://localhost:8083/',
+          'index_right_path': 'http://localhost:8082/b/page-ms-index/index_right'
+          }"
+  other: "{
+          'isDevModel': 'true',
+          'access_token_time_out_second': '500',
+          'systemTitle': 'FHS演示系统'
+          }"
 spring:
   cloud:
     nacos:

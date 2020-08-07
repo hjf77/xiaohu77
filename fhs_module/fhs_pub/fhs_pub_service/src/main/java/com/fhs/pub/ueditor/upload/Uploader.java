@@ -19,7 +19,7 @@ public class Uploader {
 	/**
 	 * 文件储存路径
 	 */
-	public static String fileSavePath  = EConfig.getPathPropertiesValue("saveFilePath");
+	public static String fileSavePath  = EConfig.getPathPropertiesValue("fileSavePath");
 
 	public Uploader(HttpServletRequest request, Map<String, Object> conf) {
 		this.request = request;

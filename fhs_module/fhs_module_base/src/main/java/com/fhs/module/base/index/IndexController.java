@@ -5,6 +5,7 @@ import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.cache.service.RedisCacheService;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
 import com.fhs.core.result.HttpResult;
@@ -63,8 +64,8 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/")
-    public ModelAndView initIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return index(request, response);
+    public void initIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect(EConfig.getPathPropertiesValue("basePath") + "/ms/index");
     }
 
     /**

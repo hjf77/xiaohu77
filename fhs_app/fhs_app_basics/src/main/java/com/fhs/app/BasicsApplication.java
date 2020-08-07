@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.DependsOn;
@@ -30,6 +31,7 @@ import java.util.List;
 @EnableRedisHttpSession
 @EnableMethodCache(basePackages = "com.fhs")
 @EnableFeignClients(basePackages = {"com.fhs"})
+@ServletComponentScan(basePackages = {"com.fhs","org.apache.shiro"})
 public class BasicsApplication {
 
     public static void main(String[] args) {

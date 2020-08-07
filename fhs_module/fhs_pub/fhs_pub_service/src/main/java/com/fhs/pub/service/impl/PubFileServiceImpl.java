@@ -79,7 +79,7 @@ public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> im
         {
             throw new ParamException("文件不存在");
         }
-        String downFilePath = EConfig.getPathPropertiesValue("downFilePath");
+        String downFilePath = EConfig.getPathPropertiesValue("fileSavePath");
         String currentDate = serviceFile.getUploadDate();
         return downFilePath + currentDate
                 + File.separator

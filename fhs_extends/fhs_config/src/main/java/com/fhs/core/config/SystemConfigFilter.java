@@ -1,24 +1,14 @@
 package com.fhs.core.config;
 
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
-import com.fhs.common.utils.ConverterUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * 如果请求 的是systemConfig.js 则读取配置文件给浏览器写
@@ -29,7 +19,6 @@ import java.util.Properties;
 @WebFilter(urlPatterns = "/*", filterName = "systemConfigFilter")
 @Component
 public class SystemConfigFilter implements Filter {
-    public static String projectName = EConfig.projectName;
 
     private static String fileName = "systemConfig.js";
 
@@ -38,13 +27,6 @@ public class SystemConfigFilter implements Filter {
      */
     private static String jsContent;
 
-    public static String basePath;
-
-    @ApolloConfig("jsConfig")
-    private Config systemConfig;
-
-    @Value("${fhs.disable-apollo:false}")
-    private boolean isDisableApollo;
 
     private boolean isInit;
 
@@ -83,43 +65,18 @@ public class SystemConfigFilter implements Filter {
     }
 
     public void initJsContent() throws Exception {
-        Map<String, String> systemConfigMap = new HashMap<>();
-        if (isDisableApollo) {
-            Properties jsConfig = new Properties();
-            InputStream in = null;
-            File jsFile = new File(EConfig.getPath() + "/js.properties");
-            if (jsFile.exists()) {
-                in = new FileInputStream(jsFile);
-            } else {
-                in = SystemConfigFilter.class.getClassLoader().getResourceAsStream("js.properties");
-            }
-
-            jsConfig.load(in);
-            for (Object key : jsConfig.keySet()) {
-                systemConfigMap.put(ConverterUtils.toString(key), ConverterUtils.toString(jsConfig.get(key)));
-            }
-        } else {
-            for (String key : systemConfig.getPropertyNames()) {
-                systemConfigMap.put(key, systemConfig.getProperty(key, ""));
-            }
-        }
         final StringBuilder jsBuilder = new StringBuilder();
         jsBuilder.append("var basePath" + " = '" + EConfig.getPathPropertiesValue("basePath") + "';");
-        final String fileServiceUrl = EConfig.getPathPropertiesValue("fhs_file_url");
-        systemConfigMap.keySet().forEach(name -> {
-            String val = systemConfigMap.get(name);
-            if (val.contains("fhs_file_url")) {
-                val = val.replace("${fhs_file_url}", fileServiceUrl);
-            }
-            if (val.contains("fhs_static_url")) {
-                val = val.replace("${fhs_static_url}", EConfig.getPathPropertiesValue("fhs_static_url"));
-            }
-            if (name.endsWith("_REG")) {
-                jsBuilder.append("var " + name + " = " + val + ";");
-            } else {
-                jsBuilder.append("var " + name + " = '" + val + "';");
-            }
-        });
+        jsBuilder.append("var fhs_static_url" + " = '" + EConfig.getPathPropertiesValue("fhs_static_url") + "';");
+        jsBuilder.append("var fileService" + " = '" + EConfig.getPathPropertiesValue("fhs_file_url") + "';");
+        jsBuilder.append("var fileDownUrl" + " = '${fhs_file_url}/downLoad/fileByName';");
+        jsBuilder.append("var fileDelUrl" + " = '${fhs_file_url}/file/del.do';");
+        jsBuilder.append("var fileListUrl" + " = '${fhs_file_url}/downLoad/listData';");
+        jsBuilder.append("var fileUploadUrl" + " = '${fhs_file_url}/upload/file';");
+        jsBuilder.append("var downForId" + " = '${fhs_file_url}/downLoad/file';");
+        jsBuilder.append("var IMG" + " = 'image/gif,image/jpeg,image/jpg,image/png,image/svg';");
+        jsBuilder.append("var IMG_REG" + " = '/\\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/';");
         jsContent = jsBuilder.toString();
+        jsContent = jsContent.replace("${fhs_file_url}",EConfig.getPathPropertiesValue("fhs_file_url"));
     }
 }

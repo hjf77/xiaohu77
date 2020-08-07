@@ -137,7 +137,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
         // 文件后缀
         String suffix = serviceFile.getFileSuffix();
         // 文件下载路径
-        String downFilePath = EConfig.getPathPropertiesValue("downFilePath");
+        String downFilePath = EConfig.getPathPropertiesValue("fileSavePath");
         // 文件上传时间
         String uploadDate = serviceFile.getUploadDate();
         // fileId
@@ -208,7 +208,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
             //获取图片的路径
             String[] pngPathList = getPngPathList(list);
             //生成zip路径
-            String path = EConfig.getPathPropertiesValue("saveFilePath")+fileName+".zip";
+            String path = EConfig.getPathPropertiesValue("fileSavePath")+fileName+".zip";
             //打包生成zip
             ZipUtil.zip(path,pngPathList);
             File file = new File(path);
@@ -232,7 +232,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
         String[] arr = new String[serviceFile.size()];
         for (int i = 0;i<serviceFile.size();i++) {
             String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + serviceFile.get(i).getFileSuffix();
-            String saveFilePath = EConfig.getPathPropertiesValue("saveFilePath") + File.separator + serviceFile.get(i).getUploadDate() + File.separator + serviceFile.get(i).getFileSuffix().replace(".", "") + File.separator + fileName;
+            String saveFilePath = EConfig.getPathPropertiesValue("fileSavePath") + File.separator + serviceFile.get(i).getUploadDate() + File.separator + serviceFile.get(i).getFileSuffix().replace(".", "") + File.separator + fileName;
             arr[i] =  saveFilePath;
         }
         return arr;

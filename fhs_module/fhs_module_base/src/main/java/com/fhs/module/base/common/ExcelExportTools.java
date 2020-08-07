@@ -186,7 +186,7 @@ public class ExcelExportTools {
         String[] titleArray = getExportTitleArray(request);
         ExcelUtils.initSheet07(sheet, rows, titleArray, null, null,1);
         try {
-            File excelFile = new File(EConfig.getPathPropertiesValue("saveFilePath") + "/temp/excel/" + StringUtil.getUUID() + ".xlsx");
+            File excelFile = new File(EConfig.getPathPropertiesValue("fileSavePath") + "/temp/excel/" + StringUtil.getUUID() + ".xlsx");
             wb.write(new FileOutputStream(excelFile));
         } catch (IOException e) {
             log.error("导出excel出错",e);

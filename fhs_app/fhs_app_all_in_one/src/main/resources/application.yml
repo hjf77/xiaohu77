@@ -51,6 +51,22 @@ fhs:
 
   activiti:
     createtb: false #是否创建表
+  path: "{
+        'basePath': 'http://localhost:8081/',
+        'fhs_static_url': 'http://localhost:8081/',
+        'fhs_basics_url': 'http://localhost:8081/',
+        'fileSavePath': 'c:/flies',
+        'jbpmFilePath': 'c:/flies/jbpm/xml',
+        'loginOutUrl': 'http://localhost:8081/ms/logout',
+        'fhs_file_url': 'http://localhost:8081/',
+        'index_right_path': 'http://localhost:8081/b/page-ms-index/index_right',
+        'work_flow_url': 'http://localhost:8081/'
+        }"
+  other: "{
+          'isDevModel': 'true',
+          'access_token_time_out_second': '500',
+          'systemTitle': 'FHS演示系统'
+          }"
 
 spring:
   main:

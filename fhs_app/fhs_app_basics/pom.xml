@@ -28,6 +28,11 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_static</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
