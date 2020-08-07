@@ -62,11 +62,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Value("${fhs.basics.passsalt:fhs}")
     private String passsalt;
 
-    /**
-     * redis 缓存服务
-     */
-    @Autowired
-    private RedisCacheService<String> redisCacheService;
+
 
     @Autowired
     private UcenterMsUserMapper sysUserMapper;
@@ -751,28 +747,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             }
         }
         return result;
-    }
-
-    @Override
-    public void loginErrorTimes(String userLoginName,UcenterMsUserDO sysUser) {
-        boolean loginUserName = redisCacheService.exists(userLoginName);
-        if (loginUserName) {
-            if (Integer.parseInt(redisCacheService.get(userLoginName)) >= 5) {
-                redisCacheService.expire(userLoginName, 300);
-                throw new ParamException("用户名或者密码错误,该账号锁定5分钟");
-            }else{
-                int errorTimes = Integer.parseInt(redisCacheService.get(userLoginName));
-                errorTimes++;
-                redisCacheService.put(userLoginName, errorTimes + "");
-            }
-        } else {
-            redisCacheService.put(userLoginName, 1 + "");
-        }
-        if(null != sysUser){
-            if(redisCacheService.exists(userLoginName)){
-                redisCacheService.remove(userLoginName);
-            }
-        }
     }
 
 

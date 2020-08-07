@@ -50,13 +50,31 @@ public class MsLoginController extends BaseController {
 
     private static final String USER_KEY = "shiro:user:";
 
-    @Value("${server.session.timeout:3600}")
-    private Integer sesstionTimeout;
+    /**
+     * 用户锁定key
+     */
+    private static final String USER_LOCK_KEY = "user:lock:";
+
+    /**
+     * 用户输入错误密码次数key
+     */
+    private static final String USER_ERROR_TIME_KEY = "user:errortime:";
 
     /**
      * 验证码
      */
     private static final String LOGIN_VCODE_KEY = "login:vcode:";
+
+    @Value("${server.session.timeout:3600}")
+    private Integer sesstionTimeout;
+
+    /**
+     * redis 缓存服务
+     */
+    @Autowired
+    private RedisCacheService redisCacheService;
+
+
 
     /**
      * 后台用户服务
@@ -85,10 +103,14 @@ public class MsLoginController extends BaseController {
     @Value("${fhs.login.url:http://default.fhs-opensource.com}")
     private String shrioLoginUrl;
 
+    /**
+     * 输入多少次密码锁定
+     */
+    @Value("${fhs.login.error-pass-lock-times:5}")
+    private int lockTimes;
 
-    @Autowired
-    private RedisCacheService redisCacheService;
-
+    @Value("${fhs.login.user-lock-seconds:300}")
+    private int userLockSeconds;
 
     /**
      * 用户登录
@@ -99,6 +121,7 @@ public class MsLoginController extends BaseController {
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
         ParamChecker.isNotNull(sysUser.getUserLoginName(), "登录名不可为空");
         ParamChecker.isNotNull(sysUser.getPassword(), "密码不可为空");
+        checkUserNameIsLock(sysUser.getUserLoginName());
         UcenterMsUserVO tempUser = sysUserService.findBean(UcenterMsUserDO.builder().userLoginName(sysUser.getUserLoginName()).build());
         if (tempUser == null) {
             throw new ParamException("用户名或者密码输入错误");
@@ -115,11 +138,12 @@ public class MsLoginController extends BaseController {
         request.getSession().setAttribute("identifyCode", null);
         String userName = sysUser.getUserLoginName();
         sysUser = sysUserService.login(sysUser);
-        sysUserService.loginErrorTimes(userName,sysUser);
         if (sysUser == null) {
             logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, tempUser.getUserId(), false);
+            addErrorPassTimes(userName);
             throw new ParamException("用户名或者密码错误");
         }
+        clearLockKey(userName);
         //如果不是admin就去加载全部的数据
         if (sysUser.getIsAdmin() == Constant.INT_TRUE) {
             request.getSession().setAttribute(Constant.SESSION_USER_DATA_PERMISSION, new HashMap<>());
@@ -137,10 +161,56 @@ public class MsLoginController extends BaseController {
     }
 
     /**
+     * 判断用户是否锁定
+     *
+     * @param userName 用户登录名
+     */
+    private void checkUserNameIsLock(String userName) {
+        String key = USER_LOCK_KEY + userName;
+        if (redisCacheService.exists(key)) {
+            throw new ParamException("用户被锁定，请您" + redisCacheService.getExpire(key) + "秒后重试");
+        }
+    }
+
+
+    /**
+     * 添加用户输入密码错误次数
+     *
+     * @param userName 用户名
+     */
+    private void addErrorPassTimes(String userName) {
+        String key = USER_ERROR_TIME_KEY + userName;
+        if (redisCacheService.exists(key)) {
+            int errorTimes = ConverterUtils.toInt(redisCacheService.get(key)) + 1;
+            if (errorTimes >= lockTimes) {
+                //锁定
+                redisCacheService.put(USER_LOCK_KEY + userName, "");
+                redisCacheService.expire(USER_LOCK_KEY + userName, userLockSeconds);
+                throw new ParamException("密码输入次数过多，账号已被锁定");
+            }
+            //存在的话+1
+            redisCacheService.put(key, "" + errorTimes);
+        } else {
+            redisCacheService.put(key, "1");
+        }
+        redisCacheService.expire(key, userLockSeconds);
+    }
+
+    /**
+     * 登录成功后清理掉无用的key
+     *
+     * @param userName
+     */
+    private void clearLockKey(String userName) {
+        redisCacheService.remove(USER_ERROR_TIME_KEY + userName);
+    }
+
+    /**
      * 用户登录
      */
     @RequestMapping("/vueLogin")
     public HttpResult<Map<String, String>> vueLogin(UcenterMsUserDO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
+        checkUserNameIsLock(sysUser.getUserLoginName());
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
         if (null == sessionIdentify) {
@@ -156,8 +226,10 @@ public class MsLoginController extends BaseController {
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null) {
             logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, null, false);
+            addErrorPassTimes(userName);
             throw new ParamException("用户名或者密码错误");
         }
+        clearLockKey(userName);
         String tokenStr = StringUtil.getUUID();
         //如果不是admin就去加载全部的数据
         if (sysUser.getIsAdmin() == Constant.INT_TRUE) {

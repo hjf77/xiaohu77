@@ -241,11 +241,6 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     List<SysUserOrgVO> getUserOrgTreeList(String groupCode);
 
-    /**
-     * 获取登陆错误次数
-     * @param userLoginName  登陆名
-     * @param sysUser
-     */
-    void loginErrorTimes(String userLoginName,UcenterMsUserDO sysUser);
+
 
 }
