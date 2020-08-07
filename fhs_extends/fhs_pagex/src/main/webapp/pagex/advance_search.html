@@ -16,7 +16,7 @@
 
     function openAdvance(){
         advanceConfig = advanceConfig.filter(function(val){
-            return !(!val.name || val.name === "" ||val.title === "null");
+            return val && !(!val.name || val.name === "" ||val.title === "null");
         });
         for(i=0;i<advanceConfig.length;i++){
             if(advanceConfig[i]){
@@ -64,7 +64,7 @@
         {"value":"0","text":"等于"},
         {"value":"2","text":"不等于"}
     ];
-    
+
     function nineSelect(_selector) {
         $(_selector).combobox("clear");
         $(_selector).combobox({
