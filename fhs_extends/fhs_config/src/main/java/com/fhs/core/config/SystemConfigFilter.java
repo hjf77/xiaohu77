@@ -1,8 +1,10 @@
 package com.fhs.core.config;
 
+import com.fhs.common.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +78,9 @@ public class SystemConfigFilter implements Filter {
         jsBuilder.append("var downForId" + " = '${fhs_file_url}/downLoad/file';");
         jsBuilder.append("var IMG" + " = 'image/gif,image/jpeg,image/jpg,image/png,image/svg';");
         jsBuilder.append("var IMG_REG" + " = '/\\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/';");
+        boolean isDev = ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel"));
+        jsBuilder.append("var isDev" + " = " + isDev + ";");
         jsContent = jsBuilder.toString();
-        jsContent = jsContent.replace("${fhs_file_url}",EConfig.getPathPropertiesValue("fhs_file_url"));
+        jsContent = jsContent.replace("${fhs_file_url}", EConfig.getPathPropertiesValue("fhs_file_url"));
     }
 }
