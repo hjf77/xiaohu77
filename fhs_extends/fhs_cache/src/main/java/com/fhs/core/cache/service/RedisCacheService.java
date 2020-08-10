@@ -148,6 +148,13 @@ public interface RedisCacheService<E>
     boolean expire(String key, int timeout);
 
     /**
+     * 获取key超时时间
+     * @param key key
+     * @return key的超时时间
+     */
+    Long getExpire(String key);
+
+    /**
      * 从队列头插入值
      * @param key
      * @param value

@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -253,6 +254,13 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
                 return (long) Constant.DEFEAT_CODE;
             }
         }) == Constant.SUCCESS_CODE;
+
+
+    }
+
+    @Override
+    public Long getExpire(String key){
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
     /**
