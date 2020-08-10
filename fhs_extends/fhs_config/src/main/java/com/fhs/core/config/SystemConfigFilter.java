@@ -77,7 +77,7 @@ public class SystemConfigFilter implements Filter {
         jsBuilder.append("var fileUploadUrl" + " = '${fhs_file_url}/upload/file';");
         jsBuilder.append("var downForId" + " = '${fhs_file_url}/downLoad/file';");
         jsBuilder.append("var IMG" + " = 'image/gif,image/jpeg,image/jpg,image/png,image/svg';");
-        jsBuilder.append("var IMG_REG" + " = '/\\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/';");
+        jsBuilder.append("var IMG_REG" + " = /\\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/;");
         boolean isDev = ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel"));
         jsBuilder.append("var isDev" + " = " + isDev + ";");
         jsContent = jsBuilder.toString();
