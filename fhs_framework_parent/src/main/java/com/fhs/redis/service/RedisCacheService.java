@@ -210,4 +210,10 @@ public interface RedisCacheService<E>
      * @param message
      */
      void convertAndSend(String channel,String message);
+
+     /**
+      * 模糊匹配key
+      * @Param: [key]
+      */
+      Set<String> getFuzzy(String key);
 }
