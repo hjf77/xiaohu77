@@ -2,10 +2,7 @@ package com.fhs.system.trans;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
-import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.*;
@@ -17,9 +14,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 字典翻译服务
@@ -48,10 +43,16 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
         for (Field tempField : toTransList) {
             tempField.setAccessible(true);
             tempTrans = tempField.getAnnotation(Trans.class);
-            String bookCode = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
+            String[] bookCodes = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName())).split(",");
+            StringJoiner bookDesc = new StringJoiner(",");
             String key = tempTrans.key().contains("KEY_") ? StringUtil.toString(ReflectUtils.getValue(obj, tempTrans.key().replace("KEY_", ""))) : tempTrans.key();
+            for (String bookCode : bookCodes) {
+                if(!StringUtil.isEmpty(bookCode)){
+                    bookDesc.add((wordBookTransMap.get(key + "_" + bookCode)));
+                }
+            }
             //sex_0/1  男 女
-            obj.getTransMap().put(tempField.getName() + "Name", wordBookTransMap.get(key + "_" + bookCode));
+            obj.getTransMap().put(tempField.getName() + "Name",bookDesc.toString());
 
         }
     }
