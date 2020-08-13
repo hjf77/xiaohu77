@@ -7,6 +7,7 @@ import com.fhs.common.ExcelExportTools;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.api.annotation.AutowareYLM;
+import com.fhs.core.db.ReadWriteDataSourceDecision;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.log.LogDesc;
@@ -84,8 +85,8 @@ public class PageXMsPubAction extends PageXBaseAction{
         paramMap.put("groupCode",user.getGroupCode());
         paramMap.put("updateUser",user.getUserId());
         paramMap.put("pkey",StringUtil.getUUID());
-        super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         addLog( namespace, "添加", paramMap, request, LogDesc.ADD);
+        super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         service.insert(paramMap,namespace);
         refreshPageXTransCache(namespace);
         return HttpResult.success(true);
@@ -117,6 +118,9 @@ public class PageXMsPubAction extends PageXBaseAction{
 
         // 获取菜单name及nameSpace
         if (namesapceMenuMap.isEmpty()) {
+            ReadWriteDataSourceDecision.markParam();
+            ReadWriteDataSourceDecision.setDataSource("base_business");
+
             HttpResult<List<SysMenuVo>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
             List<SysMenuVo> sysMenuList = result.getData();
             for (SysMenuVo adminMenu : sysMenuList) {
@@ -158,8 +162,8 @@ public class PageXMsPubAction extends PageXBaseAction{
            Map<String,Object> paramMap = new HashMap<>();
            paramMap.put("id",id);
            paramMap.put("groupCode", MultiTenancyContext.getProviderId());
-           super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
            addLog( namespace, "查看", paramMap, request, LogDesc.SEE);
+           super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
            return JSONObject.parseObject(service.findBean(paramMap,namespace));
     }
 
@@ -198,10 +202,12 @@ public class PageXMsPubAction extends PageXBaseAction{
             id = id.substring(0,id.indexOf("&amp;"));
         }
         checkPermiessAndNamespace( namespace,"del");
-        super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("id",id);
         addLog( namespace, "删除", paramMap, request, LogDesc.DEL);
+        super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
+
+
         int i = service.del(id,namespace);
         refreshPageXTransCache(namespace);
         return HttpResult.success(i!=0);
