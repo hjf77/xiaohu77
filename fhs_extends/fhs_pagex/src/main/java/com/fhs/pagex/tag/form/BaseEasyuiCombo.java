@@ -45,6 +45,10 @@ public abstract class BaseEasyuiCombo extends EmptyFormTag {
                 super.tagSett.put("name", super.tagSett.get("name") + "_select");
             }
             super.tagSett.put("class", "big_text");
+            //如果没有自定义onselect则自动送一个onselect
+            if(!super.tagSett.containsKey("onSelect")){
+                super.tagSett.put("onSelect", "removeEmptyComboVal_" + name );
+            }
         }
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='text' autocomplete='off' " + super.formartDataType());
@@ -78,13 +82,16 @@ public abstract class BaseEasyuiCombo extends EmptyFormTag {
         //这块js给你当做全局变量，比如你储存一个全局变量，就可以把代码写到这里
         return "function  setSelectHiddenValue_" + name + "(){" +
                 "$('#" + name + "').val($('#" + name + "_select')." + getEasyuiComboType() + "('getValues')+'');" +
-                "return true;}";
+                "return true;}" +
+                "function removeEmptyComboVal_" + name + "(){" +
+                "removeEmptyComboVal('#" + name + "_select');" +
+                "}";
     }
 
     @Override
     public String readyJs() {
-        if (!isOne2XModel && !ConverterUtils.toBoolean(tagSett.get("multiple"))) {
-            return "$('#" +   ConverterUtils.toString(super.tagSett.get("name")) + "').combobox('initClear');";
+        if (!isOne2XModel) {
+            return "$('#" + ConverterUtils.toString(super.tagSett.get("name")) + "').combobox('initClear');";
         }
         return "";
     }

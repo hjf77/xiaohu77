@@ -2232,4 +2232,12 @@ $.extend({
         }
     }
 });
+function removeEmptyComboVal(thisCombobox){
+    var comboboxVal = $(thisCombobox).combobox('getValues');
+    if(comboboxVal[0] == ''){
+        comboboxVal.splice(0,1);
+        $(thisCombobox).combobox('clear');
+        $(thisCombobox).combobox('setValues',comboboxVal);
+    }
+}
 
