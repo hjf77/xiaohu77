@@ -21,6 +21,7 @@
             //清除按钮添加点击事件，清除当前选中值及隐藏选择面板。
             clear.unbind("click.combo").bind("click.combo",function(){
                 jq.combo("setValue","").combo("setText","");
+                jq.combo("clear");
                 jq.combo('hidePanel');
             });
             arrow.before(clear);
