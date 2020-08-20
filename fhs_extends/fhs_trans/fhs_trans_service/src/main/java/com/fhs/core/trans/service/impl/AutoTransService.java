@@ -23,6 +23,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 本接类使用需要配合Autotrans 注解和autoTransAble的实现类
@@ -40,6 +43,8 @@ import java.util.*;
  * @Date: Created in 10:14 2019/10/15
  */
 @Data
+@Lazy(false)
+@DependsOn("persistentEnhancerScaner")
 @Service
 public class AutoTransService implements ITransTypeService, InitializingBean, ApplicationListener<ApplicationReadyEvent> {
 
@@ -59,15 +64,15 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
 
 
     /**
-     * 缓存 默认时间：半个小时
+     * 缓存 本地缓存五分钟，远程缓存不做过期时间限制，可以节省内存
      */
-    @CreateCache(expire = 1800, name = "trans:cache:", cacheType = CacheType.REMOTE)
+    @CreateCache(localExpire = 300, name = "trans:cache:", cacheType = CacheType.BOTH)
     private Cache<String, Map<String, String>> transCache;
 
     /**
      * 基础服务
      */
-    private Map<String, AutoTransAble> baseServiceMap = new HashMap<>();
+    private Map<String, AutoTransAble> baseServiceMap = new ConcurrentHashMap<>();
 
     /**
      * 配置
@@ -235,6 +240,8 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
             refreshOneNamespace(namespace);
         }
     }
+
+
 
     /**
      * 刷新一个namespace下的所有的缓存
