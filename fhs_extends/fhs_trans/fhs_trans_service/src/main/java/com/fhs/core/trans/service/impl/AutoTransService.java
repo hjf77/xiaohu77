@@ -23,8 +23,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,7 +31,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 本接类使用需要配合Autotrans 注解和autoTransAble的实现类
@@ -43,8 +40,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: Created in 10:14 2019/10/15
  */
 @Data
-@Lazy(false)
-@DependsOn("persistentEnhancerScaner")
 @Service
 public class AutoTransService implements ITransTypeService, InitializingBean, ApplicationListener<ApplicationReadyEvent> {
 
@@ -60,19 +55,19 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
     /**
      * 翻译数据缓存map
      */
-    private Map<String, Map<String, String>> cacheMap = new HashMap<>();
+    private Map<String, Map<String, String>> localTransCacheMap = new HashMap<>();
 
 
     /**
-     * 缓存 本地缓存五分钟，远程缓存不做过期时间限制，可以节省内存
+     * 缓存 默认时间：半个小时
      */
-    @CreateCache(localExpire = 300, name = "trans:cache:", cacheType = CacheType.BOTH)
-    private Cache<String, Map<String, String>> transCache;
+    @CreateCache(name = "trans:cache:", cacheType = CacheType.REMOTE)
+    private Cache<String, Map<String, String>> redisTransCache;
 
     /**
      * 基础服务
      */
-    private Map<String, AutoTransAble> baseServiceMap = new ConcurrentHashMap<>();
+    private Map<String, AutoTransAble> baseServiceMap = new HashMap<>();
 
     /**
      * 配置
@@ -241,8 +236,6 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
         }
     }
 
-
-
     /**
      * 刷新一个namespace下的所有的缓存
      *
@@ -271,9 +264,9 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
         for (int i = 0; i < vos.size(); i++) {
             po = vos.get(i);
             pkeyVal = po.getPkey();
-            cacheMap.put(namespace + "_" + pkeyVal, createTempTransCacheMap(po, autoTrans));
+            localTransCacheMap.put(namespace + "_" + pkeyVal, createTempTransCacheMap(po, autoTrans));
             if(autoTrans.useCache()){
-                this.transCache.put(namespace + "_" + pkeyVal, createTempTransCacheMap(po, autoTrans));
+                this.redisTransCache.put(namespace + "_" + pkeyVal, createTempTransCacheMap(po, autoTrans));
             }
         }
         LOGGER.info("刷新auto-trans缓存完成:" + namespace);
@@ -306,12 +299,12 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
     private Map<String, String> getTempTransCacheMap(String namespace, Object pkey) {
         AutoTrans autoTrans = this.transSettMap.get(namespace);
         //如果内存缓存中有,则优先用内存缓存
-        if (cacheMap.containsKey(namespace + "_" + pkey)) {
-            return cacheMap.get(namespace + "_" + pkey);
+        if (localTransCacheMap.containsKey(namespace + "_" + pkey)) {
+            return localTransCacheMap.get(namespace + "_" + pkey);
         }
         //如果注解为空,代表可能是其他的服务提供的翻译,尝试去redis获取缓存
         else if (autoTrans == null) {
-            Map<String, String> redisCacheResult = this.transCache.get(namespace + "_" + pkey);
+            Map<String, String> redisCacheResult = this.redisTransCache.get(namespace + "_" + pkey);
             //如果获取到了返回
             if (redisCacheResult != null) {
                 return redisCacheResult;
@@ -343,7 +336,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
      * @return
      */
     public String transKey(String namespace, String pkeyVal) {
-        Map<String, String> tempCacheTransMap = cacheMap.get(namespace + "_" + pkeyVal);
+        Map<String, String> tempCacheTransMap = localTransCacheMap.get(namespace + "_" + pkeyVal);
         if (tempCacheTransMap == null) {
             LOGGER.error("auto trans缓存未命中:" + namespace + "_" + pkeyVal);
         } else {
