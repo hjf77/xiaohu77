@@ -28,7 +28,7 @@ public class TransMessageListener {
      * @param message
      */
     public void handelMsg(String message){
-        System.out.println("收到了消息:" + message);
+        LOGGER.info("trans cache listener  received  a msg:" + message);
         Map<String,Object> messageMap = JsonUtils.parseJSON2Map(message);
         if(transRefresherMap.containsKey(messageMap.get("transType")))
         {
