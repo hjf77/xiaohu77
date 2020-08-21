@@ -33,6 +33,7 @@
             <artifactId>fhs_static</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+
     </dependencies>
 
 </project>

@@ -10,6 +10,11 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 @SpringBootApplication(scanBasePackages = {"com.fhs","com.alicp.jetcache"},exclude={
         org.activiti.spring.boot.SecurityAutoConfiguration.class,
         SecurityAutoConfiguration.class
@@ -23,7 +28,11 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class SingleApplication {
 
     public static void main(String[] args) {
-		
-        SpringApplication.run( SingleApplication.class, args);
+        List<Integer> list = new LinkedList<>();
+        Date date = new Date();
+        for(int i=0;i<10000000;i++){
+            list.add(i);
+        }
+        System.out.println(new Date().getTime()-date.getTime());
     }
 }

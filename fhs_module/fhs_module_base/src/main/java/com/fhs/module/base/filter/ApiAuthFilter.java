@@ -6,6 +6,7 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.PubResult;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -39,6 +40,7 @@ public class ApiAuthFilter implements Filter {
         if(CheckUtils.isNullOrEmpty(reqApiToken) || !reqApiToken.equals(apiToken))
         {
             JsonUtils.outJson((HttpServletResponse)servletResponse, PubResult.NO_PERMISSION.asResult().asJson());
+            return;
         }
         filterChain.doFilter(servletRequest,servletResponse);
     }

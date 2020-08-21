@@ -107,7 +107,23 @@ spring:
     validationQuery: select 'x'
 
 
-
+seata:
+  enabled: true
+  application-id: client
+  tx-service-group: fhs-seata-group
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      serverAddr: 192.168.0.213:8848
+      group: SEATA_GROUP
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      serverAddr: 192.168.0.213:8848
+      group: SEATA_GROUP
+      namespace:
 
 logging:
   config: classpath:logback-fhs.xml

@@ -72,7 +72,7 @@ public class ConverterUtils {
      * @return obj转换成的Integer值
      */
     public static Integer toInteger(Object obj) {
-        return toInt(obj, null);
+        return toInt(obj, 0);
     }
 
     /**

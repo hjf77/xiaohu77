@@ -66,6 +66,16 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>5.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.smattme</groupId>
+            <artifactId>mysql-backup4j</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
 </project>
