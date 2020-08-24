@@ -107,48 +107,57 @@ include("/page/tags/form_include.html"){}
         }
         return false;
     }
-
+    var single = true;
     //保存
     function save() {
         if(formCheck()) {
-            $('#addUpdateForm').form('submit', {
-                url : url_save,
-                success : function(d) {
-                    d = $.parseJSON(d);
-                    if (d && d.result) {
-                        Ealert("操作成功！");
-                        closeDialog();
-                        reload();
-                        if (isExitsFunction("saveSucess")) {
-                            saveSucess();
-                        }
-                    } else {
-
-                        if(d.code == 300 || d.code==400 || d.code==500 )
-                        {
-                            EalertE(d.message);
-                        }
-                        if(d.code == 409 )
-                        {
-                            if (isExitsFunction("getConflictMsg")) {
-                                EalertE(getConflictMsg());
+            //防重
+            if (single){
+                $('#addUpdateForm').form('submit', {
+                    url : url_save,
+                    beforeSend:function() {
+                        flage = false;
+                    },
+                    success : function(d) {
+                        d = $.parseJSON(d);
+                        if (d && d.result) {
+                            Ealert("操作成功！");
+                            single = true;
+                            closeDialog();
+                            reload();
+                            if (isExitsFunction("saveSucess")) {
+                                saveSucess();
                             }
+                        } else {
+
+                            if(d.code == 300 || d.code==400 || d.code==500 )
+                            {
+                                EalertE(d.message);
+                            }
+                            if(d.code == 409 )
+                            {
+                                if (isExitsFunction("getConflictMsg")) {
+                                    EalertE(getConflictMsg());
+                                }
+                                else
+                                {
+                                    EalertE('存在重复的数据，请检查');
+                                }
+                            }
+
                             else
                             {
-                                EalertE('存在重复的数据，请检查');
+                                EalertE('操作失败');
+                            }
+                            if (isExitsFunction("saveError")) {
+                                saveError();
                             }
                         }
-
-                        else
-                        {
-                            EalertE('操作失败');
-                        }
-                        if (isExitsFunction("saveError")) {
-                            saveError();
-                        }
+                        single = true;
                     }
-                }
-            });
+                });
+            }
+
         }
 
     };
