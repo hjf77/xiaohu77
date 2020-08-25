@@ -1,8 +1,9 @@
 var modelConfig = {
-    title: '租户管理', pkey: 'group_code', type: 'uuid',
+    title: '租户管理', pkey: 'id', type: 'uuid',
     orderBy: 'update_time Desc',
     namespace: "tenant", table: 't_ucenter_ms_tenant', trans: false,
-    saveUrl:'${path.basePath}/ms/tenant/add'
+    saveUrl:'${path.basePath}/ms/tenant/add',
+    updateUrl:'${path.basePath}/ms/tenant/updateTenant?id='
 };
 
 var listPage = {
@@ -83,6 +84,9 @@ var add = {
             },
             onSave: function () {
 
+            },
+            getConflictMsg:function(){
+                return '租户编码不可重复';
             },
             saveSucess: function () {
             },

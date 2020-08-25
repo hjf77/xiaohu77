@@ -8,8 +8,7 @@ package com.fhs.common.constant;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface Constant
-{
+public interface Constant {
     /**
      * 禁用
      */
@@ -21,8 +20,16 @@ public interface Constant
     /**
      * 验证码生成几位参数
      */
-    int VERIFYING_CODE_NUM =5;
+    int VERIFYING_CODE_NUM = 5;
 
+    /**
+     * 未提交
+     */
+    String UNSUBMITTED = "0";
+    /**
+     * 已提交
+     */
+    String SUBMITTED = "1";
 
     /**
      * 0
@@ -35,15 +42,15 @@ public interface Constant
     int INT_TRUE = 1;
 
     /**
-     *  否
+     * 否
      */
-    int  INT_FALSE = 0;
+    int INT_FALSE = 0;
     /**
      * 是
      */
     String STR_YES = "1";
     /**
-     *  否
+     * 否
      */
     String STR_NO = "0";
 
@@ -100,7 +107,7 @@ public interface Constant
     /**
      * 小
      */
-    int SMALL =-1;
+    int SMALL = -1;
 
     /**
      * 等于
@@ -134,14 +141,13 @@ public interface Constant
     String END = "end";
 
 
-
     /**
      * 接口调用成功代码
      */
     int HPROSE_SUCCESS_CODE = 200;
 
     /**
-     *接口调用失败代码
+     * 接口调用失败代码
      */
     int HPROSE_DEFEAT_CODE = 300;
 
@@ -186,7 +192,7 @@ public interface Constant
     Boolean BFALSE = false;
 
     /**
-     *是
+     * 是
      */
     String STR_TRUE = "true";
 
@@ -223,7 +229,6 @@ public interface Constant
     String VIEW = "view";
 
 
-
     /**
      * 斜杠
      */
@@ -240,7 +245,6 @@ public interface Constant
     String CENTER_LINE = "-";
 
 
-
     /**
      * 1
      */
@@ -250,7 +254,10 @@ public interface Constant
      * 0
      */
     int ZERO = 0;
-
+    /**
+     * 2
+     */
+    int TWO = 2;
     /**
      * 5
      */
@@ -299,7 +306,6 @@ public interface Constant
      * 验证码过期
      */
     int CODE_OVERDUE = 201;
-
 
 
     /**
@@ -379,47 +385,47 @@ public interface Constant
     int GET_DATA_FAIL = 2;
 
     /**
-     *用于查询所有数据
+     * 用于查询所有数据
      */
     int PAGE_ALL = -1;
 
     /**
-     *用户 名称 redis key
+     * 用户 名称 redis key
      */
     String USER_NAME_REDIS_KEY = "sysUser:user_username:";
 
     /**
-     *用户 部门名称 redis key
+     * 用户 部门名称 redis key
      */
     String USER_ORG_NAME_REDIS_KEY = "ucenter:user_orgname:";
 
     /**
-     *字典
+     * 字典
      */
-    String WORD_BOOK  = "wordbook";
+    String WORD_BOOK = "wordbook";
 
     /**
-     *用户信息
+     * 用户信息
      */
     String USER_INFO = "sysUser";
 
     /**
-     *用户名
+     * 用户名
      */
     String USER_NAME = "sysUser:userName";
 
     /**
-     *前台用户名
+     * 前台用户名
      */
     String FRONT_USER_INFO = "ucenter:frontUser";
 
     /**
-     *前台用户昵称
+     * 前台用户昵称
      */
     String FRONT_USER_NICK_NAME = "ucenter:frontUser:nickName";
 
     /**
-     *前台用户名
+     * 前台用户名
      */
     String FRONT_USER_NAME = "ucenter:frontUser:userName";
 
@@ -429,17 +435,17 @@ public interface Constant
     String FRONT_USER_IMAGE = "ucenter:frontUser:imagePath";
 
     /**
-     *部门
+     * 部门
      */
     String USER_ORG_NAME = "orgName";
 
     /**
-     *部门信息
+     * 部门信息
      */
     String ORG_INFO = "orgInfo";
 
     /**
-     *应用信息
+     * 应用信息
      */
     String APP_INFO = "appInfo";
 
