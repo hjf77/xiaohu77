@@ -3,9 +3,13 @@ package com.fhs.pagex.trans;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
+import com.fhs.core.db.ReadWriteDataSourceDecision;
 import com.fhs.core.trans.ITransTypeService;
 import com.fhs.core.trans.Trans;
 import com.fhs.core.trans.TransService;
@@ -14,6 +18,7 @@ import com.fhs.pagex.service.PageXDBService;
 import com.fhs.pagex.service.PagexDataService;
 import com.fhs.system.trans.TransMessageListener;
 import com.mybatis.jpa.common.ColumnNameUtil;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,10 +37,12 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
 
     private static final Logger LOGGER = Logger.getLogger(PageXTransServiceImpl.class);
 
+
     /**
-     * key namespace + _ + pkey value 是对应的缓存字段
+     * 本地5秒过期，远程永不过期
      */
-    private Map<String,Map<String,String>> pageXCacheMap = new HashMap<>();
+    @CreateCache(localExpire = 5, name = "trans_cache:",cacheType = CacheType.BOTH)
+    private Cache<String, Map<String,String>> pageXCacheMap;
 
     /**
      *  pagex中和db 打交道的service 用于缓存数据查询
@@ -142,6 +149,11 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
             return;
         }
         JSONObject row = null;
+        if(pagexListSettDTO.getModelConfig().containsKey("db"))
+        {
+            ReadWriteDataSourceDecision.markParam();
+            ReadWriteDataSourceDecision.setDataSource(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("db")));
+        }
         String rows =  pageXDBService.findListPage(paramMap,namespace);
         JSONArray rowsJson = JSON.parseArray(rows);
         String fieldCamel = null;
