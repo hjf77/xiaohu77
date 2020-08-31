@@ -25,10 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * 前段用户统一登录
  * by jackwong
- *
  */
 @RestController
 @RequestMapping("/api/frontUser")
@@ -49,36 +47,47 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
     @Override
     @RequestMapping("/getSingleFrontUser")
     public HttpResult<FrontUserVo> getSingleFrontUser(@RequestBody GetSingleFrontUserForm getSingleFrontUserForm) {
-        String userId = getSingleFrontUserForm.getUserId();
-        if(userId == null)
-        {
+        String userId = null;
+        UcenterFrontUser user = null;
+        //直接给了userid
+        if (getSingleFrontUserForm.getUserId() != null) {
+            userId = getSingleFrontUserForm.getUserId();
+            // 给了accesstoken
+        } else if (getSingleFrontUserForm.getAccessToken() != null) {
             userId = loginService.getUserIdByAccessToken(getSingleFrontUserForm.getAccessToken());
             LOG.info("根据accessToken" + getSingleFrontUserForm.getAccessToken() + "获取到的userId为:" + userId);
+            //给了手机号
+        } else if (getSingleFrontUserForm.getMobile() != null) {
+            user = frontUserService.findBean(UcenterFrontUser.builder().mobile(getSingleFrontUserForm.getMobile()).build());
+            //给了openid
+        } else if (getSingleFrontUserForm.getOpenId() != null && getSingleFrontUserForm.getOpenIdType() != null) {
+            UcenterFrontUserBind bind = frontUserBindService.findBean(UcenterFrontUserBind.builder().authOpenid(getSingleFrontUserForm.getOpenId()).authOpenidType(getSingleFrontUserForm.getOpenIdType()).build());
+            if (bind != null) {
+                userId = bind.getUserId();
+            }
+        } else {
+            throw new ParamException("userid,accesstoken,mobile,openid至少传一个");
         }
-        if(CheckUtils.isNullOrEmpty(userId))
-        {
-            throw new ParamException("用户id和用户accessToken都没传或者无效");
+        if (userId != null) {
+            user = frontUserService.findBeanById(userId);
         }
-        UcenterFrontUser user = frontUserService.selectById(userId);
-        if(user==null)
-        {
+        if (user == null) {
             throw new ParamException("用户id无效：" + userId);
         }
-        FrontUserVo resultVo  = new FrontUserVo();
-        BeanUtils.copyProperties(user,resultVo);
+        FrontUserVo resultVo = new FrontUserVo();
+        BeanUtils.copyProperties(user, resultVo);
         List<UcenterFrontUserBind> binds = frontUserBindService.findForList(UcenterFrontUserBind.builder().userId(user.getUserId()).build());
-        Map<Integer,String> openIdMap = new HashMap<>();
-        binds.forEach(bind->{
-            openIdMap.put(bind.getAuthOpenidType(),bind.getAuthOpenid());
+        Map<Integer, String> openIdMap = new HashMap<>();
+        binds.forEach(bind -> {
+            openIdMap.put(bind.getAuthOpenidType(), bind.getAuthOpenid());
         });
         resultVo.setOpenIdMap(openIdMap);
         return HttpResult.success(resultVo);
     }
 
     @RequestMapping("/update")
-    public HttpResult<Boolean> update(@RequestBody FrontUserVo frontUserVo)
-    {
-        ParamChecker.isNotNull(frontUserVo.getUserId(),"用户id不能为空");
+    public HttpResult<Boolean> update(@RequestBody FrontUserVo frontUserVo) {
+        ParamChecker.isNotNull(frontUserVo.getUserId(), "用户id不能为空");
         boolean result = 0 < frontUserService.updateSelectiveById(UcenterFrontUser.builder().userId(frontUserVo.getUserId()).mobile(frontUserVo.getMobile()).realName(frontUserVo.getRealName()).build());
         return HttpResult.success(result);
     }
@@ -86,28 +95,31 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
     @RequestMapping("/add")
     public HttpResult<Boolean> add(@RequestBody FrontUserVo frontUserVo) {
         UcenterFrontUser user = new UcenterFrontUser();
-        BeanUtils.copyProperties(frontUserVo,user);
+        BeanUtils.copyProperties(frontUserVo, user);
         user.preInsert(null);
-        return HttpResult.success(frontUserService.insertJpa(user)>0);
+        return HttpResult.success(frontUserService.insertJpa(user) > 0);
     }
 
     @RequestMapping("/find")
     public HttpResult<FrontUserVo> find(@RequestBody FrontUserVo frontUserVo) {
         UcenterFrontUser user = new UcenterFrontUser();
-        BeanUtils.copyProperties(frontUserVo,user);
+        BeanUtils.copyProperties(frontUserVo, user);
         user = frontUserService.selectBean(user);
-        if(user==null)
-        {
+        if (user == null) {
             return HttpResult.error(null);
         }
-        BeanUtils.copyProperties(user,frontUserVo);
+        BeanUtils.copyProperties(user, frontUserVo);
         return HttpResult.success(frontUserVo);
     }
 
     @Override
     public HttpResult<Boolean> mergeUser(String fromUserId, String targetUserId) {
-        //keng
-        return null;
+        List<UcenterFrontUserBind> binds = frontUserBindService.findForList(UcenterFrontUserBind.builder().userId(fromUserId).build());
+        binds.forEach(bind->{
+            bind.setUserId(targetUserId);
+            frontUserBindService.updateJpa(bind);
+        });
+        return HttpResult.success(true);
     }
 
 
