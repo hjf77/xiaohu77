@@ -7,6 +7,7 @@ import com.fhs.ucenter.api.vo.FrontUserVo;
 import feign.RequestLine;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @Description: 用户权限service
@@ -49,5 +50,14 @@ public interface FeignFrontUserApiService {
      */
     @RequestLine("POST /api/frontUser/find")
     HttpResult<FrontUserVo> find(@RequestBody FrontUserVo frontUserVo);
+
+    /**
+     * 合并用户
+     * @param fromUserId 原来用户id
+     * @param targetUserId 目标用户id
+     * @return 用户vo
+     */
+    @RequestLine("POST /api/frontUser/find")
+    HttpResult<Boolean> mergeUser(@RequestParam("fromUser")String fromUserId,String targetUserId);
 
 }

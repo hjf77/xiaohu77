@@ -104,5 +104,11 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
         return HttpResult.success(frontUserVo);
     }
 
+    @Override
+    public HttpResult<Boolean> mergeUser(String fromUserId, String targetUserId) {
+        //keng
+        return null;
+    }
+
 
 }
