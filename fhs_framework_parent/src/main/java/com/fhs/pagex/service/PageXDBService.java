@@ -3,6 +3,7 @@ package com.fhs.pagex.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fhs.core.event.datadel.DataDelManager;
 import com.fhs.pagex.dto.PagexAddDTO;
 import com.fhs.redis.service.RedisCacheService;
 import com.mybatis.jpa.cache.JpaTools;
@@ -49,6 +50,9 @@ public class PageXDBService {
 
     @Autowired
     private RedisCacheService redisCacheService;
+
+    @Autowired
+    private DataDelManager dataDelManager;
 
     private static final String DO_CACHE_KEY = "docache:";
 
@@ -214,7 +218,10 @@ public class PageXDBService {
      */
     public int del(String pkey, String namespace) {
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + pkey);
-        return sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
+        int result = sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
+        //执行
+        dataDelManager.onDel(namespace,pkey);
+        return  result;
     }
 
     /**
