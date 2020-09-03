@@ -2,6 +2,7 @@ package com.fhs.pagex.config;
 
 import com.fhs.common.utils.EMap;
 import com.fhs.core.base.controller.BaseController;
+import com.fhs.pagex.beetl.FhsBeetlClasspathResourceLoader;
 import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
@@ -46,7 +47,7 @@ public class BeetlConf extends BaseController {
     @Bean(name = "beetlConfig")
     public BeetlGroupUtilConfiguration getBeetlGroupUtilConfiguration() {
         BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = new BeetlGroupUtilConfiguration();
-        ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader();
+        FhsBeetlClasspathResourceLoader classpathResourceLoader = new FhsBeetlClasspathResourceLoader();
         beetlGroupUtilConfiguration.setResourceLoader(classpathResourceLoader);
         beetlGroupUtilConfiguration.init();
         this.beetlGroupUtilConfiguration = beetlGroupUtilConfiguration;
@@ -58,10 +59,10 @@ public class BeetlConf extends BaseController {
             @Qualifier("beetlConfig") BeetlGroupUtilConfiguration beetlGroupUtilConfiguration,ContentNegotiatingViewResolver
             contentNegotiatingViewResolver) {
         BeetlSpringViewResolver beetlSpringViewResolver = new BeetlSpringViewResolver();
+        beetlSpringViewResolver.setPrefix("/");
         beetlSpringViewResolver.setSuffix(".html");
         beetlSpringViewResolver.setContentType("text/html;charset=UTF-8");
         beetlSpringViewResolver.setOrder(0);
-        beetlSpringViewResolver.setCache(false);
         beetlSpringViewResolver.setConfig(beetlGroupUtilConfiguration);
         contentNegotiatingViewResolver.setOrder(1);
         beetlConf = this;
