@@ -77,7 +77,7 @@ public class UserFilter implements Filter {
         //普通会员
         boolean isUser = uri.contains("_u");
         FrontUserVo user = (FrontUserVo) request.getSession().getAttribute("frontUser");
-        if (isUser && CheckUtils.isNullOrEmpty(user)) {
+        if (isUser && user == null) {
             send2Login(response, request);
             return;
         }

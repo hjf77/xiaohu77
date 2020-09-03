@@ -12,6 +12,7 @@ import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Cacheable;
+import com.fhs.core.event.datadel.DataDelManager;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.strategy.GenInfo;
 import com.fhs.core.trans.TransService;
@@ -70,6 +71,9 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Autowired
     protected NestedServiceImpl<T> nestedServiceImpl;
+
+    @Autowired
+    protected DataDelManager dataDelManager;
 
 
     private static final Set<String> exist = new HashSet<>();

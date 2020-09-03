@@ -842,6 +842,30 @@
 				o.obj.siblings(".Validform_checktip").html(msg);
 				// Validform.util.cssctl(o.obj.siblings(".Validform_checktip"),o.type);
 			}
+			if(type == 6 && o.obj){
+				// 适配easyui combobox
+				if(o.obj.hasClass('easyui-combobox') || o.obj.hasClass('easyui-combogrid')|| o.obj.hasClass('easyui-combotree'))
+				{
+					if(o.obj.next().hasClass('Validform_checktip'))
+					{
+						o.obj.next().remove();
+						o.obj.next().next().next().after("<span class='Validform_checktip' checkObj='" + $(this).attr('id') + "' />");
+					}
+					errorDiv = o.obj.next().next();
+					//提交时、吐司触发方法在此。
+					if(msg){
+						JavaScriptBridge.EalertE(msg);
+					}
+				}
+				else
+				{
+					//失去焦点事件时触发吐司提示
+					if(msg){
+						console.log(msg);
+						JavaScriptBridge.EalertE(msg);
+					}
+				}
+			}
 
 		},
 

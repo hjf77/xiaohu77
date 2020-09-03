@@ -145,7 +145,8 @@ public final class ZipUtil
     public static void main(String[] args)
     {
 
-        zip("d:/1.zip",new String[]{"d:/QQ图片20160112144921.jpg","d:/1.doc"});
+        //zip("d:/1.zip",new String[]{"d:/QQ图片20160112144921.jpg","d:/1.doc"});
+        unzip("D:\\sqlx\\20_8_2020_13_46_25_fhs-demo_database_dump.zip");
     }
 }
 

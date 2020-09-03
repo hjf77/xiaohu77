@@ -17,4 +17,7 @@ import lombok.NoArgsConstructor;
 public class GetSingleFrontUserForm extends BaseForm {
     private String accessToken;
     private String userId;
+    private Integer openIdType;
+    private String openId;
+    private String mobile;
 }

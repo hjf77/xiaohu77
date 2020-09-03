@@ -12,13 +12,11 @@
         <module>fhs_cloud</module>
         <module>fhs_common</module>
         <module>fhs_core</module>
-        <module>fhs_eureka-server</module>
         <module>fhs_file</module>
         <module>fhs_static</module>
         <module>fhs_file_admin</module>
         <module>fhs_framework_api</module>
         <module>fhs_framework_base_business</module>
-        <module>fhs_framework_base_business_admin</module>
         <module>fhs_framework_parent</module>
     </modules>
 
