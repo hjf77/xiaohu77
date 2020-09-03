@@ -131,7 +131,7 @@ public abstract class ReadWriteDataSourceProcessor implements BeanPostProcessor 
 
         Boolean isForceChoiceRead = readMethodMap.get(bestNameMatch);
         //表示强制选择 读 库
-        if (isForceChoiceRead == Boolean.TRUE) {
+        if (isForceChoiceRead) {
             return true;
         }
 
