@@ -58,10 +58,10 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
             LOG.info("根据accessToken" + getSingleFrontUserForm.getAccessToken() + "获取到的userId为:" + userId);
             //给了手机号
         } else if (getSingleFrontUserForm.getMobile() != null) {
-            user = frontUserService.findBean(UcenterFrontUser.builder().mobile(getSingleFrontUserForm.getMobile()).build());
+            user = frontUserService.selectBean(UcenterFrontUser.builder().mobile(getSingleFrontUserForm.getMobile()).build());
             //给了openid
         } else if (getSingleFrontUserForm.getOpenId() != null && getSingleFrontUserForm.getOpenIdType() != null) {
-            UcenterFrontUserBind bind = frontUserBindService.findBean(UcenterFrontUserBind.builder().authOpenid(getSingleFrontUserForm.getOpenId()).authOpenidType(getSingleFrontUserForm.getOpenIdType()).build());
+            UcenterFrontUserBind bind = frontUserBindService.selectBean(UcenterFrontUserBind.builder().authOpenid(getSingleFrontUserForm.getOpenId()).authOpenidType(getSingleFrontUserForm.getOpenIdType()).build());
             if (bind != null) {
                 userId = bind.getUserId();
             }
