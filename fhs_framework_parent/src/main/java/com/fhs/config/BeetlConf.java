@@ -1,5 +1,6 @@
 package com.fhs.config;
 
+import com.fhs.beetl.FhsBeetlClasspathResourceLoader;
 import com.fhs.core.base.action.BaseAction;
 import org.apache.shiro.SecurityUtils;
 import org.beetl.core.Template;
@@ -44,7 +45,7 @@ public class BeetlConf  extends BaseAction {
     @Bean(name = "beetlConfig")
     public BeetlGroupUtilConfiguration getBeetlGroupUtilConfiguration() {
         BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = new BeetlGroupUtilConfiguration();
-        ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader();
+        FhsBeetlClasspathResourceLoader classpathResourceLoader = new FhsBeetlClasspathResourceLoader();
         beetlGroupUtilConfiguration.setResourceLoader(classpathResourceLoader);
         beetlGroupUtilConfiguration.init();
         this.beetlGroupUtilConfiguration = beetlGroupUtilConfiguration;
