@@ -53,6 +53,10 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             String fileId = request.getParameter("fileId");
             // 文件下载路径
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
+            String fileName = request.getParameter("fileName");
+            if(!StringUtil.isEmpty(fileName)){
+                serviceFile.setFileName(fileName);
+            }
             fileStorage.downloadFile(serviceFile,response);
         } catch (Exception e) {
             LOG.error(this, e);

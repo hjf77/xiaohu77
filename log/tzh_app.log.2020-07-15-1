@@ -1,0 +1,117 @@
+2020-07-15 09:22:05[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-15 09:22:22[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-15 09:22:22[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-15 09:22:35[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-15 09:24:30[IPC Sync Events Thread] [DEBUG] com.xhb.Main$JavaScriptBridge.playVideo(L302) 
+点击视频: rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast, {}
+
+2020-07-15 09:24:30[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@4a087be5[index=0], isPlaying=false
+
+2020-07-15 09:24:30[IPC Sync Events Thread] [DEBUG] com.xhb.PlayerOnCanvas.play(L234) 
+播放index=0, url=rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast
+
+2020-07-15 09:24:30[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.opening(L121) 
+media opening
+
+2020-07-15 09:24:31[IPC Sync Events Thread] [DEBUG] com.xhb.Main$JavaScriptBridge.playVideo(L302) 
+点击视频: rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast, {}
+
+2020-07-15 09:24:31[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@4a087be5[index=0], isPlaying=true
+
+2020-07-15 09:24:31[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@455da00f[index=1], isPlaying=false
+
+2020-07-15 09:24:31[IPC Sync Events Thread] [DEBUG] com.xhb.PlayerOnCanvas.play(L234) 
+播放index=1, url=rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast
+
+2020-07-15 09:24:31[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.opening(L121) 
+media opening
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main$JavaScriptBridge.playVideo(L302) 
+点击视频: rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast, {}
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@4a087be5[index=0], isPlaying=true
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@455da00f[index=1], isPlaying=true
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@2fb1068[index=2], isPlaying=false
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.PlayerOnCanvas.play(L234) 
+播放index=2, url=rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast
+
+2020-07-15 09:24:32[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.opening(L121) 
+media opening
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main$JavaScriptBridge.playVideo(L302) 
+点击视频: rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast, {}
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@4a087be5[index=0], isPlaying=true
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@455da00f[index=1], isPlaying=true
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@2fb1068[index=2], isPlaying=true
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.Main.getEnablePlayer(L284) 
+player-com.xhb.PlayerOnCanvas@64a42cc2[index=3], isPlaying=false
+
+2020-07-15 09:24:32[IPC Sync Events Thread] [DEBUG] com.xhb.PlayerOnCanvas.play(L234) 
+播放index=3, url=rtsp://admin:a12345678@192.168.0.199/Streaming/Channels/101?transportmode=unicast
+
+2020-07-15 09:24:32[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.opening(L121) 
+media opening
+
+2020-07-15 09:24:45[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.error(L106) 
+播放错误
+
+2020-07-15 09:24:46[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.error(L106) 
+播放错误
+
+2020-07-15 09:24:47[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.error(L106) 
+播放错误
+
+2020-07-15 09:24:47[media-player-events] [DEBUG] com.xhb.PlayerOnCanvas$1.error(L106) 
+播放错误
+
+2020-07-15 11:14:38[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-15 11:14:50[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-15 11:14:50[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-15 11:15:03[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-15 17:08:04[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-15 17:08:52[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-15 17:09:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-15 17:09:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-15 17:09:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+

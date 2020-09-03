@@ -494,8 +494,8 @@ public class HttpUtils {
             throws Exception {
 
         Map<String, File> fileMap = new HashMap<>();
-        fileMap.put("Filedata", new File("G:\\document\\停车项目\\图片\\logo.jpg"));
-        String doPostSSL = uploadFile("http://file.fhs.xhb.com//upload/file", fileMap);
+        fileMap.put("Filedata", new File("C:\\Users\\xhb\\Desktop\\operator_login.html"));
+        String doPostSSL = uploadFile("http://192.168.8.29:8087/upload/file", fileMap);
         System.out.println(doPostSSL);
     }
 }

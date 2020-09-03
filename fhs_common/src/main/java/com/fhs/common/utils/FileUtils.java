@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  */
 public class FileUtils extends org.apache.commons.io.FileUtils {
     // Commons Logging instance.
-    private static final Logger LOG = Logger.getLogger(JsonUtils.class);
+    private static final Logger LOG = Logger.getLogger(FileUtils.class);
 
     /**
      * byte缓存大小
@@ -141,7 +141,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @param fileName 文件名称
      */
     public static void initResponseHeader(HttpServletResponse response, String fileName, long length){
-        fileName = formartFileName(fileName);
+        //fileName = formartFileName(fileName);
         // 清空response
         response.reset();
         String contentType = getContentType(fileName);

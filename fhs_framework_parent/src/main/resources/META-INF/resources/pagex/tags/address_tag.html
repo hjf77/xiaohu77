@@ -10,7 +10,7 @@
         anchor : BMAP_ANCHOR_TOP_LEFT,
 
     });
-    var map = new BMap.Map("allmap");
+    //var map = new BMap.Map("allmap");
     map.enableScrollWheelZoom();
     map.enableContinuousZoom();
     map.addControl(navigationControl);
@@ -87,7 +87,7 @@
         $(".tangram-suggestion-main").css("z-index", 9998);
         $('#address').val(provinceName + cityName + areaNames + $(e).val());
     }
-    //百度地图--回显创建地图点
+    //百度地图&#45;&#45;回显创建地图点
     function addMarker(addressStr) {
         map.clearOverlays(); // 清除地图上所有覆盖物
         $('#address2').val(addressStr);

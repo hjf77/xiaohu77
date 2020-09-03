@@ -12,6 +12,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -87,4 +88,29 @@ public interface FeignSysUserApiService {
      */
     @RequestLine("GET /api/sysUser/getSysUserByOrganizationId?organizationId={organizationId}")
     HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@Param("organizationId")String organizationId);
+
+    /**
+     * 添加后管用户
+     * @Param: SysUserVo
+     * @Return:
+     */
+    @RequestLine("POST /api/sysUser/addUser")
+    HttpResult addUser(@RequestBody SysUserVo sysUserVo);
+
+    /**
+     * 删除后管用户
+     * @Param: loginNameo
+     * @Return:
+     */
+    @RequestLine("POST /api/sysUser/delUser?loginName={loginName}")
+    HttpResult delUser(@Param("loginName") String loginName);
+
+    /**
+     *@Description:  根据用户名修改密码
+     * @Param: [loginName, password]
+     * @Return: com.fhs.core.result.HttpResult
+     */
+
+    @RequestLine("GET /api/sysUser/updatePassWord?loginName={loginName}&password={password}")
+    HttpResult updatePassWord(@Param("loginName")String loginName,@Param("password") String password);
 }

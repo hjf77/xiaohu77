@@ -1,0 +1,534 @@
+2020-07-08 09:17:37[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L179) 
+请设置服务器地址
+
+2020-07-08 09:18:07[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L218) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 09:18:07[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L227) 
+root.width = 1920.0
+
+2020-07-08 09:18:19[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L258) 
+videoBox.width = 0.0
+
+2020-07-08 09:20:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L175) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 09:20:21[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L218) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 09:20:21[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L227) 
+root.width = 1920.0
+
+2020-07-08 09:20:21[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L258) 
+videoBox.width = 0.0
+
+2020-07-08 09:40:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L179) 
+请设置服务器地址
+
+2020-07-08 09:40:46[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L218) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 09:40:46[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L227) 
+root.width = 1920.0
+
+2020-07-08 09:40:58[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L258) 
+videoBox.width = 0.0
+
+2020-07-08 09:49:17[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L179) 
+请设置服务器地址
+
+2020-07-08 09:50:31[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L218) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 09:50:31[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L227) 
+root.width = 1920.0
+
+2020-07-08 09:50:31[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L258) 
+videoBox.width = 0.0
+
+2020-07-08 09:51:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L179) 
+请设置服务器地址
+
+2020-07-08 10:26:06[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L175) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 10:26:24[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L218) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 10:26:24[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L227) 
+root.width = 1920.0
+
+2020-07-08 10:26:24[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L258) 
+videoBox.width = 0.0
+
+2020-07-08 10:32:17[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L181) 
+请设置服务器地址
+
+2020-07-08 10:32:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L220) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 10:32:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L229) 
+root.width = 1920.0
+
+2020-07-08 10:32:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L260) 
+videoBox.width = 0.0
+
+2020-07-08 10:39:50[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L182) 
+请设置服务器地址
+
+2020-07-08 10:39:59[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L221) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 10:39:59[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L230) 
+root.width = 1920.0
+
+2020-07-08 10:40:00[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L261) 
+videoBox.width = 0.0
+
+2020-07-08 10:42:19[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L180) 
+请设置服务器地址
+
+2020-07-08 10:42:28[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L219) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 10:42:28[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L228) 
+root.width = 1920.0
+
+2020-07-08 10:42:28[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L259) 
+videoBox.width = 0.0
+
+2020-07-08 10:45:32[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L181) 
+请设置服务器地址
+
+2020-07-08 10:45:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L220) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 10:45:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L229) 
+root.width = 1920.0
+
+2020-07-08 10:45:40[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L260) 
+videoBox.width = 0.0
+
+2020-07-08 10:47:22[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L177) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 10:47:30[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L220) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 10:47:30[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L229) 
+root.width = 1920.0
+
+2020-07-08 10:47:30[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L260) 
+videoBox.width = 0.0
+
+2020-07-08 11:23:32[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 11:23:42[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L225) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 11:23:42[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+root.width = 1920.0
+
+2020-07-08 11:23:54[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L265) 
+videoBox.width = 0.0
+
+2020-07-08 11:26:55[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 11:27:03[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L225) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 11:27:03[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+root.width = 1920.0
+
+2020-07-08 11:27:03[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L265) 
+videoBox.width = 0.0
+
+2020-07-08 11:36:16[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 11:36:27[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L225) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 11:36:27[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+root.width = 1920.0
+
+2020-07-08 11:36:28[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L265) 
+videoBox.width = 0.0
+
+2020-07-08 11:39:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L182) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 11:39:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L225) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 11:39:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+root.width = 1920.0
+
+2020-07-08 11:39:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L265) 
+videoBox.width = 0.0
+
+2020-07-08 11:43:10[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L187) 
+请设置服务器地址
+
+2020-07-08 13:40:44[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 13:40:52[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L233) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 13:40:52[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L242) 
+root.width = 1920.0
+
+2020-07-08 13:41:00[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L273) 
+videoBox.width = 0.0
+
+2020-07-08 13:42:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 13:42:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L233) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 13:42:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L242) 
+root.width = 1920.0
+
+2020-07-08 13:42:37[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L273) 
+videoBox.width = 0.0
+
+2020-07-08 13:55:32[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 13:55:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 13:55:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 13:55:40[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 14:00:24[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 14:00:32[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 14:00:32[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 14:00:33[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 14:03:47[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L180) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 14:03:56[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 14:03:56[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 14:03:57[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 14:04:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 14:07:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 14:07:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 14:07:27[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 14:15:18[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 14:15:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 14:15:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 14:15:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 14:17:00[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 14:17:08[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 14:17:08[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 14:17:08[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 14:30:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 14:30:44[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 14:30:44[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 14:30:45[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 15:27:01[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+请设置服务器地址
+
+2020-07-08 15:27:08[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L232) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:27:08[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L241) 
+root.width = 1920.0
+
+2020-07-08 15:27:09[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L272) 
+videoBox.width = 0.0
+
+2020-07-08 15:38:28[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 15:38:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:38:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L243) 
+root.width = 1920.0
+
+2020-07-08 15:38:36[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L274) 
+videoBox.width = 0.0
+
+2020-07-08 15:43:22[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 15:43:34[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:43:34[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L243) 
+root.width = 1920.0
+
+2020-07-08 15:43:34[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L274) 
+videoBox.width = 0.0
+
+2020-07-08 15:44:44[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 15:44:51[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:44:51[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L243) 
+root.width = 1920.0
+
+2020-07-08 15:44:51[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L274) 
+videoBox.width = 0.0
+
+2020-07-08 15:49:17[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L182) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 15:49:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:49:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L243) 
+root.width = 1920.0
+
+2020-07-08 15:49:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L274) 
+videoBox.width = 0.0
+
+2020-07-08 15:55:05[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L186) 
+请设置服务器地址
+
+2020-07-08 15:55:11[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L234) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:55:11[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L243) 
+root.width = 1920.0
+
+2020-07-08 15:55:12[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L274) 
+videoBox.width = 0.0
+
+2020-07-08 15:56:28[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L187) 
+请设置服务器地址
+
+2020-07-08 15:56:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L235) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 15:56:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L244) 
+root.width = 1920.0
+
+2020-07-08 15:56:39[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L275) 
+videoBox.width = 0.0
+
+2020-07-08 16:01:21[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L183) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 16:01:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L235) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:01:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L244) 
+root.width = 1920.0
+
+2020-07-08 16:01:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L275) 
+videoBox.width = 0.0
+
+2020-07-08 16:04:59[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L187) 
+请设置服务器地址
+
+2020-07-08 16:05:06[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L235) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:05:06[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L244) 
+root.width = 1920.0
+
+2020-07-08 16:05:07[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L275) 
+videoBox.width = 0.0
+
+2020-07-08 16:08:22[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 16:08:33[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:08:33[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:08:33[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:11:05[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 16:11:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:11:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:11:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:12:00[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 16:12:10[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:12:10[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:12:10[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:13:04[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-08 16:13:12[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:13:12[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:13:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:13:58[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-08 16:14:16[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:14:16[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:14:16[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:15:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-08 16:15:35[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:15:35[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:15:35[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:35:15[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 16:35:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:35:25[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:35:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 16:58:03[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 16:58:17[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 16:58:17[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 16:58:29[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 17:16:05[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 17:16:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 17:16:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 17:16:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 17:34:55[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 17:35:12[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 17:35:12[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 17:35:13[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 18:01:55[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L184) 
+设置服务器ip地址: 192.168.0.121
+
+2020-07-08 18:02:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 18:02:26[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 18:02:27[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+
+2020-07-08 18:14:38[JavaFX Application Thread] [DEBUG] com.xhb.Main.start(L188) 
+请设置服务器地址
+
+2020-07-08 18:14:46[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L236) 
+videoHeight=318.0, videoWidth=454.0, htmlWidth = 1920.0
+
+2020-07-08 18:14:46[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L245) 
+root.width = 1920.0
+
+2020-07-08 18:14:46[JavaFX Application Thread] [DEBUG] com.xhb.Main.initVideoLayout(L276) 
+videoBox.width = 0.0
+

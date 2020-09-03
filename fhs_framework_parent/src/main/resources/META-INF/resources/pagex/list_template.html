@@ -24,6 +24,8 @@
     <!--easyui start-->
     <script type="text/javascript"
             src="${staticPath}js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript"
+            src="${staticPath}js/easyui/plugins/jquery.form.js"></script>
     <link rel="stylesheet" type="text/css"
           href="${staticPath}js/easyui/themes/metro/easyui.css"/>
     <link rel="stylesheet" type="text/css"
@@ -115,8 +117,11 @@
     <!--扩展js和css引入 end-->
 </head>
 <body>
-<table id="listGrid" title="${modelConfig.title}列表"
+<table id="listGrid"
        fit="true" style="width: 90%;"
+       <% if(isNotEmpty(modelConfig.title)){ %>
+            title="${modelConfig.title}列表"
+        <% } %>
         <% if(isEmpty(parameter.loadDft)){ %>
          class="easyui-datagrid"
          url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
@@ -211,7 +216,7 @@
 </div>
 <div id="addOrUpdateDialog" class="easyui-dialog" title="添加/修改${modelConfig.title}"
      data-options="iconCls:'icon-save'" closed="true"
-     style="width: 80%; height: 90%; padding: 10px"
+     style="width: 85%; height: 95%; padding: 10px"
      buttons="#dlg-buttons">
 </div>
 
@@ -244,10 +249,13 @@
 
     //显示列设置
     function showColumnSett(e){
+        debugger;
+
         var items = [
             <% for(field in listFields){ %>
 
-                { title: '${field.title}',  fn: setColumn, clickFun: 'setColumn',val:<% if(field.showField == null){ %>_fieldName='${field.camelName}'<% }else{%>'${field.showField}'<% } %> },
+                    { title: '${field.title}',visible:!'${field.hidden}', fn: setColumn, clickFun: 'setColumn',val:<% if(field.showField == null){ %>_fieldName='${field.camelName}'<% }else{%>'${field.showField}'<% } %> },
+
             <% } %>
         ];
         basicContext.show(items, e)
@@ -340,7 +348,10 @@
         var columnFields = $("#listGrid").datagrid('getColumnFields');
         var fieldArray = [];
         for (i = 0; i < columnFields.length; i++) {
-            fieldArray.push($("#listGrid").datagrid('getColumnOption', columnFields[i]));
+            var option = $("#listGrid").datagrid('getColumnOption',columnFields[i]);
+            if (option.field != "checkItem" && option.hidden != "true") { //过滤勾选框和隐藏列
+                fieldArray.push(option);
+            }
         }
         // 扩展字段
         if (isExitsFunction('excelSett')) {

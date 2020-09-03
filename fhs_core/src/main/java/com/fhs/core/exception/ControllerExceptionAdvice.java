@@ -76,6 +76,7 @@ public class ControllerExceptionAdvice {
         {
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode (400);
+            httpResult.setData("");
             JsonUtils.outJson(response, httpResult.asJson());
             return null;
         }

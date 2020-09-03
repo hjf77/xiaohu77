@@ -1,6 +1,7 @@
 package com.fhs.ucenter.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.bean.LeftMenu;
@@ -197,6 +198,14 @@ public interface SysUserService extends BaseService<SysUser>
     HttpResult refreshRedisCache();
 
     /**
+     * 刷新指定用户缓存
+     * @Param: [userList]
+     * @Return: com.fhs.core.result.HttpResult
+     */
+
+    HttpResult refreshUserCache(List<SysUser> userList);
+
+    /**
      * 获取当前用户的 左侧菜单
      * @param user 当前登录用户
      * @param menuType 菜单类型
@@ -245,5 +254,13 @@ public interface SysUserService extends BaseService<SysUser>
      * @return 集团下所有的用户tree
      */
     List<SysUserOrgDTO> getUserOrgTreeList(String groupCode);
+
+    /**
+     *@Description:  updateWrapper支持
+     * @Param: [sysUser, updateWrapper]
+     * @Return: int
+     */
+
+    int update(SysUser sysUser,Wrapper<SysUser> updateWrapper);
 
 }

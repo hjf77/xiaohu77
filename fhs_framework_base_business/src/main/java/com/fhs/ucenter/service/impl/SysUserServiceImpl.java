@@ -3,6 +3,7 @@ package com.fhs.ucenter.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -113,6 +114,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         } else {//修改
             count = super.updateSelectiveById(adminUser);
         }
+        List<SysUser> userList = new ArrayList<>(1);
+        userList.add(adminUser);
+        sysUserService.refreshUserCache(userList);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         if (count > 0) {
             // 添加用户成功时插入当前用户角色
@@ -471,7 +475,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     @Override
     public HttpResult refreshRedisCache() {
-        List<SysUser> userList = this.select();
+        this.refreshUserCache(this.select());
+        return HttpResult.success();
+    }
+
+    @Override
+    public HttpResult refreshUserCache(List<SysUser> userList){
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
                 redisCacheService.remove("ucenter:sysuser:username:" + sysUser.getUserId());
@@ -480,7 +489,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
                 redisCacheService.addStr("ucenter:sysuser:userheader:"+ sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
             }
         });
-        return HttpResult.success();
+        return  HttpResult.success();
     }
 
     @Override
@@ -682,7 +691,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Override
     public List<SysUserOrgDTO> getUserOrgTreeList(String groupCode) {
         List<SysUserOrgDTO> dbRecord = sysUserDAO.getUserOrgTreeList(groupCode);
-
         //找不到爸爸的才会放到此里面
         List<SysUserOrgDTO> result = new ArrayList<>();
 
@@ -701,6 +709,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         return result;
     }
 
+    @Override
+    public int update(SysUser sysUser, Wrapper<SysUser> updateWrapper) {
+        return sysUserDAO.update(sysUser,updateWrapper);
+    }
 
     private List<String> getPermissionUrlByUserId(String userId) {
         return sysUserDAO.getPermissionUrlByUserId(userId);

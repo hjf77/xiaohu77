@@ -934,6 +934,21 @@ function openDialog(url, title) {
   });
 }
 
+function openIframeDialog(url,title){
+    $("#addOrUpdateDialog").dialog({
+        title:title,
+        close:true,
+        onClose: function () {
+            $('#dlg-buttons').show();
+        },
+        modal:true,
+        content:"<iframe scrolling='auto' frameborder='0' src='"+url+"' style='width:100%; height:100%; display:block;'></iframe>",
+    });
+    $("#addOrUpdateDialog").dialog("open"); // 打开dialog
+    $('#dlg-buttons').hide();
+
+}
+
 $.fn.serializeObject = function()
 {
    var o = {};
@@ -2309,11 +2324,15 @@ function isExitsFunction(funcName) {
  */
 function exportExcelPub(url,dataGridId)
 {
+    debugger;
 	var columnFields =$("#listGrid").datagrid('getColumnFields');
 	var fieldArray = [];
 	for(i=0;i<columnFields.length;i++)
 	{
-		fieldArray.push($("#listGrid").datagrid('getColumnOption',columnFields[i]));
+        var option = $("#listGrid").datagrid('getColumnOption',columnFields[i]);
+        if (option.field != "checkItem" && option.hidden != "true") { //过滤勾选框和隐藏列
+            fieldArray.push(option);
+        }
 	}
 	// 如果自定义了其他的列，则加上这些列
 	if(isExitsFunction('excelSett')){

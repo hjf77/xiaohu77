@@ -137,7 +137,7 @@ public class MsUserAction extends ModelSuperAction<SysUser> {
     public HttpResult<Map> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
         try {
             SysUser sysUser = sysUserService.findBeanById(id);
-            if (sysUser.getIsAdmin() == sysUserService.SYS_USER_IS_ADMIN) {
+            if (SysUserService.SYS_USER_IS_ADMIN.equals(sysUser.getIsAdmin())) {
                 return HttpResult.error(null, "超管用户不能删除");
             }
             sysUserService.deleteSysUserById(id);

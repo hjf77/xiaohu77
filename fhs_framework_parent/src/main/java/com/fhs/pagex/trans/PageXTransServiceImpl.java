@@ -41,15 +41,16 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     /**
      * 本地5秒过期，远程永不过期
      */
-<<<<<<< HEAD
-    private Map<String, Map<String, String>> pageXCacheMap = new HashMap<>();
-=======
-    @CreateCache(localExpire = 5, name = "trans_cache:",cacheType = CacheType.BOTH)
-    private Cache<String, Map<String,String>> pageXCacheMap;
->>>>>>> 0a130c4c6d96a8f41cde103697691c0d9706db20
+    /*@CreateCache(localExpire = 5, name = "trans_cache:",cacheType = CacheType.BOTH)
+    private Cache<String, Map<String,String>> pageXCacheMap;*/
 
     /**
-     * pagex中和db 打交道的service 用于缓存数据查询
+     * key namespace + _ + pkey value 是对应的缓存字段
+     */
+    private Map<String,Map<String,String>> pageXCacheMap = new HashMap<>();
+
+    /**
+     *  pagex中和db 打交道的service 用于缓存数据查询
      */
     @Autowired
     private PageXDBService pageXDBService;
@@ -57,31 +58,36 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     @Override
     public void transOne(SuperBean<?> obj, List<Field> toTransList) {
         Trans tempTrans = null;
-        for (Field tempField : toTransList) {
+        for (Field tempField : toTransList)
+        {
             tempField.setAccessible(true);
             tempTrans = tempField.getAnnotation(Trans.class);
             String pkey = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
-            if (CheckUtils.isNullOrEmpty(pkey)) {
+            if(CheckUtils.isNullOrEmpty(pkey))
+            {
                 continue;
             }
             String namespace = tempTrans.key();
             String alias = null;
             // 如果是port#in alias == in namespace = port
-            if (namespace.contains("#")) {
-                alias = namespace.substring(namespace.indexOf("#") + 1);
-                namespace = namespace.substring(0, namespace.indexOf("#"));
+            if(namespace.contains("#"))
+            {
+                alias = namespace.substring(namespace.indexOf("#")+1);
+                namespace = namespace.substring(0,namespace.indexOf("#"));
             }
-            Map<String, String> transCache = pageXCacheMap.get(namespace + "_" + pkey);
-            if (transCache == null) {
+            Map<String,String> transCache = pageXCacheMap.get(namespace + "_" + pkey);
+            if(transCache == null){
                 LOGGER.error("pagex trans缓存未命中:" + namespace + "_" + pkey);
                 continue;
             }
-            if (alias != null) {
-                Map<String, String> tempMap = new HashMap<>();
+            if(alias != null )
+            {
+                Map<String,String> tempMap =new HashMap<>();
                 Set<String> keys = transCache.keySet();
-                for (String key : keys) {
+                for(String key : keys)
+                {
                     //tempMap.put(alias + "_" + key,transCache.get(key));
-                    tempMap.put(alias + key.substring(0, 1).toUpperCase() + key.substring(1), transCache.get(key));
+                    tempMap.put(alias + key.substring(0, 1).toUpperCase() + key.substring(1),transCache.get(key));
                 }
                 transCache = tempMap;
             }
@@ -92,8 +98,8 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
 
     @Override
     public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
-        objList.forEach(obj -> {
-            this.transOne(obj, toTransList);
+        objList.forEach(obj->{
+            this.transOne(obj,toTransList);
         });
     }
 
@@ -101,79 +107,77 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
         TransService.registerTransType("pagex", this);
-        TransMessageListener.regTransRefresher("pagex", this::refreshPageXCache);
+        TransMessageListener.regTransRefresher("pagex",this::refreshPageXCache);
     }
 
     /**
      * 刷新缓存
-     *
-     * @param messageMap 消息
+     * @param messageMap  消息
      */
-    public void refreshPageXCache(Map<String, Object> messageMap) {
+    public void refreshPageXCache(Map<String,Object> messageMap)
+    {
         //这里必须能拿到namespace 拿不到,就当作全部刷新
-        String namespace = ConverterUtils.toString(messageMap.get("namespace"), null);
-        if (namespace == null) {
+        String namespace = ConverterUtils.toString(messageMap.get("namespace"),null);
+        if(namespace == null)
+        {
             Set<String> namespaceSet = PagexDataService.SIGNEL.getAllJsNamespace();
-            namespaceSet.forEach(temp -> {
+            namespaceSet.forEach(temp->{
                 refreshOneNamespace(temp);
             });
-        } else {
+        }else
+        {
             refreshOneNamespace(namespace);
         }
     }
 
     /**
      * 刷新一个namespace下的所有的缓存
-     *
-     * @param namespace namespace
+     * @param namespace  namespace
      */
-    public void refreshOneNamespace(String namespace) {
+    public void refreshOneNamespace(String namespace)
+    {
         LOGGER.info("开始刷新pagex缓存:" + namespace);
-        if (!PagexDataService.SIGNEL.getAllJsNamespace().contains(namespace)) {
+        if(!PagexDataService.SIGNEL.getAllJsNamespace().contains(namespace))
+        {
             LOGGER.info("本系统无需刷新此缓存namespace:" + namespace);
-            return;
+            return ;
         }
 
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("start", Constant.PAGE_ALL);
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("start",Constant.PAGE_ALL);
         PagexListSettDTO pagexListSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         String pkeyField = ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("pkeyCamel"));
         JSONObject joinColumns = JSON.parseObject(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("joinColumns")));
         //没有配置则代表不需要提供翻译给其他的代码
-        if (joinColumns == null || CheckUtils.isNotEmpty(pagexListSettDTO.getModelConfig().get("notTrans"))) {
+        if(joinColumns==null || CheckUtils.isNotEmpty(pagexListSettDTO.getModelConfig().get("notTrans")))
+        {
             return;
         }
         JSONObject row = null;
-<<<<<<< HEAD
-        if (pagexListSettDTO.getModelConfig().containsKey("db")) {
-            ReadWriteDataSourceDecision.markParam();
-            ReadWriteDataSourceDecision.setDataSource(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("db")));
-        }
-        String rows = pageXDBService.findListPage(paramMap, namespace);
-=======
         if(pagexListSettDTO.getModelConfig().containsKey("db"))
         {
             ReadWriteDataSourceDecision.markParam();
             ReadWriteDataSourceDecision.setDataSource(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("db")));
         }
         String rows =  pageXDBService.findListPage(paramMap,namespace);
->>>>>>> 0a130c4c6d96a8f41cde103697691c0d9706db20
         JSONArray rowsJson = JSON.parseArray(rows);
         String fieldCamel = null;
-        String pkeyVal = null;
+        String pkeyVal  = null;
         String fielVal = null;
-        Map<String, String> tempCacheTransMap = null;
-        for (int i = 0; i < rowsJson.size(); i++) {
-            row = rowsJson.getJSONObject(i);
+        Map<String,String> tempCacheTransMap = null;
+        for(int i = 0;i<rowsJson.size();i++)
+        {
+            row  = rowsJson.getJSONObject(i);
             pkeyVal = row.getString(pkeyField);
             Set<String> columns = joinColumns.keySet();
             tempCacheTransMap = new HashMap<>();
-            for (String column : columns) {
+            for(String column : columns)
+            {
                 fieldCamel = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(column));
                 fielVal = ConverterUtils.toString(row.get(fieldCamel));
-                tempCacheTransMap.put(joinColumns.getString(column), fielVal);
+                tempCacheTransMap.put(joinColumns.getString(column),fielVal);
             }
-            pageXCacheMap.put(namespace + "_" + pkeyVal, tempCacheTransMap);
+            pageXCacheMap.put(namespace+"_"+pkeyVal,tempCacheTransMap);
         }
         LOGGER.info("刷新pagex缓存完成:" + namespace);
     }

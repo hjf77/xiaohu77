@@ -72,4 +72,20 @@ public class SysUserVo extends BaseVo {
      * 密码
      */
     private String  password;
+
+    /**
+     * 登录人的userId
+     */
+
+    private String loginUserId;
+
+    /**
+     * 登录人的groupcode
+     */
+    private String loginUserGroupCode;
+
+    /**
+     * 用户角色
+     */
+    private String[] roleList;
 }
