@@ -1,251 +1,496 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>${systemTitle}</title>
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<link rel="stylesheet" href="${basePath}/js/layui/layuiadmin/layui/css/layui.css" media="all">
-	<link rel="stylesheet" href="${basePath}/js/layui/layuiadmin/style/admin.css" media="all">
-	<script type="text/javascript" src="${fhs_static_url}js/jquery.min.js"></script>
-
-	<style>
-
-		.layadmin-iframe{
-			left: 0.5%;
-			top: 1%;
-			width: 99%;
-			height: 98%;
-		}
-		.
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHS演示系统</title>
+    <link rel="stylesheet" href="${basePath}/css/index.css">
+    <link rel="stylesheet" href="${basePath}/font/iconfont.css">
 </head>
-<body class="layui-layout-body">
-
-<div id="LAY_app">
-	<div class="layui-layout layui-layout-admin">
-		<div class="layui-header">
-			<!-- 头部区域 -->
-			<ul class="layui-nav layui-layout-left " id="topMenuUL">
-				<li class="layui-nav-item layadmin-flexible" lay-unselect>
-					<a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
-						<i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
-					</a>
-				</li>
-			</ul>
-			<ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
-				<li class="layui-nav-item" lay-unselect>
-					<a href="javascript:;">
-						<cite>${session.sessionUser.userName}</cite>
-					</a>
-					<dl class="layui-nav-child">
-						<dd><a lay-href="${basePath}/b/page-ms-index/admin_info_update">基本资料</a></dd>
-						<dd><a lay-href="${basePath}/b/page-ms-index/admin_pass_update">修改密码</a></dd>
-						<hr>
-						<dd  style="text-align: center;"><a href="${loginOutUrl}">退出</a></dd>
-					</dl>
-				</li>
-				<li class="layui-nav-item layui-hide-xs" lay-unselect>
-					<a href="javascript:;" >
-
-					</a>
-				</li>
-
-			</ul>
-		</div>
-
-		<!-- 侧边菜单 -->
-		<div class="layui-side layui-side-menu">
-			<div class="layui-side-scroll">
-				<div class="layui-logo" >
-					<img src="${basePath}/js/layui/layuiadmin/style/res/logo.png">
-					<span>${systemTitle}</span>
-				</div>
-
-				<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-
-				</ul>
-			</div>
-		</div>
-
-		<!-- 页面标签 -->
-		<div class="layadmin-pagetabs" id="LAY_app_tabs">
-			<div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
-			<div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
-			<div class="layui-icon layadmin-tabs-control layui-icon-down">
-				<ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
-					<li class="layui-nav-item" lay-unselect>
-						<a href="javascript:;"></a>
-						<dl class="layui-nav-child layui-anim-fadein">
-							<dd layadmin-event="closeThisTabs" id="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
-							<dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
-							<dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
-						</dl>
-					</li>
-				</ul>
-			</div>
-			<div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
-				<ul class="layui-tab-title" id="LAY_app_tabsheader">
-					<li lay-id="${index_right_path}" lay-attr="home/console.html" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
-				</ul>
-			</div>
-		</div>
-
-
-		<!-- 主体内容 -->
-		<div class="layui-body" id="LAY_app_body">
-			<div class="layadmin-tabsbody-item layui-show">
-				<iframe src="${index_right_path}" frameborder="0" class="layadmin-iframe"></iframe>
-			</div>
-		</div>
-
-		<!-- 辅助元素，一般用于移动设备下遮罩 -->
-		<div class="layadmin-body-shade" layadmin-event="shade"></div>
-	</div>
-</div>
-<a ay-href="" style="display: none" id="openFrameWin"></a>
-<!--顶部菜单模板-->
-<script id="top_menu_teplate" type="text/html">
-	<@for(i=0;i<menus.length;i++){
-		var _temp_menu = menus[i];
-	@>
-
-	<li class="layui-nav-item layui-hide-xs topMenu" >
-		<a href="javascript:refreshLeft('<@=_temp_menu.id@>');"  menuId="<@=_temp_menu.id@>" title="<@=_temp_menu.name@>">
-			<i class="layui-icon layui_header_menu">
-				<@=_temp_menu.name@>
-			</i>
-		</a>
-	</li>
-	<@}@>
-</script>
-<!--左侧菜单模板-->
-<script id="left_menu_teplate" type="text/html">
-	<@
-	for(i=0;i<menus.length;i++){
-	    var _temp_menu = menus[i];
-	@>
-
-	<li class="layui-nav-item" lay-unselect>
-		<a href="javascript:;"
-		<@if(!_temp_menu.sonMenu||_temp_menu.sonMenu.length==0){@>
-			lay-href="<@=_temp_menu['serverUrl']@>ms/redirect?call=<@=_temp_menu['url']@>"  title="<@=_temp_menu['name']@>"
-		<@}@>
-		  >
-			<i class="layui-icon left-menu-icon " style="background-image:url(${basePath}/images/menu/<@=_temp_menu['image']@>.png)"></i>
-			<cite><@=_temp_menu['name']@></cite>
-		</a>
-		<@if(_temp_menu.sonMenu&&_temp_menu.sonMenu.length>0)
-         {
-		    @>
-		<dl class="layui-nav-child">
-		 <@
-             for(j=0;j<_temp_menu.sonMenu.length;j++)
-			 {
-				var _class2_temp_menu = _temp_menu.sonMenu[j];
-
-		@>
-			<dd>
-				<a href="javascript:;"
-				<@if(!_class2_temp_menu.sonMenu||_temp_menu.sonMenu.length>0){@>
-				lay-href="<@=_class2_temp_menu['serverUrl']@>ms/redirect?call=<@=_class2_temp_menu['url']@>"  title="<@=_class2_temp_menu['name']@>"
-				<@}@>
-				><@=_class2_temp_menu.name@></a>
-				<@if(_class2_temp_menu.sonMenu&&_class2_temp_menu.sonMenu.length>0){
-				@>
-					<dl class="layui-nav-child ">
-						<@ for(q=0;q<_class2_temp_menu.sonMenu.length;q++)
-						{
-							var _class3_temp_menu=_class2_temp_menu.sonMenu[q];
-						 @>
-							<dd data-name="list"><a lay-href="<@=_class3_temp_menu['serverUrl']@>ms/redirect?call=<@=_class3_temp_menu['url']@>"><@=_class3_temp_menu['name']@></a></dd>
-						<@}@>
-					 </dl>
-				<@}@>
-			</dd>
-		<@
-		  }@>
-		</dl>
-		<@}@>
-	</li>
-	<@}@>
-</script>
-
-<script type="text/javascript" src="${fhs_static_url}js/baidutemplate.js"></script>
-<script src="${basePath}/js/layui/layuiadmin/layui/layui.js"></script>
-
-<!--菜单相关js-->
-<script>
-	$(function () {
-        $.get(
-		'${basePath}ms/sysUser/seachMenuByUser?menuType=${parameter.menuType!1}',
-		function(data) {
-			initTopMenu(data);
-            addOpenFrameMsgListener();
-		}, 'json');
-    })
-    var topMenuMap = {};
-
-    //初始化最顶部的菜单
-    function initTopMenu(topMenuData){
-       var topMenuHtml = baidu.template('top_menu_teplate',{menus:topMenuData});
-       $('#topMenuUL').append(topMenuHtml);
-        initLayui();
-        topMenuData.forEach(function (item) {
-            topMenuMap[item.id]=item;
-        });
-        refreshLeft(topMenuData[0].id);
-        $('.topMenu:first').addClass('layui-this');
-    }
-
-    //刷新左侧菜单
-    function refreshLeft(fatherId){
-        var leftMenuHtml = baidu.template('left_menu_teplate',{menus:topMenuMap[fatherId].sonMenu});
-        $('#LAY-system-side-menu').html(leftMenuHtml);
-        if(element.render)
-		{
-            //渲染navbar
-            element.render();
-		}
-	}
-
-	//关闭当前页面
-	function  closeDialog() {
-		$('#closeThisTabs').click();
-    }
-
-    // mainIframe打开一个Tab
-    function openFrame(url, title) {
-        $('#openFrameWin').html(title);
-		$('#openFrameWin').attr('lay-href',url);
-        $('#openFrameWin').click();
-    }
-
-    //监听子系统调用打开新的窗口事件
-    function addOpenFrameMsgListener(){
-        window.addEventListener('message',function(event){
-            openFrame(event.data.url, event.data.title)
-        },false);
-    }
-
-</script>
-<script>
-
-	var element = {};
-
-	function initLayui(){
-        layui.config({
-            base: '../../../js/layui/layuiadmin/' //静态资源所在路径
-        }).extend({
-            index: './lib/index' //主入口模块
-        }).use(['index','element'],function(){
-            element = layui.element;
-		});
-	}
-
-</script>
+<body>
+    <div id="box">
+        <!-- 页面加载前的动画 -->
+        <div id="app" v-if="loadBefore">
+            <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+            </div>
+        </div>
+        <!-- 正文 -->
+        <div id="box" @click='rightKey=false' v-cloak else> 
+            <!-- 大导航 -->
+            <div class="header">
+                    <div  class="header-left">
+                        <img :class="{'header-left-ico':ischange}" src="${systemIcon!'/images/default_avatar.png'}">
+                        <p class="header-left-item" v-show='!ischange'>${systemTitle}</p>
+                    </div>
+                    <div class="header-right" :class={'change':ischange}>
+                        <button @click='handlechange()' class="header-right-left iconfont icon-daohangshouqi" v-show='!ischange'></button>
+                        <button @click='handlechange()' class="header-right-left iconfont icon-daohangzhankai" v-show='ischange'></button>
+                        <li v-for='(item,index) in database' :key='index' @click='cutSilder(item)' :class={'header-active':titleId===item.id}>
+                            <p>{{item.name}}</p>
+                        </li>
+                    </div>
+                    <div class="header-rright">
+                        ${session.sessionUser.userName}
+                        <span class="pull-down iconfont icon-xiala1"></span>
+                        <span class="upward iconfont icon-xiangshang"></span>
+                        <div class="user-pull">
+                            <div class="user-pull-up">
+                                <div><a @click="handlejichu()">基本资料</a></div>
+                                <div><a @click="handlexiugai">修改密码</a></div>
+                            </div>
+                            <div class="user-pull-down"><a href="${loginOutUrl}">退出</a></div>
+                        </div>
+                    </div>
+            </div>
+            <div class="content">
+                <!-- 侧边导航 -->
+                <div class="silder" >
+                    <li v-for='(item,index) in list' :key='index'>
+                        <div :class="[{'active silder-item':id===item.id&&!item.sonMenu[0]},{'activete silderte-item':id===item.id&&item.sonMenu[0]},{'silder-item':id!==item.id&&!item.sonMenu[0]},{'silderte-item':id!==item.id&&item.sonMenu[0]}]"  @click='handleclick(item,index)'>
+                            <div class="silder-border"></div>
+                            <div :style="'background-image:url(' + item.serverUrl + '/images/menu/'+item.image +'.png)'" class="slider-item-ico"></div>
+                            <p :class={'slider-change':ischange}>{{item.name}}</p> 
+                            <span v-show="!item.controlAndFree&&item.sonMenu[0]" class="iconfont icon-xiala1"></span>
+                            <span v-show="item.controlAndFree&&item.sonMenu[0]" class="iconfont icon-xiangshang"></span>
+                        </div>
+                        <ul v-show="item.controlAndFree&&!ischange" class="silderSec">
+                            <li v-for='(item,index) in listSec' :key='index' @click='handleclick(item)'  class="silderSec-item"  :class={'active':id===item.id}>{{item.name}}</li>
+                        </ul>
+                    </li>
+                </div>
+                <div class="content-box" :class={'change':ischange}>
+                    <div class="top">
+                        <div class="top-back" ref="topshow">
+                            <ul :style="{'margin-left':-valueL+'px','margin-right':-valueR+'px'}" ref="topItem">
+                                <li @click='handleclickTop(home)' :class={'top-active':id===home.id} class="iconfont icon-fangzi homes" @contextmenu.prevent.stop="rightClick(home,$event)">
+                                </li>
+                                <li v-for="(item,index) in title" @click='handleclickTop(item)' :class={'top-active':id===item.id}  :key="index" @contextmenu.prevent.stop="rightClick(item,$event)">
+                                    {{item.name}}
+                                    <button @click='deletes(index)' class="iconfont icon-guanbi"></button>
+                                </li>
+                            </ul>
+                        </div>
+                        <button @click='topRight' class="top-right iconfont icon-xiangyoushuangjiantou"></button>
+                        <button @click='topLeft' class="top-left iconfont icon-xiangzuoshuangjiantou"></button>
+                    </div>
+                    <div v-show="loadOk">
+                        <h2>正在加载，请稍等。。。</h2>
+                    </div>
+                    <div class="iframe-box" v-show="isShowIframeBox">
+                        <iframe  class="bottom" src="${index_right_path}" frameborder="0"  scrolling="auto" v-show="id == home.id"></iframe>
+                        <iframe  class="bottom" v-bind:src="item.serverUrl + 'ms/redirect?call=' + item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="index" v-show="item.iframeShow"></iframe>
+                    </div>
+                    <div class="iframe-box" v-show="!isShowIframeBox">
+                        <iframe  class="bottom" v-bind:src="'${basePath}/b/page-ms-index/' + item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="index" v-show="item.iframeShows"></iframe>
+                    </div>
+                </div>
+                <ul class="top-rright-trag" v-show='rightKey' :style="{'position': 'absolute','top':mouseLocationY+'px','left':mouseLocationX+'px'}">
+                    <li @click='otherClose()'>关闭其他标签页</li>
+                    <li @click='allClose()'>关闭所有标签页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
+
+<script type="text/javascript" src="${fhs_static_url}js/jquery.min.js"></script>
+<script src="${basePath}/js/vue.js"></script>
+<script>
+    new Vue({
+        el:'#box',
+        data:{
+            database:[],
+            list:[],  //侧导航一级菜单的数据
+            listSec:[],// 二级菜单的数据
+            title:[],
+            // home:{id:14,src:'./home.html',iframeShow:false},
+            home:{},
+            id:'',
+            titleId:'',
+            ischange:false,
+            valueL:'',
+            valueR:'',
+            topWidth:'',
+            lastDiff:'',
+            diff:'',
+            winWidth:'',
+            tryData:false,
+            rightKey:false,
+            topItemWidth:121,//每个轮播导航项的宽
+            mouseLocationX:'',//鼠标右击时x坐标
+            mouseLocationY:'',//鼠标右击时y坐标
+            loadOk:false,
+            loadBefore:true,
+            isShowIframeBox:true,
+        },
+        beforeMount:function(){
+                // alert("确定执行")
+                this.loadBefore = false
+        },
+
+        mounted(){
+            this.topWidth = this.$refs.topshow.clientWidth
+            var _this = this;
+            _this.winWidth = window.innerWidth
+            this.silderShow()
+            //当浏览器被重置大小时执行
+            window.onresize = function(){ 
+                _this.winWidth = window.innerWidth
+                console.log(_this.winWidth)
+            };
+            
+            var iframe = document.querySelector('#ifra')
+           if(iframe){
+                if (iframe.attachEvent) {
+                    iframe.attachEvent('onload', function () {
+                        // iframe加载完毕以后执行操作
+                        console.log('iframe已加载完毕')
+                        this.loadOk = true
+                    })
+                    } else {
+                    iframe.onload = function () {
+                        // iframe加载完毕以后执行操作
+                        console.log('iframe已加载完毕')
+                        this.loadOk = true
+                        console.log(this.loadOk)
+                    }
+                }
+           }
+        },
+        watch:{ 
+            //监听屏幕宽度的变化来获取最新的topWidth
+            winWidth(val){
+                this.topWidth = this.$refs.topshow.clientWidth
+                console.log(this.winWidth)
+                this.silderShow()
+
+                this.diff = this.topWidth - 61 - this.title.length * this.topItemWidth
+                   if(this.diff < 0){   
+                        this.valueL = 0 - this.diff
+                        this.valueR = 0 
+                    }
+            }
+        },
+        created(){
+            this.req()
+
+            // 初始化
+            this.initialize()
+        },
+        
+        methods: {
+            req(){
+                let _this = this
+                $.ajax({
+                    url: '${basePath}ms/sysUser/seachMenuByUser?menuType=${parameter.menuType!1}',
+                    async: false,
+                    type: "GET",
+                    success:function(data) {
+                        _this.database = data
+                    },
+                    dataType: 'json'
+                });
+            },
+
+            initialize(){
+                this.id = this.home.id
+                this.titleId = this.database[0].id
+                this.list = this.database[0].sonMenu
+                this.title = []
+            },
+            //页面宽<992px,自动收缩侧导航，反之亦然
+            silderShow(){
+                console.log(this.winWidth)
+                if(this.winWidth > 992 ){
+                    this.ischange = false;
+                }else{
+                    this.ischange = true
+                }
+            },
+            // 点击侧导航
+            handleclick(item,index){
+                //判断是否有二级菜单，有，展示并赋值，并不会新增到top
+                if(item.sonMenu[0]){
+                    this.listSec = item.sonMenu
+                    console.log(item.controlAndFree)
+                    //给获取到的数据增加一对controlAndFree = false来控制二级菜单的收放
+                    if(!item.controlAndFree){
+                        this.database.forEach(x=>{
+                            x.sonMenu.forEach(y=>{
+                                if(y.sonMenu[0]){  
+                                    this.$set(y,'controlAndFree',false)   //触发视图实时更新
+                                }
+                                
+                            })
+                        })
+                    }
+                    
+                    item.controlAndFree = !item.controlAndFree
+                }else{
+                    this.noSecNav(item)
+                }
+                
+            },
+            // 没有二级菜单，单击新增到top或者回显
+            noSecNav(item){ 
+                // 给iframe的src赋值
+                // this.contents = item.src
+                 if(this.title.length == 0){
+                    this.title.push(item)
+                }
+                let arr = this.title
+                for(var i = 0;i < this.title.length;i++){
+                    if(item.id === this.title[i].id){
+                        this.lookIt(i)
+                        this.id=item.id
+                        this.database.forEach(x=>{
+                            x.sonMenu.forEach(y=>{
+                                if(y.sonMenu[0]){                            
+                                    y.sonMenu.forEach(z=>{               
+                                        this.$set(z,'iframeShow',false)   //触发视图实时更新
+                                    })
+                                }else{                                  
+                                this.$set(y,'iframeShow',false)   //触发视图实时更新  
+                                }
+                                
+                            })
+                        })
+                        item.iframeShow = true
+                        this.tryData = false
+                        break 
+                    }else{
+                        this.tryData = true
+                    }
+                } 
+                // 判断轮播导航项 在top 中没有（this.tryData === true）直接push，并左移
+                if(this.tryData === true){
+                    arr.push(item)
+                    this.id=item.id
+                    this.database.forEach(x=>{
+                        x.sonMenu.forEach(y=>{
+                            if(y.sonMenu[0]){                            
+                                y.sonMenu.forEach(z=>{               
+                                    this.$set(z,'iframeShow',false)   //触发视图实时更新
+                                })
+                            }else{                                  
+                                this.$set(y,'iframeShow',false)   //触发视图实时更新    
+                            }
+                            
+                        })
+                    })
+                    item.iframeShow = true
+                    this.title = [...new Set(arr)]
+
+                    this.diff = this.topWidth - 61 - this.title.length * this.topItemWidth
+                    if(this.diff > 0){
+                        if(this.diff < this.topItemWidth){
+                            this.lastDiff = this.diff
+                        }
+                    }else if(this.diff < 0){
+                        if(this.diff > -this.topItemWidth){
+                            this.valueL = this.topItemWidth - this.lastDiff
+                            this.lastDiff = this.diff
+                        }else{
+                            this.valueL = this.valueL + this.topItemWidth
+                        }
+                    }
+                }
+            },
+            //被选中的item 移动到可看到的位置( i为选中的item在整个title中的下标)
+            lookIt(i){
+                let longL = (i+1)* this.topItemWidth                 //该item右边 到back左边的距离
+                let longR =  this.topWidth - i* this.topItemWidth    //该item左边 到back右边的距离
+                //轮播导航项高亮隐藏在左边  需向右移动
+                let dataL = this.valueL
+                if(this.valueL >= longL){
+                    this.valueL -= (dataL - i* this.topItemWidth)
+                    this.valueR += (dataL - i* this.topItemWidth)
+                }
+                //轮播导航项高亮隐藏在右边  需向左移动
+                let dataR = this.valueR
+                if(this.valueR >= longR){
+                    this.valueR -= (dataR - (this.title.length - i -1)* this.topItemWidth)
+                    this.valueL += (dataR - (this.title.length - i -1)* this.topItemWidth)
+                }
+            },
+            // 点击 top item
+            handleclickTop(item){
+                this.id = item.id  
+
+                this.database.forEach(x=>{
+                    x.sonMenu.forEach(y=>{
+                        if(y.sonMenu[0]){       
+                            this.$set(y,'controlAndFree',false)                 //判断是否有二级菜单
+                            y.sonMenu.forEach(z=>{
+                                this.$set(z,'iframeShow',false)            //二级菜单的回显header,侧导航list,打开相应的二级菜单
+                                if(item.id === z.id){
+                                    this.titleId=x.id
+                                    this.list = x.sonMenu
+                                    this.listSec = y.sonMenu
+                                    this.$set(y,'controlAndFree',true)
+                    }
+                            })
+                        }else{   
+                            this.$set(y,'iframeShow',false)                                 //一级菜单的回显header和侧导航list
+                            if(y.id === item.id){
+                                this.titleId=x.id
+                                this.list = x.sonMenu
+                            }
+                        }
+                    })
+                })
+                this.$set(item,'iframeShow',true)
+            },
+            // 侧边栏的收放
+            handlechange(){
+                this.ischange=!this.ischange
+            },
+            // 轮播导航的右按钮
+            topRight(){
+                if(this.valueR < 0){
+                    this.valueR = 0
+                }
+                let topwidth = 0-this.topWidth
+                if(this.diff < topwidth){
+                        if(this.valueR > topwidth){
+                        this.valueL += this.topWidth
+                        this.valueR -= this.topWidth
+                    }else if(this.valueR > 0){
+                        this.valueL += this.diff
+                        this.valueR =0
+                    }
+                }else if (this.diff < 0 ){
+                    this.valueL = 0 - this.diff
+                    this.valueR = 0
+                }
+                
+            },
+            // 轮播导航的左按钮
+            topLeft(){
+                if(this.valueL < 0){
+                    this.valueL = 0
+                }
+                let topwidth = 0-this.topWidth
+                if(this.diff < topwidth){
+                        if(this.valueL > topwidth){
+                        this.valueR += this.topWidth
+                        this.valueL -= this.topWidth
+                    }else if(this.valueL > 0){
+                        this.valueR += this.diff
+                        this.valueL =0
+                    }
+                }else if (this.diff < 0 ){
+                    this.valueR = 0 - this.diff
+                    this.valueL = 0
+                }
+                
+            },
+            // 关闭其他项
+            otherClose(){
+                this.title.forEach(item => {
+                    if(item.id === this.id){
+                        this.title = []
+                        this.title.push(item)
+                    }
+                });
+                this.rightKey = false
+                this.valueL =0
+                this.valueR =0
+            },
+            // 关闭所以项
+            allClose(){
+                this.initialize()   // 初始化
+                this.rightKey = false
+                this.valueL =0
+                this.valueR =0
+            },
+            // 删除某一项
+            deletes(index,e){
+                let aft = this.title[index+1]
+                let pre= this.title[index-1]
+
+                this.title.splice(index,1)
+                // 阻止事件冒泡
+                if(e&& e.stopPropagation){
+                    event.stopPropagation()
+                }else{
+                    event.cancelBubble = true; 
+                }
+                //焦点到删除的下一项，若没有焦点到上一项，都没有则初始化
+                if(aft){
+                    this.handleclickTop(aft)
+                    this.lookIt(index+1)
+                }else if(pre){
+                    this.handleclickTop(pre)
+                    this.lookIt(index-1)
+                }else{
+                    this.initialize()  // 初始化
+                }
+            }, 
+            // 切换侧导航
+            cutSilder(item){
+                this.list = item.sonMenu
+                this.titleId = item.id
+            },
+            // top item 的右键功能
+            rightClick(i,e){
+                console.log(i)
+                console.log(e)
+                this.rightKey = true
+                this.handleclickTop(i)
+                this. mouseLocationX = e.clientX
+                this. mouseLocationY = e.clientY
+            },
+            //点击 基础资料
+            handlejichu(){
+                this.isShowIframeBox = false
+                let obj = {name:'基础资料',url:'admin_info_update',iframeShows:true,id:'基础资料'}
+                let arr= []
+                if(this.title[0]){
+                    this.title.forEach(item=>{
+                        if(item.name != '基础资料'){
+                        this.title.push(obj)
+                        arr = this.title
+                        this.id = '基础资料'
+                    }
+                })
+                }else{
+                    console.log(000000000)
+                    this.title.push(obj)
+                    arr = this.title
+                }
+                this.title = [...new Set(arr)]
+
+            },
+            //点击 修改密码
+            handlexiugai(){
+                this.isShowIframeBox = false
+                let arr= []
+                let obj = {name:'修改密码',url:'admin_pass_update',iframeShows:true,id:'修改密码'}
+                if(this.title[0]){
+                    console.log(33333333)
+                    this.title.forEach(item=>{
+                        if(item.name != '修改密码'){
+                        console.log(11111111)
+
+                        this.title.push(obj)
+                        arr = this.title
+                        this.id = '修改密码'
+                        console.log(this.title)
+                    }
+                })
+                }else{
+                    console.log(000000000)
+                    this.title.push(obj)
+                    arr = this.title
+                }
+                this.title = [...new Set(arr)]
+
+            }
+        },
+    })
+</script>
+
 </html>
-
-
