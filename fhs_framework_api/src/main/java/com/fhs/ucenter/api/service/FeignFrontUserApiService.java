@@ -4,6 +4,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.feignConfig.FeignConfiguration;
 import com.fhs.ucenter.api.form.GetSingleFrontUserForm;
 import com.fhs.ucenter.api.vo.FrontUserVo;
+import feign.Param;
 import feign.RequestLine;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +59,6 @@ public interface FeignFrontUserApiService {
      * @return 用户vo
      */
     @RequestLine("POST /api/frontUser/find")
-    HttpResult<Boolean> mergeUser(@RequestParam("fromUser")String fromUserId,@RequestParam("targetUserId")String targetUserId);
+    HttpResult<Boolean> mergeUser(@Param("fromUserId")String fromUserId, @Param("targetUserId")String targetUserId);
 
 }
