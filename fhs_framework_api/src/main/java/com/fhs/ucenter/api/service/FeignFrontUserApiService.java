@@ -58,6 +58,6 @@ public interface FeignFrontUserApiService {
      * @return 用户vo
      */
     @RequestLine("POST /api/frontUser/find")
-    HttpResult<Boolean> mergeUser(@RequestParam("fromUser")String fromUserId,String targetUserId);
+    HttpResult<Boolean> mergeUser(@RequestParam("fromUser")String fromUserId,@RequestParam("targetUserId")String targetUserId);
 
 }
