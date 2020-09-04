@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>fhs_framework</artifactId>
+		<groupId>com.fhs-opensource</groupId>
+		<version>1.5.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.fhs-opensource</groupId>
 	<artifactId>fhs_file</artifactId>
-	<version>1.0.0</version>
+	<version>1.5.0</version>
 	<packaging>jar</packaging>
 
 	<name>fhs_file</name>
@@ -21,7 +26,7 @@
 		<dependency>
 			<groupId>com.fhs-opensource</groupId>
 			<artifactId>fhs_framework_parent</artifactId>
-			<version>1.0.0</version>
+			<version>1.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.coobird</groupId>
@@ -114,11 +119,7 @@
 		</resources>
 	</build>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
+
 
 	<licenses>
 		<license>

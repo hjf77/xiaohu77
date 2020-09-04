@@ -16,8 +16,6 @@ import java.util.Set;
 /**
  * 初始化模板引擎中的参数
  */
-@Component
-@ServletComponentScan
 @WebFilter(urlPatterns = {"/*"}, filterName = "templateConfigSettFilter", asyncSupported = true)
 public class TemplateConfigSettFilter implements Filter {
 
@@ -33,12 +31,14 @@ public class TemplateConfigSettFilter implements Filter {
     }
 
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse rep, FilterChain filterChain)
             throws IOException, ServletException {
-        if (!isInit) {
+        //if (!isInit) {
             BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = SpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
             Set<String> keys = EConfig.PATH.stringPropertyNames();
             Map<String, Object> shared = new HashMap<String, Object>();
@@ -54,11 +54,12 @@ public class TemplateConfigSettFilter implements Filter {
             // beetl共享变量，所有的模板都能访问到
             beetlGroupUtilConfiguration.getGroupTemplate().setSharedVars(shared);
             isInit = true;
-        }
+        //}
         filterChain.doFilter(req, rep);
     }
 
 
+    @Override
     public void init(FilterConfig fConfig)
             throws ServletException {
     }

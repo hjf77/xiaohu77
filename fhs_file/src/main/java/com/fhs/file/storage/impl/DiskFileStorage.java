@@ -7,6 +7,7 @@ import com.fhs.core.db.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.file.bean.ServiceFile;
 import com.fhs.file.storage.FileStorage;
+import feign.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +57,9 @@ public class DiskFileStorage<mian> implements FileStorage {
      * @return serviceFile+token定位到的文件对象
      */
     private File getFile(ServiceFile serviceFile, String token) {
+        if(serviceFile==null){
+            throw new  ParamException("文件不存在");
+        }
         String fileName = (null == token ? serviceFile.getFileId() : token) + serviceFile.getFileSuffix();
         return new File(EConfig.getPathPropertiesValue("saveFilePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
     }

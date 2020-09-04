@@ -5,7 +5,7 @@ import com.fhs.feignConfig.FeignConfiguration;
 import com.fhs.ucenter.api.form.GetSingleFrontUserForm;
 import com.fhs.ucenter.api.vo.FrontUserVo;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @versio  1.0
  * Copyright (c) 2017 All Rights Reserved.
  **/
-@FeignClient(value = "system", configuration= FeignConfiguration.class)
+@FeignClient(value = "system", configuration= FeignConfiguration.class,primary = false)
 public interface FeignFrontUserApiService {
 
        /**

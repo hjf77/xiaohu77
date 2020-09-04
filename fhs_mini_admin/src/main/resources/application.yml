@@ -12,7 +12,7 @@ server:
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
-  type-aliases-package: com.fhs.system.bean;com.fhs.ucenter.bean;com.fhs.fileService.bean;com.fhs.pubservice.bean;
+  type-aliases-package: com.fhs.system.bean;com.fhs.ucenter.bean;com.fhs.fileService.bean;com.fhs.pubservice.bean;com.fhs.file.bean;
 
 fhs:
   autoware:
@@ -38,45 +38,71 @@ fhs:
     not-contains: api;action;dao
     #声明式事物管理，具体请访问官网
     package: com.fhs;
-  disable-apollo: true
+  path: "{
+          'basePath': 'http://localhost:8081/',
+          'staticPath': 'http://localhost:8081/',
+          'fhs_basics_url': 'http://localhost:8081/',
+          'fileSavePath': 'c:/flies',
+          'jbpmFilePath': 'c:/flies/jbpm/xml',
+          'loginOutUrl': 'http://localhost:8081/ms/logout',
+          'fhs_file_basePath': 'http://localhost:8081/',
+          'base_index_right': 'http://localhost:8081/b/page-ms-index/index_right',
+          'work_flow_url': 'http://localhost:8081/'
+          }"
+  other: "{
+          'isDevModel': 'true',
+          'access_token_time_out_second': '500',
+          'base_system_title': 'FHS演示系统',
+          'base_system_name' : 'FHS演示系统'
+          }"
 spring:
-    application:
-      name: park_client
-    mvc:
-      view:
-        prefix: /page/
-        suffix: .jsp
-    redis:
-      database: 0
-      password:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: park_client
+  mvc:
+    view:
+      prefix: /page/
+      suffix: .jsp
+    date-format: yyyy-MM-dd HH:mm:ss
+  redis:
+    database: 3
+    # 最大连接数
+    maxTotal: 5000
+    # 最大空闲连接数
+    maxIdle: 1000
+    # 建立连接时，最大等待时间
+    maxWaitMillis: 60000
+    lettuce:
       pool:
         max-active: 10
         max-idle: 10
         max-wait: -1
         min-idle: 10
-      host: 127.0.0.1
-      port: 6379
-      timeout: 6000
-    datasource:
-      driver-class-name: com.mysql.jdbc.Driver
-      filters: stat
-      initialSize: 1
-      maxActive: 20
-      maxOpenPreparedStatements: 20
-      maxWait: 60000
-      minEvictableIdleTimeMillis: 300000
-      minIdle: 1
-      name: base_business
-      password: root
-      poolPreparedStatements: true
-      testOnBorrow: false
-      testOnReturn: false
-      testWhileIdle: trueserver
-      timeBetweenEvictionRunsMillis: 60000
-      type: com.alibaba.druid.pool.DruidDataSource
-      url: jdbc:mysql://localhost:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true
-      username: root
-      validationQuery: select 'x'
+    host: 192.168.0.213
+    password: 123456
+    port: 6379
+    timeout: 6000
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    initialSize: 1
+    maxActive: 20
+    maxOpenPreparedStatements: 20
+    maxWait: 60000
+    minEvictableIdleTimeMillis: 300000
+    minIdle: 1
+    name: base_business
+    password: 123456
+    poolPreparedStatements: true
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: trueserver
+    timeBetweenEvictionRunsMillis: 60000
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.0.213:3306/fhs_base_business?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true
+    username: root
+    validationQuery: select 'x'
 
 
 swagger:
@@ -110,20 +136,16 @@ jetcache:
   hidePackages: com.alibaba
   local:
     default:
-      type: caffeine
+      type: linkedhashmap
       limit: 100
       keyConvertor: fastjson
       expireAfterWriteInMillis: 300000
   remote: #阿里的jetcache2级缓存
     default:
-      type: redis
+      type: redis.lettuce
       keyConvertor: fastjson
       valueEncoder: java
       valueDecoder: java
-      poolConfig:
-        minIdle: 5
-        maxIdle: 20
-        maxTotal: 50
-      host: ${spring.redis.host}
-      port: ${spring.redis.port}
-      password: ${spring.redis.password}
+      asyncResultTimeoutInMillis: 3000
+      uri:
+        - redis://123456@192.168.0.213:6379/3  #redis://密码@IP:端口/库

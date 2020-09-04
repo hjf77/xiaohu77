@@ -1,12 +1,14 @@
 package com.fhs.config;
 
-import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * swagger配置
@@ -20,7 +22,9 @@ import springfox.documentation.service.ApiInfo;
  * @UpdateDate: 2018/9/9 0009 14:52
  * @Version: 1.0
  */
-
+@EnableSwagger2
+@Configuration
+@ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
 public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware {
     /**
      * 基础包
@@ -38,7 +42,7 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     /**
      * 配置文件获取
      */
-    protected RelaxedPropertyResolver propertyResolver;
+    protected Environment environment;
     /**
      * 文档描述
      */
@@ -52,6 +56,7 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
      *
      * @param registry
      */
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(new String[]{"swagger-ui.html"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
         registry.addResourceHandler(new String[]{"/webjars*"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
@@ -67,12 +72,13 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
         return (new ApiInfoBuilder()).title(this.serviceName + " Restful APIs").description(this.description).contact(this.creatName).version("1.0").build();
     }
 
+    @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, (String) null);
-        this.basePackage = this.propertyResolver.getProperty("swagger.basepackage");
-        this.creatName = this.propertyResolver.getProperty("swagger.service.developer");
-        this.serviceName = this.propertyResolver.getProperty("swagger.service.name");
-        this.description = this.propertyResolver.getProperty("swagger.service.description");
+        this.environment = environment;
+        this.basePackage = this.environment.getProperty("fhs.swagger.basepackage");
+        this.creatName = this.environment.getProperty("fhs.swagger.service.developer");
+        this.serviceName = this.environment.getProperty("fhs.swagger.service.name");
+        this.description = this.environment.getProperty("fhs.swagger.service.description");
     }
 
 }

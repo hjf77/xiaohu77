@@ -1,18 +1,24 @@
 package com.fhs.core.clazz;
 
-import com.fhs.common.utils.Logger;
-import com.fhs.core.config.EConfig;
-import com.fhs.core.exception.BusinessException;
-
+import com.sun.tools.javac.file.BaseFileObject;
+import com.sun.tools.javac.file.JavacFileManager;
+import com.sun.tools.javac.util.Context;
+import com.sun.tools.javac.util.ListBuffer;
+import com.sun.tools.javac.util.Log;
+import org.springframework.boot.loader.jar.JarFile;
+import org.springframework.boot.system.ApplicationHome;
 import javax.tools.*;
 import javax.tools.JavaFileObject.Kind;
 import java.io.*;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.lang.reflect.Constructor;
+import java.net.*;
 import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.jar.JarEntry;
+import java.util.stream.Collectors;
+
 
 /**
  *  把一段Java字符串变成类
@@ -27,105 +33,88 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MemoryClassLoader extends URLClassLoader {
 
-    private static final Logger LOG = Logger.getLogger(MemoryClassLoader.class);
 
     private Map<String, byte[]> classBytes = new ConcurrentHashMap<>();
+
 
     /**
      * 单利默认的
      */
     private static final MemoryClassLoader defaultLoader = new MemoryClassLoader();
 
-    public MemoryClassLoader(){ super(new URL[0], MemoryClassLoader.class.getClassLoader());}
+    public MemoryClassLoader() {
+        super(new URL[0], MemoryClassLoader.class.getClassLoader());
+    }
 
     /**
      * 获取默认的类加载器
+     *
      * @return 类加载器对象
      */
-    public static  MemoryClassLoader getInstrance(){
+    public static MemoryClassLoader getInstrance() {
         return defaultLoader;
     }
 
     /**
      * 注册Java 字符串到内存类加载器中
+     *
      * @param className 类名字
-     * @param javaStr Java字符串
+     * @param javaStr   Java字符串
      */
-    public void registerJava(String className,String javaStr)
-    {
-        try
-        {
-            this.classBytes.putAll(compile( className,  javaStr) );
-        }catch(Exception e)
-        {
-            LOG.error("注册Java代码错误:"+javaStr);
-            LOG.error("注册Java代码错误:",e);
+    public void registerJava(String className, String javaStr) {
+        try {
+            this.classBytes.putAll(compile(className, javaStr));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
 
+    /**
+     * 自定义Java文件管理器
+     *
+     * @param var1
+     * @param var2
+     * @param var3
+     * @return
+     */
+    public static SpringJavaFileManager getStandardFileManager(DiagnosticListener<? super JavaFileObject> var1, Locale var2, Charset var3) {
+        Context var4 = new Context();
+        var4.put(Locale.class, var2);
+        if (var1 != null) {
+            var4.put(DiagnosticListener.class, var1);
+        }
+
+        PrintWriter var5 = var3 == null ? new PrintWriter(System.err, true) : new PrintWriter(new OutputStreamWriter(System.err, var3), true);
+        var4.put(Log.outKey, var5);
+        return new SpringJavaFileManager(var4, true, var3);
+    }
+
+    /**
+     * 编译Java代码
+     *
+     * @param className 类名字
+     * @param javaStr   Java代码
+     * @return class 二进制
+     */
     private static Map<String, byte[]> compile(String className, String javaStr) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager stdManager = compiler.getStandardFileManager(null, null, null);
+        StandardJavaFileManager stdManager = getStandardFileManager(null, null, null);
         try (MemoryJavaFileManager manager = new MemoryJavaFileManager(stdManager)) {
             JavaFileObject javaFileObject = manager.makeStringSource(className, javaStr);
-            Iterable<String> options  = null;
-            if(EConfig.getPathPropertiesValue("memoryClassLoaderClassPath")!=null && new File(EConfig.getPathPropertiesValue("memoryClassLoaderClassPath")).exists())
-            {
-                options = Arrays.asList( "-classpath", getJarFiles(EConfig.getPathPropertiesValue("memoryClassLoaderClassPath")) );
-            }
-            JavaCompiler.CompilationTask task = compiler.getTask(null, manager, null, options, null, Arrays.asList(javaFileObject));
-            if (task.call())
-            {
+            JavaCompiler.CompilationTask task = compiler.getTask(null, manager, null, null, null, Arrays.asList(javaFileObject));
+            if (task.call()) {
                 return manager.getClassBytes();
             }
         } catch (IOException e) {
-            LOG.error("编译java出错",e);
-            throw new BusinessException("编译java出错" + javaStr);
+            e.printStackTrace();
         }
         return null;
     }
 
-    /**
-     * 根据一个jar的path获取下面所有的jar放到
-     * @param jarPath jar所在的路径
-     * @return 所有的jar
-     * @throws Exception
-     */
-    private static String getJarFiles(String jarPath)  {
-        if(jarPath==null)
-        {
-            return "";
-        }
-        String os = System.getProperty("os.name");
-        final String split = os.toLowerCase().startsWith("win") ? ";" : ":";
-        File sourceFile = new File(jarPath);
-        StringBuilder jars= new StringBuilder();
-        if (sourceFile.exists()) {// 文件或者目录必须存在
-            if (sourceFile.isDirectory()) {// 若file对象为目录
-                // 得到该目录下以.jar结尾的文件或者目录
-                File[] childrenFiles = sourceFile.listFiles(new FileFilter() {
-                    public boolean accept(File pathname) {
-                        if (pathname.isDirectory()) {
-                            return true;
-                        } else {
-                            String name = pathname.getName();
-                            if (name.endsWith(".jar") ? true : false) {
-                                jars.append(pathname.getPath() + split);
-                                return true;
-                            }
-                            return false;
-                        }
-                    }
-                });
-            }
-        }
-        return jars.toString();
-    }
-
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    public Class<?> findClass(String name) throws ClassNotFoundException {
         byte[] buf = classBytes.get(name);
         if (buf == null) {
             return super.findClass(name);
@@ -136,17 +125,40 @@ public class MemoryClassLoader extends URLClassLoader {
 
     /**
      * 开放findClass 给外部使用
+     *
      * @param name classname
      * @return class对象
      */
-    public Class<?> getClass(String name)throws ClassNotFoundException {
+    public Class<?> getClass(String name) throws ClassNotFoundException {
         return this.findClass(name);
     }
+
+    /**
+     * 获取jar包所在路径
+     *
+     * @return jar包所在路径
+     */
+    public static String getPath() {
+        ApplicationHome home = new ApplicationHome(MemoryJavaFileManager.class);
+        String path = home.getSource().getPath();
+        return path;
+    }
+
+    /**
+     * 判断是否jar模式运行
+     *
+     * @return
+     */
+    public static boolean isJar() {
+        return getPath().endsWith(".jar");
+    }
+
 }
 
 
 /**
- *  内存Java文件管理器
+ * 内存Java文件管理器
+ * 用于加载springboot boot info lib 下面的依赖资源
  */
 class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
@@ -155,8 +167,60 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     final Map<String, List<JavaFileObject>> classObjectPackageMap = new HashMap<>();
 
+    private JavacFileManager javaFileManager;
+
+    /**
+     * key 包名 value javaobj 主要给jdk编译class的时候找依赖class用
+     */
+    public final static Map<String, List<JavaFileObject>> CLASS_OBJECT_PACKAGE_MAP = new HashMap<>();
+
+    private static final Object lock = new Object();
+
+    private static boolean isInit = false;
+
+
+    public void init(){
+        try {
+            String jarBaseFile = MemoryClassLoader.getPath();
+            JarFile jarFile = new JarFile(new File(jarBaseFile));
+            List<JarEntry> entries = jarFile.stream().filter(jarEntry -> {
+                return jarEntry.getName().endsWith(".jar");
+            }).collect(Collectors.toList());
+            JarFile libTempJarFile = null;
+            List<JavaFileObject> onePackgeJavaFiles =  null;
+            String packgeName = null;
+            for (JarEntry entry : entries) {
+                libTempJarFile = jarFile.getNestedJarFile(jarFile.getEntry(entry.getName()));
+                if(libTempJarFile.getName().contains("tools.jar")){
+                    continue;
+                }
+                Enumeration<JarEntry> tempEntriesEnum = libTempJarFile.entries();
+                while (tempEntriesEnum.hasMoreElements()) {
+                    JarEntry jarEntry = tempEntriesEnum.nextElement();
+                    String classPath = jarEntry.getName().replace("/", ".");
+                    if (!classPath.endsWith(".class") || jarEntry.getName().lastIndexOf("/") == -1) {
+                        continue;
+                    } else {
+                        packgeName = classPath.substring(0, jarEntry.getName().lastIndexOf("/"));
+                        onePackgeJavaFiles = CLASS_OBJECT_PACKAGE_MAP.containsKey(packgeName) ? CLASS_OBJECT_PACKAGE_MAP.get(packgeName) :  new ArrayList<>();
+                        onePackgeJavaFiles.add(new MemorySpringBootInfoJavaClassObject(jarEntry.getName().replace("/", ".").replace(".class", ""),
+                                new URL(libTempJarFile.getUrl(), jarEntry.getName()), javaFileManager));
+                        CLASS_OBJECT_PACKAGE_MAP.put(packgeName,onePackgeJavaFiles);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        isInit = true;
+
+    }
+
+
+
     MemoryJavaFileManager(JavaFileManager fileManager) {
         super(fileManager);
+        this.javaFileManager = (JavacFileManager)fileManager;
     }
 
     public Map<String, byte[]> getClassBytes() {
@@ -172,13 +236,31 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
         classBytes.clear();
     }
 
+
+    public List<JavaFileObject> getLibJarsOptions(String packgeName) {
+        synchronized (lock){
+            if(!isInit){
+                init();
+            }
+        }
+        return CLASS_OBJECT_PACKAGE_MAP.get(packgeName);
+    }
+
     @Override
     public Iterable<JavaFileObject> list(Location location,
                                          String packageName,
                                          Set<Kind> kinds,
                                          boolean recurse)
-            throws IOException
-    {
+            throws IOException {
+
+
+        if ("CLASS_PATH".equals(location.getName()) && MemoryClassLoader.isJar()) {
+            List<JavaFileObject> result =  getLibJarsOptions(packageName);
+            if(result!=null){
+                return result;
+            }
+        }
+
         Iterable<JavaFileObject> it = super.list(location, packageName, kinds, recurse);
 
         if (kinds.contains(Kind.CLASS)) {
@@ -201,13 +283,13 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
     @Override
     public String inferBinaryName(Location location, JavaFileObject file) {
         if (file instanceof MemoryInputJavaClassObject) {
-            return ((MemoryInputJavaClassObject)file).inferBinaryName();
+            return ((MemoryInputJavaClassObject) file).inferBinaryName();
         }
         return super.inferBinaryName(location, file);
     }
 
     @Override
-    public JavaFileObject getJavaFileForOutput(JavaFileManager.Location location, String className, Kind kind,
+    public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind,
                                                FileObject sibling) throws IOException {
         if (kind == Kind.CLASS) {
             return new MemoryOutputJavaClassObject(className);
@@ -266,6 +348,7 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
         }
     }
 
+
     class MemoryOutputJavaClassObject extends SimpleJavaFileObject {
         final String className;
 
@@ -288,4 +371,153 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
             };
         }
     }
+}
+
+/**
+ * 用来读取springboot的class
+ */
+class MemorySpringBootInfoJavaClassObject extends BaseFileObject {
+    private final String className;
+    private URL url;
+
+    MemorySpringBootInfoJavaClassObject(String className, URL url, JavacFileManager javacFileManager) {
+        super(javacFileManager);
+        this.className = className;
+        this.url = url;
+    }
+
+    @Override
+    public Kind getKind() {
+        return JavaFileObject.Kind.valueOf("CLASS");
+    }
+
+    @Override
+    public URI toUri() {
+        try {
+            return url.toURI();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return className;
+    }
+
+    @Override
+    public InputStream openInputStream() {
+        try {
+            return url.openStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public OutputStream openOutputStream() throws IOException {
+        return null;
+    }
+
+    @Override
+    public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
+        return null;
+    }
+
+    @Override
+    public Writer openWriter() throws IOException {
+        return null;
+    }
+
+    @Override
+    public long getLastModified() {
+        return 0;
+    }
+
+    @Override
+    public boolean delete() {
+        return false;
+    }
+
+    public String inferBinaryName() {
+        return className;
+    }
+
+    @Override
+    public String getShortName() {
+        return className.substring(className.lastIndexOf("."));
+    }
+
+    @Override
+    protected String inferBinaryName(Iterable<? extends File> iterable) {
+        return className;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+
+    @Override
+    public boolean isNameCompatible(String simpleName, Kind kind) {
+        return false;
+    }
+}
+
+/**
+ * java 文件管理器 主要用来 重新定义class loader
+ */
+class SpringJavaFileManager extends JavacFileManager {
+
+
+    public SpringJavaFileManager(Context context, boolean b, Charset charset) {
+        super(context, b, charset);
+    }
+
+
+    @Override
+    public ClassLoader getClassLoader(JavaFileManager.Location location) {
+        nullCheck(location);
+        Iterable var2 = this.getLocation(location);
+        if (var2 == null) {
+            return null;
+        } else {
+            ListBuffer var3 = new ListBuffer();
+            Iterator var4 = var2.iterator();
+
+            while (var4.hasNext()) {
+                File var5 = (File) var4.next();
+
+                try {
+                    var3.append(var5.toURI().toURL());
+                } catch (MalformedURLException var7) {
+                    throw new AssertionError(var7);
+                }
+            }
+            return this.getClassLoader((URL[]) var3.toArray(new URL[var3.size()]));
+        }
+    }
+
+    protected ClassLoader getClassLoader(URL[] var1) {
+        ClassLoader var2 = this.getClass().getClassLoader();
+        try {
+            Class loaderClass = Class.forName("org.springframework.boot.loader.LaunchedURLClassLoader");
+            Class[] var4 = new Class[]{URL[].class, ClassLoader.class};
+            Constructor var5 = loaderClass.getConstructor(var4);
+            return (ClassLoader) var5.newInstance(var1, var2);
+        } catch (Throwable var6) {
+        }
+        return new URLClassLoader(var1, var2);
+    }
+
+
 }

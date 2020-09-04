@@ -4,14 +4,14 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.feignConfig.FeignConfiguration;
 import feign.Param;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 import java.util.Map;
 
 /**
  * 机构管理rest接口
  */
-@FeignClient(value = "system", configuration=FeignConfiguration.class)
+@FeignClient(value = "system", configuration=FeignConfiguration.class,primary = false)
 public interface UcenterMsOrganizationApiService {
 
     /**

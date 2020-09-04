@@ -4,7 +4,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.feignConfig.FeignConfiguration;
 import com.fhs.ucenter.api.vo.SysMenuVo;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
  * Copyright (c) 2017 All Rights Reserved.
  *
  */
-@FeignClient(value = "system", configuration = FeignConfiguration.class)
+@FeignClient(value = "system", configuration = FeignConfiguration.class,primary = false)
 public interface FeignSysMenuApiService {
 
     /**

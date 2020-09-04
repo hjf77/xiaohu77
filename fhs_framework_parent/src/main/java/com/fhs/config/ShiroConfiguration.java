@@ -39,20 +39,23 @@ import java.util.Map;
 
 /**
  * shiro 配置包含单点登录支持
+ * @author user
+ * @since 2019-05-18 11:33:45
  */
 @Configuration
-public class ShiroConfiguration{
+@Order(2)
+public class ShiroConfiguration {
 
     /*
      *cas server地址
      */
-    @Value("${shiro.cas.casServerUrlPrefix:}")
+    @Value("${fhs.login.cas.server-url:}")
     private String casServerUrlPrefix;
 
     /*
      * 当前工程对外提供的服务地址
      */
-    @Value("${shiro.cas.shiroServerUrlPrefix:}")
+    @Value("${fhs.login.cas.client-base-path:}")
     private String shiroServerUrlPrefix;
 
     /*
@@ -122,36 +125,26 @@ public class ShiroConfiguration{
      * @return  自定义缓存管理器
      */
     @Bean(name = "shiroSpringCacheManager")
-    public ShiroSpringCacheManager shiroSpringCacheManager( RedisConnectionFactory factory) {
-        RedisTemplate template = new RedisTemplate();
-        template.setConnectionFactory(factory);
-        //定义key的序列化方式
-        JdkSerializationRedisSerializer valSerializer =new JdkSerializationRedisSerializer();
-        template.setValueSerializer(valSerializer);
-        GenericJackson2JsonRedisSerializer keySerializer = new GenericJackson2JsonRedisSerializer();
-        template.setKeySerializer(keySerializer);
-        template.afterPropertiesSet();
-        RedisCacheManager rcm = new RedisCacheManager(template);
-        //设置缓存过期时间
-        rcm.setDefaultExpiration(60);//秒
+    @DependsOn("redisConfig")
+    public ShiroSpringCacheManager shiroSpringCacheManager(RedisCacheManager redisCacheManager) {
         ShiroSpringCacheManager cacheManager = new ShiroSpringCacheManager();
-        cacheManager.setCacheManager(rcm);
+        cacheManager.setCacheManager(redisCacheManager);
         return cacheManager;
     }
 
     @Bean(name = "securityManager")
-    @DependsOn({"shiroRealm","shiroSpringCacheManager"})
-    public DefaultWebSecurityManager securityManager(RedisConnectionFactory factory) {
+    @DependsOn({"shiroRealm","shiroSpringCacheManager","redisCacheManager"})
+    public DefaultWebSecurityManager securityManager(RedisCacheManager redisCacheManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         if(this.useVue)
         {
             securityManager = new StatelessSecurityManager();
         }
-        securityManager.setCacheManager(shiroSpringCacheManager(factory));// 用户授权/认证信息Cache, 采用EhCache 缓存
+        securityManager.setCacheManager(shiroSpringCacheManager(redisCacheManager));// 用户授权/认证信息Cache, 采用EhCache 缓存
        /*if (isEnableCas) {
             securityManager.setSubjectFactory(new CasSubjectFactory());
         }*/
-       // SecurityUtils.setSecurityManager(securityManager);
+        // SecurityUtils.setSecurityManager(securityManager);
         securityManager.setRealm(shiroRealm());
         return securityManager;
     }
@@ -260,9 +253,7 @@ public class ShiroConfiguration{
         filterChainDefinitionMap.put("/page/**", "anon");
         //4.登录过的不拦截
         filterChainDefinitionMap.put("/ms/**", "authc");
+        filterChainDefinitionMap.put("/druid/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
-
-
-
 }

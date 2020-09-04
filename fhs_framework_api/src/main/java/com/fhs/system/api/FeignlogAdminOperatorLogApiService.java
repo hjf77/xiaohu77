@@ -4,7 +4,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.feignConfig.FeignConfiguration;
 import com.fhs.system.bean.LogAdminOperatorLogVo;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * Copyright (c) 2017 All Rights Reserved.
  *
  */
-@FeignClient(value = "system", configuration = FeignConfiguration.class)
+@FeignClient(value = "system", configuration = FeignConfiguration.class,primary = false)
 public interface FeignlogAdminOperatorLogApiService {
 
     /**

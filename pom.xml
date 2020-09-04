@@ -2,18 +2,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.5.RELEASE</version>
+        <relativePath/>
+    </parent>
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_framework</artifactId>
-    <version>1.0.0</version>
+    <version>1.5.0</version>
+    <description>fhs framework开源版本1.5</description>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <fhs.release.version>2.0.0</fhs.release.version>
+        <fhs.swagger.version>2.6.1</fhs.swagger.version>
+        <fhs.jetcache.version>2.5.16</fhs.jetcache.version>
+        <fhs.mybatis-jpa-jack.version>1.0.10</fhs.mybatis-jpa-jack.version>
+        <fhs.spring-cloud-starter.version>2.1.5.RELEASE</fhs.spring-cloud-starter.version>
+        <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
+        <fhs.mp-anno.version>3.0.7.1</fhs.mp-anno.version>
+        <fhs.alibaba.cloud.version>2.2.1.RELEASE</fhs.alibaba.cloud.version>
+        <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <version.servlet-api>3.1.0</version.servlet-api>
+    </properties>
     <modules>
         <module>fhs_common</module>
         <module>fhs_core</module>
+        <module>fhs_cloud</module>
         <module>fhs_file</module>
         <module>fhs_static</module>
+        <module>fhs_mini_admin</module>
         <module>fhs_framework_api</module>
         <module>fhs_framework_base_business</module>
+        <module>fhs_framework_base_business_admin</module>
         <module>fhs_framework_parent</module>
     </modules>
 

@@ -58,10 +58,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Autowired
     private SysRoleService roleService;
 
-    @Autowired
-    private SysUserService sysUserService;
 
-    @Autowired
+
+
     private UcenterMsTenantService tenantService;
 
     @Override
@@ -666,7 +665,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
             Set<String> dataPermissionsSet = dataPermissionTempMap.get(key);
             resultMap.put(key, StringUtil.getStrForIn(dataPermissionsSet, true));
         });
-        SysUser user = sysUserService.selectById(userId);
+        SysUser user = this.selectById(userId);
         // 如果不是不是管理员，哪些数据权限他没有设置为-1
         if (user.getIsAdmin() != Constant.INT_TRUE) {
             String[] permissonDataKeys = ConverterUtils.toString(EConfig.getOtherConfigPropertiesValue("permissonDataKey")).split(",");
@@ -708,6 +707,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     private List<String> getPermissionUrlAll() {
         return sysUserDAO.getPermissionUrlAll();
+    }
+
+    public void setTenantService(UcenterMsTenantService tenantService){
+        this.tenantService = tenantService;
     }
 
 }

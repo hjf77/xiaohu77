@@ -10,6 +10,7 @@ import com.fhs.ucenter.bean.UcenterMsTenant;
 import com.fhs.ucenter.service.SysOrganizationService;
 import com.fhs.ucenter.service.SysUserService;
 import com.fhs.ucenter.service.UcenterMsTenantService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @since 2019-05-15 14:21:04
  */
 @Service("ucenterMsTenantService")
-public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>   implements UcenterMsTenantService {
+public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>   implements UcenterMsTenantService, InitializingBean {
 
     @Autowired
     private SysUserService sysUserService;
@@ -53,5 +54,10 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>
         organizationService.insert(organization);
         tenant.setId(StringUtil.getUUID());
         return super.insert(tenant);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        sysUserService.setTenantService(this);
     }
 }

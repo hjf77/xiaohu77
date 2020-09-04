@@ -2,48 +2,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>fhs_framework</artifactId>
+		<groupId>com.fhs-opensource</groupId>
+		<version>1.5.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.fhs-opensource</groupId>
 	<artifactId>fhs_framework_base_business</artifactId>
-	<version>1.0.0</version>
+	<version>1.5.0</version>
 	<packaging>jar</packaging>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.13.RELEASE</version>
-		<relativePath/>
-	</parent>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<spring-cloud.version>Edgware.BUILD-SNAPSHOT</spring-cloud.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.fhs-opensource</groupId>
 			<artifactId>fhs_framework_parent</artifactId>
-			<version>1.0.0</version>
+			<version>1.5.0</version>
 		</dependency>
 
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>RELEASE</version>
+            <version>1.12.1</version>
         </dependency>
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
-			<version>RELEASE</version>
+			<version>3.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
-			<version>RELEASE</version>
+			<version>3.4.0</version>
 		</dependency>
 
 		<dependency>

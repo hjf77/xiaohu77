@@ -5,7 +5,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.feignConfig.FeignConfiguration;
 import feign.Param;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * 角色api服务
@@ -20,7 +20,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
  * Copyright (c) 2017 All Rights Reserved.
  *
  */
-@FeignClient(value = "system", configuration=FeignConfiguration.class)
+@FeignClient(value = "system", configuration=FeignConfiguration.class,primary = false)
 public interface FeignSysRoleApiService {
 
 

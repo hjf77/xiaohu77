@@ -27,14 +27,14 @@ public interface SysUserService extends BaseService<SysUser>
      */
     Integer SYS_USER_IS_ADMIN = 1;
 
-    public SysUser login(SysUser adminUser);
+    SysUser login(SysUser adminUser);
 
     /**
      * 发送邮件
      *
      * @param adminUser
      */
-    public void sendMail(SysUser adminUser, String pas);
+    void sendMail(SysUser adminUser, String pas);
 
     /***
      * 获取密码
@@ -42,7 +42,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param userName
      * @return
      */
-    public String readPass(String userName);
+    String readPass(String userName);
 
     /**
      * 添加用户角色
@@ -50,7 +50,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public int addUserRole(SysUser adminUser);
+    int addUserRole(SysUser adminUser);
 
     /**
      * 查询用户角色
@@ -58,7 +58,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public List<Map<String, Object>> searchUserRole(SysUser adminUser);
+    List<Map<String, Object>> searchUserRole(SysUser adminUser);
 
     /**
      * 删除当前用户的角色
@@ -66,7 +66,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public boolean deleteUserRole(SysUser adminUser);
+    boolean deleteUserRole(SysUser adminUser);
 
     /**
      * 添加用户信息
@@ -74,7 +74,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public Map<String, Object> addUser(SysUser adminUser);
+    Map<String, Object> addUser(SysUser adminUser);
 
     /**
      * 修改用户信息
@@ -82,7 +82,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public boolean updateUser(SysUser adminUser);
+    boolean updateUser(SysUser adminUser);
 
     /**
      * 根据用户查询菜单
@@ -90,7 +90,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public List<SysMenu> selectMenuByUid(SysUser adminUser);
+    List<SysMenu> selectMenuByUid(SysUser adminUser);
 
     /**
      * 根据父节点查询菜单
@@ -98,7 +98,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param map
      * @return
      */
-    public SysMenu selectParentMenuByid(Map<String, Object> map);
+    SysMenu selectParentMenuByid(Map<String, Object> map);
 
     /**
      * 更加用户构建菜单数据
@@ -106,7 +106,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public JSONArray buildMenuJson(SysUser adminUser);
+    JSONArray buildMenuJson(SysUser adminUser);
 
     /**
      * 测试使用
@@ -114,7 +114,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param map
      * @return
      */
-    public List<SysMenu> Test(Map<String, Object> map);
+    List<SysMenu> Test(Map<String, Object> map);
 
     /**
      * 根据用户查询权限
@@ -122,7 +122,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public List<SysMenuPermission> searchUserButton(SysUser adminUser);
+    List<SysMenuPermission> searchUserButton(SysUser adminUser);
 
     /**
      * 监测原始密码是否正确
@@ -130,7 +130,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @paramsysUserGroupcode
      * @return
      */
-    public boolean validataPass(SysUser adminUser);
+    boolean validataPass(SysUser adminUser);
 
     /**
      * 修改用户密码
@@ -138,7 +138,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @paramsysUserGroupcode
      * @return
      */
-    public boolean updatePass(SysUser adminUser);
+    boolean updatePass(SysUser adminUser);
 
     /**
      * 根据用户名称获取权限
@@ -146,7 +146,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public List<String> selectMenuByUname(SysUser adminUser);
+    List<String> selectMenuByUname(SysUser adminUser);
 
     /**
      * 根据用户名称获取权限
@@ -154,7 +154,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser,menuState(0:物业的,1:社区的)
      * @return
      */
-    public List<String> selectMenuByUname(SysUser adminUser, int menuState);
+    List<String> selectMenuByUname(SysUser adminUser, int menuState);
 
     /**
      * 通过登录名获取用户
@@ -162,7 +162,7 @@ public interface SysUserService extends BaseService<SysUser>
      * @param adminUser
      * @return
      */
-    public SysUser selectUserByULname(SysUser adminUser);
+    SysUser selectUserByULname(SysUser adminUser);
 
     /**
      * 校验登录名是否存在
@@ -183,12 +183,12 @@ public interface SysUserService extends BaseService<SysUser>
     /**
      * 根据名称获取用户信息
      */
-    public SysUser findUserByName(String userName);
+    SysUser findUserByName(String userName);
 
     /**
      * 根据用户名称查询所有权限
      */
-    public List<String> findMenuButtonByName(String userName);
+    List<String> findMenuButtonByName(String userName);
 
     /**
      * 刷新所有用户缓存
@@ -245,5 +245,11 @@ public interface SysUserService extends BaseService<SysUser>
      * @return 集团下所有的用户tree
      */
     List<SysUserOrgDTO> getUserOrgTreeList(String groupCode);
+
+    /**
+     * 设置租户service
+     * @param tenantService
+     */
+    void setTenantService(UcenterMsTenantService tenantService);
 
 }

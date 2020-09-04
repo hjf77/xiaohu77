@@ -2,42 +2,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhs_framework</artifactId>
+        <groupId>com.fhs-opensource</groupId>
+        <version>1.5.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_framework_api</artifactId>
-    <version>1.0.0</version>
+    <version>1.5.0</version>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.13.RELEASE</version>
-        <relativePath />
-    </parent>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
 
     <dependencies>
-
-
 
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>core</artifactId>
-            <version>1.0.0</version>
+            <version>1.5.0</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
-            <version>1.4.0.RELEASE</version>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${fhs.spring-cloud-starter.version}</version>
         </dependency>
-
 
 
         <dependency>
