@@ -75,7 +75,7 @@ public enum PagexDataService {
     /**
      * 刷新js的事件
      */
-    private List<JsRefreshListener> jsRefreshListenerList = new ArrayList<>();
+    private List<JsRefreshListener> jsRefreshListenerList = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * add页面扩展html模板路径

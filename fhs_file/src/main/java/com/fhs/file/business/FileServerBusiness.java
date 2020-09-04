@@ -20,12 +20,12 @@ public interface FileServerBusiness {
      * @param fileData
      * @return
      */
-    ServiceFile uploadFile(MultipartFile fileData);
+    ServiceFile uploadFile(MultipartFile fileData,String fileId);
 
     /**
      * 上传多个文件
      * @param allFileData
      * @return
      */
-    List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData);
+    List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData,String filedId);
 }

@@ -40,13 +40,13 @@ public class UploadAction extends BaseAction<ServiceFile> {
      * @return
      */
     @RequestMapping(value = "file", method = RequestMethod.POST)
-    public void uploadFile(@RequestParam MultipartFile[] Filedata, HttpServletRequest request,
+    public void uploadFile(@RequestParam MultipartFile[] Filedata,String filedId,  HttpServletRequest request,
                                            HttpServletResponse response) {
         if (Filedata == null || Filedata.length == 0) {
             super.outToClient(false, response);
         }
         LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-        ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
+        ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata),filedId).get (0);
         LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
 
         super.outWriteJson(JsonUtils.bean2json(file), response);
