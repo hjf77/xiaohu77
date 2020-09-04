@@ -7,7 +7,7 @@ server:
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
-  type-aliases-package: com.fhs.basics.dox;
+  type-aliases-package: com.fhs.system.bean;com.fhs.ucenter.bean;com.fhs.fileService.bean;com.fhs.pubservice.bean;com.fhs.file.bean;
 
 fhs:
   autoware:
@@ -18,12 +18,12 @@ fhs:
     #是否开启cas默认关闭
     enable-cas: true
     cas:
-      client-base-path: http://localhost:8082/ #当前项目的访问路径
+      client-base-path: http://127.0.0.1:8082/ #当前项目的访问路径
       server-url: http://cas.fhs.xhb.com # cas地址
   mybatis-jpa:
     #多个用;分隔
-    entity-package: com.**.**.dox
-    mapper-package: com.**.**.mapper
+    entity-package: com.**.**.bean
+    mapper-package: com.**.**.dao
   safe:
     enable-xss: true #xss注入控制
   session:
@@ -46,18 +46,21 @@ fhs:
       developer: fhs developers
       name: 公共接口文档
   path: "{
-          'basePath': 'http://localhost:8082/',
-          'fhs_static_url': 'http://localhost:8082/',
-          'fhs_basics_url': 'http://localhost:8082/',
-          'fileSavePath': 'c:/flies',
-          'loginOutUrl': 'http://cas.fhs.xhb.com/logout',
-          'fhs_file_url': 'http://localhost:8083/',
-          'index_right_path': 'http://localhost:8082/b/page-ms-index/index_right'
-          }"
+            'basePath': 'http://127.0.0.1:8082/',
+            'staticPath': 'http://static.fhs.xhb.com/',
+            'fhs_basics_url': 'http://127.0.0.1:8082/',
+            'fileSavePath': 'c:/flies',
+            'jbpmFilePath': 'c:/flies/jbpm/xml',
+            'loginOutUrl': 'http://127.0.0.1:8082/ms/logout',
+            'fhs_file_basePath': 'http://127.0.0.1:8082/',
+            'base_index_right': 'http://127.0.0.1:8082/b/page-ms-index/index_right',
+            'work_flow_url': 'http://127.0.0.1:8082/'
+            }"
   other: "{
           'isDevModel': 'true',
           'access_token_time_out_second': '500',
-          'systemTitle': 'FHS演示系统'
+          'base_system_title': 'FHS演示系统',
+          'base_system_name' : 'FHS演示系统'
           }"
 spring:
   cloud:
@@ -101,7 +104,7 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.0.213:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.213:3306/fhs_base_business?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
     validationQuery: select 'x'
@@ -126,7 +129,7 @@ seata:
 
 
 logging:
-  config: classpath:logback-fhs.xml
+  config: classpath:logback_fhs.xml
   level:
     com.fhs.basics: debug
     com.fhs.pagex: debug

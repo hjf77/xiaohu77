@@ -67,18 +67,18 @@ public class SystemConfigFilter implements Filter {
     public void initJsContent() throws Exception {
         final StringBuilder jsBuilder = new StringBuilder();
         jsBuilder.append("var basePath" + " = '" + EConfig.getPathPropertiesValue("basePath") + "';");
-        jsBuilder.append("var fhs_static_url" + " = '" + EConfig.getPathPropertiesValue("fhs_static_url") + "';");
-        jsBuilder.append("var fileService" + " = '" + EConfig.getPathPropertiesValue("fhs_file_url") + "';");
-        jsBuilder.append("var fileDownUrl" + " = '${fhs_file_url}/downLoad/fileByName';");
-        jsBuilder.append("var fileDelUrl" + " = '${fhs_file_url}/file/del.do';");
-        jsBuilder.append("var fileListUrl" + " = '${fhs_file_url}/downLoad/listData';");
-        jsBuilder.append("var fileUploadUrl" + " = '${fhs_file_url}/upload/file';");
-        jsBuilder.append("var downForId" + " = '${fhs_file_url}/downLoad/file';");
+        jsBuilder.append("var fhs_static_url" + " = '" + EConfig.getPathPropertiesValue("staticPath") + "';");
+        jsBuilder.append("var fileService" + " = '" + EConfig.getPathPropertiesValue("fhs_file_basePath") + "';");
+        jsBuilder.append("var fileDownUrl" + " = '${fhs_file_basePath}/downLoad/fileByName';");
+        jsBuilder.append("var fileDelUrl" + " = '${fhs_file_basePath}/file/del.do';");
+        jsBuilder.append("var fileListUrl" + " = '${fhs_file_basePath}/downLoad/listData';");
+        jsBuilder.append("var fileUploadUrl" + " = '${fhs_file_basePath}/upload/file';");
+        jsBuilder.append("var downForId" + " = '${fhs_file_basePath}/downLoad/file';");
         jsBuilder.append("var IMG" + " = 'image/gif,image/jpeg,image/jpg,image/png,image/svg';");
         jsBuilder.append("var IMG_REG" + " = /\\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/;");
         boolean isDev = ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel"));
         jsBuilder.append("var isDev" + " = " + isDev + ";");
         jsContent = jsBuilder.toString();
-        jsContent = jsContent.replace("${fhs_file_url}", EConfig.getPathPropertiesValue("fhs_file_url"));
+        jsContent = jsContent.replace("${fhs_file_basePath}", EConfig.getPathPropertiesValue("fhs_file_basePath"));
     }
 }

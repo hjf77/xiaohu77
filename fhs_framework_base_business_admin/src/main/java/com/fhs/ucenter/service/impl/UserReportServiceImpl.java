@@ -4,7 +4,6 @@ import com.fhs.ucenter.bean.UcenterFrontUser;
 import com.fhs.ucenter.dao.UserReportDao;
 import com.fhs.ucenter.service.UcenterFrontUserService;
 import com.fhs.ucenter.service.UserReportService;
-import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
