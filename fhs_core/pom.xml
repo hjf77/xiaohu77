@@ -113,11 +113,6 @@
 			<version>0.9.4</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fhs-opensource</groupId>
-			<artifactId>fhs_logger</artifactId>
-			<version>${fhs.release.version}</version>
-		</dependency>
 		<!--jetcache缓存-->
 		<dependency>
 			<groupId>com.alicp.jetcache</groupId>
