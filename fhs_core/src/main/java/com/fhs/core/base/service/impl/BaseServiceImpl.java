@@ -4,13 +4,12 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.CacheUpdateManager;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.Logger;
-import com.fhs.common.utils.ReflectUtils;
+import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.core.base.service.BaseService;
@@ -35,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
@@ -104,10 +104,10 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
             this.namespace = this.getClass().getAnnotation(Namespace.class).value();
         } else if (this.getClass().isAnnotationPresent(AutoTrans.class)) {
             this.namespace = this.getClass().getAnnotation(AutoTrans.class).namespace();
-        } else if (this.getTypeArgumentsClass(1).isAnnotationPresent(Table.class)) {
-            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(Table.class).name().replace("t_", "");
-        } else if (this.getTypeArgumentsClass(1).isAnnotationPresent(TableName.class)) {
-            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(TableName.class).value().replace("t_", "");
+        } else if (this.getTypeArgumentsClass(0).isAnnotationPresent(Table.class)) {
+            this.namespace = this.getTypeArgumentsClass(0).getAnnotation(Table.class).name().replace("t_", "");
+        } else if (this.getTypeArgumentsClass(0).isAnnotationPresent(TableName.class)) {
+            this.namespace = this.getTypeArgumentsClass(0).getAnnotation(TableName.class).value().replace("t_", "");
         }
     }
 
@@ -120,6 +120,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @Override
     @GenInfo
     public int add(T bean) {
+        initPkey(bean);
         int result = baseDao.add(bean);
         refreshCache();
         return result;
@@ -241,10 +242,55 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @GenInfo
     @Override
     public int insertSelective(T entity) {
+        initPkey(entity);
         int result = baseDao.insertSelective(entity);
         refreshCache();
         addCache(entity);
         return result;
+    }
+
+    /**
+     * 初始化主键
+     * @param entity
+     */
+    private void initPkey(T entity) {
+        Field field = getIdField(entity);
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                if (field.get(entity) == null && field.getType() == String.class) {
+                    field.set(entity, StringUtil.getUUID());
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private Field idField;
+
+    /**
+     * 获取子类id字段
+     *
+     * @return 子类id字段
+     */
+    public Field getIdField(T entity) {
+        if (idField != null) {
+            return idField;
+        }
+        List<Field> fieldList = ReflectUtils.getAnnotationField(entity.getClass(), javax.persistence.Id.class);
+        if (fieldList.size() == 0) {
+            fieldList = ReflectUtils.getAnnotationField(this.getClass(), TableId.class);
+            if (fieldList.size() == 0) {
+                throw new ParamException("找不到" + entity.getClass() + "的id注解");
+            }
+            fieldList.get(0).setAccessible(true);
+            return fieldList.get(0);
+        }
+        fieldList.get(0).setAccessible(true);
+        idField = fieldList.get(0);
+        return fieldList.get(0);
     }
 
     /**
@@ -272,6 +318,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @GenInfo
     @Override
     public int insertJpa(T entity) {
+        initPkey(entity);
         int result = baseDao.insertJpa(entity);
         refreshCache();
         addCache(entity);
@@ -281,6 +328,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @GenInfo
     @Override
     public int insert(T entity) {
+        initPkey(entity);
         int result = baseDao.insertJpa(entity);
         refreshCache();
         addCache(entity);
@@ -306,7 +354,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public int updateById(T entity) {
-        int result =  baseDao.updateByIdJpa(entity);
+        int result = baseDao.updateByIdJpa(entity);
         refreshCache();
         updateCache(entity);
         return result;
@@ -314,7 +362,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public int updateSelectiveById(T entity) {
-        int result= baseDao.updateSelectiveById(entity);
+        int result = baseDao.updateSelectiveById(entity);
         refreshCache();
         updateCache(entity);
         return result;
