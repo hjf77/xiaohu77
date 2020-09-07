@@ -4,6 +4,7 @@ import com.fhs.common.constant.Constant;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -61,6 +62,16 @@ public class ReflectUtils {
         } catch (IllegalAccessException e) {
             LOG.error(e);
         }
+    }
+
+    /**
+     * 获取所有的方法
+     *
+     * @param clazz 需要获取所有方法的class
+     * @return 所有的方法
+     */
+    public static List<Method> getAllMethod(Class<?> clazz) {
+        return Arrays.asList(clazz.getMethods());
     }
 
     /**

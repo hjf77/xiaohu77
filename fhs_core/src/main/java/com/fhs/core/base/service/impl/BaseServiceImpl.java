@@ -1,7 +1,10 @@
 package com.fhs.core.base.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.CacheUpdateManager;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.common.utils.ConverterUtils;
@@ -12,10 +15,13 @@ import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Cacheable;
+import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.event.datadel.DataDelManager;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.strategy.GenInfo;
+import com.fhs.core.trans.AutoTrans;
 import com.fhs.core.trans.TransService;
+import com.fhs.redis.service.RedisCacheService;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import com.mybatis.jpa.cache.JpaTools;
 import com.mybatis.jpa.constant.ResultMapConstants;
@@ -27,6 +33,7 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -62,6 +69,13 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @Autowired
     protected TransService transService;
 
+    @Autowired
+    private CacheUpdateManager cacheUpdateManager;
+
+    @Autowired
+    private RedisCacheService redisCacheService;
+
+
     /**
      * 利用spring4新特性泛型注入
      */
@@ -84,10 +98,17 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
-        if(isCacheable) {
-            this.namespace =this.getClass().getAnnotation(Cacheable.class).value();
+        if (isCacheable) {
+            this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
+        } else if (this.getClass().isAnnotationPresent(Namespace.class)) {
+            this.namespace = this.getClass().getAnnotation(Namespace.class).value();
+        } else if (this.getClass().isAnnotationPresent(AutoTrans.class)) {
+            this.namespace = this.getClass().getAnnotation(AutoTrans.class).namespace();
+        } else if (this.getTypeArgumentsClass(1).isAnnotationPresent(Table.class)) {
+            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(Table.class).name().replace("t_", "");
+        } else if (this.getTypeArgumentsClass(1).isAnnotationPresent(TableName.class)) {
+            this.namespace = this.getTypeArgumentsClass(1).getAnnotation(TableName.class).value().replace("t_", "");
         }
-
     }
 
     @Override
@@ -99,32 +120,44 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @Override
     @GenInfo
     public int add(T bean) {
-        return baseDao.add(bean);
+        int result = baseDao.add(bean);
+        refreshCache();
+        return result;
     }
 
     @Override
     public boolean updateFormMap(Map<String, Object> map) {
-        return baseDao.updateFormMap(map) > 0;
+        boolean result = baseDao.updateFormMap(map) > 0;
+        refreshCache();
+        return result;
     }
 
     @Override
     public boolean update(T bean) {
-        return baseDao.update(bean) > 0;
+        boolean result = baseDao.update(bean) > 0;
+        refreshCache();
+        return result;
     }
 
     @Override
     public boolean updateJpa(T bean) {
-        return baseDao.updateSelectiveById(bean) > 0;
+        boolean result = baseDao.updateSelectiveById(bean) > 0;
+        refreshCache();
+        return result;
     }
 
     @Override
     public boolean deleteFromMap(Map<String, Object> map) {
-        return baseDao.deleteFromMap(map) > 0;
+        boolean result = baseDao.deleteFromMap(map) > 0;
+        refreshCache();
+        return result;
     }
 
     @Override
     public boolean delete(T bean) {
-        return baseDao.delete(bean) > 0;
+        boolean result = baseDao.delete(bean) > 0;
+        refreshCache();
+        return result;
     }
 
     @Override
@@ -208,8 +241,10 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @GenInfo
     @Override
     public int insertSelective(T entity) {
+        int result = baseDao.insertSelective(entity);
+        refreshCache();
         addCache(entity);
-        return baseDao.insertSelective(entity);
+        return result;
     }
 
     /**
@@ -237,38 +272,52 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @GenInfo
     @Override
     public int insertJpa(T entity) {
-        return baseDao.insertJpa(entity);
+        int result = baseDao.insertJpa(entity);
+        refreshCache();
+        addCache(entity);
+        return result;
     }
 
     @GenInfo
     @Override
     public int insert(T entity) {
-        return baseDao.insertJpa(entity);
+        int result = baseDao.insertJpa(entity);
+        refreshCache();
+        addCache(entity);
+        return result;
     }
 
     @Override
     public int batchInsert(List<T> list) {
-        return baseDao.batchInsert(list);
+        int result = baseDao.batchInsert(list);
+        refreshCache();
+        return result;
     }
 
     @Override
     public int deleteById(Object primaryValue) {
+        int result = baseDao.deleteByIdJpa(primaryValue);
         if (this.isCacheable) {
             this.doCache.remove(namespace + ":" + ConverterUtils.toString(primaryValue));
         }
-        return baseDao.deleteByIdJpa(primaryValue);
+        refreshCache();
+        return result;
     }
 
     @Override
     public int updateById(T entity) {
+        int result =  baseDao.updateByIdJpa(entity);
+        refreshCache();
         updateCache(entity);
-        return baseDao.updateByIdJpa(entity);
+        return result;
     }
 
     @Override
     public int updateSelectiveById(T entity) {
+        int result= baseDao.updateSelectiveById(entity);
+        refreshCache();
         updateCache(entity);
-        return baseDao.updateSelectiveById(entity);
+        return result;
     }
 
     private void updateCache(T entity) {
@@ -732,4 +781,34 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     public List<T> findByIds(List<?> ids) {
         return baseDao.selectByIds(ids);
     }
+
+    /**
+     * 刷新缓存,包括do缓存,autotrans缓存,以及其他模块依赖的缓存
+     */
+    protected void refreshCache() {
+        cacheUpdateManager.clearCache(namespace);
+        AutoTrans autoTrans = this.getClass().getAnnotation(AutoTrans.class);
+        if (autoTrans != null) {
+            //发送刷新的消息
+            Map<String, String> message = new HashMap<>();
+            message.put("transType", "auto");
+            message.put("namespace", autoTrans.namespace());
+            redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
+        }
+        if (this.nameSpace != null) {
+            this.cacheUpdateManager.clearCache(nameSpace);
+        }
+    }
+
+    /**
+     * 获取泛型class
+     *
+     * @param index 第几个
+     * @return 泛型
+     */
+    private <T> Class<T> getTypeArgumentsClass(int index) {
+        Class<T> tClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[index];
+        return tClass;
+    }
+
 }
