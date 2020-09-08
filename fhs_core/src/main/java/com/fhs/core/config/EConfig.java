@@ -4,6 +4,7 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -88,6 +89,18 @@ public class EConfig implements InitializingBean{
      */
     public static String getOtherConfigPropertiesValue(String key) {
         return getValue(OTHER_CONFIG, key);
+    }
+
+
+    /**
+     * 获取jar包所在路径
+     *
+     * @return jar包所在路径
+     */
+    public static String getPath() {
+        ApplicationHome home = new ApplicationHome(EConfig.class);
+        String path = home.getDir().getAbsolutePath();
+        return path;
     }
 
 }
