@@ -140,6 +140,9 @@ public class MemoryClassLoader extends URLClassLoader {
      */
     public static String getPath() {
         ApplicationHome home = new ApplicationHome(MemoryJavaFileManager.class);
+        if(home.getSource()==null){
+            return "";
+        }
         String path = home.getSource().getPath();
         return path;
     }
