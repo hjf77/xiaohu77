@@ -3,6 +3,7 @@ package com.fhs.index;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.api.annotation.AutowareYLM;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.core.log.LogDesc;
 import com.fhs.core.result.HttpResult;
@@ -68,8 +69,8 @@ public class IndexAction {
      * @return
      */
     @RequestMapping("/")
-    public ModelAndView initIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return index(request, response);
+    public void initIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
+         response.sendRedirect(EConfig.getPathPropertiesValue("basePath") + "/ms/index");
     }
 
     /**
