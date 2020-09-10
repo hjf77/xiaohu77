@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-@SpringBootApplication(scanBasePackages = {"com.fhs","com.alicp.jetcache"},exclude={
+@SpringBootApplication(scanBasePackages = {"com.fhs", "com.alicp.jetcache"}, exclude = {
         org.activiti.spring.boot.SecurityAutoConfiguration.class,
         SecurityAutoConfiguration.class
 })
@@ -24,15 +24,10 @@ import java.util.List;
 @EnableRedisHttpSession
 @EnableMethodCache(basePackages = "com.fhs")
 @EnableFeignClients(basePackages = {"com.fhs"})
-@ServletComponentScan(basePackages = {"com.fhs","org.apache.shiro"})
+@ServletComponentScan(basePackages = {"com.fhs", "org.apache.shiro"})
 public class SingleApplication {
 
     public static void main(String[] args) {
-        List<Integer> list = new LinkedList<>();
-        Date date = new Date();
-        for(int i=0;i<10000000;i++){
-            list.add(i);
-        }
-        System.out.println(new Date().getTime()-date.getTime());
+        SpringApplication.run(SingleApplication.class, args);
     }
 }
