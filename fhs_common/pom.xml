@@ -19,12 +19,6 @@
 	<name>fhs_common</name>
 	<url>https://gitee.com/fhs-opensource/fhs_common</url>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-        <version.servlet-api>3.1.0</version.servlet-api>
-	</properties>
 
 
 

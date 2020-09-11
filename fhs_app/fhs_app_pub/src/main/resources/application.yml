@@ -147,7 +147,7 @@ jetcache:
   hidePackages: com.alibaba
   local:
     default:
-      type: caffeine
+      type: linkedhashmap
       limit: 100
       keyConvertor: fastjson
       expireAfterWriteInMillis: 300000
