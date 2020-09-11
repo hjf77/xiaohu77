@@ -281,7 +281,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
         }
         List<Field> fieldList = ReflectUtils.getAnnotationField(entity.getClass(), javax.persistence.Id.class);
         if (fieldList.size() == 0) {
-            fieldList = ReflectUtils.getAnnotationField(this.getClass(), TableId.class);
+            fieldList = ReflectUtils.getAnnotationField(entity.getClass(), TableId.class);
             if (fieldList.size() == 0) {
                 throw new ParamException("找不到" + entity.getClass() + "的id注解");
             }
