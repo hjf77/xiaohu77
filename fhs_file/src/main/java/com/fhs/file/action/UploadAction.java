@@ -1,5 +1,6 @@
 package com.fhs.file.action;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.Logger;
@@ -48,7 +49,11 @@ public class UploadAction extends BaseAction<ServiceFile> {
         LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
         ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
         LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-
+        if(CheckUtils.isNotEmpty(request.getParameter("fileId"))){
+            file.setFileId(request.getParameter("fileId"));
+            //修改文件id
+            serviceFileService.updateSelectiveById(file);
+        }
         super.outWriteJson(JsonUtils.bean2json(file), response);
 
     }
