@@ -33,18 +33,18 @@
 </p>
 
 -----------------------------------------------------------------------------------------------
-#### 体验地址
+# 体验地址
 
 http://114.116.21.147:8081/   admin  123456
 
-#### 预览图
+# 预览图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/110012_1d20674d_339743.png "fhs1.png")
  
-#### 1. 项目技术架构
+## 1. 项目技术架构
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/104222_be2c1c69_339743.jpeg "技术架构.jpg")
-#### 2. 思维导图
+## 2. 思维导图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0701/092840_63cea85d_339743.jpeg "思维导图.jpg")
-#### 2. 技术栈
+## 2. 技术栈
 - 前端:Easyui(美化过的Easyui),Layui(首页)，Validform，My 97(定制过主题)。
 - 后端校验：hibernate vilidator。
 - 后端：SpringBoot2.25 + Springcloud（可选）
