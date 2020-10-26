@@ -25,7 +25,7 @@
             //判断如果没有document，则为非浏览器环境
             if(!window.document){
                 return bt._compile(str);
-            };
+            }
 
             //HTML5规定ID可以由任何不包含空格字符的字符串组成
             var element = document.getElementById(str);
@@ -34,7 +34,7 @@
                 //取到对应id的dom，缓存其编译后的HTML模板函数
                 if (bt.cache[str]) {
                     return bt.cache[str];
-                };
+                }
 
                 //textarea或input则取value，其它情况取innerHTML
                 var html = /^(textarea|input)$/i.test(element.nodeName) ? element.value : element.innerHTML;
@@ -45,13 +45,13 @@
                 //是模板字符串，则生成一个函数
                 //如果直接传入字符串作为模板，则可能变化过多，因此不考虑缓存
                 return bt._compile(str);
-            };
+            }
 
         })();
 
         //有数据则返回HTML字符串，没有数据则返回函数 支持data={}的情况
         var result = bt._isObject(data) ? fn( data ) : fn;
-        fn = null;
+        // fn = null;
 
         return result;
     };
@@ -140,20 +140,20 @@
 
             //用来处理非分隔符内部的内容中含有 斜杠 \ 单引号 ‘ ，处理办法为HTML转义
             .replace(new RegExp(_left+"(?:(?!"+_right+")[\\s\\S])*"+_right+"|((?:(?!"+_left+")[\\s\\S])+)","g"),function (item, $1) {
-                var str = '';
+                var strr = '';
                 if($1){
 
                     //将 斜杠 单引 HTML转义
-                    str = $1.replace(/\\/g,"&#92;").replace(/'/g,'&#39;');
-                    while(/<[^<]*?&#39;[^<]*?>/g.test(str)){
+                    strr = $1.replace(/\\/g,"&#92;").replace(/'/g,'&#39;');
+                    while(/<[^<]*?&#39;[^<]*?>/g.test(strr)){
 
                         //将标签内的单引号转义为\r  结合最后一步，替换为\'
-                        str = str.replace(/(<[^<]*?)&#39;([^<]*?>)/g,'$1\r$2')
-                    };
+                        strr = strr.replace(/(<[^<]*?)&#39;([^<]*?>)/g,'$1\r$2')
+                    }
                 }else{
-                    str = item;
+                    strr = item;
                 }
-                return str ;
+                return strr ;
             });
 
 
@@ -181,7 +181,7 @@
                 
                 //默认不转义HTML转义
                 .replace(new RegExp("\\t=(.*?)"+_right,"g"),"',typeof($1) === 'undefined'?'':$1,'");
-        };
+        }
 
         str = str
 

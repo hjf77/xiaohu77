@@ -120,7 +120,7 @@
 	$.Tipmsg=tipmsg;
 
 	var Validform=function(forms,settings,inited){
-		var settings=$.extend({},Validform.defaults,settings);
+		settings=$.extend({},Validform.defaults,settings);
 		settings.datatype && $.extend(Validform.util.dataType,settings.datatype);
 		var brothers=this;
 		brothers.tipmsg={w:{}};
@@ -398,7 +398,7 @@
 			Validform.util.usePlugin.call(curform,usePlugin,tiptype,tipSweep,addRule);
 		},
 
-		usePlugin:function(plugin,tiptype,tipSweep,addRule){
+		usePlugin:function(plugi,tiptype,tipSweep,addRule){
 			/*
 				plugin:settings.usePlugin;
 				tiptype:settings.tiptype;
@@ -407,7 +407,7 @@
 			*/
 
 			var curform=this,
-				plugin=plugin || {};
+				plugin=plugi || {};
 			//swfupload;
 			if(curform.find("input[plugin='swfupload']").length && typeof(swfuploadhandler) != "undefined"){
 
@@ -474,7 +474,7 @@
 
 			//jqtransform;
 			if(addRule!="addRule" && plugin.jqtransform && $.fn.jqTransSelect){
-				if(curform[0].jqTransSelected=="true"){return;};
+				if(curform[0].jqTransSelected=="true"){return;}
 				curform[0].jqTransSelected="true";
 
 				var jqTransformHideSelect = function(oTarget){
@@ -551,7 +551,7 @@
 				regxp2=/^(.+?)(\d+)-(\d+)$/,
 				regxp3=/(.*?)\d+(.+?)\d+(.*)/,
 				mac=datatype.match(regxp),
-				temp,str;
+				str;
 
 			//如果是值不一样而报错;
 			if(recheck=="recheck"){
@@ -581,7 +581,7 @@
 		},
 
 		_regcheck:function(datatype,gets,obj,curform){
-			var curform=curform,
+			var curfor=curform,
 				info=null,
 				passed=false,
 				reg=/\/.+\//g,
@@ -600,7 +600,7 @@
 
 			//function;
 			}else if(Validform.util.toString.call(Validform.util.dataType[datatype])=="[object Function]"){
-				passed=Validform.util.dataType[datatype](gets,obj,curform,Validform.util.dataType);
+				passed=Validform.util.dataType[datatype](gets,obj,curfor,Validform.util.dataType);
 				if(passed === true || passed===undef){
 					passed = true;
 				}else{
@@ -617,17 +617,17 @@
 
 					if(!mac){
 						passed=false;
-						info=curform.data("tipmsg").undef||tipmsg.undef;
+						info=curfor.data("tipmsg").undef||tipmsg.undef;
 					}else{
 						for(var name in Validform.util.dataType){
 							temp=name.match(regex);
 							if(!temp){continue;}
 							if(mac[1]===temp[1]){
 								var str=Validform.util.dataType[name].toString(),
-									param=str.match(/\/[mgi]*/g)[1].replace("\/",""),
+									params=str.match(/\/[mgi]*/g)[1].replace("\/",""),
 									regxp=new RegExp("\\{"+temp[2]+","+temp[3]+"\\}","g");
 								str=str.replace(/\/[mgi]*/g,"\/").replace(regxp,"{"+mac[2]+","+mac[3]+"}").replace(/^\//,"").replace(/\/$/,"");
-								Validform.util.dataType[datatype]=new RegExp(str,param);
+								Validform.util.dataType[datatype]=new RegExp(str,params);
 								break;
 							}
 						}
@@ -643,23 +643,23 @@
 
 			if(passed){
 				type=2;
-				info=obj.attr("sucmsg") || curform.data("tipmsg").r||tipmsg.r;
+				info=obj.attr("sucmsg") || curfor.data("tipmsg").r||tipmsg.r;
 
 				//规则验证通过后，还需要对绑定recheck的对象进行值比较;
 				if(obj.attr("recheck")){
-					var theother=curform.find("input[name='"+obj.attr("recheck")+"']:first");
+					var theother=curfor.find("input[name='"+obj.attr("recheck")+"']:first");
 					if(gets!=theother.val()){
 						passed=false;
 						type=3;
-						info=obj.attr("errormsg")  || Validform.util.getErrormsg.call(obj,curform,datatype,"recheck");
+						info=obj.attr("errormsg")  || Validform.util.getErrormsg.call(obj,curfor,datatype,"recheck");
 					}
 				}
 			}else{
-				info=info || obj.attr("errormsg") || Validform.util.getErrormsg.call(obj,curform,datatype);
+				info=info || obj.attr("errormsg") || Validform.util.getErrormsg.call(obj,curfor,datatype);
 
 				//验证不通过且为空时;
 				if(Validform.util.isEmpty.call(obj,gets)){
-					info=obj.attr("nullmsg") || Validform.util.getNullmsg.call(obj,curform);
+					info=obj.attr("nullmsg") || Validform.util.getNullmsg.call(obj,curfor);
 				}
 			}
 
@@ -678,9 +678,9 @@
 				obj:input object;
 			*/
 			var curform=this,
-				info=null,
-				passed=false,
-				type=3;//default set to wrong type, 2,3,4;
+				info=null;
+				// passed=false,
+				// type=3;//default set to wrong type, 2,3,4;
 
 			//ignore;
 			if(obj.attr("ignore")==="ignore" && Validform.util.isEmpty.call(obj,gets)){

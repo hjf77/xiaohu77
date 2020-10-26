@@ -32,7 +32,7 @@ function createFileList(tempDivId,fileJsons)
 				{
 					case 'txt':{fileClassName = 'file-txt';}break;
 					case 'rar':{fileClassName = 'file-rar';}break;				
-					case 'doc':;				
+					case 'doc':
 					case 'docx':{fileClassName = 'file-word';}break;		
 					case 'xlsx':{fileClassName = 'file-excel';}break;	
 						
