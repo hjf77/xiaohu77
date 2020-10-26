@@ -5,6 +5,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.front.api.rpc.FeignFrontUserApiService;
 import com.fhs.front.dox.UcenterFrontUserBindDO;
@@ -31,6 +32,7 @@ import java.util.Map;
  */
 @Primary
 @Service("UcenterFrontUserService")
+@AutoTrans(namespace = "frontUser",fields = {"userName","userName"})
 @DataSource("base_business")
 public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserDO> implements UcenterFrontUserService, FeignFrontUserApiService {
 
