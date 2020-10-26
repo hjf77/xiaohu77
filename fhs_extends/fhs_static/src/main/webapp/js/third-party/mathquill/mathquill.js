@@ -1552,6 +1552,7 @@ var RootMathBlock = P(MathBlock, function(_, _super) {
       } else {
         this.cursor.selectLeft();
       }
+      break;
 
     case 'Shift-Down':
       if (this.cursor[R]) {
@@ -1560,6 +1561,7 @@ var RootMathBlock = P(MathBlock, function(_, _super) {
       else {
         this.cursor.selectRight();
       }
+      break;
 
     case 'Ctrl-Up': break;
     case 'Ctrl-Down': break;
