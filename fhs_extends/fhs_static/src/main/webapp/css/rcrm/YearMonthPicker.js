@@ -28,12 +28,12 @@ if (Ext.DatePicker) {
                 this.mon(this.monthPicker, 'dblclick', this.onMonthDblClick, this);
                 this.mpMonths = this.monthPicker.select('td.x-date-mp-month');
                 this.mpYears = this.monthPicker.select('td.x-date-mp-year');
-                this.mpMonths.each(function (m, a, i) {
-                    i += 1;
-                    if ((i % 2) === 0) {
-                        m.dom.xmonth = 5 + Math.round(i * 0.5);
+                this.mpMonths.each(function (m, a, n) {
+                    n += 1;
+                    if ((n % 2) === 0) {
+                        m.dom.xmonth = 5 + Math.round(n * 0.5);
                     } else {
-                        m.dom.xmonth = Math.round((i - 1) * 0.5);
+                        m.dom.xmonth = Math.round((n - 1) * 0.5);
                     }
                 });
             }
@@ -76,8 +76,8 @@ if (Ext.DatePicker) {
 		},
 		onMonthDblClick : function(e, t){
 			e.stopEvent();
-			var el = new Ext.Element(t), pn;
-			if((pn = el.up('td.x-date-mp-month', 2)) || (pn = el.up('td.x-date-mp-year', 2))){
+			var el = new Ext.Element(t);
+			if((el.up('td.x-date-mp-month', 2)) || (el.up('td.x-date-mp-year', 2))){
 				var d = new Date(this.mpSelYear, this.mpSelMonth, (this.activeDate || this.value).getDate());
 				if(d.getMonth() != this.mpSelMonth){
 					d = new Date(this.mpSelYear, this.mpSelMonth, 1).getLastDateOfMonth();
