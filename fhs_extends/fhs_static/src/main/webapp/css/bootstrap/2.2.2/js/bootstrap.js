@@ -674,7 +674,6 @@
   , keydown: function (e) {
       var $this
         , $items
-        , $active
         , $parent
         , isActive
         , index
@@ -854,8 +853,6 @@
     , hide: function (e) {
         e && e.preventDefault()
 
-        var that = this
-
         e = $.Event('hide')
 
         this.$element.trigger(e)
@@ -924,8 +921,8 @@
       }
 
     , backdrop: function (callback) {
-        var that = this
-          , animate = this.$element.hasClass('fade') ? 'fade' : ''
+        // var that = this
+          var animate = this.$element.hasClass('fade') ? 'fade' : ''
 
         if (this.isShown && this.options.backdrop) {
           var doAnimate = $.support.transition && animate
