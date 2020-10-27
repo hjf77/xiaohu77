@@ -522,7 +522,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
-    public List<?> callSqlIdForMany(String sqlId, Object param) {
+    public List<V> callSqlIdForMany(String sqlId, Object param) {
         return sqlsession.selectList(nameSpace + "." + sqlId, param);
     }
 
