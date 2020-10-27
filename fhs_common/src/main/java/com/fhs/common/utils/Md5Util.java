@@ -59,8 +59,8 @@ public class Md5Util {
             return null;
         }
     }
-
-    public final static String md5(String s) {
+    //未测试  update by cyx 同MD5方法名重复
+    public final static String md5Lower(String s) {
         char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
         try {
@@ -98,32 +98,21 @@ public class Md5Util {
      * @param file
      * @return
      */
-    public static String getFileMD5(File file) {
+    public static String getFileMD5(File file) throws Exception{
         if (!file.isFile()) {
             return null;
         }
-
         MessageDigest digest = null;
-        FileInputStream in = null;
         byte buffer[] = new byte[1024];
         int len;
-        try {
+        //未测试  update by cyx
+        try(FileInputStream in = new FileInputStream(file)) {
             digest = MessageDigest.getInstance("MD5");
-            in = new FileInputStream(file);
             while ((len = in.read(buffer, 0, 1024)) != -1) {
                 digest.update(buffer, 0, len);
             }
-            in.close();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         BigInteger bigInt = new BigInteger(1, digest.digest());
-
         return bigInt.toString(16);
     }
 

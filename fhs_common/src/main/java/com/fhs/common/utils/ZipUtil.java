@@ -52,17 +52,13 @@ public final class ZipUtil {
      */
     private static void addEntry(String[] filePaths, ZipOutputStream zos)
             throws IOException {
-        FileInputStream fis = null;
-        BufferedInputStream bis = null;
+        //未测试  update by cyx
         File tempFile = null;
-        try {
-
-
-            for (String filePath : filePaths) {
-                tempFile = new File(filePath);
-                fis = new FileInputStream(tempFile);
-                byte[] buffer = new byte[1024 * 10];
-                bis = new BufferedInputStream(fis, buffer.length);
+        for (String filePath : filePaths) {
+            tempFile = new File(filePath);
+            byte[] buffer = new byte[1024 * 10];
+            try(FileInputStream fis = new FileInputStream(tempFile);
+                BufferedInputStream bis = new BufferedInputStream(fis, buffer.length)){
                 int read = 0;
                 zos.putNextEntry(new ZipEntry(tempFile.getName()));
                 while ((read = bis.read(buffer, 0, buffer.length)) != -1) {
@@ -70,8 +66,6 @@ public final class ZipUtil {
                 }
                 zos.closeEntry();
             }
-        } finally {
-            IOUtil.closeQuietly(bis, fis);
         }
     }
 
