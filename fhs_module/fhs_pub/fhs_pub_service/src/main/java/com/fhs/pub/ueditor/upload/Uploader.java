@@ -26,7 +26,7 @@ public class Uploader {
 		this.conf = conf;
 	}
 
-	public final State doExec() {
+	public final State doExec() throws Exception {
 		String filedName = (String) this.conf.get("fieldName");
 		State state = null;
 
