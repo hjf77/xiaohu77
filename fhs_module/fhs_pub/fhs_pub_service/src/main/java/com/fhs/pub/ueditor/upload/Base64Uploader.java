@@ -11,7 +11,7 @@ import java.util.Map;
 
 public final class Base64Uploader {
 
-	public static State save(String content, Map<String, Object> conf) {
+	public static State save(String content, Map<String, Object> conf) throws Exception {
 
 		byte[] data = decode(content);
 
