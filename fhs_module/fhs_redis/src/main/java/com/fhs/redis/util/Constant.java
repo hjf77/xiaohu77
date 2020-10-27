@@ -28,11 +28,12 @@ public interface Constant {
 	/** redis properties key **/
 	public static final String REDISPROPERTIES_SERVER_NUM_KEY								= 	"redis.server.num";
 	public static final String REDISPROPERTIES_LANGUAGE_KEY									= 	"redis.language";
-	
+
 	public static final String REDISPROPERTIES_HOST_PROFIXKEY								= 	"redis.host.";
 	public static final String REDISPROPERTIES_NAME_PROFIXKEY								= 	"redis.name.";
 	public static final String REDISPROPERTIES_PORT_PROFIXKEY								= 	"redis.port.";
-	public static final String REDISPROPERTIES_PASSWORD_PROFIXKEY							= 	"redis.password.";
+	//未测试  update by cyx 将 REDISPROPERTIES_PASSWORD_PROFIXKEY 替换为REDISPROPERTIES_CIPHER_PROFIXKEY
+	public static final String REDISPROPERTIES_CIPHER_PROFIXKEY							= 	"redis.password.";
 	public static final String REDISPROPERTIES_DBINDEX_PROFIXKEY							= 	"redis.database.";
 	
 	

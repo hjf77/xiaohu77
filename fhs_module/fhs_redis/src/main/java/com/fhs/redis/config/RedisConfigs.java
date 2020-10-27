@@ -27,7 +27,7 @@ public class RedisConfigs implements Constant {
 		prop.put(REDISPROPERTIES_NAME_PROFIXKEY,redisHost);
 		prop.put(REDISPROPERTIES_HOST_PROFIXKEY,redisHost);
 		prop.put(REDISPROPERTIES_PORT_PROFIXKEY,redisPort);
-		prop.put(REDISPROPERTIES_PASSWORD_PROFIXKEY,redisPassword);
+		prop.put(REDISPROPERTIES_CIPHER_PROFIXKEY,redisPassword);
 		prop.put(REDISPROPERTIES_DBINDEX_PROFIXKEY,defaultDbindex);
 		return prop;
 	}

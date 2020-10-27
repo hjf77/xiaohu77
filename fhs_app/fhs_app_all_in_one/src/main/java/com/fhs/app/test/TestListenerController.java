@@ -1,6 +1,6 @@
 package com.fhs.app.test;
 
-import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.ExecutionListener;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/ms/test/listener")
+@Slf4j
 public class TestListenerController implements ExecutionListener, TaskListener {
 
 
@@ -23,13 +24,13 @@ public class TestListenerController implements ExecutionListener, TaskListener {
     public void notify(DelegateExecution execution) throws Exception {
 
         String eventName = execution.getEventName();
-        //start
+        //start 未测试  update by cyx 将 System.out.println 替换成 log.info
         if ("start".equals(eventName)) {
-            System.out.println("start====================================================="+eventName);
+            log.info("start====================================================="+eventName);
         } else if ("end".equals(eventName)) {
-            System.out.println("end======================================================="+eventName);
+            log.info("end======================================================="+eventName);
         }else if ("take".equals(eventName)) {
-            System.out.println("take======================================================"+eventName);
+            log.info("take======================================================"+eventName);
         }
     }
 
@@ -40,8 +41,8 @@ public class TestListenerController implements ExecutionListener, TaskListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         String eventName = delegateTask.getEventName();
-        System.out.println("start====================================================="+eventName);
-        System.out.println("任务监听器:" + eventName);
-        System.out.println("end======================================================="+eventName);
+        log.info("start====================================================="+eventName);
+        log.info("任务监听器:" + eventName);
+        log.info("end======================================================="+eventName);
     }
 }
