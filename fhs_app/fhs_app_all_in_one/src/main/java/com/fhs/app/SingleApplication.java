@@ -10,11 +10,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
 @SpringBootApplication(scanBasePackages = {"com.fhs", "com.alicp.jetcache"}, exclude = {
         org.activiti.spring.boot.SecurityAutoConfiguration.class,
         SecurityAutoConfiguration.class
