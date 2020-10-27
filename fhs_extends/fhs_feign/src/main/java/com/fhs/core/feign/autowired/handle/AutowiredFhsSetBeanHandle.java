@@ -38,7 +38,7 @@ public class AutowiredFhsSetBeanHandle implements ApplicationListener<ContextRef
         this.packageNames = packageNames;
     }
 
-    private static boolean isInited = false;
+    private boolean isInited = false;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {

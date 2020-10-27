@@ -177,7 +177,7 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     private static final Object lock = new Object();
 
-    private static boolean isInit = false;
+    private boolean isInit = false;
 
 
     public void init(){
@@ -230,6 +230,9 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     @Override
     public void flush() throws IOException {
+
+        System.out.println("刷新");
+
     }
 
     @Override

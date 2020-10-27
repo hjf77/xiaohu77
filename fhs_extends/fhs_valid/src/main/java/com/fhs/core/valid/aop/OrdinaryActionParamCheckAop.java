@@ -17,11 +17,12 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop {
      */
     @Pointcut("execution(* com.*.*.action..*.*(..) )")
     public void checkParam(){
-
+            //定义切入点表达式
     }
 
     @Before("checkParam()")
     public void doBefore(JoinPoint joinPoint) {
+        //前置通知逻辑处理
     }
 
     /**
@@ -42,6 +43,7 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop {
      */
     @AfterReturning("checkParam()")
     public void doAfterReturning(JoinPoint joinPoint) {
+        //返回通知逻辑处理
     }
 
 

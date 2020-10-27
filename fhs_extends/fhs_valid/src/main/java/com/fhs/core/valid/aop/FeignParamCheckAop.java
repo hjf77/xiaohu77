@@ -20,12 +20,13 @@ public class FeignParamCheckAop extends ParamCheckAop{
      */
     @Pointcut("execution(* com.*.*.api..*.*(..) )")
     public void checkParam(){
-
+         //定义切入点表达式
     }
 
 
     @Before("checkParam()")
     public void doBefore(JoinPoint joinPoint) {
+        //添加前置通知处理逻辑
     }
 
     /**
@@ -46,5 +47,6 @@ public class FeignParamCheckAop extends ParamCheckAop{
      */
     @AfterReturning("checkParam()")
     public void doAfterReturning(JoinPoint joinPoint) {
+        //添加返回后通知处理逻辑
     }
 }
