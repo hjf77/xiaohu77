@@ -364,15 +364,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      */
     public static void copyFile(File oldPath, String newPath)
             throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream(oldPath);
-        FileOutputStream fos = new FileOutputStream(newPath);
-        int len = 0;
-        byte[] buf = new byte[1024];
-        while ((len = fis.read(buf)) != -1) {
-            fos.write(buf, 0, len);
+        //未测试  update by cyx
+        try (FileInputStream fis = new FileInputStream(oldPath);
+             FileOutputStream fos = new FileOutputStream(newPath)) {
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while ((len = fis.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
         }
-        fis.close();
-        fos.close();
     }
 
     /***
