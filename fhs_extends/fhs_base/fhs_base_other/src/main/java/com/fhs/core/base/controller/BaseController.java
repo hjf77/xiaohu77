@@ -27,7 +27,7 @@ import java.util.Set;
  * @since [产品/模块版本]
  */
 public abstract class BaseController {
-    private final Logger LOG = Logger.getLogger(BaseController.class);
+    private final Logger log = Logger.getLogger(BaseController.class);
 
     /**
      * 成功
@@ -95,7 +95,7 @@ public abstract class BaseController {
      */
     public EMap<String, Object> getParameterMap() {
         HttpServletRequest request = getRequest();
-        EMap<String, Object> resultMap = new EMap<String, Object>();
+        EMap<String, Object> resultMap = new EMap<>();
         Map<String, String[]> tempMap = request.getParameterMap();
         Set<String> keys = tempMap.keySet();
         for (String key : keys) {
@@ -110,7 +110,7 @@ public abstract class BaseController {
      * @return 计算好分页起始行的参数map
      */
     protected EMap<String, Object> getPageTurnNum() {
-        HttpServletRequest request = getRequest();
+
         EMap<String, Object> paramMap = this.getParameterMap();
         PageSizeInfo pageSizeInfo = getPageSizeInfo(paramMap.getInteger(Constant.PAGE, 0), paramMap.getInteger(Constant.ROWS, 0));
         paramMap.put(Constant.START, pageSizeInfo.getPageStart());
@@ -134,7 +134,7 @@ public abstract class BaseController {
             pw.println(str);
             pw.flush();
         } catch (IOException e) {
-            LOG.error(this, e);
+            log.error(this, e);
         } finally {
             if (pw != null) {
                 pw.close();
@@ -148,7 +148,7 @@ public abstract class BaseController {
      * @param flag 是否成功 是 true 否false
      */
     protected void outToClient(boolean flag) {
-        HttpServletResponse response = getResponse();
+
         if (flag) {
             outWrite(CHECK_PASSES);
         } else {
@@ -162,8 +162,7 @@ public abstract class BaseController {
      * @param flag 是否成功 是 true 否false
      */
     protected void outToClientJsonP(boolean flag) {
-        HttpServletResponse response = getResponse();
-        HttpServletRequest request = getRequest();
+
         if (flag) {
             this.outJsonp(CHECK_PASSES);
         } else {
@@ -178,8 +177,8 @@ public abstract class BaseController {
      * @param count    符合过滤条件的数据总数
      */
     protected void writeJsonForPager(List<?> dataList, long count) {
-        HttpServletResponse response = getResponse();
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        Map<String, Object> resultMap = new HashMap<>();
         resultMap.put(Constant.TOTAL, count);
         resultMap.put(Constant.ROWS, dataList);
         String json = JsonUtils.object2json(resultMap);
@@ -191,13 +190,13 @@ public abstract class BaseController {
      *
      * @param dataList 当前页需要显示的数据
      */
-    protected void writeJsonForFooter(List<?> dataList, List<?> footerList, HttpServletResponse response) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        // resultMap.put(Constant.TOTAL, count);
+    protected void writeJsonForFooter(List<?> dataList, List<?> footerList) {
+        Map<String, Object> resultMap = new HashMap<>();
+
         resultMap.put(Constant.ROWS, dataList);
         resultMap.put(Constant.FOOTER, footerList);
         String json = JsonUtils.object2json(resultMap);
-        // System.out.println(json);
+
         this.outWrite(json);
     }
 
@@ -209,7 +208,7 @@ public abstract class BaseController {
      */
     protected void writeJsonPForPager(List<?> dataList,
                                       long count) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = new HashMap<>();
         resultMap.put(Constant.TOTAL, count);
         resultMap.put(Constant.ROWS, dataList);
         String json = JsonUtils.object2json(resultMap);
@@ -231,7 +230,7 @@ public abstract class BaseController {
             pw.print(str);
             pw.flush();
         } catch (IOException e) {
-            LOG.error(this, e);
+            log.error(this, e);
         } finally {
             if (pw != null) {
                 pw.close();
@@ -284,7 +283,7 @@ public abstract class BaseController {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
-            LOG.error(this, e);
+            log.error(this, e);
         } finally {
             if (!CheckUtils.isNullOrEmpty(out)) {
                 out.close();
@@ -318,7 +317,7 @@ public abstract class BaseController {
             file = new File(saveFilePath + currentDate + fileP + prefix + fileP + fileId + suffix);
             org.apache.commons.io.FileUtils.copyInputStreamToFile(filedata.getInputStream(), file);
         } catch (IOException e) {
-            LOG.error(this, e);
+            log.error(this, e);
         }
         resultMap.put("fileName", fileName);
         resultMap.put("fileSuffix", suffix);

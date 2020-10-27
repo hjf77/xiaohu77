@@ -1,5 +1,6 @@
 package com.fhs.pagex.beetl;
 
+import lombok.SneakyThrows;
 import org.beetl.core.Resource;
 import org.beetl.core.ResourceLoader;
 import org.beetl.core.exception.BeetlException;
@@ -21,6 +22,7 @@ public class FhsBeetlResource extends Resource {
         this.path = path;
     }
 
+    @SneakyThrows
     @Override
     public Reader openReader() {
         FhsBeetlClasspathResourceLoader loader = (FhsBeetlClasspathResourceLoader)this.resourceLoader;
@@ -38,13 +40,18 @@ public class FhsBeetlResource extends Resource {
             be.pushResource(this);
             throw be;
         } else {
-            InputStream is;
+            InputStream is=null;
             try {
                 is = url.openStream();
             } catch (IOException var9) {
+
+                var9.printStackTrace();
                 BeetlException be = new BeetlException("TEMPLATE_LOAD_ERROR");
                 be.pushResource(this);
                 throw be;
+
+            }finally {
+                is.close();
             }
 
             if (is == null) {
