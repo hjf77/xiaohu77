@@ -104,7 +104,8 @@ public final class ZipUtil {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } finally {
-                IOUtil.closeQuietly(zis, bos);
+                IOUtil.closeQuietly(zis,bos);
+
             }
         }
     }
@@ -149,7 +150,7 @@ class IOUtil {
         try {
             close(closeables);
         } catch (IOException e) {
-            // do nothing
+            e.printStackTrace();
         }
     }
 

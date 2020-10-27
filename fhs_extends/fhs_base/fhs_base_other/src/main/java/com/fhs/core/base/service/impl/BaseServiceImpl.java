@@ -27,7 +27,6 @@ import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import com.mybatis.jpa.cache.JpaTools;
-import org.apache.poi.ss.formula.functions.T;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -75,7 +74,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     /**
      * 缓存的namespace
      */
-    private String nameSpace;
+    private String naspaces;
 
 
     /**
@@ -311,8 +310,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             message.put("namespace", autoTrans.namespace());
             redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
         }
-        if (this.nameSpace != null) {
-            this.cacheUpdateManager.clearCache(nameSpace);
+        if (this.naspaces != null) {
+            this.cacheUpdateManager.clearCache(naspaces);
         }
     }
 
@@ -357,11 +356,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int deleteById(Object primaryValue) {
-        autoDelService.deleteCheck(this.nameSpace, primaryValue);
+        autoDelService.deleteCheck(this.naspaces, primaryValue);
         D d = baseMapper.selectByIdJpa(primaryValue);
         d.setIsDelete(Constant.INT_TRUE);
         int result = baseMapper.updateByIdJpa(d);
-        autoDelService.deleteItemTBL(this.nameSpace, primaryValue);
+        autoDelService.deleteItemTBL(this.naspaces, primaryValue);
         this.refreshCache();
         removeCache(primaryValue);
         BisLoggerContext.addExtParam(this.namespace, primaryValue, LoggerConstant.OPERATOR_TYPE_DEL);
@@ -497,8 +496,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         }
         for (D d : dos) {
             d.setIsDelete(Constant.INT_TRUE);
-            autoDelService.deleteCheck(this.nameSpace, d.getPkey());
-            autoDelService.deleteItemTBL(this.nameSpace, d.getPkey());
+            autoDelService.deleteCheck(this.naspaces, d.getPkey());
+            autoDelService.deleteItemTBL(this.naspaces, d.getPkey());
             BisLoggerContext.addExtParam(this.namespace, d.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         }
         //批量修改为已删除
@@ -508,27 +507,27 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public Object callSqlIdForOne(String sqlId, Object param) {
-        return sqlsession.selectOne(nameSpace + "." + sqlId, param);
+        return sqlsession.selectOne(naspaces + "." + sqlId, param);
     }
 
     /**
      * 初始化namespace
      */
     public void initNamespace() {
-        if (nameSpace == null) {
+        if (naspaces == null) {
             String modelName = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
-            nameSpace = JpaTools.statementAdapterMap.get(modelName).getNameSpace();
+            naspaces = JpaTools.statementAdapterMap.get(modelName).getNameSpace();
         }
     }
 
     @Override
     public List<V> callSqlIdForMany(String sqlId, Object param) {
-        return sqlsession.selectList(nameSpace + "." + sqlId, param);
+        return sqlsession.selectList(naspaces + "." + sqlId, param);
     }
 
     @Override
     public int callSqlIdForInt(String sqlId, Object param) {
-        return sqlsession.selectOne(nameSpace + "." + sqlId, param);
+        return sqlsession.selectOne(naspaces + "." + sqlId, param);
     }
 
 
@@ -538,8 +537,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             return 0;
         }
         for (Object id : idList) {
-            autoDelService.deleteCheck(this.nameSpace, id);
-            autoDelService.deleteItemTBL(this.nameSpace, id);
+            autoDelService.deleteCheck(this.naspaces, id);
+            autoDelService.deleteItemTBL(this.naspaces, id);
             BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
         }
         List<D> dos = baseMapper.selectByIds(idList);
