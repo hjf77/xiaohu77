@@ -31,6 +31,8 @@ import java.util.logging.Logger;
 @Slf4j
 public class ExcelUtils {
 
+    private static final String DOUBLESTRING = "double";//未测试  修复double引用多次  add by cyx
+
     /**
      * <格式化数据，用于生成excel>
      *
@@ -295,11 +297,12 @@ public class ExcelUtils {
             // 遍历所有的需要的字段，进行校验和转换
             for (int i = 0; i < colSettArray.size(); i++) {
                 tempColSett = colSettArray.getJSONObject(i);
-                // 获取当前配置的所在列
-                int index = ConverterUtils.char2Int(tempColSett.getString("index").charAt(0));
+                // 获取当前配置的所在列  未测试 update by cyx  优化 修复冗余代码
+                char colName = tempColSett.getString("index").charAt(0);
+                int index = ConverterUtils.char2Int(colName);
                 Object fieldVal = row[index - 1];
                 String valid = tempColSett.getString("valid");
-                char colName = tempColSett.getString("index").charAt(0);
+
                 //如果指定了自定义校验算法又给了自定义验证器
                 if (ConverterUtils.toString(valid).contains("ex.") && excelValidor != null) {
                     //使用自定义验证器
@@ -312,21 +315,25 @@ public class ExcelUtils {
                 // 转换字典
                 JSONObject trans = tempColSett.getJSONObject("trans");
                 if (trans != null && (!CheckUtils.isNullOrEmpty(fieldVal)) && (!trans.containsKey(fieldVal))) {
-                    errorBuilder.append("第" + (rowIndex + titleRowNum) + "行，第" + tempColSett.getString("index").charAt(0) + "列输入有误，配置为：" + trans.toJSONString() + ";");
+                    errorBuilder.append("第" + (rowIndex + titleRowNum) + "行，第" + colName + "列输入有误，配置为：" + trans.toJSONString() + ";");
                     continue;
                 }
                 if (trans != null) {
                     fieldVal = trans.getString(ConverterUtils.toString(fieldVal));
                 }
-                if ((valid != null && valid.contains("int")) || (tempColSett.containsKey("fieldTye") && "int".equals(tempColSett.getString("fieldTye")))) {
-                    ReflectUtils.setValue(rowBean, tempColSett.getString("field"), ConverterUtils.toInt(fieldVal));
+                //未测试 add by cyx 修复代码冗余
+                String field = tempColSett.getString("field");
+                boolean flag = tempColSett.containsKey("fieldTye");
+                String fieldTye = tempColSett.getString("fieldTye");
+                if ((valid != null && valid.contains("int")) || (flag && "int".equals(fieldTye))) {
+                    ReflectUtils.setValue(rowBean, field, ConverterUtils.toInt(fieldVal));
                     continue;
                 }
-                if ((valid != null && valid.contains("double")) || (tempColSett.containsKey("fieldTye") && "double".equals(tempColSett.getString("fieldTye")))) {
-                    ReflectUtils.setValue(rowBean, tempColSett.getString("field"), ConverterUtils.toDouble(fieldVal));
+                if ((valid != null && valid.contains(DOUBLESTRING)) || (flag && DOUBLESTRING.equals(fieldTye))) {
+                    ReflectUtils.setValue(rowBean, field, ConverterUtils.toDouble(fieldVal));
                     continue;
                 }
-                ReflectUtils.setValue(rowBean, tempColSett.getString("field"), fieldVal);
+                ReflectUtils.setValue(rowBean, field, fieldVal);
 
             }
             rowIndex++;
@@ -369,7 +376,7 @@ public class ExcelUtils {
             return false;
         }
         // 要求double但是不是double
-        if (valid.contains("double") && (!CheckUtils.isDouble(param))) {
+        if (valid.contains(DOUBLESTRING) && (!CheckUtils.isDouble(param))) {
             errorBuilder.append("第" + rowIndex + "行，第" + colName + "列必须为数字");
             return false;
         }

@@ -34,6 +34,8 @@ import java.util.Map;
 public class SpringContextUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
 
+    private static final String ERRORMESSAGE  = "获取对象错误:";
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         log.info("------SpringContextUtil setApplicationContext-------");
@@ -73,7 +75,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return applicationContext.getBean(clazz);
         } catch (Exception e) {
-            log.error("获取对象错误:" + e.getMessage());
+            log.error(ERRORMESSAGE + e.getMessage());
             return null;
         }
     }
@@ -90,7 +92,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return (T) getTarget(applicationContext.getBean(clazz));
         } catch (Exception e) {
-            log.error("获取对象错误:" + e.getMessage());
+            log.error(ERRORMESSAGE + e.getMessage());
             return null;
         }
     }
@@ -155,14 +157,14 @@ public class SpringContextUtil implements ApplicationContextAware {
             try {
                 proxy = getJdkDynamicProxyTargetObject(proxy);
             } catch (Exception e) {
-                log.error("获取对象错误:" + e.getMessage());
+                log.error(ERRORMESSAGE + e.getMessage());
                 return proxy;
             }
         } else { //cglib
             try {
                 proxy = getCglibProxyTargetObject(proxy);
             } catch (Exception e) {
-                log.error("获取对象错误:" + e.getMessage());
+                log.error(ERRORMESSAGE + e.getMessage());
                 return proxy;
             }
         }
