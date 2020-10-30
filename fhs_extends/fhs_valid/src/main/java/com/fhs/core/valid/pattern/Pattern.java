@@ -5,13 +5,13 @@ package com.fhs.core.valid.pattern;
  * @author user
  * @date 2020-05-19 10:07:26
  */
-public interface Pattern
+public class Pattern
 {
     /**
      * 验证两位小数的正则 1、除了个位，十位以上不能以0开头 2、小数部分可有可元 3、小数点后可以一位或者二位
      */
-    String twoDecimal = "^([1-9]\\d*|0)(\\.\\d{1,2})?$";
-    
+    String TWODECIMAL = "^([1-9]\\d*|0)(\\.\\d{1,2})?$";
+
     /**
      * 手机号验证
      */

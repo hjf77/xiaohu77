@@ -22,6 +22,7 @@ import java.util.Map;
 public class ZDataPermissonFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+                    //初始化
 
     }
 
@@ -42,6 +43,6 @@ public class ZDataPermissonFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        //处理资源销毁相关逻辑
     }
 }

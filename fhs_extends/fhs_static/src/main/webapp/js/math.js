@@ -36119,6 +36119,7 @@
                                     break;
                                 }
 
+                                break;
                                 /* Fall through on error */
                             }
                             default:

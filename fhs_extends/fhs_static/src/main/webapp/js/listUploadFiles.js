@@ -223,22 +223,22 @@
 				{
 					case 'txt':
 					{fileClassName = 'txt';}break;
-					case 'rar':;
+					case 'rar':
 					case 'zip':
 					{fileClassName = 'rar';}break;
-					case 'doc':;
+					case 'doc':
 					case 'docx':
 					{fileClassName = 'word';}break;
-					case 'xlsx':;
+					case 'xlsx':
 					case 'xls':
 					{fileClassName = 'excel';}break;
-					case 'mp4':;
-					case 'webm':;
-					case 'ogg':;
+					case 'mp4':
+					case 'webm':
+					case 'ogg':
 					case 'MP4':
 					{fileClassName = 'video';}break;
-					case 'mp3':;
-					case 'MP3':;
+					case 'mp3':
+					case 'MP3':
 					case 'wav':
 					{fileClassName = 'audio';}break;
 					default:

@@ -103,7 +103,7 @@ function inituploadifyHeader(fileInputId, buttonText,maxSize) {
 			if(!IMG_REG.test(file.fileName)) {
 				return false;
 			}
-			tempArray = fileArrayMap[fileInputId];
+		 var tempArray = fileArrayMap[fileInputId];
 			tempArray[tempArray.length] = file.fileId;
 			$('#' + fileInputId + 'Img').attr('src', fileDownUrl + '?fileName=' + file.fileId + file.fileSuffix + '&showFileName=header');
 			$('#' + fileInputId + 'Val').val(file.fileId);
@@ -130,8 +130,8 @@ function initHeader(fileInputId, fileId) {
 		url: fileListUrl + '?fileIds=' + fileId + '&jsonpCallback=?',
 		dataType: 'json',
 		success: function(files) {
-			for(i = 0; i < files.length; i++) {
-				file = files[0];
+			for(var i = 0; i < files.length; i++) {
+				var file = files[0];
 				$('#' + fileInputId + 'Img').attr('src', fileDownUrl + '?fileName=' + file.fileId + file.fileSuffix + '&showFileName=header');
 			}
 		}

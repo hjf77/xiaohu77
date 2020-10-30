@@ -26,14 +26,14 @@ public class HttpResult<V> extends BaseObject<HttpResult>
      * 成功
      * @since 1.0.0
      */
-    public static int SUCCESS = 200;
+    public static int SUCCESSFUL = 200;
 
 
     /**
      * 有错误
      * @since 1.0.0
      */
-    public static int ERROR = 500;
+    public static int ERRORS = 500;
 
     /**
      * 权限不足

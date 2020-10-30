@@ -56,28 +56,22 @@ public class SerializeUtil {
      * @param filePath
      * @return
      */
-    public static boolean serializeToFile(Object data, String filePath) {
-        FileOutputStream out = null;
-        ObjectOutputStream oos = null;
+    public static boolean serializeToFile(Object data, String filePath) throws Exception {
+        //未测试  update by cyx
         File file = new File(filePath);
-        try {
+        try ( FileOutputStream out = new FileOutputStream(file);
+              ObjectOutputStream oos = new ObjectOutputStream(out)) {
             if (!file.exists()) {
                 if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
                 file.createNewFile();
             }
-            out = new FileOutputStream(file);
-            // 序列化
-            oos = new ObjectOutputStream(out);
             oos.writeObject(data);
             oos.flush();
             oos.close();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
     }
 
 
@@ -86,22 +80,16 @@ public class SerializeUtil {
      * @param filePath
      * @return
      */
-    public static Object unSerializeFromFile(String filePath) {
-        FileInputStream in;
-        ObjectInputStream ois;
-        try {
-            File file = new File(filePath);
+    public static Object unSerializeFromFile(String filePath) throws Exception {
+        //未测试  update by cyx
+        File file = new File(filePath);
+        try(FileInputStream in = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(in)) {
             if (!file.exists()) {
                 return null;
             }
-            in = new FileInputStream(file);
-            ois = new ObjectInputStream(in);
             Object result = ois.readObject();
-            ois.close();
             return result;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
     }
 }

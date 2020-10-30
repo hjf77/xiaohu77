@@ -86,7 +86,6 @@ public class RefreshCacheTask implements InitializingBean, Runnable, Application
      */
     @Override
     public void run() {
-        while (true) {
 
             try {
                 try {
@@ -98,7 +97,7 @@ public class RefreshCacheTask implements InitializingBean, Runnable, Application
             } catch (InterruptedException e) {
                 LOG.error(e);
             }
-        }
+
     }
 
     /**

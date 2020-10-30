@@ -19,7 +19,7 @@ public class ResultException extends RuntimeException {
         this.httpResult = httpResult;
     }
 
-    public HttpResult<?> getHttpResult(){
+    public HttpResult getHttpResult(){
         return httpResult;
     }
 }

@@ -12,7 +12,7 @@ package com.fhs.core.db.ds;
 public class ReadWriteDataSourceDecision {
 
     public enum DataSourceType {
-        write, read, other, param;
+        WRITE, READ, OTHER, PARAM;
     }
 
 
@@ -34,7 +34,7 @@ public class ReadWriteDataSourceDecision {
         if (isChoiceParam()) {
             return;
         }
-        holder.set(DataSourceType.write);
+        holder.set(DataSourceType.WRITE);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ReadWriteDataSourceDecision {
         if (isChoiceParam()) {
             return;
         }
-        holder.set(DataSourceType.read);
+        holder.set(DataSourceType.READ);
     }
 
     /**
@@ -54,11 +54,11 @@ public class ReadWriteDataSourceDecision {
         if (isChoiceParam()) {
             return;
         }
-        holder.set(DataSourceType.other);
+        holder.set(DataSourceType.OTHER);
     }
 
     public static void markParam() {
-        holder.set(DataSourceType.param);
+        holder.set(DataSourceType.PARAM);
     }
 
     /**
@@ -85,19 +85,19 @@ public class ReadWriteDataSourceDecision {
     }
 
     public static boolean isChoiceWrite() {
-        return DataSourceType.write == holder.get();
+        return DataSourceType.WRITE == holder.get();
     }
 
     public static boolean isChoiceOther() {
-        return DataSourceType.other == holder.get();
+        return DataSourceType.OTHER == holder.get();
     }
 
     public static boolean isChoiceRead() {
-        return DataSourceType.read == holder.get();
+        return DataSourceType.READ == holder.get();
     }
 
     public static boolean isChoiceParam() {
-        return DataSourceType.param == holder.get();
+        return DataSourceType.PARAM == holder.get();
     }
 
 }

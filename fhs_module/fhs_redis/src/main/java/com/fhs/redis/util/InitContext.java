@@ -45,7 +45,7 @@ public class InitContext extends RedisApplication implements Constant  {
 			String host = properties.getProperty(REDISPROPERTIES_HOST_PROFIXKEY);
 			String name = properties.getProperty(REDISPROPERTIES_NAME_PROFIXKEY);
 			Integer port = Integer.valueOf(properties.getProperty(REDISPROPERTIES_PORT_PROFIXKEY));
-			String possword = properties.getProperty(REDISPROPERTIES_PASSWORD_PROFIXKEY);
+			String possword = properties.getProperty(REDISPROPERTIES_CIPHER_PROFIXKEY);
 			currentServerName = host;
 			if (StringUtil.isEmpty(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY))){
 				DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY,0);

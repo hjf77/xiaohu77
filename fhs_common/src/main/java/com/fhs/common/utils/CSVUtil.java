@@ -280,25 +280,25 @@ public class CSVUtil {
      * @throws Exception
      */
     public static String codeString(File file) throws Exception {
-        FileInputStream fileInputStream = new FileInputStream(file);
-        BufferedInputStream bin = new BufferedInputStream(fileInputStream);
-        int p = (bin.read() << 8) + bin.read();
+        //未测试  update by cyx
         String code = null;
-        switch (p) {
-            case 0xefbb:
-                code = "UTF-8";
-                break;
-            case 0xfffe:
-                code = "Unicode";
-                break;
-            case 0xfeff:
-                code = "UTF-16BE";
-                break;
-            default:
-                code = "GBK";
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             BufferedInputStream bin = new BufferedInputStream(fileInputStream)) {
+            int p = (bin.read() << 8) + bin.read();
+            switch (p) {
+                case 0xefbb:
+                    code = "UTF-8";
+                    break;
+                case 0xfffe:
+                    code = "Unicode";
+                    break;
+                case 0xfeff:
+                    code = "UTF-16BE";
+                    break;
+                default:
+                    code = "GBK";
+            }
         }
-        IOUtils.closeQuietly(bin);
-        IOUtils.closeQuietly(fileInputStream);
         return code;
     }
 

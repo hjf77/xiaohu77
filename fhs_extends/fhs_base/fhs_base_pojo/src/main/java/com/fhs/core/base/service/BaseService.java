@@ -319,7 +319,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param param 参数
      * @return 集合
      */
-    List<?> callSqlIdForMany(String sqlId, Object param);
+    List<V> callSqlIdForMany(String sqlId, Object param);
 
     /**
      * 调用一个方法返回一个int

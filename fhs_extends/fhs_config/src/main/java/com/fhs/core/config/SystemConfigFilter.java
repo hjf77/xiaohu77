@@ -27,14 +27,14 @@ public class SystemConfigFilter implements Filter {
     /**
      * systemconfig js内容
      */
-    private static String jsContent;
+    private String jsContent;
 
 
     private boolean isInit;
 
     @Override
     public void destroy() {
-
+        System.out.println("=========销毁了.....");
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SystemConfigFilter implements Filter {
 
     public void init(FilterConfig FilterConfig)
             throws ServletException {
-
+        System.out.println("=========初始化.....");
     }
 
     public void initJsContent() throws Exception {

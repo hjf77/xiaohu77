@@ -27,6 +27,8 @@ public class PageXFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
+                  //初始化
+
     }
 
     @Override
@@ -51,6 +53,6 @@ public class PageXFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        //销毁
     }
 }

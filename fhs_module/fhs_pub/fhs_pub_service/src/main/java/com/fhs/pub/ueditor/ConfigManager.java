@@ -226,26 +226,15 @@ public final class ConfigManager {
     }
 
     private String readFile(String path) throws IOException {
-
         StringBuilder builder = new StringBuilder();
-
-        try {
-
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(path), "UTF-8");
-            BufferedReader bfReader = new BufferedReader(reader);
-
+        //未测试 update by cyx
+        try(InputStreamReader reader = new InputStreamReader(new FileInputStream(path), "UTF-8");
+            BufferedReader bfReader = new BufferedReader(reader)) {
             String tmpContent = null;
-
             while ((tmpContent = bfReader.readLine()) != null) {
                 builder.append(tmpContent);
             }
-
-            bfReader.close();
-
-        } catch (UnsupportedEncodingException e) {
-            // 忽略
         }
-
         return this.filter(builder.toString());
 
     }

@@ -13,25 +13,17 @@ public class StorageManager {
 	public StorageManager() {
 	}
 
-	public static State saveBinaryFile(byte[] data, String path) {
+	public static State saveBinaryFile(byte[] data, String path) throws Exception {
 		File file = new File(path);
-
 		State state = valid(file);
-
 		if (!state.isSuccess()) {
 			return state;
 		}
-
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(file));
+		//未测试 update by cyx
+		try (BufferedOutputStream bos = new BufferedOutputStream(
+				new FileOutputStream(file))){
 			bos.write(data);
-			bos.flush();
-			bos.close();
-		} catch (IOException ioe) {
-			return new BaseState(false, AppInfo.IO_ERROR);
 		}
-
 		state = new BaseState(true, file.getAbsolutePath());
 		state.putInfo( "size", data.length );
 		state.putInfo( "title", file.getName() );
@@ -41,36 +33,25 @@ public class StorageManager {
 	public static State saveFileByInputStream(InputStream is, String path,
 			long maxSize) {
 		State state = null;
-
 		File tmpFile = getTmpFile();
-
 		byte[] dataBuf = new byte[ 2048 ];
-		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-
-		try {
+		//未测试 update by cyx
+		try(BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
 			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
-
+					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE)){
 			int count = 0;
 			while ((count = bis.read(dataBuf)) != -1) {
 				bos.write(dataBuf, 0, count);
 			}
-			bos.flush();
-			bos.close();
-
 			if (tmpFile.length() > maxSize) {
 				tmpFile.delete();
 				return new BaseState(false, AppInfo.MAX_SIZE);
 			}
-
 			state = saveTmpFile(tmpFile, path);
-
 			if (!state.isSuccess()) {
 				tmpFile.delete();
 			}
-
 			return state;
-
 		} catch (IOException e) {
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
@@ -78,29 +59,20 @@ public class StorageManager {
 
 	public static State saveFileByInputStream(InputStream is, String path) {
 		State state = null;
-
 		File tmpFile = getTmpFile();
-
 		byte[] dataBuf = new byte[ 2048 ];
-		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-
-		try {
+		//未测试 update by cyx
+		try(BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
 			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
-
+				new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE)){
 			int count = 0;
 			while ((count = bis.read(dataBuf)) != -1) {
 				bos.write(dataBuf, 0, count);
 			}
-			bos.flush();
-			bos.close();
-
 			state = saveTmpFile(tmpFile, path);
-
 			if (!state.isSuccess()) {
 				tmpFile.delete();
 			}
-
 			return state;
 		} catch (IOException e) {
 		}
