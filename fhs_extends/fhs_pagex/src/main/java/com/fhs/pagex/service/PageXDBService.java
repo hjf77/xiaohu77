@@ -250,7 +250,14 @@ public class PageXDBService {
      * @return bean的json
      */
     public String findBean(Map<String, Object> param, String namespace) {
-        return JsonUtils.bean2json(sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param));
+        Map<String,Object> result = sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param);
+        result.keySet().forEach(key->{
+            Object val = result.get(key);
+            if(val instanceof Date){
+                result.put(key,DateUtils.formartDate((Date) val,DateUtils.DATETIME_PATTERN));
+            }
+        });
+        return JsonUtils.bean2json(result);
     }
 
     /**
