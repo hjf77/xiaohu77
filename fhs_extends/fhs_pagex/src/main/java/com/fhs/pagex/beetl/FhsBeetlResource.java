@@ -44,16 +44,11 @@ public class FhsBeetlResource extends Resource {
             try {
                 is = url.openStream();
             } catch (IOException var9) {
-
                 var9.printStackTrace();
                 BeetlException be = new BeetlException("TEMPLATE_LOAD_ERROR");
                 be.pushResource(this);
                 throw be;
-
-            }finally {
-                is.close();
             }
-
             if (is == null) {
                 BeetlException be = new BeetlException("TEMPLATE_LOAD_ERROR");
                 be.pushResource(this);
@@ -65,7 +60,6 @@ public class FhsBeetlResource extends Resource {
                     } catch (UnsupportedEncodingException var8) {
                         throw new RuntimeException(var8);
                     }
-
                     this.lastModified = this.file.lastModified();
                 }
 
