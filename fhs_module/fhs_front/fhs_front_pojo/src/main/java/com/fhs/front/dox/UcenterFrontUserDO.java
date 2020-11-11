@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 前端用户表(UcenterFrontUser)实体类
  *
@@ -155,7 +157,7 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     @Length(message = "启用标识 0-启用 1-禁用字段的长度最大为1", groups = {Add.class, Update.class}, max = 1)
     @TableField("is_enable")
     @ApiModelProperty("是否启用")
-    private int isEnable;
+    private Integer isEnable;
 
     /**
      * 真实姓名
