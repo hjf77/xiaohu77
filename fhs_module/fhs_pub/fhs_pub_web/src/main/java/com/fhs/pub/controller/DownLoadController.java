@@ -217,6 +217,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
             }
             //zip传到客户端之后删除zip文件
             FileUtils.deleteFile(file.getAbsolutePath());
+
         } catch (Exception e) {
             throw new RuntimeException("下载文件异常:" + e.getMessage());
         }
