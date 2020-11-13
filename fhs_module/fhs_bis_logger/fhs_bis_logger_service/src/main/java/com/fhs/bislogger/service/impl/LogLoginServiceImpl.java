@@ -43,7 +43,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
     private LogLoginMapper logLoginMapper;
 
     @Override
-    public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, String userId, boolean typeOut){
+    public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, String userId, boolean typeOut) {
         LogLoginVO logLoginVO = new LogLoginVO();
         int count = this.findCount(logLoginVO);
         GetLoginUserMsgUtil getLoginUserMsgUtil = new GetLoginUserMsgUtil();
@@ -53,9 +53,9 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
             //获取当前登录人ip信息
             ip = NetworkUtil.getIpAddress(request);
 
-            if("0:0:0:0:0:0:0:1".equals(ip)|| "172.".equals(ip.substring(0,4)) || "192.".equals(ip.substring(0,4))) {
+            if ("0:0:0:0:0:0:0:1".equals(ip) || "172.".equals(ip.substring(0, 4)) || "192.".equals(ip.substring(0, 4))) {
 
-            }else {
+            } else {
                 //db
                 String dbPath = LogLoginServiceImpl.class.getResource("/data/ip2region.db").getPath();
 
@@ -95,12 +95,12 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
                     addresses = dataBlock.getRegion();
 
                 } catch (Exception e) {
-                    log.error("通过ip2region获取当前登录人信息失败 : ",e);
+                    log.error("通过ip2region获取当前登录人信息失败 : ", e);
                 }
 //                addresses = getLoginUserMsgUtil.getAddresses( ip);
             }
         } catch (IOException e) {
-            log.error("获取当前登录人信息失败 : ",e);
+            log.error("获取当前登录人信息失败 : ", e);
         }
         //获取当前登录人浏览器信息
         Map<String, String> userAgent = getLoginUserMsgUtil.getUserAgent(request);
@@ -116,12 +116,12 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
         logLoginVO.setCreateTime(new Date());
         logLoginVO.setState(LoggerConstant.LOG_LOGIN_TRUE);
         logLoginVO.setVisitNumber(count + 1);
-        if(isLogin){
+        if (isLogin) {
             logLoginVO.setState(LoggerConstant.LOG_LOGIN_ERROR);
             logLoginVO.setErrorInfo(errorType);
         }
         logLoginVO.setType(LoggerConstant.LOG_LOGIN_IN);
-        if(typeOut){
+        if (typeOut) {
             logLoginVO.setType(LoggerConstant.LOG_LOGIN_OUT);
         }
         this.add(logLoginVO);
@@ -129,6 +129,6 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
 
     @Override
     public List<LogLoginVO> getLoginIogSummary(Date statTime, Date endTime) {
-        return logLoginMapper.getLoginIogSummary(statTime,endTime);
+        return logLoginMapper.getLoginIogSummary(statTime, endTime);
     }
 }
