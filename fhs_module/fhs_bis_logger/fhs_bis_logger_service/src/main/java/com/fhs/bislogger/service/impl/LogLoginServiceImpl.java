@@ -61,7 +61,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
 
                 File file = new File(dbPath);
                 if (file.exists() == false) {
-                    System.out.println("Error: Invalid ip2region.db file");
+                    log.error("Error: Invalid ip2region.db file");
                 }
                 //查询算法
                 int algorithm = DbSearcher.BTREE_ALGORITHM; //B-tree
@@ -87,7 +87,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
 
                     DataBlock dataBlock = null;
                     if (Util.isIpAddress(ip) == false) {
-                        System.out.println("Error: Invalid ip address");
+                        log.error("Error: Invalid ip address");
                     }
 
                     dataBlock = (DataBlock) method.invoke(searcher, ip);
