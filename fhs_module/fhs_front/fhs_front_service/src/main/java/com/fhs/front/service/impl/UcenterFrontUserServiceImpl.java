@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Primary
 @Service("UcenterFrontUserService")
-@AutoTrans(namespace = "frontUser",fields = {"userName","userName"})
+@AutoTrans(namespace = "frontUser",fields = {"userName","nickName"})
 @DataSource("base_business")
 public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserDO> implements UcenterFrontUserService, FeignFrontUserApiService {
 
