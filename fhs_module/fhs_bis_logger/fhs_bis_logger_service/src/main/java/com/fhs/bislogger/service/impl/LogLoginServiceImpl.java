@@ -95,7 +95,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
                     addresses = dataBlock.getRegion();
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("通过ip2region获取当前登录人信息失败 : ",e);
                 }
 //                addresses = getLoginUserMsgUtil.getAddresses( ip);
             }
