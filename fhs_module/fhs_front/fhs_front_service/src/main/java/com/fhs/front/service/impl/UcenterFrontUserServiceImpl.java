@@ -11,6 +11,7 @@ import com.fhs.front.api.rpc.FeignFrontUserApiService;
 import com.fhs.front.dox.UcenterFrontUserBindDO;
 import com.fhs.front.dox.UcenterFrontUserDO;
 import com.fhs.front.form.GetSingleFrontUserForm;
+import com.fhs.front.mapper.UcenterFrontUserMapper;
 import com.fhs.front.service.LoginService;
 import com.fhs.front.service.UcenterFrontUserBindService;
 import com.fhs.front.service.UcenterFrontUserService;
@@ -38,6 +39,9 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private UcenterFrontUserMapper ucenterFrontUserMapper;
 
 
     @Autowired
@@ -85,5 +89,12 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
             return HttpResult.error(null);
         }
         return HttpResult.success(frontUserVo);
+    }
+
+    @Override
+    public List<UcenterFrontUserVO> findListFilterMobile() {
+        List<UcenterFrontUserDO> listFilterMobile = ucenterFrontUserMapper.findListFilterMobile();
+        List<UcenterFrontUserVO> ucenterFrontUserVOS = this.dos2vos(listFilterMobile);
+        return ucenterFrontUserVOS;
     }
 }

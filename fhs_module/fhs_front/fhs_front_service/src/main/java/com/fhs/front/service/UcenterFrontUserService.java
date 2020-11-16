@@ -4,6 +4,8 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.front.dox.UcenterFrontUserDO;
 import com.fhs.front.vo.UcenterFrontUserVO;
 
+import java.util.List;
+
 /**
  * 前端用户表(UcenterFrontUser)表服务接口
  *
@@ -27,4 +29,5 @@ public interface UcenterFrontUserService extends BaseService<UcenterFrontUserVO,
      */
     String SEX_GIRL = "2";
 
+    List<UcenterFrontUserVO> findListFilterMobile();
 }
