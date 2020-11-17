@@ -79,12 +79,12 @@
                         <h2>正在加载，请稍等。。。</h2>
                     </div>
                     <div class="iframe-box" v-show="isShowIframeBox">
-                        <iframe  class="bottom" src="${index_right_path}" frameborder="0"  scrolling="auto" v-show="id == home.id"></iframe>
-                        <iframe  class="bottom" v-bind:src="item.serverUrl + 'ms/redirect?call=' + item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="'i'+index" v-show="item.iframeShow"></iframe>
+                        <iframe  class="bottom" src="${index_right_path}" frameborder="0"  scrolling="auto" v-if="id == home.id"></iframe>
+                        <iframe  class="bottom" v-bind:src="item.serverUrl + 'ms/redirect?call=' + item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="'i'+index" v-if="item.serverUrl&&item.iframeShow"></iframe>
                     </div>
                     <div class="iframe-box" v-show="!isShowIframeBox">
-                        <iframe  class="bottom" v-bind:src="'${basePath}/b/page-ms-index/' + item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="'s'+index" v-show="item.iframeShows"></iframe>
-                        <iframe  class="bottom" v-bind:src="item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="'in'+index" v-show="item.iframeShowIn"></iframe>
+                        <iframe  class="bottom" v-bind:src="'${basePath}/b/page-ms-index/' + item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="'s'+index" v-if="item.iframeShows"></iframe>
+                        <iframe  class="bottom" v-bind:src="item.url" id="ifra"  frameborder="0" scrolling="auto" v-for="(item,index) in title" :key="'in'+index" v-if="item.iframeShowIn"></iframe>
                     </div>
                 </div>
                 <ul class="top-rright-trag" v-show='rightKey' :style="{'position': 'absolute','top':mouseLocationY+'px','left':mouseLocationX+'px'}">
