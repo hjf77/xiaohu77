@@ -8,6 +8,7 @@ import com.fhs.bislogger.service.LogLoginService;
 import com.fhs.bislogger.util.GetLoginUserMsgUtil;
 import com.fhs.bislogger.vo.LogLoginVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.FileUtils;
 import com.fhs.common.utils.NetworkUtil;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -58,10 +59,17 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
             } else {
                 //db
                 String dbPath = LogLoginServiceImpl.class.getResource("/data/ip2region.db").getPath();
+                System.out.println(dbPath);
 
                 File file = new File(dbPath);
                 if (file.exists() == false) {
-                    log.error("Error: Invalid ip2region.db file");
+
+                    String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
+                    dbPath = tmpDir + "ip.db";
+                    System.out.println(dbPath);
+                    file = new File(dbPath);
+                    FileUtils.copyInputStreamToFile(LogLoginServiceImpl.class.getClassLoader().getResourceAsStream("classpath:data/ip2region.db"), file);
+
                 }
                 //查询算法
                 int algorithm = DbSearcher.BTREE_ALGORITHM; //B-tree
