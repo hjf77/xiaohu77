@@ -60,10 +60,8 @@ public class SystemConfigFilter implements Filter {
     }
 
     @Override
-
     public void init(FilterConfig FilterConfig)
             throws ServletException {
-        System.out.println("=========初始化.....");
     }
 
     public void initJsContent() throws Exception {

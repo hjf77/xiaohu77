@@ -230,9 +230,6 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     @Override
     public void flush() throws IOException {
-
-        System.out.println("刷新");
-
     }
 
     @Override
