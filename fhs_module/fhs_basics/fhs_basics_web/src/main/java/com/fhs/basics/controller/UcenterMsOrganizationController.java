@@ -5,10 +5,9 @@ import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
-import com.fhs.basics.vo.ComboboxNodeVO;
+import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
-import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.constant.LoggerConstant;
@@ -16,12 +15,10 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.result.HttpResult;
-import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,16 +72,14 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
 
     /**
      * 更新
-     *
-     * @param e        bean
-     * @param check    检查结果
+     * @param e  bean
      * @param request
      * @param response
      * @return
      */
     @Override
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> update(UcenterMsOrganizationVO e, BindingResult check, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> update(UcenterMsOrganizationVO e,  HttpServletRequest request, HttpServletResponse response) {
         UcenterMsOrganizationVO oldOrg = sysOrganizationService.selectById(e.getId());
         // 如果是启用改为禁用
         if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == e.getIsEnable()) {
@@ -105,7 +100,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         if(CheckUtils.isNullOrEmpty(e.getExtJson())){
             e.setExtJson(null);
         }
-        return super.update(e, check, request, response);
+        return super.update(e, request, response);
     }
 
     /**

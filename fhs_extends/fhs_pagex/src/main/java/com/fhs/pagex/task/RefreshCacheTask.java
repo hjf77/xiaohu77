@@ -86,7 +86,7 @@ public class RefreshCacheTask implements InitializingBean, Runnable, Application
      */
     @Override
     public void run() {
-        while (true){
+        while (true) {
             try {
                 try {
                     refresh();

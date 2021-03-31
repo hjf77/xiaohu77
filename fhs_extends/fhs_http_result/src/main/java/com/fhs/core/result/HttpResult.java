@@ -1,8 +1,15 @@
 package com.fhs.core.result;
 
 
+import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.ThreadKey;
 import com.fhs.core.base.pojo.BaseObject;
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,30 +117,30 @@ public class HttpResult<V> extends BaseObject<HttpResult>
 
 
 
-   /**
-    * 失败,不包含数据的返回结果
-    * @return
-    */
-   public static HttpResult<Map> error() {
-       HttpResult<Map> result = new HttpResult<Map>();
-       result.code = 500;
-       result.data = new HashMap<>();
-       result.businessKey = ThreadKey.BUS_KEY.get();
-       return result;
-   }
+    /**
+     * 失败,不包含数据的返回结果
+     * @return
+     */
+    public static HttpResult<Map> error() {
+        HttpResult<Map> result = new HttpResult<Map>();
+        result.code = 500;
+        result.data = new HashMap<>();
+        result.businessKey = ThreadKey.BUS_KEY.get();
+        return result;
+    }
 
-   /**
-    * 失败，包含data的返回结果
-    * @param data
-    * @return
-    */
-   public static <T> HttpResult<T> error(T data) {
-       HttpResult<T> result = new HttpResult<T>();
-       result.code = 500;
-       result.data = data;
-       result.businessKey = ThreadKey.BUS_KEY.get();
-       return result;
-   }
+    /**
+     * 失败，包含data的返回结果
+     * @param data
+     * @return
+     */
+    public static <T> HttpResult<T> error(T data) {
+        HttpResult<T> result = new HttpResult<T>();
+        result.code = 500;
+        result.data = data;
+        result.businessKey = ThreadKey.BUS_KEY.get();
+        return result;
+    }
 
     /**
      * 失败，包含数据的返回结果
@@ -151,13 +158,16 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     /**
      * 验证失败的返回结果
      */
-    public static <T> HttpResult<T> validateError(T data, String message)
+    public static ModelAndView validateError(T data, String message)
     {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletResponse response = servletRequestAttributes.getResponse();
         HttpResult<T> result = new HttpResult<T>();
         result.code = 400;
         result.data = data;
         result.message = message;
-        return result;
+        JsonUtils.outJson(response,result.asJson());
+        return null;
     }
 
     /**

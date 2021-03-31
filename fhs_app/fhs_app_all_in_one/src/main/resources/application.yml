@@ -57,7 +57,7 @@ fhs:
         'basePath': 'http://localhost:8081/',
         'fhs_static_url': 'http://localhost:8081/',
         'fhs_basics_url': 'http://localhost:8081/',
-        'fileSavePath': 'c:/flies',
+        'fileSavePath': 'c:/flies',FHSAopConfig
         'jbpmFilePath': 'c:/flies/jbpm/xml',
         'loginOutUrl': 'http://localhost:8081/ms/logout',
         'fhs_file_url': 'http://localhost:8081/',

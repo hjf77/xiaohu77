@@ -9,22 +9,29 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.result.PubResult;
 import com.fhs.logger.Logger;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.dao.DuplicateKeyException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 控制器异常统一处理器
@@ -38,6 +45,57 @@ public class ControllerExceptionAdvice {
      */
     private static final Logger LOG = Logger.getLogger(ControllerExceptionAdvice.class);
 
+
+
+    /**
+     * 请求的 JSON 参数在请求体内的参数校验
+     *
+     * @param e 异常信息
+     * @return 返回数据
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView bindException(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        StringBuilder errorMesssage = new StringBuilder("校验失败:");
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            errorMesssage.append(fieldError.getField() + ":" + fieldError.getDefaultMessage() + ", ");
+        }
+        return HttpResult.validateError(null, errorMesssage.toString());
+    }
+
+
+    /**
+     * 请求的 URL 参数检验
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView bindViolationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> bindingResults = e.getConstraintViolations();
+        StringBuilder errorMesssage = new StringBuilder("校验失败:");
+        int size = 0;
+        for (ConstraintViolation bindingResult : bindingResults) {
+            errorMesssage.append(bindingResult.getPropertyPath() + ":" + bindingResult.getMessage());
+            if (size != (bindingResults.size() - 1)) {
+                errorMesssage.append(",");
+            }
+            size++;
+        }
+        return HttpResult.validateError(null, errorMesssage.toString());
+    }
+
+    /**
+     * 请求的 URL 参数检验
+     */
+    @ExceptionHandler(BindException.class)
+    public ModelAndView bindException(BindException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        StringBuilder errorMesssage = new StringBuilder("校验失败:");
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            errorMesssage.append(fieldError.getField() + ":" + fieldError.getDefaultMessage() + ", ");
+        }
+        return HttpResult.validateError(null, errorMesssage.toString());
+    }
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handlerMaxUploadSizeExceededException(Exception ex) {
@@ -117,7 +175,7 @@ public class ControllerExceptionAdvice {
             if(EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")!=null){
                 httpResult.setExceptionInfo(AESUtil.encrypt(getStackTrace(ex), EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")));
             }
-           JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtils.outJson(response, httpResult.asJson());
         }
         return null;
     }

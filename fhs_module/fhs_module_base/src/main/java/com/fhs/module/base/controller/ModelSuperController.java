@@ -4,7 +4,10 @@ import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.*;
+import com.fhs.common.utils.CheckUtils;
+import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.EMap;
+import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.pojo.pager.Pager;
@@ -18,15 +21,12 @@ import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.logger.Logger;
-import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.common.ExcelExportTools;
 import com.mybatis.jpa.context.DataPermissonContext;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -300,29 +300,27 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * 添加
      *
      * @param e     bean
-     * @param check 检查结果
      */
     @NotRepeat
     @ResponseBody
     @RequestMapping("add")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
-    public HttpResult<Boolean> add(@ModelAttribute@Validated(Add.class) V e, BindingResult check, HttpServletRequest request,
+    public HttpResult<Boolean> add(@ModelAttribute@Validated(Add.class) V e,  HttpServletRequest request,
                                    HttpServletResponse response) {
         if (isPermitted(request, "add")) {
-            if (!check.hasErrors()) {
-                if (e instanceof BaseDO) {
-                    BaseDO<?> baseDo = (BaseDO<?>) e;
-                    //如果是saas模式，并且bean中包含groupcode字段，则给其设置值
-                    if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))
-                            && ReflectUtils.getDeclaredField(e.getClass(), "groupCode") != null && ReflectUtils.getValue(e, "groupCode") == null) {
-                        ReflectUtils.setValue(e, "groupCode", getSessionuser().getGroupCode());
-                    }
-                    baseDo.preInsert(getSessionuser().getUserId());
+
+            if (e instanceof BaseDO) {
+                BaseDO<?> baseDo = (BaseDO<?>) e;
+                //如果是saas模式，并且bean中包含groupcode字段，则给其设置值
+                if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))
+                        && ReflectUtils.getDeclaredField(e.getClass(), "groupCode") != null && ReflectUtils.getValue(e, "groupCode") == null) {
+                    ReflectUtils.setValue(e, "groupCode", getSessionuser().getGroupCode());
                 }
-                baseService.insertSelective((D) e);
-                return HttpResult.success(true);
+                baseDo.preInsert(getSessionuser().getUserId());
             }
-            return HttpResult.error(null, JsonUtils.list2json(check.getAllErrors()));
+            baseService.insertSelective((D) e);
+            return HttpResult.success(true);
+
         }
         throw new NotPremissionException();
     }
@@ -353,12 +351,11 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * 更新bean数据
      *
      * @param e     bean
-     * @param check 检查结果
      */
     @RequestMapping("update")
     @ResponseBody
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e, BindingResult check, HttpServletRequest request,
+    public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e,  HttpServletRequest request,
                                       HttpServletResponse response) {
         if (isPermitted(request, "update")) {
             if (e instanceof BaseDO) {
