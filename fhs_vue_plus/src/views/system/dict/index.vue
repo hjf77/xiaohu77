@@ -114,7 +114,9 @@
       @pagination="getList"
     />
     <!-- 新增 修改 弹框-->
-    <addDict :open="open"></addDict>
+    <el-dialog title="title" v-if="open" :visible.sync="open" width="500px">
+      <addDict></addDict>
+    </el-dialog>
   </div>
 </template>
 
@@ -125,6 +127,13 @@ export default {
   name: "Dict",
   components:{
     addDict
+  },
+  provide(){
+    return {
+      wlTest:cb=>{
+        cb(this)
+      }
+    }
   },
   data() {
     return {
@@ -306,7 +315,7 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
-    }
+    },
   }
 };
 </script>

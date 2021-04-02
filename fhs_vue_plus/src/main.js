@@ -3,7 +3,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 import Cookies from 'js-cookie'
-import axios from 'axios';
+// import axios from 'axios';
+import request from '@/lib/utils/request'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
 import Element from 'element-ui'
@@ -34,7 +35,8 @@ Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
-Vue.prototype.$pagexRequest = axios;
+// Vue.prototype.$pagexRequest = axios;
+Vue.prototype.$pagexRequest = request;
 Vue.prototype.msgSuccess = function (msg) {
   this.$message({ showClose: true, message: msg, type: "success" });
 }

@@ -1,5 +1,8 @@
 import Vue from "vue";
 import axios from "axios";
+import { getToken } from '@/utils/auth'
+import qs from "qs";
+// Admin-Token
 
 
 let errorCode  = {
@@ -11,9 +14,9 @@ let errorCode  = {
 
 let setting={
     baseURL : '/api/',//基础url
-    tokenField:'AuthorizationToken',//header中的token字段
+    tokenField:'Authorization',//header中的token字段
     token:function(){
-        return '我是token';//token值
+        return getToken();//token值
     },
     errorMsgAlert:function(_msg){
       console.log(_msg);
@@ -30,7 +33,7 @@ let setting={
     timeout:30000,//过期时间
 }
 
-axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
+// axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
 // 创建axios实例
 const request = axios.create({
     // axios中请求配置有baseURL选项，表示请求URL公共部分
@@ -45,9 +48,15 @@ request.interceptors.request.use(config => {
     /*
         todo 判断请求url 如果是 get开头则设置为get post put delete 则设置为 这些 如果没指定则为get
      */
+    if(config.data && config.data.useJson){
+      config.headers['Content-Type']='application/json;charset=utf-8'
+      config.data = JSON.stringify(config.data);
+    }else{
+      config.headers['Content-Type']='application/x-www-form-urlencoded'
+      config.data = qs.stringify(config.data)
+    }
     return config
 }, error => {
-    console.log(error);
     Promise.reject(error)
 });
 

@@ -8,29 +8,43 @@
 <template>
   <div>
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
-      123123123
-      <!--<el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="分组名称" prop="groupName">
-          <el-input v-model="form.groupName" placeholder="请输入字典名称" />
-        </el-form-item>
-        <el-form-item label="分组编码" prop="wordbookGroupCode">
-          <el-input v-model="form.wordbookGroupCode" placeholder="请输入字典类型" />
-        </el-form-item>
-      </el-form>-->
-
-    </el-dialog>
+    <pagex-form
+      addApi="/ms/wordbook/addWordbookGroup"
+      updateApi="/ms/wordbook/updateWordbookGroup"
+      initApi=""
+      :isEdit="false"
+                  :controls="[
+              {
+                type: 'text',
+                name: 'groupName',
+                label: '分组名称',
+                rule:'required'
+              },{
+                type: 'text',
+                name: 'wordbookGroupCode',
+                label: '分组编码',
+                rule:'required'
+              }
+            ]"
+      >
+      </pagex-form>
   </div>
 </template>
 
 <script>
+import pagexForm from "@/lib/components/form";
 export default {
   name: "addDict",
-  data() {
-    return {}
+  components:{
+    pagexForm
   },
-  props:{
-    open:Boolean
+  data() {
+    return {
+
+    }
+  },
+  props: {
+    open: Boolean
   },
   mounted() {
   },
