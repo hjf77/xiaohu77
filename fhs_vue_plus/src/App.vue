@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <!--<div id="nav">
       <router-link to="/demo">demo</router-link> |
       <router-link to="/pagexFromDemo">pagexFromDemo</router-link>
-    </div>
+    </div>-->
     <router-view />
   </div>
 </template>
