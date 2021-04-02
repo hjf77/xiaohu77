@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
+// import Home from "../views/demo/demo";
+/*import veeFormDemo from "../views/demo/veeFormDemo";
+import pagexFromDemo from "../views/demo/pagexFormDemo";*/
+Vue.use(Router)
 
 /**
  * Note: 路由配置项
@@ -26,6 +27,21 @@ import Layout from '@/layout'
 
 // 公共路由
 export const constantRoutes = [
+  /*{
+    path: "/",
+    name: "Home",
+    component: Home
+  },*/
+  /*{
+    path: "/veeFormDemo",
+    name: "veeFormDemo",
+    component: veeFormDemo
+  },
+  {
+    path: "/pagexFromDemo",
+    name: "pagexFromDemo",
+    component: pagexFromDemo
+  },*/
   {
     path: '/redirect',
     component: Layout,
@@ -34,12 +50,27 @@ export const constantRoutes = [
       {
         path: '/redirect/:path(.*)',
         component: () => import('@/views/redirect')
-      }
+      },
     ]
   },
   {
     path: '/login',
     component: () => import('@/views/login'),
+    hidden: true
+  },
+  {
+    path: "/demo",
+    component: () => import('@/views/demo/table'),
+    hidden: true
+  },
+  {
+    path: "/pagexFromDemo",
+    component: () => import('@/views/demo/pagexFormDemo'),
+    hidden: true
+  },
+  {
+    path: "/veeFormDemo",
+    component: () => import('@/views/demo/veeFormDemo'),
     hidden: true
   },
   {
