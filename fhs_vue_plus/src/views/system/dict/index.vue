@@ -113,30 +113,19 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="分组名称" prop="groupName">
-          <el-input v-model="form.groupName" placeholder="请输入字典名称" />
-        </el-form-item>
-        <el-form-item label="分组编码" prop="wordbookGroupCode">
-          <el-input v-model="form.wordbookGroupCode" placeholder="请输入字典类型" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
+    <!-- 新增 修改 弹框-->
+    <addDict :open="open"></addDict>
   </div>
 </template>
 
 <script>
 import { listType, getType, delType, addType, updateType, refresh } from "@/api/system/dict/type";
-
+import addDict from "@/views/system/dict/components/addDict";
 export default {
   name: "Dict",
+  components:{
+    addDict
+  },
   data() {
     return {
       // 遮罩层
