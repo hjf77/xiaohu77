@@ -13,7 +13,7 @@
       updateApi="/ms/wordbook/updateWordbookGroup"
       initApi=""
       :isEdit="false"
-                  :controls="[
+      :controls="[
               {
                 type: 'text',
                 name: 'groupName',
@@ -26,8 +26,8 @@
                 rule:'required'
               }
             ]"
-      >
-      </pagex-form>
+    >
+    </pagex-form>
   </div>
 </template>
 

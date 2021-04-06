@@ -76,7 +76,7 @@
 <script>
 import {handleStrParam} from '@/lib/utils/param'
 export default {
-  inject: ["registPageEvent"],
+  // inject: ["registPageEvent"],
   props: {
     uid: {
       type: [String, Number],
@@ -114,13 +114,13 @@ export default {
     };
   },
   async created() {
+
     console.log(this);
     this.$parent.__reload = this.getList;
     this.getList();
     this.registPageEvent(this.uid, this.getList);
   },
   mounted() {
-
   },
   methods: {
     columnFormart(_row,_column){
@@ -133,7 +133,7 @@ export default {
     },
     async getList() {
       if (this.api) {
-        const {data} = await this.$pagexRequest.get(handleStrParam(this.api, this.$attrs.param));
+        const {data} = await this.$pagexRequest({url:this.api,data:this.query,method:'GET'});
         this.data = data.list || [];
         if (data.total) {
           this.total = data.total || 0;
