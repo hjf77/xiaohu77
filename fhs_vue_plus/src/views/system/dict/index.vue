@@ -110,7 +110,47 @@ export default {
 
       columns:[
         {label:'分组名称',name:'groupName'},
-        {label:'分组编码',name:'wordbookGroupCode'}
+        {label:'分组编码',name:'wordbookGroupCode',type: 'formart',
+          formart:"<a >你好世界88888</a>",
+          click:function(_row){
+            console.log(_row);
+            console.log(this);
+          }
+        },
+        {label:'操作',type:'operation',buttons: [
+            {
+              label: "修改",
+              type: "button",
+              actionType: "dialog",
+              dialog: {
+                title: "修改表单",
+                body: {
+                  type: "form",
+                  initApi: "/api/sample/${id}",
+                  api: "put:/api/sample/${id}",
+                  controls: [
+                    {
+                      type: "text",
+                      name: "engine",
+                      label: "Engine"
+                    },
+                    {
+                      type: "text",
+                      name: "browser",
+                      label: "Browser"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              label: "删除",
+              type: "button",
+              actionType: "ajax",
+              level: "danger",
+              confirmText: "确认要删除？",
+              api: "delete:https://houtai.baidu.com/api/sample/${id}"
+            },]}
       ],
       filter:{
         controls:[

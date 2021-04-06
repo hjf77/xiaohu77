@@ -48,6 +48,7 @@
         >
           <template v-if="item.buttons">
             <pagex-button
+              style="margin-right: 10px"
                 v-for="(item, index) in item.buttons"
                 :confirmText="item.confirmText"
                 :key="index"
@@ -65,6 +66,8 @@
         @current-change="handleCurrentChange"
         :current-page.sync="query.page_number"
         :page-size="query.page_size"
+        :page-sizes="query.page_sizes"
+        layout="total, sizes, prev, pager, next, jumper"
         background
         v-if="total !== 0"
         :total="total"
@@ -75,8 +78,12 @@
 
 <script>
 import {handleStrParam} from '@/lib/utils/param'
+import pagexButton from "@/lib/components/button";
 export default {
   // inject: ["registPageEvent"],
+  components:{
+    pagexButton,
+  },
   props: {
     uid: {
       type: [String, Number],
@@ -105,11 +112,21 @@ export default {
   },
   data() {
     return {
-      data: [],
-      total: 0,
+      data: [
+        {
+        groupName:'zhangsan',
+        wordbookGroupCode:'lisi'
+        },
+        {
+          groupName:'xiaoming',
+          wordbookGroupCode:'xiaohong'
+        }
+      ],
+      total: 100,
       query: {
         page_size: 10,
         page_number: 1,
+        page_sizes:[25,50,75,100]
       },
     };
   },
@@ -118,13 +135,13 @@ export default {
     console.log(this);
     this.$parent.__reload = this.getList;
     this.getList();
-    this.registPageEvent(this.uid, this.getList);
+    // this.registPageEvent(this.uid, this.getList);
   },
   mounted() {
   },
   methods: {
     columnFormart(_row,_column){
-      return handleStrParam(_column.formart,_row);
+      return handleStrParam(_row.wordbookGroupCode,_row);
     },
     proxyClick(_row,_column){
       if(_column.click){
@@ -153,5 +170,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+::v-deep .el-table .cell{
+  display: flex;
+}
+.el-pagination{
+  float: right;
+  margin: 20px 20px 20px 0;
+}
 </style>
