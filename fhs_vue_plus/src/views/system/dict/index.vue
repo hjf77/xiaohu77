@@ -111,7 +111,7 @@ export default {
       columns:[
         {label:'分组名称',name:'groupName'},
         {label:'分组编码',name:'wordbookGroupCode',type: 'formart',
-          formart:"<a >你好世界88888</a>",
+          formart:"",
           click:function(_row){
             console.log(_row);
             console.log(this);

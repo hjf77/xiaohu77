@@ -114,10 +114,12 @@ export default {
     return {
       data: [
         {
+          groupId:'1',
         groupName:'zhangsan',
         wordbookGroupCode:'lisi'
         },
         {
+          groupId:'2',
           groupName:'xiaoming',
           wordbookGroupCode:'xiaohong'
         }
@@ -144,6 +146,9 @@ export default {
       return handleStrParam(_row.wordbookGroupCode,_row);
     },
     proxyClick(_row,_column){
+      // this.$router.push({path: '/dict/type/data/', query: {row: row}});
+      this.$router.push({path: '/dict/type/data/'+ _row.groupId});
+      console.log(_row)
       if(_column.click){
         _column.click.call(this,_row);
       }
