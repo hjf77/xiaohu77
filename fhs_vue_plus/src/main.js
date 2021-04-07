@@ -21,6 +21,8 @@ import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 
+import renderFun from "@/lib/components/render";
+Vue.component(renderFun)
 Vue.config.productionTip = false
 
 

@@ -13,11 +13,8 @@
 </template>
 
 <script>
-import pagexDialog from "@/lib/components/dialog";
 export default {
-  components:{
-    pagexDialog
-  },
+
   name: "butt",
   inject:['runPageEvent'],
   props: {

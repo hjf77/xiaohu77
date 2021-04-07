@@ -69,11 +69,11 @@
       </el-col>
 
     </el-row>
-    <crud
+    <pagex-crud
       :filter="filter"
       :columns="columns"
       :api="api"
-    ></crud>
+    ></pagex-crud>
 
     <!-- 新增 修改 弹框-->
     <el-dialog :title="title" v-if="open" :visible.sync="open" width="500px">
@@ -85,12 +85,12 @@
 <script>
 import { listType, getType, delType, addType, updateType, refresh } from "@/api/system/dict/type";
 import addDict from "@/views/system/dict/components/addDict";
-import crud from "@/lib/components/crud";
+// import crud from "@/lib/components/crud";
 export default {
   name: "Dict",
   components:{
     addDict,
-    crud
+    // crud
   },
   provide(){
     return {
@@ -126,18 +126,20 @@ export default {
                 title: "修改表单",
                 body: {
                   type: "form",
-                  initApi: "/api/sample/${id}",
-                  api: "put:/api/sample/${id}",
+                  initApi: "/ms/wordbook/getWordbookGroupBean?groupId=",
+                  updateApi: "/ms/wordbook/updateWordbookGroup",
+                  isEdit:true,
                   controls: [
                     {
-                      type: "text",
-                      name: "engine",
-                      label: "Engine"
-                    },
-                    {
-                      type: "text",
-                      name: "browser",
-                      label: "Browser"
+                      type: 'text',
+                      name: 'groupName',
+                      label: '分组名称',
+                      rule:'required'
+                    },{
+                      type: 'text',
+                      name: 'wordbookGroupCode',
+                      label: '分组编码',
+                      rule:'required'
                     }
                   ]
                 }

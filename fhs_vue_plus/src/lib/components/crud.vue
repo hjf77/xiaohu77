@@ -146,6 +146,7 @@ export default {
       return handleStrParam(_row.wordbookGroupCode,_row);
     },
     proxyClick(_row,_column){
+      console.log(_row);
       // this.$router.push({path: '/dict/type/data/', query: {row: row}});
       this.$router.push({path: '/dict/type/data/'+ _row.groupId});
       console.log(_row)
@@ -154,6 +155,7 @@ export default {
       }
     },
     async getList() {
+      console.log(this.query);
       if (this.api) {
         const {data} = await this.$pagexRequest({url:this.api,data:this.query,method:'GET'});
         this.data = data.list || [];

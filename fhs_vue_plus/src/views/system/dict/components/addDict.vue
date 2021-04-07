@@ -10,10 +10,10 @@
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
       addApi="/ms/wordbook/addWordbookGroup"
-      updateApi="/ms/wordbook/updateWordbookGroup"
-      initApi="/ms/wordbook/getWordbookGroupBean?groupId="
+      updateApi=""
+      initApi=""
       :init="init"
-      :isEdit="isEdit"
+      :isEdit="false"
                   :controls="[
               {
                 type: 'text',
@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import pagexForm from "@/lib/components/form";
+// import pagexForm from "@/lib/components/form";
 export default {
   name: "addDict",
   components:{
-    pagexForm
+    // pagexForm
   },
   data() {
     return {
