@@ -114,11 +114,12 @@
       @pagination="getList"
     />
     <!-- 新增 修改 弹框-->
-    <el-dialog title="title" v-if="open" :visible.sync="open" width="500px">
-      <addDict></addDict>
+    <el-dialog :title="title" v-if="open" :visible.sync="open" width="500px">
+      <addDict :init="init" :isEdit="isEdit"></addDict>
     </el-dialog>
   </div>
 </template>
+
 
 <script>
 import { listType, getType, delType, addType, updateType, refresh } from "@/api/system/dict/type";
@@ -151,6 +152,10 @@ export default {
       typeList: [],
       // 弹出层标题
       title: "",
+      //编辑 查询详情
+      init:'',
+      //是否编辑
+      isEdit:false,
       // 是否显示弹出层
       open: false,
       // 状态数据字典
@@ -168,10 +173,10 @@ export default {
       form: {},
       // 表单校验
       rules: {
-          groupName: [
+        groupName: [
           { required: true, message: "分组名称不能为空", trigger: "blur" }
         ],
-          wordbookGroupCode: [
+        wordbookGroupCode: [
           { required: true, message: "分组编码不能为空", trigger: "blur" }
         ]
       }
@@ -202,9 +207,9 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-          groupId: undefined,
-          groupName: undefined,
-          wordbookGroupCode: undefined,
+        groupId: undefined,
+        groupName: undefined,
+        wordbookGroupCode: undefined,
 
       };
       this.resetForm("form");
@@ -224,6 +229,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.isEdit = false;
       this.title = "添加字典类型";
     },
     // 多选框选中数据
@@ -236,11 +242,14 @@ export default {
     handleUpdate(row) {
       this.reset();
       this.open = true;
-      const groupId = row.groupId
-      getType(groupId).then(response => {
+      this.isEdit = true;
+      // const groupRow = row;
+      this.title = "修改字典类型";
+      this.init = row;
+      /*getType(groupId).then(response => {
         this.form = response;
-        this.title = "修改字典类型";
-      });
+
+      });*/
     },
     /** 提交按钮 */
     submitForm: function() {
@@ -274,47 +283,47 @@ export default {
     handleDelete(row) {
       const groupId = row.groupId;
       this.$confirm('是否确认删除分组名称为"' + row.groupName + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delType(row.wordbookGroupCode,groupId);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        }).catch(function() {});
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return delType(row.wordbookGroupCode,groupId);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("删除成功");
+      }).catch(function() {});
     },
-      /** 刷新字典缓存按钮操作 */
-      refreshCache(row) {
-          let wordbookGroupCode ='';
-          if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
-              wordbookGroupCode = row.wordbookGroupCode;
-          }else {
-              wordbookGroupCode = '';
-          }
-          refresh(wordbookGroupCode).then(response => {
-              if (response.code === 200) {
-                  this.msgSuccess("操作成功");
-                  this.open = false;
-                  this.getList();
-              } else {
-                  this.msgError(response.msg);
-              }
-          });
+    /** 刷新字典缓存按钮操作 */
+    refreshCache(row) {
+      let wordbookGroupCode ='';
+      if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
+        wordbookGroupCode = row.wordbookGroupCode;
+      }else {
+        wordbookGroupCode = '';
+      }
+      refresh(wordbookGroupCode).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess("操作成功");
+          this.open = false;
+          this.getList();
+        } else {
+          this.msgError(response.msg);
+        }
+      });
 
-      },
+    },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出所有类型数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportType(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        }).catch(function() {});
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return exportType(queryParams);
+      }).then(response => {
+        this.download(response.msg);
+      }).catch(function() {});
     },
   }
 };

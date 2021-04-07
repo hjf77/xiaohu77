@@ -11,8 +11,9 @@
     <pagex-form
       addApi="/ms/wordbook/addWordbookGroup"
       updateApi="/ms/wordbook/updateWordbookGroup"
-      initApi=""
-      :isEdit="false"
+      initApi="/ms/wordbook/getWordbookGroupBean?groupId="
+      :init="init"
+      :isEdit="isEdit"
                   :controls="[
               {
                 type: 'text',
@@ -44,7 +45,9 @@ export default {
     }
   },
   props: {
-    open: Boolean
+    open: Boolean,
+    init:Object,
+    isEdit:Boolean
   },
   mounted() {
   },

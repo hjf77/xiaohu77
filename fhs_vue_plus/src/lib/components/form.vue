@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="form" size="small" label-position="left" :label-width="'80px'" :model="model" driver="vee" :rules="rules">
+  <el-form ref="form" size="small" label-position="left" :label-width="'80px'" :model="model" driver="vee"
+           :rules="rules">
     <el-form-item v-if="proxyIf(item.visibleOn,true)"
                   v-for="item in controls"
                   :label="item.label"
@@ -70,10 +71,10 @@
 
 <script>
 export default {
-  inject: ['runPageEvent','wlTest'],
+  inject: ['runPageEvent', 'wlTest'],
   props: {
     // 新增 接口
-    addApi:{
+    addApi: {
       type: String,
       default: "",
     },
@@ -87,15 +88,20 @@ export default {
       type: String,
       default: "",
     },
+    //区别 详情 编辑 和 新增
     isEdit: {
       type: Boolean,
       default: false,
     },
-
+    //查询 详情 id
+    init: {
+      type: Object,
+    },
     // 接口附带参数
     param: {
       type: Object,
-      default:() => {},
+      default: () => {
+      },
     },
     uid: {
       type: [String, Number],
@@ -105,7 +111,6 @@ export default {
       type: Array,
       default: () => [],
     },
-
     success: {
       type: Function,
       default: () => {
@@ -122,6 +127,8 @@ export default {
     return {
       model: {},
       rules: {},
+      //编辑 表单的详情数据
+      initData: {}
     };
   },
   created() {
@@ -142,7 +149,7 @@ export default {
         _that.model[_item.name] ? _that.model[_item.name] : [];
       }
     });
-    console.log(this.rules);
+    this.edit()//获取到 详情信息
   },
   methods: {
     proxyIf(_ifFun, _default) {
@@ -153,19 +160,15 @@ export default {
       this.$refs.form.validate((valid, errors) => {
         if (valid) {
           if (!this.isEdit) {
-            this.$pagexRequest({url:this.addApi,data:this.model,method:'post'}).then((res)=>{
+            this.$pagexRequest({url: this.addApi, data: this.model, method: 'post'}).then((res) => {
               console.log(res);
-              this.wlTest(root=>{
+              this.wlTest(root => {
                 root.open = false
                 root.getList()
               })
-            }).catch(()=>{
-
-            })
-          }
-
+            }).catch(() => {})
+          } else {}
         } else {
-
           return false;
         }
       });
@@ -181,6 +184,34 @@ export default {
       //   console.log(this)
       //   this.$emit('success')
       // }
+    },
+    //获取到 详情信息
+    edit() {
+      this.initData = {
+        'createTime': null,
+        'createUser': null,
+        'groupId': 1,
+        'groupIdE': null,
+        'groupName': "超级错误类型",
+        'pkey': 1,
+        'transMap': {},
+        'updateTime': null,
+        'updateUser': null,
+        'wordbookGroupCode': "super_error_type"
+      }
+      this.controls.forEach((i)=>{
+        this.model[i.name] = this.initData[i.name]
+      })
+      this.$forceUpdate();
+      console.log(this.initData);
+      console.log(this.model);
+      /*if (this.isEdit) {
+        this.$pagexRequest({method: 'get', url: this.initApi + this.init.groupId,}).then((res) => {
+          this.initData = res.data;
+        }).catch(() => {
+          return false;
+        });
+      }*/
     },
   },
 };
