@@ -85,6 +85,14 @@ export default {
     pagexButton,
   },
   props: {
+    routerPath:{
+      type:String,
+      default: ''
+    },
+    id:{
+      type: String,
+      default: ''
+    },
     uid: {
       type: [String, Number],
       default: 'default'
@@ -148,7 +156,8 @@ export default {
     proxyClick(_row,_column){
       console.log(_row);
       // this.$router.push({path: '/dict/type/data/', query: {row: row}});
-      this.$router.push({path: '/dict/type/data/'+ _row.groupId});
+      // this.$router.push({path: '/dict/type/data/'+ _row[this.id]});
+      this.$router.push({path: this.routerPath+ _row[this.id]});
       console.log(_row)
       if(_column.click){
         _column.click.call(this,_row);

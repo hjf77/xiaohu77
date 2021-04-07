@@ -73,6 +73,8 @@
       :filter="filter"
       :columns="columns"
       :api="api"
+      :id="'groupId'"
+      :routerPath="'/dict/type/data/'"
     ></pagex-crud>
 
     <!-- 新增 修改 弹框-->
