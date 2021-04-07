@@ -69,50 +69,12 @@
       </el-col>
 
     </el-row>
+    <crud
+      :filter="filter"
+      :columns="columns"
+      :api="api"
+    ></crud>
 
-    <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
-      <el-table-column label="分组名称" align="center" prop="groupName" :show-overflow-tooltip="true" />
-      <el-table-column label="分组编码" align="center"  :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <router-link :to="'/dict/type/data/' + scope.row.groupId" class="link-type">
-            <span>{{ scope.row.wordbookGroupCode }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['wordbook:update']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['wordbook:del']"
-          >删除</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="refreshCache(scope.row)"
-            v-hasPermi="['wordbook:refreshRedisCache']"
-          >刷新字典缓存</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
     <!-- 新增 修改 弹框-->
     <el-dialog :title="title" v-if="open" :visible.sync="open" width="500px">
       <addDict :init="init" :isEdit="isEdit"></addDict>
@@ -120,14 +82,15 @@
   </div>
 </template>
 
-
 <script>
 import { listType, getType, delType, addType, updateType, refresh } from "@/api/system/dict/type";
 import addDict from "@/views/system/dict/components/addDict";
+import crud from "@/lib/components/crud";
 export default {
   name: "Dict",
   components:{
-    addDict
+    addDict,
+    crud
   },
   provide(){
     return {
@@ -138,6 +101,65 @@ export default {
   },
   data() {
     return {
+      api:'/ms/wordbook/findWordbookGroupForPage',
+      // 查询参数
+      queryParams: {
+        groupName: undefined,
+        wordbookGroupCode: undefined
+      },
+
+      columns:[
+        {label:'分组名称',name:'groupName'},
+        {label:'分组编码',name:'wordbookGroupCode',type: 'formart',
+          formart:"",
+          click:function(_row){
+            console.log(_row);
+            console.log(this);
+          }
+        },
+        {label:'操作',type:'operation',buttons: [
+            {
+              label: "修改",
+              type: "button",
+              actionType: "dialog",
+              dialog: {
+                title: "修改表单",
+                body: {
+                  type: "form",
+                  initApi: "/api/sample/${id}",
+                  api: "put:/api/sample/${id}",
+                  controls: [
+                    {
+                      type: "text",
+                      name: "engine",
+                      label: "Engine"
+                    },
+                    {
+                      type: "text",
+                      name: "browser",
+                      label: "Browser"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              label: "删除",
+              type: "button",
+              actionType: "ajax",
+              level: "danger",
+              confirmText: "确认要删除？",
+              api: "delete:https://houtai.baidu.com/api/sample/${id}"
+            },]}
+      ],
+      filter:{
+        controls:[
+          {name:'groupName',placeholder: "分组名称",type:'text'},
+          {name:'wordbookGroupCode',placeholder: "分组code",type:'text'}
+        ]
+      },
+
+
       // 遮罩层
       loading: true,
       // 选中数组
@@ -149,7 +171,9 @@ export default {
       // 总条数
       total: 0,
       // 字典表格数据
-      typeList: [],
+      typeList: [
+        'groupName',
+      ],
       // 弹出层标题
       title: "",
       //编辑 查询详情
@@ -162,31 +186,21 @@ export default {
       statusOptions: [],
       // 日期范围
       dateRange: [],
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        groupName: undefined,
-        wordbookGroupCode: undefined
-      },
+
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        groupName: [
+          groupName: [
           { required: true, message: "分组名称不能为空", trigger: "blur" }
         ],
-        wordbookGroupCode: [
+          wordbookGroupCode: [
           { required: true, message: "分组编码不能为空", trigger: "blur" }
         ]
       }
     };
   },
   created() {
-    this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询字典类型列表 */
@@ -207,9 +221,9 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        groupId: undefined,
-        groupName: undefined,
-        wordbookGroupCode: undefined,
+          groupId: undefined,
+          groupName: undefined,
+          wordbookGroupCode: undefined,
 
       };
       this.resetForm("form");
@@ -283,47 +297,47 @@ export default {
     handleDelete(row) {
       const groupId = row.groupId;
       this.$confirm('是否确认删除分组名称为"' + row.groupName + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
-        return delType(row.wordbookGroupCode,groupId);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
-      }).catch(function() {});
-    },
-    /** 刷新字典缓存按钮操作 */
-    refreshCache(row) {
-      let wordbookGroupCode ='';
-      if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
-        wordbookGroupCode = row.wordbookGroupCode;
-      }else {
-        wordbookGroupCode = '';
-      }
-      refresh(wordbookGroupCode).then(response => {
-        if (response.code === 200) {
-          this.msgSuccess("操作成功");
-          this.open = false;
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return delType(row.wordbookGroupCode,groupId);
+        }).then(() => {
           this.getList();
-        } else {
-          this.msgError(response.msg);
-        }
-      });
-
+          this.msgSuccess("删除成功");
+        }).catch(function() {});
     },
+      /** 刷新字典缓存按钮操作 */
+      refreshCache(row) {
+          let wordbookGroupCode ='';
+          if (row.wordbookGroupCode != null || row.wordbookGroupCode !== undefined){
+              wordbookGroupCode = row.wordbookGroupCode;
+          }else {
+              wordbookGroupCode = '';
+          }
+          refresh(wordbookGroupCode).then(response => {
+              if (response.code === 200) {
+                  this.msgSuccess("操作成功");
+                  this.open = false;
+                  this.getList();
+              } else {
+                  this.msgError(response.msg);
+              }
+          });
+
+      },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出所有类型数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
-        return exportType(queryParams);
-      }).then(response => {
-        this.download(response.msg);
-      }).catch(function() {});
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return exportType(queryParams);
+        }).then(response => {
+          this.download(response.msg);
+        }).catch(function() {});
     },
   }
 };
