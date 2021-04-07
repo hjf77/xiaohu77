@@ -78,12 +78,8 @@
 
 <script>
 import {handleStrParam} from '@/lib/utils/param'
-import pagexButton from "@/lib/components/button";
 export default {
   // inject: ["registPageEvent"],
-  components:{
-    pagexButton,
-  },
   props: {
     routerPath:{
       type:String,
@@ -155,7 +151,6 @@ export default {
     },
     proxyClick(_row,_column){
       console.log(_row);
-      // this.$router.push({path: '/dict/type/data/', query: {row: row}});
       // this.$router.push({path: '/dict/type/data/'+ _row[this.id]});
       this.$router.push({path: this.routerPath+ _row[this.id]});
       console.log(_row)
