@@ -84,8 +84,8 @@
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="query.page_number"
-        :page-size="query.page_size"
+        :current-page.sync="query.page"
+        :page-size="query.rows"
         :page-sizes="page_sizes"
         layout="total, sizes, prev, pager, next, jumper"
         background
@@ -138,11 +138,11 @@ export default {
     return {
       data: [],
       multipleSelection: [],
-      total: 100,
+      total: 0,
       page_sizes:[10,20,50,100],
       query: {
-        page_size: 10,
-        page_number: 1,
+        rows: 10,
+        page: 1,
       },
     };
   },
@@ -187,11 +187,11 @@ export default {
       }
     },
     handleSizeChange(val) {
-      this.query.page_size = val;
+      this.query.rows = val;
       this.getList();
     },
     handleCurrentChange(val) {
-      this.query.page_number = val;
+      this.query.page = val;
       this.getList();
     },
 
