@@ -1,20 +1,10 @@
 <template>
   <div class="app-container">
-
-    <el-col :span="1.5">
-      <el-button
-        type="danger"
-        icon="el-icon-edit"
-        size="mini"
-        @click="refreshCache"
-      >刷新所有字典缓存
-      </el-button>
-    </el-col>
-
     <pagex-crud
       :filter="filter"
       :columns="columns"
       :api="api"
+      :buttons="buttons"
     >
        <div slot="import">
          我是表单和按钮
@@ -47,6 +37,8 @@ export default {
   },
   data() {
     return {
+      open:false,
+      isEdit:false,
       api: '/ms/wordbook/findWordbookGroupForPage?isVue=true',
       //delUrl
       //editUrl
@@ -59,12 +51,40 @@ export default {
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [
         {
-          title: '批量删除', click: function (_row, _checkRows) {
-
-          }, icon: 'del', color: '#0000'
+          title: '批量删除',
+          url:'1',
+          icon: 'el-icon-delete',
+          type: 'primary',
+          click: (_row, _checkRows) => {
+            console.log(_row, _checkRows);
+          },
         },{
-          title:'excel导入',name:'import',
-        }
+          title:'excel导入',
+          url:'2',
+          name:'import',
+          type:'warning',
+          click: (_row,_checkRows) => {
+
+          }
+        },{
+          title:'导出',
+          url:'2',
+          name:'import',
+          type:'danger',
+          click: (_row,_checkRows) => {
+            console.log(_row, _checkRows);
+          }
+        },{
+          title: '新增',
+          url:'1',
+          icon: 'el-icon-plus',
+          type: 'primary',
+          click: () => {
+            this.title = '新增'
+            this.open = true;
+            this.isEdit = false;
+          }
+        },
       ],
       columns: [
         {label: '', name: '', type: 'selection'},

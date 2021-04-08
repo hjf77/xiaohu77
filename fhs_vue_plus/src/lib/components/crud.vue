@@ -18,14 +18,34 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button size="small" @click="getList">搜索</el-button>
+        <el-button size="small"  @click="getList">搜索</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="data">
+
+    <div>
+      <el-button
+        v-for="i in buttons"
+        v-if="i.url != ''"
+        :type="i.type"
+        :icon="i.icon"
+        size="mini"
+        @click="check(i)"
+      >{{i.title}}
+      </el-button>
+    </div>
+
+
+
+    <el-table :data="data"  @selection-change="handleSelectionChange">
       <template v-for="(item, index) in columns">
         <el-table-column
+          v-if="item.type === 'selection'"
+          type="selection"
+        >
+        </el-table-column>
+        <el-table-column
             :prop="item.name"
-            v-if="!item.type"
+            v-else-if="!item.type"
             :label="item.label"
             :key="item.name"
         >
@@ -81,7 +101,10 @@ import {handleStrParam} from '@/lib/utils/param'
 export default {
   // inject: ["registPageEvent"],
   props: {
-
+    buttons:{
+      type: Array,
+      default: () => [],
+    },
     id:{
       type: String,
       default: ''
@@ -113,9 +136,8 @@ export default {
   },
   data() {
     return {
-      data: [
-
-      ],
+      data: [],
+      multipleSelection: [],
       total: 100,
       page_sizes:[10,20,50,100],
       query: {
@@ -133,6 +155,16 @@ export default {
   mounted() {
   },
   methods: {
+    check(val) {
+      if(val.click){
+        val.click.call(this,this.data,this.multipleSelection);
+      }
+    },
+    //多选框
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection)
+    },
     columnFormart(_row,_column){
       return handleStrParam(_column.formart,_row);
     },

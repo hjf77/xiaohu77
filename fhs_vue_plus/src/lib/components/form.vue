@@ -166,8 +166,10 @@ export default {
                 root.open = false
                 root.getList()
               })
-            }).catch(() => {})
-          } else {}
+            }).catch(() => {
+            })
+          } else {
+          }
         } else {
           return false;
         }
@@ -187,7 +189,7 @@ export default {
     },
     //获取到 详情信息
     edit() {
-      this.initData = {
+      /*this.initData = {
         'createTime': null,
         'createUser': null,
         'groupId': 1,
@@ -198,20 +200,20 @@ export default {
         'updateTime': null,
         'updateUser': null,
         'wordbookGroupCode': "super_error_type"
-      }
-      this.controls.forEach((i)=>{
-        this.model[i.name] = this.initData[i.name]
-      })
-      this.$forceUpdate();
-      console.log(this.initData);
-      console.log(this.model);
-      /*if (this.isEdit) {
+      }*/
+      /*console.log(this.initData);
+      console.log(this.model);*/
+      if (this.isEdit) {
         this.$pagexRequest({method: 'get', url: this.initApi + this.init.groupId,}).then((res) => {
           this.initData = res.data;
+          this.controls.forEach((i) => {
+            this.model[i.name] = this.initData[i.name]
+          })
+          this.$forceUpdate();
         }).catch(() => {
           return false;
         });
-      }*/
+      }
     },
   },
 };
