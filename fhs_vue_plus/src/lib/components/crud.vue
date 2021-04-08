@@ -18,11 +18,11 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button size="small"  @click="getList">搜索</el-button>
+        <el-button size="small" type="primary" icon="el-icon-search"  @click="getList">搜索</el-button>
       </el-form-item>
     </el-form>
 
-    <div>
+    <div style="margin-bottom: 20px">
       <el-button
         v-for="i in buttons"
         v-if="i.url != ''"
