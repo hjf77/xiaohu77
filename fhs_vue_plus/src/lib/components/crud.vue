@@ -66,7 +66,7 @@
         @current-change="handleCurrentChange"
         :current-page.sync="query.page_number"
         :page-size="query.page_size"
-        :page-sizes="query.page_sizes"
+        :page-sizes="page_sizes"
         layout="total, sizes, prev, pager, next, jumper"
         background
         v-if="total !== 0"
@@ -81,10 +81,7 @@ import {handleStrParam} from '@/lib/utils/param'
 export default {
   // inject: ["registPageEvent"],
   props: {
-    routerPath:{
-      type:String,
-      default: ''
-    },
+
     id:{
       type: String,
       default: ''
@@ -117,27 +114,17 @@ export default {
   data() {
     return {
       data: [
-        {
-          groupId:'1',
-        groupName:'zhangsan',
-        wordbookGroupCode:'lisi'
-        },
-        {
-          groupId:'2',
-          groupName:'xiaoming',
-          wordbookGroupCode:'xiaohong'
-        }
+
       ],
       total: 100,
+      page_sizes:[10,20,50,100],
       query: {
         page_size: 10,
         page_number: 1,
-        page_sizes:[25,50,75,100]
       },
     };
   },
   async created() {
-
     console.log(this);
     this.$parent.__reload = this.getList;
     this.getList();
@@ -147,22 +134,21 @@ export default {
   },
   methods: {
     columnFormart(_row,_column){
-      return handleStrParam(_row.wordbookGroupCode,_row);
+      return handleStrParam(_column.formart,_row);
     },
     proxyClick(_row,_column){
       console.log(_row);
-      // this.$router.push({path: '/dict/type/data/'+ _row[this.id]});
-      this.$router.push({path: this.routerPath+ _row[this.id]});
-      console.log(_row)
       if(_column.click){
         _column.click.call(this,_row);
       }
     },
     async getList() {
+      console.log(this.api);
       console.log(this.query);
       if (this.api) {
-        const {data} = await this.$pagexRequest({url:this.api,data:this.query,method:'GET'});
-        this.data = data.list || [];
+        const {data} = await this.$pagexRequest({url:this.api,params:this.query,method:'get'});
+        this.data = data.rows || [];
+
         if (data.total) {
           this.total = data.total || 0;
         }
