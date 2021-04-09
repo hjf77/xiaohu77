@@ -14,6 +14,7 @@ var listPage = {
             {name: 'mobile', title: '电话', width: '10%', align: 'center'},
             {name: 'email', title: '邮箱', width: '10%', align: 'center'},
             {name: 'remark', title: '备注', width: '58%', align: 'center'},
+            {name: 'group_code',title:'集团编码',hidden:true},
         ]
     },
     isColumnButton: function () {
@@ -33,6 +34,7 @@ var listPage = {
     otherFunctions: function () {
         return {
             resetAdminPass:function(_row){
+                debugger;
                 $.ajax({
                     url:'${path.basePath}/ms/tenant/resetAdminPass?groupCode=' + _row.groupCode,
                     dataType:'json',
