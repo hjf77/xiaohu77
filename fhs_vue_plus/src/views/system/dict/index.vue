@@ -12,7 +12,7 @@
     </pagex-crud>
 
     <!-- 新增 修改 弹框-->
-    <el-dialog :title="title" v-if="open" :visible.sync="open" width="500px">
+    <el-dialog :title="title" v-if="open" :visible.sync="open" width="510px">
       <addDict :init="init" :isEdit="isEdit"></addDict>
     </el-dialog>
   </div>
@@ -80,7 +80,7 @@ export default {
           icon: 'el-icon-plus',
           type: 'primary',
           click: () => {
-            this.title = '新增'
+            this.title = '新增字典'
             this.open = true;
             this.isEdit = false;
           }

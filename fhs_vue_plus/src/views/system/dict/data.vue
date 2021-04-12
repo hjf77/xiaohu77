@@ -69,31 +69,32 @@
     />
 
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="118px">
-        <el-form-item label="字典编码">
-          <el-input v-model="form.wordbookGroupCode" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="字典code" prop="wordbookCode">
-          <el-input v-model="form.wordbookCode" placeholder="请输入字典code" />
-        </el-form-item>
-        <el-form-item label="字典翻译" prop="wordbookDesc">
-          <el-input v-model="form.wordbookDesc" placeholder="请输入字典翻译" />
-        </el-form-item>
-        <el-form-item label="翻译英文" prop="wordbookDescEN">
-          <el-input v-model="form.wordbookDescEN" placeholder="请输入翻译英文" />
-        </el-form-item>
-        <el-form-item label="翻译繁体" prop="wordbookDescTW">
-          <el-input v-model="form.wordbookDescTW"  placeholder="请输入翻译繁体"  />
-        </el-form-item>
-        <el-form-item label="排序序号(ASC)" prop="orderNum">
-          <el-input-number v-model="form.orderNum"  placeholder="请输入排序序号(ASC)"  />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
+    <el-dialog :title="title" :visible.sync="open" width="510px">
+      <add-dictio :init="init" :isEdit="isEdit"></add-dictio>
+<!--      <el-form ref="form" :model="form" :rules="rules" label-width="118px">-->
+<!--        <el-form-item label="字典编码">-->
+<!--          <el-input v-model="form.wordbookGroupCode" :disabled="true" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="字典code" prop="wordbookCode">-->
+<!--          <el-input v-model="form.wordbookCode" placeholder="请输入字典code" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="字典翻译" prop="wordbookDesc">-->
+<!--          <el-input v-model="form.wordbookDesc" placeholder="请输入字典翻译" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="翻译英文" prop="wordbookDescEN">-->
+<!--          <el-input v-model="form.wordbookDescEN" placeholder="请输入翻译英文" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="翻译繁体" prop="wordbookDescTW">-->
+<!--          <el-input v-model="form.wordbookDescTW"  placeholder="请输入翻译繁体"  />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="排序序号(ASC)" prop="orderNum">-->
+<!--          <el-input-number v-model="form.orderNum"  placeholder="请输入排序序号(ASC)"  />-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+<!--      <div slot="footer" class="dialog-footer">-->
+<!--        <el-button type="primary" @click="submitForm">确 定</el-button>-->
+<!--        <el-button @click="cancel">取 消</el-button>-->
+<!--      </div>-->
     </el-dialog>
   </div>
 </template>
@@ -101,8 +102,12 @@
 <script>
 import { listData, getData, delData, addData, updateData, exportData } from "@/api/system/dict/data";
 import { listType, getType } from "@/api/system/dict/type";
+import addDictio from "@/views/system/dict/components/addDictio";
 
 export default {
+  components:{
+    addDictio
+  },
   name: "Data",
   data() {
     return {
@@ -124,6 +129,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      isEdit: true,
       // 状态数据字典
       statusOptions: [],
       // 类型数据字典
@@ -200,6 +206,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.isEdit =false;
       this.title = "添加字典数据";
       this.form.wordbookGroupCode = this.queryParams.wordbookGroupCode;
     },
@@ -213,6 +220,7 @@ export default {
     handleUpdate(row) {
       this.reset();
        this.open = true;
+       this.isEdit= true;
       const wordbookId = row.wordbookId
       getData(wordbookId).then(response => {
         this.form = response;
