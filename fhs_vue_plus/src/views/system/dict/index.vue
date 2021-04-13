@@ -89,7 +89,7 @@ export default {
           click: (_row, _checkRows) => {
             console.log(_row, _checkRows);
           }
-        }, {
+        },{
           title: '新增',
           name: 'add',
           type: 'primary',

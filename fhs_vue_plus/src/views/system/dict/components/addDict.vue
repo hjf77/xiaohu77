@@ -18,12 +18,14 @@
                 type: 'text',
                 name: 'groupName',
                 label: '分组名称',
-                rule:'required'
+                rule:'required',
+                placeholder:'请输入分组名称'
               },{
                 type: 'text',
                 name: 'wordbookGroupCode',
                 label: '分组编码',
-                rule:'required'
+                rule:'required',
+                placeholder: '请输入分组编码'
               }
             ]"
     >
@@ -56,5 +58,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+::v-deep .el-form--label-left .el-form-item__label{
+  text-align: right;
+}
 </style>
