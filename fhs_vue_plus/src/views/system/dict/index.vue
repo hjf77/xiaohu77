@@ -6,15 +6,14 @@
       :api="api"
       :buttons="buttons"
     >
-       <div slot="import">
-         我是表单和按钮
-       </div>
+      <template v-slot:import="prop">
+        <!-- 新增 修改 弹框-->
+        <el-dialog slot="import" :title="title" v-if="open" :visible.sync="open" width="500px">
+          <addDict :init="init" :isEdit="isEdit"></addDict>
+        </el-dialog>
+      </template>
     </pagex-crud>
 
-    <!-- 新增 修改 弹框-->
-    <el-dialog :title="title" v-if="open" :visible.sync="open" width="500px">
-      <addDict :init="init" :isEdit="isEdit"></addDict>
-    </el-dialog>
   </div>
 </template>
 
@@ -37,14 +36,33 @@ export default {
   },
   data() {
     return {
-      open:false,
-      isEdit:false,
+      slots: {
+        controls: [
+          {
+            type: 'text',
+            name: 'groupName',
+            label: '分组名称',
+            rule: 'required'
+          }, {
+            type: 'text',
+            name: 'wordbookGroupCode',
+            label: '分组编码',
+            rule: 'required'
+          }
+        ]
+      },
+      title: '编辑',
+      open: false,
+      isEdit: false,
       api: '/ms/wordbook/findWordbookGroupForPage?isVue=true',
       //delUrl
-      //editUrl
+      //addUrl
+      //updateUrl
+      //initUrl
+      //batchDelUrl
       //form:{}
-      methods:{
-        importExcelSubmit:function(_formData){
+      methods: {
+        importExcelSubmit: (_formData) => {
 
         },
       },
@@ -52,39 +70,34 @@ export default {
       buttons: [
         {
           title: '批量删除',
-          url:'1',
           icon: 'el-icon-delete',
           type: 'primary',
           click: (_row, _checkRows) => {
             console.log(_row, _checkRows);
           },
-        },{
-          title:'excel导入',
-          url:'2',
-          name:'import',
-          type:'warning',
-          click: (_row,_checkRows) => {
+        }, {
+          title: 'excel导入',
+          name: 'import',
+          type: 'warning',
+          click: (_row, _checkRows) => {
 
           }
-        },{
-          title:'导出',
-          url:'2',
-          name:'import',
-          type:'danger',
-          click: (_row,_checkRows) => {
+        }, {
+          title: '导出',
+          name: 'import',
+          type: 'danger',
+          click: (_row, _checkRows) => {
             console.log(_row, _checkRows);
           }
-        },{
+        }, {
           title: '新增',
-          url:'1',
-          icon: 'el-icon-plus',
+          name: 'add',
           type: 'primary',
           click: () => {
-            this.title = '新增'
+            this.title = '新增';
             this.open = true;
-            this.isEdit = false;
           }
-        },
+        }
       ],
       columns: [
         {label: '', name: '', type: 'selection'},
@@ -97,43 +110,27 @@ export default {
           }
         },
         {
-          label: '操作', type: 'operation', buttons: [
+          label: '操作',
+          name: 'operation',
+          type: 'textBtn',
+          textBtn: [
             {
-              label: "修改",
-              type: "button",
-              actionType: "dialog",
-              dialog: {
-                title: "修改表单",
-                body: {
-                  type: "form",
-                  initApi: "/ms/wordbook/getWordbookGroupBean?groupId=",
-                  updateApi: "/ms/wordbook/updateWordbookGroup",
-                  isEdit: true,
-                  controls: [
-
-                    {
-                      type: 'text',
-                      name: 'groupName',
-                      label: '分组名称',
-                      rule: 'required'
-                    }, {
-                      type: 'text',
-                      name: 'wordbookGroupCode',
-                      label: '分组编码',
-                      rule: 'required'
-                    }
-                  ]
-                }
+              name: "详情",
+              click: (_row, name) => {
+                console.log(_row, name);
+                this.title = '详情';
+                this.open = true;
               }
             },
             {
-              label: "删除",
-              type: "button",
-              actionType: "ajax",
-              level: "danger",
-              confirmText: "确认要删除？",
-              api: "delete:https://houtai.baidu.com/api/sample/${id}"
-            },]
+              name: "编辑",
+              click: (_row, name) => {
+                console.log(_row, name);
+                this.title = '编辑';
+                this.open = true;
+              }
+            }
+          ],
         }
       ],
       filter: {
@@ -142,8 +139,6 @@ export default {
           {name: 'wordbookGroupCode', placeholder: "分组code", type: 'text'}
         ]
       },
-
-
     };
   },
   created() {

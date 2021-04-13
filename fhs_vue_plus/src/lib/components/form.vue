@@ -67,6 +67,15 @@
       <el-button size="small" @click="submit">确定</el-button>
     </el-form-item>
   </el-form>
+
+  <!--
+      支持下载模板   downloadUrl:
+      支持上传文件--异步
+      asyncUploadUrl --
+      支持同步传 --
+      图片上传 -- 单图，多图(删除)  -- 点击每个图片要查看  配置数量，单图最大size
+      多文件上传，要能删除和下载
+  -->
 </template>
 
 <script>

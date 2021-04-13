@@ -10,11 +10,10 @@
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
       addApi="/ms/wordbook/addWordbookGroup"
-      updateApi=""
-      initApi=""
+      updateApi="/ms/wordbook/updateWordbookGroup"
+      initApi="/ms/wordbook/getWordbookGroupBean?groupId="
       :init="init"
-      :isEdit="false"
-                  :controls="[
+      :controls="[
               {
                 type: 'text',
                 name: 'groupName',
@@ -27,17 +26,17 @@
                 rule:'required'
               }
             ]"
-      >
-      </pagex-form>
+    >
+    </pagex-form>
   </div>
 </template>
 
 <script>
-// import pagexForm from "@/lib/components/form";
+import pagexForm from "@/lib/components/form";
 export default {
   name: "addDict",
   components:{
-    // pagexForm
+    pagexForm
   },
   data() {
     return {
@@ -46,8 +45,7 @@ export default {
   },
   props: {
     open: Boolean,
-    init:Object,
-    isEdit:Boolean
+    init:Object
   },
   mounted() {
   },

@@ -66,17 +66,15 @@
             :label="item.label"
             :key="'operation' + index"
         >
-          <template v-if="item.buttons">
-            <pagex-button
-              style="margin-right: 10px"
-                v-for="(item, index) in item.buttons"
-                :confirmText="item.confirmText"
-                :key="index"
-                :level="item.level"
-                :actionType="item.actionType"
-                :label="item.label"
-                :dialog="item.dialog"
-            ></pagex-button>
+        </el-table-column>
+
+        <el-table-column
+          :prop="item.name"
+          v-else-if="item.type === 'textBtn'"
+          :label="item.label"
+        >
+          <template slot-scope="scope">
+            <el-button v-for="(val,index) in item.textBtn" :key="index" type="text" @click="handleClick(scope.row,val)">{{val.name}}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -93,12 +91,21 @@
         :total="total"
     >
     </el-pagination>
+
+    <slot name="import"></slot>
+
+
+
+
   </div>
+
 </template>
 
 <script>
 import {handleStrParam} from '@/lib/utils/param'
+import Dialog from "@/lib/components/dialog";
 export default {
+  components: {Dialog},
   // inject: ["registPageEvent"],
   props: {
     buttons:{
@@ -121,6 +128,10 @@ export default {
       type: String,
       default: "",
     },
+    slots:{
+      type: Object,
+      default: () => ({}),
+    },
     columns: {
       type: Array,
       default: () => [],
@@ -134,6 +145,7 @@ export default {
       default: () => ({}),
     }
   },
+
   data() {
     return {
       data: [],
@@ -146,7 +158,14 @@ export default {
       },
     };
   },
-  async created() {
+  created() {
+    /*
+      遍历clomun 的operation的
+      遍历自定义按钮
+      slots   init
+      slotData  init
+
+     */
     console.log(this);
     this.$parent.__reload = this.getList;
     this.getList();
@@ -155,7 +174,12 @@ export default {
   mounted() {
   },
   methods: {
+    handleClick(row,val) {
+      console.log(row,val);
+      val.click.call(this,row,val);
+    },
     check(val) {
+      console.log(val);
       if(val.click){
         val.click.call(this,this.data,this.multipleSelection);
       }
@@ -170,8 +194,9 @@ export default {
     },
     proxyClick(_row,_column){
       console.log(_row);
+      let _this = this;
       if(_column.click){
-        _column.click.call(this,_row);
+        _column.click.call(_this,_row);
       }
     },
     async getList() {
