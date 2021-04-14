@@ -26,6 +26,11 @@
                 label: '分组编码',
                 rule:'required',
                 placeholder: '请输入分组编码'
+              },{
+                type: 'uploadCard',
+                name: 'uploadCard',
+                label: '上传文件',
+                rule:'required',
               }
             ]"
     >

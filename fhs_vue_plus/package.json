@@ -54,6 +54,7 @@
     "qs": "6.9.3",
     "screenfull": "4.2.0",
     "sortablejs": "1.8.4",
+    "v-viewer": "^1.5.1",
     "vee-element": "^1.0.0-alpha.5",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.11",

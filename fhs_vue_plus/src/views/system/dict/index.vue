@@ -13,7 +13,6 @@
         </el-dialog>
       </template>
     </pagex-crud>
-
   </div>
 </template>
 

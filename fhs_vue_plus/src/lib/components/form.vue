@@ -62,6 +62,14 @@
         :name="item.name"
       ></slot>
 
+      <upload-card
+        v-bind="item"
+        v-model="model[item.name]"
+        v-if="item.type === 'uploadCard'"
+      ></upload-card>
+
+
+
     </el-form-item>
     <el-form-item>
       <el-button size="small" @click="submit">确定</el-button>
@@ -79,7 +87,11 @@
 </template>
 
 <script>
+import uploadCard from "@/lib/components/uploadCard";
 export default {
+  components:{
+    uploadCard
+  },
   inject: ['runPageEvent', 'wlTest'],
   props: {
     // 新增 接口

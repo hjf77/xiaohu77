@@ -51,6 +51,12 @@
         <el-checkbox label="Outdoor activities" name="type"/>
       </el-checkbox-group>
     </el-form-item>
+
+    <el-form-item label="上传图片" prop="type" required>
+      <uploadCard></uploadCard>
+    </el-form-item>
+
+
     <el-form-item>
       <el-button @click="submit" type="primary">Submit</el-button>
       <el-button @click="reset">Reset</el-button>
@@ -60,7 +66,11 @@
 </template>
 
 <script>
+import uploadCard from "@/lib/components/uploadCard";
 export default {
+  components:{
+    uploadCard
+  },
   data () {
     return {
       model: {
