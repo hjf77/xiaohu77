@@ -16,6 +16,8 @@ import com.fhs.ucenter.service.UcenterFrontUserBindService;
 import com.fhs.ucenter.service.UcenterFrontUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +48,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
 
     @Override
     @RequestMapping("/getSingleFrontUser")
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public HttpResult<FrontUserVo> getSingleFrontUser(@RequestBody GetSingleFrontUserForm getSingleFrontUserForm) {
         String userId = null;
         UcenterFrontUser user = null;
@@ -86,6 +89,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
     }
 
     @RequestMapping("/update")
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public HttpResult<Boolean> update(@RequestBody FrontUserVo frontUserVo) {
         ParamChecker.isNotNull(frontUserVo.getUserId(), "用户id不能为空");
         boolean result = 0 < frontUserService.updateSelectiveById(UcenterFrontUser.builder().userId(frontUserVo.getUserId()).mobile(frontUserVo.getMobile()).realName(frontUserVo.getRealName()).build());
@@ -93,6 +97,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
     }
 
     @RequestMapping("/add")
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public HttpResult<Boolean> add(@RequestBody FrontUserVo frontUserVo) {
         UcenterFrontUser user = new UcenterFrontUser();
         BeanUtils.copyProperties(frontUserVo, user);
@@ -101,6 +106,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
     }
 
     @RequestMapping("/find")
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public HttpResult<FrontUserVo> find(@RequestBody FrontUserVo frontUserVo) {
         UcenterFrontUser user = new UcenterFrontUser();
         BeanUtils.copyProperties(frontUserVo, user);

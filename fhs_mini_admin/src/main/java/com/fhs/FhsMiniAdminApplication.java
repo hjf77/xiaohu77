@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.alicp.jetcache","com.fhs"})
 @MapperScan(basePackages = {"com.fhs.*.dao", "com.fhs.*.*.dao"})
 @EnableConfigurationProperties
 @EnableRedisHttpSession

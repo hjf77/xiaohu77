@@ -10,6 +10,8 @@ import com.fhs.pubservice.bean.ServiceOrderLog;
 import com.fhs.redis.service.RedisCacheService;
 import com.fhs.pubservice.service.ServiceOrderLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +39,9 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
     @Autowired
     RedisCacheService<String> redisCacheService;
 
-    @RequestMapping("/getOrderNumber")
     @Override
+    @RequestMapping("/getOrderNumber")
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public HttpResult<String> getOrderNumber(String type) {
         try
         {
