@@ -95,7 +95,7 @@ public class PageXFrontPubController extends PageXBaseController implements Init
         //如果返回值是单个对象
         if (functionResult.getType() == FunctionHandle.TYPE_MANY) {
             //不指定返回也不指定include 就直接把查询到的结果返回回去
-            if (api.isHasEXF() || api.isHasINF()) {
+            if (!api.isHasEXF() && !api.isHasINF()) {
                 return handelHttpReulst(api,functionResult.getResultArray(),request,response);
             }
             JSONArray resultArray = new JSONArray();
