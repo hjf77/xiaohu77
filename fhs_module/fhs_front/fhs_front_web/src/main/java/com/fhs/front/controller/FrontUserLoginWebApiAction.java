@@ -2,13 +2,18 @@ package com.fhs.front.controller;
 
 import com.fhs.common.utils.*;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.result.HttpResult;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.front.service.LoginService;
+import com.fhs.front.service.UcenterFrontUserService;
+import com.fhs.front.vo.UcenterFrontUserVO;
 import com.fhs.logger.Logger;
+import com.github.liangbaika.validate.annations.AbcValidate;
+import com.github.liangbaika.validate.annations.ValidateParam;
+import com.github.liangbaika.validate.enums.Check;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +39,38 @@ public class FrontUserLoginWebApiAction {
      */
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private UcenterFrontUserService frontUserService;
+
+
+
+
+    /**
+     * 获取用户信息
+     * @param accessToken  根据授权token获取用户信息
+     */
+    @GetMapping(value = "/getUserInfo")
+    @ApiOperation(value = "获取用户信息")
+    public HttpResult<UcenterFrontUserVO> getUserInfo(String accessToken){
+        String userId = loginService.getUserIdByAccessToken(accessToken);
+        ParamChecker.isNotNull(userId,"accessToken无效或者超时");
+        UcenterFrontUserVO user = frontUserService.selectById(userId);
+        user.setPasswd(null);
+        return HttpResult.success(user);
+    }
+
+    @PostMapping(value = "/loginByUsernameAndPassword")
+    @ValidateParam(value = Check.NotEmpty, argName = "userVO.userName")
+    @ValidateParam(value = Check.NotEmpty, argName = "userVO.passwd")
+    @ApiOperation(value = "使用用户名密码登录")
+    public HttpResult<String> loginByUsernameAndPassword(@RequestBody  UcenterFrontUserVO userVO){
+        userVO.setPasswd(Md5Util.MD5(userVO.getPasswd()));
+        userVO = frontUserService.findBean(userVO);
+        ParamChecker.isNotNull(userVO,"用户名密码无效");
+        return HttpResult.success(loginService.login(userVO.getUserId()));
+    }
+
 
 
     /**

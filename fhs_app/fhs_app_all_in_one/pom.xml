@@ -70,7 +70,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_front_web</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_front_wx</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.smattme</groupId>
             <artifactId>mysql-backup4j</artifactId>

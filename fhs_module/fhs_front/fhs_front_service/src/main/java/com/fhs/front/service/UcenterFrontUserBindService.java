@@ -21,6 +21,10 @@ public interface UcenterFrontUserBindService extends BaseService<UcenterFrontUse
      * 支付宝
      */
     int OPENID_TYPE_ALIPAY = 1;
+    /**
+     * 微信小程序
+     */
+    int OPENID_TYPE_WX_MINI_PARAM = 2;
 
 
 }

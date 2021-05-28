@@ -49,6 +49,11 @@ fhs:
   front:
     snsapi: snsapi_userinfo
   wxmp:
+    enable: false
+    appid: wx32fbbf2d4bdcac42
+    secret: 1a2b1f3626b8fd6dafa9a1b1c6e28f9d
+  wxmini:
+    enable: true
     appid: wx32fbbf2d4bdcac42
     secret: 1a2b1f3626b8fd6dafa9a1b1c6e28f9d
 spring:

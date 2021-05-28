@@ -4,6 +4,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.CookieUtil;
+import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.result.HttpResult;
 import com.fhs.front.api.rpc.FeignFrontUserApiService;
@@ -35,15 +36,7 @@ public class FrontUserFilter implements Filter {
     private static final String JSESSIONID_CODE = "JSESSIONID";
     private static Map jsessionidMapCache = new HashMap();
 
-    /**
-     * 存储用户信息的session
-     */
-    public static Map<String, HttpSession> sessionMap = new ConcurrentHashMap<String, HttpSession>();
 
-    /**
-     * key session value accessToken
-     */
-    public static Map<HttpSession, String> sessionAccessTokenMap = new ConcurrentHashMap<HttpSession, String>();
 
     /* 前台用户service */
     private FeignFrontUserApiService frontUserService;
@@ -62,12 +55,22 @@ public class FrontUserFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         String uri = request.getRequestURI();
+
         //如果url 是beetl的，并且不包含h5和pc直接放行
         if (uri.contains("/b/") && !uri.contains("/b/page-h5") && !uri.contains("/b/page-pc")) {
             chain.doFilter(req, res);
             return;
         }
-        if (!CheckUtils.isNullOrEmpty(request.getParameter("accessToken"))) {
+        String token = request.getHeader("token");
+        //有token代表是ajax请求，前后端分离的请求
+        if(CheckUtils.isNotEmpty(token)){
+            //使用token登录
+            if(!loginByToken( request,  response, token)){
+                return;
+            }
+            chain.doFilter(req, res);
+            return;
+        }else if (CheckUtils.isNotEmpty(request.getParameter("accessToken"))) {
             // 如果验证通过则判断用户是否是vip如果不是vip但是又要vip 那么会 302 如果accessToken验证不通过 会302
             if (login(request, response)) {
                 chain.doFilter(req, res);
@@ -89,6 +92,25 @@ public class FrontUserFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    private boolean loginByToken(HttpServletRequest request, HttpServletResponse response,String token){
+
+        HttpResult<UcenterFrontUserVO> resultFrontUser = null;
+        try{
+            resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(token).build());
+        }catch (Exception e){
+
+        }
+        if (resultFrontUser.getCode() != Constant.SUCCESS_CODE) {
+            LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
+            LOGGER.error("获取前端用户信息错误,返回结果为{}", resultFrontUser);
+            JsonUtils.outJson(response,HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR,"token失效").asJson());
+            return false;
+        }
+        HttpSession session = request.getSession();
+        session.setAttribute("frontUser", resultFrontUser.getData());
+        return true;
     }
 
 
@@ -116,8 +138,6 @@ public class FrontUserFilter implements Filter {
             CookieUtil.writeCookie("isUser", "true", response);
             session.setAttribute("frontUser", frontUser);
             session.setAttribute("accessToken", accessToken);
-            sessionMap.put(accessToken, session);
-            sessionAccessTokenMap.put(session, accessToken);
             return true;
         }
     }

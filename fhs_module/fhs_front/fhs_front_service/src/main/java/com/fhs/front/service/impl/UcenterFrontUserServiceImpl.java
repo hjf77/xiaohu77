@@ -2,6 +2,7 @@ package com.fhs.front.service.impl;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.core.cache.annotation.Cacheable;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -32,6 +33,7 @@ import java.util.Map;
  * @since 2019-03-11 14:14:58
  */
 @Primary
+@Cacheable("frontUser")
 @Service("UcenterFrontUserService")
 @AutoTrans(namespace = "frontUser",fields = {"userName","nickName"})
 @DataSource("base_business")

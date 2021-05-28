@@ -65,6 +65,7 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use(
     res => {
         const code = res.data[setting.codeField];
+        debugger
         // 获取错误信息
         const msg = errorCode[code] || res.data[setting.msgField] || errorCode["default"];
         //清除缓存跳转到登录页

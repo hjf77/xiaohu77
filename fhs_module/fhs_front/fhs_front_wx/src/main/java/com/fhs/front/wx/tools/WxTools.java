@@ -10,6 +10,7 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  * @since 2019-05-18 11:52:49
  */
 @Component
+@ConditionalOnProperty(name = "fhs.wxmp.enable", havingValue = "true")
 public class WxTools {
 
     /**

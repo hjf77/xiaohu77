@@ -20,6 +20,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import java.io.IOException;
  * @since 2019-05-18 11:53:15
  */
 @Component
+@ConditionalOnProperty(name = "fhs.wxmp.enable", havingValue = "true")
 public class WxMpOauth implements FhsOauth302, InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(WxMpOauth.class);
