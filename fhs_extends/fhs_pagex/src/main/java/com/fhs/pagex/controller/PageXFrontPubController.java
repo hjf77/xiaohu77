@@ -194,7 +194,7 @@ public class PageXFrontPubController extends PageXBaseController implements Init
      * @return
      */
     private FunctionResult handelList(String namespace, Map<String, Object> paramMap) {
-        if (paramMap.containsKey(Constant.PAGE)) {
+        if (!paramMap.containsKey(Constant.PAGE)) {
             paramMap.put(Constant.START, Constant.PAGE_ALL);
         } else {
             int page = ConverterUtils.toInt(paramMap.get(Constant.PAGE));
