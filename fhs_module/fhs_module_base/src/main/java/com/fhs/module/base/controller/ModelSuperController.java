@@ -65,7 +65,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request response
      * @throws Exception
      */
-    @RequestMapping("findPage")
+    @GetMapping("findPage")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
     public Pager<V> findPage(V e, HttpServletRequest request, HttpServletResponse response)
@@ -91,7 +91,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request response
      * @throws Exception
      */
-    @RequestMapping("findList")
+    @GetMapping("findList")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
     public List<V> findList(V e, HttpServletRequest request, HttpServletResponse response)
@@ -113,7 +113,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     @ResponseBody
     @LogMethod
-    @RequestMapping("findPageByM")
+    @GetMapping("findPageByM")
     public Pager<V> findPageByM(HttpServletRequest request, HttpServletResponse response) {
         if (isPermitted(request, "see")) {
             Map<String, Object> map = getPageTurnNum();
@@ -130,7 +130,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     /**
      * 公共导出excel 03  by jackwang
      */
-    @RequestMapping("pubExportExcel")
+    @GetMapping("pubExportExcel")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
     public void exportExcel() {
         /*
@@ -239,7 +239,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request   request
      * @return 成功
      */
-    @RequestMapping("setExportField")
+    @PostMapping("setExportField")
     @ResponseBody
     public HttpResult setExportField(@RequestBody String fieldSett, HttpServletRequest request) {
         ExcelExportTools.setExportField(fieldSett, request);
@@ -254,7 +254,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @return
      * @throws Exception
      */
-    @RequestMapping("info/{id}")
+    @GetMapping("info/{id}")
     @ResponseBody
     @LogMethod
     @ApiImplicitParams({
@@ -277,7 +277,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request
      * @throws Exception
      */
-    @RequestMapping("infoByM")
+    @GetMapping("infoByM")
     @ResponseBody
     @LogMethod
     public V infoByM(HttpServletRequest request)
@@ -303,7 +303,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @NotRepeat
     @ResponseBody
-    @RequestMapping("add")
+    @PostMapping("add")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
     public HttpResult<Boolean> add(@ModelAttribute@Validated(Add.class) V e,  HttpServletRequest request,
                                    HttpServletResponse response) {
@@ -333,7 +333,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request
      * @return
      */
-    @RequestMapping("del")
+    @PostMapping("del")
     @ResponseBody
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
@@ -352,7 +352,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      *
      * @param e     bean
      */
-    @RequestMapping("update")
+    @PostMapping("update")
     @ResponseBody
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e,  HttpServletRequest request,
