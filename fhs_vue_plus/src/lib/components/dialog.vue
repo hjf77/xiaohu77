@@ -1,11 +1,11 @@
 <template>
   <el-dialog  :visible.sync="dialogVisible" :title="config.title">
+<!--    {{config.body}}-->
       <pagex-render :schema="config.body" @success="successHandel"/>
   </el-dialog>
 </template>
 
 <script>
-
 export default {
     props:{
         value:{

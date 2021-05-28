@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="form" size="small" label-position="left" :label-width="'80px'" :model="model" driver="vee" :rules="rules">
+  <el-form ref="form" size="small" label-position="left" :label-width="'80px'" :model="model" driver="vee"
+           :rules="rules">
     <el-form-item v-if="proxyIf(item.visibleOn,true)"
                   v-for="item in controls"
                   :label="item.label"
@@ -61,19 +62,40 @@
         :name="item.name"
       ></slot>
 
+      <upload-card
+        v-bind="item"
+        v-model="model[item.name]"
+        v-if="item.type === 'uploadCard'"
+      ></upload-card>
+
+
+
     </el-form-item>
     <el-form-item>
       <el-button size="small" @click="submit">确定</el-button>
     </el-form-item>
   </el-form>
+
+  <!--
+      支持下载模板   downloadUrl:
+      支持上传文件--异步
+      asyncUploadUrl --
+      支持同步传 --
+      图片上传 -- 单图，多图(删除)  -- 点击每个图片要查看  配置数量，单图最大size
+      多文件上传，要能删除和下载
+  -->
 </template>
 
 <script>
+import uploadCard from "@/lib/components/uploadCard";
 export default {
-  inject: ['runPageEvent','wlTest'],
+  components:{
+    uploadCard
+  },
+  inject: ['runPageEvent', 'wlTest'],
   props: {
     // 新增 接口
-    addApi:{
+    addApi: {
       type: String,
       default: "",
     },
@@ -87,15 +109,20 @@ export default {
       type: String,
       default: "",
     },
+    //区别 详情 编辑 和 新增
     isEdit: {
       type: Boolean,
       default: false,
     },
-
+    //查询 详情 id
+    init: {
+      type: Object,
+    },
     // 接口附带参数
     param: {
       type: Object,
-      default:() => {},
+      default: () => {
+      },
     },
     uid: {
       type: [String, Number],
@@ -105,7 +132,6 @@ export default {
       type: Array,
       default: () => [],
     },
-
     success: {
       type: Function,
       default: () => {
@@ -122,6 +148,8 @@ export default {
     return {
       model: {},
       rules: {},
+      //编辑 表单的详情数据
+      initData: {}
     };
   },
   created() {
@@ -142,7 +170,7 @@ export default {
         _that.model[_item.name] ? _that.model[_item.name] : [];
       }
     });
-    console.log(this.rules);
+    this.edit()//获取到 详情信息
   },
   methods: {
     proxyIf(_ifFun, _default) {
@@ -153,19 +181,17 @@ export default {
       this.$refs.form.validate((valid, errors) => {
         if (valid) {
           if (!this.isEdit) {
-            this.$pagexRequest({url:this.addApi,data:this.model,method:'post'}).then((res)=>{
+            this.$pagexRequest({url: this.addApi, data: this.model, method: 'post'}).then((res) => {
               console.log(res);
-              this.wlTest(root=>{
+              this.wlTest(root => {
                 root.open = false
                 root.getList()
               })
-            }).catch(()=>{
-
+            }).catch(() => {
             })
+          } else {
           }
-
         } else {
-
           return false;
         }
       });
@@ -181,6 +207,34 @@ export default {
       //   console.log(this)
       //   this.$emit('success')
       // }
+    },
+    //获取到 详情信息
+    edit() {
+      /*this.initData = {
+        'createTime': null,
+        'createUser': null,
+        'groupId': 1,
+        'groupIdE': null,
+        'groupName': "超级错误类型",
+        'pkey': 1,
+        'transMap': {},
+        'updateTime': null,
+        'updateUser': null,
+        'wordbookGroupCode': "super_error_type"
+      }*/
+      /*console.log(this.initData);
+      console.log(this.model);*/
+      if (this.isEdit) {
+        this.$pagexRequest({method: 'get', url: this.initApi + this.init.groupId,}).then((res) => {
+          this.initData = res.data;
+          this.controls.forEach((i) => {
+            this.model[i.name] = this.initData[i.name]
+          })
+          this.$forceUpdate();
+        }).catch(() => {
+          return false;
+        });
+      }
     },
   },
 };

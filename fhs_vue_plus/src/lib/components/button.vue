@@ -14,6 +14,7 @@
 
 <script>
 export default {
+
   name: "butt",
   inject:['runPageEvent'],
   props: {

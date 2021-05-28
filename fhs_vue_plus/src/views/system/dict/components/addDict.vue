@@ -11,19 +11,26 @@
     <pagex-form
       addApi="/ms/wordbook/addWordbookGroup"
       updateApi="/ms/wordbook/updateWordbookGroup"
-      initApi=""
-      :isEdit="false"
+      initApi="/ms/wordbook/getWordbookGroupBean?groupId="
+      :init="init"
       :controls="[
               {
                 type: 'text',
                 name: 'groupName',
                 label: '分组名称',
-                rule:'required'
+                rule:'required',
+                placeholder:'请输入分组名称'
               },{
                 type: 'text',
                 name: 'wordbookGroupCode',
                 label: '分组编码',
-                rule:'required'
+                rule:'required',
+                placeholder: '请输入分组编码'
+              },{
+                type: 'uploadCard',
+                name: 'uploadCard',
+                label: '上传文件',
+                rule:'required',
               }
             ]"
     >
@@ -44,7 +51,8 @@ export default {
     }
   },
   props: {
-    open: Boolean
+    open: Boolean,
+    init:Object
   },
   mounted() {
   },
@@ -55,5 +63,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+::v-deep .el-form--label-left .el-form-item__label{
+  text-align: right;
+}
 </style>

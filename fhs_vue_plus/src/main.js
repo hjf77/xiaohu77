@@ -21,11 +21,19 @@ import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 
+import renderFun from "@/lib/components/render";
+Vue.component(renderFun)
 Vue.config.productionTip = false
 
 
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
 
-
+Vue.use(Viewer, {
+  defaultOptions: {
+    zIndex: 9999,
+  }
+})
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
