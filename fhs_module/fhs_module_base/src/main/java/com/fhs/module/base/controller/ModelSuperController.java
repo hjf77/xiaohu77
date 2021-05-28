@@ -400,7 +400,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param response
      * @throws Exception
      */
-    @RequestMapping("findListData")
+    @GetMapping("findListData")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
     public List<V> findListData(V e, HttpServletRequest request, HttpServletResponse response) throws Exception {
