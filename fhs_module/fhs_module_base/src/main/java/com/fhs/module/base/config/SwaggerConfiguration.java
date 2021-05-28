@@ -1,14 +1,28 @@
 package com.fhs.module.base.config;
 
+import com.fhs.module.base.swagger.anno.ApiGroup;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.service.ApiInfo;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.service.*;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * swagger配置
@@ -48,6 +62,11 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
      */
     protected String description;
 
+    /**
+     * 默认分组
+     */
+    private static final String GROUP_DEFAULT = "group_default";
+
     public SwaggerConfiguration() {
     }
 
@@ -70,6 +89,41 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
      */
     protected ApiInfo apiInfo() {
         return (new ApiInfoBuilder()).title(this.serviceName + " Restful APIs").description(this.description).contact(this.creatName).version("1.0").build();
+    }
+
+
+
+    @Bean
+    public Docket defaultApi() {
+        return (new Docket(DocumentationType.SWAGGER_2)).groupName("默认接口").apiInfo(this.apiInfo()).useDefaultResponseMessages(false).forCodeGeneration(false).select().apis(this.getPredicateWithGroup("group_default")).paths(PathSelectors.any()).build().securityContexts(Lists.newArrayList(new SecurityContext[]{this.securityContext()})).securitySchemes(Lists.newArrayList(new SecurityScheme[]{this.apiKey()}));
+    }
+
+
+    private Predicate<RequestHandler> getPredicateWithGroup(final String group) {
+        return new Predicate<RequestHandler>() {
+            public boolean apply(RequestHandler input) {
+                Optional<ApiGroup> ApiGroup = input.findControllerAnnotation(ApiGroup.class);
+                if(!ApiGroup.isPresent() && GROUP_DEFAULT.equals(group)){
+                    return true;
+                }
+                return ApiGroup.isPresent() && Arrays.asList(((ApiGroup)ApiGroup.get()).group()).contains(group);
+            }
+        };
+    }
+
+
+    private ApiKey apiKey() {
+        return new ApiKey("BearerToken", "token", "header");
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(this.defaultAuth()).forPaths(PathSelectors.regex("/.*")).build();
+    }
+
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[]{authorizationScope};
+        return Lists.newArrayList(new SecurityReference[]{new SecurityReference("BearerToken", authorizationScopes)});
     }
 
     @Override

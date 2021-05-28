@@ -6,6 +6,7 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.CookieUtil;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.front.api.rpc.FeignFrontUserApiService;
 import com.fhs.front.form.GetSingleFrontUserForm;
@@ -99,14 +100,10 @@ public class FrontUserFilter implements Filter {
         HttpResult<UcenterFrontUserVO> resultFrontUser = null;
         try{
             resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(token).build());
-        }catch (Exception e){
-
-        }
-        if (resultFrontUser.getCode() != Constant.SUCCESS_CODE) {
-            LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
-            LOGGER.error("获取前端用户信息错误,返回结果为{}", resultFrontUser);
-            JsonUtils.outJson(response,HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR,"token失效").asJson());
-            return false;
+        }catch (ParamException e){
+                LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
+                JsonUtils.outJson(response,HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR,"token失效").asJson());
+                return false;
         }
         HttpSession session = request.getSession();
         session.setAttribute("frontUser", resultFrontUser.getData());
