@@ -61,7 +61,7 @@ public class MessageConverterConfig extends  WebMvcConfigurerAdapter
         //WriteMapNullValue：是否输出值为null的字段,默认为false
         fastJsonConfig.setSerializerFeatures(
                 SerializerFeature.DisableCircularReferenceDetect,
-                SerializerFeature.WriteMapNullValue
+                SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNonStringKeyAsString
         );
         fastConverter.setFastJsonConfig(fastJsonConfig);
         return fastJsonHttpMessageConverter;
