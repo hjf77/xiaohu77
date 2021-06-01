@@ -131,12 +131,7 @@ public class MiniParamController {
      * </pre>
      */
     @GetMapping("/phone")
-    public HttpResult<WxMaPhoneNumberInfo> phone(String sessionKey, String signature,
-                        String rawData, String encryptedData, String iv) {
-        // 用户信息校验
-        if (!wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
-            HttpResult.error("用户信息校验失败");
-        }
+    public HttpResult<WxMaPhoneNumberInfo> phone(String sessionKey, String encryptedData, String iv) {
         // 解密
         WxMaPhoneNumberInfo phoneNoInfo = wxService.getUserService().getPhoneNoInfo(sessionKey, encryptedData, iv);
         return HttpResult.success(phoneNoInfo);
