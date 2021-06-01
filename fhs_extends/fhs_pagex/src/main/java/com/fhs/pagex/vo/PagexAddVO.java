@@ -4,6 +4,7 @@ import com.fhs.common.utils.ConverterUtils;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.script.ScriptException;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @UpdateDate: 2018/11/30 0030 20:33
  * @Version: 1.0
  */
+@Slf4j
 @Data
 public class PagexAddVO extends PagexBaseVO {
 
@@ -43,11 +45,17 @@ public class PagexAddVO extends PagexBaseVO {
      * @throws ScriptException 脚本本身有问题
      */
     public PagexAddVO(String js) throws NoSuchMethodException, ScriptException {
-        super.initScriptEngine(js);
-        addPageObject = (ScriptObjectMirror) scriptEngine.get("add");
-        this.initFormFieldSett();
-        this.initOtherFunction();
-        this.initModelConfig();
+        try{
+            super.initScriptEngine(js);
+            addPageObject = (ScriptObjectMirror) scriptEngine.get("add");
+            this.initFormFieldSett();
+            this.initOtherFunction();
+            this.initModelConfig();
+        }catch (Exception e){
+            log.error("pagex js 内容错误:" + js,e);
+            throw e;
+        }
+
     }
 
     /**

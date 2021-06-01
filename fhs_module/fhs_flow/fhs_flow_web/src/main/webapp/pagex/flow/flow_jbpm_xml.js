@@ -26,6 +26,7 @@ var listPage={
             {title:'编辑流程实例',permissionsCode:'flow_jbpm_xml:add',isRow:true,id:'editXml'},
             {title:'发布流程',fun:'publishFlow',permissionsCode:'flow_jbpm_xml:add',isRow:true},
             {title:'自定义按钮',fun:'buttons_manager',permissionsCode:'flow_jbpm_xml:add',isRow:true},
+            {title:'自定义表单',fun:'form_manager',permissionsCode:'flow_jbpm_xml:add',isRow:true},
         ];
     },
     disableButtons:function(){
@@ -49,6 +50,14 @@ var listPage={
                 }
                 top.postMessage(_openMarketMsg, '*');
             },
+            form_manager:function(row){
+                var _openMarketMsg = {
+                    url: '/ms/pagex/flow_jbmp_auth_form_list.jsp?xml_id=' + row.id,
+                    title: row.name + '的自定义按钮'
+                }
+                top.postMessage(_openMarketMsg, '*');
+            },
+
             publishFlow:function (row) {
                 if(row.status==1){
                     EalertE("流程已发布过了");

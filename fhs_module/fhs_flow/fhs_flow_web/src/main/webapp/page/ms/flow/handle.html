@@ -45,15 +45,17 @@
     <div class="infoGroup">
         <legend>审批操作</legend>
     </div>
-    <div class="fitem">
-        <div class="bigLabelDiv"><label>备注:</label></div>
-        <div class="bigContent"><textarea datatype="empty|*" nullmsg="备注不能为空" errormsg="备注输入了错误的格式"
-                                          class="form_textarea "
-                                          id="remark" name="remark" placeholder="请填写备注" prompt="请选择备注"></textarea></div>
-    </div>
-    <div class="fitem">
-        <div class="bigLabelDiv"><label>抄送人:</label></div>
-        <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
+    <div id="formContent" style="display: none">
+        <div class="fitem">
+            <div class="bigLabelDiv"><label>备注:</label></div>
+            <div class="bigContent"><textarea datatype="empty|*" nullmsg="备注不能为空" errormsg="备注输入了错误的格式"
+                                              class="form_textarea "
+                                              id="remark" name="remark" placeholder="请填写备注" prompt="请选择备注"></textarea></div>
+        </div>
+        <div class="fitem">
+            <div class="bigLabelDiv"><label>抄送人:</label></div>
+            <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
+        </div>
     </div>
     <div class="handle-button">
         <!-- 待认领状态下只显示认领按钮后才会有其他操作 -->
@@ -64,7 +66,7 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="delegate" onclick="addDelegate()">委派</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask_node"
-           onclick="backTask_node()">驳回到指定操作OK</a>
+           onclick="backTask_node()">驳回到指定操作</a>
         <!-- 已办状态但还未到下一步操作 -->
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="revoke" onclick="revoke()">撤销申请</a>
             <div style="display: none">
@@ -87,7 +89,7 @@
 if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false') == 'true'){
 %>
 
-<center><a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回OK</a></center>
+<center><a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回</a></center>
 <%}%>
 </body>
 <script>
@@ -95,6 +97,7 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
     var taskId = "${parameter.taskId}";
     var instanceId = "${parameter.instanceId}"
     var formUrl = null;
+    var hasCusForm = false;
     $(function () {
         //我是申请人，显示撤销申请按钮
         $.ajax({
@@ -114,9 +117,37 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
 
         loadInstance();
 
+
+
         <%
         if(nvl(parameter.isView,'false')=='false'){
         %>
+
+            //
+            $.ajax({
+                async: false, //同步
+                type: 'get',
+                url: '${basePath}/ms/flowJbmpAuthForm/findByTaskId?taskId=' + taskId,
+                dataType:'json',
+                success: function (res) {
+                    if (res.data) {
+                        hasCusForm = true;
+                        $.ajax({
+                            async: false, //同步
+                            type: 'get',
+                            url: res.data.formUrl + '?instanceId=' + instanceId + '&taskId=' + taskId,
+                            success: function (res) {
+                                $('#formContent').html(res);
+                                $.parser.parse($('#formContent'));
+                                $('#formContent').show();
+                            }
+                         })
+                    }else{
+                        $('#formContent').show();
+                    }
+                }
+            })
+
             //回退节点为0
             $.ajax({
                 async: false, //同步
@@ -311,6 +342,12 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
 
     //同意
     function complateTask(_extParam) {
+        //如果存在自定义表单
+        if(hasCusForm){
+            cusComplateTask();
+            return;
+        }
+
         var _param = {taskId: taskId, remark: $("#remark").val()};
         if(_extParam){
             for (var key in _extParam) {
