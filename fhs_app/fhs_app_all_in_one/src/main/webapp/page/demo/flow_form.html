@@ -11,7 +11,8 @@
         $('#addUpdateFormTask').form('submit', {
             url: '/flow_demo/submit',
             success: function (d) {
-
+                closeDialog();
+                reload();
             }
         });
     }
