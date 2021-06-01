@@ -30,7 +30,7 @@ public class ActivitiConfiguration {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Value("${fhs.activiti.createtb}:false")
+    @Value("${fhs.activiti.createtb:false}")
     private String autoActivitiCreatTbl;
 
     @Primary

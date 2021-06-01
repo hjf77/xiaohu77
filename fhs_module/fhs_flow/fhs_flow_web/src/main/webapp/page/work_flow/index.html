@@ -276,8 +276,9 @@
     //从后台加载之前的xml
     function initOldXml() {
         if (getQueryVariable('xmlId')) {
-            Http.post("/ms/flow_jbpm_xml/info/" + getQueryVariable('xmlId'), {}, function (res) {
+            Http.get("/ms/flow_jbpm_xml/info/" + getQueryVariable('xmlId'),  function (res) {
                 canvas.clear();
+                console.log(res.xml);
                 var parser = new ESTDesigner.tool.Parser(canvas, res.xml);
                 parser.parse();
             });
