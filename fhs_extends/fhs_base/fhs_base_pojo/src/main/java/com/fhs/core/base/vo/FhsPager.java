@@ -2,7 +2,6 @@ package com.fhs.core.base.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fhs.core.base.pojo.pager.Pager;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
