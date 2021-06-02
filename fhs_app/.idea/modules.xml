@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/fhs_app.iml" filepath="$PROJECT_DIR$/fhs_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_app_all_in_one/fhs_app_all_in_one.iml" filepath="$PROJECT_DIR$/fhs_app_all_in_one/fhs_app_all_in_one.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_app_basics/fhs_app_basics.iml" filepath="$PROJECT_DIR$/fhs_app_basics/fhs_app_basics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_app_front_login_demo/fhs_app_front_login_demo.iml" filepath="$PROJECT_DIR$/fhs_app_front_login_demo/fhs_app_front_login_demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_app_pub/fhs_app_pub.iml" filepath="$PROJECT_DIR$/fhs_app_pub/fhs_app_pub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fhs_extends/fhs_base/fhs_base.iml" filepath="$PROJECT_DIR$/../fhs_extends/fhs_base/fhs_base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fhs_extends/fhs_base/fhs_base_other/fhs_base_other.iml" filepath="$PROJECT_DIR$/../fhs_extends/fhs_base/fhs_base_other/fhs_base_other.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fhs_extends/fhs_base/fhs_base_pojo/fhs_base_pojo.iml" filepath="$PROJECT_DIR$/../fhs_extends/fhs_base/fhs_base_pojo/fhs_base_pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../fhs_module/fhs_module_base/fhs_module_base.iml" filepath="$PROJECT_DIR$/../fhs_module/fhs_module_base/fhs_module_base.iml" />
+    </modules>
+  </component>
+</project>

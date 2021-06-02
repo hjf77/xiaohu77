@@ -2,6 +2,7 @@ package com.fhs.core.base.controller;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.logger.Logger;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -86,6 +87,19 @@ public abstract class BaseController {
         } else {
             return new PageSizeInfo((page - 1) * rows, rows);
         }
+    }
+
+    /**
+     * 获取fhspager对象
+     * @param <T>
+     * @return
+     */
+    protected <T> FhsPager<T> getFhsPager(){
+        HttpServletRequest request = getRequest();
+        FhsPager<T> result = new FhsPager<>();
+        result.setCurrent(ConverterUtils.toLong(request.getParameter(Constant.PAGE)));
+        result.setSize( ConverterUtils.toLong(request.getParameter(Constant.ROWS)));
+        return result;
     }
 
     /**
@@ -326,6 +340,8 @@ public abstract class BaseController {
         return resultMap;
     }
 
+
+
     /**
      * 分页对象
      */
@@ -354,6 +370,7 @@ public abstract class BaseController {
         public void setPageSize(int pageSize) {
             this.pageSize = pageSize;
         }
+
 
     }
 

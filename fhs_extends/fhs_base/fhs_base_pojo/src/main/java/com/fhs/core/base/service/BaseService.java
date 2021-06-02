@@ -408,7 +408,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param queryWrapper 过滤条件
      * @return 分页数据
      */
-    IPage<D> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper);
+    IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper);
 
     /**
      * 查询分页-返回map

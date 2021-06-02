@@ -17,6 +17,7 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.cache.annotation.Cacheable;
 import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.cache.service.RedisCacheService;
@@ -96,6 +97,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Autowired
     private SqlSessionTemplate sqlsession;
+
+
 
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
@@ -333,7 +336,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
      * @return 主键值
      */
     private String getPkeyVal(D entity) {
-        return ConverterUtils.toString(ReflectUtils.getValue(entity, JpaTools.persistentMetaMap.get(entity.getClass().getName()).getPrimaryColumnMeta().getProperty()));
+        return ConverterUtils.toString(entity.getPkey());
     }
 
 
@@ -582,8 +585,12 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
-    public IPage<D> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
-        return baseMapper.selectPage(page, queryWrapper);
+    public IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
+        page = baseMapper.selectPage(page, queryWrapper);
+        IPage<V> result = new FhsPager<V>();
+        result.setTotal(page.getTotal());
+        result.setRecords(this.dos2vos(page.getRecords()));
+        return result;
     }
 
     @Override

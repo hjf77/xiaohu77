@@ -3,6 +3,7 @@ package com.fhs.core.base.dox;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
@@ -83,6 +84,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
     @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date updateTime;
 
+    @TableLogic
     @TableField("is_delete")
     @JSONField(serialize = false)
     @ApiModelProperty("是否删除")

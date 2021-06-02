@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="fhs_app_front_login_demo" />
+        <module name="fhs_base_pojo" />
+        <module name="fhs_app_pub" />
+        <module name="fhs_app_basics" />
+        <module name="fhs_app_all_in_one" />
+        <module name="fhs_module_base" />
+        <module name="fhs_base_other" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="fhs_app" target="8" />
+      <module name="fhs_app_all_in_one" target="8" />
+      <module name="fhs_app_basics" target="8" />
+      <module name="fhs_app_front_login_demo" target="8" />
+      <module name="fhs_app_pub" target="8" />
+      <module name="fhs_base" target="8" />
+      <module name="fhs_base_other" target="8" />
+      <module name="fhs_base_pojo" target="8" />
+      <module name="fhs_module_base" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="fhs_app_all_in_one" options="-parameters" />
+      <module name="fhs_app_basics" options="-parameters" />
+      <module name="fhs_app_front_login_demo" options="-parameters" />
+      <module name="fhs_app_pub" options="-parameters" />
+      <module name="fhs_base_other" options="-parameters" />
+      <module name="fhs_base_pojo" options="-parameters" />
+      <module name="fhs_module_base" options="-parameters" />
+    </option>
+  </component>
+</project>

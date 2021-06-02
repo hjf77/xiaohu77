@@ -1,5 +1,6 @@
 package com.fhs.module.base.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.constant.LoggerConstant;
@@ -13,6 +14,8 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
@@ -25,6 +28,7 @@ import com.fhs.module.base.common.ExcelExportTools;
 import com.mybatis.jpa.context.DataPermissonContext;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -68,6 +72,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("findPage")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
+    @ApiOperation("后台-普通分页查询")
     public Pager<V> findPage(V e, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -84,6 +89,25 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         }
     }
 
+    /**
+     * 查询bean列表数据
+     * @param request
+     * @throws Exception
+     */
+    @PostMapping("findPagerAdvance")
+    @ResponseBody
+    @LogMethod(voParamIndex = 0)
+    @ApiOperation("后台-高级分页查询")
+    public IPage<V> findPagerAdvance(@RequestBody  QueryFilter<D> filter, HttpServletRequest request){
+        if (isPermitted(request, "see")) {
+            //这里的是1是DO的index
+            return baseService.selectPageMP(filter.getPagerInfo(),
+                    filter.asWrapper((Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1]));
+        } else {
+            throw new NotPremissionException();
+        }
+    }
+
 
     /**
      * 无分页查询bean列表数据
@@ -94,6 +118,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("findList")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
+    @ApiOperation("后台-不分页查询集合-一般用于下拉")
     public List<V> findList(V e, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -110,10 +135,10 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request
      * @param response
      */
-
     @ResponseBody
     @LogMethod
     @GetMapping("findPageByM")
+    @ApiOperation(hidden = true,value = "废弃的老方法-根据map当作过滤条件分页")
     public Pager<V> findPageByM(HttpServletRequest request, HttpServletResponse response) {
         if (isPermitted(request, "see")) {
             Map<String, Object> map = getPageTurnNum();
@@ -239,8 +264,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param request   request
      * @return 成功
      */
-    @PostMapping("setExportField")
     @ResponseBody
+    @PostMapping("setExportField")
+    @ApiOperation(value = "设置到处的excel字段")
     public HttpResult setExportField(@RequestBody String fieldSett, HttpServletRequest request) {
         ExcelExportTools.setExportField(fieldSett, request);
         return HttpResult.success();
@@ -254,9 +280,10 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @return
      * @throws Exception
      */
-    @GetMapping("info/{id}")
-    @ResponseBody
     @LogMethod
+    @ResponseBody
+    @GetMapping("info/{id}")
+    @ApiOperation("根据id获取单挑数据信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
     )
@@ -280,6 +307,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("infoByM")
     @ResponseBody
     @LogMethod
+    @ApiOperation(value = "根据map获取单挑数据信息-废弃",hidden = true)
     public V infoByM(HttpServletRequest request)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -304,6 +332,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @NotRepeat
     @ResponseBody
     @PostMapping("add")
+    @ApiOperation(value = "新增")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
     public HttpResult<Boolean> add(@ModelAttribute@Validated(Add.class) V e,  HttpServletRequest request,
                                    HttpServletResponse response) {
@@ -335,6 +364,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @PostMapping("del")
     @ResponseBody
+    @ApiOperation(value = "删除")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
     )
@@ -352,8 +382,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      *
      * @param e     bean
      */
-    @PostMapping("update")
     @ResponseBody
+    @PostMapping("update")
+    @ApiOperation(value = "修改")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e,  HttpServletRequest request,
                                       HttpServletResponse response) {
@@ -403,6 +434,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("findListData")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
+    @ApiOperation(value ="无分页查询bean列表数据",hidden = true)
     public List<V> findListData(V e, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (isPermitted(request, "see")) {
             List<V> list = baseService.findForList((D) e);
