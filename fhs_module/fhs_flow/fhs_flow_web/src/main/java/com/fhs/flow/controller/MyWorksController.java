@@ -105,6 +105,7 @@ public class MyWorksController extends BaseController {
     @LogMethod
     public Pager<FlowTaskVO> getNeedComplateTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> paramMap = super.getPageTurnNum();
+        paramMap.remove("createUser");
         paramMap.put("loginUserId", this.getSessionuser(request).getUserId());
         List<FlowTaskVO> dataList = workFlowTaskService.findNeedComplateTask(paramMap);
         int count = workFlowTaskService.findNeedComplateTaskCount(paramMap);

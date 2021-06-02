@@ -36,7 +36,7 @@
     </select>
 
     <sql id="AlreadyDoneWhere">
-        WHERE fi.create_user = #{userId}
+        WHERE fth.assignee_user_id = #{userId}
         <if test="processTitle != null and processTitle != ''">
             AND fi.title LIKE '%${processTitle}%'
         </if>

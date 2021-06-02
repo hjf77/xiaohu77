@@ -2,7 +2,6 @@ package com.fhs.module.base.config;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.config.EConfig;
 import com.fhs.logger.Logger;

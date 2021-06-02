@@ -587,8 +587,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
         page = baseMapper.selectPage(page, queryWrapper);
-        IPage<V> result = new FhsPager<V>();
+        FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
+        result.setPageSize(page.getSize());
+        result.setPage(page.getCurrent());
         result.setRecords(this.dos2vos(page.getRecords()));
         return result;
     }

@@ -58,7 +58,6 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         FlowInstanceVO flowInstance = new FlowInstanceVO();
         flowInstance.setActivitiProcessInstanceId(instanceId);
-        flowInstance.setCreateUser(this.getSessionuser().getUserId());
         FlowInstanceVO instance = flowInstanceService.selectBean(flowInstance);
         String userId = super.getSessionuser().getUserId();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();

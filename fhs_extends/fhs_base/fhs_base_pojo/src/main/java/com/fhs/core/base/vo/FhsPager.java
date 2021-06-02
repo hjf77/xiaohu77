@@ -2,6 +2,7 @@ package com.fhs.core.base.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,18 @@ public class FhsPager<T> implements IPage<T>  {
     private long total;
 
     @ApiModelProperty("每页多少条")
+    @JsonIgnore
     private long size;
 
-    @ApiModelProperty("一共多少页")
+    @ApiModelProperty("当前第几页")
+    @JsonIgnore
     private long current;
+
+    @ApiModelProperty("当前第几页")
+    private long page;
+
+    @ApiModelProperty("每页多少条")
+    private long pageSize;
 
 
     @Override
@@ -51,11 +60,19 @@ public class FhsPager<T> implements IPage<T>  {
 
     @Override
     public IPage<T> setTotal(long total) {
-        setTotal( total);
+        this.total = total;
         return this;
     }
 
+    public void setPage(long page) {
+        this.page = page;
+        this.current = page;
+    }
 
+    public void setPageSize(long pageSize) {
+        this.pageSize = pageSize;
+        this.size = pageSize;
+    }
 
     @Override
     @JSONField(serialize = false)
