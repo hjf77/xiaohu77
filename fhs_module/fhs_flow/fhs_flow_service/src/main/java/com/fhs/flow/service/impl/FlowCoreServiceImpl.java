@@ -99,6 +99,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         flowInstance.setTitle(variables.containsKey("title") ? ConverterUtils.toString(variables.get("title")) : flowJbpmXml.getName());
         flowInstance.setStatus(FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
         flowInstance.preInsert(userId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND,-3);
+        Date now = calendar.getTime();
         ProcessInstance processInstance = this.runtimeService.startProcessInstanceByKey(flowJbpmXml.getProcessKey() + version, businessKey, variables);
         checkProProcessInstanceIsEnd(processInstance.getId(), null);
         flowInstance.setActivitiProcessInstanceId(processInstance.getId());
@@ -107,20 +110,20 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         FlowTaskHistoryDO taskHistory = null;
         // 第一个节点是提交节点，自动通过
         for (Task task : tasks) {
-            task.setAssignee(userId);
             this.taskService.claim(task.getId(),userId);
-            taskService.complete(task.getId(), variables);
-            taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
+            task.setAssignee(userId);
+            taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(now).instanceId(flowInstance.getActivitiProcessInstanceId())
                     .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowConstant.RESULT_SUBMIT).build();
             HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery().taskId(task.getId()).singleResult();
             taskHistory.setOrderNum(1);
             taskHistory.setCode("001");
-            taskHistory.setCreateTime(currTask.getStartTime());
             taskHistory.setDefinitionKey(task.getTaskDefinitionKey());
             taskHistory.preInsert(userId);
+            taskHistory.setCreateTime(now);
             taskHistory.setAssigneeUserId(userId);
             taskHistory.setTaskId(task.getId());
             taskHistoryService.insertSelective(taskHistory);
+            taskService.complete(task.getId(), variables);
             checkProProcessInstanceIsEnd(task.getProcessInstanceId(), null);
             flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(flowInstance.getId()).firstDefinitionKey(task.getTaskDefinitionKey()).build());
         }
