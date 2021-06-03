@@ -25,6 +25,7 @@ layout("/pagex/list_template.html",{}){}
                 url:'${basePath}/ms/pagex/${namespace}_add_update.jsp?isView=true&id=${parameter.id}',
                 success:function(resp){
                     $('#formDetail').html(resp);
+                    $.parser.parse('#formDetail');
                     parent.postMessage({type:'setHeight',height:$('#formDetail').height()}, '*');
                 }
             });
