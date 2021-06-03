@@ -351,6 +351,11 @@ public class MsLoginController extends BaseController {
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), true);
         request.getSession().removeAttribute(Constant.SESSION_USER);
         SecurityUtils.getSubject().logout();
+        //如果登录地址已经是http开头的则直接302 如果不是则拼接上basepath
+        if(shrioLoginUrl.contains("http")){
+            response.sendRedirect( shrioLoginUrl);
+            return;
+        }
         response.sendRedirect(EConfig.getPathPropertiesValue("basePath") + shrioLoginUrl);
     }
 
