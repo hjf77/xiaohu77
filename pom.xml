@@ -17,6 +17,7 @@
         <module>fhs_file_admin</module>
         <module>fhs_framework_api</module>
         <module>fhs_framework_base_business</module>
+        <module>fhs_framework_base_business_admin</module>
         <module>fhs_framework_parent</module>
     </modules>
 
