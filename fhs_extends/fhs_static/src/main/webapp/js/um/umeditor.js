@@ -10116,7 +10116,7 @@ UM.registerUI('bold italic redo undo underline strikethrough superscript subscri
 
             bound = this.getBound();
 
-            $( editor.container ).css( {
+            $(editor.container).css( {
                 width: width + 'px',
                 height: height + 'px',
                 position: !$.IE6 ? 'fixed' : 'absolute',
@@ -10125,16 +10125,17 @@ UM.registerUI('bold italic redo undo underline strikethrough superscript subscri
                 margin: 0,
                 padding: 0,
                 overflowX: 'hidden',
-                overflowY: 'hidden'
+                overflowY: 'auto'
             } );
 
-            $( editorBody ).css({
+            var bottomBar = $('.edui-bottombar', editor.container);
+            var bottomBarHeight = bottomBar.outerHeight() ? bottomBar.outerHeight() : 0;
+            $(editorBody).css({
                 width: width - 2*borderWidth - paddingWidth + 'px',
-                height: height - 2*borderWidth - ( editor.options.withoutToolbar ? 0 : $( '.edui-toolbar', editor.container ).outerHeight() ) - $( '.edui-bottombar', editor.container).outerHeight() + 'px',
+                height: height - 2*borderWidth - (editor.options.withoutToolbar ? 0 : $('.edui-toolbar', editor.container).outerHeight()) - bottomBarHeight + 'px',
                 overflowX: 'hidden',
                 overflowY: 'auto'
             });
-
         },
         /**
          * 保存状态
@@ -10220,11 +10221,11 @@ UM.registerUI('bold italic redo undo underline strikethrough superscript subscri
         setDocumentStatus: function(){
             $(this.getEditorDocumentBody()).css( {
                 overflowX: 'hidden',
-                overflowY: 'hidden'
+                overflowY: 'auto'
             } );
             $(this.getEditorDocumentElement()).css( {
                 overflowX: 'hidden',
-                overflowY: 'hidden'
+                overflowY: 'auto'
             } );
         },
         /**
