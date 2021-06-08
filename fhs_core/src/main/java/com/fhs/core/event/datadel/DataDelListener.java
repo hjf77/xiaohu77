@@ -1,5 +1,6 @@
 package com.fhs.core.event.datadel;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Set;
  */
 public interface DataDelListener {
 
-     void onDel(String namespace,Object pkey);
+     void onDel(String namespace, Map<String,Object> paramMap);
 
      Set<String> namespaces();
 }
