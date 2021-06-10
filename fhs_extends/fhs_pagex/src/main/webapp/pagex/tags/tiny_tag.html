@@ -28,9 +28,9 @@
             toolbar: 'undo redo | formatselect | ' +
                 'bold italic backcolor | alignleft aligncenter ' +
                 'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | lineheight image fullscreen',
+                'removeformat | lineheight image fullscreen code',
             /* without images_upload_url set, Upload tab won't show up*/
-            images_upload_url: '/um/imageUp',
+            images_upload_url: '${basePath}' + 'tiny/upload',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         });
     })

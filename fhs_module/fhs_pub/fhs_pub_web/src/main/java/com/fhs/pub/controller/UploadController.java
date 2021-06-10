@@ -45,6 +45,7 @@ public class UploadController extends ModelSuperController<PubFileVO, PubFileDO>
                            HttpServletResponse response) {
         if (Filedata == null || Filedata.length == 0) {
             super.outToClient(false);
+            return;
         }
         LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
         PubFileVO file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
