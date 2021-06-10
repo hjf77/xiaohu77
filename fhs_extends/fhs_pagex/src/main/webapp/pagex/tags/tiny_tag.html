@@ -17,6 +17,7 @@
         tinymce.remove('textarea#' + '${tagSett.name}');
         tinymce.init({
             selector: 'textarea#' + '${tagSett.name}',
+            readonly: isView,
             height: 300,
             language : "zh_CN",
             menubar: false,
