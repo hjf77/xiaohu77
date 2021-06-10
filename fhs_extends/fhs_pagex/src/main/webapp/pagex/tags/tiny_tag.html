@@ -43,6 +43,7 @@
     }
      //tinymce
     function umOnsave_${tagSett.name}(info) {
+        $("#${tagSett.name}").val(tinymce.activeEditor.getContent());
         return true;
     }
 </script>
