@@ -23,7 +23,7 @@
             plugins: [
                 'advlist autolink lists link image charmap print preview anchor',
                 'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste wordcount lineheight'
+                'insertdatetime media table paste wordcount'
             ],
             toolbar: 'undo redo | formatselect | ' +
                 'bold italic backcolor | alignleft aligncenter ' +
@@ -31,6 +31,7 @@
                 'removeformat | lineheight image fullscreen code',
             /* without images_upload_url set, Upload tab won't show up*/
             images_upload_url: '${basePath}' + 'tiny/upload',
+            lineheight_formats: '1 1.5 1.6 1.75 1.8 2 3 4 5',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         });
     })
