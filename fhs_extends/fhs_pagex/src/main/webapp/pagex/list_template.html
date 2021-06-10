@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -104,6 +105,12 @@
     <link href="${fhs_static_url}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
     <% } %>
     <!--um end-->
+    <!-- tiny start -->
+    <% if(strutil.contain(formFieldTypes, 'tiny')){ %>
+    <script type="text/javascript" charset="utf-8" src="${fhs_static_url}/js/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${fhs_static_url}/js/tinymce/jquery.tinymce.min.js"></script>
+    <% } %>
+    <!-- tiny end-->
     <!-- bmap start -->
     <% if(strutil.contain(formFieldTypes, 'address')){ %>
     <script type="text/javascript" charset="utf-8"

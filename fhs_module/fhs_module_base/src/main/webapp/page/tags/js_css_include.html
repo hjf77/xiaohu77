@@ -100,6 +100,12 @@
 <link href="${fhs_static_url}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <% } %>
 <!--um end-->
+<!-- tiny start -->
+<% if(isNotEmpty(tiny)){ %>
+<script type="text/javascript" charset="utf-8" src="${fhs_static_url}/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${fhs_static_url}/js/tinymce/jquery.tinymce.min.js"></script>
+<% } %>
+<!-- tiny end-->
 <!-- bmap start -->
 <% if(isNotEmpty(address)){ %>
 <script type="text/javascript" charset="utf-8"

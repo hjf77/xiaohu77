@@ -1,0 +1,48 @@
+<div class='fitem'>
+    <div class='bigLabelDiv'>
+        <label>${tagSett.title}:</label>
+    </div>
+    <div class='bigContent' >
+        <textarea id="${tagSett.name}" name="${tagSett.name}"></textarea>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).on('focusin', function(e) {
+        if ($(e.target).closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length) {
+            e.stopImmediatePropagation();
+        }
+    });
+    $(function(){
+        tinymce.remove('textarea#' + '${tagSett.name}');
+        tinymce.init({
+            selector: 'textarea#' + '${tagSett.name}',
+            height: 300,
+            language : "zh_CN",
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste wordcount lineheight'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | lineheight image fullscreen',
+            /* without images_upload_url set, Upload tab won't show up*/
+            images_upload_url: '/um/imageUp',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        });
+    })
+
+    //tinymce回显
+    function umLoadSuccess_${tagSett.name}(info) {
+        if(info.${tagSett.name}) {
+            tinymce.activeEditor.setContent(info.${tagSett.name});
+        }
+    }
+     //tinymce
+    function umOnsave_${tagSett.name}(info) {
+        return true;
+    }
+</script>
