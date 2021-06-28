@@ -19744,7 +19744,7 @@
         add_form_submit_trigger: true,
         submit_patch: true,
         add_unload_trigger: true,
-        convert_urls: true,
+        convert_urls: false,
         relative_urls: true,
         remove_script_host: true,
         object_resizing: true,
