@@ -1,18 +1,22 @@
 package com.fhs.ucenter.api;
 
-import com.beust.jcommander.ParameterException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fhs.core.db.DataSource;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.service.UcenterMsOrganizationApiService;
 import com.fhs.ucenter.bean.SysOrganization;
 import com.fhs.ucenter.bean.SysUser;
 import com.fhs.ucenter.service.SysOrganizationService;
 import com.fhs.ucenter.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 机构管理rest接口实现
@@ -58,10 +62,10 @@ public class UcenterMsOrganizationServiceCloud implements UcenterMsOrganizationA
                 result.put("updateBy",sysOrganization.getUpdateUser());
                 return HttpResult.success(result);
             }
-            throw new ParameterException("此用户的组织结构不存在:" + userId);
+            throw new ParamException("此用户的组织结构不存在:" + userId);
         }
 
-        throw new ParameterException("此用户不存在:" + userId);
+        throw new ParamException("此用户不存在:" + userId);
 
     }
 
@@ -82,7 +86,7 @@ public class UcenterMsOrganizationServiceCloud implements UcenterMsOrganizationA
             result.put("updateBy",sysOrganization.getUpdateUser());
             return HttpResult.success(result);
         }
-        throw new ParameterException("此组织结构不存在:" + id);
+        throw new ParamException("此组织结构不存在:" + id);
 
 
     }
