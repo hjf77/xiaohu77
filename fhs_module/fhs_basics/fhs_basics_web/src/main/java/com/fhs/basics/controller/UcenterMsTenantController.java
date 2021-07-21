@@ -10,6 +10,7 @@ import com.fhs.common.utils.StringUtil;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import com.mybatis.jpa.context.MultiTenancyContext;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(tags = {"租户"})
 @RequestMapping("/ms/tenant")
+@ApiGroup(group = "group_default")
 public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantDO> {
 
     @Autowired

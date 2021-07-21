@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SettMsMenuServerDO;
 import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @Api(tags = {"微服务"})
+@ApiGroup(group = "group_default")
 @RequestMapping("ms/sett_ms_menu_server")
 public class SettMsMenuServerController extends ModelSuperController<SettMsMenuServerVO, SettMsMenuServerDO> {
     /**

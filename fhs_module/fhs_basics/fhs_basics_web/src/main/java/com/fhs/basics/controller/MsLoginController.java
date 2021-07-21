@@ -20,6 +20,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.shiro.StatelessSubject;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/")
+@ApiGroup(group = "group_default")
 public class MsLoginController extends BaseController {
 
     private static Logger LOGGER = Logger.getLogger(MsLoginController.class);

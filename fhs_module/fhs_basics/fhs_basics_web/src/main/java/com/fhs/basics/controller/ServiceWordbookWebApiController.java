@@ -3,6 +3,7 @@ package com.fhs.basics.controller;
 import com.fhs.basics.service.ServiceWordBookService;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.controller.BaseController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2020-05-18 16:53:08
  */
 @RestController
+@ApiGroup(group = "group_default")
 @RequestMapping("webApi/wordbook")
 public class ServiceWordbookWebApiController extends BaseController {
 

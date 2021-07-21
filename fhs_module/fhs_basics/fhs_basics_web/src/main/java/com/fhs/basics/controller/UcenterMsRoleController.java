@@ -15,6 +15,7 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import java.util.*;
  */
 @RestController
 @Api(tags = {"角色"})
+@ApiGroup(group = "group_default")
 @RequestMapping("ms/sysRole")
 @LogNamespace(namespace = BaseTransConstant.ROLE_INFO,module = "角色管理")
 public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRoleDO> {

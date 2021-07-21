@@ -16,6 +16,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("ms/sysMenu")
 @Api(tags = {"菜单"})
+@ApiGroup(group = "group_default")
 @LogNamespace(namespace = BaseTransConstant.MENU_INFO,module = "菜单管理")
 public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuDO> {
 

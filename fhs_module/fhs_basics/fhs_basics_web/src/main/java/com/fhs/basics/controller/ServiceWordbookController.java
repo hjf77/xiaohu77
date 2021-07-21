@@ -17,6 +17,7 @@ import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("ms/wordbook")
 @Api(tags = {"字典"})
+@ApiGroup(group = "group_default")
 @LogNamespace(namespace = BaseTransConstant.WORD_BOOK,module = "字典管理")
 public class ServiceWordbookController extends BaseController {
 

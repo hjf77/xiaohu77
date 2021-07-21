@@ -17,6 +17,7 @@ import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ import java.util.Map;
  */
 @RestController
 @Api(tags = {"系统用户"})
+@ApiGroup(group = "group_default")
 @RequestMapping("ms/sysUser")
 @LogNamespace(namespace = BaseTransConstant.USER_INFO,module = "用户管理")
 public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserDO> {

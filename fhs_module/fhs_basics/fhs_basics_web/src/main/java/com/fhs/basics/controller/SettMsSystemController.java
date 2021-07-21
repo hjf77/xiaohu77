@@ -6,6 +6,7 @@ import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @Api(tags = {"子系统"})
+@ApiGroup(group = "group_default")
 @RequestMapping("ms/sett_ms_system")
 public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemDO> {
 
