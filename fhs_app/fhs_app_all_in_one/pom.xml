@@ -30,11 +30,11 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <!--在线定时任务模块,不需要的话可以去掉-->
-        <dependency>
+       <!-- <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_task_web</artifactId>
             <version>${fhs.release.version}</version>
-        </dependency>
+        </dependency>-->
         <!--操作日志-->
         <dependency>
             <groupId>com.fhs-opensource</groupId>

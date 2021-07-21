@@ -1,4 +1,4 @@
-package com.fhs.app.test;
+/*package com.fhs.app.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -13,4 +13,4 @@ public class HelloWordJob implements Job, Serializable {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.info("HelloWordJob - run");
     }
-}
+}*/

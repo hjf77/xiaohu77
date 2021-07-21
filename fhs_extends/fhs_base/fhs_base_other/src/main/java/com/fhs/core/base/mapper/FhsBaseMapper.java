@@ -24,6 +24,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param info 数据
      * @return 默认为影响条数
      */
+    @Deprecated
     int addFromMap(Map<String, Object> info);
 
 
@@ -33,6 +34,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param map map
      * @return 默认为影响条数
      */
+    @Deprecated
     int updateFormMap(Map<String, Object> map);
 
     /**
@@ -41,6 +43,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param map map
      * @return 默认为影响条数
      */
+    @Deprecated
     int deleteFromMap(Map<String, Object> map);
 
 
@@ -50,6 +53,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param map map
      * @return 结果
      */
+    @Deprecated
     int findCountFromMap(Map<String, Object> map);
 
 
@@ -59,6 +63,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param map map
      * @return 查询出来的数据集合
      */
+    @Deprecated
     List<D> findForListFromMap(Map<String, Object> map);
 
     /**
@@ -67,6 +72,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param map 参数
      * @return map数据集合
      */
+    @Deprecated
     List<Map<String, Object>> findMapList(Map<String, Object> map);
 
     /**
@@ -75,6 +81,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param map 参数为map
      * @return 一行数据
      */
+    @Deprecated
     D findBeanFromMap(Map<String, Object> map);
 
 
@@ -84,6 +91,7 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param list list 数据集合
      * @return 受影响行数
      */
+    @Deprecated
     int updateBatch(List<Map<String, Object>> list);
 
     /**
@@ -92,5 +100,6 @@ public interface FhsBaseMapper<D> extends MybatisBaseMapper<D> {
      * @param paramMap paramMap 参数 包含dataList  数据集合
      * @return 受影响行数
      */
+    @Deprecated
     int addBatch(Map<String, Object> paramMap);
 }

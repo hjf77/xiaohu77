@@ -117,6 +117,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
+    @Deprecated
     public int addFromMap(Map<String, Object> info) {
         int result = baseMapper.addFromMap(info);
         this.refreshCache();
@@ -134,6 +135,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
+    @Deprecated
     public boolean updateFormMap(Map<String, Object> map) {
         boolean result = baseMapper.updateFormMap(map) > 0;
         this.refreshCache();
@@ -148,7 +150,9 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
+
     @Override
+    @Deprecated
     public boolean updateJpa(D bean) {
         boolean result = baseMapper.updateSelectiveById(bean) > 0;
         if (BisLoggerContext.isNeedLogger()) {
@@ -161,6 +165,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
+    @Deprecated
     public boolean deleteFromMap(Map<String, Object> map) {
         boolean result = baseMapper.deleteFromMap(map) > 0;
         this.refreshCache();
@@ -176,6 +181,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
+    @Deprecated
     public int findCountFromMap(Map<String, Object> map) {
         int result = baseMapper.findCountFromMap(map);
         return result;
@@ -221,6 +227,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @SuppressWarnings({"unchecked"})
     @Override
+    @Deprecated
     public List<V> findForListFromMap(Map<String, Object> map) {
         List<D> dos = baseMapper.findForListFromMap(map);
         return dos2vos(dos);
@@ -244,6 +251,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
 
     @Override
+    @Deprecated
     public int updateBatch(List<Map<String, Object>> list) {
         int result = baseMapper.updateBatch(list);
         this.refreshCache();
@@ -251,6 +259,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
+    @Deprecated
     public int addBatch(Map<String, Object> paramMap) {
         int result = baseMapper.addBatch(paramMap);
         this.refreshCache();

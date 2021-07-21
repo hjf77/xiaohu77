@@ -30,6 +30,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param info 数据
      * @return 默认为影响条数
      */
+    @Deprecated
     int addFromMap(Map<String, Object> info);
 
     /**
@@ -46,6 +47,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param map map
      * @return 默认为影响条数
      */
+    @Deprecated
     boolean updateFormMap(Map<String, Object> map);
 
     /**
@@ -62,6 +64,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param bean object
      * @return 默认为影响条数
      */
+    @Deprecated
     boolean updateJpa(D bean);
 
     /**
@@ -70,6 +73,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param map map
      * @return 默认为影响条数
      */
+    @Deprecated
     boolean deleteFromMap(Map<String, Object> map);
 
     /**
@@ -100,6 +104,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param map map
      * @return 结果
      */
+    @Deprecated
     int findCountFromMap(Map<String, Object> map);
 
     /**
@@ -140,12 +145,14 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param map map
      * @return 查询出来的数据集合
      */
+    @Deprecated
     List<V> findForListFromMap(Map<String, Object> map);
 
     /**
      * @param map
      * @return
      */
+    @Deprecated
     List<Map<String, Object>> findMapList(Map<String, Object> map);
 
     /**
@@ -154,6 +161,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param map 参数为map
      * @return 一行数据
      */
+    @Deprecated
     V findBeanFromMap(Map<String, Object> map);
 
     /**
@@ -172,6 +180,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param list list 数据集合
      * @return 受影响行数
      */
+    @Deprecated
     int updateBatch(List<Map<String, Object>> list);
 
     /**
@@ -180,6 +189,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param paramMap paramMap 参数 包含dataList 数据集合
      * @return 受影响行数
      */
+    @Deprecated
     int addBatch(Map<String, Object> paramMap);
 
     /**
