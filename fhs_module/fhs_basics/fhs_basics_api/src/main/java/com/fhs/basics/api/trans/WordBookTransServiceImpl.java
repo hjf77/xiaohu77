@@ -67,7 +67,11 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
                     bookCodeList.add(wordBookTransMap.get(key + "_" + bookCode));
                 }
             }
-            obj.getTransMap().put(tempField.getName() + "Name",  bookCodeList.size()>Constant.ZERO?StringUtil.getStrForIn(bookCodeList,false):"");
+            String transResult = bookCodeList.size() > Constant.ZERO ? StringUtil.getStrForIn(bookCodeList, false) : "";
+            if (obj.getTransMap() != null) {
+                obj.getTransMap().put(tempField.getName() + "Name", transResult);
+            }
+            setRef(tempTrans, obj, transResult);
         }
     }
 

@@ -129,6 +129,22 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
         }
     }
 
+    /**
+     * 获取主键
+     *
+     * @return 主键
+     */
+    @JsonIgnore
+    public void setPkey(Object pkey) {
+        Field idField = getIdField(true);
+        try {
+             idField.set(this,pkey);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     /**
      * 获取子类id字段

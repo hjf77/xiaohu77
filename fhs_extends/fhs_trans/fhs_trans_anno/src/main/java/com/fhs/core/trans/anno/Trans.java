@@ -25,4 +25,11 @@ public @interface Trans {
      * @return
      */
     String key() default "";
+
+    /**
+     * 设置到的target value  比如我有一个sex字段，有一个sexName 字段  sex是0 设置ref翻译服务可以自动把sexname设置为男
+     * 如果是auto trans目标缓存有多少 有name,age 两个字段   我想要teacherName  可以写 teacherName#name
+     * @return
+     */
+    String ref() default "";
 }

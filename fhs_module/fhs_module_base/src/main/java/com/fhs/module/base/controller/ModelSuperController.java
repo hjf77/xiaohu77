@@ -5,13 +5,13 @@ import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.EMap;
-import com.fhs.common.utils.ReflectUtils;
+import com.fhs.common.tree.TreeNode;
+import com.fhs.common.tree.Treeable;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.pojo.pager.Pager;
+import com.fhs.core.base.pojo.vo.UpdateFieldVO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.vo.FhsPager;
@@ -31,6 +31,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -104,7 +102,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         if (isPermitted(request, "see")) {
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(),
-                    filter.asWrapper((Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1]));
+                    filter.asWrapper(getDOClass()));
         } else {
             throw new NotPremissionException();
         }
@@ -530,6 +528,41 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         }
         return fieldName.toLowerCase() + " " + order;
     }
+
+    /**
+     * @param queryFilter
+     * @return
+     */
+    @PostMapping(
+            value = {"/tree"},
+            produces = {"application/json; charset=utf-8"}
+    )
+    @ApiOperation("获取tree格式的json数据")
+    public List<TreeNode<Treeable>> treeData(@ApiParam(name = "queryFilter", value = "过滤条件") @RequestBody QueryFilter<D> queryFilter) throws IllegalAccessException {
+        List<V> datas = this.baseService.selectListMP(queryFilter.asWrapper(getDOClass()));
+        return TreeUtils.formartTree(datas);
+    }
+
+    protected Class<D> getDOClass(){
+        return (Class)((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+    }
+
+    @PutMapping("/updateField")
+    @ApiOperation("批量修改某个字段")
+    public HttpResult<Boolean> updateField(@RequestBody @Validated UpdateFieldVO<D> vo) throws InstantiationException, IllegalAccessException {
+        String[] ids =vo.getIds().split(",");
+        List<D> dos = new ArrayList<>();
+        D temp = null;
+        for (String id : ids) {
+            temp = this.getDOClass().newInstance();
+            BeanUtils.copyProperties(vo.getDoContent(),temp);
+            temp.setPkey(id);
+            dos.add(temp);
+        }
+        baseService.batchUpdate(dos);
+        return HttpResult.success(true);
+    }
+
 
     /**
      * 获取格式化字段的参数

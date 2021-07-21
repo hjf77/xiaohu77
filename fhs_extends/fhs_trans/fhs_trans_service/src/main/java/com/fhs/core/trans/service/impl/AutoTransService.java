@@ -132,6 +132,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
                 }
                 transCache = tempMap;
             }
+            setRef(tempTrans, obj, transCache);
             Map<String, String> transMap = obj.getTransMap();
             Set<String> keys = transCache.keySet();
             for (String key : keys) {
@@ -195,7 +196,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
         if (entitySet != null) {
             for (Class<?> entity : entitySet) {
                 // 获取该类
-                Object baseService = SpringContextUtil.getBeanByClass(entity);
+                Object baseService = SpringContextUtil.getBeanByName(entity);
                 if (!(baseService instanceof AutoTransAble)) {
                     LOGGER.warn("AutoTrans 只能用到实现AutoTransAble的类上,不能用到:" + baseService.getClass());
                     continue;
