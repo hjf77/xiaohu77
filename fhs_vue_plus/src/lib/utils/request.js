@@ -48,13 +48,15 @@ request.interceptors.request.use(config => {
     /*
         todo 判断请求url 如果是 get开头则设置为get post put delete 则设置为 这些 如果没指定则为get
      */
-    if(config.data && config.data.useJson){
+  config.headers['Content-Type']='application/json;charset=utf-8'
+    /*if(config.data && config.data.useJson){
       config.headers['Content-Type']='application/json;charset=utf-8'
+      delete config.data.useJson;
       config.data = JSON.stringify(config.data);
     }else{
       config.headers['Content-Type']='application/x-www-form-urlencoded'
       config.data = qs.stringify(config.data)
-    }
+    }*/
     return config
 }, error => {
     Promise.reject(error)
@@ -65,7 +67,10 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use(
     res => {
         const code = res.data[setting.codeField];
-        debugger
+        //也没有message也没有code字段代表直接返回数据的老接口
+        if(!res.data[setting.codeField] && !res.data[setting.msgField]){
+          return res.data;
+        }
         // 获取错误信息
         const msg = errorCode[code] || res.data[setting.msgField] || errorCode["default"];
         //清除缓存跳转到登录页

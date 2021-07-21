@@ -1,12 +1,12 @@
+import '@babel/polyfill'
 import Vue from 'vue'
 import App from './App'
 import store from './store'
 import router from './router'
 import Cookies from 'js-cookie'
 // import axios from 'axios';
-import request from '@/lib/utils/request'
+import request from '@/utils/request'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
-
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 import '@/assets/styles/index.scss' // global css
@@ -16,24 +16,44 @@ import permission from './directive/permission'
 
 import './assets/icons' // icon
 import './permission' // permission control
-import { getDicts } from "@/api/system/dict/data";
-import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree } from "@/utils/ruoyi";
+import {
+  getDicts
+} from "@/api/system/dict/data";
+import {
+  getConfigKey
+} from "@/api/system/config";
+import {
+  parseTime,
+  resetForm,
+  addDateRange,
+  selectDictLabel,
+  download,
+  handleTree
+} from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 
 import renderFun from "@/lib/components/render";
 Vue.component(renderFun)
 Vue.config.productionTip = false
-
-
-import Viewer from 'v-viewer'
-import 'viewerjs/dist/viewer.css'
-
-Vue.use(Viewer, {
-  defaultOptions: {
-    zIndex: 9999,
+const on = Vue.prototype.$on
+Vue.prototype.$on = function (event, func) {
+  let timer
+  let newFunc = func
+  if (event === "click") {
+    newFunc = function () {
+      clearTimeout(timer)
+      timer = setTimeout(function () {
+        func.apply(this, arguments)
+      }, 300)
+    }
   }
-})
+  on.call(this, event, newFunc)
+}
+
+
+/*import moment from 'moment'//导入文件
+Vue.prototype.$moment = moment;//赋值使用*/
+
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
@@ -46,12 +66,25 @@ Vue.prototype.handleTree = handleTree
 // Vue.prototype.$pagexRequest = axios;
 Vue.prototype.$pagexRequest = request;
 Vue.prototype.msgSuccess = function (msg) {
-  this.$message({ showClose: true, message: msg, type: "success" });
+  this.$message({
+    showClose: true,
+    message: msg,
+    type: "success"
+  });
 }
 
 Vue.prototype.msgError = function (msg) {
-  this.$message({ showClose: true, message: msg, type: "error" });
+  this.$message({
+    showClose: true,
+    message: msg,
+    type: "error"
+  });
 }
+
+
+import Avue from '@smallwei/avue';
+import '@smallwei/avue/lib/index.css';
+Vue.use(Avue);
 
 Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
@@ -76,25 +109,21 @@ Vue.use(Element, {
 })
 
 
-
-
 import VeeElement from 'vee-element'
 import VeeValidate from 'vee-validate'
 import zh_CN from "vee-validate/dist/locale/zh_CN";
-const rules = {
-
-}
-const options = {
-
-}
+import veeValidator from '@/utils/vee-validator'
+const rules = {}
+const options = {}
 Vue.use(Element);
 const validator = new VeeValidate.Validator(rules, options)
 validator.localize("zh_CN", zh_CN);
+//自定义vee提示信息
+validator.localize(veeValidator);
 Vue.use(VeeElement, validator, false)
-
 new Vue({
   el: '#app',
-  router,
   store,
+  router,
   render: h => h(App)
 }).$mount("#app");

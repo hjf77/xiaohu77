@@ -17,61 +17,79 @@ import switchs from "./switchs.vue";
 import inputNumber from "./inputNumber.vue";
 import slider from "./slider.vue";
 import pagination from "./pagination.vue";
+import uploadFileAsync from "./uploadFileAsync.vue";
+import uploadFile from "./uploadFile.vue";
+import uploadFileChoice from "./uploadFilechoice.vue";
+import formTreeSelect from "./formTreeSelect.vue";
 
 import Vue from "vue";
 import getProps from "../utils/getProps";
 
 const renderCom = {
-    props: {
-        schema: {
-            type: Object,
-            default: () => ({})
-        }
-    },
-    render(h) {
-        return render(this.schema, h);
+  props: {
+    schema: {
+      type: Object,
+      default: () => ({})
     }
+  },
+  render(h) {
+    return render(this.schema, h);
+  }
 };
 
 const comList = {
-    page: pageCom,
-    card,
-    crud,
-    button, form,
-    dialog, select, radio, checkbox,switchs,inputNumber,slider,pagination,
-    render: renderCom
+  page: pageCom,
+  card,
+  crud,
+  button,
+  form,
+  dialog,
+  select,
+  radio,
+  checkbox,
+  switchs,
+  inputNumber,
+  slider,
+  pagination,
+  uploadFileAsync,
+  uploadFile,
+  uploadFileChoice,
+  formTreeSelect,
+  render: renderCom
 };
 Object.entries(comList).forEach(([key, val]) => {
-    Vue.component("pagex-" + key, val);
+  Vue.component("pagex-" + key, val);
 });
 
 function render(schema, h) {
-    let child = [];
-    if (schema.type === undefined) {
-        return undefined
-    }
-    const props = getProps(schema);
-    const layout = "pagex-" + schema.type;
-    if (Array.isArray(schema.body)) {
-        child = schema.body.map(item => render(item, h));
-    } else if (!schema.body) {
-        child = [];
-    } else {
-        child = [render(schema.body, h)];
-    }
+  let child = [];
+  if (schema.type === undefined) {
+    return undefined
+  }
+  const props = getProps(schema);
+  const layout = "pagex-" + schema.type;
+  if (Array.isArray(schema.body)) {
+    child = schema.body.map(item => render(item, h));
+  } else if (!schema.body) {
+    child = [];
+  } else {
+    child = [render(schema.body, h)];
+  }
 
 
 
-    return h(layout, { props }, child);
+  return h(layout, {
+    props
+  }, child);
 }
 
 
 const renderFun = schema => {
-    return {
+  return {
 
-        render(h) {
-            return render(schema, h);
-        }
-    };
+    render(h) {
+      return render(schema, h);
+    }
+  };
 };
 export default renderFun

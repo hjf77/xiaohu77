@@ -1,6 +1,6 @@
 ###################  项目启动端口  ###################
 server:
-  port: 8081
+  port: 8089
   context-path: /
   tomcat:
     uri-encoding: UTF-8
@@ -14,6 +14,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 fhs:
+  vue:
+    is-verification: false
   autoware:
     package: com.fhs.*;com.fhs.*.*;
   autodel:
@@ -45,7 +47,7 @@ fhs:
     packages: com.fhs.**.service.impl
   disable-apollo: true
   swagger: # ip:port/doc.html 是swagger-ui的地址,本插件用的是swagger-bootstrap-ui
-    enable: false
+    enable: true
     basepackage: com.fhs
     service:
       description: 项目api
@@ -57,15 +59,15 @@ fhs:
   activiti:
     createtb: false #是否创建表
   path: "{
-        'basePath': 'http://localhost:8086/fhs/',
-        'fhs_static_url': 'http://localhost:8086/fhs/',
-        'fhs_basics_url': 'http://localhost:8086/fhs/',
+        'basePath': 'http://localhost:8089/',
+        'fhs_static_url': 'http://localhost:8089/',
+        'fhs_basics_url': 'http://localhost:8089/',
         'fileSavePath': 'c:/flies',
         'jbpmFilePath': 'c:/flies/jbpm/xml',
-        'loginOutUrl': 'http://localhost:8086/fhs/ms/logout',
-        'fhs_file_url': 'http://localhost:8086/fhs/',
-        'index_right_path': 'http://localhost:8086/fhs/b/page-ms-index/index_right',
-        'work_flow_url': 'http://localhost:8086/fhs/'
+        'loginOutUrl': 'http://localhost:8089/ms/logout',
+        'fhs_file_url': 'http://localhost:8089/',
+        'index_right_path': 'http://localhost:8089/b/page-ms-index/index_right',
+        'work_flow_url': 'http://localhost:8089/'
         }"
   other: "{
           'isDevModel': 'true',

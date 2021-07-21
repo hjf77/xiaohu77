@@ -40,21 +40,6 @@ export const constantRoutes = [
     component: () => import('@/views/login'),
     hidden: true
   },
-/*  {
-    path: "/demo",
-    component: () => import('@/views/demo/table'),
-    hidden: true
-  },
-  {
-    path: "/pagexFromDemo",
-    component: () => import('@/views/demo/pagexFormDemo'),
-    hidden: true
-  },
-  {
-    path: "/veeFormDemo",
-    component: () => import('@/views/demo/veeFormDemo'),
-    hidden: true
-  },*/
   {
     path: '/404',
     component: () => import('@/views/error/404'),

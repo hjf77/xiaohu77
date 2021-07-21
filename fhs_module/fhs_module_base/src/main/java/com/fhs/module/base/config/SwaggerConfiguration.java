@@ -113,7 +113,7 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
 
 
     private ApiKey apiKey() {
-        return new ApiKey("BearerToken", "token", "header");
+        return new ApiKey("Authorization", "token", "header");
     }
 
     private SecurityContext securityContext() {
@@ -123,7 +123,7 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[]{authorizationScope};
-        return Lists.newArrayList(new SecurityReference[]{new SecurityReference("BearerToken", authorizationScopes)});
+        return Lists.newArrayList(new SecurityReference[]{new SecurityReference("Authorization", authorizationScopes)});
     }
 
     @Override

@@ -19,11 +19,10 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,47 +77,74 @@ public class ServiceWordbookController extends BaseController {
      * 添加字典
      *
      * @param wordbook
-     * @param request
-     * @param response
      */
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbook")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
-    public HttpResult<Boolean> addWordbook(@Valid ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> addWordbook(@Valid ServiceWordbookVO wordbook) {
         wordbookAndGroupService.addWordbook(wordbook);
         return HttpResult.success(true);
-
     }
+
+    /**
+     * 添加字典
+     *
+     * @param wordbook
+     */
+    @RequiresPermissions("wordbook:add")
+    @PostMapping("addWordbookForVue")
+    @ApiOperation("创建字典forVUE")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    public HttpResult<Boolean> addWordbookForVue(@RequestBody @Valid ServiceWordbookVO wordbook) {
+        return addWordbook(wordbook) ;
+    }
+
 
     /**
      * 修改字典
      *
      * @param wordbook
-     * @param request
-     * @param response
      */
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbook")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> updateWordbook(@Valid ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> updateWordbook(@Valid ServiceWordbookVO wordbook) {
         wordbookAndGroupService.updateWordbook(wordbook);
         return HttpResult.success(true);
+    }
+
+
+    @RequiresPermissions("wordbook:update")
+    @PutMapping("updateWordbookForVue")
+    @ApiOperation("修改字典forVUE")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
+    public HttpResult<Boolean> updateWordbookForVue(@RequestBody@Valid ServiceWordbookVO wordbook) {
+        return updateWordbook(wordbook);
     }
 
     /**
      * 删除字典
      *
      * @param wordbook
-     * @param request
-     * @param response
      */
     @RequiresPermissions("wordbook:del")
     @RequestMapping("delWordbook")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 0)
-    public HttpResult<Boolean> delWordbook(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> delWordbook(ServiceWordbookVO wordbook) {
         wordbookAndGroupService.delWordbook(wordbook);
         return HttpResult.success(true);
     }
+
+    @RequiresPermissions("wordbook:del")
+    @DeleteMapping("delWordbookForVue")
+    @ApiOperation("删除字典forVUE")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 0)
+    public HttpResult<Boolean> delWordbookForVue(Integer id) {
+        ServiceWordbookVO vo = new ServiceWordbookVO();
+        vo.setWordbookId(id);
+        return delWordbook(vo);
+    }
+
 
     /**
      * 根据id获取单个字典
@@ -152,13 +178,10 @@ public class ServiceWordbookController extends BaseController {
     /**
      * 查询字典类型
      *
-     * @param request
-     * @param reponse
      */
     @RequestMapping("findWordbookGroupForPage")
     @LogMethod
-    public Pager<ServiceWordbookGroupVO> findWordbookGroupForPage(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
-                                                                  HttpServletResponse reponse) {
+    public Pager<ServiceWordbookGroupVO> findWordbookGroupForPage(ServiceWordbookGroupVO wordbookGroup) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         int count = wordbookGroupService.findCountJpa(wordbookGroup);
         List<ServiceWordbookGroupVO> dataList = wordbookGroupService.selectPage(wordbookGroup, pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
@@ -170,49 +193,70 @@ public class ServiceWordbookController extends BaseController {
      *
      * @param wordbookGroup
      * @param request
-     * @param response
      */
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbookGroup")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
-    public HttpResult<Boolean> addWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
-                                                HttpServletResponse response) {
+    public HttpResult<Boolean> addWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request) {
         wordbookGroup.preInsert(((UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER)).getUserId());
         wordbookAndGroupService.addWordbookGroup(wordbookGroup);
         return HttpResult.success(true);
     }
 
+    @RequiresPermissions("wordbook:add")
+    @PostMapping("addWordbookGroupForVue")
+    @ApiOperation("新增字典分组for vue")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    public HttpResult<Boolean> addWordbookGroupForVue(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request) {
+        return addWordbookGroup( wordbookGroup,  request) ;
+    }
+
+
+
     /**
      * 修改字典类型
      *
      * @param wordbookGroup
-     * @param request
-     * @param response
      */
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbookGroup")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public  HttpResult<Boolean> updateWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
-                                                    HttpServletResponse response) {
+    public  HttpResult<Boolean> updateWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
         wordbookAndGroupService.updateWordbookGroup(wordbookGroup);
         return HttpResult.success(true);
+    }
+
+    @RequiresPermissions("wordbook:update")
+    @PutMapping("updateWordbookGroupForVue")
+    @ApiOperation("修改字典分组for vue")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
+    public  HttpResult<Boolean> updateWordbookGroupForVue(ServiceWordbookGroupVO wordbookGroup) {
+        return updateWordbookGroup(wordbookGroup);
     }
 
     /**
      * 删除字典类型
      *
      * @param wordbookGroup
-     * @param request
-     * @param response
      */
     @RequiresPermissions("wordbook:del")
-    @RequestMapping("delWordbookGroup")
+    @RequestMapping("delWordbookGroupForVue")
     @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL,voParamIndex = 0)
-    public  HttpResult<Boolean> delWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
-                                                 HttpServletResponse response) {
+    public  HttpResult<Boolean> delWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
         wordbookAndGroupService.delWordbookGroup(wordbookGroup);
         return HttpResult.success(true);
     }
+
+    @RequiresPermissions("wordbook:del")
+    @DeleteMapping("delWordbookGroupForVue")
+    @ApiOperation("删除字典分组for vue")
+    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL,voParamIndex = 0)
+    public  HttpResult<Boolean> delWordbookGroupForVue(Integer id) {
+        ServiceWordbookGroupVO vo = new ServiceWordbookGroupVO();
+        vo.setGroupId(id);
+        return delWordbookGroup(vo);
+    }
+
 
     /**
      * 刷新redis缓存

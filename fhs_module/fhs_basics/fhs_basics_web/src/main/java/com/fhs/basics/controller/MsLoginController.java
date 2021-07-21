@@ -70,6 +70,9 @@ public class MsLoginController extends BaseController {
     @Value("${server.session.timeout:3600}")
     private Integer sesstionTimeout;
 
+    @Value("${fhs.vue.is-verification:true}")
+    private Boolean isVerification;
+
     /**
      * redis 缓存服务
      */
@@ -213,15 +216,17 @@ public class MsLoginController extends BaseController {
     @RequestMapping("/vueLogin")
     public HttpResult<Map<String, String>> vueLogin(UcenterMsUserDO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
         checkUserNameIsLock(sysUser.getUserLoginName());
-        String identifyCode = request.getParameter("identifyCode");
-        Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
-        if (null == sessionIdentify) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
-            throw new ParamException("验证码失效，请刷新验证码后重新输入");
-        }
-        if (!sessionIdentify.toString().equals(identifyCode)) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
-            throw new ParamException("验证码错误，请重新输入");
+        if(isVerification){
+            String identifyCode = request.getParameter("identifyCode");
+            Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
+            if (null == sessionIdentify) {
+                logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
+                throw new ParamException("验证码失效，请刷新验证码后重新输入");
+            }
+            if (!sessionIdentify.toString().equals(identifyCode)) {
+                logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
+                throw new ParamException("验证码错误，请重新输入");
+            }
         }
         sysUser.setPassword(Md5Util.MD5(sysUser.getPassword()));
         String userName = sysUser.getUserLoginName();
