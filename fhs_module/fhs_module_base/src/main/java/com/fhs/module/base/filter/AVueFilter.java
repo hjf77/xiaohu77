@@ -33,7 +33,7 @@ public class AVueFilter implements Filter {
             String token = request.getHeader("Authorization");
             UcenterMsUserDO sysUser = redisCacheService.get("shiro:user:" + token);
             if(sysUser==null){
-                JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NO_PERMISSION.asResult().asJson());
+                JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NOT_LOGIN.asResult().asJson());
                 return;
             }
             request.getSession().setAttribute(Constant.SESSION_USER,sysUser);

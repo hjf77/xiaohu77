@@ -45,6 +45,11 @@ public enum PubResult implements BaseResult
     NO_PERMISSION(403,"权限不足"),
 
     /**
+     * 已过期
+     */
+    NOT_LOGIN(401,"登录已过期，请重新登录"),
+
+    /**
      * 权限不足
      */
     NO_FIND(404,"请求的资源不存在"),
