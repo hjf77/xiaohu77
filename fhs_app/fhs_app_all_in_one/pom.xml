@@ -85,6 +85,17 @@
             <artifactId>mysql-backup4j</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

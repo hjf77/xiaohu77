@@ -427,6 +427,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @param queryWrapper 过滤条件
      * @return 分页数据
      */
+    @Deprecated
     IPage<Map<String, Object>> selectMapsPageMP(IPage<D> page, Wrapper<D> queryWrapper);
 
     /**

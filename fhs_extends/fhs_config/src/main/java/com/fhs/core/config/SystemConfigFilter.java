@@ -34,7 +34,7 @@ public class SystemConfigFilter implements Filter {
 
     @Override
     public void destroy() {
-        System.out.println("=========销毁了.....");
+        System.out.println("-----系统停止服务----");
     }
 
     @Override

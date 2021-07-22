@@ -21,6 +21,11 @@
             <artifactId>swagger-annotations</artifactId>
             <version>${fhs.swagger-anno.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+        </dependency>
     </dependencies>
 
 

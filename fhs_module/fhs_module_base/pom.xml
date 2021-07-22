@@ -63,7 +63,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.0.7.1</version>
+            <version>${fhs.mp-anno.version}</version>
         </dependency>
         <dependency>
             <groupId>org.pac4j</groupId>

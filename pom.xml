@@ -29,19 +29,17 @@
         <fhs.mybatis-jpa-jack.version>1.0.10</fhs.mybatis-jpa-jack.version>
         <fhs.spring-cloud-starter.version>2.1.5.RELEASE</fhs.spring-cloud-starter.version>
         <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
-        <fhs.mp-anno.version>3.0.7.1</fhs.mp-anno.version>
+        <fhs.mp-anno.version>3.3.0</fhs.mp-anno.version>
         <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
     </properties>
 
 
     <modules>
-
         <module>fhs_common</module>
         <module>fhs_extends</module>
         <module>fhs_module</module>
         <module>fhs_spring_cloud</module>
         <module>fhs_app</module>
-
     </modules>
 
     <dependencies>

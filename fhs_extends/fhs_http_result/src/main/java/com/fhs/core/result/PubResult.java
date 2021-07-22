@@ -50,6 +50,11 @@ public enum PubResult implements BaseResult
     NOT_LOGIN(401,"登录已过期，请重新登录"),
 
     /**
+     * 没有携带token
+     */
+    NOT_TOKEN(402,"没有携带token"),
+
+    /**
      * 权限不足
      */
     NO_FIND(404,"请求的资源不存在"),

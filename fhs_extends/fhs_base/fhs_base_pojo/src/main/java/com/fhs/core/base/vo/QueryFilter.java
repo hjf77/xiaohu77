@@ -127,7 +127,6 @@ public class QueryFilter<T> {
                     list.forEach((l) -> {
                         this.convertQueryField(x, l, currentModelClass);
                     });
-                    return x;
                 });
             } else {
                 if (!OR.equals(groupRelation)) {
@@ -137,7 +136,6 @@ public class QueryFilter<T> {
                     list.forEach((l) -> {
                         this.convertQueryField(x, l, currentModelClass);
                     });
-                    return x;
                 });
             }
 

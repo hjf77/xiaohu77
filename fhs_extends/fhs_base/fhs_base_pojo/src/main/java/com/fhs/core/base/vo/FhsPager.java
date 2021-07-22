@@ -2,6 +2,7 @@ package com.fhs.core.base.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -45,6 +46,11 @@ public class FhsPager<T> implements IPage<T>  {
     @ApiModelProperty("每页多少条")
     private long pageSize;
 
+
+    @Override
+    public List<OrderItem> orders() {
+        return new ArrayList<>();
+    }
 
     @Override
     @JSONField(serialize = false)

@@ -1,9 +1,9 @@
 package com.fhs.module.base.config;
 
 
-import com.fhs.module.base.shiro.ShiroCasRealm;
-import com.fhs.module.base.shiro.ShiroRealm;
-import com.fhs.module.base.shiro.StatelessSecurityManager;
+import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.core.cache.service.RedisCacheService;
+import com.fhs.module.base.shiro.*;
 import com.fhs.module.base.shiro.cache.ShiroSpringCacheManager;
 import com.fhs.pagex.filter.PageXFilter;
 import io.buji.pac4j.filter.CallbackFilter;
@@ -20,7 +20,9 @@ import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.logout.DefaultCasLogoutHandler;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -58,7 +60,7 @@ public class ShiroConfiguration {
     /*
      * 当前工程对外提供的服务地址
      */
-    @Value("${fhs.usevue:false}")
+    @Value("${fhs.use-vue:false}")
     private boolean useVue;
 
     private String clientName = "sso";
@@ -74,6 +76,9 @@ public class ShiroConfiguration {
      *   权限认证失败跳转地址
      */
     public static final String unauthorizedUrl = "/error/403.html";
+
+    @Autowired
+    private RedisCacheService<UcenterMsUserDO> redisCacheService;
 
     @Bean
     public Config config() {
@@ -101,6 +106,8 @@ public class ShiroConfiguration {
         return logoutHandler;
     }
 
+
+
     @Bean(name = "shiroRealm")
     public AuthorizingRealm shiroRealm() {
         if (isEnableCas) {
@@ -112,7 +119,7 @@ public class ShiroConfiguration {
             //shiroRealms.setCredentialsMatcher(hashedCredentialsMatcher);
             return shiroRealms;
         }
-        return new ShiroRealm();
+        return new ShiroRealm(useVue);
     }
 
 
@@ -133,16 +140,11 @@ public class ShiroConfiguration {
     @DependsOn({"shiroRealm","shiroSpringCacheManager","redisCacheManager"})
     public DefaultWebSecurityManager securityManager(RedisCacheManager redisCacheManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        if(this.useVue)
-        {
-            securityManager = new StatelessSecurityManager();
-        }
         securityManager.setCacheManager(shiroSpringCacheManager(redisCacheManager));// 用户授权/认证信息Cache, 采用EhCache 缓存
-       /*if (isEnableCas) {
-            securityManager.setSubjectFactory(new CasSubjectFactory());
-        }*/
-       // SecurityUtils.setSecurityManager(securityManager);
         securityManager.setRealm(shiroRealm());
+        if(useVue){
+            securityManager.setSubjectFactory(new StatelessDefaultSubjectFactory());
+        }
         return securityManager;
     }
 
@@ -180,6 +182,9 @@ public class ShiroConfiguration {
          */
         //自定义拦截器
         Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
+        if(useVue){
+            filtersMap.put("authc", new AuthFilter(redisCacheService));
+        }
         filtersMap.put("pagexFilter",new PageXFilter());
         if(isEnableCas)
         {

@@ -606,7 +606,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public IPage<Map<String, Object>> selectMapsPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
-        return baseMapper.selectMapsPage(page, queryWrapper);
+        return null;
     }
 
     @Override
