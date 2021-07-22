@@ -3,6 +3,7 @@ package com.fhs.module.base.filter;
 
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.result.PubResult;
@@ -28,7 +29,7 @@ public class AVueFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        if (request.getHeader("Authorization") != null) {
+        if (!CheckUtils.isNullOrEmpty(request.getHeader("Authorization"))) {
             String token = request.getHeader("Authorization");
             UcenterMsUserDO sysUser = redisCacheService.get("shiro:user:" + token);
             if(sysUser==null){
