@@ -8,6 +8,10 @@ import com.fhs.pub.dox.PubFileDO;
 import com.fhs.pub.service.FileServerBusiness;
 import com.fhs.pub.service.PubFileService;
 import com.fhs.pub.vo.PubFileVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +28,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("upload")
+@Api(tags="文件上传下载公共服务(文件服务)")
 public class UploadController extends ModelSuperController<PubFileVO, PubFileDO> {
 
     private static final Logger LOG = Logger.getLogger(DownLoadController.class);
@@ -39,11 +44,12 @@ public class UploadController extends ModelSuperController<PubFileVO, PubFileDO>
      * @param Filedata
      * @return
      */
-    @RequestMapping(value = "file", method = RequestMethod.POST)
     @ResponseBody
-    public void uploadFile(@RequestParam MultipartFile[] Filedata, HttpServletRequest request,
+    @RequestMapping(value = "file", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
+    @ApiOperation("上传文件")
+    public void uploadFile(@RequestPart  MultipartFile Filedata, HttpServletRequest request,
                            HttpServletResponse response) {
-        if (Filedata == null || Filedata.length == 0) {
+        if (Filedata == null) {
             super.outToClient(false);
             return;
         }

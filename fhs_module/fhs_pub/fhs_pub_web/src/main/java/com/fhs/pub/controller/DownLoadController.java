@@ -11,6 +11,7 @@ import com.fhs.pub.service.FileStorage;
 import com.fhs.pub.service.PubFileService;
 import com.fhs.pub.utils.ThumbnailatorUtils;
 import com.fhs.pub.vo.PubFileVO;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +35,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("downLoad")
+@Api(tags = "文件下载和查询")
 public class DownLoadController extends ModelSuperController<PubFileVO, PubFileDO> {
 
     private static final Logger LOG = Logger.getLogger(DownLoadController.class);
