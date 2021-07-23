@@ -11,6 +11,10 @@
 package com.fhs.basics.dox;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
@@ -41,11 +45,10 @@ import java.util.List;
  * @since [产品/模块版本]
  */
 @Data
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "t_ucenter_ms_user")
+@TableName("t_ucenter_ms_user")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
 public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
@@ -55,9 +58,8 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     /**
      * 用户id
      */
-    @Id
     @NotNull(message = "{test.userId.null}", groups = {Update.class, Delete.class})
-    @Column(name = "user_id")
+    @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("用户id")
     private String userId;
 
@@ -66,7 +68,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      */
     @NotNull(message = "{test.userLoginName.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.userLoginName.length}", max = 20, min = 0)
-    @Column(name = "user_login_name")
+    @TableField("user_login_name")
     @ApiModelProperty("登录名")
     private String userLoginName;
 
@@ -76,14 +78,14 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     @NotNull(message = "{test.userName.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.userName.length}", max = 20, min = 0)
     @Like
-    @Column(name = "user_name")
+    @TableField( "user_name")
     @ApiModelProperty("用户名")
     private String userName;
 
     /**
      * 密码
      */
-    @Column(name = "password")
+    @TableField( "password")
     @JSONField(serialize = false)
     @ApiModelProperty("密码")
     private String password;
@@ -92,14 +94,14 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      * 手机号
      */
     @NotNull(message = "{test.mobile.null}", groups = {Update.class, Add.class})
-    @Column(name = "mobile")
+    @TableField( "mobile")
     @ApiModelProperty("手机号")
     private String mobile;
 
     /**
      * 集团编码-saas模式适用
      */
-    @Column(name = "group_code")
+    @TableField( "group_code")
     @ApiModelProperty("集团编码")
     private String groupCode;
 
@@ -108,7 +110,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      */
     @NotNull(message = "{test.email.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.email.length}", max = 255, min = 0)
-    @Column(name = "email")
+    @TableField( "email")
     @ApiModelProperty("邮箱")
     private String email;
 
@@ -133,7 +135,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      */
     @Max(message = "前端用户的sex字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "前端用户的sex字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
-    @Column(name = "sex", length = 11)
+    @TableField( "sex")
     @Trans(type = TransType.WORD_BOOK, key = "sex")
     @ApiModelProperty("性别")
     private Integer sex;
@@ -151,7 +153,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     /**
      * 头像
      */
-    @Column(name = "header")
+    @TableField( "header")
     @ApiModelProperty("头像")
     private String header;
 

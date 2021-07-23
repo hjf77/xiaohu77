@@ -43,7 +43,7 @@ public class ServiceWordbookDO extends BaseDO<ServiceWordbookDO> {
     /**
      * id
      */
-    @TableId(value = "wordbook_id", type = IdType.UUID)
+    @TableId(value = "wordbook_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private Integer wordbookId;
 
