@@ -21,12 +21,16 @@ import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.shiro.StatelessSubject;
 import com.fhs.module.base.swagger.anno.ApiGroup;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,6 +49,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/")
+@Api(tags = "后台用户登录登出")
 @ApiGroup(group = "group_default")
 public class MsLoginController extends BaseController {
 
@@ -120,7 +125,8 @@ public class MsLoginController extends BaseController {
     /**
      * 用户登录
      */
-    @RequestMapping("/securityLogin")
+    @PostMapping("/securityLogin")
+    @ApiOperation("登录")
     public HttpResult<Boolean> securityLogin(UcenterMsUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
@@ -213,7 +219,8 @@ public class MsLoginController extends BaseController {
     /**
      * 用户登录
      */
-    @RequestMapping("/vueLogin")
+    @PostMapping("/vueLogin")
+    @ApiOperation("登录 for VUE")
     public HttpResult<Map<String, String>> vueLogin(UcenterMsUserDO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
         checkUserNameIsLock(sysUser.getUserLoginName());
         if(isVerification){
@@ -259,7 +266,8 @@ public class MsLoginController extends BaseController {
     /**
      * vue获取用户信息
      */
-    @RequestMapping("/getUserForVue")
+    @GetMapping("/getUserForVue")
+    @ApiOperation("获取用户信息 for VUE")
     public HttpResult<Map<String, Object>> getUserInfo(HttpServletRequest request) {
         UcenterMsUserVO user = getSessionuser();
         if (user == null) {
@@ -285,7 +293,8 @@ public class MsLoginController extends BaseController {
      *
      * @return
      */
-    @RequestMapping("/getRouters")
+    @GetMapping("/getRouters")
+    @ApiOperation("获取路由FOR VUE")
     public HttpResult<List<VueRouterVO>> getRouters() {
         UcenterMsUserVO user = getSessionuser();
         return HttpResult.success(sysUserService.getRouters(user, Constant.MENU_TYPE_VUE));
@@ -304,7 +313,8 @@ public class MsLoginController extends BaseController {
     /**
      * 生成验证码
      */
-    @RequestMapping("/defaultKaptchaForVue")
+    @GetMapping("/defaultKaptchaForVue")
+    @ApiOperation("验证码FOR VUE")
     public HttpResult<Map<String, String>> defaultKaptchaForVue()
             throws Exception {
         SCaptcha sCaptcha = new SCaptcha(100, 38);
@@ -325,7 +335,8 @@ public class MsLoginController extends BaseController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping("/defaultKaptcha")
+    @GetMapping("/defaultKaptcha")
+    @ApiOperation("验证码")
     public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         SCaptcha sCaptcha = new SCaptcha();
@@ -339,6 +350,13 @@ public class MsLoginController extends BaseController {
         }
     }
 
+    @GetMapping("/logoutForVue")
+    @ApiOperation("注销登出 for vue")
+    public HttpResult<String> logoutForVue(String token){
+        redisCacheService.remove("shiro:" + token);
+        redisCacheService.remove(USER_KEY + token);
+        return HttpResult.success("登出成功");
+    }
 
     /**
      * 退出
@@ -347,7 +365,7 @@ public class MsLoginController extends BaseController {
      * @param response
      * @throws IOException
      */
-    @RequestMapping("ms/logout")
+    @GetMapping("ms/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UcenterMsUserVO sysUser = this.getSessionuser();
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), true);

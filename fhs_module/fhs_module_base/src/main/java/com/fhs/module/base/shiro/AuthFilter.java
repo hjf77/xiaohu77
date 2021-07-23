@@ -28,10 +28,14 @@ public class AuthFilter  extends AuthenticatingFilter {
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String token = request.getHeader(Constant.VUE_HEADER_TOKEN_KEY);
-        UcenterMsUserDO sysUser = redisCacheService.get("shiro:user:" + token);
-        request.getSession().setAttribute(Constant.SESSION_USER, sysUser);
-        TokenContext.setToken(token);
+
+        UcenterMsUserDO sysUser = (UcenterMsUserDO)request.getSession().getAttribute(Constant.SESSION_USER);
+        if(sysUser==null){
+            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NOT_LOGIN.asResult().asJson());
+            return null;
+        }
+
+
         // 吧 accessToken 设置进 Shiro
         UsernamePasswordToken customUsernamePasswordToken = new UsernamePasswordToken(sysUser.getUserLoginName(), sysUser.getPassword());
         return customUsernamePasswordToken;
@@ -58,6 +62,13 @@ public class AuthFilter  extends AuthenticatingFilter {
             JsonUtils.outJson(httpServletResponse, PubResult.NOT_TOKEN.asResult().asJson());
             return false;
         }
+        UcenterMsUserDO sysUser = redisCacheService.get("shiro:user:" + token);
+        if(sysUser==null){
+            JsonUtils.outJson(httpServletResponse, PubResult.NOT_LOGIN.asResult().asJson());
+            return false;
+        }
+        httpServletRequest.getSession().setAttribute(Constant.SESSION_USER, sysUser);
+        TokenContext.setToken(token);
         return executeLogin(request,response);
     }
 
