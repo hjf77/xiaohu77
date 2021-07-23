@@ -247,7 +247,6 @@ public class MsLoginController extends BaseController {
         redisCacheService.expire("shiro:dp:" + tokenStr, sesstionTimeout);
 
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserLoginName(), sysUser.getPassword());
-        redisCacheService.put("shiro:" + tokenStr, new StatelessSubject((WebDelegatingSubject) subject));
         redisCacheService.expire("shiro:" + tokenStr, sesstionTimeout);
         redisCacheService.put(USER_KEY + tokenStr, sysUser);
         redisCacheService.expire(USER_KEY + tokenStr, sesstionTimeout);
