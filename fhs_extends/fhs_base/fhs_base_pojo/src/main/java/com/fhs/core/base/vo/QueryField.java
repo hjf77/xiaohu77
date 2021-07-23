@@ -3,7 +3,9 @@ package com.fhs.core.base.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 @ApiModel(
         description = "查询条件"
 )
+@AllArgsConstructor
 public class QueryField implements Serializable {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(
