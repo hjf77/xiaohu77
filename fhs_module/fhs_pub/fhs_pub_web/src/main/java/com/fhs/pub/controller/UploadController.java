@@ -2,6 +2,7 @@ package com.fhs.pub.controller;
 
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.JsonUtils;
+import com.fhs.core.base.controller.BaseController;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.pub.dox.PubFileDO;
@@ -29,7 +30,7 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("upload")
 @Api(tags="文件上传下载公共服务(文件服务)")
-public class UploadController extends ModelSuperController<PubFileVO, PubFileDO> {
+public class UploadController extends BaseController {
 
     private static final Logger LOG = Logger.getLogger(DownLoadController.class);
 

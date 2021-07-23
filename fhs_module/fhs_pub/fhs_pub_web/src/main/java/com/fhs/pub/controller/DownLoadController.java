@@ -1,6 +1,7 @@
 package com.fhs.pub.controller;
 
 import com.fhs.common.utils.*;
+import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.valid.checker.ParamChecker;
@@ -12,11 +13,11 @@ import com.fhs.pub.service.PubFileService;
 import com.fhs.pub.utils.ThumbnailatorUtils;
 import com.fhs.pub.vo.PubFileVO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +37,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("downLoad")
 @Api(tags = "文件下载和查询")
-public class DownLoadController extends ModelSuperController<PubFileVO, PubFileDO> {
+public class DownLoadController extends BaseController {
 
     private static final Logger LOG = Logger.getLogger(DownLoadController.class);
 
@@ -54,9 +55,9 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
      * @return
      */
     @RequestMapping(value = "file", method = RequestMethod.GET)
-    public void download(HttpServletRequest request, HttpServletResponse response) {
+    @ApiOperation("根据id下载文件")
+    public void download(String fileId, HttpServletResponse response) {
         try {
-            String fileId = request.getParameter("fileId");
             // 文件下载路径
             PubFileVO serviceFile = pubFileService.selectById(fileId);
             fileStorage.downloadFile(serviceFile,response);
@@ -73,6 +74,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
      * @return
      */
     @RequestMapping(value = "fileByName", method = RequestMethod.GET)
+    @ApiOperation("文件名称下载文件--已废弃")
     public void downloadForName(HttpServletRequest request, HttpServletResponse response) {
         try {
             String fileName = request.getParameter("fileName");
@@ -88,13 +90,14 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
 
     /**
      * 文件列表
-     * @param request
+     * @param fileIds
      * @return
      */
     @RequestMapping(value = "listData", method = RequestMethod.GET)
-    public void listData(HttpServletRequest request) {
-        ParamChecker.isNotNullOrEmpty(request.getParameter("fileIds"),"文件id不可为空");
-        List<PubFileVO> list = pubFileService.findByIds(Arrays.asList(request.getParameter("fileIds").split(",")));
+    @ApiOperation("根据逗号分隔的id获取文件详情")
+    public void listData(String fileIds) {
+        ParamChecker.isNotNullOrEmpty(fileIds,"文件id不可为空");
+        List<PubFileVO> list = pubFileService.findByIds(Arrays.asList(fileIds.split(",")));
         String json = JsonUtils.list2json(list);
         this.outJsonp(json);
     }
@@ -119,7 +122,13 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
      * @param request
      * @param response
      */
-    @RequestMapping("downImgMin")
+    @GetMapping("downImgMin")
+    @ApiOperation("获取指定分辨率的图片")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "fileId", paramType = "query", value = "文件id", required = true),
+            @ApiImplicitParam(name = "imgFileWidth", paramType = "query", value = "图片宽度", required = false),
+            @ApiImplicitParam(name = "imgFileHeight", paramType = "query", value = "图片高度", required = false),
+    })
     public void downImgMin(HttpServletRequest request, HttpServletResponse response) {
         String fileId = ConverterUtils.toString(request.getParameter("fileId"));
         Map<String, Object> map = new HashMap<String, Object>();
@@ -177,6 +186,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
      *
      * @return
      */
+    @ApiOperation("根据文件id下载--废弃")
     @RequestMapping(value = "fileFofFileId", method = RequestMethod.GET)
     public void downloadFofFileId(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -200,6 +210,7 @@ public class DownLoadController extends ModelSuperController<PubFileVO, PubFileD
      * @param response
      * @return
      */
+    @ApiOperation("多个文件压缩zip下载--用的话请问后台")
     @RequestMapping(value = "downUploadZip", method = RequestMethod.GET)
     public void downUploadZip(HttpServletRequest request, HttpServletResponse response) {
         try {
