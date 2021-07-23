@@ -247,10 +247,6 @@ public class MsLoginController extends BaseController {
         redisCacheService.expire("shiro:dp:" + tokenStr, sesstionTimeout);
 
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserLoginName(), sysUser.getPassword());
-        SecurityUtils.getSubject().login(token);
-        Subject subject = SecurityUtils.getSubject();
-        // 显示调用，让程序重新去加载授权数据
-        subject.isPermitted("init");
         redisCacheService.put("shiro:" + tokenStr, new StatelessSubject((WebDelegatingSubject) subject));
         redisCacheService.expire("shiro:" + tokenStr, sesstionTimeout);
         redisCacheService.put(USER_KEY + tokenStr, sysUser);
