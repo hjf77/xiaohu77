@@ -68,7 +68,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> imp
     @Length(message = "同级菜单排行第几字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField( "ranking")
     @ApiModelProperty(value = "同级菜单排行第几")
-    private String ranking;
+    private Integer ranking;
 
     /**
      * 是否启用(0:启用 1:禁用)
@@ -91,5 +91,14 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> imp
     @TableField("ext_json")
     @ApiModelProperty(value = "扩展字段")
     private String extJson;
+
+
+    @TableField("is_company")
+    @ApiModelProperty(value = "是否是单位")
+    private Integer isCompany;
+
+    @TableField("company_id")
+    @ApiModelProperty(value = "所属单位id")
+    private String companyId;
 
 }

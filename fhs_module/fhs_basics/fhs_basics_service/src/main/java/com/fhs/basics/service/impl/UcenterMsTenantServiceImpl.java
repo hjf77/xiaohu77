@@ -49,7 +49,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         UcenterMsOrganizationDO organization = new UcenterMsOrganizationDO();
         organization.setId(tenant.getGroupCode() + "_001");
         organization.setName(tenant.getTenantName());
-        organization.setRanking("1");
+        organization.setRanking(1);
         organization.setIsEnable(Constant.INT_TRUE);
         organization.preInsert(tenant.getCreateUser());
         organization.setParentId("");

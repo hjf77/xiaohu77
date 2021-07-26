@@ -36,6 +36,7 @@ public class FileServerBusinessImpl implements FileServerBusiness {
         String fileId = StringUtil.getUUID();
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
+        fileData.getSize();
         sf.setFileName(fileName);
         sf.setFileSuffix(suffix);
         sf.setUploadDate(currentDate);

@@ -266,7 +266,7 @@ public class MsLoginController extends BaseController {
     /**
      * vue获取用户信息
      */
-    @GetMapping("/getUserForVue")
+    @GetMapping("/ms/getUserForVue")
     @ApiOperation("获取用户信息 for VUE")
     public HttpResult<Map<String, Object>> getUserInfo(HttpServletRequest request) {
         UcenterMsUserVO user = getSessionuser();
@@ -293,7 +293,7 @@ public class MsLoginController extends BaseController {
      *
      * @return
      */
-    @GetMapping("/getRouters")
+    @GetMapping("/ms/getRouters")
     @ApiOperation("获取路由FOR VUE")
     public HttpResult<List<VueRouterVO>> getRouters() {
         UcenterMsUserVO user = getSessionuser();

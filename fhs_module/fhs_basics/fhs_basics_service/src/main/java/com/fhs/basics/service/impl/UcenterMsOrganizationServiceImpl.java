@@ -7,6 +7,7 @@ import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.TreeModelVO;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
@@ -49,8 +50,12 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         ranking = ranking == null ? 0 : ranking;
         ranking = ranking + 1;
         String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
-        adminOrganization.setRanking(ranking + "");
+        adminOrganization.setRanking(ranking );
         adminOrganization.setId(id);
+        //如果当前节点是企业的话，那么企业id用自己的id
+        if(adminOrganization.getIsCompany()!=null && adminOrganization.getIsCompany()== Constant.INT_TRUE){
+            adminOrganization.setCompanyId(adminOrganization.getId());
+        }
         int isAdd = super.insertSelective(adminOrganization);
         if (isAdd >= 1) {
             return true;

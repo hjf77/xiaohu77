@@ -42,6 +42,7 @@ public class DiskFileStorage<mian> implements FileStorage {
         File file = getFile( serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(fileData.getInputStream(), file);
+            serviceFile.setFileSize(file.length());
         } catch (IOException e) {
             LOG.error("文件上传失败", e);
         }

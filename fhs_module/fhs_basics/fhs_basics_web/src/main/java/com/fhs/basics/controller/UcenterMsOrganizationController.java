@@ -149,6 +149,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
             if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsEnable()) {
                 return HttpResult.error(sysOrganizationQuery, "父机构处于禁用状态，不能添加子机构");
             }
+            sysOrganization.setCompanyId(sysOrganizationQuery.getCompanyId());
         }
         sysOrganization.setGroupCode(super.getSessionuser().getGroupCode());
         sysOrganization.preInsert(super.getSessionuser().getUserId());
