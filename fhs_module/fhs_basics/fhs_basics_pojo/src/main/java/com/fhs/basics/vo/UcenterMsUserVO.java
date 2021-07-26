@@ -5,6 +5,7 @@ import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 /**
@@ -18,5 +19,11 @@ import lombok.*;
 @TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
 @ApiModel(value ="UcenterMsUserVO",description ="UcenterMsUserVO参数")
 public class UcenterMsUserVO extends UcenterMsUserDO implements VO {
+
+    @ApiModelProperty("组织机构对应的公司id")
+    private String companyId;
+
+    @ApiModelProperty("公司名称")
+    private String companyName;
 
 }

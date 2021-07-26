@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
@@ -12,22 +13,29 @@ import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author qixiaobo
@@ -58,7 +66,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * 获取机构菜单树结构json字符串对象 菜单管理左侧树形结构
      */
     @RequiresPermissions("sysOrganization:see")
-    @RequestMapping("getTreesData")
+    @GetMapping("getTreesData")
     public void getTreesData(String id) {
         Map<String, Object> map = super.getPageTurnNum();
         UcenterMsUserVO sysUser = super.getSessionuser();
@@ -140,7 +148,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @param sysOrganization
      */
     @RequiresPermissions("sysOrganization:add")
-    @RequestMapping("insertOrganization")
+    @PostMapping("insertOrganization")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult insertOrganization(HttpServletRequest request, HttpServletResponse response,
                                          UcenterMsOrganizationVO sysOrganization) {
@@ -163,10 +171,32 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @param request 请求
      * @return combotree数据格式
      */
-    @RequestMapping(value = "/getOrgIdComBoxData")
+    @GetMapping(value = "/getOrgIdComBoxData")
     public void getOrgIdComBoxData(HttpServletRequest request, HttpServletResponse response) {
         // 查询根级组织 为当前系统的登录用户组织
         UcenterMsUserVO sysUser = super.getSessionuser();
         super.outJsonp(JsonUtils.list2json(sysOrganizationService.getSubNode(sysUser.getOrganizationId(), request.getParameter("parentId"))));
+    }
+
+    @GetMapping(value = "/getCompanyTree")
+    @ApiOperation("获取公司tree")
+    public List<TreeNode> getCompanyTree(){
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(new LambdaQueryWrapper<>());
+        Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
+                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
+        Map<String,TreeNode> nodeMap = new HashMap<>();
+        List<TreeNode> result = new ArrayList<>();
+        for (UcenterMsOrganizationVO org : orgs) {
+            nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(org.getId()).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
+        }
+        for (UcenterMsOrganizationVO org : orgs) {
+            if(CheckUtils.isNullOrEmpty(org.getParentId())){
+                result.add(nodeMap.get(org.getId()));
+             //如果是个组织则找我爸爸的公司id
+            }else if(org.getIsCompany()!=null && Constant.INT_TRUE==org.getIsCompany() && orgMap.containsKey(org.getParentId())){
+                nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
+            }
+        }
+        return result;
     }
 }
