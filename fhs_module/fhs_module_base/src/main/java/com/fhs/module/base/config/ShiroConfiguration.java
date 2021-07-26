@@ -3,6 +3,7 @@ package com.fhs.module.base.config;
 
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.core.cache.service.RedisCacheService;
+import com.fhs.module.base.filter.LoginFilter;
 import com.fhs.module.base.shiro.*;
 import com.fhs.module.base.shiro.cache.ShiroSpringCacheManager;
 import com.fhs.pagex.filter.PageXFilter;
@@ -186,6 +187,7 @@ public class ShiroConfiguration {
             filtersMap.put("authc", new AuthFilter(redisCacheService));
         }
         filtersMap.put("pagexFilter",new PageXFilter());
+
         if(isEnableCas)
         {
             //设置pac4j回调Filter
@@ -201,6 +203,7 @@ public class ShiroConfiguration {
             logoutFilter.setDefaultUrl(shiroServerUrlPrefix + "/callback?client_name=" + clientName);
             filtersMap.put("logout",logoutFilter);
         }
+        filtersMap.put("zLoginFilter",new LoginFilter());
         shiroFilterFactoryBean.setFilters(filtersMap);
         loadShiroFilterChain(shiroFilterFactoryBean);
         return shiroFilterFactoryBean;

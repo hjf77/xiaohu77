@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author wanglei
  * @since 2019-05-18 11:28:35
  */
-@WebFilter(urlPatterns = {"*"},filterName = "zLoginFilter" ,asyncSupported = true)
+//@WebFilter(urlPatterns = {"*"},filterName = "zLoginFilter" ,asyncSupported = true)
 public class LoginFilter implements Filter{
 
     private static final Logger LOGGER = Logger.getLogger(LoginFilter.class);
