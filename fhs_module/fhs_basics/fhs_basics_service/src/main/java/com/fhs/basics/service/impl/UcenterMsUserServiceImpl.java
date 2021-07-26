@@ -11,10 +11,7 @@ import com.fhs.basics.dox.UcenterMsTenantDO;
 import com.fhs.basics.form.SysUserForm;
 import com.fhs.basics.mapper.SettMsMenuMapper;
 import com.fhs.basics.mapper.UcenterMsUserMapper;
-import com.fhs.basics.service.SettMsMenuService;
-import com.fhs.basics.service.UcenterMsRoleService;
-import com.fhs.basics.service.UcenterMsUserService;
-import com.fhs.basics.service.UcenterMsTenantService;
+import com.fhs.basics.service.*;
 import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
@@ -78,6 +75,10 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Autowired
     private UcenterMsTenantService tenantService;
 
+    @Lazy
+    @Autowired
+    private UcenterMsOrganizationService organizationService;
+
 
     @Override
     public UcenterMsUserVO login(UcenterMsUserDO adminUser) {
@@ -85,7 +86,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         if (adminUser == null) {
             return null;
         }
-        return this.selectById(adminUser.getUserId());
+        UcenterMsUserVO result = this.selectById(adminUser.getUserId());
+        if(result.getOrganizationId()!=null){
+            UcenterMsOrganizationVO organization =  organizationService.selectById(result.getOrganizationId());
+            result.setCompanyId(organization.getCompanyId());
+        }
+        return result;
     }
 
     @Override
