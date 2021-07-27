@@ -32,4 +32,10 @@ public @interface Trans {
      * @return
      */
     String ref() default "";
+
+    /**
+     * 如果设置了json key 比如userid jsonKey 设置了userName 那么会给前端序列化一个userIdName 值为transMap.get userName 此处和ref属性二选一即可
+     * @return
+     */
+    String jsonKey() default "";
 }
