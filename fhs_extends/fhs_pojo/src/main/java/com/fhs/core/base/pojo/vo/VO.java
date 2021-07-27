@@ -1,5 +1,6 @@
 package com.fhs.core.base.pojo.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fhs.common.utils.ReflectUtils;
@@ -25,6 +26,7 @@ public interface VO {
      * 获取主键
      * @return  主键
      */
+    @JSONField(serialize = false,deserialize = false)
     Object getPkey();
 
 
