@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.basics.api.rpc.FeignOrganizationApiService;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.mapper.UcenterMsOrganizationMapper;
@@ -8,18 +9,17 @@ import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author qixiaobo
@@ -30,7 +30,7 @@ import java.util.Map;
 @Service
 @DataSource("base_business")
 @AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", useRedis = true, defaultAlias = "org")
-public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationDO> implements UcenterMsOrganizationService {
+public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationDO> implements UcenterMsOrganizationService, FeignOrganizationApiService {
 
     @Autowired
     private UcenterMsOrganizationMapper mapper;
@@ -106,4 +106,16 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         return mapper.findChildCountById(paramMap);
     }
 
+    @Override
+    public HttpResult<UcenterMsOrganizationDO> getOrgById(String id) {
+        return HttpResult.success(super.selectById(id));
+    }
+
+    @Override
+    public HttpResult<List<UcenterMsOrganizationVO>> getOrgByIds(String ids) {
+        if(CheckUtils.isNullOrEmpty(ids)){
+            HttpResult.error();
+        }
+        return HttpResult.success(super.findByIds(Arrays.asList(ids.split(","))));
+    }
 }
