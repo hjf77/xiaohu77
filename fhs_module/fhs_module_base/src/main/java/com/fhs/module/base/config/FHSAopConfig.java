@@ -1,5 +1,6 @@
 package com.fhs.module.base.config;
 
+import com.fhs.core.jsonfilter.aop.ParamArrayHandle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +12,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FHSAopConfig {
 
-
+    /**
+     * 前端传数组后端自动解析为 字符串的处理器 前端[1,2,3] 后端接收 1,2,3
+     * @return
+     */
+    @Bean
+    public ParamArrayHandle paramArrayHandle(){
+        return new ParamArrayHandle();
+    }
 
 }

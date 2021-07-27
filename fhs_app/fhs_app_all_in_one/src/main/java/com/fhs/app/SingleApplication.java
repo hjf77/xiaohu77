@@ -23,7 +23,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class SingleApplication {
 
     public static void main(String[] args) {
-
         try{
             SpringApplication.run(SingleApplication.class, args);
         }catch (Exception e){
