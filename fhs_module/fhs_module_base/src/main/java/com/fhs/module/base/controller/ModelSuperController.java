@@ -358,6 +358,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
                 }
                 baseDo.preInsert(getSessionuser().getUserId());
             }
+            beforSave( e,true);
             baseService.insertSelective((D) e);
             return HttpResult.success(true);
 
@@ -434,6 +435,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
                 BaseDO<?> baseDo = (BaseDO<?>) e;
                 baseDo.preUpdate(getSessionuser().getUserId());
             }
+            beforSave( e,false);
             baseService.updateSelectiveById((D) e);
             return HttpResult.success(true);
         }
@@ -482,6 +484,16 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             return list;
         }
         throw new NotPremissionException();
+    }
+
+
+    /**
+     * 在保存之前执行部分自定义业务逻辑
+     * @param e 对象
+     * @param isAdd 是否是添加
+     */
+    protected void beforSave(V e,boolean isAdd){
+
     }
 
 
