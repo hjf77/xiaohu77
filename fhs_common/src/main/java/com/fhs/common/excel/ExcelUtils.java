@@ -655,7 +655,7 @@ public class ExcelUtils {
         File file = new File(filePath);
         // 判断目标文件是否存在
         if (!file.exists()) {
-            log.error("ExcelUtils.exportExcel    目标文件" + filePath + "不存在！");
+            log.error("ExcelUtils.importExcel    目标文件" + filePath + "不存在！");
         }
 
         String fileName = file.getName();
@@ -668,9 +668,59 @@ public class ExcelUtils {
         } else if ("xlsx".equals(extension)) {
             dataList = readExcelContent07(filePath, titleRowNum, colNum);
         } else {
-            log.error("ExcelUtils.exportExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
         }
         return dataList;
+    }
+
+    /**
+     * 导入excel的接口
+     * @param wb          excel对象
+     * @param titleRowNum title所在行，默认0行开始
+     * @Param collNum     共多少列
+     */
+    public static Object[][] importExcel(Workbook wb, int titleRowNum, int colNum) {
+        Object[][] dataList = null;
+        if (null == wb) {
+            log.error("ExcelUtils.importExcel    文件为空");
+            return dataList;
+        }
+
+        // 根据不同excel版本调用不同的excel类型
+        if (wb instanceof HSSFWorkbook){
+            dataList = readExcelContent03((HSSFWorkbook) wb, titleRowNum, colNum);
+        } else if (wb instanceof XSSFWorkbook){
+            dataList = readExcelContent07((XSSFWorkbook) wb, titleRowNum, colNum);
+        } else {
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+
+        return dataList;
+    }
+
+    /**
+     * Excel文件转换成Apache poi Workbook对象
+     */
+    public static Workbook convertToExcel(String filePath) {
+        File file = new File(filePath);
+        // 判断目标文件是否存在
+        if (!file.exists()) {
+            log.error("ExcelUtils.convertToExcel    目标文件" + filePath + "不存在！");
+        }
+
+        String fileName = file.getName();
+        String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        // 根据不同excel版本调用不同的excel类型
+        Workbook wb = null;
+        if ("xls".equals(extension)) {
+            return getWorkbook03(filePath);
+        } else if ("xlsx".equals(extension)) {
+            return getWorkbook07(filePath);
+        } else {
+            log.error("ExcelUtils.convertToExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+        return wb;
     }
 
     /**
@@ -682,6 +732,17 @@ public class ExcelUtils {
      */
     public static Object[][] readExcelContent07(String filePath, int titleRowNum, int colNum) {
         XSSFWorkbook wb = getWorkbook07(filePath);
+        return readExcelContent07(wb, titleRowNum, colNum);
+    }
+
+    /**
+     * 读取Excel数据内容
+     *
+     * @param titleRowNum 标题的总行数
+     * @param colNum      总列数
+     * @return Map 包含单元格数据内容的Map对象
+     */
+    public static Object[][] readExcelContent07(XSSFWorkbook wb, int titleRowNum, int colNum) {
         XSSFSheet sheet;
 
         sheet = wb.getSheetAt(0);
