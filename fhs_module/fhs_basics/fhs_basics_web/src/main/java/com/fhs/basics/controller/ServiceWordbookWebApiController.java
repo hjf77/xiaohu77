@@ -4,7 +4,9 @@ import com.fhs.basics.service.ServiceWordBookService;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +25,8 @@ public class ServiceWordbookWebApiController extends BaseController {
     /**
      * 查询省市区外调接口
      */
-    @RequestMapping("getData")
+    @GetMapping("getData")
+    @ApiOperation("根据字典编码获取字典")
     public void getData(String wordbookGroupCode) {
          super.outJsonp(JsonUtils.list2json(wordBookService.getWordBookList(wordbookGroupCode)));
     }
