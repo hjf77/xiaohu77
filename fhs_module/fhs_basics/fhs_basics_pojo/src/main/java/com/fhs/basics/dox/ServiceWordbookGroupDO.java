@@ -47,7 +47,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     /**
      * ID
      */
-    @TableId(value = "group_id", type = IdType.UUID)
+    @TableId(value = "group_id", type = IdType.AUTO)
     @NotNull(message = "{wordbook.groupId.null}", groups = {Update.class, Delete.class})
     @Max(message = "{wordbook.groupId.max}", value = 2147483647, groups = {Delete.class, Update.class})
     @Min(message = "{wordbook.groupId.min}", value = -2147483648, groups = {Delete.class, Update.class})
