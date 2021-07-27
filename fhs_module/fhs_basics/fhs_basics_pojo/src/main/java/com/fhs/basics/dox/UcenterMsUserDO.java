@@ -146,7 +146,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
-    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG )
+    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG,jsonKey = "orgName")
     @ApiModelProperty("组织机构编号")
     private String organizationId;
 
