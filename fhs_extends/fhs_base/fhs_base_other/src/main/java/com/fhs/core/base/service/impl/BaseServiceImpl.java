@@ -126,6 +126,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int add(D bean) {
+        this.initPkeyAndIsDel(bean);
         int result = baseMapper.insertSelective(bean);
         BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
         BisLoggerContext.addHistoryData(bean, this.namespace);
