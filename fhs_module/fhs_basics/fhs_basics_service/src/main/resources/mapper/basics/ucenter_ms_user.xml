@@ -719,5 +719,18 @@
         WHERE group_code=#{groupCode}
 	</select>
 
+    <select id="getUserByOrgAndPermission" resultType="com.fhs.basics.dox.UcenterMsUserDO" parameterType="map">
+        SELECT DISTINCT 	u.*  FROM
+            t_ucenter_ms_user u JOIN  t_ucenter_ms_role_user_rela ur  ON u.user_id = ur.user_id
+                                JOIN t_ucenter_ms_role_permission rp ON ur.role_id = rp.role_id
+                                JOIN t_sett_ms_menu_permission p ON rp.permission_id = p.permission_id
+                                JOIN t_sett_ms_menu m ON m.menu_id = p.menu_id
+                                JOIN t_ucenter_ms_organization o ON u.organization_id= o.id
+        WHERE u.is_delete=0 AND ur.is_detele= 0 AND rp.is_delete=0 AND p.is_delete = 0 AND o.is_delete=0
+          AND m.is_delete=0
+          AND m.namespace=#{namespace} and p.method=#{permissonMethodCode}
+          AND o.company_id=#{companyId}
+    </select>
+
 </mapper>
 

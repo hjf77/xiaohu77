@@ -19,6 +19,7 @@ import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     /**
      * 获取用户jsontree 用于easyui下拉tree数据源
      */
-    @RequestMapping("getUserTree")
+    @GetMapping("getUserTree")
     public void  getUserTree() {
         super.outJsonp(JsonUtils.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode())));
     }
@@ -59,7 +60,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     /**
      * 获取用户List
      */
-    @RequestMapping("getUserList")
+    @GetMapping("getUserList")
     public List<UcenterMsUserVO>  getUserList() {
         UcenterMsUserVO ucenterMsUserVO = new UcenterMsUserVO();
         ucenterMsUserVO.setIsDelete(Constant.NO_DELETE);
@@ -71,7 +72,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 根据用户id获取用户详情
      * @param userId 用户id
      */
-    @RequestMapping("getUserById")
+    @GetMapping("getUserById")
     @LogMethod
     public void getUserById(String userId){
         super.outJsonp(JsonUtils.bean2json(sysUserService.selectById(userId)));
@@ -81,7 +82,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 获取用户列表
      * @param
      */
-    @RequestMapping("getUserByIdList")
+    @GetMapping("getUserByIdList")
     @LogMethod
     public void getUserByIdList(String userIds){
         if(CheckUtils.isNullOrEmpty(userIds)){
@@ -102,7 +103,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @NotRepeat
     @RequiresPermissions("sysUser:add")
-    @RequestMapping("addUser")
+    @PostMapping("addUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
     public HttpResult addUser(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser,
                               RedirectAttributes attr) {
@@ -139,7 +140,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param response
      * @param sysUser
      */
-    @RequestMapping("readPass")
+    @PostMapping("readPass")
     public void readPass(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         String isSuccess = sysUserService.readPass(sysUser.getUserName());
         super.outWrite(isSuccess);
@@ -149,7 +150,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * jsonp接口.用于其他系统用户列表
      * @param request
      */
-    @RequestMapping("findUsers")
+    @GetMapping("findUsers")
     @LogMethod
     public void findUsersJsonp(HttpServletRequest request){
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
@@ -217,7 +218,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      *
      * @param sysUser 前端用户信息
      */
-    @RequestMapping("updatePass")
+    @PostMapping("updatePass")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2,desc = "修改个人密码")
     public void updatePass(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         UcenterMsUserVO user = super.getSessionuser();
@@ -231,7 +232,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      *
      * @param formSysUser 前端参数
      */
-    @RequestMapping("updateOwnUserInfo")
+    @PostMapping("updateOwnUserInfo")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2,desc = "修改个人信息")
     public void updateOwnUserInfo(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO formSysUser) {
         UcenterMsUserVO user = super.getSessionuser();
@@ -251,7 +252,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param request
      * @param response
      */
-    @RequestMapping("validataPass")
+    @PostMapping("validataPass")
     public void validataPass(HttpServletRequest request, HttpServletResponse response) {
         String param = request.getParameter("param");
         UcenterMsUserVO user = super.getSessionuser();
@@ -277,7 +278,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @desc 后台用户分页
      */
     @RequiresPermissions("sysUser:see")
-    @RequestMapping("/findPage/{organizationId}")
+    @GetMapping("/findPage/{organizationId}")
     @ResponseBody
     @LogMethod
     public Pager<UcenterMsUserVO> findPage(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, UcenterMsUserVO sysUser) {
@@ -296,11 +297,17 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param request
      * @return
      */
-    @RequestMapping("getOwnUserInfo")
+    @GetMapping("getOwnUserInfo")
     @ResponseBody
     @LogMethod
     public UcenterMsUserVO getOwnUserInfo(HttpServletRequest request) {
         return sysUserService.selectById(super.getSessionuser().getUserId());
     }
 
+    @GetMapping("getUserByOrgAndPermission")
+    @ResponseBody
+    @ApiOperation("根据单位id，namespace，和方法编码获取符合条件的人")
+    public List<UcenterMsUserDO> getUserByOrgAndPermission(Integer companyId,String namespace,String permissonMethodCode){
+        return sysUserService.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
+    }
 }

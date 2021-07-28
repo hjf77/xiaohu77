@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.vo.*;
 import com.fhs.core.base.service.BaseService;
+import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -26,14 +28,14 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public UcenterMsUserVO login(UcenterMsUserDO adminUser);
+    UcenterMsUserVO login(UcenterMsUserDO adminUser);
 
     /**
      * 发送邮件
      *
      * @param adminUser
      */
-    public void sendMail(UcenterMsUserDO adminUser, String pas);
+    void sendMail(UcenterMsUserDO adminUser, String pas);
 
     /***
      * 获取密码
@@ -41,7 +43,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param userName
      * @return
      */
-    public String readPass(String userName);
+    String readPass(String userName);
 
     /**
      * 添加用户角色
@@ -49,7 +51,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public int addUserRole(UcenterMsUserDO adminUser);
+    int addUserRole(UcenterMsUserDO adminUser);
 
     /**
      * 查询用户角色
@@ -57,7 +59,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public List<Map<String, Object>> searchUserRole(UcenterMsUserDO adminUser);
+    List<Map<String, Object>> searchUserRole(UcenterMsUserDO adminUser);
 
     /**
      * 删除当前用户的角色
@@ -65,7 +67,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public boolean deleteUserRole(UcenterMsUserDO adminUser);
+    boolean deleteUserRole(UcenterMsUserDO adminUser);
 
     /**
      * 添加用户信息
@@ -73,7 +75,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public Map<String, Object> addUser(UcenterMsUserDO adminUser);
+    Map<String, Object> addUser(UcenterMsUserDO adminUser);
 
     /**
      * 修改用户信息
@@ -81,7 +83,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public boolean updateUser(UcenterMsUserDO adminUser);
+    boolean updateUser(UcenterMsUserDO adminUser);
 
     /**
      * 根据用户查询菜单
@@ -89,7 +91,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public List<SettMsMenuVO> selectMenuByUid(UcenterMsUserDO adminUser);
+    List<SettMsMenuVO> selectMenuByUid(UcenterMsUserDO adminUser);
 
     /**
      * 根据父节点查询菜单
@@ -97,7 +99,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param map
      * @return
      */
-    public SettMsMenuVO selectParentMenuById(Map<String, Object> map);
+    SettMsMenuVO selectParentMenuById(Map<String, Object> map);
 
     /**
      * 更加用户构建菜单数据
@@ -105,7 +107,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public JSONArray buildMenuJson(UcenterMsUserDO adminUser);
+    JSONArray buildMenuJson(UcenterMsUserDO adminUser);
 
 
 
@@ -115,7 +117,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public List<SettMsMenuPermissionVO> searchUserButton(UcenterMsUserDO adminUser);
+    List<SettMsMenuPermissionVO> searchUserButton(UcenterMsUserDO adminUser);
 
     /**
      * 监测原始密码是否正确
@@ -123,7 +125,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      * @paramsysUserGroupcode
      */
-    public boolean validataPass(UcenterMsUserDO adminUser);
+    boolean validataPass(UcenterMsUserDO adminUser);
 
     /**
      * 修改用户密码
@@ -131,7 +133,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      * @paramsysUserGroupcode
      */
-    public boolean updatePass(UcenterMsUserDO adminUser);
+    boolean updatePass(UcenterMsUserDO adminUser);
 
     /**
      * 根据用户名称获取权限
@@ -139,7 +141,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    public List<String> selectMenuByUname(UcenterMsUserDO adminUser);
+    List<String> selectMenuByUname(UcenterMsUserDO adminUser);
 
     /**
      * 根据用户名称获取权限
@@ -147,7 +149,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser,menuState(0:物业的,1:社区的)
      * @return
      */
-    public List<String> selectMenuByUname(UcenterMsUserDO adminUser, int menuState);
+    List<String> selectMenuByUname(UcenterMsUserDO adminUser, int menuState);
 
     /**
      * 通过登录名获取用户
@@ -176,12 +178,12 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     /**
      * 根据名称获取用户信息
      */
-    public UcenterMsUserVO findUserByName(String userName);
+    UcenterMsUserVO findUserByName(String userName);
 
     /**
      * 根据用户名称查询所有权限
      */
-    public List<String> findMenuButtonByName(String userName);
+    List<String> findMenuButtonByName(String userName);
 
 
     /**
@@ -242,5 +244,12 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     List<SysUserOrgVO> getUserOrgTreeList(String groupCode);
 
 
-
+    /**
+     * 根据用户组织id
+     * @param companyId 公司id
+     * @param namespace 命名空间
+     * @param permissonMethodCode 权限编码
+     * @return
+     */
+    List<UcenterMsUserDO> getUserByOrgAndPermission(Integer companyId,String namespace,String permissonMethodCode);
 }

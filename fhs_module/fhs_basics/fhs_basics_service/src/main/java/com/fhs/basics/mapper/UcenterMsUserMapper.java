@@ -285,4 +285,15 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO> {
      * @return 集团下所有的用户
      */
     List<SysUserOrgVO> getUserOrgTreeList(@Param("groupCode") String groupCode);
+
+
+    /**
+     * 根据用户组织id
+     * @param companyId 公司id
+     * @param namespace 命名空间
+     * @param permissonMethodCode 权限编码
+     * @return
+     */
+    @NotMultiTenancyCheck
+    List<UcenterMsUserDO> getUserByOrgAndPermission(@Param("companyId") Integer companyId,@Param("namespace") String namespace,@Param("permissonMethodCode") String permissonMethodCode);
 }

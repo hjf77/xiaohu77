@@ -160,49 +160,50 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     /**
      * 状态
      */
-    @Transient
+    
+    @TableField(exist = false)
     @ApiModelProperty("状态")
     private String state;
 
     /**
      * 当前用户的角色
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("用户角色")
     private String[] roleList;
 
     /**
      * 角色id逗号分隔
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("角色编号")
     private String roleIds;
 
     /**
      * 原始密码
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("原始密码")
     private String oldPassword;
 
     /**
      * 新密码
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("新密码")
     private String newPassword;
 
     /**
      * 菜单类型
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("菜单类型")
     private Integer menuType;
 
     /**
      * 角色集合
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("角色")
     private List<UcenterMsRoleDO> roles;
 

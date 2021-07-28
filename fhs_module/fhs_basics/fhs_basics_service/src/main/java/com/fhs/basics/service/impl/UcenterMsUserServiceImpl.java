@@ -3,6 +3,7 @@ package com.fhs.basics.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
@@ -757,6 +758,17 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             } else {
                 result.add(user);
             }
+        }
+        return result;
+    }
+
+    @Override
+    public List<UcenterMsUserDO> getUserByOrgAndPermission(Integer companyId, String namespace, String permissonMethodCode) {
+        List result =  sysUserMapper.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
+        List<UcenterMsUserVO> adminUsers= super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin,Constant.INT_TRUE));
+        //把admin也加入进来
+        if(!adminUsers.isEmpty()){
+            result.addAll(adminUsers);
         }
         return result;
     }
