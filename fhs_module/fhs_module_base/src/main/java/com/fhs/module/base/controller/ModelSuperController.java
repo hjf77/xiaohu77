@@ -110,12 +110,12 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
 
     /**
-     * 查询bean列表数据
+     * 查询bean列表数据-不分页
      *
      * @param request
      * @throws Exception
      */
-    @PostMapping("pagerAdvance")
+    @PostMapping("findListAdvance")
     @ResponseBody
     @LogMethod(voParamIndex = 0)
     @ApiOperation("后台-高级查询不分页一般用于下拉-vue推荐")
