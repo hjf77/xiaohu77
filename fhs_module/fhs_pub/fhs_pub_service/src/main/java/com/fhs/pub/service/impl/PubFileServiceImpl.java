@@ -16,6 +16,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.pub.dox.PubFileDO;
 import com.fhs.pub.mapper.PubFileMapper;
 import com.fhs.pub.service.PubFileService;
@@ -37,6 +38,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("file")
+@AutoTrans(namespace = "file",fields = "fileName",useCache = true,useRedis = true)
 public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> implements PubFileService {
 
     /**
