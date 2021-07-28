@@ -55,9 +55,10 @@ public class TransFormatterFilter extends BeforeFilter {
         }
         boolean isSuperBean = obj instanceof SuperBean;
         SuperBean superBean = null;
-        if (isSuperBean) {
-            superBean = (SuperBean) obj;
+        if (!isSuperBean) {
+           return;
         }
+        superBean = (SuperBean) obj;
         //这块暂时不弄缓存
         List<Field> fields =  ReflectUtils.getAnnotationField(superBean.getClass(), Trans.class);
         for (Field field : fields) {
