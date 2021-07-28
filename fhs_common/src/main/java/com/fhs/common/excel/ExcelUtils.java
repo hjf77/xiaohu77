@@ -1019,4 +1019,95 @@ public class ExcelUtils {
         }
         return value;
     }
+
+    /**
+     * 获取excel title 行
+     * @param titleRowNum 行号,0开始
+     * @param colNum      一共多少列
+     */
+    public static Object[] getExcelTitleRow(String filePath, int titleRowNum, int colNum) {
+        File file = new File(filePath);
+        // 判断目标文件是否存在
+        if (!file.exists()) {
+            log.error("ExcelUtils.getExcelTitleRow    目标文件" + filePath + "不存在！");
+        }
+
+        String fileName = file.getName();
+        String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        // 根据不同excel版本调用不同的excel类型
+        Object[] dataList = null;
+        if ("xls".equals(extension)) {
+            dataList = readExcelTitle03(filePath, titleRowNum, colNum);
+        } else if ("xlsx".equals(extension)) {
+            dataList = readExcelTitle07(filePath, titleRowNum, colNum);
+        } else {
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+        return dataList;
+    }
+
+    /**
+     * 读取excel title内容
+     *
+     * @param wb          excel
+     * @param titleRowNum 行号
+     * @param colNum      一共多少列
+     */
+    public static Object[] readExcelTitle03(String filePath, int titleRowNum, int colNum) {
+        HSSFWorkbook wb = getWorkbook03(filePath);
+        HSSFSheet sheet;
+
+        // 获取sheet个数
+        int sheetNO = wb.getNumberOfSheets();
+        sheet = wb.getSheetAt(0);
+
+        HSSFRow row = sheet.getRow(titleRowNum);
+        if (null == row) {
+            return null;
+        }
+
+        //表头
+        Object[] titleArray = new Object[colNum];
+
+        for (int i = 0; i < colNum; i++){
+            titleArray[i] = getCellValue(row.getCell(i));
+        }
+
+        return titleArray;
+    }
+
+    /**
+     * 读取Excel title内容
+     *
+     * @param titleRowNum 标题的总行数
+     * @param colNum      总列数
+     */
+    public static Object[] readExcelTitle07(String filePath, int titleRowNum, int colNum) {
+        XSSFWorkbook wb = getWorkbook07(filePath);
+        XSSFSheet sheet;
+
+        sheet = wb.getSheetAt(0);
+        // 得到数据的总行数
+        int rowNum = sheet.getLastRowNum();
+
+        // 如果该sheet没有数据，退出
+        if (0 == rowNum) {
+            return null;
+        }
+
+        XSSFRow row = sheet.getRow(titleRowNum);
+        if (null == row) {
+            return null;
+        }
+
+        //表头
+        Object[] titleArray = new Object[colNum];
+
+        for (int i = 0; i < colNum; i++){
+            titleArray[i] = getCellValue(row.getCell(i));
+        }
+
+        return titleArray;
+    }
 }
