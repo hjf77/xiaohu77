@@ -110,6 +110,27 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
 
     /**
+     * 查询bean列表数据
+     *
+     * @param request
+     * @throws Exception
+     */
+    @PostMapping("pagerAdvance")
+    @ResponseBody
+    @LogMethod(voParamIndex = 0)
+    @ApiOperation("后台-高级查询不分页一般用于下拉-vue推荐")
+    public List<V> findListAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
+        if (isPermitted(request, "see")) {
+            //这里的是1是DO的index
+            return baseService.selectListMP(filter.asWrapper(getDOClass()));
+        } else {
+            throw new NotPremissionException();
+        }
+    }
+
+
+
+    /**
      * 无分页查询bean列表数据
      *
      * @param request response
