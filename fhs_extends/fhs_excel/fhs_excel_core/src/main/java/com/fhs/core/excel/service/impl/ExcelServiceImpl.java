@@ -147,7 +147,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 ReflectUtils.setValue(objDo, field, tranStr);
                             }
                         } else {
-                            //不需要反翻译是进行非空和长度校验
+                            //不需要反翻译时进行非空和长度校验
                             if (field.getAnnotation(NotEmpty.class) != null
                                     && StringUtils.isBlank(data.toString())){
                                 valiStr.append(fieldName + "不能为空，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
