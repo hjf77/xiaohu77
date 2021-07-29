@@ -169,4 +169,8 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
     public void run(ApplicationArguments args) throws Exception {
         refreshWordBookCache(null);
     }
+
+    public Map<String, String> getUnWordBookTransMap(){
+        return unWordBookTransMap;
+    }
 }

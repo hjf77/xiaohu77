@@ -34,13 +34,17 @@
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_excel_anno</artifactId>
-            <version>2.0.0</version>
+            <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_base_pojo</artifactId>
-            <version>2.0.0</version>
-            <scope>compile</scope>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_basics_api</artifactId>
+            <version>${fhs.release.version}</version>
         </dependency>
     </dependencies>
 
