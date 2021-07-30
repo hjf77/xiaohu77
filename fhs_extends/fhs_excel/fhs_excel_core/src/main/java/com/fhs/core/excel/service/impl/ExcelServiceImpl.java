@@ -57,6 +57,7 @@ public class ExcelServiceImpl implements ExcelService {
         Object[][] dataArray = new Object[dos.size()][fields.size()];
         Object[] titleArray = new Object[fields.size()];
 
+        //根据Order注解排序Excel头标题
         SortedMap<Integer, Field> fieldsMap = new TreeMap<>();
         int emptyOrder = 888;
         for (Field field : fields){
@@ -120,9 +121,10 @@ public class ExcelServiceImpl implements ExcelService {
         BaseService service = SpringContextUtil.getBeanByName(targetService);
         List<Field> fields = ReflectUtils.getAnnotationField(doClass, ApiModelProperty.class);
         WordBookTransServiceImpl transService = SpringContextUtil.getBeanByName(WordBookTransServiceImpl.class);
-        //excel格式检查
+        //excel错误格式提醒
         StringBuilder valiStr = new StringBuilder();
 
+        //初始化数据集合
         List<Object> doList = new ArrayList<>();
         for (int i = 0; i < dataArray.length; i++){
             doList.add(ReflectUtils.newInstance(doClass));
@@ -160,7 +162,6 @@ public class ExcelServiceImpl implements ExcelService {
                                 if (data.toString().length() < length.min() ){
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
                                 }
-
                             }
                             ReflectUtils.setValue(objDo, field, dataArray[j][i]);
                         }
@@ -168,6 +169,7 @@ public class ExcelServiceImpl implements ExcelService {
                 }
             }
         }
+        //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
         if (valiStr.length() != 0){
             throw new ValidationException(valiStr.toString());
         }
