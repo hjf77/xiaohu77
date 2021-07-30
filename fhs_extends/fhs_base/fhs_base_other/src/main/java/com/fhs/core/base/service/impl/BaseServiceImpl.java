@@ -5,13 +5,19 @@ import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.CacheUpdateManager;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.bislogger.api.context.BisLoggerContext;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.anno.NotRepeatDesc;
+import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.autodel.service.AutoDelService;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
@@ -26,12 +32,14 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.service.AutoTransAble;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
+import com.github.liangbaika.validate.exception.ParamsInValidException;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import com.mybatis.jpa.cache.JpaTools;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -127,6 +135,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int add(D bean) {
         this.initPkeyAndIsDel(bean);
+        checkIsExist(bean,  false);
         int result = baseMapper.insertSelective(bean);
         BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
         BisLoggerContext.addHistoryData(bean, this.namespace);
@@ -145,6 +154,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public boolean update(D bean) {
+        checkIsExist(bean,  true);
         boolean result = this.updateJpa(bean);
         this.refreshCache();
         this.updateCache(bean);
@@ -155,6 +165,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     @Deprecated
     public boolean updateJpa(D bean) {
+        checkIsExist(bean,  true);
         boolean result = baseMapper.updateSelectiveById(bean) > 0;
         if (BisLoggerContext.isNeedLogger()) {
             BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
@@ -272,6 +283,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     public int insertSelective(D entity) {
         initPkeyAndIsDel(entity);
         addCache(entity);
+        checkIsExist(entity,  false);
         int result = baseMapper.insertSelective(entity);
         this.refreshCache();
         BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
@@ -395,6 +407,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int updateSelectiveById(D entity) {
+        checkIsExist(entity,  true);
         updateCache(entity);
         this.refreshCache();
         int reuslt = baseMapper.updateSelectiveById(entity);
@@ -739,4 +752,49 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         }
         return 0;
     }
+
+    /**
+     * 判断存在重复数据-需要配合NotRepeatField 与 NotRepeatDesc 配套注解一起用
+     *
+     * @param newData  新数据
+     * @param isUpdate 是否是更新(更新会排除掉自己)
+     */
+    @Transactional(rollbackFor = Exception.class)
+    protected void checkIsExist(D newData, boolean isUpdate) {
+        QueryWrapper<D> wrapper = new QueryWrapper<>();
+        List<Field> fieldList = ReflectUtils.getAnnotationField(newData.getClass(), NotRepeatField.class);
+        // 如果没配置直接return false
+        if (fieldList.isEmpty()) {
+            return;
+        }
+        TableField tableField = null;
+        try {
+            for (Field field : fieldList) {
+                field.setAccessible(true);
+                tableField = field.getAnnotation(TableField.class);
+                //如果被校验字段为null或者空则不校验
+                if(CheckUtils.isNullOrEmpty(field.get(newData))){
+                    return;
+                }
+                wrapper.eq(tableField.value(), ConverterUtils.toString(field.get(newData)));
+            }
+            if (isUpdate) {
+                fieldList = ReflectUtils.getAnnotationField(newData.getClass(), TableId.class);
+                if (fieldList.isEmpty()) {
+                    throw new ParamsInValidException(newData.getClass() + "没有配置TableId注解");
+                }
+                fieldList.get(0).setAccessible(true);
+                TableId tableId = fieldList.get(0).getAnnotation(TableId.class);
+                wrapper.ne(tableId.value(), ConverterUtils.toString(fieldList.get(0).get(newData)));
+            }
+        } catch (IllegalAccessException e) {
+            log.error("反射错误", e);
+        }
+        if (this.selectCountMP(wrapper) > 0) {
+            throw new ParamsInValidException(newData.getClass().getAnnotation(NotRepeatDesc.class).value());
+        }
+    }
+
+
+
 }
