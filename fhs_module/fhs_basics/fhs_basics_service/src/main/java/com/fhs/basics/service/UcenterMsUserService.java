@@ -251,5 +251,5 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param permissonMethodCode 权限编码
      * @return
      */
-    List<UcenterMsUserDO> getUserByOrgAndPermission(Integer companyId,String namespace,String permissonMethodCode);
+    List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId,String namespace,String permissonMethodCode);
 }

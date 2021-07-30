@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fhs.core.base.anno.NotRepeatDesc;
+import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.dox.BaseDO;
 import com.mybatis.jpa.annotation.Like;
 import io.swagger.annotations.ApiModel;
@@ -37,6 +39,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TableName("t_service_wordbook_group")
+@NotRepeatDesc("分组编码不可重复")
 @ApiModel(value = "ServiceWordbookGroupDO", description = "ServiceWordbookGroup参数")
 public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     /**
@@ -73,6 +76,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField( "wordbook_group_code")
     @ApiModelProperty("分组编码")
+    @NotRepeatField
     private String wordbookGroupCode;
 
 }

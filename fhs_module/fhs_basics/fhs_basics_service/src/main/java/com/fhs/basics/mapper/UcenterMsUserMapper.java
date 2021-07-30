@@ -295,5 +295,5 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO> {
      * @return
      */
     @NotMultiTenancyCheck
-    List<UcenterMsUserDO> getUserByOrgAndPermission(@Param("companyId") Integer companyId,@Param("namespace") String namespace,@Param("permissonMethodCode") String permissonMethodCode);
+    List<UcenterMsUserDO> getUserByOrgAndPermission(@Param("companyId") String companyId,@Param("namespace") String namespace,@Param("permissonMethodCode") String permissonMethodCode);
 }

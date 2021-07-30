@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fhs.core.base.anno.NotRepeatDesc;
+import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
@@ -33,6 +35,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @TableName("t_service_wordbook")
 @EqualsAndHashCode(callSuper = true)
+@NotRepeatDesc("字典编码不可重复")
 @ApiModel(value = "ServiceWordbookDO", description = "ServiceWordbook参数")
 public class ServiceWordbookDO extends BaseDO<ServiceWordbookDO> {
     /**
@@ -55,6 +58,7 @@ public class ServiceWordbookDO extends BaseDO<ServiceWordbookDO> {
     @Length(message = "wordbookCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("wordbook_code")
     @ApiModelProperty("字典code")
+    @NotRepeatField
     private String wordbookCode;
 
     /**
@@ -90,6 +94,7 @@ public class ServiceWordbookDO extends BaseDO<ServiceWordbookDO> {
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("wordbook_group_code")
     @ApiModelProperty("字典分组code")
+    @NotRepeatField
     private String wordbookGroupCode;
 
     /**

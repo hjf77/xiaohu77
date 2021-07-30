@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.tree.Treeable;
+import com.fhs.core.base.anno.NotRepeatDesc;
+import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
@@ -30,6 +32,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TableName( "t_ucenter_ms_organization")
+@NotRepeatDesc("同一个父部门下的子部门名称不可重复")
 @ApiModel(value = "UcenterMsOrganizationDO", description = "UcenterMsOrganization参数")
 public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> implements Treeable {
 
@@ -50,6 +53,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> imp
     @Length(message = "机构名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField( "name")
     @ApiModelProperty(value = "机构名称")
+    @NotRepeatField
     private String name;
 
     /**
@@ -59,6 +63,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> imp
     @Length(message = "父类编号字段的长度最大为32", groups = {Add.class, Update.class}, max = 255)
     @TableField( "parent_id")
     @ApiModelProperty(value = "父类编号")
+    @NotRepeatField
     private String parentId;
 
     /**

@@ -763,7 +763,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     @Override
-    public List<UcenterMsUserDO> getUserByOrgAndPermission(Integer companyId, String namespace, String permissonMethodCode) {
+    public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         List result =  sysUserMapper.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
         List<UcenterMsUserVO> adminUsers= super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin,Constant.INT_TRUE));
         //把admin也加入进来

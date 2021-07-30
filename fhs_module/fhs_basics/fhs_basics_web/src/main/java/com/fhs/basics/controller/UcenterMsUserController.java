@@ -307,7 +307,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @GetMapping("getUserByOrgAndPermission")
     @ResponseBody
     @ApiOperation("根据单位id，namespace，和方法编码获取符合条件的人")
-    public List<UcenterMsUserDO> getUserByOrgAndPermission(Integer companyId,String namespace,String permissonMethodCode){
+    public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId,String namespace,String permissonMethodCode){
         return sysUserService.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
     }
 }
