@@ -11,6 +11,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -699,6 +700,33 @@ public class ExcelUtils {
     }
 
     /**
+     * 导入excel的接口
+     * @param file        文件对象
+     * @param titleRowNum title所在行，默认0行开始
+     * @Param collNum     共多少列
+     */
+    public static Object[][] importExcel(MultipartFile file, int titleRowNum, int colNum) throws IOException {
+        // 判断目标文件是否存在
+        if (file.isEmpty()) {
+            log.error("ExcelUtils.importExcel    目标文件" + file.getName() + "不存在！");
+        }
+
+        String fileName = file.getOriginalFilename();
+        String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        // 根据不同excel版本调用不同的excel类型
+        Object[][] dataList = null;
+        if ("xls".equals(extension)) {
+            dataList = readExcelContent03(file.getInputStream(), titleRowNum, colNum);
+        } else if ("xlsx".equals(extension)) {
+            dataList = readExcelContent07(file.getInputStream(), titleRowNum, colNum);
+        } else {
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+        return dataList;
+    }
+
+    /**
      * Excel文件转换成Apache poi Workbook对象
      */
     public static Workbook convertToExcel(String filePath) {
@@ -721,6 +749,18 @@ public class ExcelUtils {
             log.error("ExcelUtils.convertToExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
         }
         return wb;
+    }
+
+    /**
+     * 读取excel内容
+     *
+     * @param is          excel inputstream
+     * @param titleRowNum 行号
+     * @param colNum      一共多少列
+     * @return 数据
+     */
+    public static Object[][] readExcelContent07(InputStream is, int titleRowNum, int colNum) throws IOException {
+        return readExcelContent07(new XSSFWorkbook(is), titleRowNum, colNum);
     }
 
     /**
@@ -1048,14 +1088,49 @@ public class ExcelUtils {
     }
 
     /**
+     * 获取excel title 行
+     * @param titleRowNum 行号,0开始
+     * @param colNum      一共多少列
+     */
+    public static Object[] getExcelTitleRow(MultipartFile file, int titleRowNum, int colNum) throws IOException {
+        // 判断目标文件是否存在
+        if (!file.isEmpty()) {
+            log.error("ExcelUtils.getExcelTitleRow    目标文件" + file.getName() + "不存在！");
+        }
+
+        String fileName = file.getName();
+        String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        // 根据不同excel版本调用不同的excel类型
+        Object[] dataList = null;
+        if ("xls".equals(extension)) {
+            dataList = readExcelTitle03(file.getInputStream(), titleRowNum, colNum);
+        } else if ("xlsx".equals(extension)) {
+            dataList = readExcelTitle07(file.getInputStream(), titleRowNum, colNum);
+        } else {
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+        return dataList;
+    }
+
+    public static Object[] readExcelTitle03(String filePath, int titleRowNum, int colNum){
+        HSSFWorkbook wb = getWorkbook03(filePath);
+        return readExcelTitle03(wb, titleRowNum, colNum);
+    }
+
+    public static Object[] readExcelTitle03(InputStream is, int titleRowNum, int colNum) throws IOException {
+        HSSFWorkbook wb = new HSSFWorkbook(is);
+        return readExcelTitle03(wb, titleRowNum, colNum);
+    }
+
+    /**
      * 读取excel title内容
      *
      * @param wb          excel
      * @param titleRowNum 行号
      * @param colNum      一共多少列
      */
-    public static Object[] readExcelTitle03(String filePath, int titleRowNum, int colNum) {
-        HSSFWorkbook wb = getWorkbook03(filePath);
+    public static Object[] readExcelTitle03(HSSFWorkbook wb, int titleRowNum, int colNum) {
         HSSFSheet sheet;
 
         // 获取sheet个数
@@ -1077,14 +1152,23 @@ public class ExcelUtils {
         return titleArray;
     }
 
+    public static Object[] readExcelTitle07(String filePath, int titleRowNum, int colNum){
+        XSSFWorkbook wb = getWorkbook07(filePath);
+        return readExcelTitle07(wb, titleRowNum, colNum);
+    }
+
+    public static Object[] readExcelTitle07(InputStream is, int titleRowNum, int colNum) throws IOException {
+        XSSFWorkbook wb = new XSSFWorkbook(is);
+        return readExcelTitle07(wb, titleRowNum, colNum);
+    }
+
     /**
      * 读取Excel title内容
      *
      * @param titleRowNum 标题的总行数
      * @param colNum      总列数
      */
-    public static Object[] readExcelTitle07(String filePath, int titleRowNum, int colNum) {
-        XSSFWorkbook wb = getWorkbook07(filePath);
+    public static Object[] readExcelTitle07(XSSFWorkbook wb, int titleRowNum, int colNum) {
         XSSFSheet sheet;
 
         sheet = wb.getSheetAt(0);
