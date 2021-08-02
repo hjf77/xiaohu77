@@ -281,7 +281,7 @@ public class MsLoginController extends BaseController {
         } else {
             List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(user.getUserId());
             List<String> collect = roleList.stream().map(UcenterMsRoleVO::getRoleName).collect(Collectors.toList());
-            String roles = roleList.stream().map(UcenterMsRoleVO::getRoleId).map(Objects::toString).collect(Collectors.joining(",", "'", "'"));
+            String roles = StringUtil.join(roleList.stream().map(UcenterMsRoleVO::getRoleId).collect(Collectors.toList()),",");
             resultMap.put("roles", collect);
             resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(roles));
         }
