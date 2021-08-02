@@ -86,4 +86,12 @@ public interface FeignSysUserApiService {
      */
     @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignSysUserApiService/getSysUserByOrganizationId")
     HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationId(@Param("organizationId") String organizationId);
+
+    /**
+     * 根据用户id获取永辉对象
+     * @param userIds 用户id 多个用逗号分隔
+     * @return 用户对象
+     */
+    @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignSysUserApiService/getUserByIds")
+    HttpResult<List<UcenterMsUserVO>> getUserByIds(@Param("userIds")String userIds);
 }
