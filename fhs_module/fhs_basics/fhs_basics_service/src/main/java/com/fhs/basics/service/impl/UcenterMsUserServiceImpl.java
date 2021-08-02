@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
@@ -15,6 +16,7 @@ import com.fhs.basics.mapper.UcenterMsUserMapper;
 import com.fhs.basics.service.*;
 import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -765,6 +767,8 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return result;
     }
 
+
+
     @Override
     public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         List result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
@@ -867,6 +871,45 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         return HttpResult.success(result);
     }
+
+
+    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper){
+        List<UcenterMsUserVO> users =  super.selectListMP(wrapper);
+        List<UcenterMsOrganizationVO> orgs = this.organizationService.selectListMP(new LambdaQueryWrapper<>());
+        Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
+                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
+        Map<String,TreeNode> nodeMap = new HashMap<>();
+        List<TreeNode> result = new ArrayList<>();
+        for (UcenterMsOrganizationVO org : orgs) {
+            nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(org.getId()).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
+        }
+        Map<String,List<UcenterMsUserVO>> userOrgMap = users.stream().collect(Collectors.groupingBy(UcenterMsUserVO::getOrganizationId));
+        String companyId = null;
+        for (UcenterMsOrganizationVO org : orgs) {
+            if(CheckUtils.isNullOrEmpty(org.getParentId())){
+                result.add(nodeMap.get(org.getId()));
+                companyId = org.getId();
+                //如果是个组织则找我爸爸的公司id
+            }else if(org.getIsCompany()!=null && Constant.INT_TRUE==org.getIsCompany() && orgMap.containsKey(org.getParentId())){
+                nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
+                companyId = org.getId();
+            }else{
+                //如果只是个普通的部门则取部门id
+                companyId = org.getCompanyId();
+            }
+            //找到当前用户
+            if(userOrgMap.containsKey(org.getId())){
+                List<UcenterMsUserVO> orgUser = userOrgMap.get(org.getId());
+                for (UcenterMsUserVO ucenterMsUserVO : orgUser) {
+                    nodeMap.get(companyId).getChildren().add(TreeNode.builder().name(ucenterMsUserVO.getUserName()+"(用户)")
+                            .id(ucenterMsUserVO.getUserId()).parentId(companyId).data(ucenterMsUserVO).children(new ArrayList<>()).build());
+                }
+            }
+
+        }
+        return result;
+    }
+
 
 
     private List<String> getPermissionUrlAll() {

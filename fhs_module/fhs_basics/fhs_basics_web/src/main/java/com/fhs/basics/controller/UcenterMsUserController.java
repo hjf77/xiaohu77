@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.service.UcenterMsUserService;
@@ -9,6 +10,7 @@ import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
@@ -298,16 +300,20 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @return
      */
     @GetMapping("getOwnUserInfo")
-    @ResponseBody
     @LogMethod
     public UcenterMsUserVO getOwnUserInfo(HttpServletRequest request) {
         return sysUserService.selectById(super.getSessionuser().getUserId());
     }
 
     @GetMapping("getUserByOrgAndPermission")
-    @ResponseBody
     @ApiOperation("根据单位id，namespace，和方法编码获取符合条件的人")
     public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId,String namespace,String permissonMethodCode){
         return sysUserService.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
+    }
+
+    @GetMapping("getUserCompanyTree")
+    @ApiOperation("获取公司tree(带用户)")
+    public  List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper){
+        return sysUserService.getUserCompanyTree(new QueryWrapper<>());
     }
 }

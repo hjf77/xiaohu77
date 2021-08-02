@@ -728,8 +728,11 @@
                                 JOIN t_ucenter_ms_organization o ON u.organization_id= o.id
         WHERE u.is_delete=0 AND ur.is_detele= 0 AND rp.is_delete=0 AND p.is_delete = 0 AND o.is_delete=0
           AND m.is_delete=0
-          AND m.namespace=#{namespace} and p.method=#{permissonMethodCode}
-          AND o.company_id=#{companyId}
+          <if test="companyId != null and companyId != ''">
+             AND o.company_id=#{companyId}
+          </if>
+          AND m.namespace=#{namespace} AND p.method=#{permissonMethodCode}
+
     </select>
 
 </mapper>

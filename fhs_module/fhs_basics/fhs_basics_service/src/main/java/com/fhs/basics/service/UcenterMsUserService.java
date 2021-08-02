@@ -1,8 +1,10 @@
 package com.fhs.basics.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.vo.*;
+import com.fhs.common.tree.TreeNode;
 import com.fhs.core.base.service.BaseService;
 import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
@@ -252,4 +254,11 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId,String namespace,String permissonMethodCode);
+
+    /**
+     * 获取用户和单位tree
+     * @param wrapper  用来过滤用户的
+     * @return
+     */
+    List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper);
 }
