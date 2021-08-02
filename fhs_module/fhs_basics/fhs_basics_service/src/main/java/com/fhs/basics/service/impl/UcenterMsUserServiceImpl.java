@@ -36,9 +36,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 用户(ucenterMsUser)表服务实现类
+ *
  * @author user
  * @date 2020-05-18 16:46:36
  */
@@ -59,7 +62,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Value("${fhs.basics.passsalt:fhs}")
     private String passsalt;
-
 
 
     @Autowired
@@ -88,13 +90,13 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             return null;
         }
         UcenterMsUserVO result = this.selectById(adminUser.getUserId());
-        if(result.getOrganizationId()!=null){
-            UcenterMsOrganizationVO organization =  organizationService.selectById(result.getOrganizationId());
-            ParamChecker.isNotNull(organization,"用户所在部门被删除，禁止登陆");
+        if (result.getOrganizationId() != null) {
+            UcenterMsOrganizationVO organization = organizationService.selectById(result.getOrganizationId());
+            ParamChecker.isNotNull(organization, "用户所在部门被删除，禁止登陆");
             result.setCompanyId(organization.getCompanyId());
-            if(organization.getCompanyId()!=null){
-                organization =  organizationService.selectById(organization.getCompanyId());
-                ParamChecker.isNotNull(organization,"用户所在企业被删除，禁止登陆");
+            if (organization.getCompanyId() != null) {
+                organization = organizationService.selectById(organization.getCompanyId());
+                ParamChecker.isNotNull(organization, "用户所在企业被删除，禁止登陆");
                 result.setCompanyName(organization.getName());
             }
         }
@@ -513,7 +515,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 }
             }
         }
-        if(menuType!=null && Constant.MENU_TYPE_VUE.equals(menuType)){
+        if (menuType != null && Constant.MENU_TYPE_VUE.equals(menuType)) {
             paramMap.put("menuType", menuType);
         }
         List<SettMsMenuVO> menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(paramMap), SettMsMenuVO.class);
@@ -548,12 +550,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public List<VueRouterVO> getRouters(UcenterMsUserDO user, String menuType) {
-        List<LeftMenuVO> menus =  getMenu( user,  menuType);
+        List<LeftMenuVO> menus = getMenu(user, menuType);
         List<VueRouterVO> result = new ArrayList<>();
         VueRouterVO tempRouter = null;
         for (LeftMenuVO menu : menus) {
             tempRouter = new VueRouterVO();
-            converterMenu2Router( menu, tempRouter,true);
+            converterMenu2Router(menu, tempRouter, true);
             result.add(tempRouter);
         }
         return result;
@@ -561,26 +563,27 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     /**
      * 转换leftMenu到vueRouter
-     * @param menu 菜单
+     *
+     * @param menu        菜单
      * @param vueRouterVO vue 路由
-     * @param isFirst 是否是一级菜单
+     * @param isFirst     是否是一级菜单
      */
-    private void converterMenu2Router(LeftMenuVO menu,VueRouterVO vueRouterVO,boolean isFirst){
+    private void converterMenu2Router(LeftMenuVO menu, VueRouterVO vueRouterVO, boolean isFirst) {
         vueRouterVO.setName(menu.getNamespace());
         vueRouterVO.setAlwaysShow(isFirst);
         vueRouterVO.setPath(isFirst ? "/" + menu.getNamespace() : menu.getNamespace());
         String component = null;
-        if(menu.getServerUrl()!=null && menu.getUrl()!=null){
-            component = menu.getUrl().replace(menu.getServerUrl(),"");
+        if (menu.getServerUrl() != null && menu.getUrl() != null) {
+            component = menu.getUrl().replace(menu.getServerUrl(), "");
         }
         vueRouterVO.setComponent(isFirst ? "Layout" : component);
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
-        vueRouterVO.getMeta().put("title",menu.getName());
-        vueRouterVO.getMeta().put("icon",menu.getIcon());
-        if(menu.getSonMenu()!=null && !menu.getSonMenu().isEmpty()){
+        vueRouterVO.getMeta().put("title", menu.getName());
+        vueRouterVO.getMeta().put("icon", menu.getIcon());
+        if (menu.getSonMenu() != null && !menu.getSonMenu().isEmpty()) {
             for (LeftMenuVO sonMenu : menu.getSonMenu()) {
                 VueRouterVO sunRouter = new VueRouterVO();
-                converterMenu2Router( sonMenu, sunRouter,false);
+                converterMenu2Router(sonMenu, sunRouter, false);
                 vueRouterVO.getChildren().add(sunRouter);
             }
         }
@@ -764,10 +767,10 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
-        List result =  sysUserMapper.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
-        List<UcenterMsUserVO> adminUsers= super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin,Constant.INT_TRUE));
+        List result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
+        List<UcenterMsUserVO> adminUsers = super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin, Constant.INT_TRUE));
         //把admin也加入进来
-        if(!adminUsers.isEmpty()){
+        if (!adminUsers.isEmpty()) {
             result.addAll(adminUsers);
         }
         return result;
@@ -844,6 +847,27 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         List<UcenterMsUserVO> sysUserList = this.findForList(UcenterMsUserVO.builder().organizationId(organizationId).build());
         return HttpResult.success(sysUserList);
     }
+
+    @Override
+    public HttpResult<List<UcenterMsUserVO>> getUserByIds(String userIds) {
+        List<UcenterMsUserVO> result = super.findByIds(new ArrayList<>(Arrays.asList(userIds.split(","))));
+        if (result.isEmpty()) {
+            return HttpResult.success(result);
+        }
+        List<String> orgIds = result.stream().map(UcenterMsUserVO::getOrganizationId).collect(Collectors.toList());
+        List<UcenterMsOrganizationVO> organizationVOS = this.organizationService.findByIds(orgIds);
+        Map<String, UcenterMsOrganizationVO> orgMap = organizationVOS.stream().collect(Collectors
+                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
+        UcenterMsOrganizationVO tempOrg = null;
+        for (UcenterMsUserVO user : result) {
+            if (orgMap.containsKey(user.getOrganizationId())) {
+                tempOrg = orgMap.get(user.getOrganizationId());
+                user.setCompanyId(tempOrg.getCompanyId());
+            }
+        }
+        return HttpResult.success(result);
+    }
+
 
     private List<String> getPermissionUrlAll() {
         return sysUserMapper.getPermissionUrlAll();
