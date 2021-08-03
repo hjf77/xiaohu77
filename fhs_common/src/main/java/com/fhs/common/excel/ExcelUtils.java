@@ -1098,7 +1098,7 @@ public class ExcelUtils {
             log.error("ExcelUtils.getExcelTitleRow    目标文件" + file.getName() + "不存在！");
         }
 
-        String fileName = file.getName();
+        String fileName = file.getOriginalFilename();
         String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
 
         // 根据不同excel版本调用不同的excel类型
