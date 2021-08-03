@@ -16,11 +16,14 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.db.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.file.bean.ServiceFile;
+import com.fhs.file.dao.ServiceFileDAO;
 import com.fhs.file.service.ServiceFileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * 文件CRUD service
@@ -33,6 +36,9 @@ import java.io.File;
 @Service
 @DataSource("file")
 public class ServiceFileServiceImpl extends BaseServiceImpl<ServiceFile> implements ServiceFileService {
+
+    @Autowired
+    private ServiceFileDAO serviceFileDAO;
 
     /**
      * 文件查询方法重写
@@ -57,6 +63,11 @@ public class ServiceFileServiceImpl extends BaseServiceImpl<ServiceFile> impleme
 
     public void setFileSavePath(String fileSavePath) {
         this.fileSavePath = fileSavePath;
+    }
+
+    @Override
+    public int updateFileId(Map<String, String> paramMap) {
+        return serviceFileDAO.updateFileId(paramMap);
     }
 
     /**

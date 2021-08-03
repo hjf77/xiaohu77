@@ -18,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author qiuhang
  * @des 文件上传action
@@ -50,9 +53,12 @@ public class UploadAction extends BaseAction<ServiceFile> {
         ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
         LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
         if(CheckUtils.isNotEmpty(request.getParameter("fileId"))){
+            Map<String,String> updateIdParam = new HashMap<>();
+            updateIdParam.put("oldFileId",file.getFileId());
             file.setFileId(request.getParameter("fileId"));
+            updateIdParam.put("newFileId",file.getFileId());
             //修改文件id
-            serviceFileService.updateSelectiveById(file);
+            serviceFileService.updateFileId(updateIdParam);
         }
         super.outWriteJson(JsonUtils.bean2json(file), response);
 

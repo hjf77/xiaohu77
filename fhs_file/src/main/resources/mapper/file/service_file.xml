@@ -23,4 +23,7 @@
 		 WHERE file_id = #{fileId}
     </select>
 
+	<update id="updateFileId" parameterType="map" >
+		update t_service_file set file_id = #{newFileId} where file_id=#{oldFileId}
+	</update>
 </mapper>
