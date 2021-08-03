@@ -9,10 +9,7 @@ import com.fhs.pub.service.FileStorage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * 阿里云文件存储
@@ -40,6 +37,16 @@ public class AliyunOSSFileStorage implements FileStorage {
         // 上传文件
         try {
            this.upload(file.getInputStream(),serviceFile.getFileId());
+        } catch (IOException e) {
+            LOG.error("文件上传失败", e);
+        }
+    }
+
+    @Override
+    public void uploadFile(PubFileDO serviceFile, File fileData) {
+        // 上传文件
+        try {
+            this.upload(new FileInputStream(fileData),serviceFile.getFileId());
         } catch (IOException e) {
             LOG.error("文件上传失败", e);
         }

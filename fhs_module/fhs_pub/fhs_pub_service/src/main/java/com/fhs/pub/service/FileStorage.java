@@ -3,6 +3,7 @@ package com.fhs.pub.service;
 import com.fhs.pub.dox.PubFileDO;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -20,6 +21,15 @@ public interface FileStorage {
      */
 
     void uploadFile(PubFileDO serviceFile, MultipartFile fileData);
+
+
+    /**
+     * 根据ServiceFile和MultipartFile做文件上传
+     * @param serviceFile
+     * @param fileData
+     */
+
+    void uploadFile(PubFileDO serviceFile, File fileData);
 
     /**
      * 根据文件字节数组,serviceFile和文件名做文件上传

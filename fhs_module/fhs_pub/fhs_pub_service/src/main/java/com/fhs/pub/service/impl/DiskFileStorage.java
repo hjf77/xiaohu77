@@ -19,7 +19,7 @@ import java.io.*;
 
 @Service
 @DataSource("file")
-public class DiskFileStorage<mian> implements FileStorage {
+public class DiskFileStorage implements FileStorage {
 
     private static final Logger LOG = Logger.getLogger(DiskFileStorage.class);
 
@@ -42,6 +42,17 @@ public class DiskFileStorage<mian> implements FileStorage {
         File file = getFile( serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(fileData.getInputStream(), file);
+            serviceFile.setFileSize(file.length());
+        } catch (IOException e) {
+            LOG.error("文件上传失败", e);
+        }
+    }
+
+    @Override
+    public void uploadFile(PubFileDO serviceFile, File fileData) {
+        File file = getFile( serviceFile, null);
+        try {
+            FileUtils.copyInputStreamToFile(new FileInputStream(fileData), file);
             serviceFile.setFileSize(file.length());
         } catch (IOException e) {
             LOG.error("文件上传失败", e);

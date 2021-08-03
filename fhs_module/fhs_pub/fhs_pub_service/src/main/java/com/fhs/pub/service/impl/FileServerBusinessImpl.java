@@ -2,7 +2,9 @@ package com.fhs.pub.service.impl;
 
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.StringUtil;
+import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
+import com.fhs.pub.api.rpc.FeignFileApiService;
 import com.fhs.pub.dox.PubFileDO;
 import com.fhs.pub.service.FileServerBusiness;
 import com.fhs.pub.service.FileStorage;
@@ -13,12 +15,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @Service
-public class FileServerBusinessImpl implements FileServerBusiness {
+public class FileServerBusinessImpl implements FileServerBusiness, FeignFileApiService {
 
     private static final Logger LOG = Logger.getLogger(FileServerBusinessImpl.class);
 
@@ -36,7 +39,6 @@ public class FileServerBusinessImpl implements FileServerBusiness {
         String fileId = StringUtil.getUUID();
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
-        fileData.getSize();
         sf.setFileName(fileName);
         sf.setFileSuffix(suffix);
         sf.setUploadDate(currentDate);
@@ -62,5 +64,21 @@ public class FileServerBusinessImpl implements FileServerBusiness {
      */
     private boolean insertDataToDB(PubFileDO sf) {
         return (fileService.insertSelective(sf) > 0);
+    }
+
+    @Override
+    public HttpResult<PubFileVO> upload(File filedata) {
+        PubFileVO sf = new PubFileVO();
+        String fileName = filedata.getName();
+        String suffix = fileName.substring(fileName.lastIndexOf("."));
+        String fileId = StringUtil.getUUID();
+        String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
+        sf.setFileId(fileId);
+        sf.setFileName(fileName);
+        sf.setFileSuffix(suffix);
+        sf.setUploadDate(currentDate);
+        fileStorage.uploadFile(sf, filedata);
+        this.insertDataToDB(sf);
+        return HttpResult.success(sf);
     }
 }

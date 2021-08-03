@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_pub_service</artifactId>
+            <artifactId>fhs_pub_pojo</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
