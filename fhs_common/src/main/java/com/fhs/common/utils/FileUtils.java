@@ -126,13 +126,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     private static String formartFileName(String fileName) {
         String suffix = fileName.substring(fileName.lastIndexOf("."));
         fileName = fileName.replace(suffix, "");
-        String regex = "^[a-zA-Z0-9\u4E00-\u9FA5]+$";
+       /* String regex = "^[a-zA-Z0-9\u4E00-\u9FA5]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher match = pattern.matcher(fileName);
-        if (match.matches()) {
+        if (match.matches()) {*/
             return fileName + suffix;
-        }
-        return "default" + suffix;
+      /*  }
+        return "default" + suffix;*/
 
     }
 
