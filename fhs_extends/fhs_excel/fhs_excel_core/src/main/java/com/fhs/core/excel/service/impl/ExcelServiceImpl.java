@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.trans.WordBookTransServiceImpl;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
@@ -181,7 +182,18 @@ public class ExcelServiceImpl implements ExcelService {
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
                                 }
                             }
-                            ReflectUtils.setValue(objDo, field, dataArray[j][i]);
+                            if (field.getGenericType().equals(Date.class)){
+                                if (StringUtils.isBlank(dataArray[j][i].toString())){
+                                    continue;
+                                }
+                                try {
+                                    ReflectUtils.setValue(objDo, field, DateUtils.parseStr(dataArray[j][i].toString()));
+                                } catch (Exception e){
+                                    valiStr.append(fieldName + "列请输入正确的时间格式，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                }
+                            } else {
+                                ReflectUtils.setValue(objDo, field, dataArray[j][i]);
+                            }
                         }
                     }
                 }
