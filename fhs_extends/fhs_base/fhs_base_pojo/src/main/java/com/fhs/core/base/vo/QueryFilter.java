@@ -1,5 +1,6 @@
 package com.fhs.core.base.vo;
 
+import ch.qos.logback.core.pattern.ConverterUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,6 +10,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.StringUtil;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -238,6 +241,9 @@ public class QueryFilter<T> {
                 break;
             case "find_in_set":
                 queryWrapper.apply("FIND_IN_SET('" + queryField.getValue() + "'," + field + ")");
+                break;
+            case "ext":
+                queryWrapper.apply(ConverterUtils.toString(queryField.getValue()));
                 break;
             case "between":
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());
