@@ -236,6 +236,9 @@ public class QueryFilter<T> {
             case "in":
                 queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
                 break;
+            case "find_in_set":
+                queryWrapper.apply("FIND_IN_SET('" + queryField.getValue() + "'," + field + ")");
+                break;
             case "between":
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());
                 Assert.notNull(objs, String.format("查询条件：%s的查询值为空", field));
