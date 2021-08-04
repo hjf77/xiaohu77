@@ -24,11 +24,11 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     private FileStorage fileStorage;
 
     @Override
-    public ServiceFile uploadFile(MultipartFile fileData) {
+    public ServiceFile uploadFile(MultipartFile fileData,String fileId) {
         ServiceFile sf = new ServiceFile();
         String fileName = fileData.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        String fileId = StringUtil.getUUID();
+        fileId = fileId == null ? StringUtil.getUUID() : fileId;
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
         sf.setFileName(fileName);
@@ -40,13 +40,15 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     }
 
     @Override
-    public List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData) {
+    public List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData,List<String> fileIds) {
         List<ServiceFile> rvList = new ArrayList<ServiceFile>();
-
-        allFileData.forEach(fileData -> {
-            rvList.add(this.uploadFile(fileData));
-        });
-
+        for (int i =0;i<allFileData.size();i++){
+            String fileId = null;
+            if(fileIds!=null && fileIds.size()>i){
+                fileId = fileIds.get(i);
+            }
+            rvList.add(this.uploadFile(allFileData.get(i),fileId));
+        }
         return rvList;
     }
 

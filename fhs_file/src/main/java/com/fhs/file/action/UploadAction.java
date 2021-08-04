@@ -44,24 +44,15 @@ public class UploadAction extends BaseAction<ServiceFile> {
      * @return
      */
     @RequestMapping(value = "file", method = RequestMethod.POST)
-    public void uploadFile(@RequestParam MultipartFile[] Filedata, HttpServletRequest request,
+    public void uploadFile(@RequestParam MultipartFile Filedata, HttpServletRequest request,
                                            HttpServletResponse response) {
-        if (Filedata == null || Filedata.length == 0) {
+        if (Filedata == null ) {
             super.outToClient(false, response);
         }
         LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-        ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
+        ServiceFile file = fileServerBusiness.uploadFile(Filedata,request.getParameter("fileId"));
         LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-        if(CheckUtils.isNotEmpty(request.getParameter("fileId"))){
-            Map<String,String> updateIdParam = new HashMap<>();
-            updateIdParam.put("oldFileId",file.getFileId());
-            file.setFileId(request.getParameter("fileId"));
-            updateIdParam.put("newFileId",file.getFileId());
-            //修改文件id
-            serviceFileService.updateFileId(updateIdParam);
-        }
         super.outWriteJson(JsonUtils.bean2json(file), response);
-
     }
 
 
