@@ -1,12 +1,17 @@
 package com.fhs.core.excel.service.impl;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.trans.WordBookTransServiceImpl;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
+import com.fhs.common.utils.StringUtil;
+import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.core.excel.register.TransRpcService;
@@ -14,7 +19,7 @@ import com.fhs.core.excel.register.TransRpcServiceRegister;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.excel.anno.ExcelExport;
+import com.fhs.excel.anno.IgnoreExport;
 import com.fhs.excel.anno.Order;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.StringUtils;
@@ -51,8 +56,8 @@ public class ExcelServiceImpl implements ExcelService {
      * @return Workbook Excel对象
      */
     @Override
-    public Workbook exportExcel(QueryWrapper query, Class<? extends BaseService> targetService, Class<?> doClass) {
-        BaseService service = SpringContextUtil.getBeanByName(targetService);
+    public Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass) {
+        BaseService service = targetService;
         List<?> dos = service.selectListMP(query);
         if (null == dos){
             return null;
@@ -71,7 +76,7 @@ public class ExcelServiceImpl implements ExcelService {
         int emptyOrder = 888;
         for (Field field : fields){
             if (null == field.getAnnotation(ApiModelProperty.class)
-                    || null == field.getAnnotation(ExcelExport.class)){
+                    || field.isAnnotationPresent(IgnoreExport.class) || field.isAnnotationPresent(TableId.class)){
                 continue;
             }
             Order order = field.getAnnotation(Order.class);
@@ -95,17 +100,67 @@ public class ExcelServiceImpl implements ExcelService {
                     Field field = entry.getValue();
                     field.setAccessible(true);
                     Object fieldVal = field.get(dos.get(i));
-                    dataArray[i][num] = fieldVal;
+                    dataArray[i][num] = getFieldValue(field,dos.get(i));
                     num ++;
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
         }
-
         ExcelUtils.initSheet07(sheet, dataArray, titleArray, null, null, 1);
-
         return wb;
+    }
+
+    /**
+     * 获取字段值
+     * @param field 字段
+     * @param doObj 对象
+     * @return
+     */
+    private String getFieldValue(Field field,Object doObj){
+        if(doObj==null){
+            return null;
+        }
+        if(field.isAnnotationPresent(Trans.class)){
+            Trans trans = field.getAnnotation(Trans.class);
+            //如果翻译带ref返回null，这个列不改导出
+            if(CheckUtils.isNotEmpty(trans.ref()) ){
+                return null;
+            }
+            //字典的话取字典 如果带ref 则不拼接
+            if (TransType.WORD_BOOK.equals(trans.type()) && doObj instanceof VO) {
+                return ((VO) doObj).getTransMap().get(field.getName() + "Name");
+            }
+            //auto trans处理
+            if (TransType.AUTO_TRANS.equals(trans.type()) && doObj instanceof VO) {
+                //如果jsonkey 是空则返回null
+                if(CheckUtils.isNullOrEmpty(trans.jsonKey())){
+                    return null;
+                }
+                return ((VO) doObj).getTransMap().get(trans.jsonKey());
+            }
+        }
+        field.setAccessible(true);
+        Object value = null;
+        try {
+            value = field.get(doObj);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+        //如果没有加翻译注解的id，注解导出null
+        if(field.getName().endsWith("Id")){
+            return StringUtil.toString(value);
+        }
+        if(value instanceof Date){
+            //如果加了日期格式化则就按照格式化的来
+            if(field.isAnnotationPresent(JSONField.class) && CheckUtils.isNotEmpty(field.getAnnotation(JSONField.class).format())){
+                return DateUtils.formartDate((Date)value,field.getAnnotation(JSONField.class).format());
+            }
+            //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
+            return DateUtils.formartDate((Date)value,DateUtils.DATETIME_PATTERN);
+        }
+        return StringUtil.toString(value);
     }
 
     /**
@@ -125,9 +180,9 @@ public class ExcelServiceImpl implements ExcelService {
      * @throws ValidationException 返回整个Excel验证结果
      */
     @Override
-    public void importExcel(Object[][] dataArray, Object[] titleArray, Class<? extends BaseService> targetService, Class<?> doClass) throws ValidationException {
+    public void importExcel(Object[][] dataArray, Object[] titleArray,  BaseService targetService, Class<?> doClass) throws ValidationException {
 
-        BaseService service = SpringContextUtil.getBeanByName(targetService);
+        BaseService service = targetService;
         List<Field> fields = ReflectUtils.getAnnotationField(doClass, ApiModelProperty.class);
         WordBookTransServiceImpl transService = SpringContextUtil.getBeanByName(WordBookTransServiceImpl.class);
         //excel错误格式提醒
@@ -242,7 +297,7 @@ public class ExcelServiceImpl implements ExcelService {
      * @throws ValidationException 返回整个Excel验证结果
      */
     @Override
-    public void importExcel(MultipartFile file, Class<? extends BaseService> targetService, Class<?> doClass, int titleRowNum, int colNum) throws ValidationException {
+    public void importExcel(MultipartFile file,  BaseService targetService, Class<?> doClass, int titleRowNum, int colNum) throws ValidationException {
 
         Object[][] dataArray = new Object[0][];
         Object[] titleArray = new Object[0];

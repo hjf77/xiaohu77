@@ -50,7 +50,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
      * service的包路径
      */
     @Value("${fhs.autotrans.package:com.*.*.service.impl}")
-    private String[] packageNames;
+    private String packageNames;
 
     /**
      * 翻译数据缓存map
@@ -191,7 +191,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
 
     public void init(ApplicationReadyEvent applicationReadyEvent) {
         //spring容器初始化完成之后，就会自行此方法。
-        Set<Class<?>> entitySet = scan(AutoTrans.class, packageNames);
+        Set<Class<?>> entitySet = scan(AutoTrans.class, packageNames.split(";"));
         // 遍历所有class，获取所有用@autowareYLM注释的字段
         if (entitySet != null) {
             for (Class<?> entity : entitySet) {

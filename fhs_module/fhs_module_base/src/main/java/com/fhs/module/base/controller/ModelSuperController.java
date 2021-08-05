@@ -1,5 +1,6 @@
 package com.fhs.module.base.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
@@ -17,6 +18,7 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -25,11 +27,15 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.common.ExcelExportTools;
+import com.fhs.module.base.context.UserContext;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mybatis.jpa.context.DataPermissonContext;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +44,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -55,12 +64,21 @@ import java.util.*;
 public abstract class ModelSuperController<V extends VO, D extends BaseDO> extends BaseController {
     protected Logger log = Logger.getLogger(getClass());
 
+    /**
+     * 用于导出用的缓存
+     */
+    private Cache<String, QueryFilter> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+
     @Autowired
     private BaseService<V, D> baseService;
+
+    @Autowired
+    private ExcelService excelService;
 
     public BaseService<V, D> getBaseService() {
         return baseService;
     }
+
 
     /**
      * 查询bean列表数据
@@ -100,6 +118,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @ApiOperation("后台-高级分页查询-vue推荐")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
         if (isPermitted(request, "see")) {
+            this.setExportCache(filter);
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(),
                     filter.asWrapper(getDOClass()));
@@ -189,6 +208,24 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         List<V> dataList = getExportData();
         exportExcel(dataList);
     }
+
+    /**
+     * 公共导出excel
+     * by wanglei
+     */
+    @GetMapping("advanceExportExcel")
+    @ApiOperation("配合高级搜索一起使用的excel导出")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
+    public void exportExcelForVue(HttpServletResponse response,String fileName) throws IOException {
+        QueryFilter queryFilter = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        QueryWrapper wrapper = queryFilter == null ? new QueryWrapper(): queryFilter.asWrapper(this.getDOClass());
+        Workbook book = this.excelService.exportExcel(wrapper,this.baseService,this.getDOClass());
+        String excelTempPath =  EConfig.getPathPropertiesValue("saveFilePath") + "/" + StringUtil.getUUID() + ".xls";
+        book.write(new FileOutputStream(excelTempPath));
+        FileUtils.download(excelTempPath,response,fileName);
+        FileUtils.deleteFile(excelTempPath);
+    }
+
 
     /**
      * 有数据导出excel by jackwang
@@ -612,6 +649,14 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         result.put("permission", DataPermissonContext.getDataPermissonMap());
         result.put("loginUserId", getSessionuser().getUserId());
         return result;
+    }
+
+    /**
+     * 设置导出缓存
+     * @param queryFilter 过滤条件
+     */
+    protected void setExportCache(QueryFilter<D> queryFilter){
+        exportParamCache.put(UserContext.getSessionuser().getUserId(),queryFilter);
     }
 
 }

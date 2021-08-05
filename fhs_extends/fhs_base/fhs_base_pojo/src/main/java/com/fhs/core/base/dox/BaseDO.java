@@ -14,8 +14,10 @@ import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.excel.anno.IgnoreExport;
 import com.mybatis.jpa.annotation.Between;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -55,7 +57,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      */
     @TableField("create_user")
     @ApiModelProperty("创建人")
-    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#createUser")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#createUser",jsonKey = "createUserUserName")
     protected String createUser;
 
     /**
@@ -72,7 +74,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      */
     @ApiModelProperty("修改人")
     @TableField("update_user")
-    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#updateUser")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#updateUser",jsonKey = "updateUserUserName")
     protected String updateUser;
 
     /**
@@ -85,6 +87,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
     protected Date updateTime;
 
     @TableLogic
+    @IgnoreExport
     @TableField("is_delete")
     @JSONField(serialize = false)
     @ApiModelProperty("是否删除")

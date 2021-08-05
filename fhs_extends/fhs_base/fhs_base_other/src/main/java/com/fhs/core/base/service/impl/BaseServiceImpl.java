@@ -625,7 +625,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public List<V> findByIds(List<?> ids) {
-        return dos2vos(baseMapper.selectByIds(ids));
+        return ListUtils.copyListToList(baseMapper.selectByIds(ids), this.getVOClass());
     }
 
 

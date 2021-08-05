@@ -120,7 +120,7 @@ public class QueryFilter<T> {
         return map;
     }
 
-    public Wrapper<T> asWrapper(Class currentModelClass){
+    public QueryWrapper<T> asWrapper(Class currentModelClass){
         QueryWrapper<T> queryWrapper = new QueryWrapper();
         Map<String, List<QueryField>> groupQueryField = this.groupQueryField();
         String groupRelation = this.getGroupRelation();

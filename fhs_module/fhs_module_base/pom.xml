@@ -44,6 +44,12 @@
 
         <dependency>
             <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_excel_core</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_pagex</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
@@ -121,6 +127,7 @@
             <version>2.6.1</version>
             <scope>compile</scope>
         </dependency>
+
 
 
     </dependencies>
