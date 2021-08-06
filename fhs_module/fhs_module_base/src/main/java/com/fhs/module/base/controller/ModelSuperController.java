@@ -224,8 +224,14 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         QueryFilter queryFilter = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
         QueryWrapper wrapper = queryFilter == null ? new QueryWrapper(): queryFilter.asWrapper(this.getDOClass());
         Workbook book = this.excelService.exportExcel(wrapper,this.baseService,this.getDOClass());
-        String excelTempPath =  EConfig.getPathPropertiesValue("saveFilePath") + "/" + StringUtil.getUUID() + ".xls";
-        book.write(new FileOutputStream(excelTempPath));
+        String excelTempPath =  EConfig.getPathPropertiesValue("saveFilePath") + "/" + StringUtil.getUUID() + ".xlsx";
+        FileOutputStream os = new FileOutputStream(excelTempPath);
+        book.write(os);
+        try{
+            os.close();
+        }catch (Exception e){
+            log.error("关闭流错误",e);
+        }
         FileUtils.download(excelTempPath,response,fileName);
         FileUtils.deleteFile(excelTempPath);
     }
