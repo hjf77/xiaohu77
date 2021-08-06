@@ -60,6 +60,10 @@ public class ParamArrayHandle {
             for (Field field : fields) {
                 String strVal = ConverterUtils.toString(ReflectUtils.getValue(needHandleParam,field.getName()));
                 if(!StringUtils.isEmpty(strVal) && strVal.length()>2){
+                    //如果不是[ 开头的代表已经是好着的了，不需要这里处理
+                    if(!strVal.startsWith("[")){
+                        continue;
+                    }
                     //去掉第一个[
                     strVal = strVal.substring(1);
                     strVal = strVal.substring(0,strVal.length()-1);
