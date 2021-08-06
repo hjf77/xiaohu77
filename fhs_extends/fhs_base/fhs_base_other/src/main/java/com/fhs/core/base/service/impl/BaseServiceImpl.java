@@ -464,9 +464,9 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
                     this.doCache.put(namespace + ":" + pkey, result);
                 }
             }
-            return d2v(result);
+            return d2v(result,false);
         }
-        return d2v(baseMapper.selectByIdJpa(primaryValue));
+        return d2v(baseMapper.selectByIdJpa(primaryValue),false);
     }
 
     @Override
@@ -685,13 +685,25 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
      * @return vo
      */
     public V d2v(D d) {
+        return d2v( d, true);
+    }
+
+    /**
+     * po转vo
+     *
+     * @param d d
+     * @return vo
+     */
+    public V d2v(D d,boolean needTrans) {
         try {
             if (d == null) {
                 return null;
             }
             V vo = voClass.newInstance();
             BeanUtils.copyProperties(d, vo);
-            transService.transOne(vo);
+            if(needTrans){
+                transService.transOne(vo);
+            }
             return vo;
         } catch (InstantiationException e) {
             e.printStackTrace();

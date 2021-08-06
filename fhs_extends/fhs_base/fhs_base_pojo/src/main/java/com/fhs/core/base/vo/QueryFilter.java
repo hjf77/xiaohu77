@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtil;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
@@ -241,6 +242,18 @@ public class QueryFilter<T> {
                 break;
             case "find_in_set":
                 queryWrapper.apply("FIND_IN_SET('" + queryField.getValue() + "'," + field + ")");
+                break;
+            case "find_in_set_in":
+                if(queryField.getValue()!=null){
+                    Object[] params =  convert2ObjectArray(queryField.getValue());
+                    StringBuilder whereBulder = new StringBuilder("(");
+                    for(int i =0;i<params.length;i++){
+                        if(i!=0){
+                            whereBulder.append(" OR ");
+                        }
+                        whereBulder.append(" FIND_IN_SET('" + params[i] + "'," + field + ") ");
+                    }
+                }
                 break;
             case "ext":
                 queryWrapper.apply(ConverterUtils.toString(queryField.getValue()));
