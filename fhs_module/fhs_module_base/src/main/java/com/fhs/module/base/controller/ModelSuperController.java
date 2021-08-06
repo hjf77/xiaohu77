@@ -1,5 +1,6 @@
 package com.fhs.module.base.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -68,7 +69,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     /**
      * 用于导出用的缓存
      */
-    private Cache<String, QueryFilter> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private Cache<String, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
     private BaseService<V, D> baseService;
@@ -122,10 +123,10 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @ApiOperation("后台-高级分页查询-vue推荐")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
         if (isPermitted(request, "see")) {
-            this.setExportCache(filter);
+            QueryWrapper wrapper = filter.asWrapper(getDOClass());
+            this.setExportCache(wrapper);
             //这里的是1是DO的index
-            return baseService.selectPageMP(filter.getPagerInfo(),
-                    filter.asWrapper(getDOClass()));
+            return baseService.selectPageMP(filter.getPagerInfo(),wrapper);
         } else {
             throw new NotPremissionException();
         }
@@ -221,8 +222,8 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
     public void exportExcelForVue(HttpServletResponse response,String fileName) throws IOException {
-        QueryFilter queryFilter = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        QueryWrapper wrapper = queryFilter == null ? new QueryWrapper(): queryFilter.asWrapper(this.getDOClass());
+        QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        wrapper = wrapper == null ? new QueryWrapper(): wrapper;
         Workbook book = this.excelService.exportExcel(wrapper,this.baseService,this.getDOClass());
         String excelTempPath =  EConfig.getPathPropertiesValue("saveFilePath") + "/" + StringUtil.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
@@ -664,10 +665,10 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     /**
      * 设置导出缓存
-     * @param queryFilter 过滤条件
+     * @param wrapper 过滤条件
      */
-    protected void setExportCache(QueryFilter<D> queryFilter){
-        exportParamCache.put(UserContext.getSessionuser().getUserId(),queryFilter);
+    protected void setExportCache(QueryWrapper<D> wrapper){
+        exportParamCache.put(UserContext.getSessionuser().getUserId(),wrapper);
     }
 
 }
