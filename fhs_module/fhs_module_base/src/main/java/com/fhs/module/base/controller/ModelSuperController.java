@@ -23,6 +23,7 @@ import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
+import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.logger.Logger;
@@ -74,6 +75,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     @Autowired
     private ExcelService excelService;
+
+    @Autowired
+    private TransService transService;
 
     public BaseService<V, D> getBaseService() {
         return baseService;
@@ -349,6 +353,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             throws Exception {
         if (isPermitted(request, "see")) {
             V bean = baseService.selectById(id);
+            transService.transOne(bean);
             return bean;
         } else {
             throw new NotPremissionException();
