@@ -208,46 +208,65 @@ public class ExcelServiceImpl implements ExcelService {
                         Trans trans = field.getAnnotation(Trans.class);
                         if (trans != null){
                             if (trans.type().equals(TransType.WORD_BOOK)){
-                                String tranStr = transService.getUnWordBookTransMap().get(trans.key() + "_" + dataArray[j][i]);
-                                if (StringUtils.isBlank(tranStr)){
-                                    valiStr.append(fieldName + "找不到对应翻译，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                if (data.toString().contains(",")){
+                                    String[] strs = data.toString().split(",");
+                                    StringBuilder tranStr = new StringBuilder();
+                                    for (int k = 0; k < strs.length; k++){
+                                        String tran = transService.getUnWordBookTransMap().get(trans.key() + "_" + data);
+                                        if (StringUtils.isBlank(tran)){
+                                            valiStr.append("“" + data + "”找不到对应翻译，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                        }
+                                        tranStr.append(tran).append(",");
+                                    }
+                                    tranStr.deleteCharAt(tranStr.length()-1);
+                                    ReflectUtils.setValue(objDo, field, tranStr.toString());
+                                } else {
+                                    String tranStr = transService.getUnWordBookTransMap().get(trans.key() + "_" + data);
+                                    if (StringUtils.isBlank(tranStr)){
+                                        valiStr.append("“" + data + "”找不到对应翻译，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
+                                    ReflectUtils.setValue(objDo, field, tranStr);
                                 }
-                                ReflectUtils.setValue(objDo, field, tranStr);
                             } else if (trans.type().equals(TransType.AUTO_TRANS)){
                                 String namespace = trans.key() + "_" + field.getName();
                                 String namespaceKey = trans.key() + "_" + (j+2) + "_" + fieldName;
                                 if (!needTrans.containsKey(namespace)){
                                     needTrans.put(namespace, new HashSet<>());
                                 }
-                                needTrans.get(namespace).add(dataArray[j][i]);
-                                ReflectUtils.setValue(objDo, field, dataArray[j][i]);
+                                needTrans.get(namespace).add(data);
+                                ReflectUtils.setValue(objDo, field, data);
                             }
                         } else {
                             //不需要反翻译时进行非空和长度校验
                             if (field.getAnnotation(NotEmpty.class) != null
                                     && StringUtils.isBlank(data.toString())){
                                 valiStr.append(fieldName + "不能为空，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                continue;
                             }
                             Length length = field.getAnnotation(Length.class);
                             if (length != null){
                                 if (data.toString().length() > length.max() ){
                                     valiStr.append(fieldName + "长度不能超过" + length.max() + "，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                    continue;
                                 }
                                 if (data.toString().length() < length.min() ){
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                    continue;
                                 }
                             }
                             if (field.getGenericType().equals(Date.class)){
-                                if (StringUtils.isBlank(dataArray[j][i].toString())){
+                                if (StringUtils.isBlank(data.toString())){
                                     continue;
                                 }
                                 try {
-                                    ReflectUtils.setValue(objDo, field, DateUtils.parseStr(dataArray[j][i].toString()));
+                                    ReflectUtils.setValue(objDo, field, DateUtils.parseStr(data.toString()));
                                 } catch (Exception e){
                                     valiStr.append(fieldName + "列请输入正确的时间格式，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
+                                    continue;
                                 }
                             } else {
-                                ReflectUtils.setValue(objDo, field, dataArray[j][i]);
+                                ReflectUtils.setValue(objDo, field, data);
                             }
                         }
                     }
