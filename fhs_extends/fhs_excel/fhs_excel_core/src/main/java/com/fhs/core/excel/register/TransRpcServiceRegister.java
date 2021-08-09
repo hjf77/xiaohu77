@@ -1,8 +1,10 @@
 package com.fhs.core.excel.register;
 
 import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.excel.service.TransRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -18,23 +20,62 @@ public class TransRpcServiceRegister implements ApplicationListener<ApplicationR
 
     private static final Logger LOG = LoggerFactory.getLogger(TransRpcServiceRegister.class);
 
-    private Map<String, TransRpcService> transRpsServiceMap = new HashMap<>();
+    private Map<String, List<TransRpcService>> transRpsServiceMap = new HashMap<>();
+
+    /**
+     * springcloud 模式
+     */
+    @Value("${fhs.is-cloud-model:false}")
+    private boolean isCloudModel;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        List<TransRpcService> services = SpringContextUtil.getBeansByClass(TransRpcService.class);
+        List<TransRpcService> services = null;
+        if(isCloudModel){
+             services = SpringContextUtil.getBeansByClass(TransRpcService.class);
+        }else{
+            String[] names = SpringContextUtil.getApplicationContext().getBeanNamesForType(TransRpcService.class);
+            services = new ArrayList<>();
+            for (String name : names) {
+                try {
+                    Class clazz =  Class.forName(name);
+                    if(clazz.isInterface()){
+                        continue;
+                    }
+                    services.add((TransRpcService)SpringContextUtil.getBeanByName(clazz));
+                } catch (ClassNotFoundException e) {
+                    services.add((TransRpcService)SpringContextUtil.getBean(name));
+                }
+            }
+        }
         services.forEach(service -> {
             String namespace = service.namespace();
             if (!transRpsServiceMap.containsKey(namespace)) {
-                transRpsServiceMap.put(namespace, service);
+                transRpsServiceMap.put(namespace, new ArrayList<>());
             }
+            transRpsServiceMap.get(namespace).add(service);
         });
         LOG.info("TransRpcServiceRegister load service success");
     }
 
+    /**
+     * 根据namespace获取翻译服务
+     * @param namespace
+     * @return
+     */
     public TransRpcService getTransRpcService(String namespace){
         if (transRpsServiceMap.containsKey(namespace)) {
-            return transRpsServiceMap.get(namespace);
+            List<TransRpcService> rpcServices = transRpsServiceMap.get(namespace);
+            if(rpcServices.size()==1){
+                return rpcServices.get(0);
+            }
+            //有多个优先匹配
+            for (TransRpcService rpcService : rpcServices) {
+                if(!rpcService.isFeign()){
+                    return rpcService;
+                }
+            }
+            return rpcServices.get(rpcServices.size()-1);
         }
         return null;
     }

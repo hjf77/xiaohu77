@@ -7,6 +7,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -351,4 +353,23 @@ public class JsonUtils {
         return levelStr.toString();
     }
 
+    /**
+     * JSON序列化
+     *
+     * @param object 对象
+     * @return JSON字符串
+     */
+    public static String jacksonSerialize(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static <T> T jacksonDeserialize(String jsonStr, Class<T> classType) throws Exception {
+        return new ObjectMapper().readValue(jsonStr, classType);
+    }
 }

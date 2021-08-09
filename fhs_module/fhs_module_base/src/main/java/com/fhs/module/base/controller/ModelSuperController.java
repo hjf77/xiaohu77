@@ -19,14 +19,17 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
+import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.common.ExcelExportTools;
 import com.fhs.module.base.context.UserContext;
@@ -43,6 +46,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -354,7 +358,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("info/{id}")
     @ApiOperation("根据id获取单挑数据信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "query")}
+            @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "path")}
     )
     public V info(@PathVariable("id") String id, HttpServletRequest request)
             throws Exception {
@@ -669,6 +673,31 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     protected void setExportCache(QueryWrapper<D> wrapper){
         exportParamCache.put(UserContext.getSessionuser().getUserId(),wrapper);
+    }
+
+    @PostMapping("pubImportExcel")
+    @ApiOperation("公共excel导入")
+    public HttpResult<String> pubImportExcel(MultipartFile file,D otherParam) throws Exception {
+        if(otherParam==null){
+            otherParam= this.getDOClass().newInstance();
+        }
+        ExcelImportSett importSett = getExcelImportSett(otherParam);
+        ParamChecker.isNotNull(importSett,"此接口后台没有配置导入参数，请联系后台");
+        try{
+            importSett.setDoModel(otherParam);
+            this.excelService.importExcel(file,this.getBaseService(),this.getDOClass(),importSett);
+        }catch (ValidationException e){
+            throw new  ParamException(e.getMessage());
+        }
+        return HttpResult.success("导入成功");
+    }
+
+    /**
+     * excel的一些默认配置
+     * @return
+     */
+    protected ExcelImportSett getExcelImportSett(D otherParam){
+        return null;
     }
 
 }

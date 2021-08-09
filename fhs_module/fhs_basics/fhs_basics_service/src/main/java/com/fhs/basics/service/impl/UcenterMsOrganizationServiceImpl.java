@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.api.rpc.FeignOrganizationApiService;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.dox.UcenterMsOrganizationDO;
@@ -16,10 +17,13 @@ import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.AutoTrans;
+import com.fhs.excel.form.NamesForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author qixiaobo
@@ -118,4 +122,21 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         }
         return HttpResult.success(super.findByIds(Arrays.asList(ids.split(","))));
     }
+
+    @Override
+    public Map<String, Object> doUnTrans(NamesForm namesForm) {
+        if(namesForm.getNames()==null || namesForm.getNames().isEmpty()){
+            return new HashMap<>();
+        }
+        List<UcenterMsOrganizationVO> orgs = super.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getName,namesForm.getNames()));
+        return  orgs.stream().collect(Collectors
+                .toMap(UcenterMsOrganizationVO::getName, UcenterMsOrganizationVO::getId));
+    }
+
+    @Override
+    public String namespace() {
+        return "org";
+    }
+
+
 }

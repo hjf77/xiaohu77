@@ -593,6 +593,35 @@ public class ExcelUtils {
 
 
     /**
+     * 创建样式
+     * @param bold  是否需要加粗
+     * @param border 是否需要边框
+     * @param xssfWorkbook
+     * @return
+     */
+    private static XSSFCellStyle createStyle(boolean bold, boolean border, XSSFWorkbook xssfWorkbook) {
+        XSSFFont font = xssfWorkbook.createFont();
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 0xB);// 字体大小
+        if (bold) {
+            font.setBold(true);
+        }
+        XSSFCellStyle style = xssfWorkbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER_SELECTION);
+        style.setFont(font);                         //设置字体
+        style.setAlignment(HorizontalAlignment.CENTER);          // 居中
+        style.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
+        if (border) {
+            style.setBorderRight(BorderStyle.MEDIUM);
+            style.setBorderLeft(BorderStyle.MEDIUM);
+            style.setBorderBottom(BorderStyle.MEDIUM);
+            style.setBorderTop(BorderStyle.MEDIUM);
+            style.setLocked(true);
+        }
+        return style;
+    }
+
+    /**
      * <初始化sheet中的数据>
      *
      * @param sheet          sheet对象
@@ -613,29 +642,58 @@ public class ExcelUtils {
             int startRowNum = titleArray.length;
             for (int i = 0; i < startRowNum; i++) {
                 cell = row.createCell(i);
+                cell.setCellStyle(createStyle(true, true,  sheet.getWorkbook()));
                 cellData = titleArray[i];
+                cellData.toString().length();
+                sheet.setColumnWidth(i,(cellData.toString().length()+20)*256);
+
                 cell.setCellValue(ConverterUtils.toString(cellData));
+
             }
         }
 
+
         for (int i = 0; i < dataArray.length; i++) {
-            row = sheet.createRow(i + titleRow);
-            rowDataArray = dataArray[i];
-            for (int j = 0; j < rowDataArray.length; j++) {
-                cell = row.createCell(j);
-                cellData = rowDataArray[j];
-                if (cellData instanceof String) {
-                    cell.setCellValue(ConverterUtils.toString(cellData));
-                } else if (cellData instanceof Integer) {
-                    cell.setCellValue(ConverterUtils.toInt(cellData));
-                } else if (cellData instanceof Double) {
-                    cell.setCellValue(ConverterUtils.toDouble(cellData));
-                } else if (cellData instanceof Date) {
-                    cell.setCellValue((Date) cellData);
+            if(i<1){
+                row = sheet.createRow(i + titleRow);
+                rowDataArray = dataArray[i];
+                for (int j = 0; j < rowDataArray.length; j++) {
+                    cell = row.createCell(j);
+                    cell.setCellStyle(createStyle(false, true,  sheet.getWorkbook()));
+                    cellData = rowDataArray[j];
+                    if (cellData instanceof String) {
+                        cell.setCellValue(ConverterUtils.toString(cellData));
+                    } else if (cellData instanceof Integer) {
+                        cell.setCellValue(ConverterUtils.toInt(cellData));
+                    } else if (cellData instanceof Double) {
+                        cell.setCellValue(ConverterUtils.toDouble(cellData));
+                    } else if (cellData instanceof Date) {
+                        cell.setCellValue((Date) cellData);
+                    }
                 }
+            }else {
+                row = sheet.createRow(i + titleRow);
+                rowDataArray = dataArray[i];
+                for (int j = 0; j < rowDataArray.length; j++) {
+                    cell = row.createCell(j);
+                    cell.setCellStyle(createStyle(false, true,  sheet.getWorkbook()));
+                    cellData = rowDataArray[j];
+                    if (cellData instanceof String) {
+                        cell.setCellValue(ConverterUtils.toString(cellData));
+                    } else if (cellData instanceof Integer) {
+                        cell.setCellValue(ConverterUtils.toInt(cellData));
+                    } else if (cellData instanceof Double) {
+                        cell.setCellValue(ConverterUtils.toDouble(cellData));
+                    } else if (cellData instanceof Date) {
+                        cell.setCellValue((Date) cellData);
+                    }
+                }
+
             }
+
         }
     }
+
 
 
     /**
@@ -731,10 +789,10 @@ public class ExcelUtils {
      */
     public static Object[][] importExcel(MultipartFile file, int titleRowNum, int colNum) throws IOException {
         // 判断目标文件是否存在
-        if (file.isEmpty()) {
+        /*if (file.isEmpty()) {
             log.error("ExcelUtils.importExcel    目标文件" + file.getName() + "不存在！");
         }
-
+*/
         String fileName = file.getOriginalFilename();
         String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
 

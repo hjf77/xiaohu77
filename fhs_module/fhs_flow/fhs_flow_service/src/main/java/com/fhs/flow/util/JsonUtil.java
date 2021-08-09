@@ -2,6 +2,8 @@ package com.fhs.flow.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,8 +143,5 @@ public class JsonUtil {
         return JSON.toJSONString(obj);
     }
 
-    public static void main(String[] args) {
-        String str = JSON.toJSONString(null);
-        System.out.println();
-    }
+
 }

@@ -4,9 +4,12 @@ import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.HttpResult;
+import com.fhs.excel.form.NamesForm;
+import com.fhs.excel.service.TransRpcService;
 import feign.Param;
 import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,7 @@ import java.util.Map;
  * @date 2020-05-18 14:39:22
  */
 @FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
-public interface FeignOrganizationApiService {
+public interface FeignOrganizationApiService extends TransRpcService {
 
 
 
@@ -36,5 +39,13 @@ public interface FeignOrganizationApiService {
      */
     @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/getOrgByIds?id={ids}")
     HttpResult<List<UcenterMsOrganizationVO>> getOrgByIds(@Param("ids") String ids);
+
+    /**
+     * 反向翻译
+     * @param namesForm 表单，包含names集合
+     * @return
+     */
+    @RequestLine("POST /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/doUnTrans")
+    Map<String,Object> doUnTrans(@RequestBody NamesForm namesForm);
 
 }

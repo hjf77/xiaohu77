@@ -807,6 +807,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         }
     }
 
-
+    public boolean isFeign() {
+        return false;
+    }
 
 }

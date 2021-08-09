@@ -7,14 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.trans.WordBookTransServiceImpl;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.SpringContextUtil;
-import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
-import com.fhs.core.excel.register.TransRpcService;
+import com.fhs.excel.dto.ExcelImportSett;
+import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.trans.anno.Trans;
@@ -89,7 +87,7 @@ public class ExcelServiceImpl implements ExcelService {
 
         int num = 0;
         for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet()){
-            titleArray[num] = entry.getValue().getAnnotation(ApiModelProperty.class).value();
+            titleArray[num] = getFieldRemark(entry.getValue());
             num ++;
         }
 
@@ -164,6 +162,19 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     /**
+     * 获取列中文注释
+     * @param field
+     * @return
+     */
+    private String getFieldRemark(Field field){
+        String fieldName = field.getAnnotation(ApiModelProperty.class).value();
+        if(fieldName.contains("(")){
+            return fieldName.substring(0,fieldName.indexOf(")"));
+        }
+        return fieldName;
+    }
+
+    /**
      * Excel导入功能
      * 其中包括基本校验基于DO Class注解
      * 注解 NotEmpty 非空校验
@@ -176,29 +187,28 @@ public class ExcelServiceImpl implements ExcelService {
      * @param dataArray Excel数据数组
      * @param titleArray Excel标题数组
      * @param targetService 对应的service
-     * @param doClass 对应的 DO Class
+     * @param importSett 对应的 DO Class
      * @throws ValidationException 返回整个Excel验证结果
      */
-    @Override
-    public void importExcel(Object[][] dataArray, Object[] titleArray,  BaseService targetService, Class<?> doClass) throws ValidationException {
-
+    public void importExcel(Object[][] dataArray, Object[] titleArray,  BaseService targetService,ExcelImportSett importSett) throws Exception {
+        importSett.getDoIniter().init(importSett.getDoModel());
         BaseService service = targetService;
-        List<Field> fields = ReflectUtils.getAnnotationField(doClass, ApiModelProperty.class);
+        List<Field> fields = ReflectUtils.getAnnotationField(importSett.getDoModel().getClass(), ApiModelProperty.class);
         WordBookTransServiceImpl transService = SpringContextUtil.getBeanByName(WordBookTransServiceImpl.class);
         //excel错误格式提醒
         StringBuilder valiStr = new StringBuilder();
         //需要反翻译的名称
-        Map<String, Set<Object>> needTrans = new HashMap<>();
+        Map<String, Set<String>> needTrans = new HashMap<>();
 
         //初始化数据集合
         List<Object> doList = new ArrayList<>();
         for (int i = 0; i < dataArray.length; i++){
-            doList.add(ReflectUtils.newInstance(doClass));
+            doList.add(JsonUtils.jacksonDeserialize(JsonUtils.jacksonSerialize(importSett.getDoModel()),importSett.getDoModel().getClass()));
         }
 
         for (int i = 0; i < titleArray.length; i++){
             for (Field field : fields){
-                String fieldName = field.getAnnotation(ApiModelProperty.class).value();
+                String fieldName = getFieldRemark(field);
                 if (fieldName.equals(titleArray[i])
                         && field.getAnnotation(TableField.class).exist()){
                     for (int j = 0; j < dataArray.length; j ++){
@@ -212,7 +222,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     String[] strs = data.toString().split(",");
                                     StringBuilder tranStr = new StringBuilder();
                                     for (int k = 0; k < strs.length; k++){
-                                        String tran = transService.getUnWordBookTransMap().get(trans.key() + "_" + data);
+                                        String tran = transService.getUnWordBookTransMap().get(trans.key() + "_" + strs[k]);
                                         if (StringUtils.isBlank(tran)){
                                             valiStr.append("“" + data + "”找不到对应翻译，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
                                         }
@@ -234,7 +244,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 if (!needTrans.containsKey(namespace)){
                                     needTrans.put(namespace, new HashSet<>());
                                 }
-                                needTrans.get(namespace).add(data);
+                                needTrans.get(namespace).add(ConverterUtils.toString(data));
                                 ReflectUtils.setValue(objDo, field, data);
                             }
                         } else {
@@ -311,22 +321,27 @@ public class ExcelServiceImpl implements ExcelService {
      * @param file 文件对象
      * @param targetService 对应的service
      * @param doClass 对应的 DO Class
-     * @param titleRowNum title所在行，默认0
-     * @param colNum 共多少列
+     * @param importSett 导入配置
      * @throws ValidationException 返回整个Excel验证结果
      */
     @Override
-    public void importExcel(MultipartFile file,  BaseService targetService, Class<?> doClass, int titleRowNum, int colNum) throws ValidationException {
+    public void importExcel(MultipartFile file,  BaseService targetService, Class<?> doClass, ExcelImportSett importSett) throws Exception {
 
         Object[][] dataArray = new Object[0][];
         Object[] titleArray = new Object[0];
         try {
-            dataArray = ExcelUtils.importExcel(file, titleRowNum, colNum);
-            titleArray = ExcelUtils.getExcelTitleRow(file, titleRowNum, colNum);
+            dataArray = ExcelUtils.importExcel(file, importSett.getTitleRowNum(), importSett.getColNum());
+            titleArray = ExcelUtils.getExcelTitleRow(file, importSett.getTitleRowNum(), importSett.getColNum());
+            for(int i =0;i< titleArray.length;i++){
+                String tempTitle = ConverterUtils.toString(titleArray[i]);
+                if(tempTitle.contains("(")){
+                    titleArray[i] = tempTitle.substring(0,tempTitle.indexOf("("));
+                }
+            }
         } catch (IOException e) {
             throw new ValidationException("获取文件IO流失败", e);
         }
 
-        importExcel(dataArray, titleArray, targetService, doClass);
+        importExcel(dataArray, titleArray, targetService,  importSett);
     }
 }

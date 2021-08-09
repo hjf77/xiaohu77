@@ -3,6 +3,7 @@ package com.fhs.core.excel.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
+import com.fhs.excel.dto.ExcelImportSett;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,24 +21,17 @@ public interface ExcelService {
      */
     Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass);
 
-    /**
-     *
-     * @param datas
-     * @param title
-     * @param targetService
-     * @param doClass
-     * @throws ValidationException
-     */
-    void importExcel(Object[][] datas, Object[] title, BaseService targetService, Class<?> doClass) throws ValidationException;
+
 
     /**
      * 解析excel 入库
      * @param file 文件
      * @param targetService baseservice
      * @param doClass do的类
-     * @param titleRowNum  title第几行
-     * @param colNum 一共多少列
+     * @param importSett  其他配置
      * @throws ValidationException
      */
-    void importExcel(MultipartFile file,  BaseService targetService, Class<?> doClass, int titleRowNum, int colNum) throws ValidationException;
+    void importExcel(MultipartFile file,  BaseService targetService, Class<?> doClass, ExcelImportSett importSett) throws Exception;
+
+
 }
