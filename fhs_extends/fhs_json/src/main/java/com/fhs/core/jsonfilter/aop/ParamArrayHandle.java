@@ -56,6 +56,9 @@ public class ParamArrayHandle {
         //}
         if (autoArraySett != null) {
             Object needHandleParam = params[autoArraySett.getIndex()];
+            if(needHandleParam == null){
+                return joinPoint.proceed();
+            }
             List<Field> fields = autoArraySett.getAutoArrayFields();
             for (Field field : fields) {
                 String strVal = ConverterUtils.toString(ReflectUtils.getValue(needHandleParam,field.getName()));
