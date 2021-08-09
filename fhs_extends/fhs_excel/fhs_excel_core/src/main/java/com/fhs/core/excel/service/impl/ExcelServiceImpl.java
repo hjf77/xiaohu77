@@ -240,7 +240,6 @@ public class ExcelServiceImpl implements ExcelService {
                                 }
                             } else if (trans.type().equals(TransType.AUTO_TRANS)){
                                 String namespace = trans.key() + "_" + field.getName();
-                                String namespaceKey = trans.key() + "_" + (j+2) + "_" + fieldName;
                                 if (!needTrans.containsKey(namespace)){
                                     needTrans.put(namespace, new HashSet<>());
                                 }
