@@ -84,22 +84,20 @@ public class ParamArrayHandle {
      */
     public AutoArraySett getMethodAutoArray(Object[] params) {
         AutoArraySett result = null;
-        int index = 0;
         // 遍历所有的参数，找到需要校验的参数，进行校验并且记录校验结果
-        for (Object arg : params) {
-            if (null == arg) {
+        for (int i =0;i<params.length;i++) {
+            if (null ==  params[i]) {
                 continue;
             }
-            if (arg instanceof VO) {
-                List<Field> autoArrayFields = ReflectUtils.getAnnotationField(arg.getClass(), AutoArray.class);
+            if (params[i] instanceof VO) {
+                List<Field> autoArrayFields = ReflectUtils.getAnnotationField(params[i].getClass(), AutoArray.class);
                 if (!autoArrayFields.isEmpty()) {
                     result = new AutoArraySett();
                     result.setAutoArrayFields(autoArrayFields);
-                    result.setIndex(index);
+                    result.setIndex(i);
                     return result;
                 }
             }
-            index++;
             continue;
         }
         return result;
