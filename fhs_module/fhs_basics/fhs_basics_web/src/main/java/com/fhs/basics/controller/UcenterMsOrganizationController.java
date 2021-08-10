@@ -14,8 +14,11 @@ import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
+import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.TreeUtils;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -23,10 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -178,10 +178,37 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         super.outJsonp(JsonUtils.list2json(sysOrganizationService.getSubNode(sysUser.getOrganizationId(), request.getParameter("parentId"))));
     }
 
+    /**
+     * 下拉tree
+     * @param filter 过滤条件
+     * @return
+     */
+    @ApiOperation("下拉专用tree")
+    @PostMapping("selectTree")
+    public List<TreeNode<Treeable>> selectTree(@RequestBody  QueryFilter<UcenterMsOrganizationDO> filter){
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(filter.asWrapper(UcenterMsOrganizationDO.class));
+        Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
+                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
+        for (UcenterMsOrganizationVO org : orgs) {
+            //如果不是个单位，则设置名字为xx(单位名称)
+            if(org.getIsCompany() != null && org.getIsCompany() != Constant.INT_TRUE && orgMap.containsKey(org.getCompanyId())){
+                org.setName(org.getName() + "(" + orgMap.get(org.getCompanyId()).getName() + ")");
+            }
+        }
+        return  TreeUtils.formartTree(orgs);
+    }
+
+    /**
+     * @param hierarchy 层级
+     * @return
+     */
     @GetMapping(value = "/getCompanyTree")
     @ApiOperation("获取公司tree")
-    public List<TreeNode> getCompanyTree(){
-        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(new LambdaQueryWrapper<>());
+    public List<TreeNode> getCompanyTree(Integer hierarchy){
+        hierarchy = hierarchy == null ? 0 : hierarchy;
+        LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.apply(hierarchy!=0,"LENGTH(id)<=" + (hierarchy*3));
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(queryWrapper);
         Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
         Map<String,TreeNode> nodeMap = new HashMap<>();
