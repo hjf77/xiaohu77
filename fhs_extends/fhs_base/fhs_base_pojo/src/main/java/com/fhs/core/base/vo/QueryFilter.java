@@ -89,7 +89,6 @@ public class QueryFilter<T> {
     }
 
 
-
     @JSONField(serialize = false)
     public Map<String, List<QueryField>> groupQueryField() {
         Map<String, List<QueryField>> map = new HashMap();
@@ -121,7 +120,7 @@ public class QueryFilter<T> {
         return map;
     }
 
-    public QueryWrapper<T> asWrapper(Class currentModelClass){
+    public QueryWrapper<T> asWrapper(Class currentModelClass) {
         QueryWrapper<T> queryWrapper = new QueryWrapper();
         Map<String, List<QueryField>> groupQueryField = this.groupQueryField();
         String groupRelation = this.getGroupRelation();
@@ -157,16 +156,16 @@ public class QueryFilter<T> {
         return queryWrapper;
     }
 
-    private static final  String INJECTION_REGEX = "[A-Za-z0-9\\_\\-\\+\\.]+";
-    private static final  String WHERE_SQL_TAG = "whereSql";
-    private static final  String ORDER_SQL_TAG = "orderBySql";
+    private static final String INJECTION_REGEX = "[A-Za-z0-9\\_\\-\\+\\.]+";
+    private static final String WHERE_SQL_TAG = "whereSql";
+    private static final String ORDER_SQL_TAG = "orderBySql";
 
     private String[] convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
         if (list == null) {
             return null;
         } else {
             String[] ary = new String[list.size()];
-            for(int i = 0; i < list.size(); ++i) {
+            for (int i = 0; i < list.size(); ++i) {
                 ary[i] = getField(list.get(i).getProperty(), currentModelClass);
             }
             return ary;
@@ -175,24 +174,25 @@ public class QueryFilter<T> {
 
     /**
      * 获取数据库字段
-     * @param fieldName Java字段名
+     *
+     * @param fieldName         Java字段名
      * @param currentModelClass 类
      * @return
      */
     @JSONField(serialize = false)
-    private String getField(String fieldName,Class<T> currentModelClass){
-        if(currentModelClass == null){
+    private String getField(String fieldName, Class<T> currentModelClass) {
+        if (currentModelClass == null) {
             return fieldName;
         }
-        Field classField = ReflectionUtils.findField(currentModelClass,fieldName);
-        if(classField!=null){
-            if(classField.isAnnotationPresent(TableField.class)){
+        Field classField = ReflectionUtils.findField(currentModelClass, fieldName);
+        if (classField != null) {
+            if (classField.isAnnotationPresent(TableField.class)) {
                 fieldName = classField.getAnnotation(TableField.class).value();
-            }else if(classField.isAnnotationPresent(TableId.class)){
+            } else if (classField.isAnnotationPresent(TableId.class)) {
                 fieldName = classField.getAnnotation(TableId.class).value();
             }
         }
-        return  fieldName;
+        return fieldName;
     }
 
     private void convertQueryField(QueryWrapper<T> queryWrapper, QueryField queryField, Class<T> currentModelClass) {
@@ -200,10 +200,10 @@ public class QueryFilter<T> {
         if (OR.equals(r)) {
             queryWrapper.or();
         }
-        String field = getField(queryField.getProperty(),currentModelClass);
+        String field = getField(queryField.getProperty(), currentModelClass);
 
         String operation = queryField.getOperation();
-        switch(operation) {
+        switch (operation) {
             case "=":
                 queryWrapper.eq(field, queryField.getValue());
                 break;
@@ -238,17 +238,20 @@ public class QueryFilter<T> {
                 queryWrapper.isNotNull(field);
                 break;
             case "in":
-                queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
+                Object[] values = this.convert2ObjectArray(queryField.getValue());
+                if (values != null && values.length > 0) {
+                    queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
+                }
                 break;
             case "find_in_set":
                 queryWrapper.apply("FIND_IN_SET('" + queryField.getValue() + "'," + field + ")");
                 break;
             case "find_in_set_in":
-                if(queryField.getValue()!=null){
-                    Object[] params =  convert2ObjectArray(queryField.getValue());
+                if (queryField.getValue() != null) {
+                    Object[] params = convert2ObjectArray(queryField.getValue());
                     StringBuilder whereBulder = new StringBuilder("(");
-                    for(int i =0;i<params.length;i++){
-                        if(i!=0){
+                    for (int i = 0; i < params.length; i++) {
+                        if (i != 0) {
                             whereBulder.append(" OR ");
                         }
                         whereBulder.append(" FIND_IN_SET('" + params[i] + "'," + field + ") ");
@@ -260,9 +263,10 @@ public class QueryFilter<T> {
                 break;
             case "between":
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());
-                Assert.notNull(objs, String.format("查询条件：%s的查询值为空", field));
-                Assert.isTrue(objs.length == 2, String.format("查询条件为between时，查询值必须为两个，但是传入的查询值为：%s", objs));
-                queryWrapper.between(field, objs[0], objs[1]);
+                if (objs != null && objs.length > 0) {
+                    Assert.isTrue(objs.length == 2, String.format("查询条件为between时，查询值必须为两个，但是传入的查询值为：%s", objs));
+                    queryWrapper.between(field, objs[0], objs[1]);
+                }
         }
 
     }
@@ -272,10 +276,10 @@ public class QueryFilter<T> {
             return new Object[]{"''"};
         } else if (!(obj instanceof String)) {
             if (obj instanceof List) {
-                List<Object> objList = (List)obj;
+                List<Object> objList = (List) obj;
                 return objList.toArray();
             } else if (obj instanceof Object[]) {
-                return (Object[])obj;
+                return (Object[]) obj;
             } else {
                 return obj instanceof Object ? new Object[]{obj} : null;
             }
@@ -283,7 +287,7 @@ public class QueryFilter<T> {
             String str = obj.toString();
             String[] split = str.split(",");
 
-            for(int i = 0; i < split.length; ++i) {
+            for (int i = 0; i < split.length; ++i) {
                 split[i] = this.handleQuotation(split[i]);
             }
 
