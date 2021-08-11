@@ -66,7 +66,7 @@ public class ExcelServiceImpl implements ExcelService {
 
         List<Field> fields = ReflectUtils.getAllField(doClass);
 
-        Object[][] dataArray = new Object[dos.size()][fields.size()];
+
 
 
         //根据Order注解排序Excel头标题
@@ -87,6 +87,7 @@ public class ExcelServiceImpl implements ExcelService {
             }
         }
         Object[] titleArray = new Object[titleNum];
+        Object[][] dataArray = new Object[dos.size()][titleNum];
         int num = 0;
         for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet()){
             titleArray[num] = getFieldRemark(entry.getValue());
