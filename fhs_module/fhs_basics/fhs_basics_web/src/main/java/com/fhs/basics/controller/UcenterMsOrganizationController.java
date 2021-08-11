@@ -3,6 +3,7 @@ package com.fhs.basics.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.basics.constant.OrgConstant;
 import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
@@ -206,9 +207,12 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         String conpanyId = super.getSessionuser().getCompanyId();
         ParamChecker.isNotNull(conpanyId, "当前登录人没有公司id");
         UcenterMsOrganizationVO company = sysOrganizationService.selectById(conpanyId);
+        if(OrgConstant.ORG_ID_ROOT.equals(company.getId())){
+            return company;
+        }
         ParamChecker.isNotNull(company, conpanyId + "id无效");
         UcenterMsOrganizationVO parentOrg = sysOrganizationService.selectById(company.getParentId());
-        ParamChecker.isNotNull(company, company.getParentId() + "id无效");
+        ParamChecker.isNotNull(parentOrg, company.getParentId() + "id无效");
         if(parentOrg.getIsCompany()!=null && parentOrg.getIsCompany() == Constant.INT_TRUE){
             return parentOrg;
         }
