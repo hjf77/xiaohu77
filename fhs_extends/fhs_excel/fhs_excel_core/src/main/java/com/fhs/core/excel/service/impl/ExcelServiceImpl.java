@@ -172,7 +172,7 @@ public class ExcelServiceImpl implements ExcelService {
     private String getFieldRemark(Field field){
         String fieldName = field.getAnnotation(ApiModelProperty.class).value();
         if(fieldName.contains("(")){
-            return fieldName.substring(0,fieldName.indexOf(")"));
+            return fieldName.substring(0,fieldName.indexOf("("));
         }
         return fieldName;
     }
@@ -288,9 +288,9 @@ public class ExcelServiceImpl implements ExcelService {
         //名称反翻译
         for (String namespaceKey : needTrans.keySet()){
             String[] strs = namespaceKey.split("_");
-            String namespace = strs[0];
             String fieldName = strs[1];
-            TransRpcService transRpcService = transRpcServiceRegister.getTransRpcService(namespace);
+            //解析namespace获取到反向翻译服务
+            TransRpcService transRpcService = transRpcServiceRegister.getTransRpcService(strs[0].contains("#")?strs[0].split("#")[0] : strs[0]);
             Map<String, Object> unTrans = transRpcService.unTrans(needTrans.get(namespaceKey));
             for (Object objDo : doList){
                 Field field = ReflectUtils.getDeclaredField(objDo.getClass(), fieldName);
