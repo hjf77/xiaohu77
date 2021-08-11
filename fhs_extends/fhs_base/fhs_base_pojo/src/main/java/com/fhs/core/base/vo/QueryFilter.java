@@ -256,6 +256,8 @@ public class QueryFilter<T> {
                         }
                         whereBulder.append(" FIND_IN_SET('" + params[i] + "'," + field + ") ");
                     }
+                    whereBulder.append(" ) ");
+                    queryWrapper.apply(whereBulder.toString());
                 }
                 break;
             case "ext":
