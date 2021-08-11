@@ -239,7 +239,7 @@ public class ExcelServiceImpl implements ExcelService {
                                         valiStr.append("“" + data + "”找不到对应翻译，请检查第" + (j+2) + "行“" + fieldName + "”列;\r\n");
                                         continue;
                                     }
-                                    ReflectUtils.setValue(objDo, field, tranStr);
+                                    ReflectUtils.setValue(objDo, field, field.getGenericType().equals(String.class) ? tranStr : ConverterUtils.toInteger(tranStr));
                                 }
                             } else if (trans.type().equals(TransType.AUTO_TRANS)){
                                 String namespace = trans.key() + "_" + field.getName();
