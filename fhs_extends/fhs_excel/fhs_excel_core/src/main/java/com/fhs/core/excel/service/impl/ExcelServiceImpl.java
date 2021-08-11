@@ -67,16 +67,18 @@ public class ExcelServiceImpl implements ExcelService {
         List<Field> fields = ReflectUtils.getAllField(doClass);
 
         Object[][] dataArray = new Object[dos.size()][fields.size()];
-        Object[] titleArray = new Object[fields.size()];
+
 
         //根据Order注解排序Excel头标题
         SortedMap<Integer, Field> fieldsMap = new TreeMap<>();
         int emptyOrder = 888;
+        int titleNum = 0;
         for (Field field : fields){
             if (null == field.getAnnotation(ApiModelProperty.class)
                     || field.isAnnotationPresent(IgnoreExport.class) || field.isAnnotationPresent(TableId.class)){
                 continue;
             }
+            titleNum++;
             Order order = field.getAnnotation(Order.class);
             if (null == order){
                 fieldsMap.put(emptyOrder ++, field);
@@ -84,7 +86,7 @@ public class ExcelServiceImpl implements ExcelService {
                 fieldsMap.put(order.value(), field);
             }
         }
-
+        Object[] titleArray = new Object[titleNum];
         int num = 0;
         for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet()){
             titleArray[num] = getFieldRemark(entry.getValue());
