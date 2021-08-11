@@ -26,4 +26,7 @@ public class UcenterMsUserVO extends UcenterMsUserDO implements VO {
     @ApiModelProperty("公司名称")
     private String companyName;
 
+    @ApiModelProperty("部门名称")
+    private String orgName;
+
 }

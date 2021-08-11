@@ -229,7 +229,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
         wrapper = wrapper == null ? new QueryWrapper(): wrapper;
         Workbook book = this.excelService.exportExcel(wrapper,this.baseService,this.getDOClass());
-        String excelTempPath =  EConfig.getPathPropertiesValue("saveFilePath") + "/" + StringUtil.getUUID() + ".xlsx";
+        String excelTempPath =  EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
         book.write(os);
         try{

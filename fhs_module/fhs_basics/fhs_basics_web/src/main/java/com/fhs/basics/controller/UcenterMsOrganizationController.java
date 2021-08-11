@@ -20,6 +20,7 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.TreeUtils;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
 @Api(tags = {"后台组织机构"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysOrganization")
-@LogNamespace(namespace = BaseTransConstant.ORG,module = "机构管理")
+@LogNamespace(namespace = BaseTransConstant.ORG, module = "机构管理")
 public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationDO> {
 
     /**
@@ -79,17 +80,17 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     }
 
 
-
     /**
      * 更新
-     * @param e  bean
+     *
+     * @param e        bean
      * @param request
      * @param response
      * @return
      */
     @Override
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> update(UcenterMsOrganizationVO e,  HttpServletRequest request, HttpServletResponse response) {
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> update(UcenterMsOrganizationVO e, HttpServletRequest request, HttpServletResponse response) {
         UcenterMsOrganizationVO oldOrg = sysOrganizationService.selectById(e.getId());
         // 如果是启用改为禁用
         if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == e.getIsEnable()) {
@@ -107,7 +108,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
                 return HttpResult.error(null, "该机构下拥有用户,不可禁用!");
             }
         }
-        if(CheckUtils.isNullOrEmpty(e.getExtJson())){
+        if (CheckUtils.isNullOrEmpty(e.getExtJson())) {
             e.setExtJson(null);
         }
         return super.update(e, request, response);
@@ -121,7 +122,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return
      */
     @Override
-    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult del(String id, HttpServletRequest request) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("organizationId", id);
@@ -149,7 +150,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @RequiresPermissions("sysOrganization:add")
     @PostMapping("insertOrganization")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
     public HttpResult insertOrganization(HttpServletRequest request, HttpServletResponse response,
                                          UcenterMsOrganizationVO sysOrganization) {
         if (!CheckUtils.isNullOrEmpty(sysOrganization.getParentId())) {
@@ -180,22 +181,38 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
 
     /**
      * 下拉tree
+     *
      * @param filter 过滤条件
      * @return
      */
     @ApiOperation("下拉专用tree")
     @PostMapping("selectTree")
-    public List<TreeNode<Treeable>> selectTree(@RequestBody  QueryFilter<UcenterMsOrganizationDO> filter){
+    public List<TreeNode<Treeable>> selectTree(@RequestBody QueryFilter<UcenterMsOrganizationDO> filter) {
         List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(filter.asWrapper(UcenterMsOrganizationDO.class));
-        Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
+        Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
         for (UcenterMsOrganizationVO org : orgs) {
             //如果不是个单位，则设置名字为xx(单位名称)
-            if(org.getIsCompany() != null && org.getIsCompany() != Constant.INT_TRUE && orgMap.containsKey(org.getCompanyId())){
+            if (org.getIsCompany() != null && org.getIsCompany() != Constant.INT_TRUE && orgMap.containsKey(org.getCompanyId())) {
                 org.setName(org.getName() + "(" + orgMap.get(org.getCompanyId()).getName() + ")");
             }
         }
-        return  TreeUtils.formartTree(orgs);
+        return TreeUtils.formartTree(orgs);
+    }
+
+    @GetMapping("getUserParentCompany")
+    @ApiOperation("获取当前登录人的上级单位信息")
+    public UcenterMsOrganizationVO getUserParentCompany() {
+        String conpanyId = super.getSessionuser().getCompanyId();
+        ParamChecker.isNotNull(conpanyId, "当前登录人没有公司id");
+        UcenterMsOrganizationVO company = sysOrganizationService.selectById(conpanyId);
+        ParamChecker.isNotNull(company, conpanyId + "id无效");
+        UcenterMsOrganizationVO parentOrg = sysOrganizationService.selectById(company.getParentId());
+        ParamChecker.isNotNull(company, company.getParentId() + "id无效");
+        if(parentOrg.getIsCompany()!=null && parentOrg.getIsCompany() == Constant.INT_TRUE){
+            return parentOrg;
+        }
+        return sysOrganizationService.selectById(parentOrg.getCompanyId());
     }
 
     /**
@@ -204,23 +221,23 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @GetMapping(value = "/getCompanyTree")
     @ApiOperation("获取公司tree")
-    public List<TreeNode> getCompanyTree(Integer hierarchy){
+    public List<TreeNode> getCompanyTree(Integer hierarchy) {
         hierarchy = hierarchy == null ? 0 : hierarchy;
         LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.apply(hierarchy!=0,"LENGTH(id)<=" + (hierarchy*3));
+        queryWrapper.apply(hierarchy != 0, "LENGTH(id)<=" + (hierarchy * 3));
         List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(queryWrapper);
-        Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
+        Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
-        Map<String,TreeNode> nodeMap = new HashMap<>();
+        Map<String, TreeNode> nodeMap = new HashMap<>();
         List<TreeNode> result = new ArrayList<>();
         for (UcenterMsOrganizationVO org : orgs) {
             nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(org.getId()).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
         }
         for (UcenterMsOrganizationVO org : orgs) {
-            if(CheckUtils.isNullOrEmpty(org.getParentId())){
+            if (CheckUtils.isNullOrEmpty(org.getParentId())) {
                 result.add(nodeMap.get(org.getId()));
-             //如果是个组织则找我爸爸的公司id
-            }else if(org.getIsCompany()!=null && Constant.INT_TRUE==org.getIsCompany() && orgMap.containsKey(org.getParentId())){
+                //如果是个组织则找我爸爸的公司id
+            } else if (org.getIsCompany() != null && Constant.INT_TRUE == org.getIsCompany() && orgMap.containsKey(org.getParentId())) {
                 nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
             }
         }

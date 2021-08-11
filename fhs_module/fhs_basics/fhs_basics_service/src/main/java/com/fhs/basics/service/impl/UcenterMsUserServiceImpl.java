@@ -96,6 +96,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             UcenterMsOrganizationVO organization = organizationService.selectById(result.getOrganizationId());
             ParamChecker.isNotNull(organization, "用户所在部门被删除，禁止登陆");
             result.setCompanyId(organization.getCompanyId());
+            result.setOrgName(organization.getName());
             if (organization.getCompanyId() != null) {
                 organization = organizationService.selectById(organization.getCompanyId());
                 ParamChecker.isNotNull(organization, "用户所在企业被删除，禁止登陆");
@@ -847,8 +848,15 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationId(String organizationId) {
-        ParamChecker.isNotNullOrEmpty(organizationId, "userId不能为空");
+        ParamChecker.isNotNullOrEmpty(organizationId, "organizationId不能为空");
         List<UcenterMsUserVO> sysUserList = this.findForList(UcenterMsUserVO.builder().organizationId(organizationId).build());
+        return HttpResult.success(sysUserList);
+    }
+
+    @Override
+    public HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationIds(String organizationIds) {
+        ParamChecker.isNotNullOrEmpty(organizationIds, "organizationIds不能为空");
+        List<UcenterMsUserVO> sysUserList = this.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId,organizationIds));
         return HttpResult.success(sysUserList);
     }
 
