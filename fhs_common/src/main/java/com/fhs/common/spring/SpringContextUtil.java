@@ -1,13 +1,18 @@
 package com.fhs.common.spring;
 
+import com.fhs.common.utils.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -34,7 +39,7 @@ import java.util.Map;
 public class SpringContextUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
 
-    private static final String ERRORMESSAGE  = "获取对象错误:";
+    private static final String ERRORMESSAGE = "获取对象错误:";
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -247,14 +252,15 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     /**
      * 泛型注入
-     * @param clazz clazz
+     *
+     * @param clazz              clazz
      * @param actualTypeArgument 泛型类名
-     * @param index 泛型的索引
+     * @param index              泛型的索引
      * @param <T>
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getBeanByClass(Class<T> clazz, String actualTypeArgument,int index) {
+    public static <T> T getBeanByClass(Class<T> clazz, String actualTypeArgument, int index) {
         // 获取候选人id
         String[] candidateNames = applicationContext.getBeanNamesForType(clazz);
         Object object = null;
@@ -268,11 +274,29 @@ public class SpringContextUtil implements ApplicationContextAware {
                 types = ((ParameterizedType) object.getClass().getGenericSuperclass()).getActualTypeArguments();
 
             }
-            if(actualTypeArgument.equals(types[index].getTypeName())){
-                return  (T) object;
+            if (actualTypeArgument.equals(types[index].getTypeName())) {
+                return (T) object;
             }
         }
         return null;
+    }
+
+
+
+    /**
+     * 动态注解bean
+     *
+     * @param beanObj 对象
+     * @param name    名称
+     * @return 是否注册成功
+     */
+    public static boolean registerBean(Object beanObj, String name) {
+        if (beanObj == null || name == null) {
+            return false;
+        }
+        ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext)applicationContext;
+        configurableApplicationContext.getBeanFactory().registerSingleton(name,beanObj);
+        return true;
     }
 
 

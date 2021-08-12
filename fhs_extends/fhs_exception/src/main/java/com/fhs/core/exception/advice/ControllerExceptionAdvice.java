@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,6 +64,19 @@ public class ControllerExceptionAdvice {
         }
         return HttpResult.validateError(null, errorMesssage.toString());
     }
+
+    /**
+     * 请求的 JSON 参数在请求体内的参数校验
+     *
+     * @param e 异常信息
+     * @return 返回数据
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ModelAndView bindException(HttpRequestMethodNotSupportedException e) {
+        return HttpResult.validateError(null, "HTTP Method使用错了，详细信息:" + e.getMessage());
+    }
+
+
 
 
     /**

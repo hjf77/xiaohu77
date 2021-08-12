@@ -4,12 +4,11 @@ import com.fhs.module.base.swagger.anno.ApiGroup;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.plugin.core.config.EnablePluginRegistries;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.RequestHandler;
@@ -17,12 +16,10 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.*;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * swagger配置
@@ -36,10 +33,9 @@ import java.util.List;
  * @UpdateDate: 2018/9/9 0009 14:52
  * @Version: 1.0
  */
-@EnableSwagger2
 @Configuration
 @ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
-public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware {
+public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware{
     /**
      * 基础包
      */
@@ -66,6 +62,8 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
      * 默认分组
      */
     private static final String GROUP_DEFAULT = "group_default";
+
+
 
     public SwaggerConfiguration() {
     }
@@ -134,5 +132,8 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
         this.serviceName = this.environment.getProperty("fhs.swagger.service.name");
         this.description = this.environment.getProperty("fhs.swagger.service.description");
     }
+
+
+
 
 }
