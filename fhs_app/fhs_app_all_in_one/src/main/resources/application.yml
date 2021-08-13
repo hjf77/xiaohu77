@@ -14,7 +14,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 fhs:
-  use-vue: true
+  use-vue: false
   vue:
     is-verification: false
   autoware:
