@@ -1,3 +1,4 @@
+/*
 
 package com.fhs.module.base.config;
 
@@ -30,9 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+*/
 /**
  * 本类代理@EnableSwagger2 注解，可实现swagger异步加载
- */
+ *//*
+
 @Slf4j
 @Configuration
 @ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
@@ -92,11 +95,13 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
         return new ObjectMapperConfigurer();
     }
 
-    /**
+    */
+/**
      * 自定义json序列化，解决value是null的时候依旧序列化问题
      * @param moduleRegistrars
      * @return
-     */
+     *//*
+
     @Bean
     public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
         return new FhsJsonSerializer(moduleRegistrars);
@@ -110,10 +115,12 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
         return properties;
     }
 
-    /**
+    */
+/**
      * 当springboot 项目启动完成后，新启动一个线程去扫描swagger相关注解，生成配置对象
      * @param applicationReadyEvent
-     */
+     *//*
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
        try{
@@ -135,3 +142,4 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
     }
 }
 
+*/

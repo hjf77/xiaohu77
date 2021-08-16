@@ -19,6 +19,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.*;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 import java.util.*;
 
 /**
@@ -33,6 +35,7 @@ import java.util.*;
  * @UpdateDate: 2018/9/9 0009 14:52
  * @Version: 1.0
  */
+@EnableSwagger2
 @Configuration
 @ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
 public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware{
