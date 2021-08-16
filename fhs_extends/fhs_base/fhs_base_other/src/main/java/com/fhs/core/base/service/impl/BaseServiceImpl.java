@@ -155,7 +155,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public boolean update(D bean) {
         checkIsExist(bean,  true);
-        boolean result = this.updateJpa(bean);
+        boolean result = baseMapper.updateByIdJpa(bean) > 0;
         this.refreshCache();
         this.updateCache(bean);
         return result;
