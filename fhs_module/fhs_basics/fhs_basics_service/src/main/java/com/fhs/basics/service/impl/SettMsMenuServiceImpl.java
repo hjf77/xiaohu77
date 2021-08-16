@@ -428,8 +428,8 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
     }
 
     @Override
-    public boolean update(SettMsMenuDO bean) {
-        boolean result = super.update(bean);
+    public int updateSelectiveById(SettMsMenuDO bean) {
+        int result = super.updateSelectiveById(bean);
         this.updateDisable(bean);
         return result;
     }

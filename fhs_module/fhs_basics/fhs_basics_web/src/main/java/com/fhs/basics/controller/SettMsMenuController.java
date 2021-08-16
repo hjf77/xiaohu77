@@ -128,7 +128,7 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
             }
 
         }
-        sysMenuService.update(adminMenu);
+        sysMenuService.updateSelectiveById(adminMenu);
         return HttpResult.success(true);
     }
 
