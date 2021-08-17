@@ -2,7 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.generate.mapper.TableInfoMapper">
 
-    <select id="getTableInfo" resultType="com.fhs.generate.vo.FieldsVO">
-         show full columns from `${dbName}`. ${tableName};
+    <select id="getTableFields" resultMap="fieldsVOResultMap">
+         show full columns from `${dbName}`.${tableName};
     </select>
+
+    <select id="getTableComment" resultType="string">
+        SELECT
+            table_comment
+        FROM
+            information_schema.`TABLES`
+        WHERE
+            TABLE_SCHEMA = #{dbName} and table_name=#{tableName};
+    </select>
+
+
+
+    <resultMap id="fieldsVOResultMap" type="com.fhs.generate.vo.FieldsVO">
+        <result column="Field" property="filedName" />
+        <result column="Null" property="isNullable" />
+        <result column="Type" property="type" />
+        <result column="Key" property="key" />
+        <result column="Comment" property="comment" />
+    </resultMap>
 </mapper>
