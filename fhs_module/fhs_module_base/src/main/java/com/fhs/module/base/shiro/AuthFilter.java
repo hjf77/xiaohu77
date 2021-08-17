@@ -57,7 +57,9 @@ public class AuthFilter  extends AuthenticatingFilter {
         HttpServletRequest httpServletRequest= (HttpServletRequest) request;
         HttpServletResponse httpServletResponse= (HttpServletResponse) response;
         String token = httpServletRequest.getHeader(Constant.VUE_HEADER_TOKEN_KEY);
-        //StringUtils.isBlank(String str)  判断str字符串是否为空或者长度是否为0
+        if(CheckUtils.isNullOrEmpty(token)){
+            token  = httpServletRequest.getParameter("token");
+        }
         if(CheckUtils.isNullOrEmpty(token)){
             JsonUtils.outJson(httpServletResponse, PubResult.NOT_TOKEN.asResult().asJson());
             return false;

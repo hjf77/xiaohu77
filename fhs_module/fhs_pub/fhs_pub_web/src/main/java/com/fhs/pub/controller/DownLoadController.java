@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ import java.util.Map;
  * @des 文件下载action
  * @since 2019-05-18 11:25:25
  */
+@Slf4j
 @RestController
 @RequestMapping("downLoad")
 @Api(tags = "文件下载和查询")
@@ -242,12 +244,24 @@ public class DownLoadController extends BaseController {
      * @return
      */
     private  String[] getPngPathList(List<PubFileVO> serviceFile) {
+        if(serviceFile.isEmpty()){
+            return new String[0];
+        }
+        String tempPath = EConfig.getPathPropertiesValue("fileSavePath")+ "/" + StringUtil.getUUID();
+        new File(tempPath).mkdirs();
         String token = null;
+        String tempFilePath = null;
         String[] arr = new String[serviceFile.size()];
         for (int i = 0;i<serviceFile.size();i++) {
             String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + serviceFile.get(i).getFileSuffix();
             String saveFilePath = EConfig.getPathPropertiesValue("fileSavePath") + File.separator + serviceFile.get(i).getUploadDate() + File.separator + serviceFile.get(i).getFileSuffix().replace(".", "") + File.separator + fileName;
-            arr[i] =  saveFilePath;
+            try {
+                tempFilePath = tempPath + "/" + serviceFile.get(i).getFileName();
+                FileUtils.copyFile(new File(saveFilePath),tempFilePath);
+            } catch (IOException e) {
+                log.error("文件错误",e);
+            }
+            arr[i] =  tempFilePath;
         }
         return arr;
     }
