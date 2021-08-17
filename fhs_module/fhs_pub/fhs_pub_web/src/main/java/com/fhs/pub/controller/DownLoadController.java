@@ -221,7 +221,7 @@ public class DownLoadController extends BaseController {
             //获取图片的路径
             String[] pngPathList = getPngPathList(list);
             //生成zip路径
-            String path = EConfig.getPathPropertiesValue("fileSavePath")+fileName+".zip";
+            String path = EConfig.getPathPropertiesValue("fileSavePath")+ "/" + fileName+".zip";
             //打包生成zip
             ZipUtil.zip(path,pngPathList);
             File file = new File(path);
