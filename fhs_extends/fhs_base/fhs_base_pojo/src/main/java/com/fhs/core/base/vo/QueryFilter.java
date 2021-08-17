@@ -195,6 +195,12 @@ public class QueryFilter<T> {
         return fieldName;
     }
 
+    /**
+     * 将query filed 转换添加到  queryWrapper 中
+     * @param queryWrapper
+     * @param queryField
+     * @param currentModelClass
+     */
     private void convertQueryField(QueryWrapper<T> queryWrapper, QueryField queryField, Class<T> currentModelClass) {
         String r = queryField.getRelation();
         if (OR.equals(r)) {
@@ -231,6 +237,9 @@ public class QueryFilter<T> {
             case "like_r":
                 queryWrapper.likeRight(field, queryField.getValue());
                 break;
+            case "not_like_r":
+                queryWrapper.apply(field + " not like '" + queryField.getValue() + "%'");
+                break;
             case "is_null":
                 queryWrapper.isNull(field);
                 break;
@@ -249,15 +258,17 @@ public class QueryFilter<T> {
             case "find_in_set_in":
                 if (queryField.getValue() != null) {
                     Object[] params = convert2ObjectArray(queryField.getValue());
-                    StringBuilder whereBulder = new StringBuilder("(");
-                    for (int i = 0; i < params.length; i++) {
-                        if (i != 0) {
-                            whereBulder.append(" OR ");
+                    if(params.length>0){
+                        StringBuilder whereBulder = new StringBuilder("(");
+                        for (int i = 0; i < params.length; i++) {
+                            if (i != 0) {
+                                whereBulder.append(" OR ");
+                            }
+                            whereBulder.append(" FIND_IN_SET('" + params[i] + "'," + field + ") ");
                         }
-                        whereBulder.append(" FIND_IN_SET('" + params[i] + "'," + field + ") ");
+                        whereBulder.append(" ) ");
+                        queryWrapper.apply(whereBulder.toString());
                     }
-                    whereBulder.append(" ) ");
-                    queryWrapper.apply(whereBulder.toString());
                 }
                 break;
             case "ext":
