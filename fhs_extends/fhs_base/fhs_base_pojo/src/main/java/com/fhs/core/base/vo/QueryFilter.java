@@ -231,6 +231,9 @@ public class QueryFilter<T> {
             case "like_r":
                 queryWrapper.likeRight(field, queryField.getValue());
                 break;
+            case "not_like_r":
+                queryWrapper.apply(field + " not like '" + queryField.getValue() + "%'");
+                break;
             case "is_null":
                 queryWrapper.isNull(field);
                 break;
