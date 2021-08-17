@@ -1,0 +1,141 @@
+<!--
+  模块名称：${tableComment}
+  开发人员：${author}
+  创建时间: ${nowDate}
+-->
+<template>
+    <base-container>
+            <pagex-crud
+                    ref="crud"
+                    :filters="filters"
+                    :columns="columns"
+                    :api="api"
+                    :sortSett="sortSett"
+                    :buttons="realButtons"
+                    :querys="querys"
+            >
+                <template v-if="open" v-slot:form="prop">
+                    <!-- 新增 修改 详情 弹框-->
+                    <el-dialog
+                            class="pagex-dialog-theme"
+                            slot="form"
+                            :title="title"
+                            :visible.sync="open"
+                            v-if="open"
+                    >
+                        <${namespace}Form
+                                :init="init"
+                                :isDetail="isDetail"
+                                :isEdit="isEdit"
+                        ></${namespace}Form>
+                    </el-dialog>
+                </template>
+            </pagex-crud>
+    </base-container>
+</template>
+
+<script>
+    import crudMixins from "../../../mixins/crudMixins";
+    import ${namespace}Form from "./components/${namespace}Form";
+    import { checkPermi } from "../../../utils/permission";
+    import {mapGetters} from "vuex"
+    export default {
+        name: "${namespace}",
+        components: {
+            ${namespace}Form,
+        },
+        mixins: [crudMixins],
+        data() {
+            return {
+                rightContent: false,//右侧内容区域
+                api: "/ms/${namespace}/pagerAdvance",
+                isEdit: false,
+                open: false,
+                isDetail:false,
+                // 列表排列顺序（更新时间）
+                sortSett: [
+                    {
+                        direction: "DESC",
+                        property: "updateTime",
+                    },
+                ],
+                //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
+                buttons: [
+                    {
+                        title: "新增",
+                        name: "add",
+                        type: "primary",
+                        size: "mini",
+                        icon: "el-icon-plus",
+                        permission: ["${namespace}:add"],
+                        click: () => {
+                            this.title = "新增";
+                            this.isEdit = false;
+                            this.$set(this, "init", {});
+                            this.open = true;
+                            this.isDetail = false;
+                        },
+                    },
+                ],
+                columns: [
+                   ${columns}
+                    {
+                        label: "操作",
+                        name: "operation",
+                        type: "textBtn",
+                        width: "240",
+                        textBtn: [
+                            {
+                                name: "编辑",
+                                type: "primary",
+                                size: "mini",
+                                permission: ["${namespace}:update"],
+                                click: (_row) => {
+                                    this.$set(this, "init", _row);
+                                    this.title = "编辑";
+                                    this.isEdit = true;
+                                    this.open = true;
+                                    this.isDetail = false;
+                                },
+                            },
+                            {
+                                name: "详情",
+                                type: "success",
+                                size: "mini",
+                                click: (_row) => {
+                                    this.$set(this, "init", res);
+                                    this.title = "详情";
+                                    this.open = true;
+                                    this.isDetail = true;
+                                    this.isEdit = false;
+                                },
+                            },
+                            {
+                                name: "删除",
+                                type: "danger",
+                                api: "/ms/${namespace}/",
+                                size: "mini",
+                                permission: ["${namespace}:del"],
+                            },
+                        ],
+                    },
+                ],
+                filters:${filters},
+                querys: [
+
+                ],
+            };
+        },
+        created() {},
+        computed: {
+            ...mapGetters(["user"]),
+
+        },
+        methods: {
+
+        },
+    };
+</script>
+<style lang="scss" scoped>
+
+</style>

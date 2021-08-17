@@ -20,6 +20,7 @@
         <module>fhs_bis_logger</module>
         <module>fhs_redis</module>
         <module>fhs_web_log_view</module>
+        <module>fhs_generate</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 
