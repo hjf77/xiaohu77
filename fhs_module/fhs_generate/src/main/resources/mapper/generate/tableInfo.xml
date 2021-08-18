@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.generate.mapper.TableInfoMapper">
 
-    <select id="getTableFields" resultMap="fieldsVOResultMap">
+    <select id="getTableFields" resultMap="fieldsVOResultMap" parameterType="map">
          show full columns from `${dbName}`.${tableName};
     </select>
 
-    <select id="getTableComment" resultType="string">
+    <select id="getTableComment" resultType="string" parameterType="map">
         SELECT
             table_comment
         FROM

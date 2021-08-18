@@ -1,11 +1,10 @@
 package com.fhs.generate.mapper;
 
 import com.fhs.generate.vo.FieldsVO;
-import org.springframework.data.repository.query.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface TableInfoMapper {
@@ -16,7 +15,7 @@ public interface TableInfoMapper {
      * @param tableName 表名
      * @return
      */
-    List<FieldsVO> getTableFields(@Param("dbName")String dbName,@Param("tableName") String tableName);
+    List<FieldsVO> getTableFields(@Param("dbName")String dbName, @Param("tableName") String tableName);
 
     /**
      * 获取表注释
