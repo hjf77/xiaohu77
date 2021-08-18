@@ -209,6 +209,10 @@ public class QueryFilter<T> {
         String field = getField(queryField.getProperty(), currentModelClass);
 
         String operation = queryField.getOperation();
+        //如果是空或者null 字符串则不加此过滤条件
+        if(CheckUtils.isNullOrEmpty(queryField.getValue()) || "null".equals(ConverterUtils.toString(queryField.getValue()))){
+            return;
+        }
         switch (operation) {
             case "=":
                 queryWrapper.eq(field, queryField.getValue());
