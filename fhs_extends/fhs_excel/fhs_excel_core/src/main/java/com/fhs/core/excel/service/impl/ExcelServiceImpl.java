@@ -267,6 +267,11 @@ public class ExcelServiceImpl implements ExcelService {
                                     continue;
                                 }
                             }
+                            if (field.getGenericType().equals(Integer.class)){
+                                ReflectUtils.setValue(objDo, field, ConverterUtils.toInteger(data));
+                            }else if (field.getGenericType().equals(Double.class)){
+                                ReflectUtils.setValue(objDo, field, ConverterUtils.toDouble(data));
+                            }else
                             if (field.getGenericType().equals(Date.class)){
                                 if (StringUtils.isBlank(data.toString())){
                                     continue;
