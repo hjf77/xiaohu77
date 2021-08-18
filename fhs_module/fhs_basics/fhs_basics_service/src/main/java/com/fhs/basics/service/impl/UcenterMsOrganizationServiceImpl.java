@@ -140,13 +140,16 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
     @Override
     public List<UcenterMsOrganizationVO> findByIds(List<?> ids) {
-        List<UcenterMsOrganizationVO> result = super.findByIds(ids);
-        Set<String> idsSet = result.stream().map(UcenterMsOrganizationVO::getCompanyId).collect(Collectors.toSet());
+        return initCompanyName(super.findByIds(ids));
+    }
+
+    private List<UcenterMsOrganizationVO> initCompanyName( List<UcenterMsOrganizationVO> vos){
+        Set<String> idsSet = vos.stream().map(UcenterMsOrganizationVO::getCompanyId).collect(Collectors.toSet());
         if(!idsSet.isEmpty()){
             List<UcenterMsOrganizationVO> companyList =  super.findByIds(new ArrayList<>(idsSet));
             Map<String,UcenterMsOrganizationVO> companyMap = companyList.stream().collect(Collectors
                     .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
-            for (UcenterMsOrganizationVO ucenterMsOrganizationVO : result) {
+            for (UcenterMsOrganizationVO ucenterMsOrganizationVO : vos) {
                 if(ucenterMsOrganizationVO.getIsCompany() == Constant.INT_TRUE){
                     continue;
                 }
@@ -155,6 +158,11 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
                 }
             }
         }
-        return result;
+        return vos;
+    }
+
+    @Override
+    public List<UcenterMsOrganizationVO> select() {
+        return initCompanyName(super.select());
     }
 }
