@@ -47,7 +47,7 @@ public class FieldsVO {
 
 
     @ApiModelProperty("是否列表显示")
-    private Integer isList;
+    private Integer isList = 0;
 
     @ApiModelProperty("页面元素")
     private String pageElementType;
