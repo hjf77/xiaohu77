@@ -166,7 +166,12 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
             Set<Object> ids = new HashSet<>();
             objList.forEach(obj -> {
                 try {
-                    ids.add(tempField.get(obj));
+                    Object value = tempField.get(obj);
+                    if(ConverterUtils.toString(value).contains(",")){
+                        ids.addAll(Arrays.asList(ConverterUtils.toString(value).split(",")));
+                    }else{
+                        ids.add(value);
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
