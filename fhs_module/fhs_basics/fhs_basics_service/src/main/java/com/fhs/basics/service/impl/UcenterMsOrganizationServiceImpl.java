@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @DataSource("base_business")
-@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", useRedis = false,useCache = false, defaultAlias = "org")
+@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", useRedis = true, defaultAlias = "org")
 public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationDO> implements UcenterMsOrganizationService, FeignOrganizationApiService {
 
     @Autowired
