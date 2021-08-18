@@ -91,6 +91,10 @@ public class PubFileDO extends BaseDO<PubFileDO> implements Serializable
     @TableField(exist = false)
     private Long timeLength;
 
+    @TableField("ext")
+    @ApiModelProperty("扩展字段")
+    private String ext;
+
 
     /**
      * 格式化文件大小描述

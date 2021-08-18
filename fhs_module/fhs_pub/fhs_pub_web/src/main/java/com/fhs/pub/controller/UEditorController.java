@@ -3,6 +3,7 @@ package com.fhs.pub.controller;
 
 import com.fhs.pub.ueditor.ActionEnter;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ import java.io.PrintWriter;
 public class UEditorController
 {
 
-    @RequestMapping(value = "/config")
+    @GetMapping(value = "/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
         String rootPath = request.getSession().getServletContext().getRealPath("/");

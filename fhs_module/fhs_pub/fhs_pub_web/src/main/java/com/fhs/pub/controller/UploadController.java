@@ -1,8 +1,10 @@
 package com.fhs.pub.controller;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.controller.BaseController;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.pub.dox.PubFileDO;
@@ -48,7 +50,7 @@ public class UploadController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "file", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ApiOperation("上传文件")
-    public void uploadFile(@RequestPart  MultipartFile Filedata, HttpServletRequest request,
+    public void uploadFile(@RequestPart  MultipartFile Filedata,String ext, HttpServletRequest request,
                            HttpServletResponse response) {
         if (Filedata == null) {
             super.outToClient(false);
@@ -56,8 +58,12 @@ public class UploadController extends BaseController {
         }
         LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
         PubFileVO file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
+        //如果给了扩展字段则更新扩展字段
+        if(CheckUtils.isNotEmpty(ext)){
+            file.setExt(ext);
+            fileService.update(file);
+        }
         LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-
         super.outWriteJson(JsonUtils.bean2json(file));
 
     }
