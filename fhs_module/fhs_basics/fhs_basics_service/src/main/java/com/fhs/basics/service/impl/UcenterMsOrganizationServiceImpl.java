@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @DataSource("base_business")
-@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", useRedis = true, defaultAlias = "org")
+@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", useRedis = false,useCache = false, defaultAlias = "org")
 public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationDO> implements UcenterMsOrganizationService, FeignOrganizationApiService {
 
     @Autowired
@@ -138,5 +138,23 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         return "org";
     }
 
-
+    @Override
+    public List<UcenterMsOrganizationVO> findByIds(List<?> ids) {
+        List<UcenterMsOrganizationVO> result = super.findByIds(ids);
+        Set<String> idsSet = result.stream().map(UcenterMsOrganizationVO::getCompanyId).collect(Collectors.toSet());
+        if(!idsSet.isEmpty()){
+            List<UcenterMsOrganizationVO> companyList =  super.findByIds(new ArrayList<>(idsSet));
+            Map<String,UcenterMsOrganizationVO> companyMap = companyList.stream().collect(Collectors
+                    .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
+            for (UcenterMsOrganizationVO ucenterMsOrganizationVO : result) {
+                if(ucenterMsOrganizationVO.getIsCompany() == Constant.INT_TRUE){
+                    continue;
+                }
+                if(companyMap.containsKey(ucenterMsOrganizationVO.getCompanyId())){
+                    ucenterMsOrganizationVO.setName(ucenterMsOrganizationVO.getName()+"(" + companyMap.get(ucenterMsOrganizationVO.getCompanyId()).getName() + ")");
+                }
+            }
+        }
+        return result;
+    }
 }
