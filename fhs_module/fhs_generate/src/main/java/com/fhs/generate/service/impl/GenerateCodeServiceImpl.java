@@ -88,7 +88,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             if (Constant.INT_TRUE == fieldsVO.getIsList()) {
                 columns.append("                     {label: '" + fieldsVO.getComment() + "', name: '" +
                         (needTransElementType.contains(fieldsVO.getPageElementType())
-                                ? fieldsVO.getCamelFieldName() + "Name" : fieldsVO.getFiledName())
+                                ? fieldsVO.getCamelFieldName() + "Name" : fieldsVO.getCamelFieldName())
                         + "', width: 150},\n");
             }
             //如果没指定元素类型 或者不是过滤条件则看下一个字段
@@ -120,7 +120,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         for (FieldsVO fieldsVO : tableInfoVO.getFieldsVOS()) {
             if (Constant.INT_FALSE == fieldsVO.getIsIgnore() && Constant.INT_TRUE != fieldsVO.getIsForm()) {
                 formData.append("                     " + fieldsVO.getCamelFieldName() + ": this.init." + fieldsVO.getCamelFieldName()
-                        + " ? this.init." + fieldsVO.getCamelFieldName() + " : null,");
+                        + " ? this.init." + fieldsVO.getCamelFieldName() + " : null,\n");
             }
             //如果没指定元素类型 或者不是过滤条件则看下一个字段
             if (CheckUtils.isNullOrEmpty(fieldsVO.getPageElementType()) || Constant.INT_TRUE != fieldsVO.getIsForm()) {

@@ -80,4 +80,14 @@ public class FieldsVO {
         return "NO".equals(this.isNullable) ? Constant.INT_TRUE : Constant.INT_FALSE;
     }
 
+    public String getComment(){
+        if(comment==null){
+            return null;
+        }
+        if(comment.contains("(")){
+            return comment.substring(0,comment.indexOf("("));
+        }
+        return comment;
+    }
+
 }

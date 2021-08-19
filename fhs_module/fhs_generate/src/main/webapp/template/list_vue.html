@@ -11,7 +11,7 @@
                     :columns="columns"
                     :api="api"
                     :sortSett="sortSett"
-                    :buttons="realButtons"
+                    :buttons="buttons"
                     :querys="querys"
             >
                 <template v-if="open" v-slot:form="prop">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import crudMixins from "../../../mixins/crudMixins";
+    import crudMixins from "@/mixins/crudMixins";
     import ${namespace}Form from "./components/${namespace}Form";
     import {mapGetters} from "vuex"
     export default {
@@ -101,7 +101,7 @@
                                 type: "success",
                                 size: "mini",
                                 click: (_row) => {
-                                    this.$set(this, "init", res);
+                                    this.$set(this, "init", _row);
                                     this.title = "详情";
                                     this.open = true;
                                     this.isDetail = true;

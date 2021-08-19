@@ -43,6 +43,7 @@ public class TableInfoVO {
     @JsonIgnore
     private String namespace;
 
+
     /**
      * namespace = t_ucenter_user  去掉t_ 转驼峰  为 ucenterUser
      * @return
