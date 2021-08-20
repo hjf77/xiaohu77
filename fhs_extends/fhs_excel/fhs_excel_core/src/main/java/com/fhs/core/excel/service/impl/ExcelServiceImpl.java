@@ -11,6 +11,7 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
@@ -217,6 +218,9 @@ public class ExcelServiceImpl implements ExcelService {
                     for (int j = 0; j < dataArray.length; j ++){
                         Object objDo = doList.get(j);
                         Object data = dataArray[j][i];
+                        if(CheckUtils.isNullOrEmpty(ConverterUtils.toString(data))){
+                            continue;
+                        }
                         //反翻译
                         Trans trans = field.getAnnotation(Trans.class);
                         if (trans != null){
@@ -296,6 +300,7 @@ public class ExcelServiceImpl implements ExcelService {
             String fieldName = strs[1];
             //解析namespace获取到反向翻译服务
             TransRpcService transRpcService = transRpcServiceRegister.getTransRpcService(strs[0].contains("#")?strs[0].split("#")[0] : strs[0]);
+            ParamChecker.isNotNull(transRpcService,namespaceKey + "，没有找到对应的反向翻译服务，请到对应的service实现：TransRpcService");
             Map<String, Object> unTrans = transRpcService.unTrans(needTrans.get(namespaceKey));
             for (Object objDo : doList){
                 Field field = ReflectUtils.getDeclaredField(objDo.getClass(), fieldName);
