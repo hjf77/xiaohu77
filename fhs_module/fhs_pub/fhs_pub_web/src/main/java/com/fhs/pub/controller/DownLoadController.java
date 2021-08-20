@@ -252,11 +252,23 @@ public class DownLoadController extends BaseController {
         String token = null;
         String tempFilePath = null;
         String[] arr = new String[serviceFile.size()];
+        Map<String,Integer> fileNameMap = new HashMap<>();
+        PubFileVO file = null;
         for (int i = 0;i<serviceFile.size();i++) {
-            String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + serviceFile.get(i).getFileSuffix();
-            String saveFilePath = EConfig.getPathPropertiesValue("fileSavePath") + File.separator + serviceFile.get(i).getUploadDate() + File.separator + serviceFile.get(i).getFileSuffix().replace(".", "") + File.separator + fileName;
+            file = serviceFile.get(i);
+            String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + file.getFileSuffix();
+            String saveFilePath = EConfig.getPathPropertiesValue("fileSavePath") + File.separator + file.getUploadDate() + File.separator + file.getFileSuffix().replace(".", "") + File.separator + fileName;
             try {
-                tempFilePath = tempPath + "/" + serviceFile.get(i).getFileName();
+                //如果有重名文件，则自动给后面的重命名
+                if(fileNameMap.containsKey( file.getFileName())){
+                    fileName = file.getFileName().replace(file.getFileSuffix(),"") + '_' + fileNameMap.get(file.getFileName()) + file.getFileSuffix();
+                    tempFilePath = tempPath + "/" + fileName;
+                    fileNameMap.put(file.getFileName(),fileNameMap.get(file.getFileName()) + 1);
+                }else{
+                    tempFilePath = tempPath + "/" + serviceFile.get(i).getFileName();
+                    fileNameMap.put(file.getFileName(),0);
+                }
+
                 FileUtils.copyFile(new File(saveFilePath),tempFilePath);
             } catch (IOException e) {
                 log.error("文件错误",e);
