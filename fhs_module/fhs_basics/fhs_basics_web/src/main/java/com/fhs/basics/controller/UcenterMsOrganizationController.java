@@ -235,7 +235,13 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         Map<String, TreeNode> nodeMap = new HashMap<>();
         List<TreeNode> result = new ArrayList<>();
         for (UcenterMsOrganizationVO org : orgs) {
-            nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(org.getId()).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
+            String orgId = org.getId();
+            if(OrgConstant.ORG_ID_ROOT.equals(org.getId())){
+                orgId = "";
+            }else if(!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())){
+                orgId = (org.getId() + "b");
+            }
+            nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(orgId).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
         }
         for (UcenterMsOrganizationVO org : orgs) {
             if (CheckUtils.isNullOrEmpty(org.getParentId())) {
@@ -243,6 +249,11 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
                 //如果是个组织则找我爸爸的公司id
             } else if (org.getIsCompany() != null && Constant.INT_TRUE == org.getIsCompany() && orgMap.containsKey(org.getParentId())) {
                 nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
+            }
+            if(OrgConstant.ORG_ID_ROOT.equals(org.getId())){
+                org.setId("");
+            }else if(!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())){
+                org.setId(org.getId() + "b");
             }
         }
         return result;

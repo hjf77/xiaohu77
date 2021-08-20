@@ -50,12 +50,19 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         String parentId = adminOrganization.getParentId();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("parentId", parentId);
-        Integer ranking = mapper.findRank(parentId);
-        ranking = ranking == null ? 0 : ranking;
-        ranking = ranking + 1;
-        String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
-        adminOrganization.setRanking(ranking );
-        adminOrganization.setId(id);
+        //如果是这种的，则带c
+        if(adminOrganization.getName().endsWith("总部") || adminOrganization.getName().endsWith("本部")){
+            adminOrganization.setRanking(0 );
+            adminOrganization.setId(parentId + 'b');
+        }else{
+            Integer ranking = mapper.findRank(parentId);
+            ranking = ranking == null ? 0 : ranking;
+            ranking = ranking + 1;
+            String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
+            adminOrganization.setRanking(ranking );
+            adminOrganization.setId(id);
+        }
+
         //如果当前节点是企业的话，那么企业id用自己的id
         if(adminOrganization.getIsCompany()!=null && adminOrganization.getIsCompany()== Constant.INT_TRUE){
             adminOrganization.setCompanyId(adminOrganization.getId());
