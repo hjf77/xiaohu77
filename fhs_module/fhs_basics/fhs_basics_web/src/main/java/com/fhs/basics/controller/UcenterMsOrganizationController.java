@@ -232,7 +232,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     public List<TreeNode> getCompanyTree(Integer hierarchy, Integer isChild,Integer isHandleId) {
         //设置默认为false
         isChild = isChild == null ? Constant.INT_FALSE : isChild;
-        isHandleId = isHandleId == null ? Constant.INT_TRUE : isChild;
+        isHandleId = isHandleId == null ? Constant.INT_TRUE : isHandleId;
 
         hierarchy = hierarchy == null ? 0 : hierarchy;
         LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<>();
