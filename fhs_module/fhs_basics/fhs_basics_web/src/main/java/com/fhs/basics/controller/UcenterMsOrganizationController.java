@@ -219,15 +219,21 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         return sysOrganizationService.selectById(parentOrg.getCompanyId());
     }
 
+
     /**
-     * @param hierarchy 层级
+     * 获取单位tree
+     * @param hierarchy 层级 比如2 代表总公司和一级分公司
+     * @param isChild 是否只显示当前登录人下级单位
+     * @param isHandleId 是否处理id字段
      * @return
      */
     @GetMapping(value = "/getCompanyTree")
     @ApiOperation("获取公司tree")
-    public List<TreeNode> getCompanyTree(Integer hierarchy, Integer isChild) {
+    public List<TreeNode> getCompanyTree(Integer hierarchy, Integer isChild,Integer isHandleId) {
         //设置默认为false
         isChild = isChild == null ? Constant.INT_FALSE : isChild;
+        isHandleId = isHandleId == null ? Constant.INT_TRUE : isChild;
+
         hierarchy = hierarchy == null ? 0 : hierarchy;
         LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.apply(hierarchy != 0, "LENGTH(id)<=" + (hierarchy * 3));
@@ -241,10 +247,12 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         List<TreeNode> result = new ArrayList<>();
         for (UcenterMsOrganizationVO org : orgs) {
             String orgId = org.getId();
-            if (OrgConstant.ORG_ID_ROOT.equals(org.getId())) {
-                orgId = "";
-            } else if (!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())) {
-                orgId = (org.getId() + "b");
+            if(isHandleId == Constant.INT_TRUE){
+                if (OrgConstant.ORG_ID_ROOT.equals(org.getId())) {
+                    orgId = "";
+                } else if (!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())) {
+                    orgId = (org.getId() + "b");
+                }
             }
             nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(orgId).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
         }
@@ -256,10 +264,12 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
             } else if (org.getIsCompany() != null && Constant.INT_TRUE == org.getIsCompany() && orgMap.containsKey(org.getParentId())) {
                 nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
             }
-            if (OrgConstant.ORG_ID_ROOT.equals(org.getId())) {
-                org.setId("");
-            } else if (!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())) {
-                org.setId(org.getId() + "b");
+            if(isHandleId == Constant.INT_TRUE) {
+                if (OrgConstant.ORG_ID_ROOT.equals(org.getId())) {
+                    org.setId("");
+                } else if (!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())) {
+                    org.setId(org.getId() + "b");
+                }
             }
         }
         return result;
