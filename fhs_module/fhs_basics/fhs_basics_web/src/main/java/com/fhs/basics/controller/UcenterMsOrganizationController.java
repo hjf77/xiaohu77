@@ -207,13 +207,13 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         String conpanyId = super.getSessionuser().getCompanyId();
         ParamChecker.isNotNull(conpanyId, "当前登录人没有公司id");
         UcenterMsOrganizationVO company = sysOrganizationService.selectById(conpanyId);
-        if(OrgConstant.ORG_ID_ROOT.equals(company.getId())){
+        if (OrgConstant.ORG_ID_ROOT.equals(company.getId())) {
             return company;
         }
         ParamChecker.isNotNull(company, conpanyId + "id无效");
         UcenterMsOrganizationVO parentOrg = sysOrganizationService.selectById(company.getParentId());
         ParamChecker.isNotNull(parentOrg, company.getParentId() + "id无效");
-        if(parentOrg.getIsCompany()!=null && parentOrg.getIsCompany() == Constant.INT_TRUE){
+        if (parentOrg.getIsCompany() != null && parentOrg.getIsCompany() == Constant.INT_TRUE) {
             return parentOrg;
         }
         return sysOrganizationService.selectById(parentOrg.getCompanyId());
@@ -225,10 +225,15 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @GetMapping(value = "/getCompanyTree")
     @ApiOperation("获取公司tree")
-    public List<TreeNode> getCompanyTree(Integer hierarchy) {
+    public List<TreeNode> getCompanyTree(Integer hierarchy, Integer isChild) {
+        //设置默认为false
+        isChild = isChild == null ? Constant.INT_FALSE : isChild;
         hierarchy = hierarchy == null ? 0 : hierarchy;
         LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.apply(hierarchy != 0, "LENGTH(id)<=" + (hierarchy * 3));
+        String companyId = super.getSessionuser().getCompanyId().replace("b", "");
+        //如果只要子孙类的话，那么只选子孙类
+        queryWrapper.apply(isChild == Constant.INT_TRUE, " id LIKE '" + companyId + "%'");
         List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(queryWrapper);
         Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
@@ -236,23 +241,24 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         List<TreeNode> result = new ArrayList<>();
         for (UcenterMsOrganizationVO org : orgs) {
             String orgId = org.getId();
-            if(OrgConstant.ORG_ID_ROOT.equals(org.getId())){
+            if (OrgConstant.ORG_ID_ROOT.equals(org.getId())) {
                 orgId = "";
-            }else if(!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())){
+            } else if (!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())) {
                 orgId = (org.getId() + "b");
             }
             nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(orgId).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
         }
         for (UcenterMsOrganizationVO org : orgs) {
-            if (CheckUtils.isNullOrEmpty(org.getParentId())) {
+
+            if (CheckUtils.isNullOrEmpty(org.getParentId()) || (companyId.equals(org.getId()) && isChild == Constant.INT_TRUE)) {
                 result.add(nodeMap.get(org.getId()));
                 //如果是个组织则找我爸爸的公司id
             } else if (org.getIsCompany() != null && Constant.INT_TRUE == org.getIsCompany() && orgMap.containsKey(org.getParentId())) {
                 nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
             }
-            if(OrgConstant.ORG_ID_ROOT.equals(org.getId())){
+            if (OrgConstant.ORG_ID_ROOT.equals(org.getId())) {
                 org.setId("");
-            }else if(!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())){
+            } else if (!OrgConstant.ORG_ROOT_COMPANY_REAL.equals(org.getId())) {
                 org.setId(org.getId() + "b");
             }
         }
