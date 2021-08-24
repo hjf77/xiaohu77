@@ -305,6 +305,10 @@ public class ExcelServiceImpl implements ExcelService {
             for (Object objDo : doList){
                 Field field = ReflectUtils.getDeclaredField(objDo.getClass(), fieldName);
                 Object needTranName = ReflectUtils.getValue(objDo, fieldName);
+                if(CheckUtils.isNullOrEmpty(needTranName)){
+                    ReflectUtils.setValue(objDo, field, null);
+                    continue;
+                }
                 Object fieldValue = unTrans.get(needTranName);
                 if (null == fieldValue){
                     String fieldNameCh = field.getAnnotation(ApiModelProperty.class).value();
