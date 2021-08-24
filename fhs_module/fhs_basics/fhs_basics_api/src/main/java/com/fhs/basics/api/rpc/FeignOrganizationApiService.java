@@ -41,11 +41,21 @@ public interface FeignOrganizationApiService extends TransRpcService {
     HttpResult<List<UcenterMsOrganizationVO>> getOrgByIds(@Param("ids") String ids);
 
     /**
+     * 根据父亲节点id获取子节点集合
+     * @param parentid 组织机构父id
+     * @return 结构对象
+     */
+    @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/getOrgByIds?id={ids}")
+    HttpResult<List<UcenterMsOrganizationVO>> getOrgByParentid(@Param("id") String parentid);
+
+    /**
      * 反向翻译
      * @param namesForm 表单，包含names集合
      * @return
      */
     @RequestLine("POST /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/doUnTrans")
     Map<String,Object> doUnTrans(@RequestBody NamesForm namesForm);
+
+
 
 }

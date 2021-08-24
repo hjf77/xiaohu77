@@ -131,6 +131,11 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     }
 
     @Override
+    public HttpResult<List<UcenterMsOrganizationVO>> getOrgByParentid(String parentid) {
+        return HttpResult.success(super.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().eq(UcenterMsOrganizationDO::getParentId,parentid)));
+    }
+
+    @Override
     public Map<String, Object> doUnTrans(NamesForm namesForm) {
         if(namesForm.getNames()==null || namesForm.getNames().isEmpty()){
             return new HashMap<>();
