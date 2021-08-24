@@ -684,7 +684,7 @@
     <!-- 查询当前机构及子机构用户数 -->
     <select id="findUserByOrgId" parameterType="map" resultType="int">
         SELECT COUNT(1) FROM t_ucenter_ms_user
-        WHERE organization_id LIKE CONCAT(#{organizationId}, '%')
+        WHERE organization_id LIKE CONCAT(#{organizationId}, '%') AND is_delete=0
         <if test="isEnable != null and isEnable != ''">
             AND is_enable = #{isEnable}
         </if>
