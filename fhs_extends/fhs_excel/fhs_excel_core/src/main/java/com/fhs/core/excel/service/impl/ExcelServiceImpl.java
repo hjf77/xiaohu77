@@ -322,24 +322,25 @@ public class ExcelServiceImpl implements ExcelService {
 
 
         if (doList.size() > 0) {
-            notNullNotEmptyCheck( doList ,  valiStr);
+            notNullNotEmptyCheck(doList, valiStr, titleArray);
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
             if (valiStr.length() != 0) {
                 throw new ValidationException(valiStr.toString());
             }
             service.batchInsert(doList);
-        }else{
+        } else {
             throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
         }
     }
 
     /**
      * 非空校验
+     *
      * @param doList
      * @param valiStr
      * @return
      */
-    public StringBuilder notNullNotEmptyCheck(List<Object> doList , StringBuilder valiStr) throws IllegalAccessException {
+    public StringBuilder notNullNotEmptyCheck(List<Object> doList, StringBuilder valiStr, Object[] titleArray) throws IllegalAccessException {
         Set<Field> hasCheckField = new HashSet<>();
         List<Field> notEmptyFieldList = ReflectUtils.getAnnotationField(doList.get(0).getClass(), NotEmpty.class);
         if (!notEmptyFieldList.isEmpty()) {
@@ -349,15 +350,17 @@ public class ExcelServiceImpl implements ExcelService {
         if (!notNullFieldList.isEmpty()) {
             hasCheckField.addAll(notNullFieldList);
         }
+        Set<Object> excelIncludeTitleSet = new HashSet<>(Arrays.asList(titleArray));
         for (Field field : hasCheckField) {
-            //跳过id，id在插入的时候肯定是null
-            if (field.isAnnotationPresent(TableId.class)) {
+            String fieldName = getFieldRemark(field);
+            // excel模板中不包含的不校验
+            if (!excelIncludeTitleSet.contains(fieldName)) {
                 continue;
             }
             field.setAccessible(true);
             for (int i = 0; i < doList.size(); i++) {
                 if (CheckUtils.isNullOrEmpty(field.get(doList.get(i)))) {
-                    valiStr.append("第" + (i+1) + "行第" + getFieldRemark(field) + "不可为空");
+                    valiStr.append("第" + (i + 2) + "行第" + fieldName + "不可为空");
                 }
             }
         }
