@@ -909,7 +909,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             if(userOrgMap.containsKey(org.getId())){
                 List<UcenterMsUserVO> orgUser = userOrgMap.get(org.getId());
                 for (UcenterMsUserVO ucenterMsUserVO : orgUser) {
-                    nodeMap.get(companyId).getChildren().add(TreeNode.builder().name(ucenterMsUserVO.getUserName()+"(用户)")
+                    nodeMap.get(companyId).getChildren().add(TreeNode.builder().name(ucenterMsUserVO.getUserName()+"(用户)("  + ucenterMsUserVO.getTransMap().get("orgName")  +")")
                             .id(ucenterMsUserVO.getUserId()).parentId(companyId).data(ucenterMsUserVO).children(new ArrayList<>()).build());
                 }
             }
