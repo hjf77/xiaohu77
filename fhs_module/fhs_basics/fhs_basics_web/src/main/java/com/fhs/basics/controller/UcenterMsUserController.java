@@ -1,10 +1,15 @@
 package com.fhs.basics.controller;
 
+import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleCreateTableStatement;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.LeftMenuVO;
+import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
@@ -29,10 +34,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 系统用户管理controller
@@ -50,6 +53,13 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     @Autowired
     private UcenterMsUserService sysUserService;
+
+    /**
+     * 机构服务
+     */
+    @Autowired
+    private UcenterMsOrganizationService sysOrganizationService;
+
 
     /**
      * 获取用户jsontree 用于easyui下拉tree数据源
@@ -160,6 +170,19 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         List<UcenterMsUserVO> users = sysUserService.selectPage(queryParam,
                 pageSizeInfo.getPageStart(),pageSizeInfo.getPageSize());
         super.outJsonp(new Pager<UcenterMsUserVO>(sysUserService.selectCount(queryParam),users).asJson());
+    }
+
+    @GetMapping("getUserByCompanyId")
+    @ApiOperation("根据单位id获取单位下的用户集合")
+    public List<UcenterMsUserVO> getUserByCompanyId(String companyId){
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>()
+                .eq(UcenterMsOrganizationDO::getCompanyId,companyId));
+        if(orgs.isEmpty()){
+            return new ArrayList<>();
+        }
+        List<UcenterMsUserVO> users = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId,orgs.stream()
+                .map(UcenterMsOrganizationVO::getId).collect(Collectors.toList())));
+        return users;
     }
 
 
