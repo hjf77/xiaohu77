@@ -45,8 +45,8 @@ public interface FeignOrganizationApiService extends TransRpcService {
      * @param parentid 组织机构父id
      * @return 结构对象
      */
-    @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/getOrgByIds?id={ids}")
-    HttpResult<List<UcenterMsOrganizationVO>> getOrgByParentid(@Param("id") String parentid);
+    @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/getOrgByParentid?id={parentid}")
+    HttpResult<List<UcenterMsOrganizationVO>> getOrgByParentid(@Param("parentid") String parentid);
 
     /**
      * 反向翻译
