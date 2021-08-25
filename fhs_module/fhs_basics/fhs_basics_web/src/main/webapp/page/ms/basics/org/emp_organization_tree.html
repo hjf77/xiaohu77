@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
     $(function () {
-        $.post("${basePath}ms/sysOrganization/getTreesData", {},
+        $.get("${basePath}ms/sysOrganization/getTreesData",
             function (jsonStr) {
                 $.fn.zTree.init($("#organizationTreeData"), setting, jsonStr);
                 var treeObj = $.fn.zTree.getZTreeObj("organizationTreeData");

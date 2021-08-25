@@ -278,11 +278,12 @@ public class QueryFilter<T> {
             case "ext":
                 queryWrapper.apply(ConverterUtils.toString(queryField.getValue()));
                 break;
-            case "between":
+            case "between"://前端经常用的是 时间过滤，比如查询 2020-01-01 到2020-01-02 如果用between会是 >   2020-01-01 and 2020-01-02<
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());
                 if (objs != null && objs.length > 0) {
                     Assert.isTrue(objs.length == 2, String.format("查询条件为between时，查询值必须为两个，但是传入的查询值为：%s", objs));
-                    queryWrapper.between(field, objs[0], objs[1]);
+                    queryWrapper.ge(field, objs[0]);
+                    queryWrapper.le(field, objs[1]);
                 }
         }
 

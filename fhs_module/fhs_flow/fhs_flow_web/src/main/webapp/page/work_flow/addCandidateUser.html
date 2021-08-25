@@ -44,6 +44,7 @@
         });
         _task_unselect_candidate_user_group = $('#task-unselect-candidate-user-group').combobox({
             url: '${fhs_basics_url}/ms/sysOrganization/getOrgIdComBoxData?jsonpCallback=?',
+            method:'post',
             //editable:false,
             valueField: 'id',
             textField: 'text',

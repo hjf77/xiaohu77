@@ -173,7 +173,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @param request 请求
      * @return combotree数据格式
      */
-    @GetMapping(value = "/getOrgIdComBoxData")
+    @PostMapping(value = "/getOrgIdComBoxData")
     public void getOrgIdComBoxData(HttpServletRequest request, HttpServletResponse response) {
         // 查询根级组织 为当前系统的登录用户组织
         UcenterMsUserVO sysUser = super.getSessionuser();

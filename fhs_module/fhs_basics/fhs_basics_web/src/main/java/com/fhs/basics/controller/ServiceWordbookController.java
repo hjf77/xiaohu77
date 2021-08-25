@@ -240,7 +240,7 @@ public class ServiceWordbookController extends BaseController {
      * @param wordbookGroup
      */
     @RequiresPermissions("wordbook:del")
-    @RequestMapping("delWordbookGroupForVue")
+    @PostMapping("delWordbookGroup")
     @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL,voParamIndex = 0)
     public  HttpResult<Boolean> delWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
         wordbookAndGroupService.delWordbookGroup(wordbookGroup);

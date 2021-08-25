@@ -20,7 +20,7 @@ include("/page/tags/form_include.html"){}
     </div>
     <div class="fitem">
         <#SelectTreeFormTag name='organizationId' onChange='orgChange' title='所属机构'
-        url='${basePath}ms/sysOrganization/getOrgIdComBoxData' required='true' />
+        url='${basePath}ms/sysOrganization/getOrgIdComBoxData' method='post' required='true' />
     </div>
     <div class="fitem">
         <#SelectFormTag name='roleIds' title='角色' multiple='true' valueField='roleId'

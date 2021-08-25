@@ -21,6 +21,7 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.excel.anno.IgnoreExport;
 import com.fhs.excel.anno.Order;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -34,8 +35,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
+@Slf4j
 @Service
 public class ExcelServiceImpl implements ExcelService {
 
@@ -145,10 +148,12 @@ public class ExcelServiceImpl implements ExcelService {
         field.setAccessible(true);
         Object value = null;
         try {
-            value = field.get(doObj);
+            value = getGetMethod(doObj , field.getName());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("参数错误",e);
             return null;
+        }catch (Exception e){
+            log.error("反射调用错误",e);
         }
         //如果没有加翻译注解的id，注解导出null
         if (field.getName().endsWith("Id")) {
@@ -163,6 +168,23 @@ public class ExcelServiceImpl implements ExcelService {
             return DateUtils.formartDate((Date) value, DateUtils.DATETIME_PATTERN);
         }
         return StringUtil.toString(value);
+    }
+
+    /**
+     * 根据属性，获取get方法
+     * @param ob 对象
+     * @param name 属性名
+     * @return
+     * @throws Exception
+     */
+    public static Object getGetMethod(Object ob , String name)throws Exception{
+        Method[] m = ob.getClass().getMethods();
+        for(int i = 0;i < m.length;i++){
+            if(("get"+name).toLowerCase().equals(m[i].getName().toLowerCase())){
+                return m[i].invoke(ob);
+            }
+        }
+        return null;
     }
 
     /**

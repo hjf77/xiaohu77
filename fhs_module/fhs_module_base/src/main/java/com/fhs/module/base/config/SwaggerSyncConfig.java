@@ -110,12 +110,7 @@ public class SwaggerSyncConfig implements InitializingBean {
     }
 
 
-    @Bean
-    public static PropertyPlaceholderConfigurer swaggerProperties() {
-        PropertyPlaceholderConfigurer properties = new PropertyPlaceholderConfigurer();
-        properties.setIgnoreUnresolvablePlaceholders(true);
-        return properties;
-    }
+
 
 /*
 *
