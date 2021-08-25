@@ -35,7 +35,7 @@ import java.util.*;
  * @UpdateDate: 2018/9/9 0009 14:52
  * @Version: 1.0
  */
-@EnableSwagger2
+//@EnableSwagger2
 @Configuration
 @ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
 public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware{

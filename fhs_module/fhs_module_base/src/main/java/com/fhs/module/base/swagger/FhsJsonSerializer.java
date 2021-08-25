@@ -21,6 +21,6 @@ public class FhsJsonSerializer extends JsonSerializer {
     }
     public FhsJsonSerializer(List<JacksonModuleRegistrar> modules) {
         super(modules);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
     }
 }

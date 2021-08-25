@@ -1,4 +1,3 @@
-/*
 
 package com.fhs.module.base.config;
 
@@ -31,15 +30,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-*/
-/**
+/*
+ *
  * 本类代理@EnableSwagger2 注解，可实现swagger异步加载
- *//*
+ */
+
 
 @Slf4j
 @Configuration
 @ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
-@Import({  SwaggerCommonConfiguration.class,ModelsConfiguration.class })
+@Import({SwaggerCommonConfiguration.class, ModelsConfiguration.class})
 @ComponentScan(basePackages = {
         "springfox.documentation.swagger2.web",
         "springfox.documentation.swagger2.mappers",
@@ -50,8 +50,9 @@ import java.util.List;
         "springfox.documentation.spring.web.paths"
 }, excludeFilters =
         {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-                classes = {DocumentationPluginsBootstrapper.class})})//禁用掉DocumentationPluginsBootstrapper，这样就不会自动扫描，卡主线程
-@EnablePluginRegistries({ DocumentationPlugin.class,
+                classes = {DocumentationPluginsBootstrapper.class})})
+//禁用掉DocumentationPluginsBootstrapper，这样就不会自动扫描，卡主线程
+@EnablePluginRegistries({DocumentationPlugin.class,
         ApiListingBuilderPlugin.class,
         OperationBuilderPlugin.class,
         ParameterBuilderPlugin.class,
@@ -61,7 +62,7 @@ import java.util.List;
         DefaultsProviderPlugin.class,
         PathDecorator.class
 })
-public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyEvent> {
+public class SwaggerSyncConfig implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private DocumentationPluginsManager documentationPluginsManager;
@@ -79,7 +80,6 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
     private ServletContext servletContext;
 
 
-
     @Bean
     public Defaults defaults() {
         return new Defaults();
@@ -95,12 +95,13 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
         return new ObjectMapperConfigurer();
     }
 
-    */
 /**
-     * 自定义json序列化，解决value是null的时候依旧序列化问题
-     * @param moduleRegistrars
-     * @return
-     *//*
+        *自定义json序列化，解决value是null的时候依旧序列化问题
+     *
+    @param
+    moduleRegistrars
+     *@return*/
+
 
     @Bean
     public JsonSerializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
@@ -115,15 +116,19 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
         return properties;
     }
 
-    */
-/**
-     * 当springboot 项目启动完成后，新启动一个线程去扫描swagger相关注解，生成配置对象
-     * @param applicationReadyEvent
-     *//*
+/*
+*
+        *
+    当springboot 项目启动完成后，新启动一个线程去扫描swagger相关注解，生成配置对象
+     *
+    @param
+    applicationReadyEvent
+*/
+
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-       try{
+        try {
             List<RequestHandlerProvider> handlerProviders = new ArrayList<>();
             handlerProviders.add(provider);
             new Thread(new Runnable() {
@@ -131,15 +136,14 @@ public class SwaggerSyncConfig  implements ApplicationListener<ApplicationReadyE
                 public void run() {
                     // 手动去扫描
                     new DocumentationPluginsBootstrapper(documentationPluginsManager,
-                            handlerProviders,scanned,resourceListing,typeResolver,defaults,servletContext).start();
+                            handlerProviders, scanned, resourceListing, typeResolver, defaults, servletContext).start();
                     log.info("-------------swagger 异步扫描完成-------------");
                 }
             }).start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 }
 
-*/
