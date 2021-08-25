@@ -4,6 +4,7 @@ package com.fhs.module.base.config;
 import com.fasterxml.classmate.TypeResolver;
 import com.fhs.module.base.swagger.FhsJsonSerializer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -62,7 +63,7 @@ import java.util.List;
         DefaultsProviderPlugin.class,
         PathDecorator.class
 })
-public class SwaggerSyncConfig implements ApplicationListener<ApplicationReadyEvent> {
+public class SwaggerSyncConfig implements InitializingBean {
 
     @Autowired
     private DocumentationPluginsManager documentationPluginsManager;
@@ -124,10 +125,8 @@ public class SwaggerSyncConfig implements ApplicationListener<ApplicationReadyEv
     @param
     applicationReadyEvent
 */
-
-
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+    public void afterPropertiesSet() throws Exception {
         try {
             List<RequestHandlerProvider> handlerProviders = new ArrayList<>();
             handlerProviders.add(provider);
@@ -135,6 +134,7 @@ public class SwaggerSyncConfig implements ApplicationListener<ApplicationReadyEv
                 @Override
                 public void run() {
                     // 手动去扫描
+                    log.info("-------------swagger 异步扫描开始-------------");
                     new DocumentationPluginsBootstrapper(documentationPluginsManager,
                             handlerProviders, scanned, resourceListing, typeResolver, defaults, servletContext).start();
                     log.info("-------------swagger 异步扫描完成-------------");
@@ -143,7 +143,6 @@ public class SwaggerSyncConfig implements ApplicationListener<ApplicationReadyEv
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
 
