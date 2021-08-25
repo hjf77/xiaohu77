@@ -31,7 +31,7 @@ public class AuthFilter  extends AuthenticatingFilter {
 
         UcenterMsUserDO sysUser = (UcenterMsUserDO)request.getSession().getAttribute(Constant.SESSION_USER);
         if(sysUser==null){
-            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NOT_LOGIN.asResult().asJson());
+            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NOT_LOGIN.asResult().asJson(),PubResult.NOT_LOGIN.getCode());
             return null;
         }
 
@@ -66,7 +66,7 @@ public class AuthFilter  extends AuthenticatingFilter {
         }
         UcenterMsUserDO sysUser = redisCacheService.get("shiro:user:" + token);
         if(sysUser==null){
-            JsonUtils.outJson(httpServletResponse, PubResult.NOT_LOGIN.asResult().asJson());
+            JsonUtils.outJson(httpServletResponse, PubResult.NOT_LOGIN.asResult().asJson(), PubResult.NOT_LOGIN.getCode());
             return false;
         }
         httpServletRequest.getSession().setAttribute(Constant.SESSION_USER, sysUser);
@@ -77,7 +77,7 @@ public class AuthFilter  extends AuthenticatingFilter {
     //token失效时调用
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
-        JsonUtils.outJson((HttpServletResponse)response , PubResult.NOT_LOGIN.asResult().asJson());
+        JsonUtils.outJson((HttpServletResponse)response , PubResult.NOT_LOGIN.asResult().asJson(),PubResult.NOT_LOGIN.getCode());
         return false;
     }
 
