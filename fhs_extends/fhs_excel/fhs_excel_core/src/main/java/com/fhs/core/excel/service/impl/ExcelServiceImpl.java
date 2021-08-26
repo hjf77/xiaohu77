@@ -12,6 +12,7 @@ import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.core.valid.checker.ParamChecker;
+import com.fhs.excel.anno.GroupUntrans;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
@@ -148,12 +149,12 @@ public class ExcelServiceImpl implements ExcelService {
         field.setAccessible(true);
         Object value = null;
         try {
-            value = getGetMethod(doObj , field.getName());
+            value = getGetMethod(doObj, field.getName());
         } catch (IllegalAccessException e) {
-            log.error("参数错误",e);
+            log.error("参数错误", e);
             return null;
-        }catch (Exception e){
-            log.error("反射调用错误",e);
+        } catch (Exception e) {
+            log.error("反射调用错误", e);
         }
         //如果没有加翻译注解的id，注解导出null
         if (field.getName().endsWith("Id")) {
@@ -172,15 +173,16 @@ public class ExcelServiceImpl implements ExcelService {
 
     /**
      * 根据属性，获取get方法
-     * @param ob 对象
+     *
+     * @param ob   对象
      * @param name 属性名
      * @return
      * @throws Exception
      */
-    public static Object getGetMethod(Object ob , String name)throws Exception{
+    public static Object getGetMethod(Object ob, String name) throws Exception {
         Method[] m = ob.getClass().getMethods();
-        for(int i = 0;i < m.length;i++){
-            if(("get"+name).toLowerCase().equals(m[i].getName().toLowerCase())){
+        for (int i = 0; i < m.length; i++) {
+            if (("get" + name).toLowerCase().equals(m[i].getName().toLowerCase())) {
                 return m[i].invoke(ob);
             }
         }
@@ -317,6 +319,75 @@ public class ExcelServiceImpl implements ExcelService {
                 }
             }
         }
+
+        untransAuto(needTrans, doList, valiStr, importSett.getDoModel().getClass());
+
+        if (doList.size() > 0) {
+            notNullNotEmptyCheck(doList, valiStr, titleArray);
+            //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
+            if (valiStr.length() != 0) {
+                throw new ValidationException(valiStr.toString());
+            }
+            service.batchInsert(doList);
+        } else {
+            throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
+        }
+    }
+
+    /**
+     * autotrans的 反向翻译
+     *
+     * @param needTrans 需要反向翻译的集合
+     * @param doList    数据集合
+     * @param valiStr   校验提示
+     */
+    private void untransAuto(Map<String, Set<String>> needTrans, List<Object> doList, StringBuilder valiStr, Class doClass) throws IllegalAccessException {
+
+        //获取所有的组合反向翻译字段
+        List<Field> fields = ReflectUtils.getAnnotationField(doClass, GroupUntrans.class);
+
+
+        for (Field field : fields) {
+            GroupUntrans groupUntrans = field.getAnnotation(GroupUntrans.class);
+            Trans trans = field.getAnnotation(Trans.class);
+            if (trans == null) {
+                valiStr.append("groupUntransGroupUntrans 需要和 Trans 一起使用请检查" + field.getName() + "\r\n");
+                continue;
+            }
+            String namespace = trans.key() + "_" + field.getName();
+            List<Field> groupFields = new ArrayList<>();
+            field.setAccessible(true);
+            for (String fieldName : groupUntrans.value()) {
+                Field tempField = ReflectUtils.getDeclaredField(doClass, fieldName);
+                if (tempField != null) {
+                    tempField.setAccessible(true);
+                }
+                groupFields.add(tempField);
+            }
+            Set<String> newNamesSet = new HashSet<>();
+            //不管之前的数据了
+            needTrans.put(namespace, newNamesSet);
+            for (Object tempDo : doList) {
+                Object tempVal = field.get(tempDo);
+                if (CheckUtils.isNullOrEmpty(tempVal)) {
+                    continue;
+                }
+                StringBuilder groupName = new StringBuilder(ConverterUtils.toString(tempVal) + "@");
+                for (Field groupField : groupFields) {
+                    if (groupField == null) {
+                        groupName.append("@");
+                        continue;
+                    }
+                    groupName.append(groupField.get(tempDo) + "@");
+
+                }
+                String newName = groupName.toString();
+                newNamesSet.add(newName);
+                ReflectUtils.setValue(tempDo, field, newName);
+            }
+        }
+
+
         //名称反翻译
         for (String namespaceKey : needTrans.keySet()) {
             String[] strs = namespaceKey.split("_");
@@ -340,18 +411,6 @@ public class ExcelServiceImpl implements ExcelService {
                 }
                 ReflectUtils.setValue(objDo, field, fieldValue);
             }
-        }
-
-
-        if (doList.size() > 0) {
-            notNullNotEmptyCheck(doList, valiStr, titleArray);
-            //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
-            if (valiStr.length() != 0) {
-                throw new ValidationException(valiStr.toString());
-            }
-            service.batchInsert(doList);
-        } else {
-            throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
         }
     }
 
