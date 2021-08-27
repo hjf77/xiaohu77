@@ -223,7 +223,10 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
             String companyId = company.getParentId();
             //查询父亲组织，但是父亲组织不一定是单位,当是单位的时候
             company = sysOrganizationService.selectById(companyId);
-            ParamChecker.isNotNull(company, company.getParentId() + "id无效");
+            ParamChecker.isNotNull(company, companyId + "id无效");
+            if (OrgConstant.ORG_ID_ROOT.equals(company.getId())) {
+                return company;
+            }
             if (company.getIsCompany() != null && company.getIsCompany() == Constant.INT_TRUE) {
                 i++;
                 if(i==level){
@@ -231,11 +234,6 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
                 }
             }
         }
-      /*  UcenterMsOrganizationVO parentOrg = sysOrganizationService.selectById(company.getParentId());
-        ParamChecker.isNotNull(parentOrg, company.getParentId() + "id无效");
-        if (parentOrg.getIsCompany() != null && parentOrg.getIsCompany() == Constant.INT_TRUE) {
-            return parentOrg;
-        }*/
         return null;
     }
 
