@@ -31,6 +31,7 @@ import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.service.AutoTransAble;
 import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import com.mybatis.jpa.annotation.CatTableFlag;
@@ -609,6 +610,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
+        ParamChecker.isNotNull(page,"前端调用接口的时候没传分页信息");
         page = baseMapper.selectPage(page, queryWrapper);
         FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
