@@ -2,6 +2,7 @@ package com.fhs.pagex.service;
 
 import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.PubResult;
 
 import javax.script.ScriptException;
@@ -96,7 +97,12 @@ public enum HandelPageXService {
             trimNeedReplace = needReplace.trim();
             // 如果是path开头的就取path的
             if (trimNeedReplace.startsWith("path.")) {
-                html = html.replace("${" + needReplace + "}", EConfig.getPathPropertiesValue(trimNeedReplace.replace("path.", "")));
+                String pathValue = EConfig.getPathPropertiesValue(trimNeedReplace.replace("path.", ""));
+                if(pathValue == null)
+                {
+                    throw new ParamException(trimNeedReplace + "没有配置，请检查配置");
+                }
+                html = html.replace("${" + needReplace + "}", pathValue);
             }
             //如果是param开头的就取param的
             else if (trimNeedReplace.startsWith("param.")) {
