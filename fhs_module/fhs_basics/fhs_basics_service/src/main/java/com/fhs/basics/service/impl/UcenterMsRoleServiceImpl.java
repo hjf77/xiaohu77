@@ -72,7 +72,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveButtons(UcenterMsRoleDO adminRole) {
-        if (adminRole.getMethods().length > 0) {
+        if (adminRole.getMethods() !=null && adminRole.getMethods().length > 0) {
             // 构建按钮列表
             adminRole.setMethods(buildButtonArray(adminRole.getMethods()));
 
