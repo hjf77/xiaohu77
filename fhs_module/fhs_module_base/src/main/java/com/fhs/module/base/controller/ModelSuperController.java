@@ -677,6 +677,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     @PostMapping("pubImportExcel")
     @ApiOperation("公共excel导入")
+    @NotRepeat
     public HttpResult<String> pubImportExcel(MultipartFile file,D otherParam) throws Exception {
         if(otherParam==null){
             otherParam= this.getDOClass().newInstance();
