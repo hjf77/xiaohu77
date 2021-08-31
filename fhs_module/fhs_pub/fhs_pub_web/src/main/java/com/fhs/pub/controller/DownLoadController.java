@@ -64,7 +64,9 @@ public class DownLoadController extends BaseController {
             PubFileVO serviceFile = pubFileService.selectById(fileId);
             fileStorage.downloadFile(serviceFile,response);
         } catch (Exception e) {
-            LOG.error(this, e);
+            if(! (e instanceof ParamException)){
+                LOG.error(this, e);
+            }
             throw new ParamException("下载文件异常,可能是文件不存在");
         }
     }
