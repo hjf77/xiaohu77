@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用来分页使用
@@ -45,6 +46,9 @@ public class FhsPager<T> implements IPage<T>  {
 
     @ApiModelProperty("每页多少条")
     private long pageSize;
+
+    @ApiModelProperty("分页扩展字段")
+    private Map<String,Object> extMap;
 
 
     @Override
