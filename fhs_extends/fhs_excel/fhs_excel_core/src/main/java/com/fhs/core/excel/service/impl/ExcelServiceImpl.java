@@ -257,7 +257,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     for (int k = 0; k < strs.length; k++) {
                                         String tran = transService.getUnWordBookTransMap().get(trans.key() + "_" + strs[k]);
                                         if (StringUtils.isBlank(tran)) {
-                                            valiStr.append("“" + data + "”找不到对应翻译，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                            valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                         }
                                         tranStr.append(tran).append(",");
                                     }
@@ -266,7 +266,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 } else {
                                     String tranStr = transService.getUnWordBookTransMap().get(trans.key() + "_" + data);
                                     if (StringUtils.isBlank(tranStr)) {
-                                        valiStr.append("“" + data + "”找不到对应翻译，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                         continue;
                                     }
                                     ReflectUtils.setValue(objDo, field, field.getGenericType().equals(String.class) ? tranStr : ConverterUtils.toInteger(tranStr));
@@ -283,7 +283,6 @@ public class ExcelServiceImpl implements ExcelService {
                             //不需要反翻译时进行非空和长度校验
                             if (field.getAnnotation(NotEmpty.class) != null
                                     && StringUtils.isBlank(data.toString())) {
-                                valiStr.append(fieldName + "不能为空，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                 continue;
                             }
                             Length length = field.getAnnotation(Length.class);
@@ -406,7 +405,7 @@ public class ExcelServiceImpl implements ExcelService {
                 Object fieldValue = unTrans.get(needTranName);
                 if (null == fieldValue) {
                     String fieldNameCh = field.getAnnotation(ApiModelProperty.class).value();
-                    valiStr.append(needTranName + "找不到对应翻译，请确保“" + fieldNameCh + "”列“" + needTranName + "”填写正确;\r\n");
+                    valiStr.append("“" + needTranName + "“匹配不到对应数据，请确保“" + fieldNameCh + "”列“" + needTranName + "”填写正确;\r\n");
                     continue;
                 }
                 ReflectUtils.setValue(objDo, field, fieldValue);
