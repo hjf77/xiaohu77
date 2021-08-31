@@ -31,6 +31,7 @@
                 AND group_code = #{groupCode}
             </if>
             AND is_enable=1
+            AND is_delete=0
         </where>
     </select>
 
