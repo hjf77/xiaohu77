@@ -372,4 +372,20 @@ public class JsonUtils {
     public static <T> T jacksonDeserialize(String jsonStr, Class<T> classType) throws Exception {
         return new ObjectMapper().readValue(jsonStr, classType);
     }
+
+    /**
+     * ["1","2"] 转换为 1,2
+     * @param arrayJson
+     * @return
+     */
+    public static String parseArray(String arrayJson){
+        if(arrayJson == null){
+            return null;
+        }
+        JSONArray jsonArray = JSONArray.parseArray(arrayJson);
+        return StringUtil.join(jsonArray,",");
+    }
+
+
+
 }

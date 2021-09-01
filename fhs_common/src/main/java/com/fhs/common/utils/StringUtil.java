@@ -920,9 +920,6 @@ public class StringUtil {
         return result;
     }
 
-    public static void main(String[] args) {
-        System.out.println(formatShortNumber(1888));
-    }
 
     //
 
