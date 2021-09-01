@@ -1,6 +1,7 @@
 package com.fhs.core.jsonfilter.aop;
 
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.jsonfilter.anno.AutoArray;
@@ -67,11 +68,7 @@ public class ParamArrayHandle {
                     if(!strVal.startsWith("[")){
                         continue;
                     }
-                    //去掉第一个[
-                    strVal = strVal.substring(1);
-                    strVal = strVal.substring(0,strVal.length()-1);
-                    strVal = strVal.replace("'","").replace("\"","");
-                    ReflectUtils.setValue(needHandleParam,field,strVal);
+                    ReflectUtils.setValue(needHandleParam,field, JsonUtils.parseArray(strVal));
                 }
             }
         }
