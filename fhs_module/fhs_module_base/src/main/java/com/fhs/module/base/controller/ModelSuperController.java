@@ -1,6 +1,7 @@
 package com.fhs.module.base.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -225,9 +226,13 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("advanceExportExcel")
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcelForVue(HttpServletResponse response,String fileName) throws IOException {
+    public void exportExcelForVue(HttpServletResponse response,String fileName,String ids) throws IOException {
         QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
         wrapper = wrapper == null ? new QueryWrapper(): wrapper;
+        wrapper = (QueryWrapper)wrapper.clone();
+        if(CheckUtils.isNotEmpty(ids)){
+            wrapper.in("id",ids.split(","));
+        }
         Workbook book = this.excelService.exportExcel(wrapper,this.baseService,this.getDOClass());
         String excelTempPath =  EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
