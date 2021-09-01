@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
+import com.fhs.basics.dox.UcenterMsOrganizationDO;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
 import com.fhs.basics.form.SysUserForm;
@@ -856,7 +857,13 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationIds(String organizationIds) {
         ParamChecker.isNotNullOrEmpty(organizationIds, "organizationIds不能为空");
-        List<UcenterMsUserVO> sysUserList = this.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId,organizationIds));
+        Set<String> orgIdsSet = new HashSet<>(Arrays.asList(organizationIds.split(",")));
+        //organizationIds 其中部分可能是单位，如果是单位则把单位的orgid都查出来
+        List<UcenterMsOrganizationVO> orgs = organizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getCompanyId,orgIdsSet));
+        for (UcenterMsOrganizationVO org : orgs) {
+            orgIdsSet.add(org.getId());
+        }
+        List<UcenterMsUserVO> sysUserList = this.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId,orgIdsSet));
         return HttpResult.success(sysUserList);
     }
 
