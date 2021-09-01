@@ -77,7 +77,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     private Cache<String, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
-    private BaseService<V, D> baseService;
+    protected BaseService<V, D> baseService;
 
     @Autowired
     private ExcelService excelService;

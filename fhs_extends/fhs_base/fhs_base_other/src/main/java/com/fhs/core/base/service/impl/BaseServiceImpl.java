@@ -368,6 +368,14 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         if(list == null || list.isEmpty()){
             return 0;
         }
+        //如果do标记了重复数据校验,则进行重复数据校验
+        if(this.getDOClass().isAnnotationPresent(NotRepeatDesc.class)){
+          Set<String> hasData = new HashSet<>();
+          List<Field> fields = ReflectUtils.getAnnotationField(this.getDOClass(),NotRepeatField.class);
+          StringBuilder errorMsg = new StringBuilder();
+          boolean isHasError = false;
+          
+        }
         for (D d : list) {
             initPkeyAndIsDel(d);
         }

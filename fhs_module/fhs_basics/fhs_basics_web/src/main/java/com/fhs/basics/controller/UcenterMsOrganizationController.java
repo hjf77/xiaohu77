@@ -26,6 +26,7 @@ import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -167,6 +168,9 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         return HttpResult.success();
     }
 
+
+
+
     /**
      * 获取机构ID combotree格式
      *
@@ -198,8 +202,23 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
                 org.setName(org.getName() + "(" + orgMap.get(org.getCompanyId()).getName() + ")");
             }
         }
-        return TreeUtils.formartTree(orgs);
+        return TreeUtils.formartTree(orgs,OrgConstant.ORG_ID_ROOT);
     }
+
+    /**
+     * @param queryFilter
+     * @return
+     */
+    @PostMapping(
+            value = {"/tree"},
+            produces = {"application/json; charset=utf-8"}
+    )
+    @ApiOperation("获取tree格式的json数据")
+    public List<TreeNode<Treeable>> treeData(@ApiParam(name = "queryFilter", value = "过滤条件") @RequestBody QueryFilter<UcenterMsOrganizationDO> queryFilter) throws IllegalAccessException {
+        List<UcenterMsOrganizationVO> datas = baseService.selectListMP(queryFilter.asWrapper(getDOClass()));
+        return TreeUtils.formartTree(datas,OrgConstant.ORG_ID_ROOT);
+    }
+
 
     @GetMapping("getUserParentCompany")
     @ApiOperation("获取当前登录人的上级单位信息")

@@ -7,18 +7,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * tree数据格式化工具类
  */
 public class TreeUtils {
 
-    /**
-     * 格式化tree数据
-     * @param datas
-     * @return
-     */
-    public static List<TreeNode<Treeable>> formartTree(List datas){
+    public static List<TreeNode<Treeable>> formartTree(List datas,String rootId){
         if(datas.isEmpty()){
             return new ArrayList<>();
         }
@@ -47,7 +43,20 @@ public class TreeUtils {
                 result.add(tempNode);
             }
         }
+        if(rootId!=null){
+            return result.stream().filter(node->{
+                return node.getId().equals(rootId);
+            }).collect(Collectors.toList());
+        }
         return result;
+    }
+    /**
+     * 格式化tree数据
+     * @param datas
+     * @return
+     */
+    public static List<TreeNode<Treeable>> formartTree(List datas){
+        return formartTree( datas,null);
     }
 
 }
