@@ -202,7 +202,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
                 org.setName(org.getName() + "(" + orgMap.get(org.getCompanyId()).getName() + ")");
             }
         }
-        return TreeUtils.formartTree(orgs,OrgConstant.ORG_ID_ROOT);
+        return TreeUtils.formartTree(orgs);
     }
 
     /**
@@ -216,7 +216,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     @ApiOperation("获取tree格式的json数据")
     public List<TreeNode<Treeable>> treeData(@ApiParam(name = "queryFilter", value = "过滤条件") @RequestBody QueryFilter<UcenterMsOrganizationDO> queryFilter) throws IllegalAccessException {
         List<UcenterMsOrganizationVO> datas = baseService.selectListMP(queryFilter.asWrapper(getDOClass()));
-        return TreeUtils.formartTree(datas,OrgConstant.ORG_ID_ROOT);
+        return TreeUtils.formartTree(datas);
     }
 
 
