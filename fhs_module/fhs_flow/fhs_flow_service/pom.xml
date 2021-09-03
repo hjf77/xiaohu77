@@ -33,11 +33,6 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_flow_pojo</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_listener</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
