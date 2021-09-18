@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @since [产品/模块版本]
  */
 @Service("redisCacheServiceImpl")
-public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
-{
+public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
     /**
      * redisTemplate
      */
@@ -42,39 +42,32 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     private Lock lock = new ReentrantLock();// 基于底层IO阻塞考虑
 
     @Override
-    public void put(String key, E obj)
-    {
+    public void put(String key, E obj) {
         ValueOperations<String, E> valueOper = redisTemplate.opsForValue();
         valueOper.set(key, obj);
     }
 
     @Override
-    public E get(String key)
-    {
+    public E get(String key) {
         ValueOperations<String, E> valueOper = redisTemplate.opsForValue();
         return valueOper.get(key);
     }
 
     @Override
-    public List<E> getList(String key)
-    {
+    public List<E> getList(String key) {
         ListOperations<String, E> valueOper = redisTemplate.opsForList();
         return valueOper.range(key, 0, -1);
     }
 
     @Override
-    public Long remove(final String key)
-    {
-        if (!exists(key))
-        {
+    public Long remove(final String key) {
+        if (!exists(key)) {
             return 0l;
         }
-        return redisTemplate.execute(new RedisCallback<Long>()
-        {
+        return redisTemplate.execute(new RedisCallback<Long>() {
             @Override
             public Long doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
+                    throws DataAccessException {
                 long result = 0;
                 result = connection.del(key.getBytes());
                 return result;
@@ -83,72 +76,68 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     }
 
     @Override
-    public boolean exists(final String key)
-    {
-        return redisTemplate.execute(new RedisCallback<Boolean>()
-        {
+    public boolean exists(final String key) {
+        return redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
+                    throws DataAccessException {
                 return connection.exists(key.getBytes());
             }
         });
     }
 
     @Override
-    public void addSet(String key, E[] objs)
-    {
+    public boolean existsStr(final String key) {
+        return strRedisTemplate.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                return connection.exists(key.getBytes());
+            }
+        });
+    }
+
+    @Override
+    public void addSet(String key, E[] objs) {
         ListOperations<String, E> list = redisTemplate.opsForList();
-        for (E obj : objs)
-        {
+        for (E obj : objs) {
             list.leftPush(key, obj);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addSet(String key, Set<E> list)
-    {
-        this.addSet(key, (E[])list.toArray());
+    public void addSet(String key, Set<E> list) {
+        this.addSet(key, (E[]) list.toArray());
     }
 
     @Override
-    public void addSet(String key, E value)
-    {
-        redisTemplate.opsForSet().add(key,value);
+    public void addSet(String key, E value) {
+        redisTemplate.opsForSet().add(key, value);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addSet(String key, List<E> objSet)
-    {
-        this.addSet(key, (E[])objSet.toArray());
+    public void addSet(String key, List<E> objSet) {
+        this.addSet(key, (E[]) objSet.toArray());
     }
 
     @Override
-    public boolean contains(String key, Object value)
-    {
-        return redisTemplate.opsForSet().isMember(key,value);
+    public boolean contains(String key, Object value) {
+        return redisTemplate.opsForSet().isMember(key, value);
     }
 
     @Override
-    public void removeSetValue(String key, Object value)
-    {
+    public void removeSetValue(String key, Object value) {
         redisTemplate.opsForSet().remove(key, value);
     }
 
     @Override
-    public boolean addStr(final String key, final String value)
-    {
-        if (this.exists(key))
-        {
-            this.updateStr(key, value);
+    public boolean addStr(final String key, final String value) {
+        if (this.existsStr(key)) {
+            return this.updateStr(key, value);
         }
-        boolean result = strRedisTemplate.execute(new RedisCallback<Boolean>()
-        {
+        boolean result = strRedisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
+                    throws DataAccessException {
                 RedisSerializer<String> serializer = getRedisSerializer();
                 byte[] keys = serializer.serialize(key);
                 byte[] values = serializer.serialize(value);
@@ -159,17 +148,13 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     }
 
     @Override
-    public boolean updateStr(final String key, final String value)
-    {
-        if (!this.exists(key))
-        {
+    public boolean updateStr(final String key, final String value) {
+        if (!this.exists(key)) {
             return this.addStr(key, value);
         }
-        return strRedisTemplate.execute(new RedisCallback<Boolean>()
-        {
+        return strRedisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
+                    throws DataAccessException {
                 RedisSerializer<String> serializer = getRedisSerializer();
                 byte[] keys = serializer.serialize(key);
                 byte[] values = serializer.serialize(value);
@@ -180,18 +165,14 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     }
 
     @Override
-    public String getStr(final String key)
-    {
-        String result = strRedisTemplate.execute(new RedisCallback<String>()
-        {
+    public String getStr(final String key) {
+        String result = strRedisTemplate.execute(new RedisCallback<String>() {
             public String doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
+                    throws DataAccessException {
                 RedisSerializer<String> serializer = getRedisSerializer();
                 byte[] keys = serializer.serialize(key);
                 byte[] values = connection.get(keys);
-                if (values == null)
-                {
+                if (values == null) {
                     return null;
                 }
                 String value = serializer.deserialize(values);
@@ -206,24 +187,19 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
      *
      * @return RedisSerializer
      */
-    private RedisSerializer<String> getRedisSerializer()
-    {
+    private RedisSerializer<String> getRedisSerializer() {
         return strRedisTemplate.getStringSerializer();
     }
 
     @Override
-    public Long removeFuzzy(final String key)
-    {
-        return redisTemplate.execute(new RedisCallback<Long>()
-        {
+    public Long removeFuzzy(final String key) {
+        return redisTemplate.execute(new RedisCallback<Long>() {
             @Override
             public Long doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
+                    throws DataAccessException {
                 long result = 0;
                 Set<byte[]> keys = connection.keys(key.getBytes());
-                for (byte[] keySet : keys)
-                {
+                for (byte[] keySet : keys) {
                     result += connection.del(keySet);
                 }
                 return result;
@@ -232,34 +208,42 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     }
 
     @Override
-    public Set<E> getSet(String key)
-    {
+    public Set<E> getSet(String key) {
         return redisTemplate.opsForSet().members(key);
     }
 
     @Override
-    public boolean expire(final String key, final int timeout)
-    {
-        return redisTemplate.execute(new RedisCallback<Long>()
-        {
+    public boolean expire(final String key, final int timeout) {
+        return redisTemplate.execute(new RedisCallback<Long>() {
             @Override
             public Long doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
-                if (connection.expire(key.getBytes(), timeout))
-                {
+                    throws DataAccessException {
+                if (connection.expire(key.getBytes(), timeout)) {
                     return (long) Constant.SUCCESS_CODE;
                 }
                 ;
                 return (long) Constant.DEFEAT_CODE;
             }
         }) == Constant.SUCCESS_CODE;
-
-
     }
 
     @Override
-    public Long getExpire(String key){
+    public boolean expireStr(final String key, final int timeout) {
+        return strRedisTemplate.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                if (connection.expire(key.getBytes(), timeout)) {
+                    return (long) Constant.SUCCESS_CODE;
+                }
+                ;
+                return (long) Constant.DEFEAT_CODE;
+            }
+        }) == Constant.SUCCESS_CODE;
+    }
+
+    @Override
+    public Long getExpire(String key) {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
@@ -268,8 +252,7 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
      *
      * @param key
      */
-    public long incrAdd(String key)
-    {
+    public long incrAdd(String key) {
         return redisTemplate.boundValueOps(key).increment(1);
     }
 
@@ -279,8 +262,7 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
      * @param key
      * @param value
      */
-    public long incrAdd(String key, int value)
-    {
+    public long incrAdd(String key, int value) {
         return redisTemplate.boundValueOps(key).increment(value);
     }
 
@@ -289,58 +271,45 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
      *
      * @param key
      */
-    public long incrSub(String key)
-    {
+    public long incrSub(String key) {
         return redisTemplate.boundValueOps(key).increment(-1);
     }
 
     @Override
     public void convertAndSend(String channel, String message) {
-        redisTemplate.convertAndSend(channel,message);
+        redisTemplate.convertAndSend(channel, message);
     }
 
     @Override
-    public Long getForListSize(String key)
-    {
+    public Long getForListSize(String key) {
         return redisTemplate.opsForList().size(key);
     }
 
     @Override
-    public void leftPush(String key, E value)
-    {
+    public void leftPush(String key, E value) {
         redisTemplate.opsForList().leftPush(key, value);
     }
 
     @Override
-    public void rightPush(String key, E value)
-    {
+    public void rightPush(String key, E value) {
         redisTemplate.opsForList().rightPush(key, value);
     }
 
     @Override
-    public E getBLPop(final String key)
-    {
-        return (E)redisTemplate.execute(new RedisCallback<E>()
-        {
+    public E getBLPop(final String key) {
+        return (E) redisTemplate.execute(new RedisCallback<E>() {
             public E doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
-                try
-                {
+                    throws DataAccessException {
+                try {
                     lock.lockInterruptibly();
 
                     List<byte[]> results = connection.bLPop(0, key.getBytes());
-                    if (CollectionUtils.isEmpty(results))
-                    {
+                    if (CollectionUtils.isEmpty(results)) {
                         return null;
                     }
-                    return (E)getRedisSerializer().deserialize(results.get(1));
-                }
-                catch (InterruptedException e)
-                {
-                }
-                finally
-                {
+                    return (E) getRedisSerializer().deserialize(results.get(1));
+                } catch (InterruptedException e) {
+                } finally {
                     lock.unlock();
                 }
                 return null;
@@ -349,29 +318,20 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     }
 
     @Override
-    public E getBRPop(final String key)
-    {
-        return (E)redisTemplate.execute(new RedisCallback<E>()
-        {
+    public E getBRPop(final String key) {
+        return (E) redisTemplate.execute(new RedisCallback<E>() {
             public E doInRedis(RedisConnection connection)
-                    throws DataAccessException
-            {
-                try
-                {
+                    throws DataAccessException {
+                try {
                     lock.lockInterruptibly();
                     List<byte[]> results = connection.bRPop(0, key.getBytes());
-                    if (CollectionUtils.isEmpty(results))
-                    {
+                    if (CollectionUtils.isEmpty(results)) {
                         return null;
                     }
                     RedisSerializer<?> redisSerializer = redisTemplate.getValueSerializer();
-                    return (E)redisSerializer.deserialize(results.get(1));
-                }
-                catch (InterruptedException e)
-                {
-                }
-                finally
-                {
+                    return (E) redisSerializer.deserialize(results.get(1));
+                } catch (InterruptedException e) {
+                } finally {
                     lock.unlock();
                 }
                 return null;

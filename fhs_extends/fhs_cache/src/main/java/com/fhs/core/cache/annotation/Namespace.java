@@ -11,11 +11,11 @@ import java.lang.annotation.Target;
  * @Date: Created in 10:14 2019/10/15
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE})
-public @interface Namespace
-{
+@Target({ElementType.TYPE})
+public @interface Namespace {
     /**
-     *  命名空间
+     * 命名空间
+     *
      * @return
      */
     String value();
