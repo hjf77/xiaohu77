@@ -42,7 +42,10 @@ public class UploadAction extends BaseAction<ServiceFile> {
             super.outToClient(false, response);
         }
         LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
-        ServiceFile file = fileServerBusiness.uploadFile(Filedata, request.getParameter("filedId"));
+        String fileId = request.getParameter("filedId");
+        String fileName = Filedata.getOriginalFilename();
+        LOG.infoMsg("文件ID{},{}", fileId, fileName);
+        ServiceFile file = fileServerBusiness.uploadFile(Filedata, fileId);
         LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         super.outWriteJson(JsonUtils.bean2json(file), response);
     }
