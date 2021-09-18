@@ -14,6 +14,8 @@ import com.mybatis.jpa.annotation.MapperDefinition;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.file.bean.ServiceFile;
 
+import java.util.Map;
+
 /**
  * 文件 beancrud dao
  * @author  王磊
@@ -24,4 +26,10 @@ import com.fhs.file.bean.ServiceFile;
 @MapperDefinition(domainClass = ServiceFile.class)
 public interface ServiceFileDAO extends BaseDao<ServiceFile>
 {
+    /**
+     * 修改文件id
+     * @param paramMap 需要包含newFileId和oldFileId
+     * @return
+     */
+    int updateFileId(Map<String,String> paramMap);
 }

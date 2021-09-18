@@ -51,6 +51,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
     public void download(HttpServletRequest request, HttpServletResponse response) {
         try {
             String fileId = request.getParameter("fileId");
+            LOG.error("====> 根据文件id下载文件===> " + fileId);
             // 文件下载路径
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
             fileStorage.downloadFile(serviceFile,response);
@@ -70,6 +71,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
     public void downloadForName(HttpServletRequest request, HttpServletResponse response) {
         try {
             String fileName = request.getParameter("fileName");
+            LOG.error("====> 根据文件名称下载文件===> " + fileName);
             // 文件下载路径
             String fileId = fileName.substring(0, fileName.indexOf("."));
             ServiceFile serviceFile = serviceFileService.selectById(fileId);

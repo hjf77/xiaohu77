@@ -13,6 +13,8 @@ package com.fhs.file.service;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.file.bean.ServiceFile;
 
+import java.util.Map;
+
 /**
  * 文件CRUD service
  * 本服务不对外开放 对外方法参见PubFileService
@@ -48,5 +50,12 @@ public interface ServiceFileService extends BaseService<ServiceFile>
      * @param serviceFile 文件对象
      * @return  文件路径
      */
-    public String getAllPath(ServiceFile serviceFile);
+     String getAllPath(ServiceFile serviceFile);
+
+    /**
+     * 修改文件id
+     * @param paramMap 需要包含newFileId和oldFileId
+     * @return
+     */
+    int updateFileId(Map<String,String> paramMap);
 }

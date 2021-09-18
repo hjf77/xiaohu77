@@ -1,9 +1,22 @@
 package com.fhs.ucenter.api;
 
-import com.beust.jcommander.ParameterException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.db.DataSource;
 import com.fhs.core.exception.ParamChecker;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.form.SysUserForm;
@@ -11,13 +24,6 @@ import com.fhs.ucenter.api.service.FeignSysUserApiService;
 import com.fhs.ucenter.api.vo.SysUserVo;
 import com.fhs.ucenter.bean.SysUser;
 import com.fhs.ucenter.service.SysUserService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Filename: SysUserApiServiceCloud.java
@@ -55,7 +61,7 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
             BeanUtils.copyProperties(sysUser,result);
             return HttpResult.success(result);
         }
-        throw new ParameterException("用户名不存在:" + userLoginName);
+        throw new ParamException("用户名不存在:" + userLoginName);
     }
 
 

@@ -12,7 +12,6 @@ import java.util.Set;
  * @since [产品/模块版本]
  */
 public interface RedisCacheService<E> {
-
     /**
      * 为缓存添加一个obejct
      *
@@ -51,7 +50,7 @@ public interface RedisCacheService<E> {
      * @param key
      * @return
      */
-    boolean existsStr(String key);
+    boolean existsStr(final String key);
 
     /**
      * 添加数组到缓存中
@@ -83,7 +82,7 @@ public interface RedisCacheService<E> {
      * @param key  key
      * @param list 需要添加的集合数据
      */
-    void addSet(String key, List<E> list);
+    void addList(String key, List<E> list);
 
     /**
      * 判断set中有无value 有true
@@ -159,6 +158,7 @@ public interface RedisCacheService<E> {
      */
     boolean expire(String key, int timeout);
 
+
     /**
      * 设置一个key在 timeout 秒后超时
      *
@@ -166,14 +166,6 @@ public interface RedisCacheService<E> {
      * @param timeout 超时时间  秒
      */
     boolean expireStr(final String key, final int timeout);
-
-    /**
-     * 获取key超时时间
-     *
-     * @param key key
-     * @return key的超时时间
-     */
-    Long getExpire(String key);
 
     /**
      * 从队列头插入值
@@ -244,4 +236,11 @@ public interface RedisCacheService<E> {
      * @param message
      */
     void convertAndSend(String channel, String message);
+
+    /**
+     * 模糊匹配key
+     *
+     * @Param: [key]
+     */
+    Set<String> getFuzzy(String key);
 }

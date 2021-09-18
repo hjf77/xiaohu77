@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,7 +30,7 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
     /**
      * redisTemplate
      */
-    @Autowired
+    @Resource(name = "redisTemplate")
     private RedisTemplate<String, E> redisTemplate;
 
     @Autowired
@@ -84,20 +83,10 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
     }
 
     @Override
-    public boolean existsStr(final String key) {
-        return strRedisTemplate.execute(new RedisCallback<Boolean>() {
-            public Boolean doInRedis(RedisConnection connection)
-                    throws DataAccessException {
-                return connection.exists(key.getBytes());
-            }
-        });
-    }
-
-    @Override
     public void addSet(String key, E[] objs) {
-        ListOperations<String, E> list = redisTemplate.opsForList();
+        SetOperations<String, E> set = redisTemplate.opsForSet();
         for (E obj : objs) {
-            list.leftPush(key, obj);
+            set.add(key, obj);
         }
     }
 
@@ -114,8 +103,11 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addSet(String key, List<E> objSet) {
-        this.addSet(key, (E[]) objSet.toArray());
+    public void addList(String key, List<E> objList) {
+        ListOperations<String, E> list = redisTemplate.opsForList();
+        for (E obj : objList) {
+            list.leftPush(key, obj);
+        }
     }
 
     @Override
@@ -143,6 +135,16 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
             }
         });
         return result;
+    }
+
+    @Override
+    public boolean existsStr(final String key) {
+        return strRedisTemplate.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                return connection.exists(key.getBytes());
+            }
+        });
     }
 
     @Override
@@ -217,12 +219,12 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
             public Long doInRedis(RedisConnection connection)
                     throws DataAccessException {
                 if (connection.expire(key.getBytes(), timeout)) {
-                    return (long) Constant.SUCCESS_CODE;
+                    return (long) Constant.HPROSE_SUCCESS_CODE;
                 }
                 ;
-                return (long) Constant.DEFEAT_CODE;
+                return (long) Constant.HPROSE_DEFEAT_CODE;
             }
-        }) == Constant.SUCCESS_CODE;
+        }) == Constant.HPROSE_SUCCESS_CODE;
     }
 
     @Override
@@ -232,17 +234,12 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
             public Long doInRedis(RedisConnection connection)
                     throws DataAccessException {
                 if (connection.expire(key.getBytes(), timeout)) {
-                    return (long) Constant.SUCCESS_CODE;
+                    return (long) Constant.HPROSE_SUCCESS_CODE;
                 }
                 ;
-                return (long) Constant.DEFEAT_CODE;
+                return (long) Constant.HPROSE_DEFEAT_CODE;
             }
-        }) == Constant.SUCCESS_CODE;
-    }
-
-    @Override
-    public Long getExpire(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        }) == Constant.HPROSE_SUCCESS_CODE;
     }
 
     /**
@@ -337,4 +334,16 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
         });
     }
 
+    @Override
+    public Set<String> getFuzzy(String matchKey) {
+        Set<String> keys = redisTemplate.execute((RedisCallback<Set<String>>) connection -> {
+            Set<String> keysTmp = new HashSet<>();
+            Cursor<byte[]> cursor = connection.scan(new ScanOptions.ScanOptionsBuilder().match("*" + matchKey + "*").count(1000).build());
+            while (cursor.hasNext()) {
+                keysTmp.add(new String(cursor.next()));
+            }
+            return keysTmp;
+        });
+        return keys;
+    }
 }

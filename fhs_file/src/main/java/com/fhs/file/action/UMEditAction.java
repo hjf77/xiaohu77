@@ -34,7 +34,7 @@ public class UMEditAction {
         if (upfile == null ) {
             throw new ParamException("文件不能为空");
         }
-        ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (upfile)).get (0);
+        ServiceFile file = fileServerBusiness.uploadFile (upfile,null);
         String result = "<script>window.name='{\"name\":\""+ file.getFileName() +"\", \"originalName\": \""+  file.getFileName() +"\", \"size\": "+
                 upfile.getSize()
                 +", \"state\": \"SUCCESS\", \"type\": \""+ file.getFileSuffix() +"\", \"url\": \"" + EConfig.getPathPropertiesValue("basePath")

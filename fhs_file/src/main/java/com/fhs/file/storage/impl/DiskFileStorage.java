@@ -61,7 +61,9 @@ public class DiskFileStorage<mian> implements FileStorage {
             throw new  ParamException("文件不存在");
         }
         String fileName = (null == token ? serviceFile.getFileId() : token) + serviceFile.getFileSuffix();
-        return new File(EConfig.getPathPropertiesValue("saveFilePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
+        String filePath = EConfig.getPathPropertiesValue("saveFilePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName;
+        LOG.error(serviceFile.getFileId() + "====> 文件下载路径===> " + filePath);
+        return new File(filePath);
     }
 
     @Override
