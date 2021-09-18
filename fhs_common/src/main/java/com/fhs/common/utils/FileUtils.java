@@ -130,7 +130,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         Pattern pattern = Pattern.compile(regex);
         Matcher match = pattern.matcher(fileName);
         if (match.matches()) {*/
-            return fileName + suffix;
+        return fileName + suffix;
       /*  }
         return "default" + suffix;*/
 

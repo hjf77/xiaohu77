@@ -4,6 +4,7 @@ import java.io.*;
 
 /**
  * 序列化反序列化工具类
+ *
  * @author jackwong
  * @date 2020-05-21 13:40:16
  */
@@ -52,6 +53,7 @@ public class SerializeUtil {
 
     /**
      * 序列化
+     *
      * @param data
      * @param filePath
      * @return
@@ -59,8 +61,8 @@ public class SerializeUtil {
     public static boolean serializeToFile(Object data, String filePath) throws Exception {
         //未测试  update by cyx
         File file = new File(filePath);
-        try ( FileOutputStream out = new FileOutputStream(file);
-              ObjectOutputStream oos = new ObjectOutputStream(out)) {
+        try (FileOutputStream out = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(out)) {
             if (!file.exists()) {
                 if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
@@ -77,14 +79,15 @@ public class SerializeUtil {
 
     /**
      * 序列化
+     *
      * @param filePath
      * @return
      */
     public static Object unSerializeFromFile(String filePath) throws Exception {
         //未测试  update by cyx
         File file = new File(filePath);
-        try(FileInputStream in = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(in)) {
+        try (FileInputStream in = new FileInputStream(file);
+             ObjectInputStream ois = new ObjectInputStream(in)) {
             if (!file.exists()) {
                 return null;
             }

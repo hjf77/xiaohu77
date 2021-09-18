@@ -282,7 +282,6 @@ public class SpringContextUtil implements ApplicationContextAware {
     }
 
 
-
     /**
      * 动态注解bean
      *
@@ -294,8 +293,8 @@ public class SpringContextUtil implements ApplicationContextAware {
         if (beanObj == null || name == null) {
             return false;
         }
-        ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext)applicationContext;
-        configurableApplicationContext.getBeanFactory().registerSingleton(name,beanObj);
+        ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) applicationContext;
+        configurableApplicationContext.getBeanFactory().registerSingleton(name, beanObj);
         return true;
     }
 

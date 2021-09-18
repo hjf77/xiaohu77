@@ -1,7 +1,6 @@
 package com.fhs.common.tree;
 
 /**
- *
  * <pre>
  * 描述：标识tree
  * 构建组：x7
@@ -14,18 +13,21 @@ package com.fhs.common.tree;
 public interface Treeable {
     /**
      * 获取parentid
+     *
      * @return
      */
     String getParentId();
 
     /**
      * 获取名称
+     *
      * @return
      */
     String getName();
 
     /**
      * 获取主键
+     *
      * @return
      */
     String getId();

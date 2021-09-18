@@ -222,6 +222,7 @@ public class JsonUtils {
 
     /**
      * 把json字符串转换为list
+     *
      * @param jsonStr
      * @return
      */
@@ -375,17 +376,17 @@ public class JsonUtils {
 
     /**
      * ["1","2"] 转换为 1,2
+     *
      * @param arrayJson
      * @return
      */
-    public static String parseArray(String arrayJson){
-        if(arrayJson == null){
+    public static String parseArray(String arrayJson) {
+        if (arrayJson == null) {
             return null;
         }
         JSONArray jsonArray = JSONArray.parseArray(arrayJson);
-        return StringUtil.join(jsonArray,",");
+        return StringUtil.join(jsonArray, ",");
     }
-
 
 
 }

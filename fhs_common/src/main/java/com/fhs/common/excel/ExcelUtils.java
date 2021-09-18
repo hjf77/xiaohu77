@@ -594,8 +594,9 @@ public class ExcelUtils {
 
     /**
      * 创建样式
-     * @param bold  是否需要加粗
-     * @param border 是否需要边框
+     *
+     * @param bold         是否需要加粗
+     * @param border       是否需要边框
      * @param xssfWorkbook
      * @return
      */
@@ -642,10 +643,10 @@ public class ExcelUtils {
             int startRowNum = titleArray.length;
             for (int i = 0; i < startRowNum; i++) {
                 cell = row.createCell(i);
-                cell.setCellStyle(createStyle(true, true,  sheet.getWorkbook()));
+                cell.setCellStyle(createStyle(true, true, sheet.getWorkbook()));
                 cellData = titleArray[i];
                 cellData.toString().length();
-                sheet.setColumnWidth(i,(cellData.toString().length()+20)*256);
+                sheet.setColumnWidth(i, (cellData.toString().length() + 20) * 256);
 
                 cell.setCellValue(ConverterUtils.toString(cellData));
 
@@ -654,12 +655,12 @@ public class ExcelUtils {
 
 
         for (int i = 0; i < dataArray.length; i++) {
-            if(i<1){
+            if (i < 1) {
                 row = sheet.createRow(i + titleRow);
                 rowDataArray = dataArray[i];
                 for (int j = 0; j < rowDataArray.length; j++) {
                     cell = row.createCell(j);
-                    cell.setCellStyle(createStyle(false, true,  sheet.getWorkbook()));
+                    cell.setCellStyle(createStyle(false, true, sheet.getWorkbook()));
                     cellData = rowDataArray[j];
                     if (cellData instanceof String) {
                         cell.setCellValue(ConverterUtils.toString(cellData));
@@ -671,12 +672,12 @@ public class ExcelUtils {
                         cell.setCellValue((Date) cellData);
                     }
                 }
-            }else {
+            } else {
                 row = sheet.createRow(i + titleRow);
                 rowDataArray = dataArray[i];
                 for (int j = 0; j < rowDataArray.length; j++) {
                     cell = row.createCell(j);
-                    cell.setCellStyle(createStyle(false, true,  sheet.getWorkbook()));
+                    cell.setCellStyle(createStyle(false, true, sheet.getWorkbook()));
                     cellData = rowDataArray[j];
                     if (cellData instanceof String) {
                         cell.setCellValue(ConverterUtils.toString(cellData));
@@ -693,7 +694,6 @@ public class ExcelUtils {
 
         }
     }
-
 
 
     /**

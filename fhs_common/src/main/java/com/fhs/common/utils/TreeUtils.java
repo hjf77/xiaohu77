@@ -14,18 +14,18 @@ import java.util.stream.Collectors;
  */
 public class TreeUtils {
 
-    public static List<TreeNode<Treeable>> formartTree(List datas,String rootId){
-        if(datas.isEmpty()){
+    public static List<TreeNode<Treeable>> formartTree(List datas, String rootId) {
+        if (datas.isEmpty()) {
             return new ArrayList<>();
         }
-        if(!(datas.get(0) instanceof Treeable)){
+        if (!(datas.get(0) instanceof Treeable)) {
             throw new RuntimeException("PO请实现Treeable接口");
         }
 
         List<TreeNode<Treeable>> result = new ArrayList<>();
-        Map<String,TreeNode<Treeable>> nodeMap = new LinkedHashMap<>();
+        Map<String, TreeNode<Treeable>> nodeMap = new LinkedHashMap<>();
         TreeNode<Treeable> tempNode = null;
-        List  tempDatas = datas;
+        List tempDatas = datas;
         List<Treeable> treeDatas = tempDatas;
         for (Treeable tree : treeDatas) {
             tempNode = new TreeNode();
@@ -33,30 +33,32 @@ public class TreeUtils {
             tempNode.setName(tree.getName());
             tempNode.setParentId(tree.getParentId());
             tempNode.setData(tree);
-            nodeMap.put(tempNode.getId(),tempNode);
+            nodeMap.put(tempNode.getId(), tempNode);
         }
         for (String id : nodeMap.keySet()) {
             tempNode = nodeMap.get(id);
-            if(nodeMap.containsKey(tempNode.getParentId())){
+            if (nodeMap.containsKey(tempNode.getParentId())) {
                 nodeMap.get(tempNode.getParentId()).getChildren().add(tempNode);
-            }else{
+            } else {
                 result.add(tempNode);
             }
         }
-        if(rootId!=null){
-            return result.stream().filter(node->{
+        if (rootId != null) {
+            return result.stream().filter(node -> {
                 return node.getId().equals(rootId);
             }).collect(Collectors.toList());
         }
         return result;
     }
+
     /**
      * 格式化tree数据
+     *
      * @param datas
      * @return
      */
-    public static List<TreeNode<Treeable>> formartTree(List datas){
-        return formartTree( datas,null);
+    public static List<TreeNode<Treeable>> formartTree(List datas) {
+        return formartTree(datas, null);
     }
 
 }

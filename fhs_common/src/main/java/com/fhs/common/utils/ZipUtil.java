@@ -57,8 +57,8 @@ public final class ZipUtil {
         for (String filePath : filePaths) {
             tempFile = new File(filePath);
             byte[] buffer = new byte[1024 * 10];
-            try(FileInputStream fis = new FileInputStream(tempFile);
-                BufferedInputStream bis = new BufferedInputStream(fis, buffer.length)){
+            try (FileInputStream fis = new FileInputStream(tempFile);
+                 BufferedInputStream bis = new BufferedInputStream(fis, buffer.length)) {
                 int read = 0;
                 zos.putNextEntry(new ZipEntry(tempFile.getName()));
                 while ((read = bis.read(buffer, 0, buffer.length)) != -1) {
@@ -104,7 +104,7 @@ public final class ZipUtil {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } finally {
-                IOUtil.closeQuietly(zis,bos);
+                IOUtil.closeQuietly(zis, bos);
 
             }
         }
