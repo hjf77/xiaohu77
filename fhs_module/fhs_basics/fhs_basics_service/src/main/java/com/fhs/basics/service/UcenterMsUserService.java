@@ -27,6 +27,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
 
     /**
      * 登陆
+     *
      * @param adminUser
      * @return
      */
@@ -110,7 +111,6 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     JSONArray buildMenuJson(UcenterMsUserDO adminUser);
-
 
 
     /**
@@ -199,7 +199,8 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
 
     /**
      * 获取vue用的菜单
-     * @param user  用户
+     *
+     * @param user     用户
      * @param menuType 菜单类型
      * @return vue路由菜单
      */
@@ -248,16 +249,18 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
 
     /**
      * 根据用户组织id
-     * @param companyId 公司id
-     * @param namespace 命名空间
+     *
+     * @param companyId           公司id
+     * @param namespace           命名空间
      * @param permissonMethodCode 权限编码
      * @return
      */
-    List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId,String namespace,String permissonMethodCode);
+    List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode);
 
     /**
      * 获取用户和单位tree
-     * @param wrapper  用来过滤用户的
+     *
+     * @param wrapper 用来过滤用户的
      * @return
      */
     List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper);

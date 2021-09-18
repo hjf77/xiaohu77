@@ -53,7 +53,7 @@ import java.util.*;
 @RestController
 @AutowiredFhs
 @RequestMapping("/ms/myWorks")
-@LogNamespace(namespace ="myWorks",module = "我的工作")
+@LogNamespace(namespace = "myWorks", module = "我的工作")
 public class MyWorksController extends BaseController {
 
     @Autowired
@@ -301,17 +301,18 @@ public class MyWorksController extends BaseController {
 
     /**
      * 根据taskid和instanceId获取自定义按钮
-     * @param taskId 任务id
+     *
+     * @param taskId     任务id
      * @param instanceId 实例id
      * @return
      */
     @RequestMapping("/getFlowTaskButtons")
-    public HttpResult<List<FlowJbmpXmlButtonVO>> getFlowTaskButtons(String taskId,String instanceId){
+    public HttpResult<List<FlowJbmpXmlButtonVO>> getFlowTaskButtons(String taskId, String instanceId) {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
         ParamChecker.isNotNullOrEmpty(instanceId, "实例id不能为空");
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         FlowInstanceVO flowInstanceVO = instanceService.findBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
-        List<FlowJbmpXmlButtonVO>  buttons = flowJbmpXmlButtonService.findForList(FlowJbmpXmlButtonDO.builder().xmlId(flowInstanceVO.getXmlId()).taskName(task.getName()).build());
+        List<FlowJbmpXmlButtonVO> buttons = flowJbmpXmlButtonService.findForList(FlowJbmpXmlButtonDO.builder().xmlId(flowInstanceVO.getXmlId()).taskName(task.getName()).build());
         return HttpResult.success(buttons);
     }
 

@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 内存的cache实现。
+ *
  * @author user
  * @date 2020-05-18 13:44:12
  */
@@ -28,7 +29,7 @@ public class MemoryCache<T> implements ICache<T> {
 
     @Override
     public void delByKey(String key) {
-        if (key == null){
+        if (key == null) {
             return;
         }
         map.remove(key);

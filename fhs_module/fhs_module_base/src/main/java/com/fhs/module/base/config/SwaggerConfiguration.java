@@ -38,7 +38,7 @@ import java.util.*;
 //@EnableSwagger2
 @Configuration
 @ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
-public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware{
+public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware {
     /**
      * 基础包
      */
@@ -67,7 +67,6 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     private static final String GROUP_DEFAULT = "group_default";
 
 
-
     public SwaggerConfiguration() {
     }
 
@@ -93,7 +92,6 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     }
 
 
-
     @Bean
     public Docket defaultApi() {
         return (new Docket(DocumentationType.SWAGGER_2)).groupName("默认接口").apiInfo(this.apiInfo()).useDefaultResponseMessages(false).forCodeGeneration(false).select().apis(this.getPredicateWithGroup("group_default")).paths(PathSelectors.any()).build().securityContexts(Lists.newArrayList(new SecurityContext[]{this.securityContext()})).securitySchemes(Lists.newArrayList(new SecurityScheme[]{this.apiKey()}));
@@ -104,10 +102,10 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
         return new Predicate<RequestHandler>() {
             public boolean apply(RequestHandler input) {
                 Optional<ApiGroup> ApiGroup = input.findControllerAnnotation(ApiGroup.class);
-                if(!ApiGroup.isPresent() && GROUP_DEFAULT.equals(group)){
+                if (!ApiGroup.isPresent() && GROUP_DEFAULT.equals(group)) {
                     return true;
                 }
-                return ApiGroup.isPresent() && Arrays.asList(((ApiGroup)ApiGroup.get()).group()).contains(group);
+                return ApiGroup.isPresent() && Arrays.asList(((ApiGroup) ApiGroup.get()).group()).contains(group);
             }
         };
     }
@@ -135,8 +133,6 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
         this.serviceName = this.environment.getProperty("fhs.swagger.service.name");
         this.description = this.environment.getProperty("fhs.swagger.service.description");
     }
-
-
 
 
 }

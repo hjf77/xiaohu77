@@ -9,13 +9,14 @@ import lombok.*;
 
 /**
  * 区域
+ *
  * @author user
  * @date 2020-05-18 15:27:36
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value ="ServiceAreaVO",description ="ServiceArea参数")
+@ApiModel(value = "ServiceAreaVO", description = "ServiceArea参数")
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class ServiceAreaVO extends ServiceAreaDO implements VO {
 

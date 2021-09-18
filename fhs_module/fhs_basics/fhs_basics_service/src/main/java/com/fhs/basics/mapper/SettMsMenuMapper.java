@@ -100,6 +100,7 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO> {
 
     /**
      * 根据id 查询菜单url
+     *
      * @param parmMap
      * @return
      */
@@ -108,6 +109,7 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO> {
 
     /**
      * 查询菜单是否配置在主页显示
+     *
      * @param paramMap
      * @return
      */
@@ -115,12 +117,14 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO> {
 
     /**
      * 查询id,name,namespace列表
+     *
      * @return
      */
     List<SettMsMenuDO> findIdAndNameAndNamespaceList();
 
     /**
      * 获取菜单权限按钮
+     *
      * @return
      */
     List<TreeMenuPermissionVO> getMenuPermissionTree();

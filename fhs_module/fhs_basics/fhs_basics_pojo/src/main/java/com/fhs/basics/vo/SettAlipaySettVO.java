@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * 支付宝设置vo
+ *
  * @author user
  * @date 2020-05-18 15:32:23
  */
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettAlipaySettVO",description ="SettAlipaySett参数")
+@ApiModel(value = "SettAlipaySettVO", description = "SettAlipaySett参数")
 public class SettAlipaySettVO extends SettAlipaySettDO implements VO {
 
 }

@@ -17,6 +17,7 @@ import java.util.Set;
 
 /**
  * 系统用户mapper
+ *
  * @author jianbo.qin
  * @date 2020-05-18 16:23:28
  */
@@ -289,11 +290,12 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO> {
 
     /**
      * 根据用户组织id
-     * @param companyId 公司id
-     * @param namespace 命名空间
+     *
+     * @param companyId           公司id
+     * @param namespace           命名空间
      * @param permissonMethodCode 权限编码
      * @return
      */
     @NotMultiTenancyCheck
-    List<UcenterMsUserDO> getUserByOrgAndPermission(@Param("companyId") String companyId,@Param("namespace") String namespace,@Param("permissonMethodCode") String permissonMethodCode);
+    List<UcenterMsUserDO> getUserByOrgAndPermission(@Param("companyId") String companyId, @Param("namespace") String namespace, @Param("permissonMethodCode") String permissonMethodCode);
 }

@@ -31,13 +31,15 @@ public class LoggerDisruptorQueue {
     private int bufferSize = 2 * 1024;
 
     // Construct the Disruptor
-    private Disruptor<LoggerEventDTO> disruptor = new Disruptor<>(factory, bufferSize, executor);;
+    private Disruptor<LoggerEventDTO> disruptor = new Disruptor<>(factory, bufferSize, executor);
+    ;
 
-    private Disruptor<FileLoggerEventDTO> fileLoggerEventDisruptor = new Disruptor<>(fileLoggerEventFactory, bufferSize, executor);;
+    private Disruptor<FileLoggerEventDTO> fileLoggerEventDisruptor = new Disruptor<>(fileLoggerEventFactory, bufferSize, executor);
+    ;
 
-    private static  RingBuffer<LoggerEventDTO> ringBuffer;
+    private static RingBuffer<LoggerEventDTO> ringBuffer;
 
-    private static  RingBuffer<FileLoggerEventDTO> fileLoggerEventRingBuffer;
+    private static RingBuffer<FileLoggerEventDTO> fileLoggerEventRingBuffer;
 
     @Autowired
     LoggerDisruptorQueue(LoggerEventHandler eventHandler) {
@@ -58,7 +60,6 @@ public class LoggerDisruptorQueue {
             ringBuffer.publish(sequence);
         }
     }
-
 
 
 }

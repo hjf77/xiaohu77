@@ -159,10 +159,10 @@ public class OperatorLogAop {
      */
     private void addLog(LogAddOperatorLogVO log) {
         singleThreadExecutor.submit(() -> {
-            try{
+            try {
                 bisLoggerApiService.addLog(log);
-            }catch (Exception e){
-                LOGGER.error("日志插入错误",e);
+            } catch (Exception e) {
+                LOGGER.error("日志插入错误", e);
             }
 
         });

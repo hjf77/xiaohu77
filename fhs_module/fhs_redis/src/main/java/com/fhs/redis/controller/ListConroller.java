@@ -18,35 +18,35 @@ import com.fhs.redis.util.RedisApplication;
 @Controller
 @RequestMapping("/list")
 public class ListConroller extends RedisApplication implements Constant {
-	
-	@Autowired
-	private ListService listService;
-	
-	@RequestMapping(value="/delListValue", method=RequestMethod.POST)
-	@ResponseBody
-	public Object delListValue(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam String serverName, 
-			@RequestParam int dbIndex,
-			@RequestParam String key,
-			@RequestParam String dataType) {
-		
-		listService.delListValue(serverName, dbIndex, key);
-		
-		return WorkcenterResponseBodyJson.custom().build();
-	}
-	
-	@RequestMapping(value="/updateListValue", method=RequestMethod.POST)
-	@ResponseBody
-	public Object updateListValue(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam String serverName, 
-			@RequestParam int dbIndex,
-			@RequestParam String key,
-			@RequestParam String dataType,
-			@RequestParam String value) {
-		
-		listService.updateListValue(serverName, dbIndex, key, value);
-		
-		return WorkcenterResponseBodyJson.custom().build();
-	}
-	
+
+    @Autowired
+    private ListService listService;
+
+    @RequestMapping(value = "/delListValue", method = RequestMethod.POST)
+    @ResponseBody
+    public Object delListValue(HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam String serverName,
+                               @RequestParam int dbIndex,
+                               @RequestParam String key,
+                               @RequestParam String dataType) {
+
+        listService.delListValue(serverName, dbIndex, key);
+
+        return WorkcenterResponseBodyJson.custom().build();
+    }
+
+    @RequestMapping(value = "/updateListValue", method = RequestMethod.POST)
+    @ResponseBody
+    public Object updateListValue(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam String serverName,
+                                  @RequestParam int dbIndex,
+                                  @RequestParam String key,
+                                  @RequestParam String dataType,
+                                  @RequestParam String value) {
+
+        listService.updateListValue(serverName, dbIndex, key, value);
+
+        return WorkcenterResponseBodyJson.custom().build();
+    }
+
 }

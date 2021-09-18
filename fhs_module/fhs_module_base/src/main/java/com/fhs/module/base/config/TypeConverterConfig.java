@@ -9,6 +9,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,14 +19,15 @@ public class TypeConverterConfig {
 
     @Autowired
     private RequestMappingHandlerAdapter handlerAdapter;
+
     /**
      * 增加字符串转日期的功能
      */
     @PostConstruct
     public void initEditableAvlidation() {
-        ConfigurableWebBindingInitializer initializer = (ConfigurableWebBindingInitializer)handlerAdapter.getWebBindingInitializer();
-        if(initializer.getConversionService()!=null) {
-            GenericConversionService genericConversionService = (GenericConversionService)initializer.getConversionService();
+        ConfigurableWebBindingInitializer initializer = (ConfigurableWebBindingInitializer) handlerAdapter.getWebBindingInitializer();
+        if (initializer.getConversionService() != null) {
+            GenericConversionService genericConversionService = (GenericConversionService) initializer.getConversionService();
             genericConversionService.addConverter(new StringToDateConverter());
         }
     }
@@ -33,26 +35,27 @@ public class TypeConverterConfig {
     /**
      * 字符串日期转换器
      */
-    public static class StringToDateConverter  implements Converter<String,Date> {
+    public static class StringToDateConverter implements Converter<String, Date> {
         private static final String dateFormat = "yyyy-MM-dd HH:mm:ss";
         private static final String shortDateFormat = "yyyy-MM-dd";
+
         @Override
         public Date convert(String value) {
-            if(CheckUtils.isNullOrEmpty(value)) {
+            if (CheckUtils.isNullOrEmpty(value)) {
                 return null;
             }
             value = value.trim();
             try {
-                if(value.contains("-")) {
+                if (value.contains("-")) {
                     SimpleDateFormat formatter;
-                    if(value.contains(":")) {
+                    if (value.contains(":")) {
                         formatter = new SimpleDateFormat(dateFormat);
-                    }else {
+                    } else {
                         formatter = new SimpleDateFormat(shortDateFormat);
                     }
                     Date dtDate = formatter.parse(value);
                     return dtDate;
-                }else if(value.matches("^\\d+$")) {
+                } else if (value.matches("^\\d+$")) {
                     Long lDate = new Long(value);
                     return new Date(lDate);
                 }

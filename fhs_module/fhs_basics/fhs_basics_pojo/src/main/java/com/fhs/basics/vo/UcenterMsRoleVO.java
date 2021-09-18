@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * 角色vo
+ *
  * @author user
  * @date 2020-05-18 15:48:33
  */
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="UcenterMsRoleVO",description ="UcenterMsRole参数")
+@ApiModel(value = "UcenterMsRoleVO", description = "UcenterMsRole参数")
 public class UcenterMsRoleVO extends UcenterMsRoleDO implements VO {
 
 }

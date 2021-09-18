@@ -7,13 +7,14 @@ import lombok.*;
 
 /**
  * 字典vo
+ *
  * @author user
  * @date 2020-05-18 15:29:09
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value ="ServiceWordbookVO",description ="ServiceWordbook参数")
+@ApiModel(value = "ServiceWordbookVO", description = "ServiceWordbook参数")
 public class ServiceWordbookVO extends ServiceWordbookDO implements VO {
 
 }

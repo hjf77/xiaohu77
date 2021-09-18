@@ -10,14 +10,15 @@ import lombok.*;
 
 /**
  * 用户vo
+ *
  * @author user
  * @date 2020-05-18 15:49:03
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
-@ApiModel(value ="UcenterMsUserVO",description ="UcenterMsUserVO参数")
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value = "UcenterMsUserVO", description = "UcenterMsUserVO参数")
 public class UcenterMsUserVO extends UcenterMsUserDO implements VO {
 
     @ApiModelProperty("组织机构对应的公司id")

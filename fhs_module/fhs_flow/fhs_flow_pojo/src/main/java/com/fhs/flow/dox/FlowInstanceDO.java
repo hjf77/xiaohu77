@@ -60,7 +60,7 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
     @NotNull(message = "xml id字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "xml id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("xml_id")
-    @Trans(type = TransType.AUTO_TRANS,key = "flow_jbpm_xml")
+    @Trans(type = TransType.AUTO_TRANS, key = "flow_jbpm_xml")
     @ApiModelProperty("xml id")
     private String xmlId;
 
@@ -111,7 +111,7 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
      * 抄送
      */
     @Like
-    @Trans(type = TransType.AUTO_TRANS,key = Constant.USER_INFO + "#ccToUser")
+    @Trans(type = TransType.AUTO_TRANS, key = Constant.USER_INFO + "#ccToUser")
     @TableField("cc_to")
     @ApiModelProperty("抄送")
     private String ccTo;

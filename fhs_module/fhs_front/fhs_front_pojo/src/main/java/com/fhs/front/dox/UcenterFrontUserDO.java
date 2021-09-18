@@ -32,7 +32,7 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     private static final long serialVersionUID = 545604903343287075L;
 
     /**
-     *  用户id
+     * 用户id
      */
     @TableId(value = "user_id", type = IdType.UUID)
     @ApiModelProperty("用户id")

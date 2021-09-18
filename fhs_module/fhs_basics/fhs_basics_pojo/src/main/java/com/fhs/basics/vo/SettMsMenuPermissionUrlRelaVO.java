@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 菜单和URL对应关系
+ *
  * @author user
  * @date 2020-05-18 15:33:38
  */
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettMsMenuPermissionUrlRelaVO",description ="SettMsMenuPermissionUrlRela参数")
+@ApiModel(value = "SettMsMenuPermissionUrlRelaVO", description = "SettMsMenuPermissionUrlRela参数")
 public class SettMsMenuPermissionUrlRelaVO extends SettMsMenuPermissionUrlRelaDO implements VO {
 
 }

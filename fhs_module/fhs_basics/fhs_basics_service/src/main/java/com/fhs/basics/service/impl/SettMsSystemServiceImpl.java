@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Service
 @DataSource("base_business")
-@AutoTrans(namespace ="sett_ms_system", fields = "name")
+@AutoTrans(namespace = "sett_ms_system", fields = "name")
 public class SettMsSystemServiceImpl extends BaseServiceImpl<SettMsSystemVO, SettMsSystemDO> implements SettMsSystemService {
 
     @Autowired

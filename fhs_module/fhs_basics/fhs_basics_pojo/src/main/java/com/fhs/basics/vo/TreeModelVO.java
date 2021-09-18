@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * easyui tree
+ *
  * @author admin
  * @date 2020-05-18 15:46:33
  */
@@ -21,9 +22,9 @@ public class TreeModelVO implements Serializable {
     /**
      * 节点ID
      */
-     private String id;
+    private String id;
 
-     /**
+    /**
      * 父节点ID
      */
     private String pid;

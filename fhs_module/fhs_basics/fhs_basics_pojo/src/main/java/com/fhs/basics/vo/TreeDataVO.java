@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 角色中的菜单树封装类
- * 
+ *
  * @author jackwong
  * @date 2020-05-18 15:40:33
  */

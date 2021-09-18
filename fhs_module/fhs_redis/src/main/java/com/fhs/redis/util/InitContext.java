@@ -20,57 +20,57 @@ import java.util.Properties;
 
 @Service
 @SuppressWarnings("rawtypes")
-public class InitContext extends RedisApplication implements Constant  {
+public class InitContext extends RedisApplication implements Constant {
 
-	private static Log log = LogFactory.getLog(InitContext.class);
+    private static Log log = LogFactory.getLog(InitContext.class);
 
-	@Autowired
-	private RedisConfigs redisConfigs;
-
-
-	@Autowired
-	private Environment env;
-
-	@Autowired
-	private RedisConnectionFactory factory;
-
-	@PostConstruct
-	public void initRedisServers() {
+    @Autowired
+    private RedisConfigs redisConfigs;
 
 
-		String currentServerName = "";
-		try {
+    @Autowired
+    private Environment env;
 
-			Properties properties = redisConfigs.propertiesConfig();
-			String host = properties.getProperty(REDISPROPERTIES_HOST_PROFIXKEY);
-			String name = properties.getProperty(REDISPROPERTIES_NAME_PROFIXKEY);
-			Integer port = Integer.valueOf(properties.getProperty(REDISPROPERTIES_PORT_PROFIXKEY));
-			String possword = properties.getProperty(REDISPROPERTIES_CIPHER_PROFIXKEY);
-			currentServerName = host;
-			if (StringUtil.isEmpty(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY))){
-				DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY,0);
-			}else {
-				DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY,Integer.valueOf(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY)));
-			}
-			//redisTemplate反序列化报错、
+    @Autowired
+    private RedisConnectionFactory factory;
+
+    @PostConstruct
+    public void initRedisServers() {
+
+
+        String currentServerName = "";
+        try {
+
+            Properties properties = redisConfigs.propertiesConfig();
+            String host = properties.getProperty(REDISPROPERTIES_HOST_PROFIXKEY);
+            String name = properties.getProperty(REDISPROPERTIES_NAME_PROFIXKEY);
+            Integer port = Integer.valueOf(properties.getProperty(REDISPROPERTIES_PORT_PROFIXKEY));
+            String possword = properties.getProperty(REDISPROPERTIES_CIPHER_PROFIXKEY);
+            currentServerName = host;
+            if (StringUtil.isEmpty(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY))) {
+                DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY, 0);
+            } else {
+                DEFAULT_DBINDEX.put(REDISPROPERTIES_DBINDEX_PROFIXKEY, Integer.valueOf(properties.getProperty(REDISPROPERTIES_DBINDEX_PROFIXKEY)));
+            }
+            //redisTemplate反序列化报错、
             RedisTemplate redisTemplate = new RedisTemplate();
             redisTemplate.setConnectionFactory(factory);
             //定义key的序列化方式
             StringRedisSerializer keySerializer = new StringRedisSerializer();
             redisTemplate.setValueSerializer(keySerializer);
             redisTemplate.setKeySerializer(keySerializer);
-			redisTemplate.setHashKeySerializer(keySerializer);
-			redisTemplate.setHashValueSerializer(keySerializer);
+            redisTemplate.setHashKeySerializer(keySerializer);
+            redisTemplate.setHashValueSerializer(keySerializer);
             redisTemplate.afterPropertiesSet();
-			createRedisConnection(name, host, port, possword,redisTemplate);
-			//runUpdateLimit();
-		} catch (NumberFormatException e) {
-			log.error("initRedisServers: " + currentServerName+" occur NumberFormatException :" + e.getMessage());
-			throw new RedisInitException(e);
-		} catch (Throwable e1) {
-			log.error("initRedisServers: " + currentServerName+" occur Throwable :" + e1.getMessage());
-			throw new RedisInitException(currentServerName + " init failed", e1);
-		}
-	}
-	
+            createRedisConnection(name, host, port, possword, redisTemplate);
+            //runUpdateLimit();
+        } catch (NumberFormatException e) {
+            log.error("initRedisServers: " + currentServerName + " occur NumberFormatException :" + e.getMessage());
+            throw new RedisInitException(e);
+        } catch (Throwable e1) {
+            log.error("initRedisServers: " + currentServerName + " occur Throwable :" + e1.getMessage());
+            throw new RedisInitException(currentServerName + " init failed", e1);
+        }
+    }
+
 }

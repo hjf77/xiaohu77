@@ -11,7 +11,7 @@ public class MyabtisPlusPluginsConfig {
      */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor   paginationInterceptor = new PaginationInterceptor  ();
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         return paginationInterceptor;
     }
 }

@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * 前端用户绑定 openidvo
+ *
  * @author user
  * @since 2019-05-18 11:49:21
  */
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="UcenterFrontUserBindVO",description ="UcenterFrontUserBind参数")
+@ApiModel(value = "UcenterFrontUserBindVO", description = "UcenterFrontUserBind参数")
 public class UcenterFrontUserBindVO extends UcenterFrontUserBindDO implements VO {
 
 }

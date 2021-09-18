@@ -11,35 +11,30 @@ import java.io.IOException;
 
 /**
  * 全局路径filter
- * 
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
-@WebFilter(urlPatterns = "/*",filterName = "SimpleCORSFilter")
-public class SimpleCORSFilter implements Filter
-{
+@WebFilter(urlPatterns = "/*", filterName = "SimpleCORSFilter")
+public class SimpleCORSFilter implements Filter {
 
     /**
      * Default constructor.
      */
-    public SimpleCORSFilter()
-    {
+    public SimpleCORSFilter() {
         // TODO Auto-generated constructor stub
     }
-    
+
     /**
      * @see Filter#destroy()
      */
     @Override
-    public void destroy()
-    {
+    public void destroy() {
         // TODO Auto-generated method stub
     }
-    
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse rep, FilterChain filterChain)
-        throws IOException, ServletException
-    {
+            throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) rep;
 
@@ -50,18 +45,17 @@ public class SimpleCORSFilter implements Filter
                 "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "36000");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        response.setHeader("Access-Control-Allow-Headers","X_Requested_With,jackToken");
+        response.setHeader("Access-Control-Allow-Headers", "X_Requested_With,jackToken");
 
         filterChain.doFilter(req, rep);
     }
-    
+
     /**
      * @see Filter#init(FilterConfig)
      */
     @Override
     public void init(FilterConfig fConfig)
-        throws ServletException
-    {
+            throws ServletException {
 
     }
 }

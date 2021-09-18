@@ -57,7 +57,7 @@ public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     private String authOpenid;
 
     /**
-     *0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app
+     * 0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app
      */
     @NotNull(message = "0微信公众号 1 小程序 2 微信APP 3 qq app 4 微博app字段不可为null", groups = {Update.class, Delete.class})
     @TableField("auth_openId_type")

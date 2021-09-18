@@ -16,6 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 放到redis中，解决分布式部署的时候冲突的问题
+ *
  * @author user
  * @since 2019-05-18 11:52:21
  */

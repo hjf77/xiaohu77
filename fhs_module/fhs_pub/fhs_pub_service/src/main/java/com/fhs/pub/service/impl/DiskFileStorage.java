@@ -39,7 +39,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void uploadFile(PubFileDO serviceFile, MultipartFile fileData) {
-        File file = getFile( serviceFile, null);
+        File file = getFile(serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(fileData.getInputStream(), file);
             serviceFile.setFileSize(file.length());
@@ -50,7 +50,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void uploadFile(PubFileDO serviceFile, File fileData) {
-        File file = getFile( serviceFile, null);
+        File file = getFile(serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(new FileInputStream(fileData), file);
             serviceFile.setFileSize(file.length());
@@ -61,7 +61,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void uploadFileByToken(byte[] bytes, String token, PubFileDO serviceFile) {
-        File file = getFile( serviceFile, token);
+        File file = getFile(serviceFile, token);
         try (FileOutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
         } catch (IOException e) {
@@ -71,7 +71,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void downloadFile(PubFileDO serviceFile, HttpServletResponse response) {
-        File file = getFile( serviceFile, null);
+        File file = getFile(serviceFile, null);
         if (file.exists()) {
             FileUtils.download(file, response, serviceFile.getFileName());
             return;
@@ -81,7 +81,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void downloadFileByToken(String token, PubFileDO serviceFile, HttpServletResponse response) {
-        File file = getFile( serviceFile, token);
+        File file = getFile(serviceFile, token);
         if (file.exists()) {
             FileUtils.download(file, response, file.getName());
         }
@@ -89,11 +89,11 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public boolean checkFileIsExist(String token, PubFileDO serviceFile) {
-        return getFile( serviceFile,  token).exists();
+        return getFile(serviceFile, token).exists();
     }
 
     @Override
     public InputStream getFileInputStream(PubFileDO serviceFile) throws FileNotFoundException {
-        return new FileInputStream(getFile( serviceFile,  null));
+        return new FileInputStream(getFile(serviceFile, null));
     }
 }

@@ -85,7 +85,6 @@ public class MsLoginController extends BaseController {
     private RedisCacheService redisCacheService;
 
 
-
     /**
      * 后台用户服务
      */
@@ -223,7 +222,7 @@ public class MsLoginController extends BaseController {
     @ApiOperation("登录 for VUE")
     public HttpResult<Map<String, String>> vueLogin(UcenterMsUserDO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
         checkUserNameIsLock(sysUser.getUserLoginName());
-        if(isVerification){
+        if (isVerification) {
             String identifyCode = request.getParameter("identifyCode");
             Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
             if (null == sessionIdentify) {
@@ -281,7 +280,7 @@ public class MsLoginController extends BaseController {
         } else {
             List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(user.getUserId());
             List<String> collect = roleList.stream().map(UcenterMsRoleVO::getRoleName).collect(Collectors.toList());
-            String roles = StringUtil.join(roleList.stream().map(UcenterMsRoleVO::getRoleId).collect(Collectors.toList()),",");
+            String roles = StringUtil.join(roleList.stream().map(UcenterMsRoleVO::getRoleId).collect(Collectors.toList()), ",");
             resultMap.put("roles", collect);
             resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(roles));
         }
@@ -352,7 +351,7 @@ public class MsLoginController extends BaseController {
 
     @GetMapping("/logoutForVue")
     @ApiOperation("注销登出 for vue")
-    public HttpResult<String> logoutForVue(String token){
+    public HttpResult<String> logoutForVue(String token) {
         redisCacheService.remove("shiro:" + token);
         redisCacheService.remove(USER_KEY + token);
         return HttpResult.success("登出成功");
@@ -372,8 +371,8 @@ public class MsLoginController extends BaseController {
         request.getSession().removeAttribute(Constant.SESSION_USER);
         SecurityUtils.getSubject().logout();
         //如果登录地址已经是http开头的则直接302 如果不是则拼接上basepath
-        if(shrioLoginUrl.contains("http")){
-            response.sendRedirect( shrioLoginUrl);
+        if (shrioLoginUrl.contains("http")) {
+            response.sendRedirect(shrioLoginUrl);
             return;
         }
         response.sendRedirect(EConfig.getPathPropertiesValue("basePath") + shrioLoginUrl);

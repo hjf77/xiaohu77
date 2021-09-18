@@ -107,7 +107,7 @@ public class ServiceAreaDO extends BaseDO<ServiceAreaDO> {
     @Max(message = "{area的areaParentId字段大于int最大值}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{area的areaParentId字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
     @Column(name = "area_parent_id")
-    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.AREA +"#area")
+    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.AREA + "#area")
     @ApiModelProperty("上级主键")
     private Integer areaParentId;
 

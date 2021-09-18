@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 /**
  * 自定义subject
+ *
  * @author user
  * @since 2019-05-18 11:38:36
  */

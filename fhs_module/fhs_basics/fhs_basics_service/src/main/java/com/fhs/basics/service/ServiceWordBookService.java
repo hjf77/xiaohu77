@@ -37,6 +37,7 @@ public interface ServiceWordBookService extends BaseService<ServiceWordbookVO, S
     /**
      * 更新缓存数据
      * 主要取wordbookgroupcode 用来过滤需要的数据
+     *
      * @param bean
      */
     void initWordBookDataCache(ServiceWordbookDO bean);

@@ -55,7 +55,7 @@ public class LogHistoryDataDO extends BaseDO<LogHistoryDataDO> {
     private String pkey;
 
     /**
-     *  mainId
+     * mainId
      */
     @Length(message = "${column.comment}字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("main_id")

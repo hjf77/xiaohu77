@@ -13,7 +13,8 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- *  声明式事务
+ * 声明式事务
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.config
  * @ClassName: TxAdviceInterceptor
@@ -57,20 +58,16 @@ public class TransactionConfig {
 
     }
 
-    @Bean(name="myBeanNameAutoProxyCreator")
+    @Bean(name = "myBeanNameAutoProxyCreator")
     public MyBeanNameAutoProxyCreator txProxy() {
         MyBeanNameAutoProxyCreator creator = new MyBeanNameAutoProxyCreator();
-        if(CheckUtils.isNullOrEmpty(transcationInterceptor))
-        {
+        if (CheckUtils.isNullOrEmpty(transcationInterceptor)) {
             creator.setInterceptorNames(new String[]{"txAdvice"});
-        }
-        else
-        {
+        } else {
             String[] interceptorNamesSett = transcationInterceptor.split(",");
-            String [] interceptorNames = new String[interceptorNamesSett.length + 1];
+            String[] interceptorNames = new String[interceptorNamesSett.length + 1];
             int i = 0;
-            for(String name:interceptorNamesSett)
-            {
+            for (String name : interceptorNamesSett) {
                 interceptorNames[i++] = name;
             }
             interceptorNames[interceptorNamesSett.length] = "txAdvice";

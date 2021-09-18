@@ -19,6 +19,7 @@ public class FhsJsonSerializer extends JsonSerializer {
             throw new RuntimeException("Could not write JSON", e);
         }
     }
+
     public FhsJsonSerializer(List<JacksonModuleRegistrar> modules) {
         super(modules);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);

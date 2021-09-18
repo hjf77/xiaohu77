@@ -16,15 +16,15 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
  * @since 2020-04-23 14:27:40
  */
 @Service
-public class LogHistoryDataServiceImpl extends BaseServiceImpl<LogHistoryDataVO,LogHistoryDataDO> implements LogHistoryDataService {
+public class LogHistoryDataServiceImpl extends BaseServiceImpl<LogHistoryDataVO, LogHistoryDataDO> implements LogHistoryDataService {
 
     @Autowired
     private LogHistoryDataMapper logHistoryDataMapper;
 
     @Override
     public LogHistoryDataVO getLastVersionData(String pkey, String namespace) {
-        return super.selectOneMP(new LambdaQueryWrapper<LogHistoryDataDO>().eq(LogHistoryDataDO::getPkey,pkey)
-                .eq(LogHistoryDataDO::getNamespace,namespace).orderByDesc(LogHistoryDataDO::getVersion).last(" limit 0,1"));
+        return super.selectOneMP(new LambdaQueryWrapper<LogHistoryDataDO>().eq(LogHistoryDataDO::getPkey, pkey)
+                .eq(LogHistoryDataDO::getNamespace, namespace).orderByDesc(LogHistoryDataDO::getVersion).last(" limit 0,1"));
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 操作日志配置
+ *
  * @author user
  * @since 2019-05-18 11:33:36
  */
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class OperatorLogConfig {
 
     @Bean
-    public OperatorLogAop OperatorLogAop(){        return new OperatorLogAop();
+    public OperatorLogAop OperatorLogAop() {
+        return new OperatorLogAop();
     }
 }

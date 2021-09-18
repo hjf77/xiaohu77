@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("file")
-@AutoTrans(namespace = "file",fields = "fileName",useCache = true,useRedis = true)
+@AutoTrans(namespace = "file", fields = "fileName", useCache = true, useRedis = true)
 public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> implements PubFileService {
 
     /**
@@ -48,7 +48,7 @@ public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> im
      * @return
      */
     @Override
-    @Cached(name = "redis-file", key = "'file_fileId_' + #fileId",expire = 500)
+    @Cached(name = "redis-file", key = "'file_fileId_' + #fileId", expire = 500)
     public PubFileVO selectById(String fileId) {
         log.infoMsg("查询文件服务:{}", fileId);
         return super.selectById(fileId);
@@ -77,8 +77,7 @@ public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> im
      */
     @Override
     public String getAllPath(PubFileDO serviceFile) {
-        if(serviceFile==null)
-        {
+        if (serviceFile == null) {
             throw new ParamException("文件不存在");
         }
         String downFilePath = EConfig.getPathPropertiesValue("fileSavePath");

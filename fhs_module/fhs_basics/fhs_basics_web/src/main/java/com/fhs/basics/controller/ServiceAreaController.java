@@ -36,7 +36,7 @@ import java.util.Map;
 @RequestMapping("ms/area")
 @Api(tags = {"省市区信息"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = BaseTransConstant.AREA,module = "地区管理")
+@LogNamespace(namespace = BaseTransConstant.AREA, module = "地区管理")
 public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaDO> {
     @Autowired
     private ServiceAreaService areaService;
@@ -48,7 +48,7 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
     @RequiresPermissions("area:refreshRedisCache")
     @RequestMapping("/refreshRedisCache")
     @ResponseBody
-    public HttpResult<Boolean> refreshRedisCache(){
+    public HttpResult<Boolean> refreshRedisCache() {
         areaService.refreshRedisCache();
         return HttpResult.success(true);
     }

@@ -41,7 +41,7 @@ import java.util.Set;
 @RestController
 @Api(tags = {"流程实例"})
 @RequestMapping("/ms/flow_instance")
-@LogNamespace(namespace = "flow_instance",module = "流程实例管理")
+@LogNamespace(namespace = "flow_instance", module = "流程实例管理")
 public class FlowInstanceController extends ModelSuperController<FlowInstanceVO, FlowInstanceDO> {
 
     @Autowired
@@ -54,7 +54,7 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
      */
     @RequestMapping("isRevokeApply")
     @LogMethod
-    public HttpResult<Boolean> isRevokeApply(String instanceId, HttpServletRequest request,String taskId) throws Exception {
+    public HttpResult<Boolean> isRevokeApply(String instanceId, HttpServletRequest request, String taskId) throws Exception {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         FlowInstanceVO flowInstance = new FlowInstanceVO();
         flowInstance.setActivitiProcessInstanceId(instanceId);
@@ -62,7 +62,7 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
         String userId = super.getSessionuser().getUserId();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String taskDefinitionKey = null;
-        if (task!=null){
+        if (task != null) {
             taskDefinitionKey = task.getTaskDefinitionKey();
         }
         if (instance.getCreateUser().equals(userId) && instance.getFirstDefinitionKey().equals(taskDefinitionKey)) {
@@ -78,23 +78,24 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
     }
 
     /**
-     *  更新抄送人
+     * 更新抄送人
+     *
      * @param ccTo 抄送人
      * @return
      */
     @RequestMapping("updateCCTo")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "更新抄送人")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, desc = "更新抄送人")
     public HttpResult updateCCTo(String ccTo, String instanceId) {
         ParamChecker.isNotNull(ccTo, "抄送人不能为空");
         ParamChecker.isNotNull(instanceId, "instanceId不能为空");
         FlowInstanceVO instanceVO = this.flowInstanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
         ParamChecker.isNotNull(instanceVO, "instanceId无效");
-        if(CheckUtils.isNullOrEmpty(instanceVO.getCcTo())){
+        if (CheckUtils.isNullOrEmpty(instanceVO.getCcTo())) {
             instanceVO.setCcTo(ccTo);
-        }else{
+        } else {
             Set<String> ccToSet = new HashSet<>(Arrays.asList(instanceVO.getCcTo().split(",")));
             ccToSet.addAll(Arrays.asList(ccTo.split(",")));
-            instanceVO.setCcTo(StringUtil.getStrForIn(ccToSet,false));
+            instanceVO.setCcTo(StringUtil.getStrForIn(ccToSet, false));
         }
         flowInstanceService.updateJpa(instanceVO);
         return HttpResult.success();

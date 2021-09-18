@@ -18,8 +18,8 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value ="FlowJbmpXmlButtonVO",description ="FlowJbmpXmlButton参数")
+@ApiModel(value = "FlowJbmpXmlButtonVO", description = "FlowJbmpXmlButton参数")
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class FlowJbmpXmlButtonVO extends FlowJbmpXmlButtonDO implements VO {
-    
- }
+
+}

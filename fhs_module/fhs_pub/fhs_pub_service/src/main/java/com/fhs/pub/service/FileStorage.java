@@ -2,6 +2,7 @@ package com.fhs.pub.service;
 
 import com.fhs.pub.dox.PubFileDO;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +10,7 @@ import java.io.InputStream;
 
 /**
  * 文件储存
+ *
  * @author user
  * @since 2019-05-18 11:24:25
  */
@@ -16,6 +18,7 @@ public interface FileStorage {
 
     /**
      * 根据ServiceFile和MultipartFile做文件上传
+     *
      * @param serviceFile
      * @param fileData
      */
@@ -25,6 +28,7 @@ public interface FileStorage {
 
     /**
      * 根据ServiceFile和MultipartFile做文件上传
+     *
      * @param serviceFile
      * @param fileData
      */
@@ -33,6 +37,7 @@ public interface FileStorage {
 
     /**
      * 根据文件字节数组,serviceFile和文件名做文件上传
+     *
      * @param bytes
      * @param token
      * @param serviceFile
@@ -42,6 +47,7 @@ public interface FileStorage {
 
     /**
      * 根据serviceFile下载文件
+     *
      * @param serviceFile
      * @param response
      */
@@ -50,16 +56,18 @@ public interface FileStorage {
 
     /**
      * 根据文件名和serviceFile下载文件
+     *
      * @param token
      * @param response
-     * @param  serviceFile
+     * @param serviceFile
      */
 
     void downloadFileByToken(String token, PubFileDO serviceFile, HttpServletResponse response);
 
     /**
      * 判断一个文件是否存在
-     * @param token  token
+     *
+     * @param token       token
      * @param serviceFile file
      * @return true 存在 false不存在
      */
@@ -67,7 +75,8 @@ public interface FileStorage {
 
     /**
      * 获取一个inputstreqam
-     * @param serviceFile  文件
+     *
+     * @param serviceFile 文件
      * @return inputstream
      */
     InputStream getFileInputStream(PubFileDO serviceFile) throws FileNotFoundException;

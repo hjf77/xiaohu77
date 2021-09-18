@@ -12,28 +12,25 @@ import java.io.PrintWriter;
 
 /**
  * 百度编辑器
+ *
  * @author qiuhang
  * @since 2019-05-18 11:26:44
  */
 @Controller
 @RequestMapping("ueditor/ued")
-public class UEditorController
-{
+public class UEditorController {
 
     @GetMapping(value = "/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
         String rootPath = request.getSession().getServletContext().getRealPath("/");
-        try
-        {
+        try {
             String exec = new ActionEnter(request, rootPath).exec();
             PrintWriter writer = response.getWriter();
             writer.write(exec);
             writer.flush();
             writer.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

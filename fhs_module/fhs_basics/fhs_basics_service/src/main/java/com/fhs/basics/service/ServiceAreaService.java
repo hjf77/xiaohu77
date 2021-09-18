@@ -25,6 +25,7 @@ public interface ServiceAreaService extends BaseService<ServiceAreaVO, ServiceAr
     /**
      * 返回完整的省市区地址
      * map参数：provinceId，cityId，areaId
+     *
      * @param map
      * @return
      */

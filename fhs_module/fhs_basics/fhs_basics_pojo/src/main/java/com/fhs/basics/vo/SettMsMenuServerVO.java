@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 服务器vo
+ *
  * @author user
  * @date 2020-05-18 15:34:21
  */
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettMsMenuServerVO",description ="SettMsMenuServer参数")
+@ApiModel(value = "SettMsMenuServerVO", description = "SettMsMenuServer参数")
 public class SettMsMenuServerVO extends SettMsMenuServerDO implements VO {
 
 }

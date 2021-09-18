@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * um编辑器图片上传处理
+ *
  * @author jackwong
  * @since 2019-05-18 11:27:25
  */
@@ -29,16 +30,17 @@ public class TinyMCEController {
 
     /**
      * 上传图片
+     *
      * @param file 文件
      * @return 文件对象
      */
     @ResponseBody
     @PostMapping("upload")
     public Map<String, String> imageUp(MultipartFile file) {
-        if (file == null ) {
+        if (file == null) {
             throw new ParamException("文件不能为空");
         }
-        PubFileVO upFile = fileServerBusiness.uploadFileForList (Arrays.asList (file)).get (0);
+        PubFileVO upFile = fileServerBusiness.uploadFileForList(Arrays.asList(file)).get(0);
         Map<String, String> returnMap = new HashMap<>();
         returnMap.put("location", EConfig.getPathPropertiesValue("basePath") + "downLoad/file?fileId=" + upFile.getFileId());
         return returnMap;

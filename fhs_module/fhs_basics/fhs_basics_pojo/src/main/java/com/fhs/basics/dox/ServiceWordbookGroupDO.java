@@ -64,7 +64,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     @Like
     @NotNull(message = "groupName字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "groupName字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @TableField( "group_name")
+    @TableField("group_name")
     @ApiModelProperty("分组名称")
     private String groupName;
 
@@ -74,7 +74,7 @@ public class ServiceWordbookGroupDO extends BaseDO<ServiceWordbookGroupDO> {
     @Like
     @NotNull(message = "wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @TableField( "wordbook_group_code")
+    @TableField("wordbook_group_code")
     @ApiModelProperty("分组编码")
     @NotRepeatField
     private String wordbookGroupCode;

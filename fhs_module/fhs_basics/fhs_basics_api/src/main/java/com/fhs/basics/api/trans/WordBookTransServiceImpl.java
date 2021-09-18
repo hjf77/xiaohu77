@@ -63,7 +63,7 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
             //sex_0/1  男 女
             List<String> bookCodeList = new ArrayList<>();
             for (String bookCode : bookCodeArray) {
-                if (!StringUtil.isEmpty(bookCode)){
+                if (!StringUtil.isEmpty(bookCode)) {
                     bookCodeList.add(wordBookTransMap.get(key + "_" + bookCode));
                 }
             }
@@ -170,7 +170,7 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
         refreshWordBookCache(null);
     }
 
-    public Map<String, String> getUnWordBookTransMap(){
+    public Map<String, String> getUnWordBookTransMap() {
         return unWordBookTransMap;
     }
 }

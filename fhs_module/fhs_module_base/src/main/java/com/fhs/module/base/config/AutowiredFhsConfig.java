@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 自动注入配置
+ *
  * @author user
  * @since 2019-05-18 11:29:35
  */
@@ -17,9 +18,9 @@ public class AutowiredFhsConfig {
     private String basePackge;
 
     @Bean
-    public AutowiredFhsSetBeanHandle getAutowareYLMSetBeanEvent(){
+    public AutowiredFhsSetBeanHandle getAutowareYLMSetBeanEvent() {
         AutowiredFhsSetBeanHandle autowareYLMSetBeanEvent = new AutowiredFhsSetBeanHandle();
-        autowareYLMSetBeanEvent.setPackageNames (basePackge.split(";"));
-        return  autowareYLMSetBeanEvent;
+        autowareYLMSetBeanEvent.setPackageNames(basePackge.split(";"));
+        return autowareYLMSetBeanEvent;
     }
 }

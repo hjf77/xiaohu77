@@ -7,6 +7,7 @@ import java.util.Collections;
 
 /**
  * 字符串工具类
+ *
  * @author user
  * @date 2020-05-18 14:12:33
  */

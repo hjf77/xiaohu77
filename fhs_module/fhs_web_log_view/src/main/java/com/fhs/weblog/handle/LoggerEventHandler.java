@@ -19,6 +19,6 @@ public class LoggerEventHandler implements EventHandler<LoggerEventDTO> {
 
     @Override
     public void onEvent(LoggerEventDTO stringEvent, long l, boolean b) {
-        messagingTemplate.convertAndSend("/topic/pullLogger",stringEvent.getLog());
+        messagingTemplate.convertAndSend("/topic/pullLogger", stringEvent.getLog());
     }
 }

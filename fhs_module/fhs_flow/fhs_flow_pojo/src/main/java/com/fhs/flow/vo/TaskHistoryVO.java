@@ -23,7 +23,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TransTypes(types = {TransType.AUTO_TRANS,TransType.WORD_BOOK})
+@TransTypes(types = {TransType.AUTO_TRANS, TransType.WORD_BOOK})
 public class TaskHistoryVO implements VO {
 
     private String taskId;

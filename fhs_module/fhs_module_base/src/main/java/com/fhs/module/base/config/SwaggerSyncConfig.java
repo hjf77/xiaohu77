@@ -96,12 +96,12 @@ public class SwaggerSyncConfig implements InitializingBean {
         return new ObjectMapperConfigurer();
     }
 
-/**
-        *自定义json序列化，解决value是null的时候依旧序列化问题
+    /**
+     * 自定义json序列化，解决value是null的时候依旧序列化问题
      *
-    @param
-    moduleRegistrars
-     *@return*/
+     * @param moduleRegistrars
+     * @return
+     */
 
 
     @Bean
@@ -110,16 +110,14 @@ public class SwaggerSyncConfig implements InitializingBean {
     }
 
 
-
-
-/*
-*
-        *
-    当springboot 项目启动完成后，新启动一个线程去扫描swagger相关注解，生成配置对象
-     *
-    @param
-    applicationReadyEvent
-*/
+    /*
+    *
+            *
+        当springboot 项目启动完成后，新启动一个线程去扫描swagger相关注解，生成配置对象
+         *
+        @param
+        applicationReadyEvent
+    */
     @Override
     public void afterPropertiesSet() throws Exception {
         try {

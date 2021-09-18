@@ -11,14 +11,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * 流程任务日志vo
+ *
  * @author user
  * @since 2019-05-18 13:34:05
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
-@ApiModel(value ="FlowTaskHistoryVO",description ="FlowTaskHistory参数")
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value = "FlowTaskHistoryVO", description = "FlowTaskHistory参数")
 public class FlowTaskHistoryVO extends FlowTaskHistoryDO implements VO {
 
 }

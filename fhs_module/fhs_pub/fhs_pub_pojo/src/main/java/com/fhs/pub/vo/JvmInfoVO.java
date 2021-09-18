@@ -82,7 +82,7 @@ public class JvmInfoVO {
     public String getStartTime() {
         long time = ManagementFactory.getRuntimeMXBean().getStartTime();
         Date date = new Date(time);
-        return DateUtils.formartDate(date,DateUtils.DATETIME_PATTERN);
+        return DateUtils.formartDate(date, DateUtils.DATETIME_PATTERN);
     }
 
     /**
@@ -94,7 +94,7 @@ public class JvmInfoVO {
         Date date = new Date(time);
 
         //运行多少分钟
-        long runMS = (new Date().getTime() - date.getTime())/1000/60;
+        long runMS = (new Date().getTime() - date.getTime()) / 1000 / 60;
 
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;

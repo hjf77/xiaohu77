@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * 订单号生成服务
+ *
  * @author user
  * @since 2020-05-18 11:13:15
  */
@@ -16,6 +17,7 @@ public interface FeignOrderNumberApiService {
 
     /**
      * 获取一个订单号
+     *
      * @param type 订单号类型
      * @return 订单号
      */

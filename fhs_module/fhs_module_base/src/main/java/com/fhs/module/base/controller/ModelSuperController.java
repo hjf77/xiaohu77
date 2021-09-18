@@ -131,7 +131,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             QueryWrapper wrapper = filter.asWrapper(getDOClass());
             this.setExportCache(wrapper);
             //这里的是1是DO的index
-            return baseService.selectPageMP(filter.getPagerInfo(),wrapper);
+            return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
         } else {
             throw new NotPremissionException();
         }
@@ -156,7 +156,6 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             throw new NotPremissionException();
         }
     }
-
 
 
     /**
@@ -226,23 +225,23 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @GetMapping("advanceExportExcel")
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcelForVue(HttpServletResponse response,String fileName,String ids) throws IOException {
+    public void exportExcelForVue(HttpServletResponse response, String fileName, String ids) throws IOException {
         QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        wrapper = wrapper == null ? new QueryWrapper(): wrapper;
-        wrapper = (QueryWrapper)wrapper.clone();
-        if(CheckUtils.isNotEmpty(ids)){
-            wrapper.in("id",ids.split(","));
+        wrapper = wrapper == null ? new QueryWrapper() : wrapper;
+        wrapper = (QueryWrapper) wrapper.clone();
+        if (CheckUtils.isNotEmpty(ids)) {
+            wrapper.in("id", ids.split(","));
         }
-        Workbook book = this.excelService.exportExcel(wrapper,this.baseService,this.getDOClass());
-        String excelTempPath =  EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
+        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getDOClass());
+        String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
         book.write(os);
-        try{
+        try {
             os.close();
-        }catch (Exception e){
-            log.error("关闭流错误",e);
+        } catch (Exception e) {
+            log.error("关闭流错误", e);
         }
-        FileUtils.download(excelTempPath,response,fileName);
+        FileUtils.download(excelTempPath, response, fileName);
         FileUtils.deleteFile(excelTempPath);
     }
 
@@ -437,7 +436,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
                 }
                 baseDo.preInsert(getSessionuser().getUserId());
             }
-            beforSave( e,true);
+            beforSave(e, true);
             baseService.insertSelective((D) e);
             return HttpResult.success(true);
 
@@ -514,7 +513,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
                 BaseDO<?> baseDo = (BaseDO<?>) e;
                 baseDo.preUpdate(getSessionuser().getUserId());
             }
-            beforSave( e,false);
+            beforSave(e, false);
             baseService.updateSelectiveById((D) e);
             return HttpResult.success(true);
         }
@@ -568,10 +567,11 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     /**
      * 在保存之前执行部分自定义业务逻辑
-     * @param e 对象
+     *
+     * @param e     对象
      * @param isAdd 是否是添加
      */
-    protected void beforSave(V e,boolean isAdd){
+    protected void beforSave(V e, boolean isAdd) {
 
     }
 
@@ -634,19 +634,19 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         return TreeUtils.formartTree(datas);
     }
 
-    protected Class<D> getDOClass(){
-        return (Class)((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+    protected Class<D> getDOClass() {
+        return (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
     @PutMapping("/updateField")
     @ApiOperation("批量修改某个字段")
     public HttpResult<Boolean> updateField(@RequestBody @Validated UpdateFieldVO<D> vo) throws InstantiationException, IllegalAccessException {
-        String[] ids =vo.getIds().split(",");
+        String[] ids = vo.getIds().split(",");
         List<D> dos = new ArrayList<>();
         D temp = null;
         for (String id : ids) {
             temp = this.getDOClass().newInstance();
-            BeanUtils.copyProperties(vo.getDoContent(),temp);
+            BeanUtils.copyProperties(vo.getDoContent(), temp);
             temp.setPkey(id);
             dos.add(temp);
         }
@@ -674,35 +674,37 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     /**
      * 设置导出缓存
+     *
      * @param wrapper 过滤条件
      */
-    protected void setExportCache(QueryWrapper<D> wrapper){
-        exportParamCache.put(UserContext.getSessionuser().getUserId(),wrapper);
+    protected void setExportCache(QueryWrapper<D> wrapper) {
+        exportParamCache.put(UserContext.getSessionuser().getUserId(), wrapper);
     }
 
     @PostMapping("pubImportExcel")
     @ApiOperation("公共excel导入")
     @NotRepeat
-    public HttpResult<String> pubImportExcel(MultipartFile file,D otherParam) throws Exception {
-        if(otherParam==null){
-            otherParam= this.getDOClass().newInstance();
+    public HttpResult<String> pubImportExcel(MultipartFile file, D otherParam) throws Exception {
+        if (otherParam == null) {
+            otherParam = this.getDOClass().newInstance();
         }
         ExcelImportSett importSett = getExcelImportSett(otherParam);
-        ParamChecker.isNotNull(importSett,"此接口后台没有配置导入参数，请联系后台");
-        try{
+        ParamChecker.isNotNull(importSett, "此接口后台没有配置导入参数，请联系后台");
+        try {
             importSett.setDoModel(otherParam);
-            this.excelService.importExcel(file,this.getBaseService(),this.getDOClass(),importSett);
-        }catch (ValidationException e){
-            throw new  ParamException(e.getMessage());
+            this.excelService.importExcel(file, this.getBaseService(), this.getDOClass(), importSett);
+        } catch (ValidationException e) {
+            throw new ParamException(e.getMessage());
         }
         return HttpResult.success("导入成功");
     }
 
     /**
      * excel的一些默认配置
+     *
      * @return
      */
-    protected ExcelImportSett getExcelImportSett(D otherParam){
+    protected ExcelImportSett getExcelImportSett(D otherParam) {
         return null;
     }
 

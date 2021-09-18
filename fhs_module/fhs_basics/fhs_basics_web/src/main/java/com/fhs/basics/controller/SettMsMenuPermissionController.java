@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * 按钮控制器
+ *
  * @author Administrator
  * @date 2020-05-18 16:54:08
  */
@@ -29,7 +30,7 @@ import java.util.Map;
 @RequestMapping("ms/sysMenuPermission")
 @Api(tags = {"菜单权限"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = BaseTransConstant.MENU_INFO_PERMISSION,module = "菜单权限管理")
+@LogNamespace(namespace = BaseTransConstant.MENU_INFO_PERMISSION, module = "菜单权限管理")
 public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionDO> {
 
 
@@ -51,7 +52,7 @@ public class SettMsMenuPermissionController extends ModelSuperController<SettMsM
     }
 
     @RequestMapping("findMapListByType")
-    public List<Map<String, Object>> findMapListByType(){
+    public List<Map<String, Object>> findMapListByType() {
         Map<String, Object> map = super.getParameterMap();
         List<Map<String, Object>> mapListByType = sysMenuPermissionService.findMapListByType(map);
         return mapListByType;

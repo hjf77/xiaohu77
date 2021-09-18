@@ -51,20 +51,20 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("parentId", parentId);
         //如果是这种的，则带c
-        if(adminOrganization.getName().endsWith("总部") || adminOrganization.getName().endsWith("本部")){
-            adminOrganization.setRanking(0 );
+        if (adminOrganization.getName().endsWith("总部") || adminOrganization.getName().endsWith("本部")) {
+            adminOrganization.setRanking(0);
             adminOrganization.setId(parentId + 'b');
-        }else{
+        } else {
             Integer ranking = mapper.findRank(parentId);
             ranking = ranking == null ? 0 : ranking;
             ranking = ranking + 1;
             String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
-            adminOrganization.setRanking(ranking );
+            adminOrganization.setRanking(ranking);
             adminOrganization.setId(id);
         }
 
         //如果当前节点是企业的话，那么企业id用自己的id
-        if(adminOrganization.getIsCompany()!=null && adminOrganization.getIsCompany()== Constant.INT_TRUE){
+        if (adminOrganization.getIsCompany() != null && adminOrganization.getIsCompany() == Constant.INT_TRUE) {
             adminOrganization.setCompanyId(adminOrganization.getId());
         }
         int isAdd = super.insertSelective(adminOrganization);
@@ -124,7 +124,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
     @Override
     public HttpResult<List<UcenterMsOrganizationVO>> getOrgByIds(String ids) {
-        if(CheckUtils.isNullOrEmpty(ids)){
+        if (CheckUtils.isNullOrEmpty(ids)) {
             HttpResult.error();
         }
         return HttpResult.success(super.findByIds(Arrays.asList(ids.split(","))));
@@ -132,16 +132,16 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
     @Override
     public HttpResult<List<UcenterMsOrganizationVO>> getOrgByParentid(String parentid) {
-        return HttpResult.success(super.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().eq(UcenterMsOrganizationDO::getParentId,parentid)));
+        return HttpResult.success(super.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().eq(UcenterMsOrganizationDO::getParentId, parentid)));
     }
 
     @Override
     public Map<String, Object> doUnTrans(NamesForm namesForm) {
-        if(namesForm.getNames()==null || namesForm.getNames().isEmpty()){
+        if (namesForm.getNames() == null || namesForm.getNames().isEmpty()) {
             return new HashMap<>();
         }
-        List<UcenterMsOrganizationVO> orgs = super.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getName,namesForm.getNames()));
-        return  orgs.stream().collect(Collectors
+        List<UcenterMsOrganizationVO> orgs = super.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getName, namesForm.getNames()));
+        return orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getName, UcenterMsOrganizationVO::getId));
     }
 
@@ -155,18 +155,18 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         return initCompanyName(super.findByIds(ids));
     }
 
-    private List<UcenterMsOrganizationVO> initCompanyName( List<UcenterMsOrganizationVO> vos){
+    private List<UcenterMsOrganizationVO> initCompanyName(List<UcenterMsOrganizationVO> vos) {
         Set<String> idsSet = vos.stream().map(UcenterMsOrganizationVO::getCompanyId).collect(Collectors.toSet());
-        if(!idsSet.isEmpty()){
-            List<UcenterMsOrganizationVO> companyList =  super.findByIds(new ArrayList<>(idsSet));
-            Map<String,UcenterMsOrganizationVO> companyMap = companyList.stream().collect(Collectors
+        if (!idsSet.isEmpty()) {
+            List<UcenterMsOrganizationVO> companyList = super.findByIds(new ArrayList<>(idsSet));
+            Map<String, UcenterMsOrganizationVO> companyMap = companyList.stream().collect(Collectors
                     .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
             for (UcenterMsOrganizationVO ucenterMsOrganizationVO : vos) {
-                if(ucenterMsOrganizationVO.getIsCompany() == Constant.INT_TRUE){
+                if (ucenterMsOrganizationVO.getIsCompany() == Constant.INT_TRUE) {
                     continue;
                 }
-                if(companyMap.containsKey(ucenterMsOrganizationVO.getCompanyId())){
-                    ucenterMsOrganizationVO.setName(ucenterMsOrganizationVO.getName()+"(" + companyMap.get(ucenterMsOrganizationVO.getCompanyId()).getName() + ")");
+                if (companyMap.containsKey(ucenterMsOrganizationVO.getCompanyId())) {
+                    ucenterMsOrganizationVO.setName(ucenterMsOrganizationVO.getName() + "(" + companyMap.get(ucenterMsOrganizationVO.getCompanyId()).getName() + ")");
                 }
             }
         }

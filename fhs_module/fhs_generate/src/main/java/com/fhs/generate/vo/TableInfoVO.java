@@ -46,6 +46,7 @@ public class TableInfoVO {
 
     /**
      * namespace = t_ucenter_user  去掉t_ 转驼峰  为 ucenterUser
+     *
      * @return
      */
     public String getNamespace() {

@@ -48,9 +48,8 @@ public class WxMaConfiguration {
     private String msgDataFormat;
 
 
-
     @Bean
-    public WxMaService wxMaService(){
+    public WxMaService wxMaService() {
         WxMaInMemoryConfig config = new WxMaInMemoryConfig();
         // 使用上面的配置时，需要同时引入jedis-lock的依赖，否则会报类无法找到的异常
         config.setAppid(appid);

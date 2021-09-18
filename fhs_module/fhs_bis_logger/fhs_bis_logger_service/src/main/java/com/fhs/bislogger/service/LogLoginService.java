@@ -18,22 +18,24 @@ import java.util.List;
  * @since 2020-04-23 13:58:36
  */
 @Namespace("log_login")
-public interface LogLoginService extends BaseService<LogLoginVO,LogLoginDO>{
+public interface LogLoginService extends BaseService<LogLoginVO, LogLoginDO> {
 
 
     /**
      * 添加登录日志信息
+     *
      * @param request
      * @param userName
-     * @param isLogin 登录失败 = true;
+     * @param isLogin   登录失败 = true;
      * @param errorType
      * @param userId
-     * @param typeOut 登出 = true
+     * @param typeOut   登出 = true
      */
     void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, String userId, boolean typeOut);
 
     /**
      * 汇总前20名 登录玩家的登录次数，根基时间段查询
+     *
      * @param statTime
      * @param endTime
      * @return

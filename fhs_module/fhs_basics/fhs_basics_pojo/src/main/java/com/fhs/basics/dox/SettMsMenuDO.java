@@ -34,7 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  菜单(SettMsMenu)实体类
+ * 菜单(SettMsMenu)实体类
+ *
  * @author 朱俊
  * @version [版本号, 2015/08/13 11:37:31]
  * @see [相关类/方法]

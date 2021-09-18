@@ -19,29 +19,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class BinaryUploader
-{
+public class BinaryUploader {
 
-    public static final State save(HttpServletRequest request, Map<String, Object> conf, String fileSavePath, String fileDownLoadPath)
-    {
-        try
-        {
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
+    public static final State save(HttpServletRequest request, Map<String, Object> conf, String fileSavePath, String fileDownLoadPath) {
+        try {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             MultipartFile multipartFile = multipartRequest.getFile(conf.get("fieldName").toString());
             String originFileName = multipartFile.getOriginalFilename();
             String suffix = FileType.getSuffixByFilename(originFileName);
-            long maxSize = ((Long)conf.get("maxSize")).longValue();
-            if (!validType(suffix, (String[])conf.get("allowFiles")))
-            {
+            long maxSize = ((Long) conf.get("maxSize")).longValue();
+            if (!validType(suffix, (String[]) conf.get("allowFiles"))) {
                 return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
             }
 
-            String currentDate = DateUtils.getCurrentDateStr ("yyyy/MM/dd");
-            String prefix = suffix.replace (".", "");
+            String currentDate = DateUtils.getCurrentDateStr("yyyy/MM/dd");
+            String prefix = suffix.replace(".", "");
             String pathTemp = fileSavePath + currentDate + File.separator + prefix;// 上传文件地址
-            File targetFile = new File(pathTemp );
-            if (!targetFile.exists())
-            {
+            File targetFile = new File(pathTemp);
+            if (!targetFile.exists()) {
                 targetFile.mkdirs();
             }
             /************/
@@ -52,10 +47,9 @@ public class BinaryUploader
             String filePath = pathTemp + File.separator + fileId + suffix;
 
             State storageState = StorageManager.saveFileByInputStream(multipartFile.getInputStream(), filePath, maxSize);
-            if (storageState.isSuccess())
-            {
+            if (storageState.isSuccess()) {
                 storageState.putInfo("url",
-                    fileDownLoadPath + "downLoad/fileFofFileId?fileId=" + fileId );
+                        fileDownLoadPath + "downLoad/fileFofFileId?fileId=" + fileId);
                 storageState.putInfo("type", suffix);
                 storageState.putInfo("original", originFileName);
                 // 新增数据库
@@ -64,24 +58,21 @@ public class BinaryUploader
                 serviceFile.setFileName(originFileName);
                 serviceFile.setFileSuffix(suffix);
                 serviceFile.setFileId(fileId);
-                serviceFile.setUploadDate (currentDate);
-                service.insertSelective (serviceFile);
+                serviceFile.setUploadDate(currentDate);
+                service.insertSelective(serviceFile);
 
             }
 
             return storageState;
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
         return new BaseState(false, AppInfo.IO_ERROR);
     }
 
-    private static boolean validType(String type, String[] allowTypes)
-    {
+    private static boolean validType(String type, String[] allowTypes) {
         List<String> list = Arrays.asList(allowTypes);
         return list.contains(type);
     }

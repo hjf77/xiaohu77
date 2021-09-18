@@ -30,6 +30,7 @@ import java.io.IOException;
 
 /**
  * 微信mp接入
+ *
  * @author user
  * @since 2019-05-18 11:53:15
  */
@@ -127,6 +128,6 @@ public class WxMpOauth implements FhsOauth302, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.loginService.getOauthServiceMap().put(this.getUA(),this);
+        this.loginService.getOauthServiceMap().put(this.getUA(), this);
     }
 }

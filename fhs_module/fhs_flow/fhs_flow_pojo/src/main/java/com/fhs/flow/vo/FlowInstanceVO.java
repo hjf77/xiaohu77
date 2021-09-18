@@ -11,14 +11,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * fhs的流程实例，为activiti的实例扩展表 vo
+ *
  * @author user
  * @since 2019-05-18 11:59:49
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
-@ApiModel(value ="FlowInstanceVO",description ="FlowInstance参数")
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value = "FlowInstanceVO", description = "FlowInstance参数")
 public class FlowInstanceVO extends FlowInstanceDO implements VO {
 
 }

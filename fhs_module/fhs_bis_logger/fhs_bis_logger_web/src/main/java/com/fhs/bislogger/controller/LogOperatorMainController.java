@@ -63,17 +63,17 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
 
     @RequestMapping("/moduleSelect")
-    public List<LogOperatorMainVO> getModuleSelect(){
+    public List<LogOperatorMainVO> getModuleSelect() {
         long time = modelSelectCachedTime.getTime();
         long timeMillis = System.currentTimeMillis();
         double oneHour = 60 * 60 * 1000;
-        if(modelSelectCache.isEmpty()){
+        if (modelSelectCache.isEmpty()) {
             //doto 执行sql
             modelSelectCache = logOperatorMainService.getLoggerModelList();
-        }else{
+        } else {
             //判断当前时间和  modelSelectCachedTime 是否大于一个小时,是的话执行刷新缓存
-            if ((timeMillis-time)>oneHour){
-                new Thread(()->{
+            if ((timeMillis - time) > oneHour) {
+                new Thread(() -> {
                     //查询..
                     modelSelectCache = logOperatorMainService.getLoggerModelList();
                     namespaceModuleMap.clear();
@@ -81,18 +81,19 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
             }
         }
         for (LogOperatorMainVO logOperatorMainVO : modelSelectCache) {
-            namespaceModuleMap.put(logOperatorMainVO.getNamespace(),logOperatorMainVO.getModel());
+            namespaceModuleMap.put(logOperatorMainVO.getNamespace(), logOperatorMainVO.getModel());
         }
         return modelSelectCache;
     }
 
     /**
      * 根据日志id查询数据
+     *
      * @param logId 日志id
      * @return
      */
     @RequestMapping("/getLogger")
-    public LogOperatorMainVO getLogger(String logId){
+    public LogOperatorMainVO getLogger(String logId) {
         LogOperatorMainVO logOperatorMainVO = logOperatorMainService.selectById(logId);
         return logOperatorMainVO;
     }
@@ -100,16 +101,17 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 扩展参数列表
+     *
      * @param mainId 主日志id
      */
     @RequestMapping("/getLoggerList")
-    public void getExtendedParameters(String mainId){
-        ParamChecker.isNotNullOrEmpty(mainId,"mainId不能为空");
+    public void getExtendedParameters(String mainId) {
+        ParamChecker.isNotNullOrEmpty(mainId, "mainId不能为空");
         List<LogOperatorExtParamVO> logExtParamList =
                 logOperatorExtParamService.findForList(LogOperatorExtParamDO.builder().mainId(mainId).build());
-        ParamChecker.isNotNull(logExtParamList,"mainId不存在");
+        ParamChecker.isNotNull(logExtParamList, "mainId不存在");
         for (LogOperatorExtParamVO logOperatorExtParamVO : logExtParamList) {
-            if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
+            if (namespaceModuleMap != null && namespaceModuleMap.size() > 0) {
                 String model = namespaceModuleMap.get(logOperatorExtParamVO.getNamespace());
                 logOperatorExtParamVO.setModel(model);
             }
@@ -121,10 +123,11 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 查询人员列表
+     *
      * @return
      */
     @RequestMapping("/getUserList")
-    public List<UcenterMsUserVO> getUserList(){
+    public List<UcenterMsUserVO> getUserList() {
         List<UcenterMsUserVO> users =
                 ucenterMsUserService.findForList(UcenterMsUserDO.builder().build());
         return users;
@@ -133,17 +136,18 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 根据主键和版本获取数据
-     * @param pkey  主键
-     * @param version 版本号
+     *
+     * @param pkey      主键
+     * @param version   版本号
      * @param namespace namespace
      * @return
      */
     @RequestMapping("/getLogHistoryData")
-    public LogHistoryDataVO getLogHistoryData(String pkey, Integer version,String namespace){
+    public LogHistoryDataVO getLogHistoryData(String pkey, Integer version, String namespace) {
         LogHistoryDataVO logHistoryData =
                 logHistoryDataService.selectBean(LogHistoryDataDO.builder().pkey(pkey).version(version).namespace(namespace).build());
-        if (logHistoryData != null){
-            if (namespaceModuleMap!=null && namespaceModuleMap.size()>0){
+        if (logHistoryData != null) {
+            if (namespaceModuleMap != null && namespaceModuleMap.size() > 0) {
                 String model = namespaceModuleMap.get(logHistoryData.getNamespace());
                 logHistoryData.setModel(model);
             }
@@ -153,51 +157,52 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
 
     /**
      * 根据namespace和pkey查询数据列表
-     * @param namespace namespace
-     * @param pkey 主键
+     *
+     * @param namespace        namespace
+     * @param pkey             主键
      * @param logHistoryDataDO
      * @return
      */
     @RequestMapping("/getLogHistoryDataList")
-    public Pager<LogHistoryDataVO> getLogHistoryDataList(String namespace,String pkey,LogHistoryDataDO logHistoryDataDO){
+    public Pager<LogHistoryDataVO> getLogHistoryDataList(String namespace, String pkey, LogHistoryDataDO logHistoryDataDO) {
         PageSizeInfo pgeSizeInfo = getPageSizeInfo();
         List<LogHistoryDataVO> logHistoryDataList =
-                logHistoryDataService.findForList(LogHistoryDataDO.builder().namespace(namespace).pkey(pkey).build(),pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
-        ParamChecker.isNotNull(logHistoryDataList,"namespace或pkey不存在");
+                logHistoryDataService.findForList(LogHistoryDataDO.builder().namespace(namespace).pkey(pkey).build(), pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+        ParamChecker.isNotNull(logHistoryDataList, "namespace或pkey不存在");
         int countJpa = logHistoryDataService.findCountJpa(logHistoryDataDO);
-        return new Pager<>(countJpa,logHistoryDataList);
+        return new Pager<>(countJpa, logHistoryDataList);
     }
-
 
 
     /**
      * 根据时间段查询
+     *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return
      */
     @RequestMapping("/getAccessManyList")
-    public Pager<LogOperatorMainVO> getAccessManyList(String startTime,String endTime){
+    public Pager<LogOperatorMainVO> getAccessManyList(String startTime, String endTime) {
         Map<String, Object> paramMap = super.getPageTurnNum();
         List<LogOperatorMainVO> accessManyList = null;
-        if (startTime!=null && endTime!=null && startTime!="" && endTime!=""){
-            paramMap.put("startTime",startTime);
-            paramMap.put("endTime",endTime);
+        if (startTime != null && endTime != null && startTime != "" && endTime != "") {
+            paramMap.put("startTime", startTime);
+            paramMap.put("endTime", endTime);
             accessManyList = logOperatorMainService.getAccessManyList(paramMap);
-        }else {
+        } else {
             accessManyList = logOperatorMainService.getAccessManyList(paramMap);
         }
         for (LogOperatorMainVO logOperatorMainVO : accessManyList) {
-            paramMap.put("url",logOperatorMainVO.getUrl());
+            paramMap.put("url", logOperatorMainVO.getUrl());
             int periodLogCount =
                     logOperatorMainService.getLogCount(paramMap);
             logOperatorMainVO.setVisits(periodLogCount);
         }
         int reportCount = logOperatorMainService.getReportCount(paramMap);
-        if (startTime!=null && endTime!=null && startTime!="" && endTime!="" && reportCount>20){
-            return new Pager<>(20,accessManyList);
+        if (startTime != null && endTime != null && startTime != "" && endTime != "" && reportCount > 20) {
+            return new Pager<>(20, accessManyList);
         }
-        return new Pager<>(reportCount,accessManyList);
+        return new Pager<>(reportCount, accessManyList);
     }
 
 }

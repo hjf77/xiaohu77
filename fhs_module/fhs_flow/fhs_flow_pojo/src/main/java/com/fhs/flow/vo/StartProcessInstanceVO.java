@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * 启动流程实例
+ *
  * @author user
  * @date 2020-05-18 13:40:22
  */
@@ -26,7 +27,7 @@ public class StartProcessInstanceVO {
     /**
      * 表单参数
      */
-    private  Map<String, Object>  extFormParam;
+    private Map<String, Object> extFormParam;
     /**
      * 用户id
      */

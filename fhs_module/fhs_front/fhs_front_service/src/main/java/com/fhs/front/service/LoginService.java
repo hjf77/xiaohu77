@@ -46,22 +46,25 @@ public interface LoginService {
 
     /**
      * 获取系统支持的OAUTH登录服务
+     *
      * @return
      */
-    Map<String,FhsOauth302> getOauthServiceMap();
+    Map<String, FhsOauth302> getOauthServiceMap();
 
     /**
      * 根据UA获取实现类
-     * @param ua  浏览器UA
+     *
+     * @param ua 浏览器UA
      * @return 对应的服务实现
      */
     FhsOauth302 getOauth302Impl(String ua);
 
     /**
      * 完成登录和返回
+     *
      * @param request
      * @param response
-     * @param userId 用户id
+     * @param userId   用户id
      */
     void loginAndRedirect(HttpServletRequest request, HttpServletResponse response, String userId);
 
@@ -72,5 +75,5 @@ public interface LoginService {
      * @param accessToken token信息
      * @return 解码后的回调地址
      */
-     String checkUrl(String callback, String accessToken) throws UnsupportedEncodingException;
+    String checkUrl(String callback, String accessToken) throws UnsupportedEncodingException;
 }

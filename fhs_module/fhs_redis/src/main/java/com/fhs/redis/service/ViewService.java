@@ -8,17 +8,17 @@ import com.fhs.redis.util.ztree.ZNode;
 
 public interface ViewService {
 
-	Set<ZNode> getLeftTree();
+    Set<ZNode> getLeftTree();
 
-	Set<RKey> getRedisKeys(Pagination pagination, String serverName, String dbIndex,
-			String[] keyPrefixs, String queryKey, String queryValue);
+    Set<RKey> getRedisKeys(Pagination pagination, String serverName, String dbIndex,
+                           String[] keyPrefixs, String queryKey, String queryValue);
 
-	Set<ZNode> refresh();
+    Set<ZNode> refresh();
 
-	void changeRefreshMode(String mode);
+    void changeRefreshMode(String mode);
 
-	void changeShowType(String state);
+    void changeShowType(String state);
 
-	void refreshAllKeys();
+    void refreshAllKeys();
 
 }

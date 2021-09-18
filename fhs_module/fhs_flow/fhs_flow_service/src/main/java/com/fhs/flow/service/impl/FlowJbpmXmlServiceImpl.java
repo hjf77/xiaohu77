@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  * @since 2019-11-11 14:29:04
  */
 @Service("flowJbpmXmlService")
-@AutoTrans(namespace = "flow_jbpm_xml",fields = "name",defaultAlias = "xml")
+@AutoTrans(namespace = "flow_jbpm_xml", fields = "name", defaultAlias = "xml")
 public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXmlVO, FlowJbpmXmlDO> implements FlowJbpmXmlService {
 
     private static final Logger LOG = Logger.getLogger(WorkFlowJbpmXmlServiceImpl.class);
@@ -56,11 +56,10 @@ public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXmlVO, FlowJ
             String preId = workFlowJbpmXml.getProcessKey() + workFlowJbpmXml.getVersion();
             //xml 版本号升级 默认版本是0 发布的时候版本号变成1
             String xml = null;
-            if( workFlowJbpmXml.getXml().contains(preId)){
+            if (workFlowJbpmXml.getXml().contains(preId)) {
                 xml = workFlowJbpmXml.getXml().replace(preId,
                         workFlowJbpmXml.getProcessKey() + (workFlowJbpmXml.getVersion() + 1));
-            }
-            else{
+            } else {
                 xml = workFlowJbpmXml.getXml().replace(workFlowJbpmXml.getProcessKey(),
                         workFlowJbpmXml.getProcessKey() + (workFlowJbpmXml.getVersion() + 1));
             }

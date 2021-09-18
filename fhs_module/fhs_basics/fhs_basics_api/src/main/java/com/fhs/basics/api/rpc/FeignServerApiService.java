@@ -14,20 +14,21 @@ import java.util.List;
 
 /**
  * 服务器公共服务
+ *
  * @author user
  * @date 2020-05-18 14:40:16
  */
-@FeignClient(value = "basics", configuration = FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration = FeignConfiguration.class, primary = false)
 public interface FeignServerApiService {
 
     /**
      * 根据服务id获取服务对象
+     *
      * @param id 服务id
      * @return HttpResult 服务对象
      */
     @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignServerApiService/getMenuServeById?id={id}")
     HttpResult<SettMsMenuServerVO> getMenuServeById(@Param("id") String id);
-
 
 
 }

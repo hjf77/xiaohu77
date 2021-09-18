@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 定时任务数据库访问层
+ *
  * @author user
  * @since 2020-05-18 11:05:43
  */
@@ -16,15 +17,17 @@ public interface TaskMapper {
 
     /**
      * 根据过滤条件获取task 列表
-     * @param param 过滤条件
-     * @param start 开视行
+     *
+     * @param param    过滤条件
+     * @param start    开视行
      * @param pageSize 每页多少条数据
      * @return
      */
-    List<TaskVO> getTaskVO(@Param("task") TaskVO param,@Param("start") int start,@Param("pageSize")int pageSize);
+    List<TaskVO> getTaskVO(@Param("task") TaskVO param, @Param("start") int start, @Param("pageSize") int pageSize);
 
     /**
      * 获取task总数
+     *
      * @param param 过滤条件
      * @return
      */

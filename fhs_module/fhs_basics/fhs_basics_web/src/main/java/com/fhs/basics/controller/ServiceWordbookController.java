@@ -41,7 +41,7 @@ import java.util.Map;
 @RequestMapping("ms/wordbook")
 @Api(tags = {"字典"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = BaseTransConstant.WORD_BOOK,module = "字典管理")
+@LogNamespace(namespace = BaseTransConstant.WORD_BOOK, module = "字典管理")
 public class ServiceWordbookController extends BaseController {
 
     private static final Logger LOG = Logger.getLogger(ServiceWordbookController.class);
@@ -80,7 +80,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbook")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> addWordbook(@Valid ServiceWordbookVO wordbook) {
         wordbookAndGroupService.addWordbook(wordbook);
         return HttpResult.success(true);
@@ -94,9 +94,9 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:add")
     @PostMapping("addWordbookForVue")
     @ApiOperation("创建字典forVUE")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> addWordbookForVue(@RequestBody @Valid ServiceWordbookVO wordbook) {
-        return addWordbook(wordbook) ;
+        return addWordbook(wordbook);
     }
 
 
@@ -107,7 +107,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbook")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> updateWordbook(@Valid ServiceWordbookVO wordbook) {
         wordbookAndGroupService.updateWordbook(wordbook);
         return HttpResult.success(true);
@@ -117,8 +117,8 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:update")
     @PutMapping("updateWordbookForVue")
     @ApiOperation("修改字典forVUE")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> updateWordbookForVue(@RequestBody@Valid ServiceWordbookVO wordbook) {
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> updateWordbookForVue(@RequestBody @Valid ServiceWordbookVO wordbook) {
         return updateWordbook(wordbook);
     }
 
@@ -129,7 +129,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:del")
     @RequestMapping("delWordbook")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, voParamIndex = 0)
     public HttpResult<Boolean> delWordbook(ServiceWordbookVO wordbook) {
         wordbookAndGroupService.delWordbook(wordbook);
         return HttpResult.success(true);
@@ -138,7 +138,7 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:del")
     @DeleteMapping("delWordbookForVue")
     @ApiOperation("删除字典forVUE")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, voParamIndex = 0)
     public HttpResult<Boolean> delWordbookForVue(Integer id) {
         ServiceWordbookVO vo = new ServiceWordbookVO();
         vo.setWordbookId(id);
@@ -177,7 +177,6 @@ public class ServiceWordbookController extends BaseController {
 
     /**
      * 查询字典类型
-     *
      */
     @RequestMapping("findWordbookGroupForPage")
     @LogMethod
@@ -196,7 +195,7 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbookGroup")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> addWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request) {
         wordbookGroup.preInsert(((UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER)).getUserId());
         wordbookAndGroupService.addWordbookGroup(wordbookGroup);
@@ -206,11 +205,10 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:add")
     @PostMapping("addWordbookGroupForVue")
     @ApiOperation("新增字典分组for vue")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> addWordbookGroupForVue(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request) {
-        return addWordbookGroup( wordbookGroup,  request) ;
+        return addWordbookGroup(wordbookGroup, request);
     }
-
 
 
     /**
@@ -220,8 +218,8 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbookGroup")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public  HttpResult<Boolean> updateWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> updateWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
         wordbookAndGroupService.updateWordbookGroup(wordbookGroup);
         return HttpResult.success(true);
     }
@@ -229,8 +227,8 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:update")
     @PutMapping("updateWordbookGroupForVue")
     @ApiOperation("修改字典分组for vue")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public  HttpResult<Boolean> updateWordbookGroupForVue(ServiceWordbookGroupVO wordbookGroup) {
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> updateWordbookGroupForVue(ServiceWordbookGroupVO wordbookGroup) {
         return updateWordbookGroup(wordbookGroup);
     }
 
@@ -241,8 +239,8 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequiresPermissions("wordbook:del")
     @PostMapping("delWordbookGroup")
-    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL,voParamIndex = 0)
-    public  HttpResult<Boolean> delWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
+    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL, voParamIndex = 0)
+    public HttpResult<Boolean> delWordbookGroup(ServiceWordbookGroupVO wordbookGroup) {
         wordbookAndGroupService.delWordbookGroup(wordbookGroup);
         return HttpResult.success(true);
     }
@@ -250,8 +248,8 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:del")
     @DeleteMapping("delWordbookGroupForVue")
     @ApiOperation("删除字典分组for vue")
-    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL,voParamIndex = 0)
-    public  HttpResult<Boolean> delWordbookGroupForVue(Integer id) {
+    @LogMethod(type = LoggerConstant.OPERATOR_TYPE_DEL, voParamIndex = 0)
+    public HttpResult<Boolean> delWordbookGroupForVue(Integer id) {
         ServiceWordbookGroupVO vo = new ServiceWordbookGroupVO();
         vo.setGroupId(id);
         return delWordbookGroup(vo);
@@ -267,7 +265,7 @@ public class ServiceWordbookController extends BaseController {
     @RequiresPermissions("wordbook:refreshRedisCache")
     @RequestMapping("refreshRedisCache")
     @ResponseBody
-    public  HttpResult<Boolean> refreshRedisCache(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> refreshRedisCache(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
         Map<String, String> message = new HashMap<>();
         message.put("transType", "wordbook");
         message.put("wordbookGroupCode", wordbook.getWordbookGroupCode());
@@ -283,6 +281,6 @@ public class ServiceWordbookController extends BaseController {
      */
     @RequestMapping("getData")
     public List<ServiceWordbookVO> getData(String wordbookGroupCode) {
-         return wordBookService.getWordBookList(wordbookGroupCode);
+        return wordBookService.getWordBookList(wordbookGroupCode);
     }
 }

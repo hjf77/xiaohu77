@@ -11,14 +11,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * 流程列表-xml vo
+ *
  * @author user
  * @since 2019-05-18 12:00:05
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
-@ApiModel(value ="FlowJbpmXmlVO",description ="FlowJbpmXml参数")
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@ApiModel(value = "FlowJbpmXmlVO", description = "FlowJbpmXml参数")
 public class FlowJbpmXmlVO extends FlowJbpmXmlDO implements VO {
 
 }

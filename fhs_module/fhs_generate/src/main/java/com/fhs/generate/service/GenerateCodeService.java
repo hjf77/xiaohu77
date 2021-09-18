@@ -9,6 +9,7 @@ public interface GenerateCodeService {
 
     /**
      * 生成代码
+     *
      * @param tableInfoVO 表信息
      * @return 返回vue代码的路径
      */

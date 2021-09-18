@@ -141,7 +141,7 @@ public final class ConfigManager {
                 break;
 
             default:
-                 break;
+                break;
         }
 
         conf.put("savePath", savePath);
@@ -197,7 +197,7 @@ public final class ConfigManager {
 
         try {
 
-            String file = "/META-INF/resources/static/js/ueditor/jsp/"+ConfigManager.configFileName;
+            String file = "/META-INF/resources/static/js/ueditor/jsp/" + ConfigManager.configFileName;
             URL fileURL = this.getClass().getResource(file);
             if (fileURL != null) {
                 try {
@@ -228,8 +228,8 @@ public final class ConfigManager {
     private String readFile(String path) throws IOException {
         StringBuilder builder = new StringBuilder();
         //未测试 update by cyx
-        try(InputStreamReader reader = new InputStreamReader(new FileInputStream(path), "UTF-8");
-            BufferedReader bfReader = new BufferedReader(reader)) {
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(path), "UTF-8");
+             BufferedReader bfReader = new BufferedReader(reader)) {
             String tmpContent = null;
             while ((tmpContent = bfReader.readLine()) != null) {
                 builder.append(tmpContent);
@@ -247,7 +247,7 @@ public final class ConfigManager {
     }
 
     protected String getProperty(String name) {
-        String file = "/META-INF/resources/static/js/ueditor/jsp/"+ConfigManager.configFileName;
+        String file = "/META-INF/resources/static/js/ueditor/jsp/" + ConfigManager.configFileName;
         URL fileURL = this.getClass().getResource(file);
         if (fileURL != null) {
             try {

@@ -15,10 +15,11 @@ import java.util.Map;
  * @since 2020-04-23 13:59:14
  */
 @Namespace("log_operator_main")
-public interface LogOperatorMainService extends BaseService<LogOperatorMainVO,LogOperatorMainDO>{
+public interface LogOperatorMainService extends BaseService<LogOperatorMainVO, LogOperatorMainDO> {
 
     /**
      * 查询模块列表
+     *
      * @return
      */
     List<LogOperatorMainVO> getLoggerModelList();
@@ -26,6 +27,7 @@ public interface LogOperatorMainService extends BaseService<LogOperatorMainVO,Lo
 
     /**
      * 根据时间段查询数据
+     *
      * @param paramMap
      * @return
      */
@@ -33,6 +35,7 @@ public interface LogOperatorMainService extends BaseService<LogOperatorMainVO,Lo
 
     /**
      * 根据url查询接口调用多少次
+     *
      * @param paramMap
      * @return
      */
@@ -40,6 +43,7 @@ public interface LogOperatorMainService extends BaseService<LogOperatorMainVO,Lo
 
     /**
      * 查询分组后的总记录数
+     *
      * @param paramMap
      * @return
      */

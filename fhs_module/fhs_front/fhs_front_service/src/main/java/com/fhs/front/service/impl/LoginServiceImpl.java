@@ -152,7 +152,6 @@ public class LoginServiceImpl implements LoginService {
     }
 
 
-
     @Override
     public void loginAndRedirect(HttpServletRequest request, HttpServletResponse response, String userId) {
         UcenterFrontUserVO user = frontUserService.selectById(userId);
@@ -180,7 +179,7 @@ public class LoginServiceImpl implements LoginService {
      * @return 解码后的回调地址
      */
     public String checkUrl(String callback, String accessToken)
-            throws  UnsupportedEncodingException{
+            throws UnsupportedEncodingException {
         callback = new String(callback.getBytes(), "utf-8");
         callback = java.net.URLDecoder.decode(callback, "utf-8");
         if (!callback.startsWith("http")) {

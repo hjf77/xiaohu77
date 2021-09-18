@@ -17,14 +17,14 @@ import java.util.List;
 
 /**
  * 消息转换器配置
+ *
  * @author user
  * @since 2019-05-18 11:33:35
  */
 @Configuration
-public class MessageConverterConfig extends  WebMvcConfigurerAdapter
-{
+public class MessageConverterConfig extends WebMvcConfigurerAdapter {
     @Bean
-    public HttpMessageConverter<?> fastJsonHttpMessageConverters(){
+    public HttpMessageConverter<?> fastJsonHttpMessageConverters() {
         JsonFilterHttpMessageConverter fastJsonHttpMessageConverter = new JsonFilterHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setCharset(Charset.forName("UTF-8"));
@@ -61,7 +61,7 @@ public class MessageConverterConfig extends  WebMvcConfigurerAdapter
         //WriteMapNullValue：是否输出值为null的字段,默认为false
         fastJsonConfig.setSerializerFeatures(
                 SerializerFeature.DisableCircularReferenceDetect,
-                SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNonStringKeyAsString
+                SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNonStringKeyAsString
         );
         fastConverter.setFastJsonConfig(fastJsonConfig);
         return fastJsonHttpMessageConverter;

@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * 前端用户vo
+ *
  * @author user
  * @since 2019-05-18 11:49:33
  */
@@ -19,12 +20,12 @@ import java.util.Map;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="UcenterFrontUserVO",description ="UcenterFrontUser参数")
+@ApiModel(value = "UcenterFrontUserVO", description = "UcenterFrontUser参数")
 public class UcenterFrontUserVO extends UcenterFrontUserDO implements VO {
 
     /**
      * openidmap
      * key0 微信openid 1 支付宝openid
      */
-    private Map<Integer,String> openIdMap;
+    private Map<Integer, String> openIdMap;
 }

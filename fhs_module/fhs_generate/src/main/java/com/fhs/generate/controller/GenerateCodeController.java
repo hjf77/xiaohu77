@@ -21,6 +21,7 @@ import java.io.File;
 
 /**
  * 代码生成类
+ *
  * @author wanglei
  */
 @RestController
@@ -34,11 +35,11 @@ public class GenerateCodeController {
 
     @PostMapping("generate")
     @ApiOperation("生成代码")
-    public void generate(@RequestBody TableInfoVO tableInfoVO, HttpServletResponse response){
+    public void generate(@RequestBody TableInfoVO tableInfoVO, HttpServletResponse response) {
         String[] files = generateCodeService.generateCode(tableInfoVO);
-        String zipPath = EConfig.getPathPropertiesValue("fileSavePath") + "/vueCode.zip" ;
-        ZipUtil.zip(zipPath,files);
-        FileUtils.download(zipPath,response,"vueCode.zip");
+        String zipPath = EConfig.getPathPropertiesValue("fileSavePath") + "/vueCode.zip";
+        ZipUtil.zip(zipPath, files);
+        FileUtils.download(zipPath, response, "vueCode.zip");
         FileUtils.deleteFile(zipPath);
         new File(files[0]).getParentFile().delete();
     }

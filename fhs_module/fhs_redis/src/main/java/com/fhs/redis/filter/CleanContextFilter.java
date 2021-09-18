@@ -11,29 +11,29 @@ import javax.servlet.ServletResponse;
 
 import com.fhs.redis.util.RedisApplication;
 
-public class CleanContextFilter extends RedisApplication implements Filter  {
+public class CleanContextFilter extends RedisApplication implements Filter {
 
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		String contentPath = filterConfig.getServletContext().getContextPath();
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        String contentPath = filterConfig.getServletContext().getContextPath();
 
-	}
+    }
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
-		
-		chain.doFilter(request, response);
-		cleanContext();
-	}
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws IOException, ServletException {
 
-	private void cleanContext() {
-		redisConnectionDbIndex.set(0);
-	}
+        chain.doFilter(request, response);
+        cleanContext();
+    }
 
-	@Override
-	public void destroy() {
-		
-	}
+    private void cleanContext() {
+        redisConnectionDbIndex.set(0);
+    }
+
+    @Override
+    public void destroy() {
+
+    }
 
 }

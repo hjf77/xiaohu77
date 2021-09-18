@@ -16,6 +16,6 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
  */
 @Service
 @Namespace("flow_jbmp_xml_button")
-public class FlowJbmpXmlButtonServiceImpl extends BaseServiceImpl<FlowJbmpXmlButtonVO,FlowJbmpXmlButtonDO> implements FlowJbmpXmlButtonService {
-    
+public class FlowJbmpXmlButtonServiceImpl extends BaseServiceImpl<FlowJbmpXmlButtonVO, FlowJbmpXmlButtonDO> implements FlowJbmpXmlButtonService {
+
 }

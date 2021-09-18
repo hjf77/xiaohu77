@@ -9,6 +9,7 @@ public interface TableInfoService {
 
     /**
      * 获取表信息
+     *
      * @param dbName
      * @param tableName
      * @return

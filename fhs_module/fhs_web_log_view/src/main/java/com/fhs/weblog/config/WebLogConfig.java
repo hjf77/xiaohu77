@@ -16,13 +16,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
+ * websocket配置
  *
- *  websocket配置
  * @author jackwang
  */
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebLogConfig implements  WebSocketMessageBrokerConfigurer{
+public class WebLogConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket")
@@ -32,7 +32,7 @@ public class WebLogConfig implements  WebSocketMessageBrokerConfigurer{
     }
 
     @Bean
-    public LoggerEventHandler LoggerEventHandler(){
+    public LoggerEventHandler LoggerEventHandler() {
         return new LoggerEventHandler();
     }
 

@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Api(tags = {"系统用户"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysUser")
-@LogNamespace(namespace = BaseTransConstant.USER_INFO,module = "用户管理")
+@LogNamespace(namespace = BaseTransConstant.USER_INFO, module = "用户管理")
 public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserDO> {
 
 
@@ -65,7 +65,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 获取用户jsontree 用于easyui下拉tree数据源
      */
     @GetMapping("getUserTree")
-    public void  getUserTree() {
+    public void getUserTree() {
         super.outJsonp(JsonUtils.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode())));
     }
 
@@ -73,7 +73,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 获取用户List
      */
     @GetMapping("getUserList")
-    public List<UcenterMsUserVO>  getUserList() {
+    public List<UcenterMsUserVO> getUserList() {
         UcenterMsUserVO ucenterMsUserVO = new UcenterMsUserVO();
         ucenterMsUserVO.setIsDelete(Constant.NO_DELETE);
         ucenterMsUserVO.setGroupCode(super.getSessionuser().getGroupCode());
@@ -82,22 +82,24 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * 根据用户id获取用户详情
+     *
      * @param userId 用户id
      */
     @GetMapping("getUserById")
     @LogMethod
-    public void getUserById(String userId){
+    public void getUserById(String userId) {
         super.outJsonp(JsonUtils.bean2json(sysUserService.selectById(userId)));
     }
 
     /**
      * 获取用户列表
+     *
      * @param
      */
     @GetMapping("getUserByIdList")
     @LogMethod
-    public void getUserByIdList(String userIds){
-        if(CheckUtils.isNullOrEmpty(userIds)){
+    public void getUserByIdList(String userIds) {
+        if (CheckUtils.isNullOrEmpty(userIds)) {
             super.outJsonp("[]");
             return;
         }
@@ -116,7 +118,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @NotRepeat
     @RequiresPermissions("sysUser:add")
     @PostMapping("addUser")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
     public HttpResult addUser(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser,
                               RedirectAttributes attr) {
         // 添加用户信息
@@ -160,27 +162,28 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * jsonp接口.用于其他系统用户列表
+     *
      * @param request
      */
     @GetMapping("findUsers")
     @LogMethod
-    public void findUsersJsonp(HttpServletRequest request){
+    public void findUsersJsonp(HttpServletRequest request) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         UcenterMsUserDO queryParam = UcenterMsUserDO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
         List<UcenterMsUserVO> users = sysUserService.selectPage(queryParam,
-                pageSizeInfo.getPageStart(),pageSizeInfo.getPageSize());
-        super.outJsonp(new Pager<UcenterMsUserVO>(sysUserService.selectCount(queryParam),users).asJson());
+                pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
+        super.outJsonp(new Pager<UcenterMsUserVO>(sysUserService.selectCount(queryParam), users).asJson());
     }
 
     @GetMapping("getUserByCompanyId")
     @ApiOperation("根据单位id获取单位下的用户集合")
-    public List<UcenterMsUserVO> getUserByCompanyId(String companyId){
+    public List<UcenterMsUserVO> getUserByCompanyId(String companyId) {
         List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>()
-                .eq(UcenterMsOrganizationDO::getCompanyId,companyId));
-        if(orgs.isEmpty()){
+                .eq(UcenterMsOrganizationDO::getCompanyId, companyId));
+        if (orgs.isEmpty()) {
             return new ArrayList<>();
         }
-        List<UcenterMsUserVO> users = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId,orgs.stream()
+        List<UcenterMsUserVO> users = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId, orgs.stream()
                 .map(UcenterMsOrganizationVO::getId).collect(Collectors.toList())));
         return users;
     }
@@ -194,7 +197,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @RequiresPermissions("sysUser:del")
     @RequestMapping("/delSysUser")
-    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,pkeyParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
         UcenterMsUserVO sysUser = sysUserService.selectById(id);
         if (sysUser.getIsAdmin() == sysUserService.SYS_USER_IS_ADMIN) {
@@ -214,7 +217,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @RequiresPermissions("sysUser:update")
     @RequestMapping("updateUser")
-    @LogMethod(type=LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
     public HttpResult<Boolean> update(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);
@@ -222,7 +225,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         sysUserService.updateUser(sysUser);
         return HttpResult.success(Boolean.TRUE);
     }
-
 
 
     /**
@@ -244,7 +246,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param sysUser 前端用户信息
      */
     @PostMapping("updatePass")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2,desc = "修改个人密码")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2, desc = "修改个人密码")
     public void updatePass(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         UcenterMsUserVO user = super.getSessionuser();
         sysUser.setUserId(user.getUserId());
@@ -258,7 +260,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param formSysUser 前端参数
      */
     @PostMapping("updateOwnUserInfo")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2,desc = "修改个人信息")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2, desc = "修改个人信息")
     public void updateOwnUserInfo(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO formSysUser) {
         UcenterMsUserVO user = super.getSessionuser();
         formSysUser.setUserName(formSysUser.getUserName());
@@ -294,8 +296,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-
-
     /**
      * @param request http请求
      * @param
@@ -315,7 +315,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-
     /**
      * 获取自己的个人信息
      *
@@ -330,13 +329,13 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     @GetMapping("getUserByOrgAndPermission")
     @ApiOperation("根据单位id，namespace，和方法编码获取符合条件的人")
-    public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId,String namespace,String permissonMethodCode){
-        return sysUserService.getUserByOrgAndPermission(companyId,namespace,permissonMethodCode);
+    public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
+        return sysUserService.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
     }
 
     @GetMapping("getUserCompanyTree")
     @ApiOperation("获取公司tree(带用户)")
-    public  List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper){
+    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper) {
         return sysUserService.getUserCompanyTree(new QueryWrapper<>());
     }
 }

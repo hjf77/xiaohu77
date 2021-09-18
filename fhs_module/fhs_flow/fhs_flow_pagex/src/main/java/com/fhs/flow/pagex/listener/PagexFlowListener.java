@@ -21,6 +21,7 @@ import java.util.Set;
 
 /**
  * pagex工作流监听器
+ *
  * @author user
  * @since 2019-05-18 11:52:49
  */
@@ -45,16 +46,16 @@ public class PagexFlowListener implements DistributedListener {
     @Override
     public Map<String, Object> onMessage(Map<String, Object> param) {
         //有namespace的才是pagex需要监听的,其他的不管
-        if(param.containsKey("namespace")){
+        if (param.containsKey("namespace")) {
             String namespace = ConverterUtils.toString(param.get("namespace"));
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("id", param.get("businessKey"));
             setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
-            Map<String,Object> dbParam = JSONObject.parseObject(service.findBean(paramMap, namespace));
-            dbParam.put("instanceStatus",param.get("instanceStatus"));
-            EMap<String,Object> updateParam = new EMap<>();
+            Map<String, Object> dbParam = JSONObject.parseObject(service.findBean(paramMap, namespace));
+            dbParam.put("instanceStatus", param.get("instanceStatus"));
+            EMap<String, Object> updateParam = new EMap<>();
             updateParam.putAll(dbParam);
-            service.update(updateParam,namespace);
+            service.update(updateParam, namespace);
         }
         return null;
     }

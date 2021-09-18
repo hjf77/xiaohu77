@@ -59,7 +59,7 @@ public class SettAlipaySettDO extends BaseDO<SettAlipaySettDO> {
     private String appId;
 
     /**
-     *  应用公钥
+     * 应用公钥
      */
     @NotEmpty
     @NotNull(message = "应用公钥字段不可为null", groups = {Update.class, Delete.class})

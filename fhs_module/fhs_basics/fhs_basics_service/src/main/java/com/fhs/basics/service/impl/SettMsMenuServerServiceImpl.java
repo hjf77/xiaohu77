@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * 服务管理(settMsMenuServerService)表服务实现类
+ *
  * @author jianbo.qin
  * @version [版本号, 2018/03/23 14:19:21]
  * @Description:服务器配置
@@ -25,14 +26,14 @@ import org.springframework.stereotype.Service;
 @Service("settMsMenuServerService")
 @DataSource("base_business")
 @Namespace("sett_ms_system")
-@AutoTrans(namespace = "sett_ms_system",fields = "serverName",useRedis = true)
+@AutoTrans(namespace = "sett_ms_system", fields = "serverName", useRedis = true)
 public class SettMsMenuServerServiceImpl extends BaseServiceImpl<SettMsMenuServerVO, SettMsMenuServerDO> implements SettMsMenuServerService, FeignServerApiService {
 
     @Override
     public HttpResult<SettMsMenuServerVO> getMenuServeById(String id) {
-        ParamChecker.isNotNullOrEmpty(id,"服务id不可为空");
+        ParamChecker.isNotNullOrEmpty(id, "服务id不可为空");
         SettMsMenuServerVO vo = this.selectById(id);
-        ParamChecker.isNotNull(vo,"服务id无效");
+        ParamChecker.isNotNull(vo, "服务id无效");
         return HttpResult.success(vo);
     }
 }

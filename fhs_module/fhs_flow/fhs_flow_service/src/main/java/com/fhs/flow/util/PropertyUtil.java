@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 
 /**
  * 属性工具类。
+ *
  * @author user
  * @date 2020-05-18 14:12:33
  */

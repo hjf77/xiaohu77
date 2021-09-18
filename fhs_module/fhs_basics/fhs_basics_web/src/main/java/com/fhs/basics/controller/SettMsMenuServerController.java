@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SettMsMenuServerController extends ModelSuperController<SettMsMenuServerVO, SettMsMenuServerDO> {
     /**
      * 获取服务列表for jsonp接口
+     *
      * @param request  request
      * @param response response
      */

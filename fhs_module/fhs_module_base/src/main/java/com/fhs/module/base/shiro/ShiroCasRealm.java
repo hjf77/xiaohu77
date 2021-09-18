@@ -21,60 +21,59 @@ import java.util.List;
 
 /**
  * cas单点登录器
+ *
  * @author user
  * @since 2019-05-18 11:37:44
  */
 public class ShiroCasRealm extends Pac4jRealm {
 
-	private static final Logger LOGGER = Logger.getLogger(ShiroCasRealm.class);
+    private static final Logger LOGGER = Logger.getLogger(ShiroCasRealm.class);
 
 
-	private FeignSysUserApiService feignSysUserService;
+    private FeignSysUserApiService feignSysUserService;
 
 
-	/**
-	 * 鎺堟潈
-	 */
-	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalcollection) {
-		if(feignSysUserService==null)
-		{
-			feignSysUserService = SpringContextUtil.getBeanByClassForApi(FeignSysUserApiService.class);
-		}
-		try {
-			String loginName  = ((Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
-			HttpResult<UcenterMsUserVO> httpResult = feignSysUserService.getSysUserByName(loginName);
-			UcenterMsUserVO user = httpResult.getData();
-			HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-			LOGGER.info("用户已经登录");
-			HttpResult<List<String>> menuResult =  feignSysUserService.selectMenuByUname(loginName);
-			List<String> listsMenu = menuResult.getData();
-			if (listsMenu == null || listsMenu.size() <= 0) {
-				return null;
-			}
-			LOGGER.info(menuResult.asJson());
-			SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-			authorizationInfo.addStringPermissions(listsMenu);
-			return authorizationInfo;
+    /**
+     * 鎺堟潈
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalcollection) {
+        if (feignSysUserService == null) {
+            feignSysUserService = SpringContextUtil.getBeanByClassForApi(FeignSysUserApiService.class);
+        }
+        try {
+            String loginName = ((Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
+            HttpResult<UcenterMsUserVO> httpResult = feignSysUserService.getSysUserByName(loginName);
+            UcenterMsUserVO user = httpResult.getData();
+            HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            LOGGER.info("用户已经登录");
+            HttpResult<List<String>> menuResult = feignSysUserService.selectMenuByUname(loginName);
+            List<String> listsMenu = menuResult.getData();
+            if (listsMenu == null || listsMenu.size() <= 0) {
+                return null;
+            }
+            LOGGER.info(menuResult.asJson());
+            SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+            authorizationInfo.addStringPermissions(listsMenu);
+            return authorizationInfo;
 
-		} catch (Exception e) {
-			LOGGER.error("加载权限错误，用户："+principalcollection.getPrimaryPrincipal(), e);
-		}
-		return null;
+        } catch (Exception e) {
+            LOGGER.error("加载权限错误，用户：" + principalcollection.getPrimaryPrincipal(), e);
+        }
+        return null;
 
-	}
+    }
 
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-	{
-		AuthenticationInfo info = super.doGetAuthenticationInfo(token);
-		clearCache(info.getPrincipals());
-		return info;
-	}
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
+        AuthenticationInfo info = super.doGetAuthenticationInfo(token);
+        clearCache(info.getPrincipals());
+        return info;
+    }
 
-	@Override
-	public void clearCachedAuthorizationInfo(PrincipalCollection arg0) {
-		super.clearCachedAuthorizationInfo(arg0);
-	}
+    @Override
+    public void clearCachedAuthorizationInfo(PrincipalCollection arg0) {
+        super.clearCachedAuthorizationInfo(arg0);
+    }
 
 }

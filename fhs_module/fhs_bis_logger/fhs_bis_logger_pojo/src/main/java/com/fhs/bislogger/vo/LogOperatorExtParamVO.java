@@ -18,12 +18,12 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value ="LogOperatorExtParamDO",description ="LogOperatorExtParam参数")
+@ApiModel(value = "LogOperatorExtParamDO", description = "LogOperatorExtParam参数")
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class LogOperatorExtParamVO extends LogOperatorExtParamDO implements VO {
 
     /**
      * 模型
      */
-     private String model;
- }
+    private String model;
+}

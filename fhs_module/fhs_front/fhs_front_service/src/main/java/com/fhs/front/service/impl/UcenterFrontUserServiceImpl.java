@@ -35,7 +35,7 @@ import java.util.Map;
 @Primary
 @Cacheable("frontUser")
 @Service("UcenterFrontUserService")
-@AutoTrans(namespace = "frontUser",fields = {"userName","nickName","realName"})
+@AutoTrans(namespace = "frontUser", fields = {"userName", "nickName", "realName"})
 @DataSource("base_business")
 public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserDO> implements UcenterFrontUserService, FeignFrontUserApiService {
 

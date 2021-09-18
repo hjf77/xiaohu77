@@ -51,7 +51,7 @@ import java.util.List;
 @TableName("t_ucenter_ms_user")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
-public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
+public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
 
     private static final long serialVersionUID = 1L;
 
@@ -78,14 +78,14 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     @NotNull(message = "{test.userName.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.userName.length}", max = 20, min = 0)
     @Like
-    @TableField( "user_name")
+    @TableField("user_name")
     @ApiModelProperty("用户名")
     private String userName;
 
     /**
      * 密码
      */
-    @TableField( "password")
+    @TableField("password")
     @JSONField(serialize = false)
     @ApiModelProperty("密码")
     private String password;
@@ -94,14 +94,14 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      * 手机号
      */
     @NotNull(message = "{test.mobile.null}", groups = {Update.class, Add.class})
-    @TableField( "mobile")
+    @TableField("mobile")
     @ApiModelProperty("手机号")
     private String mobile;
 
     /**
      * 集团编码-saas模式适用
      */
-    @TableField( "group_code")
+    @TableField("group_code")
     @ApiModelProperty("集团编码")
     private String groupCode;
 
@@ -110,7 +110,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      */
     @NotNull(message = "{test.email.null}", groups = {Update.class, Add.class})
     @Length(message = "{test.email.length}", max = 255, min = 0)
-    @TableField( "email")
+    @TableField("email")
     @ApiModelProperty("邮箱")
     private String email;
 
@@ -135,7 +135,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
      */
     @Max(message = "前端用户的sex字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "前端用户的sex字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
-    @TableField( "sex")
+    @TableField("sex")
     @Trans(type = TransType.WORD_BOOK, key = "sex")
     @ApiModelProperty("性别")
     private Integer sex;
@@ -146,21 +146,21 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
-    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG,jsonKey = "orgName")
+    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG, jsonKey = "orgName")
     @ApiModelProperty("组织机构编号")
     private String organizationId;
 
     /**
      * 头像
      */
-    @TableField( "header")
+    @TableField("header")
     @ApiModelProperty("头像")
     private String header;
 
     /**
      * 状态
      */
-    
+
     @TableField(exist = false)
     @ApiModelProperty("状态")
     private String state;
@@ -207,8 +207,8 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO>  {
     @ApiModelProperty("角色")
     private List<UcenterMsRoleDO> roles;
 
-    public String[] getRoleList(){
-        if(CheckUtils.isNullOrEmpty(this.roleIds)){
+    public String[] getRoleList() {
+        if (CheckUtils.isNullOrEmpty(this.roleIds)) {
             return new String[]{};
         }
         return this.roleIds.split(",");

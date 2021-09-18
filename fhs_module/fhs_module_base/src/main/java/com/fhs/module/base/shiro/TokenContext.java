@@ -6,17 +6,19 @@ public class TokenContext {
 
     /**
      * 设置token
+     *
      * @param token
      */
-    public static void setToken(String token){
+    public static void setToken(String token) {
         TOKEN_CONTEXT.set(token);
     }
 
     /**
      * 获取token
+     *
      * @return
      */
-    public static String getToken(){
+    public static String getToken() {
         return TOKEN_CONTEXT.get();
     }
 }

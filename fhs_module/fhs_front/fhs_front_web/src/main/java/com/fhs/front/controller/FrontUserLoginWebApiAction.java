@@ -22,6 +22,7 @@ import java.io.IOException;
 
 /**
  * 前段用户登录注册 by jackwong
+ *
  * @author jackwong
  * @since 2019-05-18 11:51:21
  */
@@ -29,7 +30,7 @@ import java.io.IOException;
 @RequestMapping("/webApi/front")
 public class FrontUserLoginWebApiAction {
     /**
-     *  日志
+     * 日志
      */
     private static final Logger LOGGER = Logger.getLogger(FrontUserLoginWebApiAction.class);
 
@@ -44,17 +45,16 @@ public class FrontUserLoginWebApiAction {
     private UcenterFrontUserService frontUserService;
 
 
-
-
     /**
      * 获取用户信息
-     * @param accessToken  根据授权token获取用户信息
+     *
+     * @param accessToken 根据授权token获取用户信息
      */
     @GetMapping(value = "/getUserInfo")
     @ApiOperation(value = "获取用户信息")
-    public HttpResult<UcenterFrontUserVO> getUserInfo(String accessToken){
+    public HttpResult<UcenterFrontUserVO> getUserInfo(String accessToken) {
         String userId = loginService.getUserIdByAccessToken(accessToken);
-        ParamChecker.isNotNull(userId,"accessToken无效或者超时");
+        ParamChecker.isNotNull(userId, "accessToken无效或者超时");
         UcenterFrontUserVO user = frontUserService.selectById(userId);
         user.setPasswd(null);
         return HttpResult.success(user);
@@ -64,13 +64,12 @@ public class FrontUserLoginWebApiAction {
     @ValidateParam(value = Check.NotEmpty, argName = "userVO.userName")
     @ValidateParam(value = Check.NotEmpty, argName = "userVO.passwd")
     @ApiOperation(value = "使用用户名密码登录")
-    public HttpResult<String> loginByUsernameAndPassword(@RequestBody  UcenterFrontUserVO userVO){
+    public HttpResult<String> loginByUsernameAndPassword(@RequestBody UcenterFrontUserVO userVO) {
         userVO.setPasswd(Md5Util.MD5(userVO.getPasswd()));
         userVO = frontUserService.findBean(userVO);
-        ParamChecker.isNotNull(userVO,"用户名密码无效");
+        ParamChecker.isNotNull(userVO, "用户名密码无效");
         return HttpResult.success(loginService.login(userVO.getUserId()));
     }
-
 
 
     /**

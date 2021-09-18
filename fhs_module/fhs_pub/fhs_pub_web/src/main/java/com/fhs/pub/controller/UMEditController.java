@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 /**
  * um编辑器图片上传处理
+ *
  * @author jackwong
  * @since 2019-05-18 11:27:25
  */
@@ -27,20 +28,21 @@ public class UMEditController {
 
     /**
      * 上传图片
+     *
      * @param upfile 文件
      * @return 文件对象
      */
     @ResponseBody
     @PostMapping("imageUp")
     public String imageUp(MultipartFile upfile) {
-        if (upfile == null ) {
+        if (upfile == null) {
             throw new ParamException("文件不能为空");
         }
-        PubFileVO file = fileServerBusiness.uploadFileForList (Arrays.asList (upfile)).get (0);
-        String result = "<script>window.name='{\"name\":\""+ file.getFileName() +"\", \"originalName\": \""+  file.getFileName() +"\", \"size\": "+
+        PubFileVO file = fileServerBusiness.uploadFileForList(Arrays.asList(upfile)).get(0);
+        String result = "<script>window.name='{\"name\":\"" + file.getFileName() + "\", \"originalName\": \"" + file.getFileName() + "\", \"size\": " +
                 upfile.getSize()
-                +", \"state\": \"SUCCESS\", \"type\": \""+ file.getFileSuffix() +"\", \"url\": \"" + EConfig.getPathPropertiesValue("basePath")
-                +"/downLoad/file?fileId=" + file.getFileId() + "\"}' </script>";
+                + ", \"state\": \"SUCCESS\", \"type\": \"" + file.getFileSuffix() + "\", \"url\": \"" + EConfig.getPathPropertiesValue("basePath")
+                + "/downLoad/file?fileId=" + file.getFileId() + "\"}' </script>";
         System.out.println(result);
         return result;
     }

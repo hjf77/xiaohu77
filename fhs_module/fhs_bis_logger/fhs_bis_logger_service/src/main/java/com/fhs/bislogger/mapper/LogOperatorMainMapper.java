@@ -21,6 +21,7 @@ public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> 
 
     /**
      * 查询模块列表
+     *
      * @return
      */
     List<LogOperatorMainVO> getLoggerModelList();
@@ -28,6 +29,7 @@ public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> 
 
     /**
      * 根据时间段查询数据
+     *
      * @param paramMap
      * @return
      */
@@ -35,6 +37,7 @@ public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> 
 
     /**
      * 根据url查询接口调用多少次
+     *
      * @param paramMap
      * @return
      */
@@ -42,6 +45,7 @@ public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> 
 
     /**
      * 查询分组后的总记录数
+     *
      * @param paramMap
      * @return
      */

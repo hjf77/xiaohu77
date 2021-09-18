@@ -36,7 +36,7 @@ import java.util.Map;
 @RestController
 @Api(tags = {"流程任务日志"})
 @RequestMapping("/ms/flowTaskHistory")
-@LogNamespace(namespace = "flow_task_history",module = "流程任务日志管理")
+@LogNamespace(namespace = "flow_task_history", module = "流程任务日志管理")
 public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHistoryVO, FlowTaskHistoryDO> {
 
     @Autowired
@@ -81,7 +81,7 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
         TaskHistoryVO taskHistoryVO = null;
         for (HistoricTaskInstance historicTaskInstance : histList) {
             for (TaskHistoryVO historyVO : approvalRecord) {
-                if (historyVO.getTaskFinishTime()!=null){
+                if (historyVO.getTaskFinishTime() != null) {
                     long finishTime = DateUtils.parseStr(historyVO.getTaskFinishTime(), DateUtils.DATETIME_PATTERN).getTime();
                     long createTime = DateUtils.parseStr(historyVO.getCreateTime(), DateUtils.DATETIME_PATTERN).getTime();
                     long useTime = (finishTime - createTime) / 1000 / 60;
@@ -89,15 +89,15 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
                 }
             }
             taskHistoryVO = new TaskHistoryVO();
-            if (!("completed".equals(historicTaskInstance.getDeleteReason()))){
+            if (!("completed".equals(historicTaskInstance.getDeleteReason()))) {
                 taskHistoryVO.setCreateTime(DateUtils.doConvertToString(historicTaskInstance.getStartTime()));
                 taskHistoryVO.setTaskFinishTime(DateUtils.doConvertToString(historicTaskInstance.getEndTime()));
                 taskHistoryVO.setCreateUser(historicTaskInstance.getAssignee());
                 taskHistoryVO.setTaskName(historicTaskInstance.getName());
                 taskHistoryVO.setTaskId(historicTaskInstance.getId());
-                if (DateUtils.doConvertToString(historicTaskInstance.getEndTime()) == null ){
+                if (DateUtils.doConvertToString(historicTaskInstance.getEndTime()) == null) {
                     taskHistoryVO.setUseStatus(String.valueOf(FlowConstant.APPROVING));
-                }else if ("deleted".equals(historicTaskInstance.getDeleteReason())){
+                } else if ("deleted".equals(historicTaskInstance.getDeleteReason())) {
                     taskHistoryVO.setUseStatus(String.valueOf(FlowConstant.RESULT_END));
                 }
                 approvalRecord.add(taskHistoryVO);

@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * 系统菜单vo
+ *
  * @author user
  * @date 2020-05-18 15:36:38
  */
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettMsMenuVO",description ="SettMsMenu参数")
+@ApiModel(value = "SettMsMenuVO", description = "SettMsMenu参数")
 public class SettMsMenuVO extends SettMsMenuDO implements VO {
 
 }

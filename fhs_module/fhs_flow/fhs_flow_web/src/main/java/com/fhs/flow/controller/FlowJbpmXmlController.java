@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(tags = {"流程列表"})
 @RequestMapping("/ms/flow_jbpm_xml")
-@LogNamespace(namespace = "flow_jbpm_xml",module = "流程列表")
+@LogNamespace(namespace = "flow_jbpm_xml", module = "流程列表")
 public class FlowJbpmXmlController extends ModelSuperController<FlowJbpmXmlVO, FlowJbpmXmlDO> {
 
     @Autowired
@@ -56,7 +56,7 @@ public class FlowJbpmXmlController extends ModelSuperController<FlowJbpmXmlVO, F
      */
     @RequestMapping("addFlow")
     @RequiresPermissions("flow_jbpm_xml:add")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 0)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> addFlow(@Validated(Add.class) FlowJbpmXmlVO flowJbpmXmlVO) {
         flowJbpmXmlVO.setStatus(FlowConstant.XML_STATUS_DRAFT);
         flowJbpmXmlVO.setVersion(1);

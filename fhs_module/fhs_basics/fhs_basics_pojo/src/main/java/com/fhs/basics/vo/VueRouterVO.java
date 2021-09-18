@@ -54,7 +54,7 @@ public class VueRouterVO extends BaseObject<VueRouterVO> {
     /**
      * 扩展信息
      */
-    private Map<String,String> meta = new HashMap<>();
+    private Map<String, String> meta = new HashMap<>();
 
     /**
      * 子菜单

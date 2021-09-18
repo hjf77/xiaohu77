@@ -14,9 +14,9 @@ import io.swagger.annotations.Api;
  */
 
 @RestController
-@Api(tags={"流程自定义按钮"})
+@Api(tags = {"流程自定义按钮"})
 @RequestMapping("/ms/flow_jbmp_xml_button")
-public class FlowJbmpXmlButtonController extends ModelSuperController<FlowJbmpXmlButtonVO,FlowJbmpXmlButtonDO> {
-   
+public class FlowJbmpXmlButtonController extends ModelSuperController<FlowJbmpXmlButtonVO, FlowJbmpXmlButtonDO> {
+
 
 }

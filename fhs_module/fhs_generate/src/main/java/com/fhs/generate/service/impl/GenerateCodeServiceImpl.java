@@ -28,12 +28,12 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     /**
      * form的类型对应的过滤条件类型
      */
-    private static Map<String,String> typeConverter = new HashMap<>();
+    private static Map<String, String> typeConverter = new HashMap<>();
 
     /**
      * 各个页面元素对应的操作符
      */
-    private static Map<String,String> operationMap = new HashMap<>();
+    private static Map<String, String> operationMap = new HashMap<>();
 
 
     static {
@@ -43,13 +43,13 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         needTransElementType.add("checkbox");
         needTransElementType.add("switch");
 
-        operationMap.put("dates","between");
-        operationMap.put("textarea","like");
-        operationMap.put("text","like");
-        operationMap.put("checkbox","find_in_set_in");
+        operationMap.put("dates", "between");
+        operationMap.put("textarea", "like");
+        operationMap.put("text", "like");
+        operationMap.put("checkbox", "find_in_set_in");
 
-        typeConverter.put("dates","datetimerange");
-        typeConverter.put("textarea","text");
+        typeConverter.put("dates", "datetimerange");
+        typeConverter.put("textarea", "text");
     }
 
     @Override
@@ -59,18 +59,18 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         String listVueCode = generateListVue(tableInfoVO);
         String listVueFile = tempPath + "/index.vue";
         try {
-            FileUtils.write(new File(listVueFile),listVueCode,"UTF-8");
+            FileUtils.write(new File(listVueFile), listVueCode, "UTF-8");
         } catch (IOException e) {
-            log.error("写入文件错误",e);
+            log.error("写入文件错误", e);
         }
         String formVueCode = generateFormVue(tableInfoVO);
         String formVueFile = tempPath + "/components/" + tableInfoVO.getNamespace() + "Form.vue";
         try {
-            FileUtils.write(new File(formVueFile),formVueCode,"UTF-8");
+            FileUtils.write(new File(formVueFile), formVueCode, "UTF-8");
         } catch (IOException e) {
-            log.error("写入文件错误",e);
+            log.error("写入文件错误", e);
         }
-        return new String[]{listVueFile,formVueFile};
+        return new String[]{listVueFile, formVueFile};
     }
 
     /**
@@ -109,6 +109,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
     /**
      * 生成表单 vue代码
+     *
      * @param tableInfoVO 表对象
      * @return 代码
      */
@@ -139,38 +140,37 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
 
-
     /**
      * 获取过滤条件json
+     *
      * @param fieldsVO
      * @return
      */
     private JSONObject getFilterJson(FieldsVO fieldsVO) {
         JSONObject result = new JSONObject();
-        result.put("type",typeConverter.containsKey(fieldsVO.getPageElementType()) ? typeConverter.get(fieldsVO.getPageElementType()) : fieldsVO.getPageElementType());
-        result.put("label",fieldsVO.getComment());
-        result.put("name",fieldsVO.getCamelFieldName());
-        result.put("operation",operationMap.containsKey(fieldsVO.getPageElementType()) ? operationMap.get(fieldsVO.getPageElementType()) : "=");
+        result.put("type", typeConverter.containsKey(fieldsVO.getPageElementType()) ? typeConverter.get(fieldsVO.getPageElementType()) : fieldsVO.getPageElementType());
+        result.put("label", fieldsVO.getComment());
+        result.put("name", fieldsVO.getCamelFieldName());
+        result.put("operation", operationMap.containsKey(fieldsVO.getPageElementType()) ? operationMap.get(fieldsVO.getPageElementType()) : "=");
         result.putAll(fieldsVO.getExtParam());
         return result;
     }
 
     /**
      * 获取基础json
+     *
      * @param fieldsVO
      * @return
      */
     private JSONObject getFormJson(FieldsVO fieldsVO) {
         JSONObject result = getFilterJson(fieldsVO);
         result.remove("operation");
-        result.put("type",fieldsVO.getPageElementType());
-        if(Constant.INT_TRUE==fieldsVO.getIsRequired()){
-            result.put("rule","required");
+        result.put("type", fieldsVO.getPageElementType());
+        if (Constant.INT_TRUE == fieldsVO.getIsRequired()) {
+            result.put("rule", "required");
         }
         return result;
     }
-
-
 
 
 }

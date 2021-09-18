@@ -82,7 +82,7 @@ public class FlowTaskDO extends BaseDO<FlowTaskDO> {
     /**
      * 实例创建人
      */
-    @Trans(type = TransType.AUTO_TRANS,key = Constant.USER_INFO)
+    @Trans(type = TransType.AUTO_TRANS, key = Constant.USER_INFO)
     private String createUser;
 
 

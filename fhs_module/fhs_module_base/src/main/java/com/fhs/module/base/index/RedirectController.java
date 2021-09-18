@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * 核心跨域跳转Controller
+ *
  * @author qh
  * @since 2019-05-18 11:36:23
  */
@@ -27,22 +28,21 @@ public class RedirectController {
 
     @RequestMapping(value = "ms/redirect")
     public void redirect(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        Map<String, String[]> parameterMap = request.getParameterMap ( );
-        String redirectUrl = parameterMap.get ( "call" )[0].toString ();
-        for (String key: parameterMap.keySet ()) {
-            if (!"call".equals (key )){
-                redirectUrl += ("&" + key + "=" + URLEncoder.encode(parameterMap.get (key)[0].toString (),"utf8")   );
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        String redirectUrl = parameterMap.get("call")[0].toString();
+        for (String key : parameterMap.keySet()) {
+            if (!"call".equals(key)) {
+                redirectUrl += ("&" + key + "=" + URLEncoder.encode(parameterMap.get(key)[0].toString(), "utf8"));
             }
         }
-        if(request.getSession().getAttribute(Constant.SESSION_USER) == null)
-        {
-            request.getSession().setAttribute("serviceURL",redirectUrl);
-            redirectUrl = EConfig.getPathPropertiesValue("basePath")+"/ms/index";
+        if (request.getSession().getAttribute(Constant.SESSION_USER) == null) {
+            request.getSession().setAttribute("serviceURL", redirectUrl);
+            redirectUrl = EConfig.getPathPropertiesValue("basePath") + "/ms/index";
         }
         try {
-            response.sendRedirect ( redirectUrl );
+            response.sendRedirect(redirectUrl);
         } catch (IOException e) {
-            LOGGER.error ( redirectUrl + "转发异常", e );
+            LOGGER.error(redirectUrl + "转发异常", e);
         }
     }
 }

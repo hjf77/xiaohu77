@@ -28,6 +28,6 @@ public class ServiceWordbookWebApiController extends BaseController {
     @GetMapping("getData")
     @ApiOperation("根据字典编码获取字典")
     public void getData(String wordbookGroupCode) {
-         super.outJsonp(JsonUtils.list2json(wordBookService.getWordBookList(wordbookGroupCode)));
+        super.outJsonp(JsonUtils.list2json(wordBookService.getWordBookList(wordbookGroupCode)));
     }
 }

@@ -60,7 +60,6 @@ public class FlowJbmpAuthFormDO extends BaseDO<FlowJbmpAuthFormDO> {
     private String formName;
 
 
-
     /**
      * 流程变量值
      */

@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * 文件服务配置类
+ *
  * @author user
  * @since 2019-05-18 11:21:18
  */
@@ -35,13 +36,13 @@ public class FileServiceConfig implements WebMvcConfigurer {
 
     /**
      * 初始化文件储存器
-     * @return  根据条件初始化文件储存器
+     *
+     * @return 根据条件初始化文件储存器
      */
     @Bean
-    public FileStorage fileStorage(){
+    public FileStorage fileStorage() {
         //如果是阿里云则使用阿里云oss文件储存器
-        if("oss".equals(storageType))
-        {
+        if ("oss".equals(storageType)) {
             return new AliyunOSSFileStorage();
         }
         return new DiskFileStorage();

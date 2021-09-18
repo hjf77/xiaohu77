@@ -43,8 +43,7 @@ import java.text.DecimalFormat;
 @TableName("t_pub_file")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PubFileDO", description = "PubFile参数")
-public class PubFileDO extends BaseDO<PubFileDO> implements Serializable
-{
+public class PubFileDO extends BaseDO<PubFileDO> implements Serializable {
     private static final long serialVersionUID = 7096338027750227520L;
 
     /**
@@ -98,10 +97,11 @@ public class PubFileDO extends BaseDO<PubFileDO> implements Serializable
 
     /**
      * 格式化文件大小描述
+     *
      * @return
      */
-    public String getFileSizeDesc(){
-        if(fileSize==null){
+    public String getFileSizeDesc() {
+        if (fileSize == null) {
             return "";
         }
         DecimalFormat formater = new DecimalFormat("####.00");

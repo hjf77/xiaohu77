@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * bean 属性copy
+ *
  * @author user
  * @date 2020-05-18 14:07:33
  */
@@ -40,7 +41,7 @@ public class BeanCopierUtils {
      * @return
      */
     public static <T> T transformBean(Object source, Class<T> clazz) {
-        if (source == null){
+        if (source == null) {
             return null;
         }
         T target;
@@ -79,7 +80,7 @@ public class BeanCopierUtils {
         for (Object source : sourceList) {
             T target = transformBean(source, clazz);
 
-            if (target != null){
+            if (target != null) {
                 list.add(target);
             }
         }

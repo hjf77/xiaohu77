@@ -19,6 +19,7 @@ import java.util.Map;
 
 /**
  * 微信工具 by jackwong
+ *
  * @author jackwong
  * @since 2019-05-18 11:52:49
  */

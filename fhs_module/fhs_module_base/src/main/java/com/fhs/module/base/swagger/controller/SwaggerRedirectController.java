@@ -10,6 +10,7 @@ import java.io.IOException;
 
 /**
  * swagger转发控制器
+ *
  * @author user
  * @since 2019-05-18 11:39:05
  */
@@ -22,7 +23,7 @@ public class SwaggerRedirectController extends BaseController {
 
     @RequestMapping("302")
     public void redirect() throws IOException {
-        if(isEnable){
+        if (isEnable) {
             super.getResponse().sendRedirect(EConfig.getPathPropertiesValue("basePath") + "/doc.html");
             return;
         }

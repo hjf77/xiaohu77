@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * 子系统vo
+ *
  * @author user
  * @date 2020-05-18 15:37:57
  */
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettMsSystemVO",description ="SettMsSystem参数")
+@ApiModel(value = "SettMsSystemVO", description = "SettMsSystem参数")
 public class SettMsSystemVO extends SettMsSystemDO implements VO {
 
 }

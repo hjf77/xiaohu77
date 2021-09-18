@@ -38,7 +38,7 @@ import java.util.*;
 @Api(tags = {"角色"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysRole")
-@LogNamespace(namespace = BaseTransConstant.ROLE_INFO,module = "角色管理")
+@LogNamespace(namespace = BaseTransConstant.ROLE_INFO, module = "角色管理")
 public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRoleDO> {
 
     /**
@@ -73,26 +73,27 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequestMapping("getRolesForJsonp")
     @LogMethod
-    public void getRolesForJsonp(HttpServletRequest request){
+    public void getRolesForJsonp(HttpServletRequest request) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         UcenterMsRoleDO roleName = UcenterMsRoleDO.builder().roleName(request.getParameter("roleName")).build();
         List<UcenterMsRoleVO> roles =
                 sysRoleService.selectPage(roleName, pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
-        super.outJsonp(new Pager<UcenterMsRoleVO>(sysRoleService.selectCount(roleName),roles).asJson());
+        super.outJsonp(new Pager<UcenterMsRoleVO>(sysRoleService.selectCount(roleName), roles).asJson());
         //        super.outJsonp(listData(null).asJson());
     }
 
     /**
      * 根据角色ids获取角色列表
+     *
      * @param ids
      */
     @RequestMapping("getRoleForJsonpByIds")
-    public void getRoleForJsonpByIds(String ids){
-        if(CheckUtils.isNullOrEmpty(ids)){
+    public void getRoleForJsonpByIds(String ids) {
+        if (CheckUtils.isNullOrEmpty(ids)) {
             super.outJsonp("[]");
             return;
         }
-        List<UcenterMsRoleVO> roles =   sysRoleService.findByIds(Arrays.asList(ids.split(",")));
+        List<UcenterMsRoleVO> roles = sysRoleService.findByIds(Arrays.asList(ids.split(",")));
         super.outJsonp(JsonUtils.list2json(roles));
     }
 
@@ -157,7 +158,6 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     }
 
 
-
     /**
      * 更新角色信息
      *
@@ -166,7 +166,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * @paramadminRole
      */
     @ResponseBody
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
     @RequestMapping("updateSysRole")
     @RequiresPermissions("sysRole:update")
     public HttpResult<Boolean> updateSysRole(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
@@ -196,7 +196,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:add")
     @RequestMapping("addSysRole")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
     public HttpResult<Boolean> add(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setIsDelete(Constant.ZERO);
@@ -216,7 +216,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @RequiresPermissions("sysRole:del")
     @RequestMapping("delSysRole")
-    @LogMethod(type=LoggerConstant.METHOD_TYPE_DEL,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, voParamIndex = 2)
     public HttpResult<Boolean> del(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
         sysRoleService.deleteRole(sysRole);
         return HttpResult.success(true);

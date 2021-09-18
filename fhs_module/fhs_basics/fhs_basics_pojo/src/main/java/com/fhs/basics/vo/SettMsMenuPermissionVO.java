@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 菜单权限vo
+ *
  * @author user
  * @date 2020-05-18 15:33:48
  */
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettMsMenuPermissionVO",description ="SettMsMenuPermission参数")
+@ApiModel(value = "SettMsMenuPermissionVO", description = "SettMsMenuPermission参数")
 public class SettMsMenuPermissionVO extends SettMsMenuPermissionDO implements VO {
 
 }

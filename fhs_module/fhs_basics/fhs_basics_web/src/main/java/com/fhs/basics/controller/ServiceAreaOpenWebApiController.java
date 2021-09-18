@@ -36,7 +36,7 @@ public class ServiceAreaOpenWebApiController extends BaseController {
      */
     @RequestMapping("getProvinceData")
     @ResponseBody
-    public void getProvinceData( ServiceAreaVO area) {
+    public void getProvinceData(ServiceAreaVO area) {
         getProvinceList(area);
     }
 

@@ -35,9 +35,9 @@ public class ShiroRealm extends AuthorizingRealm {
 
     private RedisCacheService<List<String>> redisCacheService;
 
-    private boolean isVue ;
+    private boolean isVue;
 
-    public ShiroRealm(boolean isVue){
+    public ShiroRealm(boolean isVue) {
         this.isVue = isVue;
     }
 
@@ -51,22 +51,22 @@ public class ShiroRealm extends AuthorizingRealm {
             redisCacheService = SpringContextUtil.getBeanByName(RedisCacheService.class);
         }
         List<String> listsMenu = null;
-        if(isVue){
+        if (isVue) {
             String token = TokenContext.getToken();
-            if(redisCacheService.exists(PERMISSION_KEY + token)){
+            if (redisCacheService.exists(PERMISSION_KEY + token)) {
                 listsMenu = redisCacheService.get(PERMISSION_KEY + token);
             }
         }
         //如果是null去加载权限
-        if(listsMenu == null){
+        if (listsMenu == null) {
             String loginName = (String) principalcollection.fromRealm(getName()).iterator().next();
             HttpResult<List<String>> listsMenuResult = feignSysUserService.selectMenuByUname(loginName);
             if (listsMenuResult.getCode() != Constant.SUCCESS_CODE) {
                 throw new BusinessException("获取菜单信息错误");
             }
             listsMenu = listsMenuResult.getData();
-            if(isVue){
-                redisCacheService.put(PERMISSION_KEY + TokenContext.getToken(),listsMenu);
+            if (isVue) {
+                redisCacheService.put(PERMISSION_KEY + TokenContext.getToken(), listsMenu);
             }
             if (listsMenu == null || listsMenu.size() <= 0) {
                 return null;

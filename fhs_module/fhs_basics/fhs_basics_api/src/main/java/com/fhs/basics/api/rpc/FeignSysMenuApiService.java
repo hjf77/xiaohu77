@@ -16,12 +16,10 @@ import java.util.List;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
-@FeignClient(value = "basics", configuration = FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration = FeignConfiguration.class, primary = false)
 public interface FeignSysMenuApiService {
 
     /**

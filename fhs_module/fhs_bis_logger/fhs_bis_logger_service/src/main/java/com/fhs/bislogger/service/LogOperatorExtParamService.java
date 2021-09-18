@@ -14,8 +14,7 @@ import java.util.List;
  * @since 2020-04-23 13:58:59
  */
 @Namespace("log_operator_ext_param")
-public interface LogOperatorExtParamService extends BaseService<LogOperatorExtParamVO,LogOperatorExtParamDO>{
-
+public interface LogOperatorExtParamService extends BaseService<LogOperatorExtParamVO, LogOperatorExtParamDO> {
 
 
 }

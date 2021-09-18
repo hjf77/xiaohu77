@@ -31,7 +31,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("upload")
-@Api(tags="文件上传下载公共服务(文件服务)")
+@Api(tags = "文件上传下载公共服务(文件服务)")
 public class UploadController extends BaseController {
 
     private static final Logger LOG = Logger.getLogger(DownLoadController.class);
@@ -44,31 +44,30 @@ public class UploadController extends BaseController {
 
     /**
      * 文件
+     *
      * @param Filedata
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "file", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ApiOperation("上传文件")
-    public void uploadFile(@RequestPart  MultipartFile Filedata,String ext, HttpServletRequest request,
+    public void uploadFile(@RequestPart MultipartFile Filedata, String ext, HttpServletRequest request,
                            HttpServletResponse response) {
         if (Filedata == null) {
             super.outToClient(false);
             return;
         }
-        LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-        PubFileVO file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata)).get (0);
+        LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
+        PubFileVO file = fileServerBusiness.uploadFileForList(Arrays.asList(Filedata)).get(0);
         //如果给了扩展字段则更新扩展字段
-        if(CheckUtils.isNotEmpty(ext)){
+        if (CheckUtils.isNotEmpty(ext)) {
             file.setExt(ext);
             fileService.update(file);
         }
-        LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
+        LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         super.outWriteJson(JsonUtils.bean2json(file));
 
     }
-
-
 
 
 }

@@ -17,7 +17,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AuthFilter  extends AuthenticatingFilter {
+public class AuthFilter extends AuthenticatingFilter {
 
     private RedisCacheService<UcenterMsUserDO> redisCacheService;
 
@@ -29,9 +29,9 @@ public class AuthFilter  extends AuthenticatingFilter {
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        UcenterMsUserDO sysUser = (UcenterMsUserDO)request.getSession().getAttribute(Constant.SESSION_USER);
-        if(sysUser==null){
-            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NOT_LOGIN.asResult().asJson(),PubResult.NOT_LOGIN.getCode());
+        UcenterMsUserDO sysUser = (UcenterMsUserDO) request.getSession().getAttribute(Constant.SESSION_USER);
+        if (sysUser == null) {
+            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NOT_LOGIN.asResult().asJson(), PubResult.NOT_LOGIN.getCode());
             return null;
         }
 
@@ -54,30 +54,30 @@ public class AuthFilter  extends AuthenticatingFilter {
     //拒绝访问的请求，onAccessDenied方法先获取 token，再调用executeLogin方法
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest= (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse= (HttpServletResponse) response;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String token = httpServletRequest.getHeader(Constant.VUE_HEADER_TOKEN_KEY);
-        if(CheckUtils.isNullOrEmpty(token)){
-            token  = httpServletRequest.getParameter("token");
+        if (CheckUtils.isNullOrEmpty(token)) {
+            token = httpServletRequest.getParameter("token");
         }
-        if(CheckUtils.isNullOrEmpty(token)){
+        if (CheckUtils.isNullOrEmpty(token)) {
             JsonUtils.outJson(httpServletResponse, PubResult.NOT_TOKEN.asResult().asJson());
             return false;
         }
         UcenterMsUserDO sysUser = redisCacheService.get("shiro:user:" + token);
-        if(sysUser==null){
+        if (sysUser == null) {
             JsonUtils.outJson(httpServletResponse, PubResult.NOT_LOGIN.asResult().asJson(), PubResult.NOT_LOGIN.getCode());
             return false;
         }
         httpServletRequest.getSession().setAttribute(Constant.SESSION_USER, sysUser);
         TokenContext.setToken(token);
-        return executeLogin(request,response);
+        return executeLogin(request, response);
     }
 
     //token失效时调用
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
-        JsonUtils.outJson((HttpServletResponse)response , PubResult.NOT_LOGIN.asResult().asJson(),PubResult.NOT_LOGIN.getCode());
+        JsonUtils.outJson((HttpServletResponse) response, PubResult.NOT_LOGIN.asResult().asJson(), PubResult.NOT_LOGIN.getCode());
         return false;
     }
 

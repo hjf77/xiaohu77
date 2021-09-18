@@ -9,17 +9,17 @@ import com.fhs.redis.service.ListService;
 @Service
 public class ListServiceImpl implements ListService {
 
-	@Autowired
-	private RedisDao redisDao;
-	
-	@Override
-	public void updateListValue(String serverName, int dbIndex, String key, String value) {
-		redisDao.lupdateListValue(serverName, dbIndex, key, value);
-	}
+    @Autowired
+    private RedisDao redisDao;
 
-	@Override
-	public void delListValue(String serverName, int dbIndex, String key) {
-		redisDao.ldelListValue(serverName, dbIndex, key);
-	}
+    @Override
+    public void updateListValue(String serverName, int dbIndex, String key, String value) {
+        redisDao.lupdateListValue(serverName, dbIndex, key, value);
+    }
+
+    @Override
+    public void delListValue(String serverName, int dbIndex, String key) {
+        redisDao.ldelListValue(serverName, dbIndex, key);
+    }
 
 }

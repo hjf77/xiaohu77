@@ -34,8 +34,8 @@ public class RestReturnValueHandlerConfigurer implements InitializingBean {
     public void afterPropertiesSet() {
         List<HandlerMethodReturnValueHandler> list = this.handlerAdapter.getReturnValueHandlers();
         if (!CollectionUtils.isEmpty(list)) {
-            List<HandlerMethodReturnValueHandler> newList = (List)list.stream().map((x) -> {
-                return (HandlerMethodReturnValueHandler)(x instanceof RequestResponseBodyMethodProcessor ? new HandlerMethodReturnValueHandlerProxy(x, this.applicationContext) : x);
+            List<HandlerMethodReturnValueHandler> newList = (List) list.stream().map((x) -> {
+                return (HandlerMethodReturnValueHandler) (x instanceof RequestResponseBodyMethodProcessor ? new HandlerMethodReturnValueHandlerProxy(x, this.applicationContext) : x);
             }).collect(Collectors.toList());
             this.handlerAdapter.setReturnValueHandlers(newList);
         }
@@ -58,13 +58,13 @@ class HandlerMethodReturnValueHandlerProxy implements HandlerMethodReturnValueHa
     }
 
     public void handleReturnValue(Object returnValue, MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest) throws Exception {
-        HttpServletRequest request = (HttpServletRequest)nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+        HttpServletRequest request = (HttpServletRequest) nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         if (request.getRequestURI().startsWith("/actuator")) {
             this.proxyObject.handleReturnValue(returnValue, methodParameter, modelAndViewContainer, nativeWebRequest);
         } else {
             Object data = returnValue;
-            String isVue =request.getParameter("isVue");
-            if(!(data instanceof HttpResult) && "true".equals(isVue)){
+            String isVue = request.getParameter("isVue");
+            if (!(data instanceof HttpResult) && "true".equals(isVue)) {
                 HttpResult result = HttpResult.success(data);
                 this.proxyObject.handleReturnValue(result, methodParameter, modelAndViewContainer, nativeWebRequest);
                 return;

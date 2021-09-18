@@ -94,13 +94,13 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
         //找不到爸爸的才会放到此里面
         List<TreeModelVO> result = new ArrayList<>();
         Map<String, TreeModelVO> map = new HashMap<>();
-        for(TreeModelVO tree : allMenu){
-            map.put(tree.getId(),tree);
+        for (TreeModelVO tree : allMenu) {
+            map.put(tree.getId(), tree);
             //找爸爸
-            if(map.containsKey(tree.getParentId())){
+            if (map.containsKey(tree.getParentId())) {
                 //把树对象 放入到爸爸 List集合里
                 map.get(tree.getParentId()).getChildren().add(tree);
-            }else{
+            } else {
                 result.add(tree);
             }
         }
@@ -119,13 +119,13 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
         //找不到爸爸的才会放到此里面
         List<TreeMenuPermissionVO> result = new ArrayList<>();
         Map<String, TreeMenuPermissionVO> map = new HashMap<>();
-        for(TreeMenuPermissionVO tree : TreeMenuPermissionVO){
-            map.put(tree.getId(),tree);
+        for (TreeMenuPermissionVO tree : TreeMenuPermissionVO) {
+            map.put(tree.getId(), tree);
             //找爸爸
-            if(map.containsKey(tree.getParentId())){
+            if (map.containsKey(tree.getParentId())) {
                 //把树对象 放入到爸爸 List集合里
                 map.get(tree.getParentId()).getChildren().add(tree);
-            }else{
+            } else {
                 result.add(tree);
             }
         }

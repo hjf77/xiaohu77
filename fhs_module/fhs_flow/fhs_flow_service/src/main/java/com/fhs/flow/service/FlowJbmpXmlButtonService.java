@@ -10,8 +10,7 @@ import com.fhs.core.base.service.BaseService;
  * @author wanglei
  * @since 2020-06-16 14:54:50
  */
-public interface FlowJbmpXmlButtonService extends BaseService<FlowJbmpXmlButtonVO,FlowJbmpXmlButtonDO>{
+public interface FlowJbmpXmlButtonService extends BaseService<FlowJbmpXmlButtonVO, FlowJbmpXmlButtonDO> {
 
-    
 
 }

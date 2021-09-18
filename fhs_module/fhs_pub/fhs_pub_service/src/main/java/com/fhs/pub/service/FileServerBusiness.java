@@ -8,17 +8,20 @@ import java.util.List;
 
 /**
  * 文件服务器业务
+ *
  * @author user
  * @since 2019-05-18 11:22:55
  */
 public interface FileServerBusiness {
-    /** filep */
-    String fileP =  File.separator;
-
+    /**
+     * filep
+     */
+    String fileP = File.separator;
 
 
     /**
      * 上传文件
+     *
      * @param fileData
      * @return
      */
@@ -26,6 +29,7 @@ public interface FileServerBusiness {
 
     /**
      * 上传多个文件
+     *
      * @param allFileData
      * @return
      */

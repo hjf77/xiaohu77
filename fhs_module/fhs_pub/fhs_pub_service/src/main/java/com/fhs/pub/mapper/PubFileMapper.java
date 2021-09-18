@@ -21,13 +21,13 @@ import java.util.Map;
 
 /**
  * 文件 beancrud dao
- * @author  王磊
- * @version  [版本号, 2015/08/14 11:34:23]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ *
+ * @author 王磊
+ * @version [版本号, 2015/08/14 11:34:23]
+ * @see [相关类/方法]
+ * @since [产品/模块版本]
  */
 @Repository
 @MapperDefinition(domainClass = PubFileDO.class)
-public interface PubFileMapper extends FhsBaseMapper<PubFileDO>
-{
+public interface PubFileMapper extends FhsBaseMapper<PubFileDO> {
 }

@@ -7,6 +7,7 @@ import org.apache.shiro.util.Destroyable;
 
 /**
  * 自定义缓存管理器
+ *
  * @author user
  * @since 2019-05-18 11:37:23
  */
@@ -28,11 +29,11 @@ public class ShiroSpringCacheManager implements CacheManager, Destroyable {
     }
 
     @Override
-    public <K, V> Cache<K, V> getCache(String name)  {
-        if (name == null ){
+    public <K, V> Cache<K, V> getCache(String name) {
+        if (name == null) {
             return null;
         }
-        return new ShiroSpringCache<K,V>(name,getCacheManager());
+        return new ShiroSpringCache<K, V>(name, getCacheManager());
     }
 
 

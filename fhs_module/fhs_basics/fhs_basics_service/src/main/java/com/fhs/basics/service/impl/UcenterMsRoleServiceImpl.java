@@ -31,6 +31,7 @@ import java.util.Map;
 /**
  * 系统角色实现
  * 老代码待优化
+ *
  * @author user
  * @date 2020-05-18 16:43:36
  */
@@ -72,7 +73,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean saveButtons(UcenterMsRoleDO adminRole) {
-        if (adminRole.getMethods() !=null && adminRole.getMethods().length > 0) {
+        if (adminRole.getMethods() != null && adminRole.getMethods().length > 0) {
             // 构建按钮列表
             adminRole.setMethods(buildButtonArray(adminRole.getMethods()));
 
@@ -93,9 +94,9 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
         for (String item : buttons) {
             String[] itemarr = item.split("_");
             //p前缀 直接跟的就是权限id
-            if("p".equalsIgnoreCase(itemarr[0])){
+            if ("p".equalsIgnoreCase(itemarr[0])) {
                 list.add(itemarr[1]);
-            }else if ("t".equalsIgnoreCase(itemarr[0])) {
+            } else if ("t".equalsIgnoreCase(itemarr[0])) {
                 String buttonId = itemarr[1].split(":")[1];
                 list.add(buttonId);
             } else {
@@ -163,7 +164,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
             // 修改当前角色信息
             int result = super.updateSelectiveById(adminRole);
             if (result > 0) {
-                if (adminRole.getMethods() !=null && adminRole.getMethods().length > 0) {
+                if (adminRole.getMethods() != null && adminRole.getMethods().length > 0) {
                     // 构建按钮列表
                     adminRole.setMethods(buildButtonArray(adminRole.getMethods()));
                     // 插入按钮信息

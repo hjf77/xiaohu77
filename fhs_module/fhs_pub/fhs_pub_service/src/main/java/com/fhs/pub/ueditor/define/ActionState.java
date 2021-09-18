@@ -1,4 +1,5 @@
 package com.fhs.pub.ueditor.define;
+
 public enum ActionState {
-	UNKNOW_ERROR
+    UNKNOW_ERROR
 }

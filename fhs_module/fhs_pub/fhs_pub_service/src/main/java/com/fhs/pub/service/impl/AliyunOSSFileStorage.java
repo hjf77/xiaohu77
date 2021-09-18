@@ -8,6 +8,7 @@ import com.fhs.pub.dox.PubFileDO;
 import com.fhs.pub.service.FileStorage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
@@ -36,7 +37,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     public void uploadFile(PubFileDO serviceFile, MultipartFile file) {
         // 上传文件
         try {
-           this.upload(file.getInputStream(),serviceFile.getFileId());
+            this.upload(file.getInputStream(), serviceFile.getFileId());
         } catch (IOException e) {
             LOG.error("文件上传失败", e);
         }
@@ -46,7 +47,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     public void uploadFile(PubFileDO serviceFile, File fileData) {
         // 上传文件
         try {
-            this.upload(new FileInputStream(fileData),serviceFile.getFileId());
+            this.upload(new FileInputStream(fileData), serviceFile.getFileId());
         } catch (IOException e) {
             LOG.error("文件上传失败", e);
         }
@@ -54,7 +55,8 @@ public class AliyunOSSFileStorage implements FileStorage {
 
     /**
      * 上传文件
-     * @param is  inputsteam
+     *
+     * @param is    inputsteam
      * @param token token
      */
     private void upload(InputStream is, String token) {
@@ -83,33 +85,27 @@ public class AliyunOSSFileStorage implements FileStorage {
 
     @Override
     public void downloadFile(PubFileDO serviceFile, HttpServletResponse response) {
-        download(serviceFile.getFileId(),  response,serviceFile.getFileName());
+        download(serviceFile.getFileId(), response, serviceFile.getFileName());
     }
 
-    private void download(String token, HttpServletResponse response,String fileName)
-    {
+    private void download(String token, HttpServletResponse response, String fileName) {
         fileName = fileName == null ? "mini.png" : fileName;
         // 初始化 阿里文件服务客户端
         OSSClient ossClientdownForId = this.getClient();
-        try
-        {
+        try {
             // 获取文件输出流
             OSSObject ossObject = ossClientdownForId.getObject(bucketname, token);
-            FileUtils.downloadInputStream(ossObject.getObjectContent(), response, fileName,ossObject.getObjectMetadata().getContentLength());
-        }
-        catch (Exception e)
-        {
-            LOG.error("file not find ,the file id :" + token,e);
-        }
-        finally
-        {
+            FileUtils.downloadInputStream(ossObject.getObjectContent(), response, fileName, ossObject.getObjectMetadata().getContentLength());
+        } catch (Exception e) {
+            LOG.error("file not find ,the file id :" + token, e);
+        } finally {
             ossClientdownForId.shutdown();
         }
     }
 
     @Override
     public void downloadFileByToken(String token, PubFileDO serviceFile, HttpServletResponse response) {
-        download(token,  response,null);
+        download(token, response, null);
     }
 
     @Override
@@ -117,18 +113,13 @@ public class AliyunOSSFileStorage implements FileStorage {
         // 初始化 阿里文件服务客户端
         OSSClient ossClient = this.getClient();
         token = token == null ? serviceFile.getFileId() : token;
-        try
-        {
+        try {
             // 获取文件输出流
-            boolean result = ossClient.doesObjectExist(bucketname,token);
+            boolean result = ossClient.doesObjectExist(bucketname, token);
             return result;
-        }
-        catch (Exception e)
-        {
-            LOG.error("判断文件是否存在异常:" + token,e);
-        }
-        finally
-        {
+        } catch (Exception e) {
+            LOG.error("判断文件是否存在异常:" + token, e);
+        } finally {
             ossClient.shutdown();
         }
         return false;
@@ -138,22 +129,17 @@ public class AliyunOSSFileStorage implements FileStorage {
     public InputStream getFileInputStream(PubFileDO serviceFile) throws FileNotFoundException {
         // 初始化 阿里文件服务客户端
         OSSClient ossClientdownForId = this.getClient();
-        try
-        {
+        try {
             // 获取文件输出流
             OSSObject ossObject = ossClientdownForId.getObject(bucketname, serviceFile.getFileId());
             byte[] bytes = FileUtils.input2byte(ossObject.getObjectContent());
             return new ByteArrayInputStream(bytes);
-        }
-        catch (Exception e)
-        {
-            LOG.error("文件不存在" + serviceFile.getFileId(),e);
-        }
-        finally
-        {
+        } catch (Exception e) {
+            LOG.error("文件不存在" + serviceFile.getFileId(), e);
+        } finally {
             ossClientdownForId.shutdown();
         }
-        throw new  FileNotFoundException();
+        throw new FileNotFoundException();
     }
 
     private OSSClient getClient() {

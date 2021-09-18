@@ -98,7 +98,7 @@ public class IndexController {
             } else {
                 modelAndView.setViewName("page/ms/index/index_menu_layui");
             }
-            request.getSession().setAttribute("serviceURL",null);
+            request.getSession().setAttribute("serviceURL", null);
             return modelAndView;
         }
 

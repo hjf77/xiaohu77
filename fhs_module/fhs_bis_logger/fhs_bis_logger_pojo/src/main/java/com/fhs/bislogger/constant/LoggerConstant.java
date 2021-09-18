@@ -2,6 +2,7 @@ package com.fhs.bislogger.constant;
 
 /**
  * 日志模块常量
+ *
  * @author user
  * @date 2020-05-18 14:21:23
  */

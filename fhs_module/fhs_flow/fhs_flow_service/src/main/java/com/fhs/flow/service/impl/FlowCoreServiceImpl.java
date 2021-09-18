@@ -100,7 +100,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         flowInstance.setStatus(FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
         flowInstance.preInsert(userId);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND,-3);
+        calendar.add(Calendar.SECOND, -3);
         Date now = calendar.getTime();
         ProcessInstance processInstance = this.runtimeService.startProcessInstanceByKey(flowJbpmXml.getProcessKey() + version, businessKey, variables);
         checkProProcessInstanceIsEnd(processInstance.getId(), null);
@@ -110,9 +110,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         FlowTaskHistoryDO taskHistory = null;
         // 第一个节点是提交节点，自动通过
         for (Task task : tasks) {
-            this.taskService.claim(task.getId(),userId);
+            this.taskService.claim(task.getId(), userId);
             task.setAssignee(userId);
-            taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(now).instanceId(flowInstance.getActivitiProcessInstanceId())
+            taskHistory = FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(now).instanceId(flowInstance.getActivitiProcessInstanceId())
                     .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowConstant.RESULT_SUBMIT).build();
             HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery().taskId(task.getId()).singleResult();
             taskHistory.setOrderNum(1);
@@ -151,7 +151,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         // 获取当天task的 code 比如是 0012910 那么他的爸爸应该是001 0012 00129
         String taskCode = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId()).getCode();
         taskHistories.forEach(item -> {
-            if (item.getCode()!= null && taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode())) && item.getResult()!=FlowConstant.RESULT_DELEGATE) {
+            if (item.getCode() != null && taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode())) && item.getResult() != FlowConstant.RESULT_DELEGATE) {
                 result.add(BackAvtivityVO.builder().id(item.getDefinitionKey()).title(item.getTitle()).build());
             }
         });
@@ -239,11 +239,11 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
                 throw new ParamException("您不是工单创建人，无法撤销");
             }
             variables.put("result", FlowConstant.RESULT_REVOKE);
-            msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_REVOKE );
+            msgMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_REVOKE);
             msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_REVOKE);
         } else {
             variables.put("result", FlowConstant.RESULT_END);
-            msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_END );
+            msgMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_END);
             msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_COMPLATE);
         }
         FlowInstanceVO flowInstanceVO = new FlowInstanceVO();
@@ -254,9 +254,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         msgMap.put("instanceId", flowInstance.getActivitiProcessInstanceId());
         msgMap.put("businessKey", flowInstance.getFormPkey());
 
-        FlowJbpmXmlVO xml  = flowJbpmXmlService.selectById(flowInstance.getXmlId());
-        ParamChecker.isNotNull(xml,"xml丢失");
-        msgMap.put("namespace",xml.getNamespace());
+        FlowJbpmXmlVO xml = flowJbpmXmlService.selectById(flowInstance.getXmlId());
+        ParamChecker.isNotNull(xml, "xml丢失");
+        msgMap.put("namespace", xml.getNamespace());
         distributedListenerRegister.callListener(FlowConstant.LISTENER_INSTANCE, FlowConstant.ENVENT_NEWS, new Object(), msgMap);
     }
 
@@ -371,7 +371,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             taskHistoryService.insertSelective(history);
         }
         if (task.getDelegationState() != null && task.getDelegationState().equals(DelegationState.PENDING)) {
-            taskService.resolveTask(taskId,variables);
+            taskService.resolveTask(taskId, variables);
         }
         // 跳转节点为空，默认提交操作
         if (CheckUtils.isNullOrEmpty(activityId)) {
@@ -493,11 +493,11 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
                 Map<String, Object> msgMap = new HashMap<>();
                 msgMap.put("instanceId", instance.getActivitiProcessInstanceId());
                 msgMap.put("businessKey", instance.getFormPkey());
-                msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_END );
+                msgMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_END);
                 msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_COMPLATE);
-                FlowJbpmXmlVO xml  = flowJbpmXmlService.selectById(instance.getXmlId());
-                ParamChecker.isNotNull(xml,"xml丢失");
-                msgMap.put("namespace",xml.getNamespace());
+                FlowJbpmXmlVO xml = flowJbpmXmlService.selectById(instance.getXmlId());
+                ParamChecker.isNotNull(xml, "xml丢失");
+                msgMap.put("namespace", xml.getNamespace());
                 distributedListenerRegister.callListener(FlowConstant.LISTENER_INSTANCE, FlowConstant.ENVENT_NEWS, new Object(), msgMap);
             }
         }
@@ -858,10 +858,10 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
     @Override
     public HttpResult<String> startProcessInstanceForApi(StartProcessInstanceVO startProcessInstance) {
         try {
-            return HttpResult.success(this.updateStartProcessInstanceByKey(startProcessInstance.getProcessDefinitionKey(),startProcessInstance.getBusinessKey(),
-                    startProcessInstance.getVariables(),startProcessInstance.getExtFormParam(),startProcessInstance.getUserId()));
+            return HttpResult.success(this.updateStartProcessInstanceByKey(startProcessInstance.getProcessDefinitionKey(), startProcessInstance.getBusinessKey(),
+                    startProcessInstance.getVariables(), startProcessInstance.getExtFormParam(), startProcessInstance.getUserId()));
         } catch (Exception e) {
-            LOGGER.error("启动流程失败:" + startProcessInstance,e);
+            LOGGER.error("启动流程失败:" + startProcessInstance, e);
             return HttpResult.error("");
         }
     }
@@ -869,9 +869,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
     @Override
     public HttpResult reSubmit(ReSubmitVO reSubmitVO) {
         try {
-            this.commitProcess(reSubmitVO.getTaskId(),reSubmitVO.getVariablesMap(),null);
+            this.commitProcess(reSubmitVO.getTaskId(), reSubmitVO.getVariablesMap(), null);
         } catch (Exception e) {
-            LOGGER.error("重新提交流程提交失败:" + JsonUtil.toJSONString(reSubmitVO),e);
+            LOGGER.error("重新提交流程提交失败:" + JsonUtil.toJSONString(reSubmitVO), e);
             return HttpResult.error();
         }
         return HttpResult.success();

@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * 系统权限mapper
+ *
  * @author jianbo.qin
  * @date 2020-05-18 16:16:03
  */
@@ -102,6 +103,7 @@ public interface SettMsMenuPermissionMapper extends FhsBaseMapper<SettMsMenuPerm
 
     /**
      * 根据角色Ids 查询出权限 namespace:mothd
+     *
      * @param roleIds
      * @return
      */

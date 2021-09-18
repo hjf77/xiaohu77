@@ -25,15 +25,15 @@ public class TableInfoController {
     private TableInfoService tableInfoService;
 
     /**
-    * @param tableName
-    * @author LiYuLin
-    * @date 2021年08月17日
-    * @return com.fhs.generate.vo.TableSearchVO
-    */
+     * @param tableName
+     * @return com.fhs.generate.vo.TableSearchVO
+     * @author LiYuLin
+     * @date 2021年08月17日
+     */
     @GetMapping("/getTableInfo")
     @ResponseBody
     @ApiOperation("根据库名和表名获取表信息")
-    public TableInfoVO getTableInfo(String dbName, String tableName){
-       return tableInfoService.getTableInfo(dbName,tableName);
+    public TableInfoVO getTableInfo(String dbName, String tableName) {
+        return tableInfoService.getTableInfo(dbName, tableName);
     }
 }

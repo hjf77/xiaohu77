@@ -53,39 +53,38 @@ public class FieldsVO {
     private String pageElementType;
 
     @ApiModelProperty("扩展信息")
-    private Map<String,Object> extParam = new HashMap<>();
+    private Map<String, Object> extParam = new HashMap<>();
 
 
     @JsonIgnore
-    public String getCamelFieldName(){
-        return  ColumnNameUtil.underlineToCamel(this.filedName);
+    public String getCamelFieldName() {
+        return ColumnNameUtil.underlineToCamel(this.filedName);
     }
 
-    public Integer getLength(){
-        if(this.type.contains("varchar")){
-            return ConverterUtils.toInt(this.type.replace("varchar(","").replace(")",""));
+    public Integer getLength() {
+        if (this.type.contains("varchar")) {
+            return ConverterUtils.toInt(this.type.replace("varchar(", "").replace(")", ""));
         }
-        if(this.type.contains("text")){
+        if (this.type.contains("text")) {
             return 1000;
         }
         return 0;
     }
 
 
-
-    public Integer getIsRequired(){
-        if(this.isRequired!=null){
+    public Integer getIsRequired() {
+        if (this.isRequired != null) {
             return isRequired;
         }
         return "NO".equals(this.isNullable) ? Constant.INT_TRUE : Constant.INT_FALSE;
     }
 
-    public String getComment(){
-        if(comment==null){
+    public String getComment() {
+        if (comment == null) {
             return null;
         }
-        if(comment.contains("(")){
-            return comment.substring(0,comment.indexOf("("));
+        if (comment.contains("(")) {
+            return comment.substring(0, comment.indexOf("("));
         }
         return comment;
     }

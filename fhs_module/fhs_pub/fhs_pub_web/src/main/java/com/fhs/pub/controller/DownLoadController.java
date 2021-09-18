@@ -50,7 +50,6 @@ public class DownLoadController extends BaseController {
     private FileStorage fileStorage;
 
 
-
     /**
      * 根据文件id下载文件
      *
@@ -62,9 +61,9 @@ public class DownLoadController extends BaseController {
         try {
             // 文件下载路径
             PubFileVO serviceFile = pubFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile,response);
+            fileStorage.downloadFile(serviceFile, response);
         } catch (Exception e) {
-            if(! (e instanceof ParamException)){
+            if (!(e instanceof ParamException)) {
                 LOG.error(this, e);
             }
             throw new ParamException("下载文件异常,可能是文件不存在");
@@ -85,7 +84,7 @@ public class DownLoadController extends BaseController {
             // 文件下载路径
             String fileId = fileName.substring(0, fileName.indexOf("."));
             PubFileVO serviceFile = pubFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile,response);
+            fileStorage.downloadFile(serviceFile, response);
         } catch (Exception e) {
             LOG.error(this, e);
             throw new RuntimeException("下载文件异常:" + e.getMessage());
@@ -94,13 +93,14 @@ public class DownLoadController extends BaseController {
 
     /**
      * 文件列表
+     *
      * @param fileIds
      * @return
      */
     @RequestMapping(value = "listData", method = RequestMethod.GET)
     @ApiOperation("根据逗号分隔的id获取文件详情")
     public void listData(String fileIds) {
-        ParamChecker.isNotNullOrEmpty(fileIds,"文件id不可为空");
+        ParamChecker.isNotNullOrEmpty(fileIds, "文件id不可为空");
         List<PubFileVO> list = pubFileService.findByIds(Arrays.asList(fileIds.split(",")));
         String json = JsonUtils.list2json(list);
         this.outJsonp(json);
@@ -159,22 +159,22 @@ public class DownLoadController extends BaseController {
         fileId = serviceFile.getFileId();
         // 图片规格
         String fileIdWH = fileId + "_" + maxWidth + "_" + maxHeight + suffix;
-        String filePath =  uploadDate + File.separator + suffix.replace(".", "") + File.separator;
+        String filePath = uploadDate + File.separator + suffix.replace(".", "") + File.separator;
         //兼容旧数据
 
         // 文件名
         String showFileName = serviceFile.getFileName();
         String minPath = downFilePath + filePath + fileIdWH;
         File file = new File(minPath);
-        if (fileStorage.checkFileIsExist(minPath,serviceFile)) {
-            fileStorage.downloadFileByToken(minPath,serviceFile,response);
+        if (fileStorage.checkFileIsExist(minPath, serviceFile)) {
+            fileStorage.downloadFileByToken(minPath, serviceFile, response);
         } else {
             byte[] fileByte;
-            try (InputStream is = fileStorage.getFileInputStream(serviceFile)){
+            try (InputStream is = fileStorage.getFileInputStream(serviceFile)) {
                 fileByte = ThumbnailatorUtils
                         .zoom2Bytes(is, maxWidth, maxHeight);
                 file.createNewFile();
-                fileStorage.uploadFileByToken(fileByte,minPath,serviceFile);
+                fileStorage.uploadFileByToken(fileByte, minPath, serviceFile);
                 FileUtils.download(file, response, showFileName);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -182,7 +182,6 @@ public class DownLoadController extends BaseController {
             }
         }
     }
-
 
 
     /**
@@ -200,7 +199,7 @@ public class DownLoadController extends BaseController {
                 fileId = fileId.substring(0, fileId.indexOf("."));
             }
             PubFileVO serviceFile = pubFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile,response);
+            fileStorage.downloadFile(serviceFile, response);
         } catch (Exception e) {
             throw new RuntimeException("下载文件异常:" + e.getMessage());
         }
@@ -225,11 +224,11 @@ public class DownLoadController extends BaseController {
             //获取图片的路径
             String[] pngPathList = getPngPathList(list);
             //生成zip路径
-            String path = EConfig.getPathPropertiesValue("fileSavePath")+ "/" + fileName+".zip";
+            String path = EConfig.getPathPropertiesValue("fileSavePath") + "/" + fileName + ".zip";
             //打包生成zip
-            ZipUtil.zip(path,pngPathList);
+            ZipUtil.zip(path, pngPathList);
             File file = new File(path);
-            if (file.exists()){
+            if (file.exists()) {
                 FileUtils.download(file, response, file.getName());
             }
             //zip传到客户端之后删除zip文件
@@ -242,40 +241,41 @@ public class DownLoadController extends BaseController {
 
     /**
      * 获取图片路径
+     *
      * @param serviceFile
      * @return
      */
-    private  String[] getPngPathList(List<PubFileVO> serviceFile) {
-        if(serviceFile.isEmpty()){
+    private String[] getPngPathList(List<PubFileVO> serviceFile) {
+        if (serviceFile.isEmpty()) {
             return new String[0];
         }
-        String tempPath = EConfig.getPathPropertiesValue("fileSavePath")+ "/" + StringUtil.getUUID();
+        String tempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID();
         new File(tempPath).mkdirs();
         String token = null;
         String tempFilePath = null;
         String[] arr = new String[serviceFile.size()];
-        Map<String,Integer> fileNameMap = new HashMap<>();
+        Map<String, Integer> fileNameMap = new HashMap<>();
         PubFileVO file = null;
-        for (int i = 0;i<serviceFile.size();i++) {
+        for (int i = 0; i < serviceFile.size(); i++) {
             file = serviceFile.get(i);
             String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + file.getFileSuffix();
             String saveFilePath = EConfig.getPathPropertiesValue("fileSavePath") + File.separator + file.getUploadDate() + File.separator + file.getFileSuffix().replace(".", "") + File.separator + fileName;
             try {
                 //如果有重名文件，则自动给后面的重命名
-                if(fileNameMap.containsKey( file.getFileName())){
-                    fileName = file.getFileName().replace(file.getFileSuffix(),"") + '_' + fileNameMap.get(file.getFileName()) + file.getFileSuffix();
+                if (fileNameMap.containsKey(file.getFileName())) {
+                    fileName = file.getFileName().replace(file.getFileSuffix(), "") + '_' + fileNameMap.get(file.getFileName()) + file.getFileSuffix();
                     tempFilePath = tempPath + "/" + fileName;
-                    fileNameMap.put(file.getFileName(),fileNameMap.get(file.getFileName()) + 1);
-                }else{
+                    fileNameMap.put(file.getFileName(), fileNameMap.get(file.getFileName()) + 1);
+                } else {
                     tempFilePath = tempPath + "/" + serviceFile.get(i).getFileName();
-                    fileNameMap.put(file.getFileName(),0);
+                    fileNameMap.put(file.getFileName(), 0);
                 }
 
-                FileUtils.copyFile(new File(saveFilePath),tempFilePath);
+                FileUtils.copyFile(new File(saveFilePath), tempFilePath);
             } catch (IOException e) {
-                log.error("文件错误",e);
+                log.error("文件错误", e);
             }
-            arr[i] =  tempFilePath;
+            arr[i] = tempFilePath;
         }
         return arr;
     }

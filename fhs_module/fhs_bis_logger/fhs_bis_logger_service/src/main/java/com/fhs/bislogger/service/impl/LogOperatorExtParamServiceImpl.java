@@ -19,6 +19,6 @@ import java.util.List;
  */
 @Service
 @DataSource("log")
-public class LogOperatorExtParamServiceImpl extends BaseServiceImpl<LogOperatorExtParamVO,LogOperatorExtParamDO> implements LogOperatorExtParamService {
+public class LogOperatorExtParamServiceImpl extends BaseServiceImpl<LogOperatorExtParamVO, LogOperatorExtParamDO> implements LogOperatorExtParamService {
 
 }

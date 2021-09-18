@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ZSetServiceImpl implements ZSetService {
 
-	@Autowired
-	private RedisDao redisDao;
-	
-	@Override
-	public void updateZSetValue(String serverName, int dbIndex, String key, double score, String member) {
-		redisDao.updateZSetValue(serverName, dbIndex, key, score, member);
-	}
+    @Autowired
+    private RedisDao redisDao;
 
-	@Override
-	public void delZSetValue(String serverName, int dbIndex, String key, String member) {
-		redisDao.delZSetValue(serverName, dbIndex, key, member);
-	}
+    @Override
+    public void updateZSetValue(String serverName, int dbIndex, String key, double score, String member) {
+        redisDao.updateZSetValue(serverName, dbIndex, key, score, member);
+    }
+
+    @Override
+    public void delZSetValue(String serverName, int dbIndex, String key, String member) {
+        redisDao.delZSetValue(serverName, dbIndex, key, member);
+    }
 
 }

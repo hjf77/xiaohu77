@@ -16,15 +16,17 @@ import java.util.List;
 
 /**
  * 工作流服务
+ *
  * @author user
  * @since 2019-05-18 11:55:49
  */
-@FeignClient(value = "flow", configuration = FeignConfiguration.class,primary = false)
+@FeignClient(value = "flow", configuration = FeignConfiguration.class, primary = false)
 public interface FeignWorkFlowApiService {
 
 
     /**
      * 启动一个流程
+     *
      * @param startProcessInstance 启动流程参数
      * @return instanceid
      */
@@ -33,6 +35,7 @@ public interface FeignWorkFlowApiService {
 
     /**
      * 根据服务id获取服务对象
+     *
      * @param reSubmitVO 重新提交的vo
      * @return HttpResult
      */

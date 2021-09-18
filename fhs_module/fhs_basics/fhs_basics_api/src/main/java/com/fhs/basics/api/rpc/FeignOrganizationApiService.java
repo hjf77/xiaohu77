@@ -16,16 +16,17 @@ import java.util.Map;
 
 /**
  * 机构管理rest接口
+ *
  * @author user
  * @date 2020-05-18 14:39:22
  */
-@FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration = FeignConfiguration.class, primary = false)
 public interface FeignOrganizationApiService extends TransRpcService {
-
 
 
     /**
      * 根据id获取组织机构
+     *
      * @param id 组织机构id
      * @return 结构对象
      */
@@ -34,6 +35,7 @@ public interface FeignOrganizationApiService extends TransRpcService {
 
     /**
      * 根据ids获取组织机构
+     *
      * @param ids 组织机构id 逗号分隔
      * @return 结构对象
      */
@@ -42,6 +44,7 @@ public interface FeignOrganizationApiService extends TransRpcService {
 
     /**
      * 根据父亲节点id获取子节点集合
+     *
      * @param parentid 组织机构父id
      * @return 结构对象
      */
@@ -50,12 +53,12 @@ public interface FeignOrganizationApiService extends TransRpcService {
 
     /**
      * 反向翻译
+     *
      * @param namesForm 表单，包含names集合
      * @return
      */
     @RequestLine("POST /api/com.fhs.basics.api.rpc.FeignOrganizationApiService/doUnTrans")
-    Map<String,Object> doUnTrans(@RequestBody NamesForm namesForm);
-
+    Map<String, Object> doUnTrans(@RequestBody NamesForm namesForm);
 
 
 }

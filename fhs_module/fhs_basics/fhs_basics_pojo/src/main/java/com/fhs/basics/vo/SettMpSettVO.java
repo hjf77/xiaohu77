@@ -9,6 +9,7 @@ import lombok.*;
 
 /**
  * 公众号设置vo
+ *
  * @author user
  * @date 2020-05-18 15:32:38
  */
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
-@ApiModel(value ="SettMpSettVO",description ="SettMpSett参数")
+@ApiModel(value = "SettMpSettVO", description = "SettMpSett参数")
 public class SettMpSettVO extends SettMpSettDO implements VO {
 
 }

@@ -27,8 +27,6 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistoryVO, F
     int STATUS_FINISH = 1;
 
 
-
-
     /**
      * 根据当前需要记录节点的usertaskkey和instanceId来构建一个FlowTaskHistory
      * 处理好code字段，和排序字段

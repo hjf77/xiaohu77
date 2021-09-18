@@ -33,7 +33,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- *  菜单权限(SettMsMenuPermission)实体类
+ * 菜单权限(SettMsMenuPermission)实体类
+ *
  * @author 朱俊
  * @version [版本号, 2015/08/13 11:37:45]
  * @see [相关类/方法]
@@ -98,7 +99,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = TransType.WORD_BOOK,key = "is_enable")
+    @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     @ApiModelProperty("是否禁用 0:启用 1:禁用")
     private Integer isEnable;
 
@@ -117,7 +118,6 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @Transient
     @ApiModelProperty("状态")
     private String state;
-
 
 
 }

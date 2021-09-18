@@ -32,7 +32,7 @@ import javax.validation.Valid;
  */
 @Slf4j
 @RestController
-@Api(value = "小程序用户接口",tags = "小程序用户接口")
+@Api(value = "小程序用户接口", tags = "小程序用户接口")
 @RequestMapping("/mini_param")
 public class MiniParamController {
     /**
@@ -60,23 +60,23 @@ public class MiniParamController {
      */
     @PostMapping("/login")
     @ValidateParam(value = Check.NotEmpty, argName = "code")
-    @ApiOperation( "使用code登录，返回token")
-    public HttpResult<LoginResultVo> login(String code){
+    @ApiOperation("使用code登录，返回token")
+    public HttpResult<LoginResultVo> login(String code) {
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
             UcenterFrontUserBindVO bind = frontUserBindService.selectBean(UcenterFrontUserBindVO.builder().authOpenid(session.getOpenid())
                     .authOpenidType(UcenterFrontUserBindService.OPENID_TYPE_WX_MINI_PARAM)
                     .build());
-            if(bind == null){
-                HttpResult result = HttpResult.otherCodeMsgResult(NEED_REG,"用户第一次登录请调用注册接口获取token");
+            if (bind == null) {
+                HttpResult result = HttpResult.otherCodeMsgResult(NEED_REG, "用户第一次登录请调用注册接口获取token");
                 result.setData(LoginResultVo.builder().openid(session.getOpenid()).sessionKey(session.getSessionKey()).build());
                 return result;
             }
-            String userId =  bind.getUserId();
+            String userId = bind.getUserId();
             return HttpResult.success(LoginResultVo.builder().openid(session.getOpenid()).sessionKey(session.getSessionKey()).token(loginService.login(userId)).build());
         } catch (WxErrorException e) {
             this.log.error(e.getMessage(), e);
-            return HttpResult.error(null,"登录失败:" + e.getMessage());
+            return HttpResult.error(null, "登录失败:" + e.getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ public class MiniParamController {
      * 注册
      */
     @PostMapping("/register")
-    @ApiOperation( "注册")
+    @ApiOperation("注册")
     public HttpResult<LoginResultVo> register(@RequestBody @Valid MiniParamRegVo loginVo) {
         UcenterFrontUserBindVO bind = frontUserBindService.selectBean(UcenterFrontUserBindVO.builder().authOpenid(loginVo.getOpenid())
                 .authOpenidType(UcenterFrontUserBindService.OPENID_TYPE_WX_MINI_PARAM)
@@ -92,7 +92,7 @@ public class MiniParamController {
         String userId = null;
         if (bind == null) {
             if (!wxService.getUserService().checkUserInfo(loginVo.getSessionKey(), loginVo.getRawData(), loginVo.getSignature())) {
-                HttpResult.error(null,"用户信息校验失败");
+                HttpResult.error(null, "用户信息校验失败");
             }
             WxMaUserInfo userInfo = wxService.getUserService().getUserInfo(loginVo.getSessionKey(), loginVo.getEncryptedData(), loginVo.getIv());
             UcenterFrontUserDO user = UcenterFrontUserVO.builder().userId(StringUtil.getUUID())
@@ -106,16 +106,15 @@ public class MiniParamController {
     }
 
 
-
     /**
      * <pre>
      * 获取用户信息接口
      * </pre>
      */
     @GetMapping("/info")
-    @ApiOperation( "获取用户信息")
+    @ApiOperation("获取用户信息")
     public HttpResult<WxMaUserInfo> info(String sessionKey,
-                       String signature, String rawData, String encryptedData, String iv) {
+                                         String signature, String rawData, String encryptedData, String iv) {
         // 用户信息校验
         if (!wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
             HttpResult.error("用户信息校验失败");

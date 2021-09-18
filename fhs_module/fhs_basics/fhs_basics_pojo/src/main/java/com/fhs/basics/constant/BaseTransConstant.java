@@ -2,6 +2,7 @@ package com.fhs.basics.constant;
 
 /**
  * 翻译服务静态常量
+ *
  * @author user
  * @date 2020-05-18 14:42:20
  */
@@ -29,11 +30,11 @@ public interface BaseTransConstant {
     /**
      * 菜单管理
      */
-    String  MENU_INFO = "sysMenu";
+    String MENU_INFO = "sysMenu";
     /**
      * 菜单权限管理
      */
-    String  MENU_INFO_PERMISSION = "sysMenuPermission";
+    String MENU_INFO_PERMISSION = "sysMenuPermission";
     /**
      * 地区
      */

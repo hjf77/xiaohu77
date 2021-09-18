@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/ms/task")
-@LogNamespace(namespace ="task",module = "定時任务管理")
+@LogNamespace(namespace = "task", module = "定時任务管理")
 public class TaskController extends BaseController {
     private final static Logger LOGGER = Logger.getLogger(TaskController.class);
 
@@ -39,6 +39,7 @@ public class TaskController extends BaseController {
 
     /**
      * 新增
+     *
      * @param quartz
      * @return
      * @throws SchedulerException
@@ -47,12 +48,12 @@ public class TaskController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("task:add")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
-    public HttpResult<Boolean> save(@Validated  TaskVO quartz) throws SchedulerException {
-        if(quartz.getOldJobGroup() != null) {
+    public HttpResult<Boolean> save(@Validated TaskVO quartz) throws SchedulerException {
+        if (quartz.getOldJobGroup() != null) {
             JobKey key = new JobKey(quartz.getOldJobName(), quartz.getOldJobGroup());
             scheduler.deleteJob(key);
         }
-        try{
+        try {
             Class cls = Class.forName(quartz.getJobClassName());
             cls.newInstance();
             //构建job信息
@@ -65,11 +66,11 @@ public class TaskController extends BaseController {
                     .startNow().withSchedule(cronScheduleBuilder).build();
             //交由Scheduler安排触发
             scheduler.scheduleJob(job, trigger);
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             throw new ParamException("类不存在");
-        }catch (InstantiationException e){
+        } catch (InstantiationException e) {
             throw new ParamException("反射错误");
-        }catch (IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             throw new ParamException("反射错误");
         }
         return HttpResult.success(true);
@@ -77,6 +78,7 @@ public class TaskController extends BaseController {
 
     /**
      * 获取列表
+     *
      * @param quartz
      * @return
      */
@@ -86,11 +88,12 @@ public class TaskController extends BaseController {
     public Pager<TaskVO> list(TaskVO quartz) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
         List<TaskVO> list = taskService.getTaskVO(quartz, pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
-        return new Pager<>(taskService.getTaskCount(quartz),list);
+        return new Pager<>(taskService.getTaskCount(quartz), list);
     }
 
     /**
      * 手动触发任务
+     *
      * @param quartz
      * @param response
      * @return
@@ -98,7 +101,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/trigger")
     @RequiresPermissions("task:update")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "手动触发任务")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, desc = "手动触发任务")
     public HttpResult<Boolean> trigger(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         JobKey key = new JobKey(quartz.getJobName(), quartz.getJobGroup());
         scheduler.triggerJob(key);
@@ -107,6 +110,7 @@ public class TaskController extends BaseController {
 
     /**
      * 暂停执行任务
+     *
      * @param quartz
      * @param response
      * @return
@@ -114,7 +118,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/pause")
     @RequiresPermissions("task:update")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "暂停执行任务")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, desc = "暂停执行任务")
     public HttpResult pause(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         JobKey key = new JobKey(quartz.getJobName(), quartz.getJobGroup());
         scheduler.pauseJob(key);
@@ -123,6 +127,7 @@ public class TaskController extends BaseController {
 
     /**
      * 恢复执行
+     *
      * @param quartz
      * @param response
      * @return
@@ -130,7 +135,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping("/resume")
     @RequiresPermissions("task:update")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,desc = "恢复执行")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, desc = "恢复执行")
     public HttpResult resume(TaskVO quartz, HttpServletResponse response) throws SchedulerException {
         JobKey key = new JobKey(quartz.getJobName(), quartz.getJobGroup());
         scheduler.resumeJob(key);
@@ -139,6 +144,7 @@ public class TaskController extends BaseController {
 
     /**
      * 删除任务
+     *
      * @param quartz
      * @param response
      * @return

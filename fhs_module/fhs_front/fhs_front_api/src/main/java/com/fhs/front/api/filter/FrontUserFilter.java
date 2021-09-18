@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * c端用户登录过滤器
+ *
  * @author user
  * @since 2019-05-18 11:40:05
  */
@@ -36,7 +37,6 @@ public class FrontUserFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(FrontUserFilter.class);
     private static final String JSESSIONID_CODE = "JSESSIONID";
     private static Map jsessionidMapCache = new HashMap();
-
 
 
     /* 前台用户service */
@@ -64,14 +64,14 @@ public class FrontUserFilter implements Filter {
         }
         String token = request.getHeader("token");
         //有token代表是ajax请求，前后端分离的请求
-        if(CheckUtils.isNotEmpty(token)){
+        if (CheckUtils.isNotEmpty(token)) {
             //使用token登录
-            if(!loginByToken( request,  response, token)){
+            if (!loginByToken(request, response, token)) {
                 return;
             }
             chain.doFilter(req, res);
             return;
-        }else if (CheckUtils.isNotEmpty(request.getParameter("accessToken"))) {
+        } else if (CheckUtils.isNotEmpty(request.getParameter("accessToken"))) {
             // 如果验证通过则判断用户是否是vip如果不是vip但是又要vip 那么会 302 如果accessToken验证不通过 会302
             if (login(request, response)) {
                 chain.doFilter(req, res);
@@ -95,15 +95,15 @@ public class FrontUserFilter implements Filter {
 
     }
 
-    private boolean loginByToken(HttpServletRequest request, HttpServletResponse response,String token){
+    private boolean loginByToken(HttpServletRequest request, HttpServletResponse response, String token) {
 
         HttpResult<UcenterFrontUserVO> resultFrontUser = null;
-        try{
+        try {
             resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(token).build());
-        }catch (ParamException e){
-                LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
-                JsonUtils.outJson(response,HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR,"token失效").asJson());
-                return false;
+        } catch (ParamException e) {
+            LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
+            JsonUtils.outJson(response, HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR, "token失效").asJson());
+            return false;
         }
         HttpSession session = request.getSession();
         session.setAttribute("frontUser", resultFrontUser.getData());

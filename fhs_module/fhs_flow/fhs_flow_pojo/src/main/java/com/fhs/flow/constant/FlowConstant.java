@@ -2,6 +2,7 @@ package com.fhs.flow.constant;
 
 /**
  * 工作流常量
+ *
  * @author user
  * @since 2019-05-18 11:57:49
  */
@@ -15,7 +16,7 @@ public interface FlowConstant {
     /**
      * 已发布
      */
-    int XML_STATUS_RELEASE =1;
+    int XML_STATUS_RELEASE = 1;
 
     /**
      * 已禁用
@@ -49,7 +50,7 @@ public interface FlowConstant {
 
 
     /**
-     *  驳回
+     * 驳回
      */
     int INSTANCE_NEWS_TYPE_BACK = 4;
 

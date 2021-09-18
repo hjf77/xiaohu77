@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * 菜单业务接口，实现增删改查等业务
+ *
  * @author Administrator
  * @date 2020-05-18 16:35:06
  */
@@ -37,12 +38,14 @@ public interface SettMsMenuService extends BaseService<SettMsMenuVO, SettMsMenuD
 
     /**
      * vue-element 获取菜单Tree 数据
+     *
      * @return
      */
     List<TreeModelVO> getMenuTreesData();
 
     /**
      * 获取菜单权限按钮
+     *
      * @return
      */
     List<TreeMenuPermissionVO> getMenuPermissionTree();

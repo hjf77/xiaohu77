@@ -12,14 +12,16 @@ import java.util.List;
 
 /**
  * 字典公共服务
+ *
  * @author user
  * @date 2020-05-18 14:40:58
  */
-@FeignClient(value = "basics", configuration = FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration = FeignConfiguration.class, primary = false)
 public interface FeignWordBookApiService {
 
     /**
      * 根据字典编码获取字典信息
+     *
      * @param wordBookGroupCode 字典编码
      * @return HttpResult 角色数据权限
      */

@@ -20,15 +20,16 @@ import java.util.Map;
 /**
  * 文件CRUD service
  * 本服务不对外开放 对外方法参见PubFileService
- * @author  王磊
- * @version  [版本号, 2015/08/14 11:34:23]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ *
+ * @author 王磊
+ * @version [版本号, 2015/08/14 11:34:23]
+ * @see [相关类/方法]
+ * @since [产品/模块版本]
  */
-public interface PubFileService extends BaseService<PubFileVO, PubFileDO>
-{
+public interface PubFileService extends BaseService<PubFileVO, PubFileDO> {
     /**
      * 根据fileId查询文件信息
+     *
      * @param fileId
      * @return
      */
@@ -36,6 +37,7 @@ public interface PubFileService extends BaseService<PubFileVO, PubFileDO>
 
     /**
      * 获取文件上传路径
+     *
      * @return 文件上传路径
      */
     String getFileSavePath();
@@ -43,14 +45,16 @@ public interface PubFileService extends BaseService<PubFileVO, PubFileDO>
 
     /**
      * 设置文件上传路径
+     *
      * @param path 路径
      */
     void setFileSavePath(String path);
 
     /**
      * 获取文件路径
+     *
      * @param serviceFile 文件对象
-     * @return  文件路径
+     * @return 文件路径
      */
     public String getAllPath(PubFileDO serviceFile);
 

@@ -770,7 +770,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
     @Override
     public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         List<UcenterMsUserDO> result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
@@ -861,11 +860,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         ParamChecker.isNotNullOrEmpty(organizationIds, "organizationIds不能为空");
         Set<String> orgIdsSet = new HashSet<>(Arrays.asList(organizationIds.split(",")));
         //organizationIds 其中部分可能是单位，如果是单位则把单位的orgid都查出来
-        List<UcenterMsOrganizationVO> orgs = organizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getCompanyId,orgIdsSet));
+        List<UcenterMsOrganizationVO> orgs = organizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getCompanyId, orgIdsSet));
         for (UcenterMsOrganizationVO org : orgs) {
             orgIdsSet.add(org.getId());
         }
-        List<UcenterMsUserVO> sysUserList = this.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId,orgIdsSet));
+        List<UcenterMsUserVO> sysUserList = this.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId, orgIdsSet));
         return HttpResult.success(sysUserList);
     }
 
@@ -890,35 +889,35 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper){
-        List<UcenterMsUserVO> users =  super.selectListMP(wrapper);
+    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper) {
+        List<UcenterMsUserVO> users = super.selectListMP(wrapper);
         List<UcenterMsOrganizationVO> orgs = this.organizationService.selectListMP(new LambdaQueryWrapper<>());
-        Map<String,UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
+        Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
-        Map<String,TreeNode> nodeMap = new HashMap<>();
+        Map<String, TreeNode> nodeMap = new HashMap<>();
         List<TreeNode> result = new ArrayList<>();
         for (UcenterMsOrganizationVO org : orgs) {
             nodeMap.put(org.getId(), TreeNode.builder().name(org.getName()).id(org.getId()).parentId(org.getParentId()).data(org).children(new ArrayList<>()).build());
         }
-        Map<String,List<UcenterMsUserVO>> userOrgMap = users.stream().collect(Collectors.groupingBy(UcenterMsUserVO::getOrganizationId));
+        Map<String, List<UcenterMsUserVO>> userOrgMap = users.stream().collect(Collectors.groupingBy(UcenterMsUserVO::getOrganizationId));
         String companyId = null;
         for (UcenterMsOrganizationVO org : orgs) {
-            if(CheckUtils.isNullOrEmpty(org.getParentId())){
+            if (CheckUtils.isNullOrEmpty(org.getParentId())) {
                 result.add(nodeMap.get(org.getId()));
                 companyId = org.getId();
                 //如果是个组织则找我爸爸的公司id
-            }else if(org.getIsCompany()!=null && Constant.INT_TRUE==org.getIsCompany() && orgMap.containsKey(org.getParentId())){
+            } else if (org.getIsCompany() != null && Constant.INT_TRUE == org.getIsCompany() && orgMap.containsKey(org.getParentId())) {
                 nodeMap.get(orgMap.get(org.getParentId()).getCompanyId()).getChildren().add(nodeMap.get(org.getId()));
                 companyId = org.getId();
-            }else{
+            } else {
                 //如果只是个普通的部门则取部门id
                 companyId = org.getCompanyId();
             }
             //找到当前用户
-            if(userOrgMap.containsKey(org.getId())){
+            if (userOrgMap.containsKey(org.getId())) {
                 List<UcenterMsUserVO> orgUser = userOrgMap.get(org.getId());
                 for (UcenterMsUserVO ucenterMsUserVO : orgUser) {
-                    nodeMap.get(companyId).getChildren().add(TreeNode.builder().name(ucenterMsUserVO.getUserName()+"(用户)("  + ucenterMsUserVO.getTransMap().get("orgName")  +")")
+                    nodeMap.get(companyId).getChildren().add(TreeNode.builder().name(ucenterMsUserVO.getUserName() + "(用户)(" + ucenterMsUserVO.getTransMap().get("orgName") + ")")
                             .id(ucenterMsUserVO.getUserId()).parentId(companyId).data(ucenterMsUserVO).children(new ArrayList<>()).build());
                 }
             }
@@ -926,7 +925,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         return result;
     }
-
 
 
     private List<String> getPermissionUrlAll() {

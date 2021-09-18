@@ -22,7 +22,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value ="LogLoginDO",description ="LogLogin参数")
+@ApiModel(value = "LogLoginDO", description = "LogLogin参数")
 @TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class LogLoginVO extends LogLoginDO implements VO {
 
@@ -36,4 +36,4 @@ public class LogLoginVO extends LogLoginDO implements VO {
      */
     private Integer count;
 
- }
+}

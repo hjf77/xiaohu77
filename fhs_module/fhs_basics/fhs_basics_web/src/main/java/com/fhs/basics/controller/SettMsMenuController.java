@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * 系统菜单controller
+ *
  * @author jianbo.qin
  * @date 2020-05-18 16:53:48
  */
@@ -37,7 +38,7 @@ import java.util.List;
 @RequestMapping("ms/sysMenu")
 @Api(tags = {"菜单"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = BaseTransConstant.MENU_INFO,module = "菜单管理")
+@LogNamespace(namespace = BaseTransConstant.MENU_INFO, module = "菜单管理")
 public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuDO> {
 
     private static final Logger LOG = Logger.getLogger(SettMsMenuController.class);
@@ -91,7 +92,7 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
     @NotRepeat
     @RequiresPermissions("sysMenu:add")
     @RequestMapping("addMenu")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
     public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SettMsMenuVO adminMenu) {
         try {
             String url = adminMenu.getMenuUrl();
@@ -118,7 +119,7 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
      */
     @RequiresPermissions("sysMenu:update")
     @RequestMapping("updateMenu")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
     public HttpResult<Boolean> updateMenu(HttpServletRequest request, HttpServletResponse reponse, SettMsMenuVO adminMenu) {
         String url = adminMenu.getMenuUrl();
         if (!CheckUtils.isNullOrEmpty(url)) {

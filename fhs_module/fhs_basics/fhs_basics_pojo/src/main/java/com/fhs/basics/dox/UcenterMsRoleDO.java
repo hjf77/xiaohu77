@@ -91,7 +91,7 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "organization_id")
-    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG )
+    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
     @ApiModelProperty("组织机构id")
     private String organizationId;
 

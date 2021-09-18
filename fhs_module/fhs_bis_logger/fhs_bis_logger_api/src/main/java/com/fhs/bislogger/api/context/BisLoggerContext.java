@@ -16,6 +16,7 @@ import java.util.*;
 
 /**
  * 日志上下文
+ *
  * @author user
  * @date 2020-05-18 14:20:14
  */
@@ -66,6 +67,7 @@ public class BisLoggerContext {
 
     /**
      * 添加扩展参数
+     *
      * @param namespace
      * @param pkey
      * @param operatorType
@@ -89,14 +91,14 @@ public class BisLoggerContext {
             return;
         }
         String pkey = vo.getPkey().toString();
-        if(BisLoggerContext.logHistoryDataPKeySet.get().contains(vo.getPkey().toString())){
-           List<LogHistoryDataVO> extParamVOS =   BisLoggerContext.logHistoryDataVOList.get();
-           for(int i =0;i<extParamVOS.size();i++){
-               if(extParamVOS.get(i).getPkey().equals(pkey)){
-                   extParamVOS.remove(i);
-                   break;
-               }
-           }
+        if (BisLoggerContext.logHistoryDataPKeySet.get().contains(vo.getPkey().toString())) {
+            List<LogHistoryDataVO> extParamVOS = BisLoggerContext.logHistoryDataVOList.get();
+            for (int i = 0; i < extParamVOS.size(); i++) {
+                if (extParamVOS.get(i).getPkey().equals(pkey)) {
+                    extParamVOS.remove(i);
+                    break;
+                }
+            }
         }
         BisLoggerContext.logHistoryDataPKeySet.get().add(pkey);
         LogHistoryDataVO historyDataVO = new LogHistoryDataVO();
