@@ -7,10 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * 标记此注解的字段，在join此表的时候，会放到对方的transmap中
+ *
  * @author user
  * @date 2020-05-19 13:35:55
  */
-@Target({ ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JoinShowColumn {
 

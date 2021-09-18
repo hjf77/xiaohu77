@@ -19,18 +19,21 @@ import java.lang.annotation.Target;
 public @interface DelCheckTable {
     /**
      * 指定mapper
+     *
      * @return
      */
     Class<? extends BaseService> manager();
 
     /**
      * 指定字段名字(数据库字段名)
+     *
      * @return
      */
     String fieldName();
 
     /**
      * 对这个表进行一个描述，如果有关联数据存在则提示这个信息
+     *
      * @return
      */
     String message();

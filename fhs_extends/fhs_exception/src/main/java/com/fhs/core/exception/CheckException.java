@@ -14,26 +14,22 @@ public class CheckException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public CheckException(HttpResult result)
-    {
+    public CheckException(HttpResult result) {
         super(result.getMessage());
         this.result = result;
     }
 
-    public CheckException()
-    {
+    public CheckException() {
 
     }
 
     protected HttpResult result;
 
-    public HttpResult getResult()
-    {
+    public HttpResult getResult() {
         return result;
     }
 
-    public void setResult(HttpResult result)
-    {
+    public void setResult(HttpResult result) {
         this.result = result;
     }
 }

@@ -24,5 +24,4 @@ public interface POJOConstant {
     String END_WITH = "8";
 
 
-
 }

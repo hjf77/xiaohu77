@@ -20,6 +20,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * pagex 自动生成java代码控制器
+ *
  * @author user
  * @date 2020-05-19 13:56:33
  */
@@ -77,7 +78,7 @@ public class PageXAutoCodeController implements ApplicationRunner {
                 autoCode(null);
                 pageXTransService.refreshPageXCache(new HashMap<>());
             } catch (Exception e) {
-                LOGGER.error("生成代码或者刷新pagex缓存错误:",e);
+                LOGGER.error("生成代码或者刷新pagex缓存错误:", e);
             }
         }).start();
     }

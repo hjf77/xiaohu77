@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
  * 忽略导出
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 public @interface IgnoreExport {
 }

@@ -15,30 +15,34 @@ import java.lang.annotation.Target;
  * @Date: Created in 10:14 2019/10/15
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE})
+@Target({ElementType.TYPE})
 public @interface AutoDelSett {
 
     /**
      * 主表的service
+     *
      * @return
      */
-   String namespace();
+    String namespace();
 
     /**
      * 主表主键对应我表的字段名 注意 index 需要和mainServiceClazz 对应上
+     *
      * @return
      */
-   String field();
+    String field();
 
     /**
      * 是否校验子类被删除
      * 如果给true的话,子类没有删除完之前父类不可删除
+     *
      * @return
      */
-   boolean isChecker() default false;
+    boolean isChecker() default false;
 
     /**
      * 本类描述
+     *
      * @return
      */
     String desc() default "";

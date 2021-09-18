@@ -5,7 +5,8 @@ import com.fhs.pagex.common.BeetlUtil;
 import org.springframework.stereotype.Component;
 
 /**
- *  多 文件/图片 上传
+ * 多 文件/图片 上传
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: UploadFormTag
@@ -18,23 +19,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class UploadSFormTag extends BaseFormTag {
     private static final Logger LOG = Logger.getLogger(UploadSFormTag.class);
-    static
-    {
+
+    static {
         FormTagFactory.regTag("ups", UploadSFormTag.class);
     }
+
     @Override
     public String getContentHtml() {
-        if(!tagSett.containsKey("multi")){
-            tagSett.put("multi",true);
+        if (!tagSett.containsKey("multi")) {
+            tagSett.put("multi", true);
         }
         try {
-            return BeetlUtil.renderBeelt("/pagex/tags/uploads_tag.html",super.getBeetlParamMap());
+            return BeetlUtil.renderBeelt("/pagex/tags/uploads_tag.html", super.getBeetlParamMap());
         } catch (Exception e) {
-            LOG.error(this,e);
+            LOG.error(this, e);
         }
         return "";
     }
-
 
 
     @Override
@@ -45,7 +46,7 @@ public class UploadSFormTag extends BaseFormTag {
 
     @Override
     public String saveJs() {
-        return  "uploadsFileOnsave_" + super.tagSett.get("name") + "()";
+        return "uploadsFileOnsave_" + super.tagSett.get("name") + "()";
     }
 
     @Override
@@ -65,6 +66,6 @@ public class UploadSFormTag extends BaseFormTag {
 
     @Override
     protected String[] getHandelKeys() {
-        return new String[]{"desc","maxFileNumer","acceptFileType","multi"};
+        return new String[]{"desc", "maxFileNumer", "acceptFileType", "multi"};
     }
 }

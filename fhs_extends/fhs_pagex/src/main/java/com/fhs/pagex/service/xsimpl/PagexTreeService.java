@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * 处理pagexTree页面的服务
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex
  * @ClassName: PagexListService
@@ -27,32 +28,33 @@ import java.util.Map;
  * @Version: 1.0
  */
 @Component
-public class PagexTreeService  implements IPageXService, InitializingBean {
+public class PagexTreeService implements IPageXService, InitializingBean {
 
     private static final Logger LOG = Logger.getLogger(PagexTreeService.class);
 
 
-
     /**
-     *  拼接html
-     * @param request request
-     * @param response response
-     * @param js js配置
+     * 拼接html
+     *
+     * @param request   request
+     * @param response  response
+     * @param js        js配置
      * @param namespace 命名空间
      * @return Tree页HTML
      */
     @Override
     public String service(HttpServletRequest request, HttpServletResponse response, String js, String namespace) throws NoSuchMethodException, ScriptException {
         PageXTreeVO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("modelConfig",treeDTO.getModelConfig());
-        paramMap.put("keySett",treeDTO.getKeySettMap());
-        paramMap.put("listUrlSettMap",treeDTO.getListUrlSettMap());
-        return BeetlConf.beetlConf.renderBeelt("/pagex/tree_template.html",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("modelConfig", treeDTO.getModelConfig());
+        paramMap.put("keySett", treeDTO.getKeySettMap());
+        paramMap.put("listUrlSettMap", treeDTO.getListUrlSettMap());
+        return BeetlConf.beetlConf.renderBeelt("/pagex/tree_template.html", paramMap);
     }
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        HandelPageXService.SIGEL.registerPageXService("tree.jsp",this);
+        HandelPageXService.SIGEL.registerPageXService("tree.jsp", this);
     }
 
 }

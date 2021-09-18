@@ -13,15 +13,15 @@ import java.lang.annotation.Target;
  * @Date: Created in 10:14 2019/10/15
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE})
+@Target({ElementType.TYPE})
 public @interface AutoDel {
 
     /**
      * 主表的
+     *
      * @return
      */
     AutoDelSett[] mainServiceSetts() default {};
-
 
 
 }

@@ -8,10 +8,11 @@ import org.springframework.context.annotation.FilterType;
 
 /**
  * 翻译类型
+ *
  * @author user
  * @date 2020-05-19 10:15:15
  */
-public interface TransType{
+public interface TransType {
 
     /**
      * 自动翻译

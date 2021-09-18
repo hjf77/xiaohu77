@@ -91,14 +91,15 @@ public abstract class BaseController {
 
     /**
      * 获取fhspager对象
+     *
      * @param <T>
      * @return
      */
-    protected <T> FhsPager<T> getFhsPager(){
+    protected <T> FhsPager<T> getFhsPager() {
         HttpServletRequest request = getRequest();
         FhsPager<T> result = new FhsPager<>();
         result.setCurrent(ConverterUtils.toLong(request.getParameter(Constant.PAGE)));
-        result.setSize( ConverterUtils.toLong(request.getParameter(Constant.ROWS)));
+        result.setSize(ConverterUtils.toLong(request.getParameter(Constant.ROWS)));
         return result;
     }
 
@@ -339,7 +340,6 @@ public abstract class BaseController {
         resultMap.put("uploadDate", currentDate);
         return resultMap;
     }
-
 
 
     /**

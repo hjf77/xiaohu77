@@ -69,7 +69,7 @@ public class PageXMsPubController extends PageXBaseController {
         paramMap.put("createUser", user.getUserId());
         paramMap.put("groupCode", user.getGroupCode());
         paramMap.put("updateUser", user.getUserId());
-        String pkey =  StringUtil.getUUID();
+        String pkey = StringUtil.getUUID();
         paramMap.put("pkey", pkey);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         HttpResult result = errorResult;
@@ -79,13 +79,13 @@ public class PageXMsPubController extends PageXBaseController {
             service.insert(paramMap, namespace);
             refreshPageXTransCache(namespace);
             result = successResult;
-            addHistoryAndExtParam( pkey, namespace, LoggerConstant.METHOD_TYPE_ADD);
-        }catch (Exception except){
+            addHistoryAndExtParam(pkey, namespace, LoggerConstant.METHOD_TYPE_ADD);
+        } catch (Exception except) {
             e = except;
-            LOG.error("add出错" + namespace + ",param:" + paramMap,e);
-            throw  except;
-        }finally {
-            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_ADD,e);
+            LOG.error("add出错" + namespace + ",param:" + paramMap, e);
+            throw except;
+        } finally {
+            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_ADD, e);
         }
         BisLoggerContext.clear();
         return result;
@@ -93,19 +93,20 @@ public class PageXMsPubController extends PageXBaseController {
 
     /**
      * 添加历史log和扩展参数
-     * @param pkey  主键
+     *
+     * @param pkey      主键
      * @param namespace namespace
-     * @param type 操作类型 见LoggerConstant
+     * @param type      操作类型 见LoggerConstant
      */
-    private void addHistoryAndExtParam(String pkey,String namespace,int type){
-        Map<String,Object> paramMap = new HashMap<>();
+    private void addHistoryAndExtParam(String pkey, String namespace, int type) {
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", pkey);
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
-        Map<String,Object>  rowData = service.findBeanMap(paramMap, namespace);
-        VO vo = service.map2VO(rowData,service.getNamespaceClassMap().get(namespace));
+        Map<String, Object> rowData = service.findBeanMap(paramMap, namespace);
+        VO vo = service.map2VO(rowData, service.getNamespaceClassMap().get(namespace));
         transService.transOne(vo);
-        BisLoggerContext.addExtParam(namespace,pkey,type);
-        BisLoggerContext.addHistoryData(vo,namespace);
+        BisLoggerContext.addExtParam(namespace, pkey, type);
+        BisLoggerContext.addHistoryData(vo, namespace);
     }
 
 
@@ -125,14 +126,14 @@ public class PageXMsPubController extends PageXBaseController {
         JSONObject result = null;
         Exception exception = null;
         BisLoggerContext.init(StringUtil.getUUID());
-        try{
+        try {
             result = JSONObject.parseObject(service.findBean(paramMap, namespace));
-        }catch (Exception e){
+        } catch (Exception e) {
             exception = e;
-            LOG.error("info出错" + namespace + ",id:" + id,e);
-            throw  exception;
-        }finally {
-            addLog(namespace, JSONObject.toJSONString(result), paramMap, request, LoggerConstant.METHOD_TYPE_VIEW,exception);
+            LOG.error("info出错" + namespace + ",id:" + id, e);
+            throw exception;
+        } finally {
+            addLog(namespace, JSONObject.toJSONString(result), paramMap, request, LoggerConstant.METHOD_TYPE_VIEW, exception);
         }
         BisLoggerContext.clear();
         return result;
@@ -155,18 +156,18 @@ public class PageXMsPubController extends PageXBaseController {
         HttpResult result = errorResult;
         Exception exception = null;
         BisLoggerContext.init(StringUtil.getUUID());
-        try{
+        try {
             service.update(paramMap, namespace);
             refreshPageXTransCache(namespace);
             result = successResult;
-            addHistoryAndExtParam( id, namespace, LoggerConstant.METHOD_TYPE_UPATE);
+            addHistoryAndExtParam(id, namespace, LoggerConstant.METHOD_TYPE_UPATE);
             return result;
-        }catch (Exception e){
+        } catch (Exception e) {
             exception = e;
-            LOG.error("更新出错",e);
-            throw  exception;
-        }finally {
-            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_UPATE,exception);
+            LOG.error("更新出错", e);
+            throw exception;
+        } finally {
+            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_UPATE, exception);
             BisLoggerContext.clear();
         }
     }
@@ -190,17 +191,17 @@ public class PageXMsPubController extends PageXBaseController {
         HttpResult result = errorResult;
         Exception exception = null;
         BisLoggerContext.init(StringUtil.getUUID());
-        try{
+        try {
             service.del(id, namespace);
             refreshPageXTransCache(namespace);
             result = successResult;
             return result;
-        }catch (Exception e){
+        } catch (Exception e) {
             exception = e;
             LOG.error(e);
-            throw  exception;
-        }finally {
-            addLog(namespace,JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_DEL,exception);
+            throw exception;
+        } finally {
+            addLog(namespace, JsonUtils.object2json(result), paramMap, request, LoggerConstant.METHOD_TYPE_DEL, exception);
             BisLoggerContext.clear();
         }
     }
@@ -214,9 +215,9 @@ public class PageXMsPubController extends PageXBaseController {
     public Map<String, Object> findPager(@PathVariable("namespace") String namespace, HttpServletRequest request, HttpServletResponse response) {
         checkPermiessAndNamespace(namespace, "see");
         Map<String, Object> paramMap = super.getPageTurnNum();
-        if (paramMap.containsKey("sortTzwName")){
+        if (paramMap.containsKey("sortTzwName")) {
             Boolean isTransMap = paramMap.get("sortTzwName").toString().contains("transMap");
-            if (isTransMap){
+            if (isTransMap) {
                 paramMap.remove("sortTzwName");
             }
         }
@@ -299,7 +300,7 @@ public class PageXMsPubController extends PageXBaseController {
         }
         Exception exception = null;
         BisLoggerContext.init(StringUtil.getUUID());
-        try{
+        try {
             //去掉分页
             paramMap.remove("start");
             paramMap.remove("end");
@@ -316,12 +317,12 @@ public class PageXMsPubController extends PageXBaseController {
                 dataList.add(jsonArray.getJSONObject(i));
             }
             ExcelExportTools.exportExcel(dataList, request, response);
-        }catch (Exception e){
+        } catch (Exception e) {
             exception = e;
             LOG.error(e);
-            throw  exception;
-        }finally {
-            addLog(namespace,Constant.STR_TRUE,paramMap,request,LoggerConstant.METHOD_TYPE_EXPORT,exception);
+            throw exception;
+        } finally {
+            addLog(namespace, Constant.STR_TRUE, paramMap, request, LoggerConstant.METHOD_TYPE_EXPORT, exception);
         }
         BisLoggerContext.clear();
     }

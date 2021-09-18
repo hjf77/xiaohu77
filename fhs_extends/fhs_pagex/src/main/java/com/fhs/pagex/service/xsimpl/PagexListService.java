@@ -60,13 +60,13 @@ public class PagexListService implements IPageXService, InitializingBean {
         PagexListSettVO listPageSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         initDefaultUrl(listPageSett, namespace);
         List<Map<String, Object>> fieldSettList = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getFormFieldSett();
-        String formFieldSetts=  initFormField( listPageSett, namespace,fieldSettList);
+        String formFieldSetts = initFormField(listPageSett, namespace, fieldSettList);
         // 普通的过滤条件参数 map包含name和val 2个key其中val为此过滤条件的获取值的代码
         List<Map<String, String>> filterParams = new ArrayList<>();
         List<Map<String, String>> filterParamsForBetween = new ArrayList<>();
         String advanceSearchConfig = getAdvanceSearchConfig(fieldSettList);
         List<String> readyJsListList = new ArrayList<>();
-        String filtersHtml = createFiltersHtml(request, response, listPageSett, filterParams, filterParamsForBetween,readyJsListList);
+        String filtersHtml = createFiltersHtml(request, response, listPageSett, filterParams, filterParamsForBetween, readyJsListList);
         try {
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("filtersHtml", filtersHtml);
@@ -93,7 +93,7 @@ public class PagexListService implements IPageXService, InitializingBean {
         }
     }
 
-    private String getAdvanceSearchConfig(List<Map<String, Object>> fieldSettList){
+    private String getAdvanceSearchConfig(List<Map<String, Object>> fieldSettList) {
         StringBuilder advanceConfigResult = new StringBuilder("[");
         String type = null;
         Class fromTagClass = null;
@@ -101,22 +101,22 @@ public class PagexListService implements IPageXService, InitializingBean {
         // 获取所有的表单字段
         for (Map<String, Object> field : fieldSettList) {
             type = ConverterUtils.toString(field.get("type"));
-            if (CheckUtils.isNullOrEmpty(type) ||"one2x".equals(type)) {
+            if (CheckUtils.isNullOrEmpty(type) || "one2x".equals(type)) {
                 continue;
             }
             fromTagClass = FormTagFactory.getTag(type);
             try {
                 formTag = (BaseFormTag) fromTagClass.newInstance();
-                Map<String,Object> fieldSettMap = new HashMap<>();
+                Map<String, Object> fieldSettMap = new HashMap<>();
                 fieldSettMap.putAll(field);
                 fieldSettMap.put("name", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(fieldSettMap.get("name"))));
                 formTag.setTagSett(fieldSettMap, null, null);
-                if(!formTag.isSupportAdvanceSearch()){
+                if (!formTag.isSupportAdvanceSearch()) {
                     continue;
                 }
                 advanceConfigResult.append(formTag.getAdvanceSearchSett() + ",\n");
-            }catch (Exception e){
-                LOG.error("拼接高级搜索配置错误",e);
+            } catch (Exception e) {
+                LOG.error("拼接高级搜索配置错误", e);
             }
 
         }
@@ -126,13 +126,14 @@ public class PagexListService implements IPageXService, InitializingBean {
 
     /**
      * 方便子类扩展
+     *
      * @return
      */
-    public String getListTemplate(){
+    public String getListTemplate() {
         return "/pagex/list_template.html";
     }
 
-    protected String initFormField(PagexListSettVO listPageSett,String namespace,List<Map<String, Object>> fieldSettList){
+    protected String initFormField(PagexListSettVO listPageSett, String namespace, List<Map<String, Object>> fieldSettList) {
         StringBuilder formFieldSetts = new StringBuilder("");
         for (Map<String, Object> field : fieldSettList) {
             formFieldSetts.append(field.get("type") + ",");
@@ -191,7 +192,7 @@ public class PagexListService implements IPageXService, InitializingBean {
                 gridTag = (BaseGridTag) gridTagClass.newInstance();
                 gridTag.setTagSett(field, request, response);
                 gridTag.initReloadParam(filterParams, filterParamsForBetween);
-                if(!CheckUtils.isNullOrEmpty(gridTag.readyJs())){
+                if (!CheckUtils.isNullOrEmpty(gridTag.readyJs())) {
                     readyJsListList.add(gridTag.readyJs());
                 }
                 filtersBuilder.append(gridTag.getHtmlForToolsBar());

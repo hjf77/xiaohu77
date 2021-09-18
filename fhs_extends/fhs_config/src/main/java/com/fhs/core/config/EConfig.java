@@ -5,6 +5,7 @@ import com.fhs.logger.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 /**
@@ -16,7 +17,7 @@ import java.util.*;
  * @since [产品/模块版本]
  */
 @Component("eConfig")
-public class EConfig implements InitializingBean{
+public class EConfig implements InitializingBean {
 
     private static final Logger LOG = Logger.getLogger(EConfig.class);
 
@@ -31,10 +32,10 @@ public class EConfig implements InitializingBean{
     public static final Properties OTHER_CONFIG = new Properties();
 
     @Value("#{${fhs.path}}")
-    private Map<String,String> pathMap;
+    private Map<String, String> pathMap;
 
     @Value("#{${fhs.other}}")
-    private Map<String,String> otherMap;
+    private Map<String, String> otherMap;
 
     @Override
     public void afterPropertiesSet() throws Exception {

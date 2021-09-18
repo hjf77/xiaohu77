@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * excel导入配置
+ *
  * @param <D>
  */
 @Data

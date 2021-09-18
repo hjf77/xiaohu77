@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 强制换行
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BRFormTag extends EmptyFormTag {
 
-    static{
+    static {
         FormTagFactory.regTag("br", BRFormTag.class);
     }
 

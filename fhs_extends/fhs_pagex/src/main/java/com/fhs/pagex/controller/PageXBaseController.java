@@ -40,6 +40,7 @@ import java.util.concurrent.Executors;
 
 /**
  * pagex处理前段业务逻辑的公共代码
+ *
  * @author user
  * @date 2020-05-19 13:59:30
  */
@@ -100,9 +101,6 @@ public class PageXBaseController extends BaseController {
     }
 
 
-
-
-
     /**
      * 刷新namespace 翻译缓存
      *
@@ -135,12 +133,12 @@ public class PageXBaseController extends BaseController {
      * 添加日志
      *
      * @param namespace namespace
-     * @param result      描述
+     * @param result    描述
      * @param paramMap  参数
      * @param request   request
      * @param type      操作类型
      */
-    protected void addLog(String namespace, String result, Map<String, Object> paramMap, HttpServletRequest request, int type,Exception e) {
+    protected void addLog(String namespace, String result, Map<String, Object> paramMap, HttpServletRequest request, int type, Exception e) {
         if (feignBisLoggerApiService == null) {
             feignBisLoggerApiService = SpringContextUtil.getBeanByClassForApi(FeignBisLoggerApiService.class);
         }
@@ -156,7 +154,7 @@ public class PageXBaseController extends BaseController {
         logMainVO.setReqMethod(request.getMethod());
         logMainVO.setRespBody(e == null ? JsonUtils.object2json(result) : e.getMessage());
         logMainVO.setState(e == null ? LoggerConstant.LOG_STATE_SUCCESS : LoggerConstant.LOG_STATE_ERROR);
-        logMainVO.setIsDelete((e == null && type == LoggerConstant.METHOD_TYPE_DEL)?LoggerConstant.HAS_SOFT_DEL:LoggerConstant.SOFT_DEL);
+        logMainVO.setIsDelete((e == null && type == LoggerConstant.METHOD_TYPE_DEL) ? LoggerConstant.HAS_SOFT_DEL : LoggerConstant.SOFT_DEL);
         try {
             logMainVO.setIp(NetworkUtil.getIpAddress(request));
         } catch (IOException ioe) {
@@ -171,14 +169,15 @@ public class PageXBaseController extends BaseController {
 
     /**
      * 异步入库
+     *
      * @param log
      */
     private void addLog(LogAddOperatorLogVO log) {
         singleThreadExecutor.submit(() -> {
-            try{
+            try {
                 feignBisLoggerApiService.addLog(log);
-            }catch (Exception e){
-                LOG.error("日志插入错误",e);
+            } catch (Exception e) {
+                LOG.error("日志插入错误", e);
             }
         });
     }

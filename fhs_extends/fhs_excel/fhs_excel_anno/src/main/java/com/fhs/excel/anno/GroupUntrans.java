@@ -11,11 +11,12 @@ import java.lang.annotation.Target;
  * 比如用户 ，是无法通过姓名来确定唯一的一条数据的
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 public @interface GroupUntrans {
 
     /**
      * 根据哪几个字段关联反向翻译
+     *
      * @return
      */
     String[] value();
@@ -23,7 +24,8 @@ public @interface GroupUntrans {
 
     /**
      * 如果关联不到提示的消息
+     *
      * @return
      */
-    String msg() default  "";
+    String msg() default "";
 }

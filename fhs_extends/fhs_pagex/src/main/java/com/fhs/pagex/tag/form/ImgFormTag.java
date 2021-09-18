@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * input 一行只有一个的大input
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImgFormTag extends EmptyFormTag {
 
-    static{
+    static {
         FormTagFactory.regTag("img", ImgFormTag.class);
     }
 
@@ -27,7 +28,7 @@ public class ImgFormTag extends EmptyFormTag {
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append("<div class=\"fitem\">");
         resultHtmlBuilder.append(getTitleHtml());
-        resultHtmlBuilder.append(" <img src='"+this.tagSett.get("src")+"' " + super.formartDataType());
+        resultHtmlBuilder.append(" <img src='" + this.tagSett.get("src") + "' " + super.formartDataType());
         resultHtmlBuilder.append(formartClass("formImg"));
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());

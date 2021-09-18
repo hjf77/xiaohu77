@@ -65,8 +65,8 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
             dataType = dataType + "&s" + min + "-" + tagSett.get("max");
         }
         String errormsg = super.tagSett.get("title") + "输入了错误的格式";
-        if (!CheckUtils.isNullOrEmpty(tagSett.get("errormsg"))){
-            errormsg = super.tagSett.get("errormsg")+"";
+        if (!CheckUtils.isNullOrEmpty(tagSett.get("errormsg"))) {
+            errormsg = super.tagSett.get("errormsg") + "";
         }
         // 如果只给了min不给最大不管他。
         return " dataType='" + dataType + "' nullmsg='" + super.tagSett.get("title") + "不能为空'  errormsg='"

@@ -64,7 +64,6 @@ public class PageXDBService {
     private RedisCacheService redisCacheService;
 
 
-
     @Autowired
     private CacheUpdateManager cacheUpdateManager;
 
@@ -80,7 +79,6 @@ public class PageXDBService {
     private Map<String, Class> namespaceClassMap = new ConcurrentHashMap<>();
 
 
-
     /**
      * 插入一条数据到db
      *
@@ -90,7 +88,7 @@ public class PageXDBService {
      */
     public int insert(EMap<String, Object> paramMap, String namespace) {
         insertAndUpdateX(paramMap, namespace, true);
-        int result =  sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX", paramMap);
+        int result = sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX", paramMap);
         refreshCache(namespace);
         return result;
     }
@@ -115,7 +113,7 @@ public class PageXDBService {
             for (Map<String, Object> field : fields) {
                 if ("one2x".equals(field.get("type"))) {
                     Object allowEdit = field.get("allowEdit");
-                    if(allowEdit == null || (boolean)allowEdit){
+                    if (allowEdit == null || (boolean) allowEdit) {
                         namespaces.add(ConverterUtils.toString(field.get("namespace")));
                     }
                 }
@@ -129,8 +127,8 @@ public class PageXDBService {
                 int n = sqlsession.delete(getSqlNamespace() + xNamespace + "_delFkeyPageX", deleteFKeyParam);
                 // 数据库有改动才会产生日志
                 if (n > 0 && BisLoggerContext.isNeedLogger()) {
-                    BisLoggerContext.addExtParam(xNamespace,pkey,LoggerConstant.OPERATOR_TYPE_DEL);
-                    BisLoggerContext.addHistoryData(JSON.parseObject(JSON.toJSONString(deleteFKeyParam),LogHistoryDataVO.class),xNamespace);
+                    BisLoggerContext.addExtParam(xNamespace, pkey, LoggerConstant.OPERATOR_TYPE_DEL);
+                    BisLoggerContext.addHistoryData(JSON.parseObject(JSON.toJSONString(deleteFKeyParam), LogHistoryDataVO.class), xNamespace);
                 }
                 //取出fkey的列名字
                 String fkeyField = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("fkey")));
@@ -149,8 +147,8 @@ public class PageXDBService {
                     extendsChild.put("groupCode", groupCode);
                     sqlsession.insert(getSqlNamespace() + xNamespace + "_insertPageX", extendsChild);
                     if (BisLoggerContext.isNeedLogger()) {
-                        BisLoggerContext.addExtParam(xNamespace, extendsChild.get(fkeyField), isAdd?LoggerConstant.OPERATOR_TYPE_ADD:LoggerConstant.OPERATOR_TYPE_UPDATE);
-                        BisLoggerContext.addHistoryData(JSONObject.parseObject(extendsChild.toJSONString(),LogHistoryDataVO.class),xNamespace);
+                        BisLoggerContext.addExtParam(xNamespace, extendsChild.get(fkeyField), isAdd ? LoggerConstant.OPERATOR_TYPE_ADD : LoggerConstant.OPERATOR_TYPE_UPDATE);
+                        BisLoggerContext.addHistoryData(JSONObject.parseObject(extendsChild.toJSONString(), LogHistoryDataVO.class), xNamespace);
                     }
                 }
             }
@@ -160,9 +158,10 @@ public class PageXDBService {
 
     /**
      * 刷新缓存
+     *
      * @param namespace 命名空间
      */
-    private void refreshCache(String namespace){
+    private void refreshCache(String namespace) {
         cacheUpdateManager.clearCache(namespace);
         //发送刷新的消息
         Map<String, String> message = new HashMap<>();
@@ -196,26 +195,26 @@ public class PageXDBService {
 
     /**
      * map的数据转换为vo
+     *
      * @param mapData
      * @param clazz
      * @return
      */
-    public VO map2VO(Map<String, Object> mapData,Class clazz){
+    public VO map2VO(Map<String, Object> mapData, Class clazz) {
         try {
             Object tempObj = clazz.newInstance();
             VO tempSuperBenn = (VO) tempObj;
             Field field = null;
             for (String key : mapData.keySet()) {
                 field = ReflectUtils.getDeclaredField(clazz, key);
-                if(field == null){
+                if (field == null) {
                     continue;
                 }
                 if (field.getType() == Date.class) {
-                    ReflectUtils.setValue(tempObj, key, DateUtils.parseStr(mapData.get(key).toString(),DateUtils.DATETIME_PATTERN));
+                    ReflectUtils.setValue(tempObj, key, DateUtils.parseStr(mapData.get(key).toString(), DateUtils.DATETIME_PATTERN));
                 } else if (field.getType() == Integer.class) {
                     ReflectUtils.setValue(tempObj, key, ConverterUtils.toInteger(mapData.get(key)));
-                }
-                else{
+                } else {
                     ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(mapData.get(key)));
                 }
             }
@@ -250,11 +249,11 @@ public class PageXDBService {
      * @return bean的json
      */
     public String findBean(Map<String, Object> param, String namespace) {
-        Map<String,Object> result = sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param);
-        result.keySet().forEach(key->{
+        Map<String, Object> result = sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param);
+        result.keySet().forEach(key -> {
             Object val = result.get(key);
-            if(val instanceof Date){
-                result.put(key,DateUtils.formartDate((Date) val,DateUtils.DATETIME_PATTERN));
+            if (val instanceof Date) {
+                result.put(key, DateUtils.formartDate((Date) val, DateUtils.DATETIME_PATTERN));
             }
         });
         return JsonUtils.bean2json(result);
@@ -267,10 +266,9 @@ public class PageXDBService {
      * @param namespace namespace
      * @return bean的json
      */
-    public Map<String,Object> findBeanMap(Map<String, Object> param, String namespace) {
+    public Map<String, Object> findBeanMap(Map<String, Object> param, String namespace) {
         return sqlsession.selectOne(getSqlNamespace() + namespace + "_findBeanPageX", param);
     }
-
 
 
     /**
@@ -296,10 +294,10 @@ public class PageXDBService {
      * @return 删除了几行 理论来说是1
      */
     public int del(String pkey, String namespace) {
-        autoDelService.deleteCheck(namespace,pkey);
+        autoDelService.deleteCheck(namespace, pkey);
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + pkey);
-        int result =  sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
-        autoDelService.deleteItemTBL(namespace,pkey);
+        int result = sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
+        autoDelService.deleteItemTBL(namespace, pkey);
         refreshCache(namespace);
         return result;
     }

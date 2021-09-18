@@ -73,7 +73,7 @@ public class DistributedListenerRegister implements ApplicationListener<Applicat
         List<DistributedListener> cacheListener = aNamespaceListenerMap.get(eventType);
         for (DistributedListener listener : cacheListener) {
             //判断是否是rpc的listener，如果是的话，判断是否存在非代理的实现类，存在只添加非代理实现类
-            if((!listener.isRpc())  || SpringContextUtil.getBeanByClassForApi(listener.getRpcInterfaceClass()) == listener){
+            if ((!listener.isRpc()) || SpringContextUtil.getBeanByClassForApi(listener.getRpcInterfaceClass()) == listener) {
                 defaultEventListeners.add(listener);
             }
         }

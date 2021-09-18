@@ -7,9 +7,10 @@ import java.lang.annotation.Target;
 
 /**
  * 某个字段自动变成
+ *
  * @author wanglei
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 public @interface AutoArray {
 }

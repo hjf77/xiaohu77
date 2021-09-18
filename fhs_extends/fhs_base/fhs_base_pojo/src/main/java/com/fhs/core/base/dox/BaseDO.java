@@ -57,7 +57,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      */
     @TableField("create_user")
     @ApiModelProperty("创建人")
-    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#createUser",jsonKey = "createUserUserName")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#createUser", jsonKey = "createUserUserName")
     protected String createUser;
 
     /**
@@ -74,7 +74,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      */
     @ApiModelProperty("修改人")
     @TableField("update_user")
-    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#updateUser",jsonKey = "updateUserUserName")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#updateUser", jsonKey = "updateUserUserName")
     protected String updateUser;
 
     /**
@@ -122,7 +122,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      */
     @Override
     @JsonIgnore
-    @JSONField(serialize = false,deserialize = false)
+    @JSONField(serialize = false, deserialize = false)
     public Object getPkey() {
         Field idField = getIdField(true);
         try {
@@ -139,16 +139,15 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
      * @return 主键
      */
     @JsonIgnore
-    @JSONField(serialize = false,deserialize = false)
+    @JSONField(serialize = false, deserialize = false)
     public void setPkey(Object pkey) {
         Field idField = getIdField(true);
         try {
-             idField.set(this,pkey);
+            idField.set(this, pkey);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
-
 
 
     /**
@@ -176,70 +175,77 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> implements V
         return fieldList.get(0);
     }
 
-    @JSONField(serialize=false)
+    @JSONField(serialize = false)
     @JsonIgnore
-    public BaseService getBaseService(){
+    public BaseService getBaseService() {
         // 如果父类直接是basedo代表是个do如果父类不是basedo代表应是个vo
         Class clazz = this.getClass().getSuperclass() == BaseDO.class ? this.getClass() : this.getClass().getSuperclass();
-        Type[] types  = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
-        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class,types[0].getTypeName(),1);
+        Type[] types = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
+        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, types[0].getTypeName(), 1);
         return baseService;
     }
 
     /**
      * 插入
+     *
      * @return
      */
-    public int insert(){
+    public int insert() {
         return this.getBaseService().insertSelective((BaseDO) this);
     }
 
     /**
      * 以自己当做参数查询
+     *
      * @return
      */
-    public  <V> List<V> findForList(){
+    public <V> List<V> findForList() {
         return this.getBaseService().findForList((BaseDO) this);
     }
 
     /**
      * 根据主键修改 不包含null
+     *
      * @return
      */
-    public boolean updateSelectiveById(){
+    public boolean updateSelectiveById() {
         return this.getBaseService().updateJpa((BaseDO) this);
     }
 
     /**
      * 根据主键修改 包含null
+     *
      * @return
      */
-    public boolean updateByPkey(){
+    public boolean updateByPkey() {
         return this.getBaseService().update((BaseDO) this);
     }
 
 
     /**
      * 把自己当做参数做删除
+     *
      * @return
      */
-    public boolean deleteByPkey(){
+    public boolean deleteByPkey() {
         return this.getBaseService().delete((BaseDO) this);
     }
 
     /**
      * 查询总数
+     *
      * @return
      */
-    public int findCount(){
+    public int findCount() {
         return this.getBaseService().findCount((BaseDO) this);
     }
 
     /**
      * 查询单个
+     *
      * @return
      */
-    public <V> V findOne(){
+    public <V> V findOne() {
         return (V) this.getBaseService().findBean((BaseDO) this);
     }
 

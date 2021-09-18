@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * 标记方法不可重入
+ *
  * @author user
  * @date 2020-05-19 11:17:15
  */
@@ -16,6 +17,7 @@ import java.lang.annotation.Target;
 public @interface NotRepeat {
     /**
      * 自动过期时间
+     *
      * @return
      */
     int outTime() default 10;

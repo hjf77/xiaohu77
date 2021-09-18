@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 
 /**
  * 字符串序列化为数组
+ *
  * @author wanglei
  */
 public class Str2ArrayValueSerializer implements ObjectSerializer {
@@ -19,8 +20,7 @@ public class Str2ArrayValueSerializer implements ObjectSerializer {
     public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType,
                       int features) throws IOException {
         String str = ConverterUtils.toString(object);
-        if(StringUtils.isEmpty(ConverterUtils.toString(str)))
-        {
+        if (StringUtils.isEmpty(ConverterUtils.toString(str))) {
             serializer.write(new String[]{});
             return;
         }

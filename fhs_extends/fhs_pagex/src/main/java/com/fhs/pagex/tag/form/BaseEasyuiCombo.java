@@ -46,8 +46,8 @@ public abstract class BaseEasyuiCombo extends EmptyFormTag {
             }
             super.tagSett.put("class", "big_text");
             //如果没有自定义onselect则自动送一个onselect
-            if(!super.tagSett.containsKey("onSelect")){
-                super.tagSett.put("onSelect", "removeEmptyComboVal_" + name );
+            if (!super.tagSett.containsKey("onSelect")) {
+                super.tagSett.put("onSelect", "removeEmptyComboVal_" + name);
             }
         }
         resultHtmlBuilder.append(getTitleHtml());

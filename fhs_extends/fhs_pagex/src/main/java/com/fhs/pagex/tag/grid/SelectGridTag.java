@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 下拉标签 easyui combobox
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -14,10 +15,9 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class SelectGridTag extends  BaseEasyuiComboGridTag {
+public class SelectGridTag extends BaseEasyuiComboGridTag {
 
-    static
-    {
+    static {
         GridTagFactory.regTag("select", SelectGridTag.class);
     }
 

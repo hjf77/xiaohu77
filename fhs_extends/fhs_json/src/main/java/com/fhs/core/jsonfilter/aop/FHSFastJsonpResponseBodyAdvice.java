@@ -21,6 +21,7 @@ import java.util.HashSet;
  * update from https://github.com/Liuyis/jsonfilter
  * by jackwong
  * json转换器前置解析注解内容
+ *
  * @author jackwong
  * @date 2020-05-19 14:44:21
  */
@@ -43,14 +44,14 @@ public class FHSFastJsonpResponseBodyAdvice implements ResponseBodyAdvice {
             JsonFilterObject jsonFilterObject = new JsonFilterObject();
             ObjFilter[] objFilters = methodParameter.getMethod().getAnnotation(JsonFilter.class).value();
             for (ObjFilter filter : objFilters) {
-                jsonFilterObject.getExcludes().put(filter.clazz(),new HashSet<>(Arrays.asList(filter.excludeField())));
-                jsonFilterObject.getIncludes().put(filter.clazz(),new HashSet<>(Arrays.asList(filter.includeField())));
+                jsonFilterObject.getExcludes().put(filter.clazz(), new HashSet<>(Arrays.asList(filter.excludeField())));
+                jsonFilterObject.getIncludes().put(filter.clazz(), new HashSet<>(Arrays.asList(filter.includeField())));
             }
             jsonFilterObject.setJsonObject(o);
             return jsonFilterObject;
         }
         if (methodParameter.getMethod().isAnnotationPresent(VoFormatter.class)) {
-            VoFormatter voFormatter =  methodParameter.getMethod().getAnnotation(VoFormatter.class);
+            VoFormatter voFormatter = methodParameter.getMethod().getAnnotation(VoFormatter.class);
             VoConverterObject voConverterObject = new VoConverterObject();
             voConverterObject.setSettings(voFormatter.value());
             voConverterObject.setInclude(voFormatter.include());

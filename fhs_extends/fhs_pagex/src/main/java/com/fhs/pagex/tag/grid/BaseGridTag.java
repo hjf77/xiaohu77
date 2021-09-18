@@ -32,33 +32,34 @@ public abstract class BaseGridTag extends PagexBaseTag {
 
     /**
      * 获取 标签在toolsbar的html
-     * @return  标签在toolsbar的html
+     *
+     * @return 标签在toolsbar的html
      */
     public abstract String getHtmlForToolsBar();
 
 
-
     /**
      * 在reload的时候如何获取值，一般的就是$('#idF').val();
-     * @param filterParams 过滤条件获取值的代码配置
+     *
+     * @param filterParams           过滤条件获取值的代码配置
      * @param filterParamsForBetween 过滤条件获取值的代码配置-between条件处理
      */
-    public abstract void initReloadParam(List<Map<String,String>> filterParams, List<Map<String,String>> filterParamsForBetween);
+    public abstract void initReloadParam(List<Map<String, String>> filterParams, List<Map<String, String>> filterParamsForBetween);
 
     /**
      * 格式化自动提示
      */
-    public String formartPlaceholderHtml(){
+    public String formartPlaceholderHtml() {
         return " placeholder='请填写" + super.tagSett.get("title") + "' prompt='请选择" + super.tagSett.get("title") + "' ";
     }
 
     /**
      * 格式化id
+     *
      * @return
      */
-    public String formartIdHtml()
-    {
-        return  " id='" + super.tagSett.get("name") + "F'";
+    public String formartIdHtml() {
+        return " id='" + super.tagSett.get("name") + "F'";
     }
 
     @Override

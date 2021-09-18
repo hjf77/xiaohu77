@@ -15,30 +15,30 @@ import java.util.Map;
 /**
  * 数据权限过滤器
  * 会给DataPermissonContext设置数据权限
+ *
  * @author user
  * @date 2020-05-19 15:31:19
  */
-@WebFilter(urlPatterns = {"/ms/*"},filterName = "zDataPermissonFilter" ,asyncSupported = true)
+@WebFilter(urlPatterns = {"/ms/*"}, filterName = "zDataPermissonFilter", asyncSupported = true)
 public class ZDataPermissonFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-                    //初始化
+        //初始化
 
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
-        HttpServletResponse response = (HttpServletResponse)servletResponse;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         //没用户的话直接放行
-        if(request.getSession().getAttribute(Constant.SESSION_USER) == null || (!request.getServletPath().startsWith("/ms/")))
-        {
-            filterChain.doFilter(servletRequest,servletResponse);
+        if (request.getSession().getAttribute(Constant.SESSION_USER) == null || (!request.getServletPath().startsWith("/ms/"))) {
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        Map<String,String> dataPermissonMap = (Map<String, String>) request.getSession().getAttribute(Constant.SESSION_USER_DATA_PERMISSION);
+        Map<String, String> dataPermissonMap = (Map<String, String>) request.getSession().getAttribute(Constant.SESSION_USER_DATA_PERMISSION);
         DataPermissonContext.setDataPermissonMap(dataPermissonMap);
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

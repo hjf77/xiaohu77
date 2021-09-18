@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 导出排序
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 public @interface Order {
     int value();
 }

@@ -14,10 +14,8 @@ import org.springframework.context.annotation.Configuration;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @Configuration
 public class FeignConfiguration implements RequestInterceptor {
@@ -25,15 +23,15 @@ public class FeignConfiguration implements RequestInterceptor {
     @Value("${fhs.api.password:fhs-framework}")
     private String apiToken;
 
-    public String getApiToken(){
+    public String getApiToken() {
         return apiToken;
     }
 
     @Bean
-    public Contract myFeignConfiguration()
-    {
+    public Contract myFeignConfiguration() {
         return new Contract.Default();
     }
+
     @Bean
     public Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
@@ -41,6 +39,6 @@ public class FeignConfiguration implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header("apiToken",apiToken);
+        template.header("apiToken", apiToken);
     }
 }

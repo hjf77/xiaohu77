@@ -12,6 +12,7 @@ import java.util.Set;
 
 /**
  * beetl工具类
+ *
  * @author user
  * @date 2020-05-19 13:38:29
  */
@@ -33,13 +34,11 @@ public class BeetlUtil {
         for (String key : parameterMap.keySet()) {
             template.binding(key, parameterMap.get(key));
         }
-        if(PagexServletContext.getRequest()!=null)
-        {
+        if (PagexServletContext.getRequest() != null) {
             template.binding("parameter", getParameterMap(PagexServletContext.getRequest()));
         }
         return template.render();
     }
-
 
 
     private static EMap<String, Object> getParameterMap(HttpServletRequest request) {

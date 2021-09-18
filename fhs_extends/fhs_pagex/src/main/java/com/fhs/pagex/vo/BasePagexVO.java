@@ -17,13 +17,13 @@ import com.fhs.core.base.pojo.vo.VO;
  * @UpdateDate: 2018/12/29 0029 12:33
  * @Version: 1.0
  */
-public class BasePagexVO<T extends BasePagexVO>  extends BaseDO<T> implements VO {
+public class BasePagexVO<T extends BasePagexVO> extends BaseDO<T> implements VO {
 
     private static final String ID_FIELD_NAME = "id";
 
 
     public Object getId() {
-        if(ReflectUtils.getDeclaredField(this.getClass(), ID_FIELD_NAME) != null){
+        if (ReflectUtils.getDeclaredField(this.getClass(), ID_FIELD_NAME) != null) {
             return ReflectUtils.getValue(this, ID_FIELD_NAME);
         }
         return getPkey();

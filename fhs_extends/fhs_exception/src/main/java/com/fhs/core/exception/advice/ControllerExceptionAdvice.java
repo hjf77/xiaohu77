@@ -47,7 +47,6 @@ public class ControllerExceptionAdvice {
     private static final Logger LOG = Logger.getLogger(ControllerExceptionAdvice.class);
 
 
-
     /**
      * 请求的 JSON 参数在请求体内的参数校验
      *
@@ -75,8 +74,6 @@ public class ControllerExceptionAdvice {
     public ModelAndView bindException(HttpRequestMethodNotSupportedException e) {
         return HttpResult.validateError(null, "HTTP Method使用错了，详细信息:" + e.getMessage());
     }
-
-
 
 
     /**
@@ -137,12 +134,12 @@ public class ControllerExceptionAdvice {
             httpResult.setMessage(ex.getMessage());
             JsonUtils.outJson(response, httpResult.asJson(), ((HttpException) ex).getHttpCode());
             return null;
-        }  else if (ex instanceof ParamsInValidException) {
+        } else if (ex instanceof ParamsInValidException) {
             httpResult.setMessage(ex.getMessage());
             JsonUtils.outJson(response, httpResult.asJson());
             return null;
         } else if (ex instanceof MethodArgumentNotValidException) {
-            BindingResult bindingResult = ((MethodArgumentNotValidException)(ex)).getBindingResult();
+            BindingResult bindingResult = ((MethodArgumentNotValidException) (ex)).getBindingResult();
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             StringBuilder errMsg = new StringBuilder();
             for (ObjectError allError : allErrors) {
@@ -154,8 +151,7 @@ public class ControllerExceptionAdvice {
             httpResult.setMessage(errMsg.toString());
             JsonUtils.outJson(response, httpResult.asJson());
             return null;
-        }
-        else if (ex instanceof BusinessException) {
+        } else if (ex instanceof BusinessException) {
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode(((BusinessException) ex).getCode());
@@ -186,7 +182,7 @@ public class ControllerExceptionAdvice {
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
             httpResult = HttpResult.otherResult(PubResult.SYSTEM_ERROR);
             httpResult.setMessage("系统错误，请联系管理员,NONCE:" + ThreadKey.BUS_KEY.get());
-            if(EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")!=null){
+            if (EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword") != null) {
                 httpResult.setExceptionInfo(AESUtil.encrypt(getStackTrace(ex), EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")));
             }
             JsonUtils.outJson(response, httpResult.asJson());

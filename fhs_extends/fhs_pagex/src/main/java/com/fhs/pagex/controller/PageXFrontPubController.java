@@ -27,6 +27,7 @@ import java.util.Map;
 
 /**
  * pagex自动生成前端接口  by jackwong
+ *
  * @author user
  * @date 2020-05-19 14:00:00
  */
@@ -79,24 +80,24 @@ public class PageXFrontPubController extends PageXBaseController implements Init
 
         //返回值是int不用处理结果
         if (functionResult.getType() == FunctionHandle.TYPE_INT) {
-            return handelHttpReulst(api,functionResult.getResultInt(),request,response);
+            return handelHttpReulst(api, functionResult.getResultInt(), request, response);
         }
         //如果返回值是单个对象
         if (functionResult.getType() == FunctionHandle.TYPE_ONE) {
             if (api.isHasEXF()) {
-                return handelHttpReulst(api,handleExFields(functionResult.getResultObject(), api.getExFs()),request,response);
+                return handelHttpReulst(api, handleExFields(functionResult.getResultObject(), api.getExFs()), request, response);
             }
             if (api.isHasINF()) {
-                return handelHttpReulst(api,handleInFields(functionResult.getResultObject(), api.getInFs()),request,response);
+                return handelHttpReulst(api, handleInFields(functionResult.getResultObject(), api.getInFs()), request, response);
             }
             //以上2个都没有直接返回
-            return  handelHttpReulst(api,functionResult.getResultObject(),request,response);
+            return handelHttpReulst(api, functionResult.getResultObject(), request, response);
         }
         //如果返回值是单个对象
         if (functionResult.getType() == FunctionHandle.TYPE_MANY) {
             //不指定返回也不指定include 就直接把查询到的结果返回回去
             if (!api.isHasEXF() && !api.isHasINF()) {
-                return handelHttpReulst(api,functionResult.getResultArray(),request,response);
+                return handelHttpReulst(api, functionResult.getResultArray(), request, response);
             }
             JSONArray resultArray = new JSONArray();
             for (int i = 0; i < functionResult.getResultArray().size(); i++) {
@@ -106,28 +107,26 @@ public class PageXFrontPubController extends PageXBaseController implements Init
                     resultArray.add(handleInFields(functionResult.getResultArray().getJSONObject(i), api.getInFs()));
                 }
             }
-            return handelHttpReulst(api,resultArray,request,response);
+            return handelHttpReulst(api, resultArray, request, response);
         }
         //处理返回结果end
-        return handelHttpReulst(api,"js配置错误",request,response);
+        return handelHttpReulst(api, "js配置错误", request, response);
     }
 
     /**
      * 对于返回的数据进行包装
      * 在jsonp或者客户端指定不要httpresult的时候不用httpresult返回
-     * @param api  api对象
+     *
+     * @param api        api对象
      * @param resultData 给前段的数据
-     * @param request request
-     * @param response response
+     * @param request    request
+     * @param response   response
      * @return 只有前端不传notHttpResult并且接口不支持jsonp的时候给前端返回Httpresult
      */
-    public HttpResult<Object> handelHttpReulst(PageXFrontVO.FrontApi api,Object resultData,HttpServletRequest request,HttpServletResponse response){
-        if(api.isJSONP())
-        {
-            if(request.getParameter("jsonpCallback")!=null)
-            {
-                if(request.getParameter("notHttpResult")!=null)
-                {
+    public HttpResult<Object> handelHttpReulst(PageXFrontVO.FrontApi api, Object resultData, HttpServletRequest request, HttpServletResponse response) {
+        if (api.isJSONP()) {
+            if (request.getParameter("jsonpCallback") != null) {
+                if (request.getParameter("notHttpResult") != null) {
                     super.outJsonp(JsonUtils.object2json(resultData));
                     return null;
                 }
@@ -135,8 +134,7 @@ public class PageXFrontPubController extends PageXBaseController implements Init
                 return null;
             }
         }
-        if(request.getParameter("notHttpResult")!=null)
-        {
+        if (request.getParameter("notHttpResult") != null) {
             super.outWriteJson(JsonUtils.object2json(resultData));
             return null;
         }
@@ -204,7 +202,7 @@ public class PageXFrontPubController extends PageXBaseController implements Init
             paramMap.put(Constant.END, pageSizeInfo.getPageSize());
         }
 
-        return FunctionResult.builder().type(FunctionHandle.TYPE_MANY).resultArray(super.findListDataAndInitJoin(namespace,paramMap)).build();
+        return FunctionResult.builder().type(FunctionHandle.TYPE_MANY).resultArray(super.findListDataAndInitJoin(namespace, paramMap)).build();
     }
 
     @Override

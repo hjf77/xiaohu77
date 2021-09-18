@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * input 表单tag
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class InputFormTag extends EmptyFormTag implements IOne2XTag {
 
-    static{
+    static {
         FormTagFactory.regTag("input", InputFormTag.class);
         FormTagFactory.regOne2XTag("input", InputFormTag.class);
     }

@@ -27,6 +27,7 @@ import java.util.*;
 
 /**
  * 表关联查询服务
+ *
  * @author user
  * @date 2020-05-19 14:04:24
  */
@@ -49,7 +50,7 @@ public class JoinService implements InitializingBean {
     /**
      * 每个model对应哪些字段是可能需要被关联的  val->map key db字段名，val Java字段名
      */
-    private Map<String, Map<String,String>> modelJoinFiledMap = new HashMap<>();
+    private Map<String, Map<String, String>> modelJoinFiledMap = new HashMap<>();
 
     /**
      * key model val 查询的sql
@@ -58,38 +59,35 @@ public class JoinService implements InitializingBean {
 
     /**
      * key namespace value 此namespace需要关联查询的字段集合
-     *   valMap->     key 字段名字 val namespace
+     * valMap->     key 字段名字 val namespace
      */
-    private Map<String,Map<String,String>> namespaceJoinColumnMap = new HashMap<>();
+    private Map<String, Map<String, String>> namespaceJoinColumnMap = new HashMap<>();
 
 
     /**
      * 填充Join数据
-     * @param rows 待被填充的数据集合
+     *
+     * @param rows      待被填充的数据集合
      * @param namespace namespace
      * @return 初始好的数据
      */
-    public  JSONArray initJoinData(JSONArray rows, String namespace)
-    {
-        if(namespaceJoinColumnMap.containsKey(namespace)){
-            Map<String,String> namespaceJoinColumnInfo = namespaceJoinColumnMap.get(namespace);
+    public JSONArray initJoinData(JSONArray rows, String namespace) {
+        if (namespaceJoinColumnMap.containsKey(namespace)) {
+            Map<String, String> namespaceJoinColumnInfo = namespaceJoinColumnMap.get(namespace);
             Set<String> columnSet = namespaceJoinColumnInfo.keySet();
-            for(int i = 0;i<rows.size();i++)
-            {
-                if(!rows.getJSONObject(i).containsKey("transMap"))
-                {
-                    rows.getJSONObject(i).put("transMap",new JSONObject());
-                };
+            for (int i = 0; i < rows.size(); i++) {
+                if (!rows.getJSONObject(i).containsKey("transMap")) {
+                    rows.getJSONObject(i).put("transMap", new JSONObject());
+                }
+                ;
             }
             String tempNameSpace = null;
             String camaelColumn = null;
             //遍历所有需要join的字段
-            for(String column:columnSet)
-            {
+            for (String column : columnSet) {
                 Set<String> columnVal = new HashSet<>();
                 camaelColumn = ColumnNameUtil.underlineToCamel(column);
-                for(int i = 0;i<rows.size();i++)
-                {
+                for (int i = 0; i < rows.size(); i++) {
                     columnVal.add(ConverterUtils.toString(rows.getJSONObject(i).get(camaelColumn)));
                 }
                 tempNameSpace = namespaceJoinColumnInfo.get(column);
@@ -97,29 +95,25 @@ public class JoinService implements InitializingBean {
                 String sql = modelSqlMap.get(tempNameSpace);
                 sql = sql.replace("@{pkeys}", StringUtil.getStrToIn(columnVal));
                 //一个namespace 查询出来的data集合，后面的代码将会把这个数据填充到dataList中
-                List<Map<String,Object>> namespaceDataList = pageXDAO.selectListForJoin(sql);
+                List<Map<String, Object>> namespaceDataList = pageXDAO.selectListForJoin(sql);
                 //关联表的一列数据
-                Map<String,Map<String,Object>> joinTBLData = new HashMap<>();
-                Map<String,String> joinField = this.modelJoinFiledMap.get(tempNameSpace);
+                Map<String, Map<String, Object>> joinTBLData = new HashMap<>();
+                Map<String, String> joinField = this.modelJoinFiledMap.get(tempNameSpace);
                 // 转换字段名字
-                for(Map<String,Object> row:namespaceDataList)
-                {
-                    for(String dbColumnName : joinField.keySet())
-                    {
-                        row.put(joinField.get(dbColumnName),row.get(dbColumnName));
+                for (Map<String, Object> row : namespaceDataList) {
+                    for (String dbColumnName : joinField.keySet()) {
+                        row.put(joinField.get(dbColumnName), row.get(dbColumnName));
                         row.remove(dbColumnName);
                     }
-                    String rowPkey= ConverterUtils.toString(row.get("pkey"));
+                    String rowPkey = ConverterUtils.toString(row.get("pkey"));
                     row.remove("pkey");
-                    joinTBLData.put(rowPkey,row);
+                    joinTBLData.put(rowPkey, row);
                 }
-                for(int i = 0;i<rows.size();i++)
-                {
+                for (int i = 0; i < rows.size(); i++) {
                     JSONObject row = rows.getJSONObject(i);
                     JSONObject transMap = row.getJSONObject("transMap");
                     String pkey = ConverterUtils.toString(row.get(camaelColumn));
-                    if(joinTBLData.get(pkey)!=null)
-                    {
+                    if (joinTBLData.get(pkey) != null) {
                         transMap.putAll(joinTBLData.get(pkey));
                     }
                 }
@@ -127,7 +121,6 @@ public class JoinService implements InitializingBean {
         }
         return rows;
     }
-
 
 
     @Override
@@ -141,15 +134,14 @@ public class JoinService implements InitializingBean {
     }
 
 
-
     /**
      * 解析此类哪些字段需要join show
      *
      * @param clazz class
      * @return 需要join show的字段 map
      */
-    private Map<String,String> parseNeedJoinField(Class<?> clazz) {
-        Map<String,String> needJoinFieldMap = new HashMap<>();
+    private Map<String, String> parseNeedJoinField(Class<?> clazz) {
+        Map<String, String> needJoinFieldMap = new HashMap<>();
         List<Field> fieldList = ReflectUtils.getAllField(clazz);
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT ");
@@ -159,7 +151,7 @@ public class JoinService implements InitializingBean {
                 continue;
             }
             tblColumnName = PersistentUtil.getColumnName(field);
-            needJoinFieldMap.put(tblColumnName,clazz.getSimpleName() + "_" + field.getName());
+            needJoinFieldMap.put(tblColumnName, clazz.getSimpleName() + "_" + field.getName());
             sqlBuilder.append(tblColumnName + ",");
         }
         String pkey = PersistentUtil.getTableName(clazz);
@@ -196,45 +188,41 @@ public class JoinService implements InitializingBean {
 
     /**
      * 当有js刷新的事件 刷新 对应的sql 和 列表字段
+     *
      * @param namespace namespace
-     * @param js js
+     * @param js        js
      */
-    public void refreshJs(String namespace,String js)
-    {
+    public void refreshJs(String namespace, String js) {
         PagexListSettVO pagexListSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         String joinColumns = ConverterUtils.toString(pagexListSett.getModelConfig().get("joinColumns"));
-        if(CheckUtils.isNotEmpty(joinColumns))
-        {
+        if (CheckUtils.isNotEmpty(joinColumns)) {
             StringBuilder joinDBColumns = new StringBuilder();
             JSONObject columns = JSON.parseObject(joinColumns);
-            for(Object key : columns.keySet())
-            {
+            for (Object key : columns.keySet()) {
                 joinDBColumns.append(key + ",");
             }
             String sql = "SELECT " + joinDBColumns
                     + pagexListSett.getModelConfig().get("pkey") + " AS pkey FROM "
                     + pagexListSett.getModelConfig().get("table") + " WHERE "
-                    +  pagexListSett.getModelConfig().get("pkey") + " IN (@{pkeys})";
-            modelSqlMap.put(namespace,sql);
-            modelJoinFiledMap.put(namespace,JSON.parseObject(joinColumns, new TypeReference<HashMap<String,String>>() {}));
+                    + pagexListSett.getModelConfig().get("pkey") + " IN (@{pkeys})";
+            modelSqlMap.put(namespace, sql);
+            modelJoinFiledMap.put(namespace, JSON.parseObject(joinColumns, new TypeReference<HashMap<String, String>>() {
+            }));
         }
-        Map<String,String> namespaceJoinColumnInfo = new HashMap<>();
-        pagexListSett.getListSett().forEach(column->{
+        Map<String, String> namespaceJoinColumnInfo = new HashMap<>();
+        pagexListSett.getListSett().forEach(column -> {
             //如果是join
-            if(ConverterUtils.toBoolean(column.get("isJoin")))
-            {
-                if(!namespaceJoinColumnInfo.containsKey(ConverterUtils.toString(column.get("name"))))
-                {
+            if (ConverterUtils.toBoolean(column.get("isJoin"))) {
+                if (!namespaceJoinColumnInfo.containsKey(ConverterUtils.toString(column.get("name")))) {
                     namespaceJoinColumnInfo.put(ConverterUtils.toString(column.get("name")),
                             ConverterUtils.toString(column.get("namespace")));
                 }
             }
         });
-        if(namespaceJoinColumnInfo.isEmpty())
-        {
+        if (namespaceJoinColumnInfo.isEmpty()) {
             return;
         }
-        namespaceJoinColumnMap.put(namespace,namespaceJoinColumnInfo);
+        namespaceJoinColumnMap.put(namespace, namespaceJoinColumnInfo);
 
     }
 }

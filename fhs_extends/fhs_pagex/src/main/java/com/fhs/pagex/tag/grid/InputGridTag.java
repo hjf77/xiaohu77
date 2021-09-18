@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  input 列表页标签
+ * input 列表页标签
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.grid
  * @ClassName: InputGridTag
@@ -19,10 +20,9 @@ import java.util.Map;
  * @Version: 1.0
  */
 @Component
-public class InputGridTag extends  BaseGridTag{
+public class InputGridTag extends BaseGridTag {
 
-    static
-    {
+    static {
         GridTagFactory.regTag("input", InputGridTag.class);
     }
 
@@ -33,9 +33,9 @@ public class InputGridTag extends  BaseGridTag{
 
     @Override
     public void initReloadParam(List<Map<String, String>> filterParams, List<Map<String, String>> filterParamsForBetween) {
-        Map<String,String> reloadParam = new HashMap<>();
+        Map<String, String> reloadParam = new HashMap<>();
         reloadParam.put("name", ConverterUtils.toString(super.tagSett.get("name")));
-        reloadParam.put("val","$('#" + super.tagSett.get("name") + "F').val()");
+        reloadParam.put("val", "$('#" + super.tagSett.get("name") + "F').val()");
         filterParams.add(reloadParam);
     }
 

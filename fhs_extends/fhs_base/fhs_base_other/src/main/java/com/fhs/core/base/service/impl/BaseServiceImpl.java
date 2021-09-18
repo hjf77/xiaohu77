@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, AutoTransAble<V>,  InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, AutoTransAble<V>, InitializingBean {
 
     protected final Logger log = Logger.getLogger(this.getClass());
 
@@ -108,7 +108,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     private SqlSessionTemplate sqlsession;
 
 
-
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
@@ -136,7 +135,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int add(D bean) {
         this.initPkeyAndIsDel(bean);
-        checkIsExist(bean,  false);
+        checkIsExist(bean, false);
         int result = baseMapper.insertSelective(bean);
         BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
         BisLoggerContext.addHistoryData(bean, this.namespace);
@@ -155,7 +154,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public boolean update(D bean) {
-        checkIsExist(bean,  true);
+        checkIsExist(bean, true);
         boolean result = baseMapper.updateByIdJpa(bean) > 0;
         this.refreshCache();
         this.updateCache(bean);
@@ -166,7 +165,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     @Deprecated
     public boolean updateJpa(D bean) {
-        checkIsExist(bean,  true);
+        checkIsExist(bean, true);
         boolean result = baseMapper.updateSelectiveById(bean) > 0;
         if (BisLoggerContext.isNeedLogger()) {
             BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
@@ -210,10 +209,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     public int findCountJpa(D bean) {
         bean.setIsDelete(Constant.INT_FALSE);
         String extWhereSql = bean.getAdvanceSearchSql();
-        if(CheckUtils.isNullOrEmpty(extWhereSql)){
+        if (CheckUtils.isNullOrEmpty(extWhereSql)) {
             extWhereSql = null;
         }
-        return (int)baseMapper.selectCountAdvance(bean,extWhereSql);
+        return (int) baseMapper.selectCountAdvance(bean, extWhereSql);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -284,7 +283,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     public int insertSelective(D entity) {
         initPkeyAndIsDel(entity);
         addCache(entity);
-        checkIsExist(entity,  false);
+        checkIsExist(entity, false);
         int result = baseMapper.insertSelective(entity);
         this.refreshCache();
         BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
@@ -365,16 +364,16 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int batchInsert(List<D> list) {
-        if(list == null || list.isEmpty()){
+        if (list == null || list.isEmpty()) {
             return 0;
         }
         //如果do标记了重复数据校验,则进行重复数据校验
-        if(this.getDOClass().isAnnotationPresent(NotRepeatDesc.class)){
-          Set<String> hasData = new HashSet<>();
-          List<Field> fields = ReflectUtils.getAnnotationField(this.getDOClass(),NotRepeatField.class);
-          StringBuilder errorMsg = new StringBuilder();
-          boolean isHasError = false;
-          
+        if (this.getDOClass().isAnnotationPresent(NotRepeatDesc.class)) {
+            Set<String> hasData = new HashSet<>();
+            List<Field> fields = ReflectUtils.getAnnotationField(this.getDOClass(), NotRepeatField.class);
+            StringBuilder errorMsg = new StringBuilder();
+            boolean isHasError = false;
+
         }
         for (D d : list) {
             initPkeyAndIsDel(d);
@@ -416,7 +415,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int updateSelectiveById(D entity) {
-        checkIsExist(entity,  true);
+        checkIsExist(entity, true);
         updateCache(entity);
         this.refreshCache();
         int reuslt = baseMapper.updateSelectiveById(entity);
@@ -473,9 +472,9 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
                     this.doCache.put(namespace + ":" + pkey, result);
                 }
             }
-            return d2v(result,false);
+            return d2v(result, false);
         }
-        return d2v(baseMapper.selectByIdJpa(primaryValue),false);
+        return d2v(baseMapper.selectByIdJpa(primaryValue), false);
     }
 
     @Override
@@ -488,10 +487,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     public List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy) {
         entity.setIsDelete(Constant.INT_FALSE);
         String extWhereSql = entity.getAdvanceSearchSql();
-        if(CheckUtils.isNullOrEmpty(extWhereSql)){
+        if (CheckUtils.isNullOrEmpty(extWhereSql)) {
             extWhereSql = null;
         }
-        return dos2vos(baseMapper.selectAdvance(entity, extWhereSql,pageStart, pageSize, orderBy));
+        return dos2vos(baseMapper.selectAdvance(entity, extWhereSql, pageStart, pageSize, orderBy));
     }
 
 
@@ -618,7 +617,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
-        ParamChecker.isNotNull(page,"前端调用接口的时候没传分页信息");
+        ParamChecker.isNotNull(page, "前端调用接口的时候没传分页信息");
         page = baseMapper.selectPage(page, queryWrapper);
         FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
@@ -695,7 +694,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
      * @return vo
      */
     public V d2v(D d) {
-        return d2v( d, true);
+        return d2v(d, true);
     }
 
     /**
@@ -704,14 +703,14 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
      * @param d d
      * @return vo
      */
-    public V d2v(D d,boolean needTrans) {
+    public V d2v(D d, boolean needTrans) {
         try {
             if (d == null) {
                 return null;
             }
             V vo = voClass.newInstance();
             BeanUtils.copyProperties(d, vo);
-            if(needTrans){
+            if (needTrans) {
                 transService.transOne(vo);
             }
             return vo;
@@ -795,7 +794,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
                 field.setAccessible(true);
                 tableField = field.getAnnotation(TableField.class);
                 //如果被校验字段为null或者空则不校验
-                if(CheckUtils.isNullOrEmpty(field.get(newData))){
+                if (CheckUtils.isNullOrEmpty(field.get(newData))) {
                     return;
                 }
                 wrapper.eq(tableField.value(), ConverterUtils.toString(field.get(newData)));

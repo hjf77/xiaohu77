@@ -5,7 +5,8 @@ import com.fhs.pagex.common.BeetlUtil;
 import org.springframework.stereotype.Component;
 
 /**
- *  省市区 + 百度地图 + 经纬度
+ * 省市区 + 百度地图 + 经纬度
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: UploadFormTag
@@ -18,16 +19,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddressFormTag extends BaseFormTag {
     private static final Logger LOG = Logger.getLogger(AddressFormTag.class);
-    static
-    {
+
+    static {
         FormTagFactory.regTag("address", AddressFormTag.class);
     }
+
     @Override
     public String getContentHtml() {
         try {
-           return BeetlUtil.renderBeelt("/pagex/tags/address_tag.html",super.getBeetlParamMap());
+            return BeetlUtil.renderBeelt("/pagex/tags/address_tag.html", super.getBeetlParamMap());
         } catch (Exception e) {
-            LOG.error(this,e);
+            LOG.error(this, e);
         }
         return "";
     }
@@ -50,7 +52,7 @@ public class AddressFormTag extends BaseFormTag {
 
     @Override
     public String saveJs() {
-        return  "";
+        return "";
     }
 
     @Override

@@ -12,20 +12,19 @@ import java.util.Set;
 /**
  * 除了配置的字段外的字段都不参与序列化
  * by wanglei
+ *
  * @author jackwong
  * @date 2020-05-19 15:00:00
  */
-public class AllPropertyNotSeralizerFilter  extends SimplePropertyPreFilter {
+public class AllPropertyNotSeralizerFilter extends SimplePropertyPreFilter {
 
     /**
      * 转换配置
      */
     private Set<String> includeField;
 
-    public AllPropertyNotSeralizerFilter(VoConverterObject voConverterObject)
-    {
-        if(voConverterObject.getInclude()==null)
-        {
+    public AllPropertyNotSeralizerFilter(VoConverterObject voConverterObject) {
+        if (voConverterObject.getInclude() == null) {
             includeField = new HashSet<>();
             return;
         }
@@ -34,8 +33,7 @@ public class AllPropertyNotSeralizerFilter  extends SimplePropertyPreFilter {
 
     @Override
     public boolean apply(JSONSerializer serializer, Object source, String name) {
-        if(source instanceof HttpResult)
-        {
+        if (source instanceof HttpResult) {
             return true;
         }
         return includeField.contains(name);

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
  * pagex 列表数据扩展处理
  * 比如分钟转几天几小时显示
  * 比如根据结束日期获取结束日期距离现在的时长
+ *
  * @author user
  * @date 2020-05-19 14:04:49
  */
@@ -59,7 +60,7 @@ public class ListExtendsHanleService implements InitializingBean {
                     return stringObjectMap.containsKey("handle");
                 }
             }).collect(Collectors.toList());
-            notNeedHandleNamespaceSettMap.put(namespace,needHandleFieldList);
+            notNeedHandleNamespaceSettMap.put(namespace, needHandleFieldList);
         }
         if (needHandleFieldList == null || needHandleFieldList.isEmpty()) {
             notNeedHandleNamespace.add(namespace);
@@ -68,7 +69,7 @@ public class ListExtendsHanleService implements InitializingBean {
         needHandleFieldList.forEach(field -> {
             String handleType = ConverterUtils.toString(field.get("handle"));
             if (handleMap.containsKey(handleType)) {
-                handleMap.get(handleType).handleData(field,rows);
+                handleMap.get(handleType).handleData(field, rows);
             } else {
                 LOG.error("namespace:" + namespace + "的列：" + field + "缺少对应的数据处理handle");
             }

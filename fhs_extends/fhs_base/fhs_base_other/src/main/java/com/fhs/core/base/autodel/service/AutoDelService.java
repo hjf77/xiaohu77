@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 import com.fhs.core.base.autodel.anno.AutoDel;
 import com.fhs.core.base.autodel.anno.AutoDelSett;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -71,7 +72,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
      * @param pkey
      */
     public void deleteItemTBL(String namespace, Object pkey) {
-        if(CheckUtils.isNullOrEmpty(namespace)){
+        if (CheckUtils.isNullOrEmpty(namespace)) {
             return;
         }
         Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = cacheMap.get(namespace);
@@ -88,11 +89,11 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
     /**
      * 删除主表检查子表是否有数据
      *
-     * @param namespace  命名空间
+     * @param namespace 命名空间
      * @param pkey
      */
     public void deleteCheck(String namespace, Object pkey) {
-        if(CheckUtils.isNullOrEmpty(namespace)){
+        if (CheckUtils.isNullOrEmpty(namespace)) {
             return;
         }
         Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = cacheMap.get(namespace);

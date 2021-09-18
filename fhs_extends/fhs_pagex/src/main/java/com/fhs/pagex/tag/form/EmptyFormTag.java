@@ -12,7 +12,7 @@ package com.fhs.pagex.tag.form;
  * @UpdateDate: 2018/12/4 0004 19:44
  * @Version: 1.0
  */
-public abstract class EmptyFormTag extends BaseFormTag{
+public abstract class EmptyFormTag extends BaseFormTag {
 
 
     @Override

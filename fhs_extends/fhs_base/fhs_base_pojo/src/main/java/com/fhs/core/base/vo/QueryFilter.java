@@ -197,6 +197,7 @@ public class QueryFilter<T> {
 
     /**
      * 将query filed 转换添加到  queryWrapper 中
+     *
      * @param queryWrapper
      * @param queryField
      * @param currentModelClass
@@ -210,7 +211,7 @@ public class QueryFilter<T> {
 
         String operation = queryField.getOperation();
         //如果是空或者null 字符串则不加此过滤条件
-        if(CheckUtils.isNullOrEmpty(queryField.getValue()) || "null".equals(ConverterUtils.toString(queryField.getValue()))){
+        if (CheckUtils.isNullOrEmpty(queryField.getValue()) || "null".equals(ConverterUtils.toString(queryField.getValue()))) {
             return;
         }
         switch (operation) {
@@ -262,7 +263,7 @@ public class QueryFilter<T> {
             case "find_in_set_in":
                 if (queryField.getValue() != null) {
                     Object[] params = convert2ObjectArray(queryField.getValue());
-                    if(params.length>0){
+                    if (params.length > 0) {
                         StringBuilder whereBulder = new StringBuilder("(");
                         for (int i = 0; i < params.length; i++) {
                             if (i != 0) {

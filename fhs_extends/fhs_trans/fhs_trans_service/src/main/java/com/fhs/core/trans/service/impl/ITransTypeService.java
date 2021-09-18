@@ -13,20 +13,22 @@ import java.util.Map;
 
 /**
  * 翻译接口,将此接口实现类注册到transservice即可用
+ *
  * @author wanglei
  */
-public interface ITransTypeService
-{
+public interface ITransTypeService {
     /**
      * 翻译一个字段
-     * @param obj 需要翻译的对象
+     *
+     * @param obj         需要翻译的对象
      * @param toTransList 需要翻译的字段
      */
     void transOne(VO obj, List<Field> toTransList);
 
     /**
      * 翻译多个 字段
-     * @param objList 需要翻译的对象集合
+     *
+     * @param objList     需要翻译的对象集合
      * @param toTransList 需要翻译的字段集合
      */
     void transMore(List<? extends VO> objList, List<Field> toTransList);
@@ -44,12 +46,12 @@ public interface ITransTypeService
         }
     }
 
-    default void setRef(Trans trans, VO vo, Map<String,String> valMap) {
+    default void setRef(Trans trans, VO vo, Map<String, String> valMap) {
         if (CheckUtils.isNotEmpty(trans.ref())) {
             String ref = trans.ref();
             String[] refSetting = ref.split("#");
             if (refSetting.length == 1) {
-                if(valMap.size()>0){
+                if (valMap.size() > 0) {
                     String key = valMap.keySet().iterator().next();
                     ReflectUtils.setValue(vo, refSetting[0], valMap.get(key));
                 }

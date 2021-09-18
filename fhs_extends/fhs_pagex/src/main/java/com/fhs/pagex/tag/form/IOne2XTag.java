@@ -6,42 +6,49 @@ import java.util.Map;
 
 /**
  * 一对多tag
+ *
  * @author user
  * @date 2020-05-19 14:06:33
  */
 public interface IOne2XTag {
     /**
      * 表单中的html
+     *
      * @return
      */
     String getFormHtml();
 
     /**
      * 当数据加载的时候执行的代码
+     *
      * @return
      */
     String one2XDataLoadSuccessJs();
 
     /**
      * 保存的时候执行的代码
+     *
      * @return
      */
     String one2XSaveJs();
 
     /**
      * 全局
+     *
      * @return
      */
     String one2XOverallJs();
 
     /**
      * 设置值的代码
+     *
      * @return
      */
     String setValueJs();
 
     /**
      * 获取值的代码
+     *
      * @return
      */
     String getValueJs();
@@ -53,9 +60,10 @@ public interface IOne2XTag {
 
     /**
      * 设置tag的配置信息
+     *
      * @param tagSett 标签配置
      * @return
      */
-     void setTagSett(Map<String, Object> tagSett, HttpServletRequest request, HttpServletResponse response);
+    void setTagSett(Map<String, Object> tagSett, HttpServletRequest request, HttpServletResponse response);
 
 }

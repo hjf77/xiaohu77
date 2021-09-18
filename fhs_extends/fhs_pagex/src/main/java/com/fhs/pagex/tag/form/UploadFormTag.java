@@ -5,7 +5,8 @@ import com.fhs.pagex.common.BeetlUtil;
 import org.springframework.stereotype.Component;
 
 /**
- *  单图上传
+ * 单图上传
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: UploadFormTag
@@ -18,16 +19,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class UploadFormTag extends BaseFormTag {
     private static final Logger LOG = Logger.getLogger(UploadFormTag.class);
-    static
-    {
+
+    static {
         FormTagFactory.regTag("up", UploadFormTag.class);
     }
+
     @Override
     public String getContentHtml() {
         try {
-            return BeetlUtil.renderBeelt("/pagex/tags/upload_tag.html",super.getBeetlParamMap());
+            return BeetlUtil.renderBeelt("/pagex/tags/upload_tag.html", super.getBeetlParamMap());
         } catch (Exception e) {
-            LOG.error(this,e);
+            LOG.error(this, e);
         }
         return "";
     }
@@ -50,7 +52,7 @@ public class UploadFormTag extends BaseFormTag {
 
     @Override
     public String saveJs() {
-        return  "uploadHeaderOnsave_" + super.tagSett.get("name") + "()";
+        return "uploadHeaderOnsave_" + super.tagSett.get("name") + "()";
     }
 
     @Override
@@ -60,6 +62,6 @@ public class UploadFormTag extends BaseFormTag {
 
     @Override
     protected String[] getHandelKeys() {
-        return new String[]{"desc","maxSize"};
+        return new String[]{"desc", "maxSize"};
     }
 }

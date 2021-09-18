@@ -29,6 +29,7 @@ import java.util.Set;
 
 /**
  * excel导出工具类
+ *
  * @author user
  * @date 2020-05-19 13:43:30
  */
@@ -36,126 +37,115 @@ import java.util.Set;
 public class ExcelExportTools {
 
 
-
-
     /**
      * 格式化导出数据
+     *
      * @param fieldMap 字段
      * @param dataList 需要被格式化的数据
      * @return 格式化后的数据
      */
-    public static Object[][] parseExportData( final Map<String,String> fieldMap, List<?> dataList){
+    public static Object[][] parseExportData(final Map<String, String> fieldMap, List<?> dataList) {
         final Object[][] rows = new Object[dataList.size()][fieldMap.size()];
         Set<String> fieldSet = fieldMap.keySet();
         String transFieldName = null;
         boolean isMap = false;
-        if(dataList.size()!=0)
-        {
-            if(dataList.get(0) instanceof  Map)
-            {
+        if (dataList.size() != 0) {
+            if (dataList.get(0) instanceof Map) {
                 isMap = true;
             }
         }
-        for(int i = 0;i<dataList.size();i++)
-        {
+        for (int i = 0; i < dataList.size(); i++) {
             Object rowData = dataList.get(i);
             Object[] row = new Object[fieldSet.size()];
             rows[i] = row;
             int fieldIndex = 0;
-            for(String field:fieldSet)
-            {
+            for (String field : fieldSet) {
                 Object value = null;
-                if(field.contains("transMap"))
-                {
-                    transFieldName = field.replace("transMap.","");
-                    if(!isMap)
-                    {
-                        value = ((VO)rowData).getTransMap().get(transFieldName);
+                if (field.contains("transMap")) {
+                    transFieldName = field.replace("transMap.", "");
+                    if (!isMap) {
+                        value = ((VO) rowData).getTransMap().get(transFieldName);
+                    } else {
+                        value = ((Map) ((Map) rowData).get("transMap")).get(transFieldName);
                     }
-                    else
-                    {
-                        value = ((Map)((Map)rowData).get("transMap")).get(transFieldName);
-                    }
-                }
-                else
-                {
-                    value = ReflectUtils.getValue(rowData,field);
+                } else {
+                    value = ReflectUtils.getValue(rowData, field);
                 }
                 row[fieldIndex] = value;
-                fieldIndex ++;
+                fieldIndex++;
             }
         }
-        return  rows;
+        return rows;
     }
 
     /**
      * 格式化导出数据
-     * @param request request
+     *
+     * @param request  request
      * @param dataList 需要被格式化的数据
      * @return 格式化后的数据
      */
-    public static Object[][] parseExportData(HttpServletRequest request, List<?> dataList){
-        final Map<String,String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
-        return parseExportData(  fieldMap, dataList);
+    public static Object[][] parseExportData(HttpServletRequest request, List<?> dataList) {
+        final Map<String, String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
+        return parseExportData(fieldMap, dataList);
     }
 
     /**
      * 获取excel的title
+     *
      * @param request request
      * @return title集合
      */
-    public static String[] getExportTitleArray(HttpServletRequest request){
-        final Map<String,String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
+    public static String[] getExportTitleArray(HttpServletRequest request) {
+        final Map<String, String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
         String[] titles = new String[fieldMap.size()];
         Set<String> set = fieldMap.keySet();
         int i = 0;
-        for(String field:set)
-        {
+        for (String field : set) {
             titles[i] = fieldMap.get(field);
-            i ++;
+            i++;
         }
         return titles;
     }
 
     /**
      * 将导出的列配置信息缓存到session中
+     *
      * @param fieldSett 导出配置
-     * @param request request
+     * @param request   request
      * @return 成功
      */
-    public static HttpResult setExportField(String fieldSett, HttpServletRequest request){
+    public static HttpResult setExportField(String fieldSett, HttpServletRequest request) {
         JSONArray fields = JSON.parseArray(fieldSett);
         // key field value title
-        final Map<String,String> fieldMap = new LinkedHashMap<>();
+        final Map<String, String> fieldMap = new LinkedHashMap<>();
         JSONObject tempObj = null;
-        for(int i=0;i<fields.size();i++)
-        {
+        for (int i = 0; i < fields.size(); i++) {
             tempObj = fields.getJSONObject(i);
-            fieldMap.put(tempObj.getString("field"),tempObj.getString("title"));
+            fieldMap.put(tempObj.getString("field"), tempObj.getString("title"));
         }
-        request.getSession().setAttribute("exportField",fieldMap );
+        request.getSession().setAttribute("exportField", fieldMap);
         return HttpResult.success();
     }
 
 
     /**
      * 有数据导出excel by jackwang
-     * @param dataList  数据集合
-     * @param request request
+     *
+     * @param dataList 数据集合
+     * @param request  request
      * @param response response
      */
-    public  static   void exportExcel(List<?> dataList,HttpServletRequest request, HttpServletResponse response)
-    {
-        Object[][] rows = parseExportData(request,dataList);
+    public static void exportExcel(List<?> dataList, HttpServletRequest request, HttpServletResponse response) {
+        Object[][] rows = parseExportData(request, dataList);
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet();
         String[] titleArray = getExportTitleArray(request);
-        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null,1);
+        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null, 1);
         String excelName = "data_list.xlsx";
-        if(CheckUtils.isNotEmpty(request.getParameter("excelName")))
-        {
+        if (CheckUtils.isNotEmpty(request.getParameter("excelName"))) {
             try {
-                excelName = URLDecoder.decode(request.getParameter("excelName"),"UTF-8");
+                excelName = URLDecoder.decode(request.getParameter("excelName"), "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -163,36 +153,35 @@ public class ExcelExportTools {
         try {
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");
             response.setHeader("Content-Disposition",
-                    "attachment;filename=" + URLEncoder.encode(excelName + ".xlsx","UTF-8"));
+                    "attachment;filename=" + URLEncoder.encode(excelName + ".xlsx", "UTF-8"));
             wb.write(response.getOutputStream());
         } catch (IOException e) {
             log.error("导出excel出错，URI:" + request.getRequestURI());
-            log.error("导出excel出错",e);
+            log.error("导出excel出错", e);
         }
     }
 
 
     /**
      * 有数据导出excel by jackwang
-     * @param dataList  数据集合
-     * @param request request
+     *
+     * @param dataList 数据集合
+     * @param request  request
      */
-    public static File exportExcel(List<?> dataList, HttpServletRequest request)
-    {
-        Object[][] rows = parseExportData(request,dataList);
+    public static File exportExcel(List<?> dataList, HttpServletRequest request) {
+        Object[][] rows = parseExportData(request, dataList);
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet();
         String[] titleArray = getExportTitleArray(request);
-        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null,1);
+        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null, 1);
         try {
             File excelFile = new File(EConfig.getPathPropertiesValue("fileSavePath") + "/temp/excel/" + StringUtil.getUUID() + ".xlsx");
             wb.write(new FileOutputStream(excelFile));
         } catch (IOException e) {
-            log.error("导出excel出错",e);
+            log.error("导出excel出错", e);
         }
         return null;
     }
-
 
 
 }

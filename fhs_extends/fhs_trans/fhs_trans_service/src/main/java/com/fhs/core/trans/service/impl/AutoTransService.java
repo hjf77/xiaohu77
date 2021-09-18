@@ -107,7 +107,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
                 transCache = new HashMap<>();
                 Map<String, String> tempTransCache = null;
                 for (String tempPkey : pkeys) {
-                    tempTransCache = getTempTransCacheMap(namespace,tempPkey);
+                    tempTransCache = getTempTransCacheMap(namespace, tempPkey);
                     if (tempTransCache == null) {
                         LOGGER.error("auto trans缓存未命中:" + namespace + "_" + tempPkey);
                         continue;
@@ -167,9 +167,9 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
             objList.forEach(obj -> {
                 try {
                     Object value = tempField.get(obj);
-                    if(ConverterUtils.toString(value).contains(",")){
+                    if (ConverterUtils.toString(value).contains(",")) {
                         ids.addAll(Arrays.asList(ConverterUtils.toString(value).split(",")));
-                    }else{
+                    } else {
                         ids.add(value);
                     }
                 } catch (IllegalAccessException e) {
@@ -211,7 +211,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
                 this.transSettMap.put(autoTransSett.namespace(), autoTransSett);
             }
         }
-        new Thread(()->{
+        new Thread(() -> {
             Thread.currentThread().setName("refresh auto trans cache");
             refreshCache(new HashMap<>());
         }).start();
@@ -271,7 +271,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
             po = vos.get(i);
             pkeyVal = po.getPkey();
             localTransCacheMap.put(namespace + "_" + pkeyVal, createTempTransCacheMap(po, autoTrans));
-            if(autoTrans.useCache()){
+            if (autoTrans.useCache()) {
                 this.redisTransCache.put(namespace + "_" + pkeyVal, createTempTransCacheMap(po, autoTrans));
             }
         }
@@ -320,7 +320,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
         } else {
             if (autoTrans == null) {
                 LOGGER.warn("namespace对应的service没有使用autotrans注解标记:" + namespace);
-                return  new HashMap<>();
+                return new HashMap<>();
             }
             //如果强调使用缓存,则可能是还没刷新进来,直接返回空map,前端在刷新一下就好了
             if (autoTrans.useCache()) {

@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * 用来分页使用
+ *
  * @param <T>
  */
 @Data
@@ -25,7 +26,7 @@ import java.util.Map;
 @ApiModel("分页对象")
 @AllArgsConstructor
 @NoArgsConstructor
-public class FhsPager<T> implements IPage<T>  {
+public class FhsPager<T> implements IPage<T> {
 
     @ApiModelProperty("数据")
     private List<T> rows;
@@ -48,7 +49,7 @@ public class FhsPager<T> implements IPage<T>  {
     private long pageSize;
 
     @ApiModelProperty("分页扩展字段")
-    private Map<String,Object> extMap;
+    private Map<String, Object> extMap;
 
 
     @Override

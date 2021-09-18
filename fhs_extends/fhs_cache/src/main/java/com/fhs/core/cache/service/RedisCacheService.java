@@ -44,6 +44,7 @@ public interface RedisCacheService<E> {
      * @return
      */
     boolean exists(String key);
+
     /**
      * 检查key是否已经存在
      *
@@ -51,6 +52,7 @@ public interface RedisCacheService<E> {
      * @return
      */
     boolean existsStr(String key);
+
     /**
      * 添加数组到缓存中
      *

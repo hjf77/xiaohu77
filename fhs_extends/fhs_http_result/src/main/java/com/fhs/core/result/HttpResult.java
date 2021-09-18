@@ -14,23 +14,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * HttpResult
- *
+ * <p>
  * jackwong jackwong 2017年9月27日 下午12:03:03
  *
  * @author jackwong
  * @version 1.0.0
- *
  */
-public class HttpResult<V> extends BaseObject<HttpResult>
-{
+public class HttpResult<V> extends BaseObject<HttpResult> {
 
     private static final long serialVersionUID = 1L;
 
 
     /**
      * 成功
+     *
      * @since 1.0.0
      */
     public static int SUCCESSFUL = 200;
@@ -38,12 +36,14 @@ public class HttpResult<V> extends BaseObject<HttpResult>
 
     /**
      * 有错误
+     *
      * @since 1.0.0
      */
     public static int ERRORS = 500;
 
     /**
      * 权限不足
+     *
      * @since 1.0.0
      */
     public static int AUTHORITY_ERROR = 403;
@@ -86,13 +86,11 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     }
 
 
-
     /**
      * 成功包含data的返回结果
      */
-    public static <T> HttpResult<T> success(T data)
-    {
-        HttpResult<T> result = new HttpResult<T> ();
+    public static <T> HttpResult<T> success(T data) {
+        HttpResult<T> result = new HttpResult<T>();
         result.code = 200;
         result.data = data;
         result.businessKey = ThreadKey.BUS_KEY.get();
@@ -100,12 +98,10 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     }
 
 
-
     /**
      * 成功不包含数据的返回结果
      */
-    public static HttpResult<Map> success()
-    {
+    public static HttpResult<Map> success() {
         HttpResult<Map> result = new HttpResult<Map>();
         result.code = 200;
         result.data = new HashMap<>();
@@ -114,11 +110,9 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     }
 
 
-
-
-
     /**
      * 失败,不包含数据的返回结果
+     *
      * @return
      */
     public static HttpResult<Map> error() {
@@ -131,6 +125,7 @@ public class HttpResult<V> extends BaseObject<HttpResult>
 
     /**
      * 失败，包含data的返回结果
+     *
      * @param data
      * @return
      */
@@ -145,8 +140,7 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     /**
      * 失败，包含数据的返回结果
      */
-    public static <T> HttpResult<T> error(T data, String message)
-    {
+    public static <T> HttpResult<T> error(T data, String message) {
         HttpResult<T> result = new HttpResult<T>();
         result.code = 300;
         result.data = data;
@@ -158,39 +152,40 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     /**
      * 验证失败的返回结果
      */
-    public static ModelAndView validateError(T data, String message)
-    {
+    public static ModelAndView validateError(T data, String message) {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = servletRequestAttributes.getResponse();
         HttpResult<T> result = new HttpResult<T>();
         result.code = 400;
         result.data = data;
         result.message = message;
-        JsonUtils.outJson(response,result.asJson());
+        JsonUtils.outJson(response, result.asJson());
         return null;
     }
 
     /**
      * 返回其他code和msg的httpResult
+     *
      * @param code
      * @param message
      * @return
      */
-    public static HttpResult<Map> otherCodeMsgResult(Integer code, String message){
+    public static HttpResult<Map> otherCodeMsgResult(Integer code, String message) {
         HttpResult<Map> result = new HttpResult<Map>();
         result.code = code;
-        result.data = new HashMap<String,Object> (  );
+        result.data = new HashMap<String, Object>();
         result.message = message;
         return result;
     }
 
-    public HttpResult(){
+    public HttpResult() {
         this.businessKey = ThreadKey.BUS_KEY.get();
     }
 
     /**
      * 其他的业务返回
-     * @param data 给前台的数据
+     *
+     * @param data       给前台的数据
      * @param baseResult 业务result
      * @return HttpResult
      */
@@ -203,59 +198,49 @@ public class HttpResult<V> extends BaseObject<HttpResult>
     }
 
 
-
-
-
-    public String getBusinessKey()
-    {
+    public String getBusinessKey() {
         return businessKey;
     }
 
-    public void setBusinessKey(String businessKey)
-    {
+    public void setBusinessKey(String businessKey) {
         this.businessKey = businessKey;
     }
 
     /**
      * 其他的业务返回
+     *
      * @param baseResult 业务result
      * @return HttpResult
      */
     public static HttpResult<Map> otherResult(BaseResult baseResult) {
         HttpResult<Map> result = new HttpResult<Map>();
         result.code = baseResult.getCode();
-        result.data = new HashMap<String,Object> ();
+        result.data = new HashMap<String, Object>();
         result.message = baseResult.getMessage();
         return result;
     }
 
-    public int getCode()
-    {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(int code)
-    {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public V getData()
-    {
+    public V getData() {
         return data;
     }
 
-    public void setData(V data)
-    {
+    public void setData(V data) {
         this.data = data;
     }
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message)
-    {
+    public void setMessage(String message) {
         this.message = message;
     }
 

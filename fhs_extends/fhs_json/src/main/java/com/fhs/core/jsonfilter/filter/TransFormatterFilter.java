@@ -18,11 +18,11 @@ import java.util.List;
  * 自动序列化一些翻译值参数到前端 比如 sex 在transMap有sexName
  * 通过这个过滤器可以将sexName直接给到对象里
  * by wanglei
+ *
  * @author jackwong
  * @date 2020-05-19 15:01:18
  */
 public class TransFormatterFilter extends BeforeFilter {
-
 
 
     public TransFormatterFilter() {
@@ -56,17 +56,16 @@ public class TransFormatterFilter extends BeforeFilter {
         boolean isSuperBean = obj instanceof SuperBean;
         SuperBean superBean = null;
         if (!isSuperBean) {
-           return;
+            return;
         }
         superBean = (SuperBean) obj;
         //这块暂时不弄缓存
-        List<Field> fields =  ReflectUtils.getAnnotationField(superBean.getClass(), Trans.class);
+        List<Field> fields = ReflectUtils.getAnnotationField(superBean.getClass(), Trans.class);
         for (Field field : fields) {
             Trans trans = field.getAnnotation(Trans.class);
-            if(TransType.WORD_BOOK.equals(trans.type())){
+            if (TransType.WORD_BOOK.equals(trans.type())) {
                 super.writeKeyValue(field.getName() + "Name", superBean.getTransMap().get(field.getName() + "Name"));
-            }
-            else if(CheckUtils.isNotEmpty(trans.jsonKey())){
+            } else if (CheckUtils.isNotEmpty(trans.jsonKey())) {
                 super.writeKeyValue(field.getName() + "Name", superBean.getTransMap().get(trans.jsonKey()));
             }
         }

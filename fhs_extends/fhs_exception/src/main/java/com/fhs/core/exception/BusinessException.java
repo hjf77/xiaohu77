@@ -1,7 +1,6 @@
 package com.fhs.core.exception;
 
 /**
- *
  * 业务异常
  * 此类可以携带自定义错误码
  * jackwong
@@ -9,7 +8,6 @@ package com.fhs.core.exception;
  *
  * @author jackwong
  * @version 1.0.0
- *
  */
 public class BusinessException extends RuntimeException {
 
@@ -28,24 +26,21 @@ public class BusinessException extends RuntimeException {
 
     private int code;
 
-    public BusinessException(String message,int code)
-    {
-         super(message);
-         this.code = code;
+    public BusinessException(String message, int code) {
+        super(message);
+        this.code = code;
     }
 
-    public BusinessException(String message)
-    {
+    public BusinessException(String message) {
         super(message);
         this.code = 500;
     }
 
 
-    public BusinessException()
-    {
+    public BusinessException() {
     }
 
-    public int getCode(){
+    public int getCode() {
         return code;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 下拉列表标签 easyui combogrid
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -17,11 +18,11 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class SelectGridFormTag extends  InputFormTag {
+public class SelectGridFormTag extends InputFormTag {
 
     private static final Logger LOG = Logger.getLogger(SelectGridFormTag.class);
-    static
-    {
+
+    static {
         FormTagFactory.regTag("selectGrid", SelectGridFormTag.class);
     }
 
@@ -39,22 +40,21 @@ public class SelectGridFormTag extends  InputFormTag {
         resultHtmlBuilder.append("</div>");
         return resultHtmlBuilder.toString();
     }
+
     @Override
 
     public String readyJs() {
         try {
-            if(tagSett.get("url")!=null&&!tagSett.get("url").toString().contains("?"))
-            {
-                tagSett.put("url",tagSett.get("url") + "?1=1");
+            if (tagSett.get("url") != null && !tagSett.get("url").toString().contains("?")) {
+                tagSett.put("url", tagSett.get("url") + "?1=1");
             }
-            request.setAttribute("tagSett",super.tagSett);
-            return BeetlUtil.renderBeelt("/pagex/tags/select_grid_tag.html",super.getBeetlParamMap());
+            request.setAttribute("tagSett", super.tagSett);
+            return BeetlUtil.renderBeelt("/pagex/tags/select_grid_tag.html", super.getBeetlParamMap());
         } catch (Exception e) {
-            LOG.error("渲染select_grid出错:",e);
+            LOG.error("渲染select_grid出错:", e);
         }
         return "";
     }
-
 
 
     @Override

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 下拉tree标签 easyui combotree
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -15,8 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SelectTreeFormTag extends BaseEasyuiCombo implements IOne2XTag {
-    static
-    {
+    static {
         FormTagFactory.regTag("selectTree", SelectTreeFormTag.class);
         FormTagFactory.regOne2XTag("selectTree", SelectTreeFormTag.class);
     }

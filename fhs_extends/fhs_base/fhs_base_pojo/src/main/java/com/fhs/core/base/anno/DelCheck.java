@@ -13,6 +13,7 @@ import java.lang.annotation.*;
 public @interface DelCheck {
     /**
      * 配置要check哪些表
+     *
      * @return
      */
     DelCheckTable[] checkTables();

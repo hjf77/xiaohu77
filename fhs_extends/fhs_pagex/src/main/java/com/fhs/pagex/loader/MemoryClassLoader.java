@@ -8,6 +8,7 @@ import com.sun.tools.javac.util.ListBuffer;
 import com.sun.tools.javac.util.Log;
 import org.springframework.boot.loader.jar.JarFile;
 import org.springframework.boot.system.ApplicationHome;
+
 import javax.tools.*;
 import javax.tools.JavaFileObject.Kind;
 import java.io.*;
@@ -180,7 +181,7 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
     private boolean isInit = false;
 
 
-    public void init(){
+    public void init() {
         try {
             String jarBaseFile = MemoryClassLoader.getPath();
             JarFile jarFile = new JarFile(new File(jarBaseFile));
@@ -188,11 +189,11 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
                 return jarEntry.getName().endsWith(".jar");
             }).collect(Collectors.toList());
             JarFile libTempJarFile = null;
-            List<JavaFileObject> onePackgeJavaFiles =  null;
+            List<JavaFileObject> onePackgeJavaFiles = null;
             String packgeName = null;
             for (JarEntry entry : entries) {
                 libTempJarFile = jarFile.getNestedJarFile(jarFile.getEntry(entry.getName()));
-                if(libTempJarFile.getName().contains("tools.jar")){
+                if (libTempJarFile.getName().contains("tools.jar")) {
                     continue;
                 }
                 Enumeration<JarEntry> tempEntriesEnum = libTempJarFile.entries();
@@ -203,10 +204,10 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
                         continue;
                     } else {
                         packgeName = classPath.substring(0, jarEntry.getName().lastIndexOf("/"));
-                        onePackgeJavaFiles = CLASS_OBJECT_PACKAGE_MAP.containsKey(packgeName) ? CLASS_OBJECT_PACKAGE_MAP.get(packgeName) :  new ArrayList<>();
+                        onePackgeJavaFiles = CLASS_OBJECT_PACKAGE_MAP.containsKey(packgeName) ? CLASS_OBJECT_PACKAGE_MAP.get(packgeName) : new ArrayList<>();
                         onePackgeJavaFiles.add(new MemorySpringBootInfoJavaClassObject(jarEntry.getName().replace("/", ".").replace(".class", ""),
                                 new URL(libTempJarFile.getUrl(), jarEntry.getName()), javaFileManager));
-                        CLASS_OBJECT_PACKAGE_MAP.put(packgeName,onePackgeJavaFiles);
+                        CLASS_OBJECT_PACKAGE_MAP.put(packgeName, onePackgeJavaFiles);
                     }
                 }
             }
@@ -218,10 +219,9 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
     }
 
 
-
     MemoryJavaFileManager(JavaFileManager fileManager) {
         super(fileManager);
-        this.javaFileManager = (JavacFileManager)fileManager;
+        this.javaFileManager = (JavacFileManager) fileManager;
     }
 
     public Map<String, byte[]> getClassBytes() {
@@ -239,8 +239,8 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
 
     public List<JavaFileObject> getLibJarsOptions(String packgeName) {
-        synchronized (lock){
-            if(!isInit){
+        synchronized (lock) {
+            if (!isInit) {
                 init();
             }
         }
@@ -256,8 +256,8 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
 
         if ("CLASS_PATH".equals(location.getName()) && MemoryClassLoader.isJar()) {
-            List<JavaFileObject> result =  getLibJarsOptions(packageName);
-            if(result!=null){
+            List<JavaFileObject> result = getLibJarsOptions(packageName);
+            if (result != null) {
                 return result;
             }
         }

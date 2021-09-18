@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * UM富文本编辑器
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -16,16 +17,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UMFormTag extends InputFormTag {
-    static
-    {
+    static {
         FormTagFactory.regTag("um", UMFormTag.class);
     }
 
     @Override
     public String getContentHtml() {
-       request.setAttribute("tagSett",super.tagSett);
+        request.setAttribute("tagSett", super.tagSett);
         try {
-            return BeetlUtil.renderBeelt("/pagex/tags/um_tag.html",super.getBeetlParamMap());
+            return BeetlUtil.renderBeelt("/pagex/tags/um_tag.html", super.getBeetlParamMap());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,12 +35,12 @@ public class UMFormTag extends InputFormTag {
 
     @Override
     public String loadSuccessJs() {
-        return  "umLoadSuccess_" +  super.tagSett.get("name")  + "(info)";
+        return "umLoadSuccess_" + super.tagSett.get("name") + "(info)";
     }
 
     @Override
     public String saveJs() {
-        return   "umOnsave_"+super.tagSett.get("name")+"()";
+        return "umOnsave_" + super.tagSett.get("name") + "()";
     }
 
     @Override

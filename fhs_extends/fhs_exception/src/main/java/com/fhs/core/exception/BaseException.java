@@ -1,7 +1,6 @@
 package com.fhs.core.exception;
 
 /**
- *
  * BaseException
  * 此类暂时没用
  * jackwong
@@ -9,27 +8,24 @@ package com.fhs.core.exception;
  *
  * @author jackwong
  * @version 1.0.0
- *
  */
-public class BaseException extends Exception
-{
+public class BaseException extends Exception {
     /**
-     *serialVersionUID
+     * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
     /**
      * 异常的描述
+     *
      * @since 1.0.0
      */
     protected String message;
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message)
-    {
+    public void setMessage(String message) {
         this.message = message;
     }
 }

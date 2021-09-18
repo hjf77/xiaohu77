@@ -25,7 +25,7 @@ public class ParamArrayHandle {
      * 所有的控制器方法
      */
     @Pointcut("execution(* com..controller.*.*(..) )")
-    public void contorllerPointcout(){
+    public void contorllerPointcout() {
 
     }
 
@@ -52,30 +52,29 @@ public class ParamArrayHandle {
         } else if (parameterSettMaps.containsKey(cacheKey) && parameterSettMaps.get(cacheKey) == null) {
             return joinPoint.proceed();
         } else {*/
-            autoArraySett = this.getMethodAutoArray(params);
-            parameterSettMaps.put(cacheKey, autoArraySett);
+        autoArraySett = this.getMethodAutoArray(params);
+        parameterSettMaps.put(cacheKey, autoArraySett);
         //}
         if (autoArraySett != null) {
             Object needHandleParam = params[autoArraySett.getIndex()];
-            if(needHandleParam == null){
+            if (needHandleParam == null) {
                 return joinPoint.proceed();
             }
             List<Field> fields = autoArraySett.getAutoArrayFields();
             for (Field field : fields) {
-                String strVal = ConverterUtils.toString(ReflectUtils.getValue(needHandleParam,field.getName()));
-                if(!StringUtils.isEmpty(strVal) && strVal.length()>2){
+                String strVal = ConverterUtils.toString(ReflectUtils.getValue(needHandleParam, field.getName()));
+                if (!StringUtils.isEmpty(strVal) && strVal.length() > 2) {
                     //如果不是[ 开头的代表已经是好着的了，不需要这里处理
-                    if(!strVal.startsWith("[")){
+                    if (!strVal.startsWith("[")) {
                         continue;
                     }
-                    ReflectUtils.setValue(needHandleParam,field, JsonUtils.parseArray(strVal));
+                    ReflectUtils.setValue(needHandleParam, field, JsonUtils.parseArray(strVal));
                 }
             }
         }
 
         return joinPoint.proceed();
     }
-
 
 
     /**
@@ -85,8 +84,8 @@ public class ParamArrayHandle {
     public AutoArraySett getMethodAutoArray(Object[] params) {
         AutoArraySett result = null;
         // 遍历所有的参数，找到需要校验的参数，进行校验并且记录校验结果
-        for (int i =0;i<params.length;i++) {
-            if (null ==  params[i]) {
+        for (int i = 0; i < params.length; i++) {
+            if (null == params[i]) {
                 continue;
             }
             if (params[i] instanceof VO) {

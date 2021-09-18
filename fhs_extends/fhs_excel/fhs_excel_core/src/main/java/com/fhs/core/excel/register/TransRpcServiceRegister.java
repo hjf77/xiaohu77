@@ -13,7 +13,6 @@ import java.util.*;
 
 /**
  * 名称翻译注册中心
- *
  */
 @Component
 public class TransRpcServiceRegister implements ApplicationListener<ApplicationReadyEvent> {
@@ -31,20 +30,20 @@ public class TransRpcServiceRegister implements ApplicationListener<ApplicationR
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         List<TransRpcService> services = null;
-        if(isCloudModel){
-             services = SpringContextUtil.getBeansByClass(TransRpcService.class);
-        }else{
+        if (isCloudModel) {
+            services = SpringContextUtil.getBeansByClass(TransRpcService.class);
+        } else {
             String[] names = SpringContextUtil.getApplicationContext().getBeanNamesForType(TransRpcService.class);
             services = new ArrayList<>();
             for (String name : names) {
                 try {
-                    Class clazz =  Class.forName(name);
-                    if(clazz.isInterface()){
+                    Class clazz = Class.forName(name);
+                    if (clazz.isInterface()) {
                         continue;
                     }
-                    services.add((TransRpcService)SpringContextUtil.getBeanByName(clazz));
+                    services.add((TransRpcService) SpringContextUtil.getBeanByName(clazz));
                 } catch (ClassNotFoundException e) {
-                    services.add((TransRpcService)SpringContextUtil.getBean(name));
+                    services.add((TransRpcService) SpringContextUtil.getBean(name));
                 }
             }
         }
@@ -60,22 +59,23 @@ public class TransRpcServiceRegister implements ApplicationListener<ApplicationR
 
     /**
      * 根据namespace获取翻译服务
+     *
      * @param namespace
      * @return
      */
-    public TransRpcService getTransRpcService(String namespace){
+    public TransRpcService getTransRpcService(String namespace) {
         if (transRpsServiceMap.containsKey(namespace)) {
             List<TransRpcService> rpcServices = transRpsServiceMap.get(namespace);
-            if(rpcServices.size()==1){
+            if (rpcServices.size() == 1) {
                 return rpcServices.get(0);
             }
             //有多个优先匹配
             for (TransRpcService rpcService : rpcServices) {
-                if(!rpcService.isFeign()){
+                if (!rpcService.isFeign()) {
                     return rpcService;
                 }
             }
-            return rpcServices.get(rpcServices.size()-1);
+            return rpcServices.get(rpcServices.size() - 1);
         }
         return null;
     }

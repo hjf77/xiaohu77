@@ -6,6 +6,7 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import org.apache.ibatis.annotations.Param;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface BaseService<V extends VO,D extends BaseDO>{
+public interface BaseService<V extends VO, D extends BaseDO> {
 
     /**
      * 将一个map里面的数据插入到数据库
@@ -53,6 +54,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
     /**
      * 更新数据库数据，参数为object
      * 此方法支持将值设置为null
+     *
      * @param bean object
      * @return 默认为影响条数
      */
@@ -61,6 +63,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
     /**
      * 更新数据库数据，参数为object
      * 此方法忽略值为null的属性
+     *
      * @param bean object
      * @return 默认为影响条数
      */
@@ -78,6 +81,7 @@ public interface BaseService<V extends VO,D extends BaseDO>{
 
     /**
      * 真实删除-根据id集合删除
+     *
      * @param idList
      * @return
      */
@@ -85,10 +89,11 @@ public interface BaseService<V extends VO,D extends BaseDO>{
 
     /**
      * 根据Wrapper 删除-真实删除
+     *
      * @param wrapper
      * @return
      */
-    int deleteMp( Wrapper<D> wrapper);
+    int deleteMp(Wrapper<D> wrapper);
 
     /**
      * 删除数据库 数据 参数为object
@@ -173,7 +178,6 @@ public interface BaseService<V extends VO,D extends BaseDO>{
     V findBean(D bean);
 
 
-
     /**
      * 批处理更新数据
      *
@@ -218,7 +222,6 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @since 1.0.0
      */
     int deleteById(Object primaryValue);
-
 
 
     /**
@@ -313,8 +316,6 @@ public interface BaseService<V extends VO,D extends BaseDO>{
     int deleteBean(D entity);
 
 
-
-
     /**
      * 调用一个方法返回一个对象
      *
@@ -340,7 +341,6 @@ public interface BaseService<V extends VO,D extends BaseDO>{
     int callSqlIdForInt(String sqlId, Object param);
 
 
-
     /**
      * 根据分页参数返回结果
      * 如果不需要分页 pageStart或者pageSize传-1即可
@@ -352,7 +352,6 @@ public interface BaseService<V extends VO,D extends BaseDO>{
      * @return 符合条件的数据
      */
     List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy);
-
 
 
     /**
@@ -432,13 +431,15 @@ public interface BaseService<V extends VO,D extends BaseDO>{
 
     /**
      * 根据id集合查询
+     *
      * @param ids ids
      * @return 对应的PO
      */
-    List<V>  findByIds(List<? extends Object> ids);
+    List<V> findByIds(List<? extends Object> ids);
 
     /**
      * vo转do
+     *
      * @param vo vo
      * @return po
      */
@@ -446,12 +447,14 @@ public interface BaseService<V extends VO,D extends BaseDO>{
 
     /**
      * 获取do的class
+     *
      * @return
      */
     Class<D> getDOClass();
 
     /**
      * 获取vo的class
+     *
      * @return
      */
     Class<V> getVOClass();

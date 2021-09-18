@@ -40,19 +40,20 @@ public class PagexAddVO extends PagexBaseVO {
 
     /**
      * 解析js 返回对象
+     *
      * @param js js
      * @throws NoSuchMethodException 如果调用某些方法找不到
-     * @throws ScriptException 脚本本身有问题
+     * @throws ScriptException       脚本本身有问题
      */
     public PagexAddVO(String js) throws NoSuchMethodException, ScriptException {
-        try{
+        try {
             super.initScriptEngine(js);
             addPageObject = (ScriptObjectMirror) scriptEngine.get("add");
             this.initFormFieldSett();
             this.initOtherFunction();
             this.initModelConfig();
-        }catch (Exception e){
-            log.error("pagex js 内容错误:" + js,e);
+        } catch (Exception e) {
+            log.error("pagex js 内容错误:" + js, e);
             throw e;
         }
 
@@ -60,17 +61,16 @@ public class PagexAddVO extends PagexBaseVO {
 
     /**
      * 初始化列表字段设置
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initFormFieldSett() throws NoSuchMethodException, ScriptException {
-        formFieldSett = getListM("formFields",addPageObject);
-        for(Map<String,Object> field:formFieldSett)
-        {
+        formFieldSett = getListM("formFields", addPageObject);
+        for (Map<String, Object> field : formFieldSett) {
             field.put("camelName", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(field.get("name"))));
         }
     }
-
 
 
     @Override

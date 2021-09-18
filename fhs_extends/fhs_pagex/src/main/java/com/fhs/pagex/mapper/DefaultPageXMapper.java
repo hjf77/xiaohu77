@@ -1,4 +1,5 @@
 package com.fhs.pagex.mapper;
+
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.pagex.dox.DefaultPageXDO;
 import com.mybatis.jpa.annotation.MapperDefinition;
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  此mapper没什么用
+ * 此mapper没什么用
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.dao
  * @ClassName: DefaultPageXDAO
@@ -25,8 +27,9 @@ public interface DefaultPageXMapper extends FhsBaseMapper<DefaultPageXDO> {
     /**
      * 查询数据给join用
      * 本方法就是执行一个sql 返回结果的集合
+     *
      * @param sql sql
      * @return 结果集合
      */
-    List<Map<String,Object>> selectListForJoin(@Param("sql") String sql);
+    List<Map<String, Object>> selectListForJoin(@Param("sql") String sql);
 }

@@ -144,15 +144,15 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
                 continue;
             }
             if (whereSql.length() > 6) {
-                whereSql.append(tempAFilter.getString("connector")+" ");
+                whereSql.append(tempAFilter.getString("connector") + " ");
             }
             whereSql.append(sqlField + ("searchKey".equals(field.getName()) ? " LIKE " : SIMPLE_OPERATOR.get(tempAFilter.getString("filterType"))) + tempVal + " ");
             isHashWhere = true;
         }
-        if(!isHashWhere){
+        if (!isHashWhere) {
             return "";
         }
-        whereSql.append( ")");
+        whereSql.append(")");
         return whereSql.toString();
     }
 
@@ -174,7 +174,8 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
         if (!CheckUtils.isNullOrEmpty(searchKeyType)) {
             if ("str".equals(searchKeyType)) {
                 return " CONCAT('%','\"" + fieldName + "\"','%','" + val + "','%') ";
-            } if ("streq".equals(searchKeyType)) {
+            }
+            if ("streq".equals(searchKeyType)) {
                 return " CONCAT('%','\"" + fieldName + "\":\"" + val + "\"','%') ";
             } else if ("date".equals(searchKeyType)) {
                 return " CONCAT('%','\"" + fieldName + "\":\"" + val + "','%') ";

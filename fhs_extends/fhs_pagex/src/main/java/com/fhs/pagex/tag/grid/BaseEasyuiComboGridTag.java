@@ -21,9 +21,10 @@ import java.util.Map;
 public abstract class BaseEasyuiComboGridTag extends BaseGridTag {
     /**
      * 获取子类的class
+     *
      * @return
      */
-    public abstract  String getEasyuiClass();
+    public abstract String getEasyuiClass();
 
 
     @Override
@@ -50,10 +51,10 @@ public abstract class BaseEasyuiComboGridTag extends BaseGridTag {
 
     @Override
     public void initReloadParam(List<Map<String, String>> filterParams, List<Map<String, String>> filterParamsForBetween) {
-        Map<String,String> reloadParam = new HashMap<>();
+        Map<String, String> reloadParam = new HashMap<>();
         reloadParam.put("name", ConverterUtils.toString(super.tagSett.get("name")));
         String getValMethod = ConverterUtils.toBoolean(this.tagSett.get("multiple")) ? "getValues" : "getValue";
-        reloadParam.put("val","$('#" + super.tagSett.get("name") + "F' )." + getEasyuiClass()  + "('" + getValMethod + "')");
+        reloadParam.put("val", "$('#" + super.tagSett.get("name") + "F' )." + getEasyuiClass() + "('" + getValMethod + "')");
         filterParams.add(reloadParam);
     }
 

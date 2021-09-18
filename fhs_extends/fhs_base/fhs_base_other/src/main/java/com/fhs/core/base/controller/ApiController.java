@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 /**
  * 所有的api请求都通过此接口走
+ *
  * @author user
  * @date 2020-05-18 16:57:08
  */
@@ -46,10 +47,10 @@ public class ApiController {
      * @param response     res
      */
     @RequestMapping("/api/{serviceClass}/{methodName}")
-    public void doExec(@PathVariable() String serviceClass,@PathVariable() String methodName, HttpServletRequest request, HttpServletResponse response) {
+    public void doExec(@PathVariable() String serviceClass, @PathVariable() String methodName, HttpServletRequest request, HttpServletResponse response) {
         ParamChecker.isNotNullOrEmpty(serviceClass, "serviceClass 不可为空");
         ParamChecker.isNotNullOrEmpty(methodName, "methodName 不可为空");
-        if(!this.apiToken.equals(request.getHeader("apiToken"))){
+        if (!this.apiToken.equals(request.getHeader("apiToken"))) {
             throw new ParamException("token不正确,非法调用");
         }
         try {

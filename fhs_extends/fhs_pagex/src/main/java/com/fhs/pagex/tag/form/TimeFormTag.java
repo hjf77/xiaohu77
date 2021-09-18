@@ -3,7 +3,8 @@ package com.fhs.pagex.tag.form;
 import org.springframework.stereotype.Component;
 
 /**
- *  时间选择
+ * 时间选择
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimeFormTag extends EmptyFormTag implements IOne2XTag {
 
-    static{
+    static {
         FormTagFactory.regTag("time", TimeFormTag.class);
         FormTagFactory.regOne2XTag("time", TimeFormTag.class);
     }
@@ -36,12 +37,12 @@ public class TimeFormTag extends EmptyFormTag implements IOne2XTag {
 
     @Override
     public String readyJs() {
-        return "$( '#"+this.tagSett.get("name")+"' ).timeDropper({setCurrentTime:false});";
+        return "$( '#" + this.tagSett.get("name") + "' ).timeDropper({setCurrentTime:false});";
     }
 
     @Override
     public String loadSuccessJs() {
-        return "$( '#"+this.tagSett.get("name")+"' ).timeDropper({setCurrentTime:false});";
+        return "$( '#" + this.tagSett.get("name") + "' ).timeDropper({setCurrentTime:false});";
     }
 
     @Override

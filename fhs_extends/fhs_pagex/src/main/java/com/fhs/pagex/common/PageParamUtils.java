@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *  页面参数处理
+ * 页面参数处理
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.common
  * @ClassName: PageParamUtils
@@ -23,6 +24,7 @@ public class PageParamUtils {
 
     /**
      * 获取参数map
+     *
      * @param request request
      * @return 参数map
      */
@@ -32,8 +34,8 @@ public class PageParamUtils {
         Set<String> keys = tempMap.keySet();
         Iterator var5 = keys.iterator();
 
-        while(var5.hasNext()) {
-            String key = (String)var5.next();
+        while (var5.hasNext()) {
+            String key = (String) var5.next();
             resultMap.put(key, request.getParameter(key));
         }
 

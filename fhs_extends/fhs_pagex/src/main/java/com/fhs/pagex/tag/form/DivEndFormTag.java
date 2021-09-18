@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * div start
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -14,9 +15,8 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class DivEndFormTag extends  InputFormTag {
-    static
-    {
+public class DivEndFormTag extends InputFormTag {
+    static {
         FormTagFactory.regTag("divEnd", DivEndFormTag.class);
     }
 
@@ -24,6 +24,7 @@ public class DivEndFormTag extends  InputFormTag {
     public String getContentHtml() {
         return "</div>";
     }
+
     @Override
 
     public String readyJs() {

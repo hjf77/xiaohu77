@@ -5,6 +5,7 @@ import com.fhs.core.result.HttpResult;
 
 /**
  * 由service层直接返回一个httpresult到前段
+ *
  * @author user
  * @date 2020-05-19 15:30:18
  */
@@ -19,7 +20,7 @@ public class ResultException extends RuntimeException {
         this.httpResult = httpResult;
     }
 
-    public HttpResult getHttpResult(){
+    public HttpResult getHttpResult() {
         return httpResult;
     }
 }

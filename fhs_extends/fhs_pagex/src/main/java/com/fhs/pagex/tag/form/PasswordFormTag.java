@@ -4,13 +4,14 @@ import org.springframework.stereotype.Component;
 
 /**
  * input type是密码 表单tag
+ *
  * @author user
  * @date 2020-05-19 14:08:20
  */
 @Component
-public class PasswordFormTag extends  EmptyFormTag{
+public class PasswordFormTag extends EmptyFormTag {
 
-    static{
+    static {
         FormTagFactory.regTag("password", PasswordFormTag.class);
     }
 
