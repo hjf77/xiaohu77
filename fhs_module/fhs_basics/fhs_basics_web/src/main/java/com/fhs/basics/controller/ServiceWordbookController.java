@@ -16,6 +16,7 @@ import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -267,7 +268,7 @@ public class ServiceWordbookController extends BaseController {
     @ResponseBody
     public HttpResult<Boolean> refreshRedisCache(ServiceWordbookVO wordbook, HttpServletRequest request, HttpServletResponse response) {
         Map<String, String> message = new HashMap<>();
-        message.put("transType", "wordbook");
+        message.put("transType", TransType.WORD_BOOK);
         message.put("wordbookGroupCode", wordbook.getWordbookGroupCode());
         redisCacheService.convertAndSend("trans", JsonUtils.map2json(message));
         wordbookAndGroupService.refreshRedisCache(wordbook);

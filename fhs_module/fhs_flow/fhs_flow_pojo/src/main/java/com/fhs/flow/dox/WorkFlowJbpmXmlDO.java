@@ -3,6 +3,7 @@ package com.fhs.flow.dox;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -54,7 +55,7 @@ public class WorkFlowJbpmXmlDO extends BaseDO<WorkFlowJbpmXmlDO> {
     @Min(message = "{workflow.typeId.min}", value = -2147483648, groups = {Add.class, Update.class})
 
     @Column(name = "type_id", nullable = false, length = 10)
-    @Trans(type = "wordbook", key = "workFlow_xml_type")
+    @Trans(type = TransType.WORD_BOOK, key = "workFlow_xml_type")
     private Integer typeId;
     /**
      * xml内容
@@ -81,7 +82,7 @@ public class WorkFlowJbpmXmlDO extends BaseDO<WorkFlowJbpmXmlDO> {
      */
 
     @Column(name = "state", nullable = true, length = 64)
-    @Trans(type = "wordbook", key = "workFlow_release_state")
+    @Trans(type = TransType.WORD_BOOK, key = "workFlow_release_state")
     private Integer state = 0;
 
     /**
@@ -89,7 +90,7 @@ public class WorkFlowJbpmXmlDO extends BaseDO<WorkFlowJbpmXmlDO> {
      */
 
     @Column(name = "is_choose_next", nullable = true, length = 64)
-    @Trans(type = "wordbook", key = "pub_boolean")
+    @Trans(type = TransType.WORD_BOOK, key = "pub_boolean")
     private Integer isChooseNext;
 
     /**
@@ -97,7 +98,7 @@ public class WorkFlowJbpmXmlDO extends BaseDO<WorkFlowJbpmXmlDO> {
      */
 
     @Column(name = "is_pub_form", nullable = true, length = 64)
-    @Trans(type = "wordbook", key = "pub_boolean")
+    @Trans(type = TransType.WORD_BOOK, key = "pub_boolean")
     private Integer isPubForm;
 
     /**

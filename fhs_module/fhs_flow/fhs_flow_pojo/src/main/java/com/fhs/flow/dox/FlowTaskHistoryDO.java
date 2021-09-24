@@ -9,6 +9,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -83,7 +84,7 @@ public class FlowTaskHistoryDO extends BaseDO<FlowTaskHistoryDO> {
      */
     @NotNull(message = "0 未完成 1 已完成字段不可为null", groups = {Update.class, Delete.class})
     @TableField("status")
-    @Trans(type = Constant.WORD_BOOK, key = "task_history_status")
+    @Trans(type = TransType.WORD_BOOK, key = "task_history_status")
     @ApiModelProperty("状态")
     private Integer status;
 

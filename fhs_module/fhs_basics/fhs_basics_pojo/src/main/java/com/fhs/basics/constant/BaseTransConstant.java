@@ -1,5 +1,7 @@
 package com.fhs.basics.constant;
 
+import com.fhs.core.trans.constant.TransType;
+
 /**
  * 翻译服务静态常量
  *
@@ -15,7 +17,7 @@ public interface BaseTransConstant {
     /**
      * 字典
      */
-    String WORD_BOOK = "wordbook";
+    String WORD_BOOK = TransType.WORD_BOOK;
 
     /**
      * 用户信息
