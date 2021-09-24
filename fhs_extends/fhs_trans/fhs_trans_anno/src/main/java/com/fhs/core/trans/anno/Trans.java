@@ -1,5 +1,7 @@
 package com.fhs.core.trans.anno;
 
+import com.fhs.core.base.pojo.vo.VO;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -42,4 +44,23 @@ public @interface Trans {
      * @return
      */
     String jsonKey() default "";
+
+
+    /**
+     * 目标class
+     * @return
+     */
+    Class<? extends VO> target() default VO.class;
+
+    /**
+     * 需要目标class哪些字段
+     * @return
+     */
+    String[] fields() default {};
+
+    /**
+     * 别名
+     * @return
+     */
+    String alias() default "";
 }

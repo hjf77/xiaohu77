@@ -24,5 +24,8 @@ public interface TransType {
      */
     String WORD_BOOK = "wordbook";
 
-
+    /**
+     * 简单翻译
+     */
+    String SIMPLE = "simple";
 }

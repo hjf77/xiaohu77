@@ -4,6 +4,7 @@ import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtil;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.config.BeetlConf;
@@ -51,7 +52,7 @@ public class PageXAutoJavaService {
     private static Map<String, String> transAbbreviationMap = new HashMap<>();
 
     static {
-        transAbbreviationMap.put("book", "wordbook");
+        transAbbreviationMap.put("book", TransType.WORD_BOOK);
     }
 
 

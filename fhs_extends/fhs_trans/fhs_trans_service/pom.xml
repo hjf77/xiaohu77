@@ -12,6 +12,16 @@
     <artifactId>fhs_trans_service</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_trans_anno</artifactId>
             <version>${fhs.release.version}</version>
