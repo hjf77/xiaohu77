@@ -177,7 +177,6 @@
 
 
     <logger name="jdbc.audit" level="ERROR" />
-    <logger name="com.yzb.platform.db.ReadWriteDataSource" level="ERROR" />
 
     <logger name="jdbc.connection" level="ERROR" />
     <logger name="com.baomidou.mybatisplus.MybatisConfiguration" level="ERROR" />

@@ -1,3 +1,4 @@
+/*
 package com.fhs.app.test;
 
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -32,9 +33,11 @@ import java.util.List;
 import java.util.Map;
 
 
+*/
 /**
  * @author user
- */
+ *//*
+
 @RestController
 @AutowiredFhs
 @RequestMapping("/webApi/test/flow")
@@ -47,12 +50,14 @@ public class TestMultilnstanceController extends PageXBaseController {
     @Autowired
     private TaskService taskService;
 
-    /**
+    */
+/**
      * 测试多实例会签
      * @param namespace
      * @param request
      * @return
-     */
+     *//*
+
     @RequestMapping("{namespace}/countersign")
     @Transactional(rollbackFor = Exception.class)
     public HttpResult<Boolean> countersign(@PathVariable("namespace") String namespace, HttpServletRequest request) {
@@ -90,3 +95,4 @@ public class TestMultilnstanceController extends PageXBaseController {
         return HttpResult.success(true);
     }
 }
+*/

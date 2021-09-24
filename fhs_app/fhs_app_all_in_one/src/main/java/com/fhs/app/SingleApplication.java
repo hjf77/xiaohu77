@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @SpringBootApplication(scanBasePackages = {"com.fhs", "com.alicp.jetcache"}, exclude = {
-        org.activiti.spring.boot.SecurityAutoConfiguration.class,
+       // org.activiti.spring.boot.SecurityAutoConfiguration.class,
         SecurityAutoConfiguration.class
 })
 @MapperScan(basePackages = {"com.fhs.*.mapper", "com.fhs.*.*.mapper"})
