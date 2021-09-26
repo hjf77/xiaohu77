@@ -259,4 +259,26 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
         map.put("alias", sysRole.getRoleId());
         return HttpResult.success(JsonUtils.object2json(map));
     }
+
+    /**
+     * 更新角色授权
+     * @param adminRole
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public boolean updateRoleRermission(UcenterMsRoleDO adminRole) {
+        // 删除当前角色的按钮信息
+        boolean count = deleteButtons(adminRole);
+        if (count) {
+            if (adminRole.getMethods() != null && adminRole.getMethods().length > 0) {
+                // 构建按钮列表
+                adminRole.setMethods(buildButtonArray(adminRole.getMethods()));
+                // 插入按钮信息
+                return addButtons(adminRole);
+            }
+            return true;
+        }
+        return false;
+    }
 }

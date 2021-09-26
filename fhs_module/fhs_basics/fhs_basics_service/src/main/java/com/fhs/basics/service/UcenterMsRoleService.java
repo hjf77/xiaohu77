@@ -117,4 +117,11 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
      * @return 关联用户数量
      */
     Integer findUserCountByRoleId(Map<String, Object> paramMap);
+
+    /**
+     * 修改角色权限
+     * @param adminRole
+     * @return
+     */
+    boolean updateRoleRermission(UcenterMsRoleDO adminRole);
 }
