@@ -59,7 +59,7 @@
             则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除-->
             <maxHistory>${maxHistory}</maxHistory>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
-            <totalSizeCap>1G</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
 
         <!-- 按照固定窗口模式生成日志文件，当文件大于20MB时，生成新的日志文件。窗口大小是1到3，当保存了3个归档文件后，将覆盖最早的日志。
@@ -95,7 +95,7 @@
             <!-- 日志最大的历史 60天 -->
             <maxHistory>${maxHistory}</maxHistory>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
-            <totalSizeCap>1G</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
@@ -120,7 +120,7 @@
             <!-- 日志最大的历史 60天 -->
             <maxHistory>${maxHistory}</maxHistory>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
-            <totalSizeCap>1G</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
@@ -146,7 +146,7 @@
             <!-- 日志最大的历史 60天 -->
             <maxHistory>${maxHistory}</maxHistory>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
-            <totalSizeCap>1G</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
@@ -171,7 +171,7 @@
             <!-- 日志最大的历史 60天 -->
             <maxHistory>${maxHistory}</maxHistory>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
-            <totalSizeCap>1G</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
