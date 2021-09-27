@@ -8,12 +8,17 @@ import com.fhs.generate.mapper.TableInfoMapper;
 import com.fhs.generate.service.TableInfoService;
 import com.fhs.generate.vo.FieldsVO;
 import com.fhs.generate.vo.TableInfoVO;
+import feign.Param;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TableInfoServiceImpl implements TableInfoService {
 
@@ -40,7 +45,16 @@ public class TableInfoServiceImpl implements TableInfoService {
         if (!isDev) {
             throw new ParamException("代码生成器仅仅开发模式可用，请配置isDevModel为true");
         }
-        List<FieldsVO> fieldList = tableInfoMapper.getTableFields(dbName, tableName);
+        List<FieldsVO> fieldList = null;
+        try{
+            tableInfoMapper.getTableFields(dbName, tableName);
+        }catch (Exception e){
+            log.error("获取表信息错误");
+            if(e instanceof BadSqlGrammarException){
+                throw new ParamException("表不存在哥哥,库名字或者表名子写错了把！");
+            }
+        }
+
         fieldList = fieldList.stream().filter(fieldsVO -> {
             return (!IGNORE_SET.contains(fieldsVO.getFiledName()));
         }).collect(Collectors.toList());
