@@ -108,4 +108,12 @@ public interface FeignSysUserApiService {
      */
     @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignSysUserApiService/getUserByIds")
     HttpResult<List<UcenterMsUserVO>> getUserByIds(@Param("userIds") String userIds);
+
+    /**
+     * 根据用户联系方式获取对象
+     * @param mobileList 用户联系方式 list集合
+     * @return
+     */
+    @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignSysUserApiService/getUserByMobileList")
+    HttpResult<List<UcenterMsUserVO>> getUserByMobileList(@Param("mobileList") List<String> mobileList);
 }
