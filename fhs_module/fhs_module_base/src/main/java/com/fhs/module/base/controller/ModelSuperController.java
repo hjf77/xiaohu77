@@ -74,7 +74,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     /**
      * 用于导出用的缓存
      */
-    private Cache<String, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+    protected Cache<String, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
     protected BaseService<V, D> baseService;

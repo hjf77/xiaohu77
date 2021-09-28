@@ -931,4 +931,23 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return sysUserMapper.getPermissionUrlAll();
     }
 
+    public HttpResult<List<UcenterMsUserVO>> getUserByMobileList(List<String> mobileList) {
+        List<UcenterMsUserVO> result =
+                super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getMobile, mobileList));
+        if (result.isEmpty()) {
+            return HttpResult.success(result);
+        }
+        List<String> orgIds = result.stream().map(UcenterMsUserVO::getOrganizationId).collect(Collectors.toList());
+        List<UcenterMsOrganizationVO> organizationVOS = this.organizationService.findByIds(orgIds);
+        Map<String, UcenterMsOrganizationVO> orgMap = organizationVOS.stream().collect(Collectors
+                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
+        UcenterMsOrganizationVO tempOrg = null;
+        for (UcenterMsUserVO user : result) {
+            if (orgMap.containsKey(user.getOrganizationId())) {
+                tempOrg = orgMap.get(user.getOrganizationId());
+                user.setCompanyId(tempOrg.getCompanyId());
+            }
+        }
+        return HttpResult.success(result);
+    }
 }
