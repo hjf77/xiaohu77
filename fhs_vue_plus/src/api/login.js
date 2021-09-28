@@ -18,16 +18,16 @@ export function login(userLoginName, password, identifyCode, uuid) {
 // 获取用户详细信息
 export function getInfo() {
   return request({
-    url: '/getUserForVue',
+    url: '/ms/getUserForVue',
     method: 'get'
   })
 }
 
 // 退出方法
-export function logout() {
+export function logout(token) {
   return request({
-    url: '/ms/logout',
-    method: 'post'
+    url: `/logoutForVue?token=${token}`,
+    method: 'GET'
   })
 }
 
@@ -38,3 +38,19 @@ export function getCodeImg() {
     method: 'get'
   })
 }
+
+// 外协人员登录
+export function stuLogin(userLoginName, password, identifyCode, uuid) {
+  const data = {
+    userLoginName,
+    password,
+    identifyCode,
+    uuid
+  }
+  return request({
+    url: '/stu/vueLogin',
+    method: 'post',
+    data: data
+  })
+}
+

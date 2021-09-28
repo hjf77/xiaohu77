@@ -15,7 +15,7 @@ export function handleStrParam(_str, _pageParam) {
 
 //替换参数
 function getParamVaue(_paramName, _pageParam) {
-    let _sourceParamName = _pageParam;
+    let _sourceParamName = _paramName;
     let tempParamValue = null;
     //手动指定从session取
     if (_paramName.indexOf('session.') == 0) {
@@ -33,15 +33,15 @@ function getParamVaue(_paramName, _pageParam) {
         if(_pageParam){
             tempParamValue = (_paramName.indexOf('.') != -1) ? _pageParam[_paramName.substr(0, (_paramName.indexOf('.') + 1))] : _pageParam[_paramName];
         }
-        if (!tempParamValue) {
+        if (!tempParamValue  && tempParamValue!=0) {
             tempParamValue = (_paramName.indexOf('.') != -1) ? getSessionJson(_paramName.substr(0, (_paramName.indexOf('.') + 1))) : getSession(_paramName);
         }
-        if (!tempParamValue) {
+        if (!tempParamValue  && tempParamValue!=0) {
             tempParamValue = (_paramName.indexOf('.') != -1) ? getLocalJson(_paramName.substr(0, (_paramName.indexOf('.') + 1))) : getLocal(_paramName);
         }
     }
     //没拿到原样返回
-    if (!tempParamValue) {
+    if (!tempParamValue && tempParamValue!=0) {
         return '${' + _sourceParamName + '}';
     }
     let dianIndex = _paramName.indexOf('.');
@@ -86,4 +86,3 @@ function isJsonOrArray(_source) {
     return typeof (_source === 'object');
 }
 
-   

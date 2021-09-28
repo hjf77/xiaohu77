@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'FHS演示',
+  title: 'FHS-DEMO',
 
   /**
    * 是否系统布局配置

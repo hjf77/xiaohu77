@@ -38,7 +38,7 @@ export function updateMenu(data) {
 // 删除菜单
 export function delMenu(menuId) {
   return request({
-    url: '/ms/sysMenu/del?id=' + menuId,
+    url: '/ms/sysMenu/' + menuId,
     method: 'delete'
   })
 }
@@ -96,7 +96,7 @@ export function addPermission(data) {
 export function updatePermission(data) {
   return request({
     url: '/ms/sysMenuPermission/update?permissionId=' + data.permissionId,
-    method: 'put',
+    method: 'POST',
     data: data
   })
 }
@@ -104,7 +104,7 @@ export function updatePermission(data) {
 // 删除权限
 export function delPermission(permissionId) {
   return request({
-    url: '/ms/sysMenuPermission/del?id=' + permissionId,
+    url: '/ms/sysMenuPermission/' + permissionId,
     method: 'delete'
   })
 }

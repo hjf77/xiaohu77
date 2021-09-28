@@ -1,147 +1,137 @@
 <template>
-  <div class="app-container">
-    <pagex-crud
-      :filter="filter"
-      :columns="columns"
-      :api="api"
-      :buttons="buttons"
-    >
-      <template v-slot:import="prop">
-        <!-- 新增 修改 弹框-->
-        <el-dialog slot="import" :title="title" v-if="open" :visible.sync="open" width="500px">
-          <addDict :init="init" :isEdit="isEdit"></addDict>
-        </el-dialog>
-      </template>
-    </pagex-crud>
-  </div>
+  <base-container>
+    <base-crud :option="crudOption" :before-open="beforeOpen">
+    </base-crud>
+  </base-container>
+
 </template>
 
 <script>
-import {listType, getType, delType, addType, updateType, refresh} from "@/api/system/dict/type";
-import addDict from "@/views/system/dict/components/addDict";
-// import crud from "@/lib/components/crud";
+
 export default {
   name: "Dict",
-  components: {
-    addDict,
-    // crud
-  },
-  provide() {
-    return {
-      wlTest: cb => {
-        cb(this)
-      }
-    }
-  },
   data() {
     return {
-      slots: {
-        controls: [
-          {
-            type: 'text',
-            name: 'groupName',
-            label: '分组名称',
-            rule: 'required'
-          }, {
-            type: 'text',
-            name: 'wordbookGroupCode',
-            label: '分组编码',
-            rule: 'required'
-          }
-        ]
-      },
-      title: '编辑',
-      open: false,
-      isEdit: false,
-      api: '/ms/wordbook/findWordbookGroupForPage?isVue=true',
-      //delUrl
-      //addUrl
-      //updateUrl
-      //initUrl
-      //batchDelUrl
-      //form:{}
-      methods: {
-        importExcelSubmit: (_formData) => {
-
-        },
-      },
-      //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
-      buttons: [
-        {
-          title: '批量删除',
-          icon: 'el-icon-delete',
-          type: 'primary',
-          click: (_row, _checkRows) => {
-            console.log(_row, _checkRows);
-          },
-        }, {
-          title: 'excel导入',
-          name: 'import',
-          type: 'warning',
-          click: (_row, _checkRows) => {
-
-          }
-        }, {
-          title: '导出',
-          name: 'import',
-          type: 'danger',
-          click: (_row, _checkRows) => {
-            console.log(_row, _checkRows);
-          }
-        },{
-          title: '新增',
-          name: 'add',
-          type: 'primary',
-          click: () => {
-            this.title = '新增';
-            this.open = true;
-          }
-        }
-      ],
-      columns: [
-        {label: '', name: '', type: 'selection'},
-        {label: '分组名称', name: 'groupName'},
-        {
-          label: '分组编码', name: 'wordbookGroupCode', type: 'formart',
-          formart: "<label style='cursor:pointer'>${wordbookGroupCode}</label>",
-          click: function (_row) {
-            this.$router.push({path: '/dict/type/data/' + _row.groupId});
-          }
-        },
-        {
-          label: '操作',
-          name: 'operation',
-          type: 'textBtn',
-          textBtn: [
-            {
-              name: "详情",
-              click: (_row, name) => {
-                console.log(_row, name);
-                this.title = '详情';
-                this.open = true;
-              }
-            },
-            {
-              name: "编辑",
-              click: (_row, name) => {
-                console.log(_row, name);
-                this.title = '编辑';
-                this.open = true;
-              }
+      crudOption: {
+        api: '/ms/word_book_group/pagerAdvance',
+        addApi: '/ms/word_book_group/',
+        updateApi: '/ms/word_book_group/',
+        delApi: '/ms/word_book_group/',
+        queryOneApi: '',
+        isNeedPager: false,
+        align: "center", //对齐方式
+        sortSett: [{
+          "direction": "DESC",
+          "property": "updateTime"
+        }],
+        formOption: {
+          group:
+            [
+              {
+                type: 'text',
+                name: 'groupName',
+                label: '分组名称',
+                rule: 'required',
+                placeholder: '请输入分组名称'
+              }, {
+              type: 'text',
+              name: 'wordbookGroupCode',
+              label: '分组编码',
+              rule: 'required',
+              placeholder: '请输入分组编码'
             }
-          ],
-        }
-      ],
-      filter: {
-        controls: [
-          {name: 'groupName', placeholder: "分组名称", type: 'text'},
-          {name: 'wordbookGroupCode', placeholder: "分组code", type: 'text'}
-        ]
+            ],
+
+        },
+        buttons: [
+          {
+            title: '新增',
+            name: 'add',
+            code: "add",
+            type: 'primary',
+            size: 'mini',
+            icon: 'el-icon-plus',
+          },
+          {
+            title: '刷新全部缓存',
+            name: 'refresh',
+            type: 'primary',
+            size: 'mini',
+            icon: 'el-icon-refresh',
+            isRight: true,
+            click: () => {
+              this.$pagexRequest({
+                url: '/ms/wordbook/refreshRedisCache?wordbookGroupCode=',
+                method: "GET",
+              }).then((res) => {
+                this.$message({
+                  type: "success",
+                  message: "刷新成功!",
+                });
+              });
+            }
+          }
+        ],
+        filters: [
+          {label: '分组名称:', name: 'groupName', placeholder: "分组名称", type: 'text', operation: 'like'},
+          {label: '分组编码:', name: 'wordbookGroupCode', placeholder: "分组编码", type: 'text', operation: 'like'}
+        ],
+        columns: [
+          {label: '分组名称', name: 'groupName'},
+          {
+            label: '分组编码', name: 'wordbookGroupCode', type: 'formart',
+            formart: "<label style='cursor:pointer'>${wordbookGroupCode}</label>",
+            click: function (_row) {
+              this.$router.push({path: '/dict/type/data/',query:{dictCode: _row.wordbookGroupCode}});
+            }
+          },
+          {
+            label: '操作',
+            name: 'operation',
+            type: 'textBtn',
+            textBtn: [
+              {
+                name: "编辑",
+                code: "edit",
+                type: "text",
+                size: 'mini'
+              },
+              {
+                name: "删除",
+                code: "del",
+                type: "text",
+                api: '/ms/word_book_group/',
+                size: 'mini',
+                idFieldName: 'groupId'
+              },
+              {
+                name: "刷新缓存",
+                type: "text",
+                size: 'mini',
+                api: '/ms/wordbook/refreshRedisCache?wordbookGroupCode=',
+                click: (row) => {
+                  this.$pagexRequest({
+                    url: `/ms/wordbook/refreshRedisCache?wordbookGroupCode=${row.wordbookGroupCode}`,
+                    method: "GET",
+                  }).then((res) => {
+                    this.$message({
+                      type: "success",
+                      message: "刷新成功!",
+                    });
+                  });
+                }
+              }
+            ],
+          }
+        ],
       },
-    };
+    }
   },
-  created() {
-  },
-  methods: {}
+  methods: {
+    beforeOpen(done, type) {
+      done()
+      console.log(type)
+    }
+  }
 };
 </script>

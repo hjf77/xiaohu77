@@ -1,0 +1,110 @@
+[{
+    "alwaysShow": true,
+    "children": [
+        {
+            "alwaysShow": false,
+            "children": [],
+            "component": "system/dept/index",
+            "meta": {
+                "icon": null,
+                "title": "部门VUE"
+            },
+            "icon": null,
+            "title": "部门VUE",
+            "name": "dept",
+            "path": "dept",
+            "redirect": null
+        },
+        {
+            "alwaysShow": false,
+            "children": [],
+            "component": "system/dept/index",
+            "meta": {
+                "icon": null,
+                "title": "部门VUE"
+            },
+            "icon": null,
+            "title": "部门VUE",
+            "name": "dept",
+            "path": "dept",
+            "redirect": null
+        },
+        {
+            "alwaysShow": false,
+            "children": [],
+            "component": "system/dept/index",
+            "meta": {
+                "icon": null,
+                "title": "部门VUE"
+            },
+            "icon": null,
+            "title": "部门VUE",
+            "name": "dept",
+            "path": "dept",
+            "redirect": null
+        }
+     ],
+    "component": "Layout",
+    "meta": {
+        "icon": null,
+        "title": "系统管理VUE"
+    },
+    "name": "system",
+    "path": "/system",
+    "redirect": "noRedirect"
+},
+{
+    "alwaysShow": true,
+    "children": [
+        {
+            "alwaysShow": false,
+            "children": [],
+            "component": "system/dept/index",
+            "meta": {
+                "icon": null,
+                "title": "部门VUE"
+            },
+            "icon": null,
+            "title": "部门VUE",
+            "name": "dept",
+            "path": "dept",
+            "redirect": null
+        },
+        {
+            "alwaysShow": false,
+            "children": [],
+            "component": "system/dept/index",
+            "meta": {
+                "icon": null,
+                "title": "部门VUE"
+            },
+            "icon": null,
+            "title": "部门VUE",
+            "name": "dept",
+            "path": "dept",
+            "redirect": null
+        },
+        {
+            "alwaysShow": false,
+            "children": [],
+            "component": "system/dept/index",
+            "meta": {
+                "icon": null,
+                "title": "部门VUE"
+            },
+            "icon": null,
+            "title": "部门VUE",
+            "name": "dept",
+            "path": "dept",
+            "redirect": null
+        }
+    ],
+    "component": "Layout",
+    "meta": {
+        "icon": null,
+        "title": "工作流VUE"
+    },
+    "name": "flow",
+    "path": "/flow",
+    "redirect": "noRedirect"
+}]

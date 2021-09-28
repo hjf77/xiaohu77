@@ -1,6 +1,7 @@
 import Vue from "vue";
 import axios from "axios";
 import { getToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 import qs from "qs";
 // Admin-Token
 
@@ -13,12 +14,18 @@ let errorCode  = {
 }
 
 let setting={
-    baseURL : '/api/',//基础url
+    baseURL : process.env.VUE_APP_BASE_API, //基础url
     tokenField:'Authorization',//header中的token字段
     token:function(){
         return getToken();//token值
     },
     errorMsgAlert:function(_msg){
+      Message({
+        message: _msg,
+        type: 'error',
+        showClose: true,
+        duration: 3 * 1000
+      })
       console.log(_msg);
     },
     loginRouter:'/login',//登录跳转
@@ -77,7 +84,7 @@ request.interceptors.response.use(
         if (code === setting.tokenTimeoutCode) {
             localStorage.clear();
             sessionStorage.clear();
-            //window.location.reload();  todo 跳转到登录页
+            window.location.reload();
             return;
         }
         else if (code === setting.paramErrorCode || code===setting.systemErrorCode || code !== setting.successCode) {
@@ -88,13 +95,19 @@ request.interceptors.response.use(
         }
     },
     error => {
-        console.log("err" + error);
         let { message } = error;
         if (message == "Network Error") {
-            message = "后端接口连接异常";
+            message = "网络错误";
         } else if (message.includes("timeout")) {
             message = "系统接口请求超时";
         } else if (message.includes("Request failed with status code")) {
+            let code = message.substr(message.length - 3);
+            if (code == setting.tokenTimeoutCode) {
+              localStorage.clear();
+              sessionStorage.clear();
+              window.location.reload();
+              return;
+            }
             message = "系统接口" + message.substr(message.length - 3) + "异常";
         }
         setting.errorMsgAlert(message);

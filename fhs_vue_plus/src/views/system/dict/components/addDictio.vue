@@ -9,18 +9,13 @@
   <div>
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
-      addApi="/ms/wordbook/addWordbookGroup"
-      updateApi=""
-      initApi=""
+      addApi="/ms/wordbook/"
+      updateApi="/ms/wordbook/"
       :init="init"
-      :isEdit="false"
+      :data="formData"
+      :isEdit="isEdit"
       :controls="[
               {
-                type: 'text',
-                name: 'wordbookGroupCode',
-                label: '字典编码',
-                placeholder: '请输入字典编码'
-              },{
                 type: 'text',
                 name: 'wordbookCode',
                 label: '字典code',
@@ -48,11 +43,10 @@
               {
                 type: 'inputNumber',
                 name: 'orderNum',
-                label: '排序序号(ASC)',
+                label: '排序序号',
                 rule:'required',
-                size:'medium',
-                placeholder:'请输入排序序号(ASC)',
-                options:{label:'衣服',min:0, max:100}
+                options:{max:100,min:0},
+                placeholder:'请输入排序序号'
               },
             ]"
     >
@@ -61,23 +55,29 @@
 </template>
 
 <script>
-// import pagexForm from "@/lib/components/form";
 export default {
   name: "addDict",
-  components: {
-    // pagexForm
-  },
+
   data() {
-    return {}
+    return {
+      formData:{
+        wordbookGroupCode:'',
+        orderNum:0,
+        wordbookId: this.init.wordbookId
+      }
+    }
   },
   props: {
     open: Boolean,
     init: Object,
-    isEdit: Boolean
+    isEdit: Boolean,
+    dictCode: String
   },
   mounted() {
+    console.log(this.isEdit)
   },
   created() {
+    this.formData.wordbookGroupCode = this.dictCode;
   },
   methods: {}
 }

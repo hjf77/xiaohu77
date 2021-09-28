@@ -5,13 +5,17 @@
     v-on="$listeners"
     clearable
     :disabled="disabled"
+    filterable
+    :allow-create="isAllowCreate"
+    :default-first-option="isDefaultFirstOption"
+    @change="_change"
   >
     <template v-if="isHaveFatherOption">
       <el-option
         v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
+        :key="item[valueField]"
+        :label="item[labelField]"
+        :value="item[valueField]"
       >
       </el-option>
     </template>
@@ -64,6 +68,36 @@ export default {
       type: Boolean,
       default: false,
     },
+    methodType: {
+      type: String,
+      default: 'GET',
+    },
+    isValueNum:{
+      type: Boolean,
+      default: false,
+    },
+    isCustomLabel: {
+      type: Boolean,
+      default: false,
+    },
+    customLabelQuerys: {
+      type: Object,
+      default: () => {
+        return {
+          field: 'name',
+          start: '(',
+          end: ')'
+        }
+      },
+    },
+    isDefaultFirstOption: {
+      type: Boolean,
+      default: false,
+    },
+    isAllowCreate: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
@@ -81,13 +115,14 @@ export default {
     this.newValueField = this.valueField;
     if (this.dictCode) {
       this.newURL =
-        "/portal/sys/dataDict/v1/getByTypeKey?typeKey=" + this.dictCode;
-      this.newValueField = "key";
-      this.newLabelField = "text";
+        "/webApi/wordbook/getData?wordbookGroupCode=" + this.dictCode;
+      this.newValueField = "wordbookCode";
+      this.newLabelField = "wordbookDesc";
     }
     if (this.newURL) {
       this.loadData();
     }
+    this._change();
   },
   methods: {
     async loadData() {
@@ -96,7 +131,7 @@ export default {
         data = await this.$pagexRequest({
           url: this.newURL,
           data: this.querys,
-          method: "POST",
+          method: this.methodType,
         });
       } else {
         data = await this.$pagexRequest.get(
@@ -107,16 +142,20 @@ export default {
       let _that = this;
       if (Array.isArray(_options)) {
         _options.forEach(function (_item) {
-          _item.labelField = _item[_that.newLabelField];
-          _item.valueField = _item[_that.newValueField];
+          if (_that.isCustomLabel) {
+            _item.labelField = _item[_that.newLabelField] + _that.customLabelQuerys.start + _item[_that.customLabelQuerys.field] + _that.customLabelQuerys.end;
+          } else {
+            _item.labelField = _item[_that.newLabelField];
+          }
+          _item.valueField = _that.isValueNum ? parseInt(_item[_that.newValueField]) : _item[_that.newValueField];
         });
-      } else { 
-        const ArrayOptions = _options.value;
-        ArrayOptions.forEach(function (_item) {
+      } else {
+        const arrayOptions = _options.value;
+        arrayOptions.forEach(function (_item) {
           _item.labelField = _item[_that.newLabelField];
-          _item.valueField = _item[_that.newValueField];
+          _item.valueField = _that.isValueNum ? parseInt(_item[_that.newValueField]) : _item[_that.newValueField];
         });
-        this.ownerOption = ArrayOptions;
+        this.ownerOption = arrayOptions;
         return
       }
 
@@ -125,6 +164,9 @@ export default {
       }else{
         this.ownerOption = _options;
       }
+    },
+    _change() {
+      this.$emit("change", this.radioValue);
     },
   },
 };

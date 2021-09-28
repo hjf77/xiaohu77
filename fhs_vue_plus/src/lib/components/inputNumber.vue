@@ -1,30 +1,18 @@
 <template>
   <div>
-    <template v-if="isHaveFatherOption">
-      <el-input-number
-        v-model="countValue"
-        :min="options.min || 0"
-        :max="options.max || 10"
-        :label="options.label || ''"
-        :placeholder="this.placeholder"
-        :size="this.size"
-      ></el-input-number>
-    </template>
-    <template v-else>
-      <el-input-number
-        v-model="countValue"
-        :min="ownerOption.min||0"
-        :max="ownerOption.max||10"
-        :label="ownerOption.labelField || ''"
-        :placeholder="this.placeholder"
-        :size="this.size"
-      ></el-input-number>
-    </template>
+    <el-input-number
+      :min="min"
+      :max="max"
+      :precision="0" :step="1"
+      :size="this.size"
+      v-bind="$attrs"
+      @change="handleChange"
+      v-model="showValue"
+    ></el-input-number>
   </div>
 </template>
 
 <script>
-import {handleStrParam} from "@/lib/utils/param";
 
 export default {
   name: "pagexIpnutNumber",
@@ -35,67 +23,42 @@ export default {
   props: {
     options: {
       type: Object,
-      default: () => undefined,
-    },
-    url: {
-      type: String,
-      default: () => "",
-    },
-    labelField: {
-      type: String,
-      default: () => "title",
-    },
-    valueField: {
-      type: String,
-      default: () => "id",
-    },
-    param: {
-      type: Object,
       default: () => {
-      },
-    },
-    value: {
-      type: Number
-    },
-    placeholder: {
-      type: String
+        return {};
+      }
     },
     size: {
-      type: String
-    }
+      type: String,
+      default: () => 'large'
+    },
+    value:{
+      type:Number,
+      default: () => 0
+    },
+    min:{
+      type:Number,
+      default: () => 0
+    },
+    max:{
+      type:Number,
+    },
+
   },
   data() {
     return {
-      ownerOption: [],
-      isHaveFatherOption: false,
-      countValue: this.value,
+      showValue:0,
     };
   },
-
+  created() {
+    this.showValue = this.value;
+  },
   async mounted() {
-    this.isHaveFatherOption = typeof this.options != "undefined";
-    if (this.url) {
-      this.loadData();
-    }
+
   },
   methods: {
-    async loadData() {
-      const {data} = await this.$pagexRequest.get(
-        handleStrParam(this.url, this.param)
-      );
-
-      let _options = data || [];
-      let _that = this;
-      _options.forEach(function (_item) {
-        _item.labelField = _item[_that.labelField];
-        _item.valueField = _item[_that.valueField];
-      });
-      if (this.isHaveFatherOption) {
-        this.$emit("update:options", _options);
-      } else {
-        this.ownerOption = _options;
-      }
-    },
+    handleChange(val){
+      this.$emit("change", val);
+    }
   },
 };
 </script>

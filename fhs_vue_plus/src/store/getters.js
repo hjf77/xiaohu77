@@ -1,3 +1,5 @@
+import user from "./modules/user";
+
 const getters = {
   sidebar: state => state.app.sidebar,
   size: state => state.app.size,
@@ -10,6 +12,8 @@ const getters = {
   introduction: state => state.user.introduction,
   roles: state => state.user.roles,
   permissions: state => state.user.permissions,
-  permission_routes: state => state.permission.routes
+  permission_routes: state => state.permission.routes,
+  user: state => state.user.user,
+  outsource:state => state.user.outsource
 }
 export default getters

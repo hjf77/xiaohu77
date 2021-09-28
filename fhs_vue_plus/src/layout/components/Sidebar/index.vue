@@ -1,18 +1,19 @@
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <img src="@/assets/icon/sideBarUpBg.png" class="sideBarUpBg">
+    <el-scrollbar wrap-class="scrollbar-wrapper" class="menuBgImg">
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
-        :background-color="variables.menuBg"
+        background-color="rgba(0,0,0,0)"
         :text-color="variables.menuText"
         :unique-opened="true"
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" :collapse="isCollapse"/>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -26,6 +27,9 @@ import variables from '@/assets/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
+  data(){
+    return{}
+  },
   computed: {
     ...mapGetters([
       'permission_routes',
@@ -49,9 +53,18 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
-  },
-  mounted() {
-    console.log(this.permission_routes);
   }
 }
 </script>
+<style lang="scss" scoped>
+.sideBarUpBg{
+  height: 69px;
+  width: 100%;
+}
+.menuBgImg{
+  background-image:url('../../../assets/icon/sideBarButtonBg.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 0 bottom;
+}
+</style>

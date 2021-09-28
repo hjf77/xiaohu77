@@ -6,7 +6,7 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
+        <!-- <search id="header-search" class="right-menu-item" />
 
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
@@ -20,11 +20,62 @@
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
+        <div class="switch" @click="resetPwd"><i class="el-icon-lock"></i></div>
+        <div class="switch" @click="logout">
+          <i class="el-icon-switch-button"></i>
+        </div>
+        <div class="switch-name">{{ userName || "未设置昵称" }}</div>
 
       </template>
+      <el-dialog
+      title="修改密码"
+      :visible.sync="dialogFormVisible"
+      width="30%"
+      :destroy-on-close="closeDestroy"
+    >
+      <el-form ref="form" :model="user" :rules="rules">
+        <el-form-item
+          label="旧密码"
+          :label-width="formLabelWidth"
+          prop="oldPassword"
+        >
+          <el-input
+            type="password"
+            v-model="user.oldPassword"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="新密码"
+          :label-width="formLabelWidth"
+          prop="newPassword"
+        >
+          <el-input
+            type="password"
+            v-model="user.newPassword"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="确认密码"
+          :label-width="formLabelWidth"
+          prop="confirmPassword"
+        >
+          <el-input
+            type="password"
+            v-model="user.confirmPassword"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="close">取 消</el-button>
+      </div>
+    </el-dialog>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <!-- <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar">
           <i class="el-icon-caret-bottom" />
@@ -40,7 +91,7 @@
             <span>退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> -->
     </div>
   </div>
 </template>
@@ -65,11 +116,50 @@ export default {
     RuoYiGit,
     RuoYiDoc
   },
+  data(){
+    const equalToPassword = (rule, value, callback) => {
+      if (this.user.newPassword !== value) {
+        callback(new Error("两次输入的密码不一致"));
+      } else {
+        callback();
+      }
+    };
+    return{
+      dialogFormVisible: false,
+      userName:this.$store.state.user.name,
+      closeDestroy: true,
+      user: {
+        oldPassword: undefined,
+        newPassword: undefined,
+        confirmPassword: undefined,
+      },
+      formLabelWidth: "120px",
+      // 表单校验
+      rules: {
+        oldPassword: [
+          { required: true, message: "旧密码不能为空", trigger: "blur" },
+        ],
+        newPassword: [
+          { required: true, message: "新密码不能为空", trigger: "blur" },
+          {
+            min: 6,
+            max: 20,
+            message: "长度在 6 到 20 个字符",
+            trigger: "blur",
+          },
+        ],
+        confirmPassword: [
+          { required: true, message: "确认密码不能为空", trigger: "blur" },
+          { required: true, validator: equalToPassword, trigger: "blur" },
+        ],
+      },
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'device'
+      'device',
     ]),
     setting: {
       get() {
@@ -95,9 +185,37 @@ export default {
       }).then(() => {
         this.$store.dispatch('LogOut').then(() => {
           location.reload()
+        }).catch(err=>{
+          location.reload()
         })
       })
-    }
+    },
+    resetPwd() {
+      this.dialogFormVisible = true;
+    },
+    submit() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          updateUserPwd(
+            this.user.oldPassword,
+            this.user.newPassword,
+            this.userInfo.account
+          ).then((response) => {
+            if (response.state) {
+              this.msgSuccess("修改成功");
+              this.dialogFormVisible = false;
+            } else {
+              this.msgError(response.message);
+            }
+          });
+        }
+      });
+    },
+    close() {
+      this.$store.dispatch("tagsView/delView", this.$route);
+      this.$router.push({ path: "/index" });
+      this.dialogFormVisible = false;
+    },
   }
 }
 </script>
@@ -157,6 +275,19 @@ export default {
           background: rgba(0, 0, 0, .025)
         }
       }
+    }
+    .switch{
+      display: inline-block;
+      padding: 0 8px;
+      height: 100%;
+    }
+    .switch-name{
+      display: inline-block;
+      // padding: 0 8px;
+      height: 100%;
+      margin-right: 25px;
+      font-size: 16px;
+      font-weight: 400;
     }
 
     .avatar-container {

@@ -7,7 +7,6 @@
 import pageCom from "./page.vue";
 import card from "./card.vue";
 import crud from "./crud.vue";
-import button from "./button.vue";
 import form from "./form.vue";
 import dialog from "./dialog.vue";
 import select from "./select.vue";
@@ -19,8 +18,16 @@ import slider from "./slider.vue";
 import pagination from "./pagination.vue";
 import uploadFileAsync from "./uploadFileAsync.vue";
 import uploadFile from "./uploadFile.vue";
+import uploadPicture from "./uploadPicture.vue";
 import uploadFileChoice from "./uploadFilechoice.vue";
 import formTreeSelect from "./formTreeSelect.vue";
+import formDetail from "./formDetail.vue";
+import fileItem from "./fileItem.vue";
+import fileDetail from "./fileDetail.vue";
+import cascader from "./cascader.vue";
+import transfer from "./transfer.vue";
+import treeSelect from "./treeSelect"
+import previewPicture from "./previewPicture";
 
 import Vue from "vue";
 import getProps from "../utils/getProps";
@@ -41,7 +48,6 @@ const comList = {
   page: pageCom,
   card,
   crud,
-  button,
   form,
   dialog,
   select,
@@ -53,8 +59,16 @@ const comList = {
   pagination,
   uploadFileAsync,
   uploadFile,
+  uploadPicture,
   uploadFileChoice,
   formTreeSelect,
+  formDetail,
+  fileItem,
+  fileDetail,
+  cascader,
+  transfer,
+  treeSelect,
+  previewPicture,
   render: renderCom
 };
 Object.entries(comList).forEach(([key, val]) => {

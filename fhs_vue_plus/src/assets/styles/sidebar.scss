@@ -39,7 +39,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 50px);
+        height: calc(100% - 149px);
       }
     }
 
@@ -64,27 +64,68 @@
     }
 
     // sysMenu hover
+    // .submenu-title-noDropdown,
+    // .el-submenu__title {
+    //   &:hover {
+    //     background-color: $menuHover !important;
+    //   }
+    // }
     .submenu-title-noDropdown,
     .el-submenu__title {
+      background-color: $menuBg;
+      color: $menuText !important;
+      i{
+        color: $menuText !important;
+      }
       &:hover {
         background-color: $menuHover !important;
+        color:$menuActiveText !important;
+        i{
+          color: $menuActiveText !important;
+        }
+      }
+      &.is-active {
+        color:$menuActiveText !important;
+        i{
+          color: $menuActiveText !important;
+        }
       }
     }
-
-    .is-active>.el-submenu__title {
-      color: $subMenuActiveText !important;
-    }
-
     & .nest-menu .el-submenu>.el-submenu__title,
-    & .el-submenu .el-menu-item {
-      min-width: $sideBarWidth !important;
-      background-color: $subMenuBg !important;
-
-      &:hover {
-        background-color: $subMenuHover !important;
+  & .el-submenu .el-menu-item {
+    min-width: $sideBarWidth !important;
+    background-color: $subMenuBg !important;  
+    color: #d3faf7 !important;    //二级菜单静置的文字颜色
+    i{
+      color: #d3faf7 !important;
+    }
+    &:hover {
+      background-color: $menuHover !important;
+      color:$menuActiveText !important;
+      i{
+        color: $menuActiveText !important;
+      }
+    }
+    &.is-active{
+      background-color: $menuHover !important;
+      color:$menuActiveText !important;
+      i{
+        color: $menuActiveText !important;
       }
     }
   }
+
+  & .theme-dark .nest-menu .el-submenu>.el-submenu__title,
+  & .theme-dark .el-submenu .el-menu-item {
+    background-color: $subMenuBg !important;
+
+    &:hover {
+      background-color: $subMenuHover !important;
+    }
+  }
+
+  }
+  
 
   .hideSidebar {
     .sidebar-container {
@@ -206,4 +247,23 @@
       border-radius: 20px;
     }
   }
+}
+
+
+
+.is-active {
+    .el-submenu__title {
+      position: relative;
+      background-color: #3EA6A7 !important;
+      &::before{
+        content:"";
+        width:3px;
+        height:56px;
+        position: absolute;
+        left:5px;
+        top:0;
+        background-color: #8ECBCB;
+      }
+    }
+
 }

@@ -1,41 +1,39 @@
 <template>
-  <el-dialog  :visible.sync="dialogVisible" :title="config.title">
-<!--    {{config.body}}-->
-      <pagex-render :schema="config.body" @success="successHandel"/>
+  <el-dialog   v-bind="$attrs" v-on="$listeners" :visible.sync="visible" >
+    <slot></slot>
   </el-dialog>
 </template>
 
 <script>
 export default {
     props:{
-        value:{
+        visible:{
             type:Boolean,
             default:false,
         },
-        config:{
-            type:Object,
-            default:()=>({})
+        eventBusName: {
+          type: String,
+          default: () => null,
         }
     },
     computed:{
-        dialogVisible:{
-            get(){
-                return this.value
-            },
-            set(val){
-                this.$emit("input",val)
-            }
+
+    },
+    mounted() {
+      this.$nextTick(()=>{
+        if(this.eventBusName){
+          this.$EventBus.$on(this.eventBusName,() => {
+            this.$emit('update:visible', false);
+          })
         }
+      })
     },
     methods:{
-        successHandel(){
-            this.dialogVisible=false
-            this.$emit('success')
-        }
+
     }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

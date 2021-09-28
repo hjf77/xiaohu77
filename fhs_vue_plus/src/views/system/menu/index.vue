@@ -73,7 +73,7 @@
         </el-row>
         <el-table v-loading="loading" :data="permissionList">
           <el-table-column prop="permissionName" label="权限名称" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="method" label="方法名称" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="method" label="权限编码" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="transMap.isEnableName" label="状态" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
@@ -230,18 +230,18 @@
       <el-form ref="permissionForm" :model="permissionForm" :rules="permissionRules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="菜单名称" prop="permissionName">
-              <el-input v-model="permissionForm.permissionName" placeholder="请输入菜单名称"/>
+            <el-form-item label="权限名称" prop="permissionName">
+              <el-input v-model="permissionForm.permissionName" placeholder="请输入权限名称"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="方法名称" prop="method">
-              <el-input v-model="permissionForm.method" placeholder="请输入方法名称"/>
+            <el-form-item label="权限编码" prop="method">
+              <el-input v-model="permissionForm.method" placeholder="请输入权限编码"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="菜单类型" prop="permissionType">
-              <el-select v-model="permissionForm.permissionType" placeholder="请选择菜单类型" @change="menuTypeChange">
+            <el-form-item label="权限类型" prop="permissionType">
+              <el-select v-model="permissionForm.permissionType" placeholder="请选择权限类型" @change="menuTypeChange">
                 <el-option
                   v-for="item in permissionTypeOptions"
                   :key="item.wordbookCode"
@@ -272,12 +272,6 @@
     </el-dialog>
   </div>
 </template>
-
-<style>
-  .el-table__body tr.current-row > td {
-    background: #f57878 !important;
-  }
-</style>
 
 <script>
   import {

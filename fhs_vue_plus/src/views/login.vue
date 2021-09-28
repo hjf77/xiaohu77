@@ -1,7 +1,18 @@
 <template>
+
+
+<!--  <div id="full-screen-container" :ref="ref" class="login-container">-->
+<!--      <div class="login-wrap">-->
+<!--          <div class="login-content">-->
+
+<!--          </div>-->
+<!--      </div>-->
+
+<!--  </div>-->
+
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">FHS_Framework演示系统</h3>
+      <h3 class="title">FHS-DEMO</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -33,6 +44,7 @@
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.xueyuan" style="margin:0px 0px 25px 50px;">外协人员</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -48,7 +60,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2018-2020 fhs All Rights Reserved.</span>
+      <span>Copyright © 2018-2021 fhs-opensource All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -57,17 +69,25 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
-
 export default {
   name: "Login",
   data() {
     return {
+
+      ref: 'full-screen-container',
+      allWidth: 0,
+      scale: 0,
+      datavRoot: '',
+      ready: false,
+
+
       codeUrl: "",
       cookiePassword: "",
       loginForm: {
-        username: "admin",
-        password: "123456",
+        username: "",
+        password: "",
         rememberMe: false,
+        xueyuan: false,
         code: "",
         uuid: ""
       },
@@ -91,6 +111,13 @@ export default {
       },
       immediate: true
     }
+  },
+  beforeCreate() {
+    // 当前页面宽度相对于 1920 宽的缩放比例，可根据自己需要修改。
+    const scale = document.documentElement.clientWidth / 1920
+
+    // 设置页面根节点字体大小
+    document.documentElement.style.fontSize = (14 * Math.min(scale, 2)) + 'px'
   },
   created() {
     this.getCode();
@@ -200,5 +227,48 @@ export default {
   font-family: Arial;
   font-size: 12px;
   letter-spacing: 1px;
+}
+
+.login-container {
+  background: linear-gradient(0deg, #0A7D84, #00CBCB);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  overflow: hidden;
+  transform-origin: left top;
+  z-index: 999;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding:70px 140px;
+
+}
+.login-wrap{
+  width:100%;
+  height:940px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(249,249,249,0.5);
+  box-shadow: 0px 0px 40px 0px rgba(0, 84, 89, 0.2);
+  box-sizing: border-box;
+  padding:20px;
+
+}
+.login-container:after {
+  content:"";
+  display: block;
+  width:708px;
+  height:503px;
+  background-image: url("/static/login-bg.png");
+  background-size: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.login-content{
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 4px;
 }
 </style>

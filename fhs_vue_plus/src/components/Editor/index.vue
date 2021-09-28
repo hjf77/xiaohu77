@@ -64,9 +64,7 @@ export default {
   data() {
     return {
       content: this.value,
-      uploadImgUrl: "",
       editorOption: {
-        placeholder: "",
         theme: "snow", // or 'bubble'
         placeholder: "请输入内容",
         modules: {
@@ -142,12 +140,16 @@ export default {
     }
   }
 };
-</script> 
+</script>
 
 <style>
 .editor {
   line-height: normal !important;
-  height: 192px;
+  height: 163px;
+  width: 740px;
+}
+.ql-container{
+  height:60%
 }
 .quill-img {
   display: none;

@@ -1,218 +1,308 @@
 <template>
-  <div>
-    <el-form size="small" :inline="true" :model="query" v-if="filters">
-      <el-form-item
-        :label="item.formname"
-        v-for="item in filters"
-        :key="item.name"
-      >
-        <el-input
-          v-model="query.params[item.name]"
-          v-if="item.type === 'text'"
-          :placeholder="item.placeholder"
-        ></el-input>
+  <div class="crud-container">
+    <div class="clear"></div>
+    <div class="search" v-if="filters && filters.length > 0">
+      <el-form size="small" :inline="true" :model="query" v-if="filters">
+        <div class="q">
+          <div class="w">
+            <el-form-item
+              :label="item.formname ? item.formname:item.label"
+              v-for="item in filters"
+              :key="item.name"
+            >
+              <el-input
+                v-model="query.params[item.name]"
+                v-if="item.type === 'text'"
+                prefix-icon="el-icon-search"
+                :placeholder="item.placeholder"
+                clearable
+              ></el-input>
 
-        <pagex-select
-          v-bind="item"
-          v-model="query.params[item.name]"
-          v-if="item.type === 'select'"
-          placeholder="请选择"
-        ></pagex-select>
+              <pagex-select
+                v-bind="item"
+                v-model="query.params[item.name]"
+                v-if="item.type === 'select'"
+                placeholder="请选择"
+              ></pagex-select>
 
-        <el-date-picker
-          v-model="query.params[item.name]"
-          v-if="item.type === 'date-picker'"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
-        </el-date-picker>
-        <el-date-picker
-          v-model="query.params[item.name]"
-          v-if="item.type === 'datetimerange'"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item v-if="filters.length">
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="search"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="mini" @click="reset"
-          >重置</el-button
-        >
-      </el-form-item>
-    </el-form>
-    <div style="margin-bottom: 20px">
-      <el-button
-        v-for="(i, v) in buttons"
-        :key="v"
-        v-hasPermi="i.permission ? i.permission : 'none'"
-        v-if="i.url != ''"
-        :type="i.type"
-        :icon="i.icon"
-        size="mini"
-        @click="check(i)"
-        >{{ i.title }}
-      </el-button>
+                <pagex-formTreeSelect
+                    v-bind="item"
+                    v-model="query.params[item.name]"
+                    v-if="item.type === 'treeSelect'"
+                    :api="item.api"
+                ></pagex-formTreeSelect>
+
+              <el-date-picker
+                v-model="query.params[item.name]"
+                v-if="item.type === 'date-picker'"
+                type="daterange"
+                range-separator="~"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="['00:00:00', '23:59:59']"
+              >
+              </el-date-picker>
+              <el-date-picker
+                v-model="query.params[item.name]"
+                v-if="item.type === 'datetimerange'"
+                type="datetimerange"
+                range-separator="~"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              >
+              </el-date-picker>
+
+              <pagex-checkbox
+                v-bind="item"
+                v-model="query.params[item.name]"
+                v-if="item.type === 'checkbox'"
+                :dictCode="item.dictCode"
+              ></pagex-checkbox>
+            </el-form-item>
+            <el-form-item v-if="filters.length">
+              <el-button
+                size="mini"
+                type="primary"
+                @click="search"
+              >搜索
+              </el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                plain
+                @click="reset"
+              >重置
+              </el-button>
+            </el-form-item>
+          </div>
+        </div>
+      </el-form>
     </div>
-    <el-table
-      style="width: 100%"
-      :data="data"
-      @selection-change="handleSelectionChange"
-      @row-click="LineClick && rowClick(arguments)"
-      :highlight-current-row="highlight"
-      :height="height"
-    >
-      <template v-for="(item, index) in columns">
-        <el-table-column
-          :key="index"
-          v-if="item.type === 'selection'"
-          type="selection"
-        >
-        </el-table-column>
+    <!-- 表格上方共呢个区域 -->
+    <slot name="fn"></slot>
+    <!-- 表格上方共呢个区域 -->
+    <div class="list">
+      <div v-for="(i, v) in realButtons" :key="v" class="btn_div">
+        <span v-if="centerShow" class="centerTitle">系统</span>
+        <div class="lf" v-if="!i.isRight">
+          <el-button
+            v-hasPermi="i.permission ? i.permission : 'none'"
+            :type="i.type"
+            :icon="i.icon"
+            :size="i.size"
+            :plain="i.title=='批量导出' || i.title=='批量导入'"
+            @click="check(i)"
+            style="margin: 0px 20px 20px 0px;"
+          >{{ i.title }}
+          </el-button>
+        </div>
+        <div class="lr" v-else>
+          <el-button
+            v-hasPermi="i.permission ? i.permission : 'none'"
+            :type="i.type"
+            :icon="i.icon"
+            :size="i.size"
+            style="margin: 0px 0px 20px 20px;"
+            @click="check(i)"
+          >{{ i.title }}
+          </el-button>
+        </div>
+      </div>
+      <div class="lr count">
+        <slot :questionObj="questionObj"></slot>
+      </div>
+      <el-table
+        class="crud-table"
+        :header-cell-style="{'text-align':'center'}"
+        style="width: 100%"
+        size="small"
+        :data="data"
+        @selection-change="handleSelectionChange"
+        @row-click="LineClick && rowClick(arguments)"
+        :highlight-current-row="highlight"
+        :height="height"
+        stripe
+        row-key="id"
+        :tree-props="{children: 'children'}"
+      >
+        <template v-for="(item, index) in realColumns">
+          <el-table-column
+            :key="index"
+            v-if="item.type === 'selection'"
+            type="selection"
+            align="center"
+          >
+          </el-table-column>
+          <el-table-column
+            :key="index"
+            :label="item.label"
+            v-else-if="item.type == 'cascader'"
+            align="center"
+            :width="item.width || 240"
+          >
+            <template slot-scope="scope">
+              <pagex-cascader
+                v-bind="item"
+                v-model="scope.row[item.name]"
+                :url="item.api"
+                :methodType="item.methodType"
+                :querys="item.querys"
+                :labelField="item.labelField"
+                :valueField="item.valueField"
+                :isValueNum="item.isValueNum"
+                :propsField = "item.propsField"
+                :style="{ 'width': item.width ? item.width + 'px' : '230px' }"
+              ></pagex-cascader>
+            </template>
+          </el-table-column>
+          <el-table-column
+            :key="index"
+            v-else-if="item.type === 'index'"
+            type="index"
+            :label="item.label"
+            :fixed="item.fixed"
+            :width="item.width"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span>{{scope.row.index}}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column
-          :key="index"
-          v-else-if="item.type === 'index'"
-          type="index"
-          :index="indexMethod"
-          :label="item.label"
-          :width="item.width"
-          :fixed="item.fixed"
-        ></el-table-column>
+          <el-table-column
+            :prop="item.name"
+            v-else-if="!item.type"
+            :label="item.label"
+            :key="item.name"
+            :width="item.width"
+            :min-width="item.minWidth"
+            align="center"
+          >
+          </el-table-column>
+          <el-table-column
+            :prop="item.name"
+            :show-overflow-tooltip="true"
+            v-else-if="item.type === 'formart'"
+            :label="item.label"
+            :key="'operation' + index"
+            align="center"
+            :width="item.width"
+          >
+            <template slot-scope="scope">
+              <div
+                @click="proxyClick(scope.row, item)"
+                v-html="columnFormart(scope.row, item)"
+              ></div>
+            </template>
+          </el-table-column>
 
-        <el-table-column
-          :prop="item.name"
-          v-else-if="!item.type"
-          :label="item.label"
-          :key="item.name"
-        >
-        </el-table-column>
-        <el-table-column
-          :prop="item.name"
-          :show-overflow-tooltip="true"
-          v-else-if="item.type === 'formart'"
-          :label="item.label"
-          :key="'operation' + index"
-        >
-          <template slot-scope="scope">
-            <div
-              @click="proxyClick(scope.row, item)"
-              v-html="columnFormart(scope.row, item)"
-            ></div>
-          </template>
-        </el-table-column>
+          <el-table-column
+            :prop="item.name"
+            v-else-if="item.type === 'popover'"
+            :label="item.label"
+            :key="'operation' + index"
+            :show-overflow-tooltip="true"
+            :width="item.width"
+            :align="item.align || 'center'"
+            :fixed="item.fixed"
+          >
+          </el-table-column>
 
-        <el-table-column
-          :prop="item.name"
-          v-else-if="item.type === 'popover'"
-          :label="item.label"
-          :key="'operation' + index"
-          :show-overflow-tooltip="true"
-          :width="item.width"
-          align="center"
-          :fixed="item.fixed"
-        >
-        </el-table-column>
+          <el-table-column
+            :prop="item.name"
+            v-else-if="item.type === 'operation'"
+            :label="item.label"
+            :key="'operation' + index"
+          >
+          </el-table-column>
 
-        <el-table-column
-          :prop="item.name"
-          v-else-if="item.type === 'operation'"
-          :label="item.label"
-          :key="'operation' + index"
-        >
-        </el-table-column>
+          <el-table-column
+            :prop="item.name"
+            v-else-if="item.type === 'filters'"
+            :label="item.label"
+            :key="'operation' + index"
+            :fixed="item.fixed"
+          >
+            <template slot-scope="scope">
+              <div v-for="i in item.filter">
+                <div v-if="i.name == scope.row[item.name]">{{ i.filters }}</div>
+              </div>
+            </template>
+          </el-table-column>
 
-        <el-table-column
-          :prop="item.name"
-          v-else-if="item.type === 'filters'"
-          :label="item.label"
-          :key="'operation' + index"
-          :fixed="item.fixed"
-        >
-          <template slot-scope="scope">
-            <div v-for="i in item.filter">
-              <div v-if="i.name == scope.row[item.name]">{{ i.filters }}</div>
-            </div>
-          </template>
-        </el-table-column>
+          <el-table-column
+            :prop="item.name"
+            v-else-if="item.type === 'isShared' || item.type === 'switch'"
+            :label="item.label"
+            :key="'operation' + index"
+            :fixed="item.fixed"
+            :align="item.align || 'center'"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-model="switchValue[index + '_' + item.name]"
+                v-if="switchHandel(item, scope.row, index)"
+                active-color="#13ce66"
+                @change="switchChange(item, scope.row)"
+                inactive-color="#909399"
+              >
+              </el-switch>
+            </template>
+          </el-table-column>
 
-        <el-table-column
-          :prop="item.name"
-          v-else-if="item.type === 'isShared' || item.type === 'switch'"
-          :label="item.label"
-          :key="'operation' + index"
-          :fixed="item.fixed"
-        >
-          <template slot-scope="scope">
-            <el-switch
-              v-model="switchValue[index + '_' + item.name]"
-              v-if="switchHandel(item, scope.row, index)"
-              active-color="#13ce66"
-              @change="switchChange(item, scope.row)"
-              inactive-color="#909399"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
+          <el-table-column
+            v-else-if="item.type === 'textBtn'"
+            :label="item.label"
+            :width="item.width || 210"
+            :min-width="item.minWidth"
+            :align="item.align || 'center'"
+            :fixed="item.fixed"
+          >
+            <template slot-scope="scope">
+              <el-button
+                v-for="(val, index) in item.textBtn"
+                v-if="proxyBtnIf(scope.row, index, val)"
+                :key="index"
+                :type="val.type"
+                :size="val.size"
+                :disabled="proxyBtnDisabled(scope.row, index, val)"
+                plain
+                @click="handleClick(scope.row, val)"
+              >
+                {{ val.name }}
+              </el-button>
+            </template>
+          </el-table-column>
+        </template>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="query.page"
+        :page-size="query.rows"
+        :page-sizes="page_sizes"
+        layout="total, sizes, prev, pager, next, jumper"
+        background
+        v-show="data.length"
+        :total="total"
+        v-if="isNeedPager"
+      >
+      </el-pagination>
 
-        <el-table-column
-          :prop="item.name"
-          v-else-if="item.type === 'textBtn'"
-          :label="item.label"
-          fixed="right"
-          :width="item.width"
-        >
-          <template slot-scope="scope">
-            <el-button
-              v-for="(val, index) in item.textBtn"
-              v-if="
-                proxyBtnIf(scope.row, index, val) &&
-                jurisdiction(scope.row, val.displayStatus)
-              "
-              :key="index"
-              type="text"
-              @click="handleClick(scope.row, val)"
-            >
-              {{ val.name }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </template>
-    </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="query.page"
-      :page-size="query.rows"
-      :page-sizes="page_sizes"
-      layout="total, sizes, prev, pager, next, jumper"
-      background
-      v-show="data.length"
-      :total="total"
-    >
-    </el-pagination>
-
-    <slot name="form"></slot>
+      <slot name="form"></slot>
+    </div>
   </div>
 </template>
 
 <script>
-import { handleStrParam } from "@/lib/utils/param";
+import {handleStrParam} from "@/lib/utils/param";
 import Dialog from "@/lib/components/dialog";
 import $moment from "moment";
-import { checkPermi } from "@/utils/permission";
+import {checkPermi} from "@/utils/permission";
+import PagexCheckBox from "./checkbox";
+
 export default {
-  components: { Dialog },
+  components: {PagexCheckBox, Dialog},
   props: {
     buttons: {
       type: Array,
@@ -279,9 +369,33 @@ export default {
       type: Number,
       default: null,
     },
+    isNeedPager: {
+      type: Boolean,
+      default: true,
+    },
+    centerShow: {
+      type: Boolean,
+      default: false,
+    },
+    eventBusName: {
+      type: String,
+      default: ''
+    },
+    tableList:{
+      type:Array,
+      default:() => {
+        return []
+      }
+    },
+    methodType: {
+      type: String,
+      default: 'POST'
+    }
   },
   data() {
     return {
+      // 题库管理统计
+      questionObj: {},
       switchValue: {}, //列表开关上的状态
       data: [],
       multipleSelection: [],
@@ -292,6 +406,8 @@ export default {
         page: 1,
         params: {},
       },
+      realColumns:[],
+      realButtons:[],
       rowPermissions: {},
     };
   },
@@ -300,12 +416,48 @@ export default {
       reloadable: this,
     };
   },
+  watch:{
+      tableList:{
+          handler(){
+              this.reset()
+          },
+          deep:true
+      }
+  },
   created() {
     if (this.minPageSize) {
       this.query.rows = this.minPageSize;
       this.page_sizes.unshift(this.minPageSize);
     }
-    this.columns.forEach((_item, _index) => {
+
+    this.filters.forEach((item, index) => {
+      if(item.defaultValue){
+        this.query.params[item.name] = item.defaultValue
+      }
+      if(!item.placeholder){
+        let title = item.formname ? item.formname:item.label;
+        item.placeholder = (item.type=='text' ? '请输入' : '请选择') + title;
+      }
+    });
+    this.columns.forEach((column)=>{
+      if(column.ifFun){
+        if(column.ifFun.call()){
+           this.realColumns.push(column);
+        }
+      }else{
+        this.realColumns.push(column);
+      }
+    });
+    this.buttons.forEach((button) => {
+      if(button.ifFun){
+        if(button.ifFun.call()){
+          this.realButtons.push(button);
+        }
+      }else{
+        this.realButtons.push(button);
+      }
+    })
+    this.realColumns.forEach((_item, _index) => {
       if (_item.type == "textBtn") {
         _item.textBtn.forEach((btn, btnIndex) => {
           if (btn.permission) {
@@ -318,11 +470,32 @@ export default {
     });
     this.getList();
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(()=>{
+      if(this.eventBusName){
+        this.$EventBus.$on(this.eventBusName,() => {
+          this.getList()
+        })
+      }
+    })
+  },
+  beforeDestroy() {
+    this.$EventBus.$off(this.eventBusName)
+  },
   methods: {
+    // 已选择数据，禁用按钮
+    proxyBtnDisabled(_row, _btnIndex, _btn){
+        if(_btn.disabledFun){
+           return _btn.disabledFun(_row);
+        }
+        return false
+    },
     proxyBtnIf(_row, _btnIndex, _btn) {
       if (!this.rowPermissions[_btnIndex]) {
         return false;
+      }
+      if(_btn.ifFun){
+        return _btn.ifFun(_row);
       }
       if (_btn.ifAttr && _btn.ifValue) {
         if (_btn.ifOperator == "in") {
@@ -342,62 +515,23 @@ export default {
       }
       return true;
     },
-    /**
-     * Login_person当前登录人
-     * share共享
-     **/
-    jurisdiction(_row, control) {
-      if (control) {
-        if (control.length > 1) {
-          let statusList = [];
-          control.forEach((item) => {
-            if (item == "Login_person") {
-              statusList.push(
-                this.$store.getters.userInfo.username == _row.createByName
-                  ? true
-                  : false
-              );
-            } else if (item == "share") {
-              statusList.push(_row.isShared == "0" ? true : false);
-            }
-          });
-          if (statusList.findIndex((target) => target === false) == -1) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return control[0] == "Login_person"
-            ? this.$store.getters.userInfo.username == _row.createByName
-              ? true
-              : false
-            : control[0] == "share"
-            ? _row.isShared == "0"
-              ? true
-              : false
-            : true;
-        }
-      } else {
-        return true;
-      }
-    },
     switchHandel(item, _row, index) {
       this.switchValue[index + "_" + item.name] = _row[item.name] == 1;
       return true;
     },
     switchChange(item, _row) {
-      let _data = { id: _row.id };
+      let _data = {id: _row.id};
       _data[item.name] = _row[item.name] == "0" ? "1" : "0";
       this.$pagexRequest({
         url: item.url,
         data: _data,
         method: "PUT",
       }).then((res) => {
-        if (res.state) {
-          this.msgSuccess(res.value);
+        if (res.data) {
+          this.msgSuccess(res.message || "修改成功");
           this.getList();
         } else {
-          this.msgError(res.value);
+          this.msgError(res.message || "修改失败");
         }
       });
     },
@@ -405,7 +539,7 @@ export default {
     formartReqFilter: function () {
       let result = {
         groupRelation: "AND",
-        pageBean: {
+        pagerInfo: {
           page: this.query.page,
           pageSize: this.query.rows,
           showTotal: true,
@@ -413,7 +547,6 @@ export default {
         params: this.paramsQuery,
         querys: JSON.parse(JSON.stringify(this.querys)),
         sorter: this.sortSett,
-        // useJson: true
       };
       this.filters.forEach((item, index) => {
         if (
@@ -432,7 +565,6 @@ export default {
           });
         }
       });
-      // console.log(result);
       return result;
     },
     datePicker(val) {
@@ -442,29 +574,32 @@ export default {
       return arr;
     },
     handleClick(row, val) {
-      // console.log(row, val);
-      if (val.name == "删除") {
+      if (val.name == "删除" && !val.click) {
         this.$confirm("是否删除此数据?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
         })
           .then(() => {
-            //isDelPathId 如果为true，则使用/dsp/****/v1/159，否则 /dsp/***/v1/?id=159
-            let url = val.isDelPathId
-              ? `${val.api}${row.id}`
-              : `${val.api}?ids=${row.id}`;
+            // 若设置idFieldName，则根据这个参数值删除，负责根据id删除
+            const id = val.idFieldName ? row[val.idFieldName] : row.id
+            // isDelPathId 如果为true，则使用/dsp/****/v1/159，否则 /dsp/***/v1/?id=159
+            let url = `${val.api}${id}`;
             this.$pagexRequest({
               url: url,
               method: "DELETE",
             })
               .then((res) => {
-                if (res.state) {
+                if (res.code === 200) {
                   this.reset();
                   this.$message({
                     type: "success",
                     message: "删除成功!",
                   });
+                  //  删除成功的回调
+                  if(val.clickCallBack){
+                    val.clickCallBack.call(this, row, val);
+                  }
                 } else {
                   this.$message({
                     type: "error",
@@ -474,7 +609,6 @@ export default {
               })
               .catch((res) => {
                 this.getList();
-                console.log(res);
               });
           })
           .catch(() => {
@@ -542,116 +676,20 @@ export default {
               });
             });
         }
-      } else if (val.name == "share") {
-        if (this.multipleSelection.length == 0) {
-          this.$message({
-            type: "error",
-            message: "暂未勾选任何数据!",
-          });
-        } else {
-          this.$confirm("确定共享选中项吗?", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-          })
-            .then(() => {
-              let data = [];
-              this.multipleSelection.forEach((item) => {
-                data.push(item.id);
-              });
-              this.$pagexRequest({
-                url: val.api,
-                method: "post",
-                data: {
-                  ids: data,
-                  isShared: "1",
-                },
-              })
-                .then((res) => {
-                  if (res.state) {
-                    this.getList();
-                    this.$message({
-                      type: "success",
-                      message: "共享成功!",
-                    });
-                  } else {
-                    this.$message({
-                      type: "error",
-                      message: res.message,
-                    });
-                  }
-                })
-                .catch((res) => {
-                  this.getList();
-                });
-            })
-            .catch(() => {
-              this.$message({
-                type: "info",
-                message: "已取消共享",
-              });
-            });
-        }
-      } else if (val.name == "sharedel") {
-        if (this.multipleSelection.length == 0) {
-          this.$message({
-            type: "error",
-            message: "暂未勾选任何数据!",
-          });
-        } else {
-          this.$confirm("确定取消共享选中项吗?", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-          })
-            .then(() => {
-              let data = [];
-              this.multipleSelection.forEach((item) => {
-                data.push(item.id);
-              });
-              this.$pagexRequest({
-                url: val.api,
-                method: "post",
-                data: {
-                  ids: data,
-                  isShared: "0",
-                },
-              })
-                .then((res) => {
-                  if (res.state) {
-                    this.getList();
-                    this.$message({
-                      type: "success",
-                      message: "取消共享成功!",
-                    });
-                  } else {
-                    this.$message({
-                      type: "error",
-                      message: res.message,
-                    });
-                  }
-                })
-                .catch((res) => {
-                  this.getList();
-                });
-            })
-            .catch(() => {
-              this.$message({
-                type: "info",
-                message: "已取消共享",
-              });
-            });
-        }
       } else {
         if (val.click) {
-          val.click.call(this, this.multipleSelection);
+          let ids = [];
+          this.multipleSelection.forEach((item)=>{
+            ids.push(item.id);
+          })
+          val.click.call(this, this.multipleSelection,ids.join(','));
         }
       }
     },
     //多选框
     handleSelectionChange(val) {
-      // console.log(val);
       this.multipleSelection = val;
+       this.$emit("handleSelectionChange", val);
     },
     // 点击某一行
     rowClick(row) {
@@ -676,34 +714,45 @@ export default {
       this.query.params = {};
       this.search();
     },
+    // 刷新缓存
     reload(_groupName) {
       this.search();
     },
-    async getList() {
+    async getList(addData) {
       if (this.api) {
-        const data = await this.$pagexRequest({
+        const res = await this.$pagexRequest({
           url: this.api,
           data: this.formartReqFilter(),
-          method: "POST",
+          method: this.methodType,
         });
-        if (data.rows == undefined) {
-          if (data.length != 0) {
-            this.data = data || [];
+        if(this.isNeedPager){
+          if (res.extMap) {
+            this.questionObj = res.extMap
+          }
+          if (res.rows) {
+            this.data = res.rows;
           } else {
             this.data = [];
             this.$emit("nullvalue", 0);
           }
-        } else {
-          if (data.rows.length != 0) {
-            this.data = data.rows || [];
-          } else {
-            this.data = [];
-            this.$emit("nullvalue", 0);
+          if (res.total) {
+            this.total = res.total;
           }
+          this.setTableIndex(this.data)
+        }else{
+          this.data = res;
+          if(addData){
+            this.data.push(addData)
+          }
+          this.data.forEach((item, key) => {
+            item.index = key + 1;
+          })
         }
-        if (data.total) {
-          this.total = data.total;
-        }
+      }else{
+        this.$set(this,"data",this.tableList)
+        this.data.forEach((item, key) => {
+          item.index = key + 1;
+        })
       }
     },
     handleSizeChange(val) {
@@ -714,31 +763,106 @@ export default {
       this.query.page = val;
       this.getList();
     },
-    indexMethod(index) {
-      index = index + 1 + (this.query.page - 1) * this.query.rows;
-      return index;
-    },
-  },
-};
+    // 树形列表index层级，实现方法（可复制直接调用）
+    setTableIndex(arr, index) {
+      arr.forEach((item, key) => {
+        item.index = key + 1 + (this.query.page - 1) * this.query.rows;
+        if (index) {
+          item.index = index + "-" + (key + 1);
+        }
+        if (item.children) {
+          this.setTableIndex(item.children, item.index);
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-table .cell {
-  display: flex;
+.el-pagination {
+  float: right;
+  margin: 20px 20px 20px 0;
+}
+
+.el-form--inline .el-form-item {
+  margin-right: 40px;
+}
+
+::v-deep .el-input--small .el-input__inner {
+  width: 220px;
 }
 
 .el-pagination {
   float: right;
-  margin: 20px 20px 20px 0;
+  margin: 20px 0;
 }
-.el-form--inline .el-form-item {
-  margin-right: 40px;
+
+.crud-container {
+  background: #F3F3F3;
 }
-::v-deep .el-input--small .el-input__inner {
-  width: 220px;
+
+.list {
+  background: #ffffff;
+  padding: 20px 20px 80px 20px;
+  border-radius: 4px;
 }
-.el-pagination {
+
+.search {
+  background: #ffffff;
+  padding: 20px 20px 0 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+::v-deep .crud-table th.is-leaf {
+  border: none !important;
+}
+
+::v-deep .crud-table td {
+  border-bottom: none !important;
+}
+
+::v-deep .el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #31A3A4;
+}
+
+.btn_div {
+  display: inline;
+  padding-bottom: 20px
+}
+
+.lf {
+  float: left;
+}
+
+.centerTitle{
+    font-size: 16px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #333333;
+}
+
+.lr{
   float: right;
-  margin: 20px 20px 20px 0;
 }
+
+.lr.count{
+  line-height: 40px;
+}
+
+.q {
+  display: flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+}
+.w {
+  width: 100%;
+}
+
+.e {
+  width: 260px;
+}
+
 </style>

@@ -2,9 +2,10 @@ import request from '@/utils/request'
 import { praseStrEmpty } from "@/utils/ruoyi";
 
 // 查询角色列表
-export function listRole(organizationId) {
+export function listRole(params) {
   return request({
-    url: '/ms/sysRole/listData/' + organizationId,
+    url: '/ms/sysRole/findPage/',
+    params,
     method: 'get',
   })
 }

@@ -9,61 +9,57 @@
   <div>
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
-      addApi="/ms/wordbook/addWordbookGroup"
-      updateApi="/ms/wordbook/updateWordbookGroup"
-      initApi="/ms/wordbook/getWordbookGroupBean?groupId="
+      :isEdit="isEdit"
+      addApi="/ms/word_book_group/"
+      updateApi="/ms/word_book_group/"
       :init="init"
-      :controls="[
-              {
-                type: 'text',
-                name: 'groupName',
-                label: '分组名称',
-                rule:'required',
-                placeholder:'请输入分组名称'
-              },{
-                type: 'text',
-                name: 'wordbookGroupCode',
-                label: '分组编码',
-                rule:'required',
-                placeholder: '请输入分组编码'
-              },{
-                type: 'uploadCard',
-                name: 'uploadCard',
-                label: '上传文件',
-                rule:'required',
-              }
-            ]"
+      :data="formData"
+      :controls="controls"
+      :buttons="buttons"
     >
     </pagex-form>
   </div>
 </template>
 
 <script>
-import pagexForm from "@/lib/components/form";
 export default {
-  name: "addDict",
-  components:{
-    pagexForm
+  name: "AddDict",
+  props: {
+    isEdit: Boolean,
+    open: Boolean,
+    init: Object
   },
   data() {
     return {
-
+      formData: {
+        groupId: this.init.groupId
+      },
+      controls: [
+        {
+          type: 'text',
+          name: 'groupName',
+          label: '分组名称',
+          rule:'required',
+          placeholder:'请输入分组名称'
+        },{
+          type: 'text',
+          name: 'wordbookGroupCode',
+          label: '分组编码',
+          rule:'required',
+          placeholder: '请输入分组编码'
+        }
+      ]
     }
   },
-  props: {
-    open: Boolean,
-    init:Object
-  },
-  mounted() {
-  },
-  created() {
-  },
-  methods: {}
+
 }
 </script>
 
 <style scoped lang="scss">
-::v-deep .el-form--label-left .el-form-item__label{
-  text-align: right;
+::v-deep .el-form--label-left {
+  .el-form-item__label {
+    text-align: right;
+  }
+
 }
 </style>

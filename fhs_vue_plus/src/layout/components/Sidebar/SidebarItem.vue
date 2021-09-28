@@ -2,15 +2,18 @@
   <div v-if="!item.hidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}" id="menuItem">
+          <i v-if="isNest" class="diandian"></i>
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body :class="{'collapse':collapse}">
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <img src="@/assets/icon/personalCenter.png" class="iconStyle">
+        <item v-if="item.meta" :title="item.meta.title" />
+        <!-- :icon="item.meta && item.meta.icon" -->
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -19,6 +22,7 @@
         :item="child"
         :base-path="resolvePath(child.path)"
         class="nest-menu"
+        :collapse="collapse"
       />
     </el-submenu>
   </div>
@@ -30,6 +34,7 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+
 
 export default {
   name: 'SidebarItem',
@@ -48,6 +53,10 @@ export default {
     basePath: {
       type: String,
       default: ''
+    },
+    collapse: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -62,6 +71,7 @@ export default {
         } else {
           // Temp set(will be used if only has one showing child)
           this.onlyOneChild = item
+          // this.onlyOneChild = item.
           return true
         }
       })
@@ -91,3 +101,29 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+ @import "~@/assets/styles/variables.scss";
+  .diandian{
+    display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: $menuText;
+      margin-right: 4px;
+  }
+  #menuItem:hover .diandian{
+    background: $menuActiveText;
+  }
+  #menuItem.is-active .diandian{
+    background: $menuActiveText;
+  }
+  .iconStyle{
+    margin-right: 3px;
+  }
+  .collapse {
+    .iconStyle {
+      margin-right: 3px;
+      margin-left: 18px;
+    }
+  }
+</style>

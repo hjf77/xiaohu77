@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
+
 Vue.use(Router)
 
 /**
@@ -41,6 +42,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/generate',
+    component: () => import('@/views/generate'),
+    hidden: true
+  },
+  {
     path: '/404',
     component: () => import('@/views/error/404'),
     hidden: true
@@ -51,6 +57,19 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/dict',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/data',
+        component: () => import('@/views/system/dict/data'),
+        name: 'Data',
+        meta: { title: '字典数据', icon: '' }
+      }
+    ]
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',
@@ -59,67 +78,14 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/index'),
         name: '首页',
-        meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
+        meta: {title: '首页', icon: 'dashboard', noCache: true, affix: true}
       }
     ]
   },
-  {
-    path: '/user',
-    component: Layout,
-    hidden: true,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'profile',
-        component: () => import('@/views/system/user/profile/index'),
-        name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
-      }
-    ]
-  },
-  {
-    path: '/dict',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'type/data/:dictId(\\d+)',
-        component: () => import('@/views/system/dict/data'),
-        name: 'Data',
-        meta: { title: '字典数据', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/job',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/monitor/job/log'),
-        name: 'JobLog',
-        meta: { title: '调度日志' }
-      }
-    ]
-  },
-  {
-    path: '/gen',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'edit',
-        component: () => import('@/views/tool/gen/editTable'),
-        name: 'GenEdit',
-        meta: { title: '修改生成配置' }
-      }
-    ]
-  }
 ]
 
 export default new Router({
   mode: 'history', // 去掉url中的#
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })

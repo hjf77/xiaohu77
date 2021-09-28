@@ -1,16 +1,22 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, stuLogin } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import Cookies from 'js-cookie'
 
 const user = {
   state: {
+    user:{},
     token: getToken(),
     name: '',
     avatar: '',
     roles: [],
-    permissions: []
+    permissions: [],
+    outsource: Cookies.get('outsource') || ''
   },
 
   mutations: {
+    SET_USER: (state, user) => {
+      state.user = user
+    },
     SET_TOKEN: (state, token) => {
       state.token = token
     },
@@ -25,6 +31,10 @@ const user = {
     },
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
+    },
+    SET_OUTSOURCE: (state, outsource) => {
+      state.outsource = outsource
+      Cookies.set('outsource',outsource)
     }
   },
 
@@ -35,15 +45,29 @@ const user = {
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
-      return new Promise((resolve, reject) => {
-        login(username, password, code, uuid).then(res => {
-          setToken(res.data.token)
-          commit('SET_TOKEN', res.data.token)
-          resolve()
-        }).catch(error => {
-          reject(error)
+      // 外协人员登录
+      if (userInfo.xueyuan) {
+        return new Promise((resolve, reject) => {
+          stuLogin(username, password, code, uuid).then(res => {
+            setToken(res.data.token)
+            commit('SET_TOKEN', res.data.token)
+            commit('SET_OUTSOURCE', userInfo.xueyuan)
+            resolve()
+          }).catch(error => {
+            reject(error)
+          })
         })
-      })
+      } else {
+        return new Promise((resolve, reject) => {
+          login(username, password, code, uuid).then(res => {
+            setToken(res.data.token)
+            commit('SET_TOKEN', res.data.token)
+            resolve()
+          }).catch(error => {
+            reject(error)
+          })
+        })
+      }
     },
 
     // 获取用户信息
@@ -58,7 +82,8 @@ const user = {
           } else {
             commit('SET_ROLES', ['ROLE_DEFAULT'])
           }
-          commit('SET_NAME', user.username)
+          commit('SET_USER', user)
+          commit('SET_NAME', user.userName)
           commit('SET_AVATAR', avatar)
           resolve(res)
         }).catch(error => {
@@ -71,13 +96,15 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          commit('SET_PERMISSIONS', [])
-          removeToken()
           resolve()
         }).catch(error => {
           reject(error)
+        }).finally(()=>{
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          commit('SET_PERMISSIONS', [])
+          commit('SET_OUTSOURCE', '')
+          removeToken()
         })
       })
     },
@@ -86,6 +113,7 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_OUTSOURCE', '')
         removeToken()
         resolve()
       })

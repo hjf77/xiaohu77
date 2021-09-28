@@ -5,12 +5,15 @@ import store from './store'
 import router from './router'
 import Cookies from 'js-cookie'
 // import axios from 'axios';
-import request from '@/utils/request'
+import request from '@/lib/utils/request'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
+import { Message } from 'element-ui'
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
 
 import permission from './directive/permission'
 
@@ -31,9 +34,15 @@ import {
   handleTree
 } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
-
+import BaseContainer from "@/components/BaseContainer"
 import renderFun from "@/lib/components/render";
+import BaseCrud from "@/components/BaseCrud"
+
+Vue.use(VueVideoPlayer)
+Vue.use(BaseCrud)
+
 Vue.component(renderFun)
+Vue.use(BaseContainer)
 Vue.config.productionTip = false
 const on = Vue.prototype.$on
 Vue.prototype.$on = function (event, func) {
@@ -66,25 +75,22 @@ Vue.prototype.handleTree = handleTree
 // Vue.prototype.$pagexRequest = axios;
 Vue.prototype.$pagexRequest = request;
 Vue.prototype.msgSuccess = function (msg) {
-  this.$message({
-    showClose: true,
+  Message({
     message: msg,
-    type: "success"
-  });
+    type: 'success',
+    showClose: true,
+    duration: 3 * 1000
+  })
 }
 
 Vue.prototype.msgError = function (msg) {
-  this.$message({
-    showClose: true,
+  Message({
     message: msg,
-    type: "error"
-  });
+    type: 'error',
+    showClose: true,
+    duration: 3 * 1000
+  })
 }
-
-
-import Avue from '@smallwei/avue';
-import '@smallwei/avue/lib/index.css';
-Vue.use(Avue);
 
 Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
@@ -95,6 +101,7 @@ Vue.component('Pagination', Pagination)
 
 Vue.use(permission)
 
+Vue.prototype.$EventBus = new Vue();
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -110,14 +117,28 @@ Vue.use(Element, {
 
 
 import VeeElement from 'vee-element'
-import VeeValidate from 'vee-validate'
+import VeeValidate,{ Validator } from 'vee-validate'
 import zh_CN from "vee-validate/dist/locale/zh_CN";
 import veeValidator from '@/utils/vee-validator'
+import {range,greaterThanZero,mobile} from '@/utils/vee-customize'
 const rules = {}
 const options = {}
 Vue.use(Element);
+
+//vee，自定义校验规则；
+Validator.extend('range', range);
+Validator.extend('greaterThanZero', greaterThanZero);
+//vee，自定义校验规则；
+Validator.extend('mobile', mobile);
+
+
 const validator = new VeeValidate.Validator(rules, options)
 validator.localize("zh_CN", zh_CN);
+
+
+require("@/lib/utils/element-reset.js")
+
+
 //自定义vee提示信息
 validator.localize(veeValidator);
 Vue.use(VeeElement, validator, false)

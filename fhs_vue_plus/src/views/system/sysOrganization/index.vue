@@ -46,28 +46,27 @@
       v-loading="loading"
       :data="deptList"
       row-key="id"
+      style="width: 100%"
       default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column prop="name" label="部门名称" width="260"></el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column prop="name" label="部门名称"  min-width="60%"></el-table-column>
+      <el-table-column label="状态"  min-width="10%"   align="center">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.isEnable"
-            active-text="禁用"
-            inactive-text="启用"
-            :active-value="0"
-            :inactive-value="1"
+            :active-value="1"
+            :inactive-value="0"
             @change="handleStatusChange(scope.row)"
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+      <el-table-column label="创建时间" align="center" min-width="10%"  prop="createTime" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="20%" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -103,10 +102,10 @@
         <el-row>
           <el-col :span="24" v-if="form.parentId !== ''">
             <el-form-item label="上级部门" prop="parentId">
-              <treeselect v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" placeholder="选择上级部门"/>
+              <treeselect :disabled="this.form.id != undefined" v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" placeholder="选择上级部门"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="部门名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入部门名称"/>
             </el-form-item>
@@ -123,6 +122,30 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="是否单位">
+              <el-radio-group v-model="form.isCompany">
+                <el-radio
+                  :disabled="isEdit"
+                  v-for="dict in isCompanyOptions"
+                  :key="dict.wordbookCode"
+                  :label="dict.wordbookCode"
+                >{{dict.wordbookDesc}}
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="审批人" prop="extJson">
+              <pagex-formTreeSelect
+                                    httpMehod="GET"
+                                    v-model="form.extJson"
+                                    api="/ms/sysUser/getUserCompanyTree"
+              ></pagex-formTreeSelect>
+            </el-form-item>
+          </el-col>
+
+
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -155,13 +178,20 @@
         open: false,
         // 状态数据字典
         statusOptions: [],
+        // 是否是企业数据字典
+        isCompanyOptions: [],
+        isEdit:false,
         // 查询参数
         queryParams: {
           name: undefined,
-          isEnable: undefined
+          isEnable: undefined,
+          page:1,
+          rows:1000
         },
         // 表单参数
-        form: {},
+        form: {
+          extJson:null,
+        },
         // 表单校验
         rules: {
           parentId: [
@@ -169,6 +199,9 @@
           ],
           name: [
             { required: true, message: '部门名称不能为空', trigger: 'blur' }
+          ],
+          isCompany: [
+            { required: true, message: '请选择是否为单位', trigger: 'blur' }
           ],
         }
       }
@@ -178,13 +211,17 @@
       this.getDicts('is_enable').then(response => {
         this.statusOptions = response
       })
+      this.getDicts('yesOrNo').then(response => {
+        this.isCompanyOptions = response
+      })
+
     },
     methods: {
       /** 查询部门列表 */
       getList() {
         this.loading = true
         listDept(this.queryParams).then(response => {
-          this.deptList = this.handleTree(response.rows, 'deptId')
+          this.deptList = this.handleTree(response, 'deptId')
           this.loading = false
         })
       },
@@ -202,7 +239,7 @@
       /** 查询部门下拉树结构 */
       getTreeselect() {
         listDept().then(response => {
-          this.deptOptions = this.handleTree(response.rows, 'deptId')
+          this.deptOptions = this.handleTree(response, 'deptId')
         })
       },
       // 字典状态字典翻译
@@ -241,16 +278,21 @@
         if (row != undefined) {
           this.form.parentId = row.id
         }
+        this.$set(this.form,'isCompany','0')
+        this.$set(this.form,'isEnable','1')
         this.open = true
+        this.isEdit = false;
         this.title = '添加部门'
       },
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset()
         this.getTreeselect()
+        this.isEdit = true;
         getDept(row.id).then(response => {
           this.form = response
-          this.form.isEnable = response.isEnable.toString();
+          this.$set(this.form,'isCompany',response.isCompany.toString())
+          this.$set(this.form,'isEnable', response.isEnable.toString())
           this.open = true
           this.title = '修改部门'
         })

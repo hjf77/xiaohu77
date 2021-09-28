@@ -3,7 +3,6 @@
 @import './transition.scss';
 @import './element-ui.scss';
 @import './sidebar.scss';
-@import './btn.scss';
 
 body {
   height: 100%;
@@ -15,6 +14,7 @@ body {
 
 label {
   font-weight: 700;
+  font-family: PingFang SC;
 }
 
 html {
@@ -121,6 +121,7 @@ aside {
 
 //main-container全局样式
 .app-container {
+  background: #F5F5F5;
   padding: 20px;
 }
 
@@ -130,7 +131,7 @@ aside {
 }
 
 .pagination-container {
-  margin-top: 30px;
+  //margin-top: 30px;
 }
 
 .text-center {
