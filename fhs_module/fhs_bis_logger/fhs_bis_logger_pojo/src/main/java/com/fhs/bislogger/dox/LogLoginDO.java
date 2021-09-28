@@ -36,7 +36,7 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
     /**
      * 日志id
      */
-    @TableId(value = "log_id", type = IdType.UUID)
+    @TableId(value = "log_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")
     private String logId;
 

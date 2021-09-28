@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "UcenterFrontUserBindDO", description = "UcenterFrontUserBind参数")
 public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     private static final long serialVersionUID = 920530665191970437L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")
     private String id;
 

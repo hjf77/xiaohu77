@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "FlowJbpmXmlDO", description = "FlowJbpmXml参数")
 public class FlowJbpmXmlDO extends BaseDO<FlowJbpmXmlDO> {
     private static final long serialVersionUID = -26479945401118903L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private String id;
 

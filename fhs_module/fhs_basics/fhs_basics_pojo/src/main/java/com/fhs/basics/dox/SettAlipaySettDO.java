@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "SettAlipaySettDO", description = "SettAlipaySett参数")
 public class SettAlipaySettDO extends BaseDO<SettAlipaySettDO> {
     private static final long serialVersionUID = -22527353735624120L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private String id;
 

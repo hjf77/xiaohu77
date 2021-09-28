@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "SettMpSettDO", description = "SettMpSett参数")
 public class SettMpSettDO extends BaseDO<SettMpSettDO> {
     private static final long serialVersionUID = 296286961263761719L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private String id;
 

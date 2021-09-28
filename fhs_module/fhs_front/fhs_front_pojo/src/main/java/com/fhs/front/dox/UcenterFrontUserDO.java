@@ -34,7 +34,7 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     /**
      * 用户id
      */
-    @TableId(value = "user_id", type = IdType.UUID)
+    @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("用户id")
     private String userId;
 

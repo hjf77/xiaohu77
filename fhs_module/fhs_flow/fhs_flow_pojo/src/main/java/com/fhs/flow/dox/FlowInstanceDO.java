@@ -39,7 +39,7 @@ import java.util.Date;
 @ApiModel(value = "FlowInstanceDO", description = "FlowInstance参数")
 public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
     private static final long serialVersionUID = -80075792071824152L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private String id;
 

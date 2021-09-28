@@ -42,7 +42,7 @@ public class UcenterMsOrganizationDO extends BaseDO<UcenterMsOrganizationDO> imp
     /**
      * 编号
      */
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @ApiModelProperty(value = "主键id")
     private String id;

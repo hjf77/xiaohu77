@@ -30,7 +30,7 @@ import lombok.*;
 @ApiModel(value = "FlowJbmpAuthFormDO", description = "FlowJbmpAuthForm参数")
 public class FlowJbmpAuthFormDO extends BaseDO<FlowJbmpAuthFormDO> {
     private static final long serialVersionUID = -39085699120042500L;
-    @TableId(value = "auth_form_id", type = IdType.UUID)
+    @TableId(value = "auth_form_id", type = IdType.ASSIGN_UUID)
     @NotNull(message = "${column.comment}字段不可为空", groups = {Update.class, Delete.class})
     @ApiModelProperty(value = "")
     private String authFormId;

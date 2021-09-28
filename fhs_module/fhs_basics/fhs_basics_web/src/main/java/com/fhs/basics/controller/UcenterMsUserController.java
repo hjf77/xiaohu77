@@ -22,6 +22,8 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
+import com.fhs.core.valid.group.Add;
+import com.fhs.core.valid.group.Update;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -29,6 +31,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -107,20 +110,25 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         super.outJsonp(JsonUtils.list2json(byIds));
     }
 
+    @NotRepeat
+    @ResponseBody
+    @PostMapping("/")
+    @ApiOperation(value = "新增-vue专用")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
+    public HttpResult<Boolean> save(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser, HttpServletRequest request,
+                                    HttpServletResponse response) {
+        return addUser(sysUser);
+    }
+
     /**
      * 添加平台用户
-     *
-     * @param request
-     * @param response
      * @param sysUser
-     * @param attr
      */
     @NotRepeat
     @RequiresPermissions("sysUser:add")
     @PostMapping("addUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
-    public HttpResult addUser(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser,
-                              RedirectAttributes attr) {
+    public HttpResult addUser( UcenterMsUserVO sysUser) {
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
@@ -207,18 +215,22 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         return HttpResult.success(true);
     }
 
-
+    @ResponseBody
+    @PutMapping("/")
+    @ApiOperation(value = "修改-vue专用")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class)UcenterMsUserVO sysUser, HttpServletRequest request,
+                                            HttpServletResponse response) {
+        return update(sysUser);
+    }
     /**
      * 更新用户信息
-     *
-     * @param request
-     * @param response
      * @param sysUser
      */
     @RequiresPermissions("sysUser:update")
     @RequestMapping("updateUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
-    public HttpResult<Boolean> update(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
+    public HttpResult<Boolean> update(UcenterMsUserVO sysUser) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);
         }

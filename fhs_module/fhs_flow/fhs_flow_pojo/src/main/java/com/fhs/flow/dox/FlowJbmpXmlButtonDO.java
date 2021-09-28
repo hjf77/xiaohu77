@@ -30,7 +30,7 @@ import lombok.*;
 @ApiModel(value = "FlowJbmpXmlButtonDO", description = "FlowJbmpXmlButton参数")
 public class FlowJbmpXmlButtonDO extends BaseDO<FlowJbmpXmlButtonDO> {
     private static final long serialVersionUID = 111685833854224986L;
-    @TableId(value = "button_id", type = IdType.UUID)
+    @TableId(value = "button_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键")
     private String buttonId;
 

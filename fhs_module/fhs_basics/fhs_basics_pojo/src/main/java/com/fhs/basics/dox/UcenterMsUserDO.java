@@ -58,7 +58,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     /**
      * 用户id
      */
-    @NotNull(message = "{test.userId.null}", groups = {Update.class, Delete.class})
+    @NotNull(message = "userid不能为空", groups = {Update.class, Delete.class})
     @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("用户id")
     private String userId;
@@ -66,8 +66,8 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     /**
      * 登录名
      */
-    @NotNull(message = "{test.userLoginName.null}", groups = {Update.class, Add.class})
-    @Length(message = "{test.userLoginName.length}", max = 20, min = 0)
+    @NotNull(message = "登录名不能为空", groups = {Update.class, Add.class})
+    @Length(message = "登录名不能最大为20", max = 20, min = 0)
     @TableField("user_login_name")
     @ApiModelProperty("登录名")
     private String userLoginName;
@@ -75,11 +75,11 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     /**
      * 用户的名字
      */
-    @NotNull(message = "{test.userName.null}", groups = {Update.class, Add.class})
-    @Length(message = "{test.userName.length}", max = 20, min = 0)
+    @NotNull(message = "姓名不能为空", groups = {Update.class, Add.class})
+    @Length(message = "姓名最大20", max = 20, min = 0)
     @Like
     @TableField("user_name")
-    @ApiModelProperty("用户名")
+    @ApiModelProperty("姓名")
     private String userName;
 
     /**
@@ -93,7 +93,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     /**
      * 手机号
      */
-    @NotNull(message = "{test.mobile.null}", groups = {Update.class, Add.class})
+    @NotNull(message = "手机号不能为空", groups = {Update.class, Add.class})
     @TableField("mobile")
     @ApiModelProperty("手机号")
     private String mobile;
@@ -108,8 +108,8 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     /**
      * 邮箱
      */
-    @NotNull(message = "{test.email.null}", groups = {Update.class, Add.class})
-    @Length(message = "{test.email.length}", max = 255, min = 0)
+    @NotNull(message = "邮箱不能为空", groups = {Update.class, Add.class})
+    @Length(message = "邮箱最大为255", max = 255, min = 0)
     @TableField("email")
     @ApiModelProperty("邮箱")
     private String email;
@@ -146,6 +146,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
+    @TableField("organization_id")
     @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG, jsonKey = "orgName")
     @ApiModelProperty("组织机构编号")
     private String organizationId;

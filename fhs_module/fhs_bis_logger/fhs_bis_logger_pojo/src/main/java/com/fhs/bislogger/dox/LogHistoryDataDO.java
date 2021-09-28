@@ -34,7 +34,7 @@ public class LogHistoryDataDO extends BaseDO<LogHistoryDataDO> {
     /**
      * id
      */
-    @TableId(value = "his_id", type = IdType.UUID)
+    @TableId(value = "his_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "历史id")
     private String hisId;
 

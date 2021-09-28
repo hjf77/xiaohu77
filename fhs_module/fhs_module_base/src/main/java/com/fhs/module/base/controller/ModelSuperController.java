@@ -124,7 +124,6 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @PostMapping("pagerAdvance")
     @ResponseBody
-    @LogMethod(voParamIndex = 0)
     @ApiOperation("后台-高级分页查询-vue推荐")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
         if (isPermitted(request, "see")) {

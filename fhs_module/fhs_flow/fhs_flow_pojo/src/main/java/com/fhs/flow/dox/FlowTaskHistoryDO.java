@@ -35,7 +35,7 @@ import java.util.Date;
 @ApiModel(value = "FlowTaskHistoryDO", description = "FlowTaskHistory参数")
 public class FlowTaskHistoryDO extends BaseDO<FlowTaskHistoryDO> {
     private static final long serialVersionUID = -88447633213612521L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private String id;
 

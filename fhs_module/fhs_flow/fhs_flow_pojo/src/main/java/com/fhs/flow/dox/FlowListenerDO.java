@@ -31,7 +31,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "FlowListenerDO", description = "FlowListener参数")
 public class FlowListenerDO extends BaseDO<FlowListenerDO> {
     private static final long serialVersionUID = -34427919221391088L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("主键id")
     private String id;
 

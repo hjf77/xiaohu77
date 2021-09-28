@@ -32,7 +32,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
     private static final long serialVersionUID = -83321483098557581L;
-    @TableId(value = "log_id", type = IdType.UUID)
+    @TableId(value = "log_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")
     private String logId;
 

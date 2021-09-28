@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 public class UcenterMsTenantDO extends BaseDO<UcenterMsTenantDO> {
     private static final long serialVersionUID = -45809111607636131L;
 
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")
     private String id;
 
