@@ -47,12 +47,13 @@ public class TableInfoServiceImpl implements TableInfoService {
         }
         List<FieldsVO> fieldList = null;
         try{
-            tableInfoMapper.getTableFields(dbName, tableName);
+            fieldList = tableInfoMapper.getTableFields(dbName, tableName);
         }catch (Exception e){
             log.error("获取表信息错误");
             if(e instanceof BadSqlGrammarException){
                 throw new ParamException("表不存在哥哥,库名字或者表名子写错了把！");
             }
+            throw e;
         }
 
         fieldList = fieldList.stream().filter(fieldsVO -> {

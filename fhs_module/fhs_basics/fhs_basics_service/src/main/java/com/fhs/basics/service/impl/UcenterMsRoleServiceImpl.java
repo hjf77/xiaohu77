@@ -100,13 +100,15 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
                 String buttonId = itemarr[1].split(":")[1];
                 list.add(buttonId);
             } else {
-                String buttonType = itemarr[1].split(":")[1];
-                String menuId = itemarr[1].split(":")[0];
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("buttonType", buttonType);
-                map.put("menuId", menuId);
-                List<String> itemlist = searchButtonId(map);
-                list.addAll(itemlist);
+                if(itemarr.length>1){
+                    String buttonType = itemarr[1].split(":")[1];
+                    String menuId = itemarr[1].split(":")[0];
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("buttonType", buttonType);
+                    map.put("menuId", menuId);
+                    List<String> itemlist = searchButtonId(map);
+                    list.addAll(itemlist);
+                }
             }
         }
         return list.toArray(new String[]{});

@@ -20,6 +20,7 @@ import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,7 +76,7 @@ public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, Set
     /**
      * vue - element 获取菜单权限按钮
      */
-    @RequestMapping("getMenuPermissionTree")
+    @GetMapping("getMenuPermissionTree")
     public List<TreeMenuPermissionVO> getMenuPermissionTree(HttpServletRequest request, HttpServletResponse response) {
         List<TreeMenuPermissionVO> menuTrees = sysMenuService.getMenuPermissionTree();
         return menuTrees;

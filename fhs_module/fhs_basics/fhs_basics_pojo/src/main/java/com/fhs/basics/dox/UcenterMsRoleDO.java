@@ -10,6 +10,10 @@
  */
 package com.fhs.basics.dox;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.EncryptUtils;
 import com.fhs.core.base.dox.BaseDO;
@@ -44,7 +48,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "t_ucenter_ms_role")
+@TableName("t_ucenter_ms_role")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterMsRoleDO", description = "UcenterMsRole参数")
 public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
@@ -54,33 +58,32 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
     /**
      * 角色id
      */
-    @Id
-    @Column(name = "role_id")
+    @TableId(value="role_id",type = IdType.AUTO)
     @ApiModelProperty("角色id")
     private Integer roleId;
 
     /**
      * 角色名称
      */
-    @NotNull(message = "{test.roleName.null}", groups = {Update.class, Add.class})
-    @Length(message = "{test.roleName.length}", max = 20, min = 0)
+    @TableField("role_name")
     @ApiModelProperty("角色名")
+    @NotNull(message = "角色名称不能为空", groups = {Update.class, Add.class})
+    @Length(message = "角色名称长度最大20", max = 20, min = 0)
     private String roleName;
 
     /**
      * 备注
      */
-    @NotNull(message = "{test.remark.null}")
-    @Length(message = "{test.remark.length}", max = 200, min = 0)
+    @TableField("remark")
     @ApiModelProperty("备注")
+    @Length(message = "备注长度最大200", max = 200, min = 0)
     private String remark;
 
     /**
      * 是否禁用 0:启用 1:禁用
      */
-    @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
-    @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
-    @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @TableField("is_enable")
+    @NotNull(message = "状态不能为空", groups = {Update.class, Add.class})
     @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     @ApiModelProperty("是否禁用")
     private Integer isEnable;
@@ -90,7 +93,7 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
      */
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @Column(name = "organization_id")
+    @TableField("organization_id")
     @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
     @ApiModelProperty("组织机构id")
     private String organizationId;
@@ -98,16 +101,14 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
     /**
      * 数据权限(资源类型，部门及小区)
      */
-    @NotNull(message = "数据权限(资源类型，部门及小区)字段不可为null", groups = {Update.class, Delete.class})
-    @Length(message = "数据权限(资源类型，部门及小区)字段的长度最大为500", groups = {Add.class, Update.class}, max = 500)
-    @Column(name = "data_permissions")
+    @TableField("data_permissions")
     @ApiModelProperty("数据权限")
     private String dataPermissions;
 
     /**
      * 集团编码
      */
-    @Column(name = "group_code")
+    @TableField("group_code")
     @ApiModelProperty("集团编码")
     private String groupCode;
 
@@ -115,13 +116,8 @@ public class UcenterMsRoleDO extends BaseDO<UcenterMsRoleDO> {
      * 菜单按钮数据
      */
     @Transient
+    @TableField(exist = false)
     private String[] methods;
 
-    /**
-     * 状态
-     */
-    @Transient
-    @ApiModelProperty("状态")
-    private String state;
 
 }

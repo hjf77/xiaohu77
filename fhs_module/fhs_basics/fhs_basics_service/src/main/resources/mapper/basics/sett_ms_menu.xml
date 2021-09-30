@@ -376,7 +376,6 @@
 			t_sett_ms_menu
 		WHERE is_delete = 0
 		ORDER BY parentId
-		LIMIT 0, 1000
 		)
 
 		UNION  ALL

@@ -13,12 +13,18 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.safe.repeat.anno.NotRepeat;
+import com.fhs.core.valid.group.Add;
+import com.fhs.core.valid.group.Update;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,7 +117,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      *
      * @param roleId
      */
-    @RequestMapping("getRolePermissionButtons")
+    @GetMapping("getRolePermissionButtons")
     public String[] getRolePermissionButtons(String roleId) {
         return sysRoleService.getRolePermissionButtons(roleId);
     }
@@ -155,19 +161,25 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         }
     }
 
+    @ResponseBody
+    @PutMapping("/")
+    @RequiresPermissions("sysRole:update")
+    @ApiOperation(value = "修改-vue专用")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class) UcenterMsRoleVO e, HttpServletRequest request,
+                                            HttpServletResponse response) {
+        return updateSysRole(e);
+    }
 
     /**
      * 更新角色信息
-     *
-     * @param request
-     * @param response
      * @paramadminRole
      */
     @ResponseBody
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
     @RequestMapping("updateSysRole")
     @RequiresPermissions("sysRole:update")
-    public HttpResult<Boolean> updateSysRole(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
+    public HttpResult<Boolean> updateSysRole(UcenterMsRoleVO sysRole) {
         UcenterMsRoleVO oldRole = sysRoleService.selectById(sysRole.getRoleId());
         if (Constant.ENABLED == oldRole.getIsEnable() && Constant.DISABLE == sysRole.getIsEnable()) {
             // 根据roleid查询用户关联表用户数
@@ -185,17 +197,26 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         return HttpResult.success(true);
     }
 
+    @NotRepeat
+    @ResponseBody
+    @RequiresPermissions("sysRole:add")
+    @PostMapping("/")
+    @ApiOperation(value = "新增-vue专用")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
+    public HttpResult<Boolean> save(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
+                                    HttpServletResponse response) {
+        return add(sysRole);
+    }
+
     /**
      * 添加角色
      *
-     * @param request
-     * @param response
-     * @paramadminRole
+     * @param sysRole
      */
     @RequiresPermissions("sysRole:add")
     @RequestMapping("addSysRole")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
-    public HttpResult<Boolean> add(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
+    public HttpResult<Boolean> add(UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
@@ -208,17 +229,27 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     /**
      * 根据Id删除角色
      *
-     * @param request
-     * @param response
-     * @paramadminRole
+     * @param sysRole
      */
     @RequiresPermissions("sysRole:del")
     @RequestMapping("delSysRole")
+    @ApiOperation(value = "删除-Easyui专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, voParamIndex = 2)
-    public HttpResult<Boolean> del(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
+    public HttpResult<Boolean> del(UcenterMsRoleVO sysRole) {
         sysRoleService.deleteRole(sysRole);
         return HttpResult.success(true);
 
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    @RequiresPermissions("sysRole:del")
+    @ApiOperation(value = "删除-vue专用")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
+    public HttpResult<Boolean> delForVue(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
+        UcenterMsRoleVO role = new UcenterMsRoleVO();
+        role.setRoleId(ConverterUtils.toInt(id));
+        return del(role);
     }
 
     /**
