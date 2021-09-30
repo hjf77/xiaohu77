@@ -127,7 +127,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @NotRepeat
     @RequiresPermissions("sysUser:add")
     @PostMapping("addUser")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult addUser( UcenterMsUserVO sysUser) {
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
