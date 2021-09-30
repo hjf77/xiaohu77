@@ -40,13 +40,6 @@
         },
         data() {
             return {
-                // 关联父级规章制度
-                parentRow: {},
-                tempButtons: [],
-                opinionForm: {
-                    userId: '',
-                    statusWhy: ''
-                },
                 formData: {
                     roleIds: this.isEdit ? this.init.roleIds : [],
                     organizationId: this.init.organizationId,
@@ -59,7 +52,6 @@
                 },
                 addApi: "/ms/sysUser/",
                 updateApi: "/ms/sysUser/",
-                roleOptions: [],
                 controls: [
                     {
                         type: "text",

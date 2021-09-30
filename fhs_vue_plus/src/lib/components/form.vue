@@ -184,7 +184,7 @@
             :api="item.api"
             :selectOn = "item.selectOn"
             :isDisabled = "item.isDisabled"
-            :style="{ width: item.width ? item.width + 'px' : '305px' }"
+            :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
           ></pagex-formTreeSelect>
 
           <pagex-treeSelect
