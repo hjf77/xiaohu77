@@ -130,7 +130,6 @@ export default {
   methods: {
     beforeOpen(done, type) {
       done()
-      console.log(type)
     }
   }
 };

@@ -59,13 +59,11 @@ export default {
   data() {
     return {
       org: {},
-      options: [],
-      dialogVisible: false,
       title: '新增',
       loading: false,
       rightContent: false,//右侧内容区域
       api: "/ms/sysUser/pagerAdvance",
-      sortSett: [
+      sortSett: [ //默认排序
         {
           direction: "DESC",
           property: "createTime",
