@@ -229,7 +229,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @RequiresPermissions("sysUser:update")
     @RequestMapping("updateUser")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(UcenterMsUserVO sysUser) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);

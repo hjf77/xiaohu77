@@ -215,7 +215,11 @@ public class OperatorLogAop {
         // 获取所有的参数的注解
         Object[] args = joinPoint.getArgs();
         if (logMethod.voParamIndex() != LoggerConstant.INDEX_NOT) {
-            return (VO) args[logMethod.voParamIndex()];
+            int voIndex = logMethod.voParamIndex();
+            if (voIndex > args.length - 1) {
+                voIndex = args.length - 1;
+            }
+            return (VO) args[voIndex];
         }
         if (VO_INDEX_MAP.containsKey(method)) {
             return (VO) args[VO_INDEX_MAP.get(method)];
