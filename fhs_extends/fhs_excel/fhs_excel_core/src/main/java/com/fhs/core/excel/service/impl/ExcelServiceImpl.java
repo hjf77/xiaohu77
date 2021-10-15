@@ -11,19 +11,19 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
-import com.fhs.core.valid.checker.ParamChecker;
-import com.fhs.excel.anno.GroupUntrans;
-import com.fhs.excel.dto.ExcelImportSett;
-import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.valid.checker.ParamChecker;
+import com.fhs.excel.anno.GroupUntrans;
 import com.fhs.excel.anno.IgnoreExport;
 import com.fhs.excel.anno.Order;
+import com.fhs.excel.dto.ExcelImportSett;
+import com.fhs.excel.service.TransRpcService;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -32,8 +32,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -61,6 +63,26 @@ public class ExcelServiceImpl implements ExcelService {
      */
     @Override
     public Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass) {
+        return exportExcel(query, targetService, doClass, Collections.EMPTY_SET);
+    }
+
+    /**
+     * @Description: Excel导出功能
+     * 需要导出的DoClass列中必须添加ApiModelProperty和ExcelExport注解
+     * ApiModelProperty 注解用于获取字段中文描述
+     * ExcelExport 注解用于确定哪些字段需要导出
+     * 需要导出的DoClass列中选择添加Order注解
+     * Order注解用于导出字段排序，默认正序
+     * @author: cdpha
+     * @date: 16:21 2021/10/15
+     * @param query 查询条件
+     * @param targetService 对应的Service
+     * @param doClass 对应的 DO class
+     * @param commonFieldSet 需要导出的公共字段(createUser,createTime,updateUser,updateTime)
+     * @return org.apache.poi.ss.usermodel.Workbook
+     **/
+    @Override
+    public Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass, Set<String> commonFieldSet) {
         BaseService service = targetService;
         List<?> dos = service.selectListMP(query);
         if (null == dos) {
@@ -81,6 +103,17 @@ public class ExcelServiceImpl implements ExcelService {
             if (null == field.getAnnotation(ApiModelProperty.class)
                     || field.isAnnotationPresent(IgnoreExport.class) || field.isAnnotationPresent(TableId.class)) {
                 continue;
+            }
+            String fieldName = field.getName();
+            if (StringUtils.equalsAnyIgnoreCase(fieldName, "createUser", "createTime", "updateUser", "updateTime")) {
+                if (commonFieldSet.isEmpty()) {
+                    // 默认不导出公共字段(createUser,createTime,updateUser,updateTime)
+                    continue;
+                } else {
+                    if (!commonFieldSet.contains(fieldName)){
+                        continue;
+                    }
+                }
             }
             titleNum++;
             Order order = field.getAnnotation(Order.class);
@@ -281,19 +314,43 @@ public class ExcelServiceImpl implements ExcelService {
                             }
                         } else {
                             //不需要反翻译时进行非空和长度校验
+                            String dataValue = data.toString();
                             if (field.getAnnotation(NotEmpty.class) != null
-                                    && StringUtils.isBlank(data.toString())) {
+                                    && StringUtils.isBlank(dataValue)) {
                                 continue;
                             }
                             Length length = field.getAnnotation(Length.class);
                             if (length != null) {
-                                if (data.toString().length() > length.max()) {
+                                if (dataValue.length() > length.max()) {
                                     valiStr.append(fieldName + "长度不能超过" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
                                 }
-                                if (data.toString().length() < length.min()) {
+                                if (dataValue.length() < length.min()) {
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
+                                }
+                            }
+
+                            if (StringUtils.isNotEmpty(dataValue)) {
+                                // 邮箱校验
+                                Email emailAnnotation = field.getAnnotation(Email.class);
+                                if (null != emailAnnotation) {
+                                    String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+                                    boolean isMatch = java.util.regex.Pattern.matches(emailPattern, dataValue);
+                                    if (!isMatch) {
+                                        valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
+                                }
+                                // 正则校验
+                                Pattern patternAnnotation = field.getAnnotation(Pattern.class);
+                                if (null != patternAnnotation) {
+                                    String regexp = patternAnnotation.regexp();
+                                    boolean isMatch = java.util.regex.Pattern.matches(regexp, dataValue);
+                                    if (!isMatch) {
+                                        valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
                                 }
                             }
                             if (field.getGenericType().equals(Integer.class)) {
@@ -301,11 +358,11 @@ public class ExcelServiceImpl implements ExcelService {
                             } else if (field.getGenericType().equals(Double.class)) {
                                 ReflectUtils.setValue(objDo, field, ConverterUtils.toDouble(data));
                             } else if (field.getGenericType().equals(Date.class)) {
-                                if (StringUtils.isBlank(data.toString())) {
+                                if (StringUtils.isBlank(dataValue)) {
                                     continue;
                                 }
                                 try {
-                                    ReflectUtils.setValue(objDo, field, DateUtils.parseStr(data.toString()));
+                                    ReflectUtils.setValue(objDo, field, DateUtils.parseStr(dataValue));
                                 } catch (Exception e) {
                                     valiStr.append(fieldName + "列请输入正确的时间格式，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;

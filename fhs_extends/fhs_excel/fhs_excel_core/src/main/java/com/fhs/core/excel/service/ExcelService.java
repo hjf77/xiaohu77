@@ -7,6 +7,8 @@ import com.fhs.excel.dto.ExcelImportSett;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 /**
  * 公共的excel导出导入服务
  */
@@ -22,6 +24,22 @@ public interface ExcelService {
      */
     Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass);
 
+    /**
+     * @Description: Excel导出功能
+     * 需要导出的DoClass列中必须添加ApiModelProperty和ExcelExport注解
+     * ApiModelProperty 注解用于获取字段中文描述
+     * ExcelExport 注解用于确定哪些字段需要导出
+     * 需要导出的DoClass列中选择添加Order注解
+     * Order注解用于导出字段排序，默认正序
+     * @author: cdpha
+     * @date: 16:21 2021/10/15
+     * @param query 查询条件
+     * @param targetService 对应的Service
+     * @param doClass 对应的 DO class
+     * @param commonFieldSet 需要导出的公共字段(createUser,createTime,updateUser,updateTime)
+     * @return org.apache.poi.ss.usermodel.Workbook
+     **/
+    Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass, Set<String> commonFieldSet);
 
     /**
      * 解析excel 入库

@@ -1,7 +1,5 @@
 package com.fhs.module.base.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -17,7 +15,6 @@ import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.base.pojo.vo.UpdateFieldVO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
-import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
@@ -41,6 +38,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
@@ -58,6 +56,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 /**
@@ -232,6 +231,40 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             wrapper.in("id", ids.split(","));
         }
         Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getDOClass());
+        String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
+        FileOutputStream os = new FileOutputStream(excelTempPath);
+        book.write(os);
+        try {
+            os.close();
+        } catch (Exception e) {
+            log.error("关闭流错误", e);
+        }
+        FileUtils.download(excelTempPath, response, fileName);
+        FileUtils.deleteFile(excelTempPath);
+    }
+
+
+    @GetMapping("expExcelWithField")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
+    @ApiOperation("Excel自定义公共字段(createUser,createTime,updateUser,updateTime)导出")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "fileName", value = "导出的文件名", dataType = "string", paramType = "query", required = true),
+            @ApiImplicitParam(name = "ids", value = "主键Id(以逗号分割)", dataType = "string", paramType = "query", required = false),
+            @ApiImplicitParam(name = "includeCommonFields", value = "需要导出的公共字段(createUser,createTime,updateUser,updateTime)", dataType = "string", paramType = "query", required = false)
+    })
+    public void expExcelWithCommonFields(HttpServletResponse response, @RequestParam(name = "fileName") String fileName, @RequestParam(name = "ids", required = false) String ids, @RequestParam(name = "includeCommonFields", required = false) String includeCommonFields) throws IOException {
+        QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        wrapper = wrapper == null ? new QueryWrapper() : wrapper;
+        wrapper = (QueryWrapper) wrapper.clone();
+        if (CheckUtils.isNotEmpty(ids)) {
+            wrapper.in("id", ids.split(","));
+        }
+        Set<String> commonFieldSet = new HashSet<>();
+        if (StringUtils.isNotEmpty(includeCommonFields)) {
+            String[] commonFieldArr = includeCommonFields.split(",");
+            commonFieldSet.addAll(Arrays.stream(commonFieldArr).collect(Collectors.toSet()));
+        }
+        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getDOClass(), commonFieldSet);
         String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
         book.write(os);
