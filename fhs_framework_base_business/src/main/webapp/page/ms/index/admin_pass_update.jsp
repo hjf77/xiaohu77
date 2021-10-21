@@ -61,7 +61,7 @@
 				return (ResetPasswordForm.check());
 			},
 			success : function(d) {
-				d = $.parseJSON(d);
+				d = $.parseJSON($.parseJSON(d));
 				if (d.result) {
 					Ealert('修改成功');
                     setTimeout(function(){top.closeDialog()},2000);
