@@ -773,11 +773,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         List<UcenterMsUserDO> result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
-        List<UcenterMsUserVO> adminUsers = super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin, Constant.INT_TRUE));
+        // modify by ZhangBo：审批人去掉管理员
+        /*List<UcenterMsUserVO> adminUsers = super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin, Constant.INT_TRUE));
         //把admin也加入进来
         if (!adminUsers.isEmpty()) {
             result.addAll(adminUsers);
-        }
+        }*/
         // 按userId删除重复用户
         List<UcenterMsUserDO> userList = result.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(UcenterMsUserDO::getUserId))), ArrayList::new));
         return userList;
