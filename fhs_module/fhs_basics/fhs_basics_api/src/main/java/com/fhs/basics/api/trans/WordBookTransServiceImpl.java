@@ -116,6 +116,16 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
     }
 
     /**
+     * 根据分组编码和字典翻译结果反向翻译  比如 sex  男 你能得到0
+     * @param groupCode 分组编码比如  sex
+     * @param desc 字典描述比如 男
+     * @return
+     */
+    public String unTrans(String groupCode,String desc){
+       return unWordBookTransMap.get(groupCode + "_" + desc);
+    }
+
+    /**
      * 翻译多个 字段
      *
      * @param objList 需要翻译的对象集合
