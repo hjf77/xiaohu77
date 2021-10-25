@@ -38,6 +38,15 @@ public interface RedisCacheService<E>
     Long remove(String key);
 
     /**
+     * 删除一个key
+     *
+     * @param key key
+     * @return 影响的结果数
+     */
+    Long removeStr(String key);
+
+
+    /**
      * 检查key是否已经存在
      *
      * @param key
@@ -45,10 +54,19 @@ public interface RedisCacheService<E>
      */
     boolean exists(String key);
 
+
+    /**
+     * 检查key是否已经存在
+     *
+     * @param key
+     * @return
+     */
+    boolean existsStr(String key);
+
     /**
      * 添加数组到缓存中
      *
-     * @param key key
+     * @param key  key
      * @param objs 数组
      */
     void addSet(String key, E[] objs);
@@ -56,13 +74,14 @@ public interface RedisCacheService<E>
     /**
      * 添加一个set到数组中
      *
-     * @param key key
+     * @param key    key
      * @param objSet objset
      */
     void addSet(String key, Set<E> objSet);
 
     /**
      * 添加value 到set中
+     *
      * @param key
      * @param value
      */
@@ -71,13 +90,14 @@ public interface RedisCacheService<E>
     /**
      * 添加一个list到集合中
      *
-     * @param key key
+     * @param key  key
      * @param list 需要添加的集合数据
      */
     void addList(String key, List<E> list);
 
     /**
      * 判断set中有无value 有true
+     *
      * @param key
      * @param value
      * @return
@@ -86,6 +106,7 @@ public interface RedisCacheService<E>
 
     /**
      * 删除set集合中指定的value
+     *
      * @param key
      * @param value
      */
@@ -110,7 +131,7 @@ public interface RedisCacheService<E>
     /**
      * 添加一个字符串
      *
-     * @param key key
+     * @param key   key
      * @param value value
      */
     boolean addStr(String key, String value);
@@ -118,7 +139,7 @@ public interface RedisCacheService<E>
     /**
      * 修改字符串
      *
-     * @param key 键
+     * @param key   键
      * @param value 值
      * @return 是否更新成功
      */
@@ -142,13 +163,24 @@ public interface RedisCacheService<E>
 
     /**
      * 设置一个key在 timeout 秒后超时
-     * @param key key
+     *
+     * @param key     key
      * @param timeout 超时时间  秒
      */
     boolean expire(String key, int timeout);
 
+
+    /**
+     * 设置一个key在 timeout 秒后超时
+     *
+     * @param key     key
+     * @param timeout 超时时间  秒
+     */
+    boolean expireStr(String key, int timeout);
+
     /**
      * 从队列头插入值
+     *
      * @param key
      * @param value
      */
@@ -156,6 +188,7 @@ public interface RedisCacheService<E>
 
     /**
      * 从队列尾部插入值
+     *
      * @param key
      * @param value
      */
@@ -163,6 +196,7 @@ public interface RedisCacheService<E>
 
     /**
      * 从头开始取值
+     *
      * @param key
      * @return
      */
@@ -170,6 +204,7 @@ public interface RedisCacheService<E>
 
     /**
      * 从后开始取值
+     *
      * @param key
      * @return
      */
@@ -177,6 +212,7 @@ public interface RedisCacheService<E>
 
     /**
      * 获取list总数
+     *
      * @param key
      * @return
      */
@@ -187,7 +223,7 @@ public interface RedisCacheService<E>
      *
      * @param key
      */
-    public long incrAdd(String key) ;
+    public long incrAdd(String key);
 
     /**
      * 增加固定值
@@ -195,25 +231,27 @@ public interface RedisCacheService<E>
      * @param key
      * @param value
      */
-    public long incrAdd(String key, int value) ;
+    public long incrAdd(String key, int value);
 
     /**
      * 递减值
      *
      * @param key
      */
-    public long incrSub(String key) ;
+    public long incrSub(String key);
 
     /**
      * 给redis 的channel 发送 message
+     *
      * @param channel
      * @param message
      */
-     void convertAndSend(String channel,String message);
+    void convertAndSend(String channel, String message);
 
-     /**
-      * 模糊匹配key
-      * @Param: [key]
-      */
-      Set<String> getFuzzy(String key);
+    /**
+     * 模糊匹配key
+     *
+     * @Param: [key]
+     */
+    Set<String> getFuzzy(String key);
 }
