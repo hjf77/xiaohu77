@@ -73,8 +73,34 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
     }
 
     @Override
+    public Long removeStr(final String key) {
+        if (!existsStr(key)) {
+            return 0l;
+        }
+        return strRedisTemplate.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                long result = 0;
+                result = connection.del(key.getBytes());
+                return result;
+            }
+        });
+    }
+
+    @Override
     public boolean exists(final String key) {
         return redisTemplate.execute(new RedisCallback<Boolean>() {
+            public Boolean doInRedis(RedisConnection connection)
+                    throws DataAccessException {
+                return connection.exists(key.getBytes());
+            }
+        });
+    }
+
+    @Override
+    public boolean existsStr(String key) {
+        return strRedisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
                     throws DataAccessException {
                 return connection.exists(key.getBytes());
@@ -123,7 +149,7 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
     @Override
     public boolean addStr(final String key, final String value) {
         if (this.existsStr(key)) {
-            return this.updateStr(key, value);
+            this.updateStr(key, value);
         }
         boolean result = strRedisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
@@ -135,16 +161,6 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
             }
         });
         return result;
-    }
-
-    @Override
-    public boolean existsStr(final String key) {
-        return strRedisTemplate.execute(new RedisCallback<Boolean>() {
-            public Boolean doInRedis(RedisConnection connection)
-                    throws DataAccessException {
-                return connection.exists(key.getBytes());
-            }
-        });
     }
 
     @Override
@@ -346,4 +362,5 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
         });
         return keys;
     }
+
 }

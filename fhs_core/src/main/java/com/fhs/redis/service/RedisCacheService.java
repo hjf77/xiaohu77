@@ -37,12 +37,13 @@ public interface RedisCacheService<E> {
     Long remove(String key);
 
     /**
-     * 检查key是否已经存在
+     * 删除一个key
      *
-     * @param key
-     * @return
+     * @param key key
+     * @return 影响的结果数
      */
-    boolean exists(String key);
+    Long removeStr(String key);
+
 
     /**
      * 检查key是否已经存在
@@ -50,7 +51,16 @@ public interface RedisCacheService<E> {
      * @param key
      * @return
      */
-    boolean existsStr(final String key);
+    boolean exists(String key);
+
+
+    /**
+     * 检查key是否已经存在
+     *
+     * @param key
+     * @return
+     */
+    boolean existsStr(String key);
 
     /**
      * 添加数组到缓存中
@@ -165,7 +175,7 @@ public interface RedisCacheService<E> {
      * @param key     key
      * @param timeout 超时时间  秒
      */
-    boolean expireStr(final String key, final int timeout);
+    boolean expireStr(String key, int timeout);
 
     /**
      * 从队列头插入值
