@@ -5,12 +5,12 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.FileUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.config.EConfig;
 import com.fhs.generate.service.GenerateCodeService;
 import com.fhs.generate.vo.FieldsVO;
 import com.fhs.generate.vo.TableInfoVO;
-import com.fhs.pagex.common.BeetlUtil;
+import com.fhs.beetl.common.BeetlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
     @Override
     public String[] generateCode(TableInfoVO tableInfoVO) {
-        String tempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID();
+        String tempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID();
         new File(tempPath + "/components").mkdirs();
         String listVueCode = generateListVue(tableInfoVO);
         String listVueFile = tempPath + "/index.vue";

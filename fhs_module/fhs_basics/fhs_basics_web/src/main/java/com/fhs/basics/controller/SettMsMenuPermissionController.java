@@ -1,7 +1,7 @@
 package com.fhs.basics.controller;
 
 import com.fhs.basics.constant.BaseTransConstant;
-import com.fhs.basics.dox.SettMsMenuPermissionDO;
+import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
 import com.fhs.bislogger.api.anno.LogMethod;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Map;
 
 
@@ -31,8 +30,7 @@ import java.util.Map;
 @Api(tags = {"菜单权限"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = BaseTransConstant.MENU_INFO_PERMISSION, module = "菜单权限管理")
-public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionDO> {
-
+public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionPO> {
 
     @Autowired
     private SettMsMenuPermissionService sysMenuPermissionService;
@@ -51,10 +49,4 @@ public class SettMsMenuPermissionController extends ModelSuperController<SettMsM
         super.outToClient(result);
     }
 
-    @RequestMapping("findMapListByType")
-    public List<Map<String, Object>> findMapListByType() {
-        Map<String, Object> map = super.getParameterMap();
-        List<Map<String, Object>> mapListByType = sysMenuPermissionService.findMapListByType(map);
-        return mapListByType;
-    }
 }

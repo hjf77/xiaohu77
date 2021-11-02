@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.dox.SettMpSettDO;
+import com.fhs.basics.po.SettMpSettPO;
 import com.fhs.basics.service.SettMpSettService;
 import com.fhs.basics.vo.SettMpSettVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("ucenterMpSettService")
 @DataSource("base_business")
-public class SettMpSettServiceImpl extends BaseServiceImpl<SettMpSettVO, SettMpSettDO> implements SettMpSettService {
+public class SettMpSettServiceImpl extends BaseServiceImpl<SettMpSettVO, SettMpSettPO> implements SettMpSettService {
 
 }

@@ -98,7 +98,7 @@ public class TableUtils {
                         tempTdMap.put(groupKey, null);
                         groupKeyTd.setRowSpan((groupKeyTd.getRowSpan() + 1));
                     } else {
-                        groupKeyTd = new TD(1, 1, StringUtil.toString(nowGroupKeyContent));
+                        groupKeyTd = new TD(1, 1, StringUtils.toString(nowGroupKeyContent));
                         tempTdMap.put(groupKey, groupKeyTd);
                     }
                 } else {
@@ -112,7 +112,7 @@ public class TableUtils {
                 } else {
                     preContent = nowContent;
                     // 如果
-                    tempTd = new TD(1, 1, StringUtil.toString(nowContent));
+                    tempTd = new TD(1, 1, StringUtils.toString(nowContent));
                     tempTdMap.put(tempKey, tempTd);
                 }
                 if (!preGroupKeyContent.equals(nowGroupKeyContent)) {
@@ -126,7 +126,7 @@ public class TableUtils {
             for (int i = 0; i < rowSize; i++) {
                 tempMap = dataList.get(i);
                 nowContent = tempMap.get(tempKey);
-                tempTd = new TD(1, 1, StringUtil.toString(nowContent));
+                tempTd = new TD(1, 1, StringUtils.toString(nowContent));
                 tempTdMap = resultList.get(i);
                 tempTdMap.put(tempKey, tempTd);
             }

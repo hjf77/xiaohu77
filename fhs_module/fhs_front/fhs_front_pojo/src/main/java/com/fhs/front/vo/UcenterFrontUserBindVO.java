@@ -1,7 +1,6 @@
 package com.fhs.front.vo;
 
-import com.fhs.core.base.pojo.vo.VO;
-import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.front.dox.UcenterFrontUserBindDO;
 import io.swagger.annotations.ApiModel;
@@ -16,7 +15,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 @ApiModel(value = "UcenterFrontUserBindVO", description = "UcenterFrontUserBind参数")
 public class UcenterFrontUserBindVO extends UcenterFrontUserBindDO implements VO {
 

@@ -5,16 +5,20 @@
     <parent>
         <artifactId>fhs_extends</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_valid</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_exception</artifactId>
             <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
     </dependencies>
 

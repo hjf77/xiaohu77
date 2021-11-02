@@ -19,7 +19,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableRedisHttpSession
 @EnableMethodCache(basePackages = "com.fhs")
 @EnableFeignClients(basePackages = {"com.fhs"})
-@ServletComponentScan(basePackages = {"com.fhs", "org.apache.shiro"})
+@ServletComponentScan(basePackages = {"com.fhs"})
 public class SingleApplication {
 
     public static void main(String[] args) {

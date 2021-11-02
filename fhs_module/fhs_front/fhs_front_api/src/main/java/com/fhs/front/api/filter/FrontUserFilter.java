@@ -4,7 +4,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.CookieUtil;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -13,7 +13,6 @@ import com.fhs.front.form.GetSingleFrontUserForm;
 import com.fhs.front.vo.UcenterFrontUserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * c端用户登录过滤器
@@ -102,7 +100,7 @@ public class FrontUserFilter implements Filter {
             resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(token).build());
         } catch (ParamException e) {
             LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
-            JsonUtils.outJson(response, HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR, "token失效").asJson());
+            JsonUtil.outJson(response, HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR, "token失效").asJson());
             return false;
         }
         HttpSession session = request.getSession();

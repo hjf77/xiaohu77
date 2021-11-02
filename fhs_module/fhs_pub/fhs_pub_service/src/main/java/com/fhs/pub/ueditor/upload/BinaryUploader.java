@@ -2,7 +2,7 @@ package com.fhs.pub.ueditor.upload;
 
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.pub.ueditor.define.AppInfo;
 import com.fhs.pub.ueditor.define.BaseState;
 import com.fhs.pub.ueditor.define.FileType;
@@ -42,7 +42,7 @@ public class BinaryUploader {
             /************/
             // State storageState = StorageManager.saveFileByInputStream(multipartFile.getInputStream(),savePath,
             // maxSize);
-            String fileId = StringUtil.getUUID();
+            String fileId = StringUtils.getUUID();
 
             String filePath = pathTemp + File.separator + fileId + suffix;
 

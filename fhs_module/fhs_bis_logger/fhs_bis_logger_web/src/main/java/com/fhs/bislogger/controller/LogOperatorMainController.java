@@ -1,6 +1,6 @@
 package com.fhs.bislogger.controller;
 
-import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.dox.LogHistoryDataDO;
@@ -13,14 +13,13 @@ import com.fhs.bislogger.vo.LogHistoryDataVO;
 import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.pojo.pager.Pager;
-import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.trans.service.impl.TransService;
 import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.fhs.module.base.controller.ModelSuperController;
 import io.swagger.annotations.Api;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -129,7 +128,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     @RequestMapping("/getUserList")
     public List<UcenterMsUserVO> getUserList() {
         List<UcenterMsUserVO> users =
-                ucenterMsUserService.findForList(UcenterMsUserDO.builder().build());
+                ucenterMsUserService.findForList(UcenterMsUserPO.builder().build());
         return users;
     }
 

@@ -6,9 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
-import com.fhs.core.base.pojo.SuperBean;
-import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.common.utils.StringUtils;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.result.HttpResult;
 import lombok.extern.slf4j.Slf4j;
@@ -176,7 +175,7 @@ public class ExcelExportTools {
         String[] titleArray = getExportTitleArray(request);
         ExcelUtils.initSheet07(sheet, rows, titleArray, null, null, 1);
         try {
-            File excelFile = new File(EConfig.getPathPropertiesValue("fileSavePath") + "/temp/excel/" + StringUtil.getUUID() + ".xlsx");
+            File excelFile = new File(EConfig.getPathPropertiesValue("fileSavePath") + "/temp/excel/" + StringUtils.getUUID() + ".xlsx");
             wb.write(new FileOutputStream(excelFile));
         } catch (IOException e) {
             log.error("导出excel出错", e);

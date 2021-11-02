@@ -34,8 +34,8 @@ import java.util.Map;
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
-@Component
 @Slf4j
+@Component("fhsSpringContextUtil")
 public class SpringContextUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
 

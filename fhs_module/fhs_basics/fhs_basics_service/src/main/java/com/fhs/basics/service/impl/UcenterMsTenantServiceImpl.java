@@ -1,15 +1,15 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.dox.UcenterMsOrganizationDO;
-import com.fhs.basics.dox.UcenterMsUserDO;
-import com.fhs.basics.dox.UcenterMsTenantDO;
+import com.fhs.basics.po.UcenterMsOrganizationPO;
+import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.po.UcenterMsTenantPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.service.UcenterMsTenantService;
 import com.fhs.basics.vo.UcenterMsTenantVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.Md5Util;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @since 2019-05-15 14:21:04
  */
 @Service("ucenterMsTenantService")
-public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantVO, UcenterMsTenantDO> implements UcenterMsTenantService {
+public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantVO, UcenterMsTenantPO> implements UcenterMsTenantService {
 
 
     @Lazy
@@ -33,11 +33,11 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
     private UcenterMsOrganizationService organizationService;
 
     @Override
-    public int insertSelective(UcenterMsTenantDO tenant) {
-        UcenterMsUserDO adminUser = new UcenterMsUserDO();
+    public int insertSelective(UcenterMsTenantPO tenant) {
+        UcenterMsUserPO adminUser = new UcenterMsUserPO();
         adminUser.setGroupCode(tenant.getGroupCode());
         adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode() + "123456").toLowerCase());
-        adminUser.setUserId(StringUtil.getUUID());
+        adminUser.setUserId(StringUtils.getUUID());
         adminUser.setIsAdmin(Constant.INT_TRUE);
         adminUser.setUserName(tenant.getTenantName());
         adminUser.setUserLoginName(tenant.getGroupCode() + "_admin");
@@ -46,7 +46,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         adminUser.setIsEnable(Constant.INT_TRUE);
         adminUser.preInsert(null);
         sysUserService.insertSelective(adminUser);
-        UcenterMsOrganizationDO organization = new UcenterMsOrganizationDO();
+        UcenterMsOrganizationPO organization = new UcenterMsOrganizationPO();
         organization.setId(tenant.getGroupCode() + "_001");
         organization.setName(tenant.getTenantName());
         organization.setRanking(1);
@@ -55,7 +55,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         organization.setParentId("");
         organization.setGroupCode(tenant.getGroupCode());
         organizationService.insertSelective(organization);
-        tenant.setId(StringUtil.getUUID());
+        tenant.setId(StringUtils.getUUID());
         return super.insertSelective(tenant);
     }
 }

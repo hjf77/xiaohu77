@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Filename: IpAddressUtil.java
  * @Description:
  * @Version: 1.0
- * @Author: qixiaobo
+ * @Author: wanglei
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */

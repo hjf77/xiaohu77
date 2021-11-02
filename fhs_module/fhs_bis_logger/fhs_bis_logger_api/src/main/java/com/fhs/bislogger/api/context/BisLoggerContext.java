@@ -1,14 +1,10 @@
 package com.fhs.bislogger.api.context;
 
-import com.fhs.bislogger.dox.LogOperatorExtParamDO;
-import com.fhs.bislogger.vo.LogAddOperatorLogVO;
 import com.fhs.bislogger.vo.LogHistoryDataVO;
 import com.fhs.bislogger.vo.LogOperatorExtParamVO;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
-import com.fhs.core.base.pojo.vo.VO;
-import com.fhs.core.cache.service.RedisCacheService;
+import com.fhs.core.trans.vo.VO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.lang.reflect.Field;
@@ -103,7 +99,7 @@ public class BisLoggerContext {
         BisLoggerContext.logHistoryDataPKeySet.get().add(pkey);
         LogHistoryDataVO historyDataVO = new LogHistoryDataVO();
         historyDataVO.setPkey(vo.getPkey().toString());
-        historyDataVO.setData(formartJson(JsonUtils.bean2json(vo), vo.getClass()));
+        historyDataVO.setData(formartJson(JsonUtil.bean2json(vo), vo.getClass()));
         historyDataVO.setNamespace(namespace);
         historyDataVO.setMainId(getTranceId());
         logHistoryDataVOList.get().add(historyDataVO);

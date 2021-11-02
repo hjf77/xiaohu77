@@ -8,16 +8,14 @@ import com.fhs.bislogger.api.context.BisLoggerContext;
 import com.fhs.bislogger.api.rpc.FeignBisLoggerApiService;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.bislogger.vo.LogAddOperatorLogVO;
-import com.fhs.bislogger.vo.LogHistoryDataVO;
-import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.basics.context.UserContext;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
-import com.fhs.core.base.pojo.vo.VO;
-import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.core.trans.vo.VO;
+import com.fhs.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
-import io.swagger.annotations.ApiModelProperty;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,10 +27,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -44,7 +40,7 @@ import java.util.concurrent.Executors;
  * @Filename: ActionInterceptAndCreateLogAop.java
  * @Description:
  * @Version: 1.0
- * @Author: qixiaobo
+ * @Author: wanglei
  * @Email: qxb@sxpartner.com
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
@@ -79,7 +75,7 @@ public class OperatorLogAop {
         if (bisLoggerApiService == null) {
             bisLoggerApiService = SpringContextUtil.getBeanByClassForApi(FeignBisLoggerApiService.class);
         }
-        String mainId = StringUtil.getUUID();
+        String mainId = StringUtils.getUUID();
         BisLoggerContext.init(mainId);
         String methodName = joinPoint.getSignature().getName();
         Class<?> classTarget = joinPoint.getTarget().getClass();
@@ -134,7 +130,7 @@ public class OperatorLogAop {
         } else if (logMethod.reqBodyParamIndex() != LoggerConstant.INDEX_NOT) {
             mainVO.setReqParam(BisLoggerContext.formartJson(JSONObject.toJSONString(args[logMethod.reqBodyParamIndex()]), args[logMethod.reqBodyParamIndex()].getClass()));
         } else {
-            mainVO.setReqParam(JsonUtils.map2json(getParameterMap()));
+            mainVO.setReqParam(JsonUtil.map2json(getParameterMap()));
         }
         mainVO.setRespBody(e == null ? JSONObject.toJSONString(result) : e.getMessage());
         UcenterMsUserVO user = getSessionuser();
@@ -175,8 +171,7 @@ public class OperatorLogAop {
      * @return session里面的user
      */
     protected UcenterMsUserVO getSessionuser() {
-        HttpServletRequest request = getRequest();
-        return (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+        return UserContext.getSessionuser();
     }
 
     /**

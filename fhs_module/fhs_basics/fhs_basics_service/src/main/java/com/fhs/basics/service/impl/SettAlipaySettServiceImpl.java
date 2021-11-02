@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.dox.SettAlipaySettDO;
+import com.fhs.basics.po.SettAlipaySettPO;
 import com.fhs.basics.service.SettAlipaySettService;
 import com.fhs.basics.vo.SettAlipaySettVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("settAlipaySettService")
 @DataSource("base_business")
-public class SettAlipaySettServiceImpl extends BaseServiceImpl<SettAlipaySettVO, SettAlipaySettDO> implements SettAlipaySettService {
+public class SettAlipaySettServiceImpl extends BaseServiceImpl<SettAlipaySettVO, SettAlipaySettPO> implements SettAlipaySettService {
 
 }

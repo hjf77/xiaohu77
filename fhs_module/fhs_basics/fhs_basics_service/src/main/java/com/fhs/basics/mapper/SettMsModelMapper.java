@@ -1,6 +1,6 @@
 package com.fhs.basics.mapper;
 
-import com.fhs.basics.dox.SettMsModelDO;
+import com.fhs.basics.po.SettMsModelPO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @since 2018-05-29
  */
 @Repository
-@MapperDefinition(domainClass = SettMsModelDO.class)
-public interface SettMsModelMapper extends FhsBaseMapper<SettMsModelDO> {
+@MapperDefinition(domainClass = SettMsModelPO.class)
+public interface SettMsModelMapper extends FhsBaseMapper<SettMsModelPO> {
 
 }

@@ -52,7 +52,7 @@ public class EMap<K, V> extends HashMap<K, V> {
      * @return key对应的对象的string类型
      */
     public String getStr(Object key) {
-        return StringUtil.toString(super.get(key));
+        return StringUtils.toString(super.get(key));
     }
 
     /**
@@ -63,7 +63,7 @@ public class EMap<K, V> extends HashMap<K, V> {
      * @return key对应的对象的string类型
      */
     public String getStr(Object key, String defaultVal) {
-        return StringUtil.toString(super.get(key), defaultVal);
+        return StringUtils.toString(super.get(key), defaultVal);
     }
 
     /**
@@ -113,6 +113,6 @@ public class EMap<K, V> extends HashMap<K, V> {
      * @return json
      */
     public String asJson() {
-        return JsonUtils.map2json(this);
+        return JsonUtil.map2json(this);
     }
 }

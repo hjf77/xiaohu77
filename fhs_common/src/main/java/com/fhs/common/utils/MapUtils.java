@@ -261,7 +261,7 @@ public class MapUtils {
         if (nullFieldList.size() == 0) {
             return "";
         }
-        return StringUtil.getStrForIntegerIn(nullFieldList);
+        return StringUtils.getStrForIntegerIn(nullFieldList);
     }
 
     /**
@@ -284,7 +284,7 @@ public class MapUtils {
         if (nullFieldList.size() == 0) {
             return "";
         }
-        return StringUtil.getStrForIntegerIn(nullFieldList);
+        return StringUtils.getStrForIntegerIn(nullFieldList);
     }
 
     /**
@@ -484,7 +484,7 @@ public class MapUtils {
     private static void remove(Object obj, Iterator<?> iterator) {
         if (obj instanceof String) {
             String str = (String) obj;
-            if (StringUtil.isEmpty(str)) {
+            if (StringUtils.isEmpty(str)) {
                 iterator.remove();
             }
         } else if (obj instanceof Collection) {

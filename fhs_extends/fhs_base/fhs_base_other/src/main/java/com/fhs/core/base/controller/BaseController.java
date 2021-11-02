@@ -196,7 +196,7 @@ public abstract class BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put(Constant.TOTAL, count);
         resultMap.put(Constant.ROWS, dataList);
-        String json = JsonUtils.object2json(resultMap);
+        String json = JsonUtil.object2json(resultMap);
         this.outWrite(json);
     }
 
@@ -210,7 +210,7 @@ public abstract class BaseController {
 
         resultMap.put(Constant.ROWS, dataList);
         resultMap.put(Constant.FOOTER, footerList);
-        String json = JsonUtils.object2json(resultMap);
+        String json = JsonUtil.object2json(resultMap);
 
         this.outWrite(json);
     }
@@ -226,7 +226,7 @@ public abstract class BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put(Constant.TOTAL, count);
         resultMap.put(Constant.ROWS, dataList);
-        String json = JsonUtils.object2json(resultMap);
+        String json = JsonUtil.object2json(resultMap);
         this.outJsonp(json);
     }
 
@@ -322,7 +322,7 @@ public abstract class BaseController {
         // 后缀
         String suffix = fileName.substring(fileName.lastIndexOf("."));
 
-        String fileId = StringUtil.getUUID();
+        String fileId = StringUtils.getUUID();
         String currentDate = DateUtils.getCurrentDateStr("yyyy/MM/dd");
         // 文件类型
         String prefix = suffix.replace(".", "");

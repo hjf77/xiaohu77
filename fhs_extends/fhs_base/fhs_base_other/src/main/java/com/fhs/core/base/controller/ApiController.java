@@ -2,7 +2,7 @@ package com.fhs.core.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.spring.SpringContextUtil;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.valid.checker.ParamChecker;
@@ -87,7 +87,7 @@ public class ApiController {
             Object service = SpringContextUtil.getBeanByClassForApi(clazz);
             try {
                 Object result = method.invoke(service, params);
-                JsonUtils.outJson(response, JsonUtils.bean2json(result));
+                JsonUtil.outJson(response, JsonUtil.bean2json(result));
             } catch (IllegalAccessException e) {
                 log.error("", e);
             } catch (InvocationTargetException e) {

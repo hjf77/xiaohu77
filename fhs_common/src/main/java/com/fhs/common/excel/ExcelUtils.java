@@ -17,7 +17,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * <excel读写工具类>
@@ -82,7 +81,7 @@ public class ExcelUtils {
                     }
                     obj[i][j] = sbuilder.toString().substring(0, sbuilder.length() - Constant.ONE);
                 } else {
-                    obj[i][j] = StringUtil.toString(tempDataMap.get(tempFiled));
+                    obj[i][j] = StringUtils.toString(tempDataMap.get(tempFiled));
                 }
             }
 

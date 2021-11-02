@@ -8,7 +8,6 @@ import com.fhs.core.jsonfilter.bean.VoConverterObject;
 import com.fhs.core.jsonfilter.filter.AllPropertyNotSeralizerFilter;
 import com.fhs.core.jsonfilter.filter.JsonFormatterFilter;
 import com.fhs.core.jsonfilter.filter.SimpleSerializerFilter;
-import com.fhs.core.jsonfilter.filter.TransFormatterFilter;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
@@ -45,7 +44,6 @@ public class JsonFilterHttpMessageConverter extends FastJsonHttpMessageConverter
         } else {
             OutputStream out = outputMessage.getBody();
             String text = JSON.toJSONString(obj, new SerializeFilter[]{
-                    new TransFormatterFilter()
             }, super.getFastJsonConfig().getSerializerFeatures());
             byte[] bytes = text.getBytes(super.getFastJsonConfig().getCharset());
             out.write(bytes);

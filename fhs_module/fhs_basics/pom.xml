@@ -5,28 +5,14 @@
     <parent>
         <artifactId>fhs_module</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_basics</artifactId>
     <packaging>pom</packaging>
     <dependencies>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_pojo</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_trans_anno</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>mybatis-jpa-jack</artifactId>
-            <version>${fhs.mybatis-jpa-jack.version}</version>
-        </dependency>
+
     </dependencies>
     <modules>
         <module>fhs_basics_api</module>

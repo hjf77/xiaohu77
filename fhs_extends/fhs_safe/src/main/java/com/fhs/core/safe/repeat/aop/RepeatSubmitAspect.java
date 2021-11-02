@@ -8,6 +8,7 @@ import com.fhs.core.exception.HttpException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import lombok.extern.slf4j.Slf4j;
+import cn.dev33.satoken.stp.StpUtil;
 import org.apache.catalina.users.AbstractUser;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -49,12 +50,12 @@ public class RepeatSubmitAspect {
         String key = null;
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            UcenterMsUserVO user = (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
-            if (user == null) {
+            String token  = StpUtil.getTokenValue();
+            if (token == null) {
                 throw new HttpException("请重新登录", HttpException.NO_PERMISSION);
             }
             String methodName = pjp.getSignature().getName();
-            key = PRE + pjp.getTarget().getClass() + ":" + methodName + user.getUserId();
+            key = PRE + pjp.getTarget().getClass() + ":" + methodName + token;
             if (ConverterUtils.toBoolean(redisCacheService.get(key))) {
                 throw new ParamException("请勿重复提交");
             }

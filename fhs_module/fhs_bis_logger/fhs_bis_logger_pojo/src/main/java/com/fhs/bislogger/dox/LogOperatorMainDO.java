@@ -1,14 +1,9 @@
 package com.fhs.bislogger.dox;
 
-import java.io.Serializable;
-
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.mybatis.jpa.annotation.*;
 import com.fhs.core.valid.group.*;
-
-import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
@@ -30,7 +25,7 @@ import lombok.*;
 @AllArgsConstructor
 @TableName("t_log_operator_main")
 @EqualsAndHashCode(callSuper = true)
-public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
+public class LogOperatorMainDO extends BasePO<LogOperatorMainDO> {
     private static final long serialVersionUID = -83321483098557581L;
     @TableId(value = "log_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")
@@ -88,7 +83,7 @@ public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
      */
     @TableField("state")
     @ApiModelProperty(value = "状态")
-    @Trans(type = TransType.WORD_BOOK, key = "state")
+    @Trans(type = TransType.DICTIONARY, key = "state")
     private Integer state;
 
     /**
@@ -96,7 +91,7 @@ public class LogOperatorMainDO extends BaseDO<LogOperatorMainDO> {
      */
     @TableField("type")
     @ApiModelProperty(value = "0 新增 1 修改 2删除 3 查询 4 导入  5 导出")
-    @Trans(type = TransType.WORD_BOOK, key = "type")
+    @Trans(type = TransType.DICTIONARY, key = "type")
     private Integer type;
 
     /**

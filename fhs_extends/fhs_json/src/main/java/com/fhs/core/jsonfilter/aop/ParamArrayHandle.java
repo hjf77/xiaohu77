@@ -1,19 +1,19 @@
 package com.fhs.core.jsonfilter.aop;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ReflectUtils;
-import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.jsonfilter.anno.AutoArray;
+import com.fhs.core.trans.vo.VO;
 import lombok.Data;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class ParamArrayHandle {
     /**
      * 纪录方法 的第几个参数是需要 array2string的
      */
-    private Map<String, AutoArraySett> parameterSettMaps = new HashedMap();
+    private Map<String, AutoArraySett> parameterSettMaps = new HashMap<>();
 
     /**
      * 处理 array2str
@@ -63,12 +63,12 @@ public class ParamArrayHandle {
             List<Field> fields = autoArraySett.getAutoArrayFields();
             for (Field field : fields) {
                 String strVal = ConverterUtils.toString(ReflectUtils.getValue(needHandleParam, field.getName()));
-                if (!StringUtils.isEmpty(strVal) && strVal.length() > 2) {
+                if (CheckUtils.isNotEmpty(strVal) && strVal.length() > 2) {
                     //如果不是[ 开头的代表已经是好着的了，不需要这里处理
                     if (!strVal.startsWith("[")) {
                         continue;
                     }
-                    ReflectUtils.setValue(needHandleParam, field, JsonUtils.parseArray(strVal));
+                    ReflectUtils.setValue(needHandleParam, field, JsonUtil.parseArray(strVal));
                 }
             }
         }

@@ -1,10 +1,8 @@
 package com.fhs.generate.controller;
 
 import com.fhs.common.utils.FileUtils;
-import com.fhs.common.utils.StringUtil;
 import com.fhs.common.utils.ZipUtil;
 import com.fhs.core.config.EConfig;
-import com.fhs.core.result.HttpResult;
 import com.fhs.generate.service.GenerateCodeService;
 import com.fhs.generate.vo.TableInfoVO;
 import com.fhs.module.base.swagger.anno.ApiGroup;

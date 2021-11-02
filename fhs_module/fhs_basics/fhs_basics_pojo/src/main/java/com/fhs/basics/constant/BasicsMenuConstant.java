@@ -8,7 +8,7 @@ package com.fhs.basics.constant;
  */
 public interface BasicsMenuConstant {
 
-    int MENU_ROOT = 1;
 
-    String MENU_ROOT_STR = "1";
+
+    String MENU_ROOT_STR = "root";
 }

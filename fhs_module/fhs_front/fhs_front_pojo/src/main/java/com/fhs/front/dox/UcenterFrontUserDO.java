@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 前端用户表(UcenterFrontUser)实体类
@@ -28,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @TableName("t_ucenter_front_user")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterFrontUserDO", description = "UcenterFrontUser参数")
-public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
+public class UcenterFrontUserDO extends BasePO<UcenterFrontUserDO> {
     private static final long serialVersionUID = 545604903343287075L;
 
     /**

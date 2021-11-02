@@ -1,12 +1,7 @@
 package com.fhs.bislogger.dox;
 
-import java.io.Serializable;
-
-import com.fhs.core.base.dox.BaseDO;
-import com.mybatis.jpa.annotation.*;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.*;
-
-import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
@@ -28,7 +23,7 @@ import lombok.*;
 @AllArgsConstructor
 @TableName("t_log_history_data")
 @EqualsAndHashCode(callSuper = true)
-public class LogHistoryDataDO extends BaseDO<LogHistoryDataDO> {
+public class LogHistoryDataDO extends BasePO<LogHistoryDataDO> {
     private static final long serialVersionUID = 312083419921410582L;
 
     /**

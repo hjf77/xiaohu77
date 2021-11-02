@@ -48,7 +48,6 @@ fhs:
       name: 公共接口文档
   path: "{
           'basePath': 'http://localhost:8082/',
-          'fhs_static_url': 'http://localhost:8082/',
           'fhs_basics_url': 'http://localhost:8082/',
           'fileSavePath': 'c:/flies',
           'loginOutUrl': 'http://cas.fhs.xhb.com/logout',
@@ -130,7 +129,6 @@ logging:
   config: classpath:logback-fhs.xml
   level:
     com.fhs.basics: debug
-    com.fhs.pagex: debug
 
 logback:
   #这里可以配置logstash ip和端口

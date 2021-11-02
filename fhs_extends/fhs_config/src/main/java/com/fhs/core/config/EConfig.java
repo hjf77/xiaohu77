@@ -1,6 +1,6 @@
 package com.fhs.core.config;
 
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.logger.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,8 +51,8 @@ public class EConfig implements InitializingBean {
             public void run() {
                 PATH.putAll(pathMap);
                 OTHER_CONFIG.putAll(otherMap);
-                LOG.info("成功加载path properties:" + JsonUtils.map2json(PATH));
-                LOG.info("成功加载other properties:" + JsonUtils.map2json(OTHER_CONFIG));
+                LOG.info("成功加载path properties:" + JsonUtil.map2json(PATH));
+                LOG.info("成功加载other properties:" + JsonUtil.map2json(OTHER_CONFIG));
             }
         }.start();
     }

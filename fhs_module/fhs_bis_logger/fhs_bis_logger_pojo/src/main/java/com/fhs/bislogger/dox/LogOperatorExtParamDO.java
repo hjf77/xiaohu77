@@ -1,11 +1,8 @@
 package com.fhs.bislogger.dox;
 
-import java.io.Serializable;
-
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.mybatis.jpa.annotation.*;
 import com.fhs.core.valid.group.*;
 
 import javax.validation.constraints.*;
@@ -30,7 +27,7 @@ import lombok.*;
 @AllArgsConstructor
 @TableName("t_log_operator_ext_param")
 @EqualsAndHashCode(callSuper = true)
-public class LogOperatorExtParamDO extends BaseDO<LogOperatorExtParamDO> {
+public class LogOperatorExtParamDO extends BasePO<LogOperatorExtParamDO> {
     private static final long serialVersionUID = -88643840123395899L;
     @TableId(value = "ext_param_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "扩展id")
@@ -88,7 +85,7 @@ public class LogOperatorExtParamDO extends BaseDO<LogOperatorExtParamDO> {
      */
     @NotNull(message = "操作类型字段不可为null", groups = {Update.class, Delete.class})
     @TableField("operator_type")
-    @Trans(type = TransType.WORD_BOOK, key = "operator_type")
+    @Trans(type = TransType.DICTIONARY, key = "operator_type")
     private Integer operatorType;
 
 }

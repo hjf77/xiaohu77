@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_extends</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_db</artifactId>
     <dependencies>
         <dependency>
@@ -25,6 +25,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-core</artifactId>
+            <version>${sa.token.version}</version>
         </dependency>
     </dependencies>
 

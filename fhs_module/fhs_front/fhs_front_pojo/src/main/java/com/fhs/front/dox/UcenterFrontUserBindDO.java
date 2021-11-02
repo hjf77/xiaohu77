@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -12,8 +12,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
-
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -30,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @TableName("t_ucenter_front_user_bind")
 @ApiModel(value = "UcenterFrontUserBindDO", description = "UcenterFrontUserBind参数")
-public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
+public class UcenterFrontUserBindDO extends BasePO<UcenterFrontUserBindDO> {
     private static final long serialVersionUID = 920530665191970437L;
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")

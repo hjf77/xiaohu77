@@ -4,7 +4,6 @@ import com.fhs.common.constant.Constant;
 import com.mybatis.jpa.context.DataPermissonContext;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +31,12 @@ public class ZDataPermissonFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         //没用户的话直接放行
-        if (request.getSession().getAttribute(Constant.SESSION_USER) == null || (!request.getServletPath().startsWith("/ms/"))) {
+        /*if (UserContext.getSessionuser() == null || (!request.getServletPath().startsWith("/ms/"))) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
-        }
-        Map<String, String> dataPermissonMap = (Map<String, String>) request.getSession().getAttribute(Constant.SESSION_USER_DATA_PERMISSION);
-        DataPermissonContext.setDataPermissonMap(dataPermissonMap);
+        }*/
+        /*Map<String, String> dataPermissonMap = (Map<String, String>) request.getSession().getAttribute(Constant.SESSION_USER_DATA_PERMISSION);
+        DataPermissonContext.setDataPermissonMap(dataPermissonMap);*/
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

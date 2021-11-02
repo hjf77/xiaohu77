@@ -1,12 +1,12 @@
 package com.fhs.basics.controller;
 
-import com.fhs.basics.dox.UcenterMsTenantDO;
+import com.fhs.basics.po.UcenterMsTenantPO;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.vo.UcenterMsTenantVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.Md5Util;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 租户管理(UcenterMsTenant)表控制层
  *
- * @author makejava
+ * @author wanglei
  * @since 2019-05-15 14:21:04
  */
 @RestController
 @Api(tags = {"租户"})
 @RequestMapping("/ms/tenant")
 @ApiGroup(group = "group_default")
-public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantDO> {
+public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantPO> {
 
     @Autowired
     private UcenterMsUserService userService;
@@ -41,7 +41,7 @@ public class UcenterMsTenantController extends ModelSuperController<UcenterMsTen
     @RequestMapping("resetAdminPass")
     public HttpResult<String> resetAdminPass(String groupCode) {
         ParamChecker.isNotNull(groupCode, "groupCode不能为空");
-        String newPass = StringUtil.getUUID();
+        String newPass = StringUtils.getUUID();
         UcenterMsUserVO user = new UcenterMsUserVO();
         user.setUserLoginName(groupCode + "_admin");
         MultiTenancyContext.setProviderId(null);

@@ -1,11 +1,11 @@
 package com.fhs.basics.controller;
 
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleCreateTableStatement;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
-import com.fhs.basics.dox.UcenterMsOrganizationDO;
-import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.basics.po.UcenterMsOrganizationPO;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.LeftMenuVO;
@@ -24,16 +24,13 @@ import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
-import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,7 +48,7 @@ import java.util.stream.Collectors;
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysUser")
 @LogNamespace(namespace = BaseTransConstant.USER_INFO, module = "用户管理")
-public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserDO> {
+public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserPO> {
 
 
     @Autowired
@@ -69,7 +66,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @GetMapping("getUserTree")
     public void getUserTree() {
-        super.outJsonp(JsonUtils.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode())));
+        super.outJsonp(JsonUtil.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode())));
     }
 
     /**
@@ -91,7 +88,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @GetMapping("getUserById")
     @LogMethod
     public void getUserById(String userId) {
-        super.outJsonp(JsonUtils.bean2json(sysUserService.selectById(userId)));
+        super.outJsonp(JsonUtil.bean2json(sysUserService.selectById(userId)));
     }
 
     /**
@@ -107,7 +104,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             return;
         }
         List<UcenterMsUserVO> byIds = sysUserService.findByIds(Arrays.asList(userIds.split(",")));
-        super.outJsonp(JsonUtils.list2json(byIds));
+        super.outJsonp(JsonUtil.list2json(byIds));
     }
 
     @NotRepeat
@@ -125,7 +122,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param sysUser
      */
     @NotRepeat
-    @RequiresPermissions("sysUser:add")
+    @SaCheckRole("sysUser:add")
     @PostMapping("addUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult addUser( UcenterMsUserVO sysUser) {
@@ -135,7 +132,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             UcenterMsUserVO loginSysUser = super.getSessionuser();
             sysUser.setUpdateTime(new Date());
             sysUser.setUpdateUser(loginSysUser.getUserId());
-            if (StringUtil.isEmpty(sysUser.getUserId())) { //新增
+            if (StringUtils.isEmpty(sysUser.getUserId())) { //新增
                 sysUser.setCreateTime(new Date());
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());
@@ -177,7 +174,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @LogMethod
     public void findUsersJsonp(HttpServletRequest request) {
         PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
-        UcenterMsUserDO queryParam = UcenterMsUserDO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
+        UcenterMsUserPO queryParam = UcenterMsUserPO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
         List<UcenterMsUserVO> users = sysUserService.selectPage(queryParam,
                 pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
         super.outJsonp(new Pager<UcenterMsUserVO>(sysUserService.selectCount(queryParam), users).asJson());
@@ -186,12 +183,12 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @GetMapping("getUserByCompanyId")
     @ApiOperation("根据单位id获取单位下的用户集合")
     public List<UcenterMsUserVO> getUserByCompanyId(String companyId) {
-        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>()
-                .eq(UcenterMsOrganizationDO::getCompanyId, companyId));
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationPO>()
+                .eq(UcenterMsOrganizationPO::getCompanyId, companyId));
         if (orgs.isEmpty()) {
             return new ArrayList<>();
         }
-        List<UcenterMsUserVO> users = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId, orgs.stream()
+        List<UcenterMsUserVO> users = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>().in(UcenterMsUserPO::getOrganizationId, orgs.stream()
                 .map(UcenterMsOrganizationVO::getId).collect(Collectors.toList())));
         return users;
     }
@@ -203,7 +200,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @return
      * @desc 根据id删除对象
      */
-    @RequiresPermissions("sysUser:del")
+    @SaCheckRole("sysUser:del")
     @RequestMapping("/delSysUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
@@ -227,7 +224,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 更新用户信息
      * @param sysUser
      */
-    @RequiresPermissions("sysUser:update")
+    @SaCheckRole("sysUser:update")
     @RequestMapping("updateUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(UcenterMsUserVO sysUser) {
@@ -314,7 +311,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @return 前端分页请求
      * @desc 后台用户分页
      */
-    @RequiresPermissions("sysUser:see")
+    @SaCheckRole("sysUser:see")
     @GetMapping("/findPage/{organizationId}")
     @ResponseBody
     @LogMethod
@@ -341,13 +338,13 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     @GetMapping("getUserByOrgAndPermission")
     @ApiOperation("根据单位id，namespace，和方法编码获取符合条件的人")
-    public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
+    public List<UcenterMsUserPO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         return sysUserService.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
     }
 
     @GetMapping("getUserCompanyTree")
     @ApiOperation("获取公司tree(带用户)")
-    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper) {
+    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
         return sysUserService.getUserCompanyTree(new QueryWrapper<>());
     }
 }

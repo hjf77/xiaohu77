@@ -1,7 +1,7 @@
 package com.fhs.core.exception.advice;
 
 import com.fhs.common.utils.AESUtil;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ThreadKey;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.*;
@@ -128,15 +128,15 @@ public class ControllerExceptionAdvice {
             httpResult.setMessage(ex.getMessage());
         } else if (ex instanceof IllegalArgumentException) {
             httpResult.setMessage(ex.getMessage());
-            JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson());
             return null;
         } else if (ex instanceof HttpException) {
             httpResult.setMessage(ex.getMessage());
-            JsonUtils.outJson(response, httpResult.asJson(), ((HttpException) ex).getHttpCode());
+            JsonUtil.outJson(response, httpResult.asJson(), ((HttpException) ex).getHttpCode());
             return null;
         } else if (ex instanceof ParamsInValidException) {
             httpResult.setMessage(ex.getMessage());
-            JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson());
             return null;
         } else if (ex instanceof MethodArgumentNotValidException) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) (ex)).getBindingResult();
@@ -149,33 +149,33 @@ public class ControllerExceptionAdvice {
                 errMsg.append(field + ":" + defaultMessage + ";  ");
             }
             httpResult.setMessage(errMsg.toString());
-            JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson());
             return null;
         } else if (ex instanceof BusinessException) {
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode(((BusinessException) ex).getCode());
-            JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson());
             return null;
         } else if (ex instanceof ParamException) {
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode(400);
-            JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson());
             return null;
         } else if (ex instanceof CheckException) {
-            JsonUtils.outJson(response, ((CheckException) ex).getResult().asJson());
+            JsonUtil.outJson(response, ((CheckException) ex).getResult().asJson());
             return null;
         } else if (ex instanceof DuplicateKeyException) {
-            JsonUtils.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
+            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
             return null;
         } else if (ex instanceof SQLIntegrityConstraintViolationException) {
-            JsonUtils.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
+            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
             return null;
         } else if (ex instanceof NotPremissionException) {
-            JsonUtils.outJson(response, HttpResult.otherResult(PubResult.NO_PERMISSION).asJson());
+            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.NO_PERMISSION).asJson());
             return null;
         } else if (ex instanceof ResultException) {
-            JsonUtils.outJson(response, ((ResultException) ex).getHttpResult().asJson());
+            JsonUtil.outJson(response, ((ResultException) ex).getHttpResult().asJson());
             return null;
         } else {
 
@@ -185,7 +185,7 @@ public class ControllerExceptionAdvice {
             if (EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword") != null) {
                 httpResult.setExceptionInfo(AESUtil.encrypt(getStackTrace(ex), EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")));
             }
-            JsonUtils.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson());
         }
         return null;
     }

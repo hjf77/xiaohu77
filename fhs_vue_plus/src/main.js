@@ -20,9 +20,6 @@ import permission from './directive/permission'
 import './assets/icons' // icon
 import './permission' // permission control
 import {
-  getDicts
-} from "@/api/system/dict/data";
-import {
   getConfigKey
 } from "@/api/system/config";
 import {
@@ -63,8 +60,6 @@ Vue.prototype.$on = function (event, func) {
 /*import moment from 'moment'//导入文件
 Vue.prototype.$moment = moment;//赋值使用*/
 
-// 全局方法挂载
-Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm

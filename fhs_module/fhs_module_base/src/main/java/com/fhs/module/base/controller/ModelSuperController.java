@@ -1,23 +1,18 @@
 package com.fhs.module.base.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.constant.LoggerConstant;
-import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
-import com.fhs.core.base.dox.BaseDO;
-import com.fhs.core.base.pojo.pager.Pager;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.pojo.vo.UpdateFieldVO;
-import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
-import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
@@ -26,14 +21,15 @@ import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
-import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.common.ExcelExportTools;
-import com.fhs.module.base.context.UserContext;
+import com.fhs.basics.context.UserContext;
+import com.fhs.trans.service.impl.TransService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mybatis.jpa.context.DataPermissonContext;
@@ -42,7 +38,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -68,7 +63,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: jianbo.qin
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public abstract class ModelSuperController<V extends VO, D extends BaseDO> extends BaseController {
+public abstract class ModelSuperController<V extends VO, D extends BasePO> extends BaseController {
     protected Logger log = Logger.getLogger(getClass());
 
     /**
@@ -87,33 +82,6 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
     public BaseService<V, D> getBaseService() {
         return baseService;
-    }
-
-
-    /**
-     * 查询bean列表数据
-     *
-     * @param request response
-     * @throws Exception
-     */
-    @GetMapping("findPage")
-    @ResponseBody
-    @LogMethod(voParamIndex = 0)
-    @ApiOperation("后台-普通分页查询")
-    public Pager<V> findPage(V e, HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        if (isPermitted(request, "see")) {
-            PageSizeInfo pgeSizeInfo = getPageSizeInfo();
-            D d = (D) e;
-            d.setUserInfo(getSessionuser().asMap());
-            List<V> dataList = baseService.selectPageForOrder(d, pgeSizeInfo.getPageStart(),
-                    pgeSizeInfo.getPageSize(), this.formartOrderBy(request));
-            int count = baseService.findCountJpa(d);
-            request.getSession().setAttribute(this.getClass() + "preLoadParam", e);
-            return new Pager<V>(count, dataList);
-        } else {
-            throw new NotPremissionException();
-        }
     }
 
     /**
@@ -156,7 +124,6 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         }
     }
 
-
     /**
      * 无分页查询bean列表数据
      *
@@ -178,46 +145,6 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     }
 
     /**
-     * 根据map条件查询返回page對象
-     *
-     * @param request
-     * @param response
-     */
-    @ResponseBody
-    @LogMethod
-    @GetMapping("findPageByM")
-    @ApiOperation(hidden = true, value = "废弃的老方法-根据map当作过滤条件分页")
-    public Pager<V> findPageByM(HttpServletRequest request, HttpServletResponse response) {
-        if (isPermitted(request, "see")) {
-            Map<String, Object> map = getPageTurnNum();
-            map.put("orderBy", this.formartOrderBy(request));
-            List<V> dataList = baseService.findForListFromMap(map);
-            int count = baseService.findCountFromMap(map);
-            request.getSession().setAttribute(this.getClass() + "preLoadParam", map);
-            return new Pager<V>(count, dataList);
-        } else {
-            throw new NotPremissionException();
-        }
-    }
-
-    /**
-     * 公共导出excel 03  by jackwang
-     */
-    @GetMapping("pubExportExcel")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcel() {
-        /*
-           1 获取参数
-           2  根据参数类型获取List<T>
-           3 根据列配置将List<T> 转换为obejct[][]
-           5  将obejct[][] 转换为 poi对象
-           6  从poi获取二进制 下载
-         */
-        List<V> dataList = getExportData();
-        exportExcel(dataList);
-    }
-
-    /**
      * 公共导出excel
      * by wanglei
      */
@@ -232,7 +159,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             wrapper.in("id", ids.split(","));
         }
         Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getDOClass());
-        String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID() + ".xlsx";
+        String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
         book.write(os);
         try {
@@ -264,33 +191,29 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     private List<V> getExportData() {
         HttpServletRequest request = getRequest();
         Object param = request.getSession().getAttribute(this.getClass() + "preLoadParam");
-        if (param instanceof Map) {
-            return baseService.findForListFromMap((Map) param);
-        } else {
-            //如果session中拿不到参数，则自己new一个
-            if (param == null) {
-                //子类集成我的时候传的泛型是什么就new什么
-                Type t = this.getClass().getGenericSuperclass();
-                if (t instanceof ParameterizedType) {
-                    Type[] p = ((ParameterizedType) t).getActualTypeArguments();
-                    if (p.length > 0) {
-                        try {
-                            param = Class.forName(p[0].getTypeName()).newInstance();
-                        } catch (InstantiationException e) {
-                            log.error(this, e);
-                        } catch (IllegalAccessException e) {
-                            log.error(this, e);
-                        } catch (ClassNotFoundException e) {
-                            log.error(this, e);
-                        }
+        //如果session中拿不到参数，则自己new一个
+        if (param == null) {
+            //子类集成我的时候传的泛型是什么就new什么
+            Type t = this.getClass().getGenericSuperclass();
+            if (t instanceof ParameterizedType) {
+                Type[] p = ((ParameterizedType) t).getActualTypeArguments();
+                if (p.length > 0) {
+                    try {
+                        param = Class.forName(p[0].getTypeName()).newInstance();
+                    } catch (InstantiationException e) {
+                        log.error(this, e);
+                    } catch (IllegalAccessException e) {
+                        log.error(this, e);
+                    } catch (ClassNotFoundException e) {
+                        log.error(this, e);
                     }
                 }
             }
-            if (param == null) {
-                throw new ParamException("导出没有调用查询方法设置查询参数");
-            }
-            return baseService.findForList((D) param);
         }
+        if (param == null) {
+            throw new ParamException("导出没有调用查询方法设置查询参数");
+        }
+        return baseService.findForList((D) param);
     }
 
     /**
@@ -376,27 +299,6 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
 
 
     /**
-     * 获取单条bean数据
-     *
-     * @param request
-     * @throws Exception
-     */
-    @GetMapping("infoByM")
-    @ResponseBody
-    @LogMethod
-    @ApiOperation(value = "根据map获取单挑数据信息-废弃", hidden = true)
-    public V infoByM(HttpServletRequest request)
-            throws Exception {
-        if (isPermitted(request, "see")) {
-            EMap<String, Object> paramMap = this.getParameterMap();
-            V bean = baseService.findBeanFromMap(paramMap);
-            return bean;
-        } else {
-            throw new NotPremissionException();
-        }
-    }
-
-    /**
      * groupcode字段
      */
     private Field groupCodeField;
@@ -406,28 +308,12 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> save(@RequestBody @Validated(Add.class) V e, HttpServletRequest request,
+    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e, HttpServletRequest request,
                                     HttpServletResponse response) {
-        return add(e, request, response);
-    }
-
-
-    /**
-     * 添加
-     *
-     * @param e bean
-     */
-    @NotRepeat
-    @ResponseBody
-    @PostMapping("add")
-    @ApiOperation(value = "新增-easyui专用")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> add(@ModelAttribute @Validated(Add.class) V e, HttpServletRequest request,
-                                   HttpServletResponse response) {
         if (isPermitted(request, "add")) {
 
-            if (e instanceof BaseDO) {
-                BaseDO<?> baseDo = (BaseDO<?>) e;
+            if (e instanceof BasePO) {
+                BasePO<?> baseDo = (BasePO<?>) e;
                 //如果是saas模式，并且bean中包含groupcode字段，则给其设置值
                 if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))
                         && ReflectUtils.getDeclaredField(e.getClass(), "groupCode") != null && ReflectUtils.getValue(e, "groupCode") == null) {
@@ -456,31 +342,13 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @ApiOperation(value = "删除-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> delForVue(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
-        return del(id, request);
-    }
-
-
-    /**
-     * 根据id删除对象
-     *
-     * @param id
-     * @param request
-     * @return
-     */
-    @PostMapping("del")
-    @ResponseBody
-    @ApiOperation(value = "删除-easyui专用")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "query")}
-    )
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> del(@RequestParam("id") String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
             baseService.deleteById(id);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
     }
+
 
     /**
      * 更新bean数据
@@ -493,23 +361,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
                                             HttpServletResponse response) {
-        return update(e, request, response);
-    }
-
-    /**
-     * 更新bean数据
-     *
-     * @param e bean
-     */
-    @ResponseBody
-    @PostMapping("update")
-    @ApiOperation(value = "修改")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> update(@ModelAttribute @Validated(Update.class) V e, HttpServletRequest request,
-                                      HttpServletResponse response) {
         if (isPermitted(request, "update")) {
-            if (e instanceof BaseDO) {
-                BaseDO<?> baseDo = (BaseDO<?>) e;
+            if (e instanceof BasePO) {
+                BasePO<?> baseDo = (BasePO<?>) e;
                 baseDo.preUpdate(getSessionuser().getUserId());
             }
             beforSave(e, false);
@@ -518,6 +372,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         }
         throw new NotPremissionException();
     }
+
 
     /**
      * 判断登录人是否有权限
@@ -529,7 +384,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     public boolean isPermitted(HttpServletRequest request, String permitName) {
         String path = request.getServletPath();
         String namespace = path.split("/")[2];
-        boolean bool = SecurityUtils.getSubject().isPermitted(namespace + ":" + permitName);
+        boolean bool = StpUtil.hasPermission(namespace + ":" + permitName);
         return bool;
     }
 
@@ -539,28 +394,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @return session里面的user
      */
     protected UcenterMsUserVO getSessionuser() {
-        HttpServletRequest request = getRequest();
-        return (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
-    }
-
-    /**
-     * 无分页查询bean列表数据
-     *
-     * @param e
-     * @param request
-     * @param response
-     * @throws Exception
-     */
-    @GetMapping("findListData")
-    @ResponseBody
-    @LogMethod(voParamIndex = 0)
-    @ApiOperation(value = "无分页查询bean列表数据", hidden = true)
-    public List<V> findListData(V e, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (isPermitted(request, "see")) {
-            List<V> list = baseService.findForList((D) e);
-            return list;
-        }
-        throw new NotPremissionException();
+        return UserContext.getSessionuser();
     }
 
 

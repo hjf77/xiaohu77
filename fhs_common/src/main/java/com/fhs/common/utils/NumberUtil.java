@@ -220,7 +220,7 @@ public class NumberUtil {
      * @return 四舍五不入后的结果
      */
     public static double numberDown(double v, int scale) {
-        return new BigDecimal(StringUtil.toString(v)).setScale(scale, BigDecimal.ROUND_DOWN).doubleValue();
+        return new BigDecimal(StringUtils.toString(v)).setScale(scale, BigDecimal.ROUND_DOWN).doubleValue();
     }
 
     /**

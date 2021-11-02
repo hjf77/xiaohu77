@@ -2,11 +2,9 @@ package com.fhs.module.base.filter;
 
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.PubResult;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -20,7 +18,7 @@ import java.io.IOException;
  * @author user
  * @since 2019-05-18 11:34:35
  */
-@WebFilter(urlPatterns = {"/api/*"}, filterName = "apiAuthFilter", asyncSupported = true)
+@WebFilter(urlPatterns = {"/api/*","/easyTrans/proxy/*","/easyTrans/proxy/*","/easyCloud/proxy/"}, filterName = "apiAuthFilter", asyncSupported = true)
 public class ApiAuthFilter implements Filter {
 
     String apiToken = null;
@@ -38,7 +36,7 @@ public class ApiAuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String reqApiToken = request.getHeader("apiToken");
         if (CheckUtils.isNullOrEmpty(reqApiToken) || !reqApiToken.equals(apiToken)) {
-            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NO_PERMISSION.asResult().asJson());
+            JsonUtil.outJson((HttpServletResponse) servletResponse, PubResult.NO_PERMISSION.asResult().asJson());
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

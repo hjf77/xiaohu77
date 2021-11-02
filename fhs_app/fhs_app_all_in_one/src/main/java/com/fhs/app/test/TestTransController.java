@@ -1,9 +1,9 @@
 package com.fhs.app.test;
 
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.trans.service.impl.TransService;
 import com.fhs.front.dox.UcenterFrontUserDO;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class TestTransController {
     }
 
     @Data
-    public static class TestStudent extends BaseDO<TestStudent>{
+    public static class TestStudent extends BasePO<TestStudent> {
         @Trans(type = TransType.SIMPLE,target = UcenterFrontUserDO.class,fields = "nickName")
         private String userId ;
     }

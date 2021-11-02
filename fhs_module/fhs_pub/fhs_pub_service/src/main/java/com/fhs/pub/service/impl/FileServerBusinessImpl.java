@@ -1,7 +1,7 @@
 package com.fhs.pub.service.impl;
 
 import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
 import com.fhs.pub.api.rpc.FeignFileApiService;
@@ -36,7 +36,7 @@ public class FileServerBusinessImpl implements FileServerBusiness, FeignFileApiS
         PubFileVO sf = new PubFileVO();
         String fileName = fileData.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        String fileId = StringUtil.getUUID();
+        String fileId = StringUtils.getUUID();
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
         sf.setFileName(fileName);
@@ -71,7 +71,7 @@ public class FileServerBusinessImpl implements FileServerBusiness, FeignFileApiS
         PubFileVO sf = new PubFileVO();
         String fileName = filedata.getName();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        String fileId = StringUtil.getUUID();
+        String fileId = StringUtils.getUUID();
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
         sf.setFileName(fileName);

@@ -2,8 +2,8 @@ package com.fhs.core.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fhs.core.base.dox.BaseDO;
-import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.base.po.BasePO;
+import com.fhs.core.trans.vo.VO;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,16 +23,9 @@ import java.util.Map;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface BaseService<V extends VO, D extends BaseDO> {
+public interface BaseService<V extends VO, D extends BasePO> {
 
-    /**
-     * 将一个map里面的数据插入到数据库
-     *
-     * @param info 数据
-     * @return 默认为影响条数
-     */
-    @Deprecated
-    int addFromMap(Map<String, Object> info);
+
 
     /**
      * 将一个obj插入到数据库
@@ -42,14 +35,6 @@ public interface BaseService<V extends VO, D extends BaseDO> {
      */
     int add(D bean);
 
-    /**
-     * 更新数据库数据，参数为map
-     *
-     * @param map map
-     * @return 默认为影响条数
-     */
-    @Deprecated
-    boolean updateFormMap(Map<String, Object> map);
 
     /**
      * 更新数据库数据，参数为object
@@ -70,30 +55,7 @@ public interface BaseService<V extends VO, D extends BaseDO> {
     @Deprecated
     boolean updateJpa(D bean);
 
-    /**
-     * 删除数据库数据，参数为map
-     *
-     * @param map map
-     * @return 默认为影响条数
-     */
-    @Deprecated
-    boolean deleteFromMap(Map<String, Object> map);
 
-    /**
-     * 真实删除-根据id集合删除
-     *
-     * @param idList
-     * @return
-     */
-    int deleteByIdsMp(Collection<? extends Serializable> idList);
-
-    /**
-     * 根据Wrapper 删除-真实删除
-     *
-     * @param wrapper
-     * @return
-     */
-    int deleteMp(Wrapper<D> wrapper);
 
     /**
      * 删除数据库 数据 参数为object
@@ -103,14 +65,7 @@ public interface BaseService<V extends VO, D extends BaseDO> {
      */
     boolean delete(D bean);
 
-    /**
-     * 查询 返回一行一列 结果为int类型 参数为map
-     *
-     * @param map map
-     * @return 结果
-     */
-    @Deprecated
-    int findCountFromMap(Map<String, Object> map);
+
 
     /**
      * 查询 返回一行一列 结果为int类型 参数为obj
@@ -144,30 +99,8 @@ public interface BaseService<V extends VO, D extends BaseDO> {
      */
     List<V> findForList(D bean, int pageStart, int pageSize);
 
-    /**
-     * 查询数据 参数为map
-     *
-     * @param map map
-     * @return 查询出来的数据集合
-     */
-    @Deprecated
-    List<V> findForListFromMap(Map<String, Object> map);
 
-    /**
-     * @param map
-     * @return
-     */
-    @Deprecated
-    List<Map<String, Object>> findMapList(Map<String, Object> map);
 
-    /**
-     * 查询一条数据，返回map
-     *
-     * @param map 参数为map
-     * @return 一行数据
-     */
-    @Deprecated
-    V findBeanFromMap(Map<String, Object> map);
 
     /**
      * 查询一条数据 返回object
@@ -178,23 +111,7 @@ public interface BaseService<V extends VO, D extends BaseDO> {
     V findBean(D bean);
 
 
-    /**
-     * 批处理更新数据
-     *
-     * @param list list 数据集合
-     * @return 受影响行数
-     */
-    @Deprecated
-    int updateBatch(List<Map<String, Object>> list);
 
-    /**
-     * 批处理添加数据
-     *
-     * @param paramMap paramMap 参数 包含dataList 数据集合
-     * @return 受影响行数
-     */
-    @Deprecated
-    int addBatch(Map<String, Object> paramMap);
 
     /**
      * 做判空处理的insert -- jpa方法
@@ -384,7 +301,7 @@ public interface BaseService<V extends VO, D extends BaseDO> {
      * @param queryWrapper 过滤条件
      * @return 符合条件的数据数量
      */
-    Integer selectCountMP(Wrapper<D> queryWrapper);
+    Long selectCountMP(Wrapper<D> queryWrapper);
 
     /**
      * 查询list

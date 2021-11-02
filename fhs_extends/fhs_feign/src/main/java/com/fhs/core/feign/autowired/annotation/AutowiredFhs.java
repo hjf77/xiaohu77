@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * @Filename: AutowiredFhs.java
  * @Description: fegin 代理出来的接口自动注入
  * @Version: 1.0
- * @Author: qixiaobo
+ * @Author: wanglei
  * @Email: qxb@sxpartner.com
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.

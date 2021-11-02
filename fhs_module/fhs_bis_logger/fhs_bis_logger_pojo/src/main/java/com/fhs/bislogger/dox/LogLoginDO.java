@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @TableName("t_log_login")
 @EqualsAndHashCode(callSuper = true)
-public class LogLoginDO extends BaseDO<LogLoginDO> {
+public class LogLoginDO extends BasePO<LogLoginDO> {
     private static final long serialVersionUID = 330446860714574816L;
 
     /**
@@ -43,7 +43,7 @@ public class LogLoginDO extends BaseDO<LogLoginDO> {
     /**
      * 访问次数
      */
-    @TableId(value = "visit_number", type = IdType.AUTO)
+    @TableField(value = "visit_number")
     private Integer visitNumber;
 
     /**

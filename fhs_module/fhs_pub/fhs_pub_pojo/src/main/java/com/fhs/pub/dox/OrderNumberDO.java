@@ -1,6 +1,6 @@
 package com.fhs.pub.dox;
 
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +35,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_order_log")
 @ApiModel(value = "OrderNumberDO", description = "OrderNumber参数")
-public class OrderNumberDO extends BaseDO<OrderNumberDO> {
+public class OrderNumberDO extends BasePO<OrderNumberDO> {
     private static final long serialVersionUID = 1L;
     /**
      * 主键id
@@ -50,7 +49,6 @@ public class OrderNumberDO extends BaseDO<OrderNumberDO> {
     /**
      * 类型
      */
-    @Length(message = "pubservice的type字段的长度最大为20", groups = {Add.class, Update.class}, max = 20, min = 0)
     @Column(name = "type", nullable = true, length = 20)
     @ApiModelProperty("类型")
     private String type;
@@ -58,7 +56,6 @@ public class OrderNumberDO extends BaseDO<OrderNumberDO> {
     /**
      * 时间
      */
-    @Length(message = "pubservice的time字段的长度最大为50", groups = {Add.class, Update.class}, max = 50, min = 0)
     @Column(name = "time", nullable = true, length = 50)
     @ApiModelProperty("时间")
     private String time;

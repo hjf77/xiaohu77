@@ -1,7 +1,8 @@
 package com.fhs.basics.controller;
 
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.constant.BaseTransConstant;
-import com.fhs.basics.dox.UcenterMsRoleDO;
+import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -10,19 +11,16 @@ import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
-import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
-import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -43,63 +41,13 @@ import java.util.*;
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysRole")
 @LogNamespace(namespace = BaseTransConstant.ROLE_INFO, module = "角色管理")
-public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRoleDO> {
+public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRolePO> {
 
     /**
      * 角色服务
      */
     @Autowired
     private UcenterMsRoleService sysRoleService;
-
-    /**
-     * 获取角色集合
-     *
-     * @param organizationId 机构id
-     */
-    @RequiresPermissions("sysRole:see")
-    @RequestMapping("/listData/{organizationId}")
-    @LogMethod
-    public Pager<UcenterMsRoleVO> listData(@PathVariable(value = "organizationId") String organizationId) {
-        UcenterMsUserVO sysUser = super.getSessionuser();
-        Map<String, Object> map = super.getPageTurnNum();
-        if (CheckUtils.isNotEmpty(organizationId)) {
-            map.put("organizationId", organizationId);
-        } else {
-            map.put("organizationId", sysUser.getOrganizationId());
-        }
-        List<UcenterMsRoleVO> dataList = sysRoleService.findForListFromMap(map);
-        int count = sysRoleService.findCountFromMap(map);
-        return new Pager<UcenterMsRoleVO>(count, dataList);
-    }
-
-    /**
-     * 获取角色列表jsonp
-     */
-    @RequestMapping("getRolesForJsonp")
-    @LogMethod
-    public void getRolesForJsonp(HttpServletRequest request) {
-        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
-        UcenterMsRoleDO roleName = UcenterMsRoleDO.builder().roleName(request.getParameter("roleName")).build();
-        List<UcenterMsRoleVO> roles =
-                sysRoleService.selectPage(roleName, pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
-        super.outJsonp(new Pager<UcenterMsRoleVO>(sysRoleService.selectCount(roleName), roles).asJson());
-        //        super.outJsonp(listData(null).asJson());
-    }
-
-    /**
-     * 根据角色ids获取角色列表
-     *
-     * @param ids
-     */
-    @RequestMapping("getRoleForJsonpByIds")
-    public void getRoleForJsonpByIds(String ids) {
-        if (CheckUtils.isNullOrEmpty(ids)) {
-            super.outJsonp("[]");
-            return;
-        }
-        List<UcenterMsRoleVO> roles = sysRoleService.findByIds(Arrays.asList(ids.split(",")));
-        super.outJsonp(JsonUtils.list2json(roles));
-    }
 
 
     /**
@@ -133,61 +81,25 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         return sysRoleService.findForList(sysRole);
     }
 
-    /**
-     * 角色下拉框获取数据
-     *
-     * @return
-     */
-    @RequestMapping("realRoleComBoxData")
-    public void realRoleComBoxData() {
-        Map<String, Object> map = super.getPageTurnNum();
-        map.put("organizationId", super.getSessionuser().getOrganizationId());
-        super.outJsonp(JsonUtils.list2json(sysRoleService.findForListFromMap(map)));
-    }
 
-    /**
-     * 根据机构id获取角色下拉框数据
-     *
-     * @return
-     */
-    @RequestMapping("/getSelectOrganSysRoles/{organizationId}")
-    public List<UcenterMsRoleVO> getSelectOrganSysRoles(@PathVariable("organizationId") String organizationId) {
-        if (StringUtil.isEmpty(organizationId)) {
-            throw new ParamException("organizationId 为必传");
-        } else {
-            Map<String, Object> map = super.getParameterMap();
-            map.put("organizationId", organizationId);
-            return sysRoleService.findForListFromMap(map);
-        }
-    }
+
+
 
     @ResponseBody
     @PutMapping("/")
-    @RequiresPermissions("sysRole:update")
+    @SaCheckRole("sysRole:update")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class) UcenterMsRoleVO e, HttpServletRequest request,
+    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
                                             HttpServletResponse response) {
-        return updateSysRole(e);
-    }
-
-    /**
-     * 更新角色信息
-     * @paramadminRole
-     */
-    @ResponseBody
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2)
-    @RequestMapping("updateSysRole")
-    @RequiresPermissions("sysRole:update")
-    public HttpResult<Boolean> updateSysRole(UcenterMsRoleVO sysRole) {
         UcenterMsRoleVO oldRole = sysRoleService.selectById(sysRole.getRoleId());
         if (Constant.ENABLED == oldRole.getIsEnable() && Constant.DISABLE == sysRole.getIsEnable()) {
             // 根据roleid查询用户关联表用户数
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("roleId", sysRole.getRoleId());
             Integer count = sysRoleService.findUserCountByRoleId(paramMap);
-            if (count > Constant.ENABLED) {
-                return HttpResult.error(count > Constant.ENABLED, "该角色拥有关联用户,不可禁用!");
+            if (count > 0) {
+                throw new ParamException("该角色拥有关联用户,不可禁用");
             }
         }
         UcenterMsUserVO sysUser = super.getSessionuser();
@@ -197,26 +109,16 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         return HttpResult.success(true);
     }
 
+
+
     @NotRepeat
     @ResponseBody
-    @RequiresPermissions("sysRole:add")
+    @SaCheckRole("sysRole:add")
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> save(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
                                     HttpServletResponse response) {
-        return add(sysRole);
-    }
-
-    /**
-     * 添加角色
-     *
-     * @param sysRole
-     */
-    @RequiresPermissions("sysRole:add")
-    @RequestMapping("addSysRole")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> add(UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
@@ -226,30 +128,17 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         return HttpResult.success(true);
     }
 
-    /**
-     * 根据Id删除角色
-     *
-     * @param sysRole
-     */
-    @RequiresPermissions("sysRole:del")
-    @RequestMapping("delSysRole")
-    @ApiOperation(value = "删除-Easyui专用")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, voParamIndex = 2)
-    public HttpResult<Boolean> del(UcenterMsRoleVO sysRole) {
-        sysRoleService.deleteRole(sysRole);
-        return HttpResult.success(true);
-
-    }
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    @RequiresPermissions("sysRole:del")
+    @SaCheckRole("sysRole:del")
     @ApiOperation(value = "删除-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> delForVue(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
         UcenterMsRoleVO role = new UcenterMsRoleVO();
         role.setRoleId(ConverterUtils.toInt(id));
-        return del(role);
+        sysRoleService.deleteRole(role);
+        return HttpResult.success(true);
     }
 
     /**

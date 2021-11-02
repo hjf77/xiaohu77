@@ -14,10 +14,6 @@ public interface BaseTransConstant {
      */
     String SYS_ORGANIZATION_INFO = "sysOrganizationInfo";
 
-    /**
-     * 字典
-     */
-    String WORD_BOOK = TransType.WORD_BOOK;
 
     /**
      * 用户信息

@@ -1,6 +1,6 @@
 package com.fhs.core.base.pojo.pager;
 
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 
 import java.util.Collection;
 
@@ -10,7 +10,7 @@ import java.util.Collection;
  * @Filename: Pager.java
  * @Description:
  * @Version: 1.0
- * @Author: qixiaobo
+ * @Author: wanglei
  * @Email: wanglei@sxpartner.com
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
@@ -51,6 +51,6 @@ public class Pager<T> {
     }
 
     public String asJson() {
-        return JsonUtils.bean2json(this);
+        return JsonUtil.bean2json(this);
     }
 }

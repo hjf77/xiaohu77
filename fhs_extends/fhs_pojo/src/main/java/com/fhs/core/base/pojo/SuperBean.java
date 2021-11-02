@@ -10,8 +10,6 @@ import com.fhs.common.utils.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
@@ -92,7 +90,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      * @param inParam 参数集合
      */
     public void add2In(String field, List<String> inParam) {
-        inFilter.put(field, StringUtil.getStrToIn(inParam));
+        inFilter.put(field, StringUtils.getStrToIn(inParam));
     }
 
 
@@ -117,7 +115,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @JSONField(serialize = false)
     @JsonIgnore
-    public String getAdvanceSearchSql() {
+    public String findAdvanceSearchSql() {
         if (extAdvanceFilterParam == null) {
             return null;
         }
@@ -216,9 +214,6 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
 
                 return null;
             }
-        } else if (field.isAnnotationPresent(Column.class)) {
-            Column column = field.getAnnotation(Column.class);
-            return column.name();
         }
         return null;
     }

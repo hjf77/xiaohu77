@@ -115,9 +115,9 @@ export default {
     this.newValueField = this.valueField;
     if (this.dictCode) {
       this.newURL =
-        "/webApi/wordbook/getData?wordbookGroupCode=" + this.dictCode;
-      this.newValueField = "wordbookCode";
-      this.newLabelField = "wordbookDesc";
+        "/ms/dictItem/findList?dictGroupCode=" + this.dictCode;
+      this.newValueField = "dictCode";
+      this.newLabelField = "dictDesc";
     }
     if (this.newURL) {
       this.loadData();

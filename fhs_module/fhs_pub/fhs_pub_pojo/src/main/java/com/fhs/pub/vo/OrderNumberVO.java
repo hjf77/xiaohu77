@@ -1,6 +1,6 @@
 package com.fhs.pub.vo;
 
-import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.pub.dox.OrderNumberDO;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

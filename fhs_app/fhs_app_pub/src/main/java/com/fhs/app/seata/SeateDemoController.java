@@ -1,9 +1,7 @@
 package com.fhs.app.seata;
 
-import com.fhs.common.utils.StringUtil;
-import com.fhs.core.exception.ParamException;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.result.HttpResult;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +16,7 @@ public class SeateDemoController {
     @GlobalTransactional
     @RequestMapping("/seata/demo/add")
     public HttpResult<Boolean> add(){
-        String uuid = StringUtil.getUUID();
+        String uuid = StringUtils.getUUID();
         System.out.println(uuid);
         demoApi.insert(uuid);
         if(1==1){

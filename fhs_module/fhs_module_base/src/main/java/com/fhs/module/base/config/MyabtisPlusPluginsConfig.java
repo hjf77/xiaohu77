@@ -1,6 +1,7 @@
 package com.fhs.module.base.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,8 +11,8 @@ public class MyabtisPlusPluginsConfig {
      * mybatis-plus分页插件
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+    public PaginationInnerInterceptor paginationInterceptor() {
+        PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
         return paginationInterceptor;
     }
 }

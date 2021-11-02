@@ -9,8 +9,8 @@ import java.util.List;
  * @Filename: Node.java
  * @description:
  * @Version: 1.0
- * @Author: qixiaobo
- * @Email: qixiaobo@sxpartner.com
+ * @Author: wanglei
+ * @Email: wanglei@sxpartner.com
  * @History: 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 public class ComboboxNodeVO {

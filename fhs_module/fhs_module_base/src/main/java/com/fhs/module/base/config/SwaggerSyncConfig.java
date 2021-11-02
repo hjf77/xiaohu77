@@ -33,7 +33,7 @@ import java.util.List;
 
 /*
  *
- * 本类代理@EnableSwagger2 注解，可实现swagger异步加载
+ * 本类代替@EnableSwagger2 注解，可实现swagger异步加载
  */
 
 

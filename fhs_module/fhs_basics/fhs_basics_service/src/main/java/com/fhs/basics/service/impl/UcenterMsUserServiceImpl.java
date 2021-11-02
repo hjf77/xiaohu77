@@ -1,17 +1,13 @@
 package com.fhs.basics.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
-import com.fhs.basics.dox.UcenterMsOrganizationDO;
-import com.fhs.basics.dox.UcenterMsUserDO;
-import com.fhs.basics.dox.UcenterMsTenantDO;
-import com.fhs.basics.form.SysUserForm;
+import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.po.UcenterMsTenantPO;
 import com.fhs.basics.mapper.SettMsMenuMapper;
 import com.fhs.basics.mapper.UcenterMsUserMapper;
 import com.fhs.basics.service.*;
@@ -19,13 +15,9 @@ import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.*;
-import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
-import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
-import com.fhs.core.exception.ParamException;
-import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.google.common.collect.HashMultimap;
@@ -53,7 +45,7 @@ import java.util.stream.Collectors;
 @Service("ucenterMsUserService")
 @DataSource("base_business")
 @AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = "userName")
-public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserDO> implements UcenterMsUserService, FeignSysUserApiService {
+public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserPO> implements UcenterMsUserService {
 
     private final int ADMIN = 1;
 
@@ -87,7 +79,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
 
     @Override
-    public UcenterMsUserVO login(UcenterMsUserDO adminUser) {
+    public UcenterMsUserVO login(UcenterMsUserPO adminUser) {
         adminUser = sysUserMapper.login(adminUser);
         if (adminUser == null) {
             return null;
@@ -104,11 +96,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 result.setCompanyName(organization.getName());
             }
         }
+        result.setPassword(null);
         return result;
     }
 
     @Override
-    public void sendMail(UcenterMsUserDO adminUser, String pas) {
+    public void sendMail(UcenterMsUserPO adminUser, String pas) {
         //如果开通要发邮件的话可以写到这里
 
     }
@@ -120,18 +113,19 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public int addUserRole(UcenterMsUserDO adminUser) {
+    public int addUserRole(UcenterMsUserPO adminUser) {
         return sysUserMapper.addUserRole(adminUser);
     }
 
     @Override
-    public List<Map<String, Object>> searchUserRole(UcenterMsUserDO adminUser) {
+    public List<Map<String, Object>> searchUserRole(UcenterMsUserPO adminUser) {
         return sysUserMapper.searchUserRole(adminUser);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+
     @Override
-    public boolean deleteUserRole(UcenterMsUserDO adminUser) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean deleteUserRole(UcenterMsUserPO adminUser) {
         try {
             sysUserMapper.deleteUserRole(adminUser);
             return true;
@@ -140,12 +134,13 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+
     @Override
-    public Map<String, Object> addUser(UcenterMsUserDO adminUser) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Map<String, Object> addUser(UcenterMsUserPO adminUser) {
         int count = 0;
-        if (StringUtil.isEmpty(adminUser.getUserId())) { //新增
-            adminUser.setUserId(StringUtil.getUUID());
+        if (StringUtils.isEmpty(adminUser.getUserId())) { //新增
+            adminUser.setUserId(StringUtils.getUUID());
             count = this.insertSelective(adminUser);
         } else {//修改
             count = super.updateSelectiveById(adminUser);
@@ -167,9 +162,10 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return paramMap;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+
     @Override
-    public boolean updateUser(UcenterMsUserDO adminUser) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean updateUser(UcenterMsUserPO adminUser) {
         // 删除原有的角色
         boolean count = deleteUserRole(adminUser);
         if (count) {
@@ -190,181 +186,13 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * 根据用户查询菜单
      */
     @Override
-    public List<SettMsMenuVO> selectMenuByUid(UcenterMsUserDO adminUser) {
+    public List<SettMsMenuVO> selectMenuByUid(UcenterMsUserPO adminUser) {
         return ListUtils.copyListToList(sysUserMapper.selectMenuByUid(adminUser), SettMsMenuVO.class);
     }
 
-    /**
-     * 构建菜单树数据
-     *
-     * @param adminUser
-     * @return
-     */
-    @Override
-    public JSONArray buildMenuJson(UcenterMsUserDO adminUser) {
-        List<SettMsMenuVO> menuList = null;
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("menuType", "0");//运营菜单
-        UcenterMsUserDO temp = super.findBean(adminUser);
-        if (temp.getIsAdmin() == ADMIN) {
-            menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(map), SettMsMenuVO.class);
-        } else {
-            menuList = selectMenuByUid(adminUser);
-        }
-        JSONArray array = searchArrayGroupby(menuList);
-        return array;
-    }
-
-    private List<SettMsMenuVO> dropDoulbe(List<SettMsMenuVO> menuList) {
-        MyMap<String, SettMsMenuVO> map = new MyMap<String, SettMsMenuVO>();
-        for (SettMsMenuVO menu : menuList) {
-            if (menu.getMenuState() != SHOW) {
-                continue;
-            }
-            map.put(menu.getFatherMenuId() + "" + menu.getMenuId(), menu);
-        }
-        return map.getValueList();
-    }
 
 
-    @Override
-    public UcenterMsUserVO findBean(UcenterMsUserDO bean) {
-        UcenterMsUserVO adminUser = super.findBean(bean);
-        return adminUser;
-    }
 
-    @Override
-    public List<UcenterMsUserVO> findForListFromMap(Map<String, Object> map) {
-        List<UcenterMsUserVO> result = super.findForListFromMap(map);
-        return result;
-    }
-
-    /**
-     * 根据父Id分组构建json数据
-     *
-     * @param menuList
-     * @return
-     */
-
-    public JSONArray searchArrayGroupby(List<SettMsMenuVO> menuList) {
-        menuList = dropDoulbe(menuList);
-        MyMap<String, JSONObject> tempmap = new MyMap<String, JSONObject>();
-        MyMap<String, JSONObject> mapobj = new MyMap<String, JSONObject>();
-        MyMap<String, Integer> map = caseListToMap(menuList);
-        for (Integer item : map.getValueList()) {
-            JSONArray temparr = new JSONArray();
-            List<SettMsMenuVO> templist = seachChildJson(item, menuList);
-            for (SettMsMenuVO menu : templist) {
-                JSONObject menujson = new JSONObject();
-                menujson.put("id", menu.getMenuId());
-                menujson.put("name", menu.getMenuName());
-                menujson.put("url", menu.getMenuUrl());
-                menujson.put("img", "");
-                menujson.put("serverUrl", menu.getServerUrl());
-                menujson.put("sonMenu", new JSONArray());
-                temparr.add(menujson);
-                tempmap.put(menu.getMenuId().toString(), menujson);
-            }
-            JSONObject tempobj = searchMenuByParentId(item, temparr, tempmap);
-            if (tempobj == null) {
-                continue;
-            }
-            String key = tempobj.getString("id") + "root";
-            JSONObject res = tempmap.get(key);
-            if (res == null) {
-                tempmap.put(key, tempobj);
-            }
-            mapobj.put(key, tempobj);
-        }
-        JSONArray array = mapToJSONArray(mapobj);
-        return array;
-    }
-
-    private JSONArray mapToJSONArray(MyMap<String, JSONObject> map) {
-        JSONArray array = new JSONArray();
-        List<String> set = map.getKeyList();
-        Iterator<String> iter = set.iterator();
-        while (iter.hasNext()) {
-            JSONObject tempob = map.get(iter.next());
-            int id = tempob.getIntValue("id");
-            if (id == 0) {
-                array.addAll(tempob.getJSONArray("sonMenu"));
-            } else {
-                array.add(tempob);
-            }
-        }
-        return array;
-    }
-
-    /**
-     * 将菜单集合转换为父Id map表
-     *
-     * @param menuList
-     * @return
-     */
-    private MyMap<String, Integer> caseListToMap(List<SettMsMenuVO> menuList) {
-        MyMap<String, Integer> map = new MyMap<String, Integer>();
-        for (SettMsMenuVO item : menuList) {
-            map.put(ConverterUtils.toString(item.getFatherMenuId()), item.getFatherMenuId());
-        }
-        return map;
-    }
-
-    /**
-     * 获取特定父Id的子项集合
-     *
-     * @param parentId
-     * @param menuList
-     * @return
-     */
-    private List<SettMsMenuVO> seachChildJson(Integer parentId, List<SettMsMenuVO> menuList) {
-        List<SettMsMenuVO> array = new ArrayList<SettMsMenuVO>();
-        for (SettMsMenuVO item : menuList) {
-            if (parentId != null && (item.getFatherMenuId()) != null
-                    && parentId.intValue() == item.getFatherMenuId().intValue()) {
-                array.add(item);
-            }
-        }
-        return array;
-    }
-
-    /**
-     * 递归构建json数据
-     *
-     * @param parentId
-     * @param child
-     * @return
-     */
-    private JSONObject searchMenuByParentId(Integer parentId, JSONArray child, MyMap<String, JSONObject> parenmap) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("fatherMenuId", parentId);
-        SettMsMenuVO parentmenu = selectParentMenuById(map);
-        if (parentmenu != null && parentmenu.getMenuId() != 0) {
-            JSONObject menujson = parenmap.get(parentId.toString());
-            JSONArray array = new JSONArray();
-            if (menujson == null) {
-                menujson = new JSONObject();
-                menujson.put("id", parentmenu.getMenuId());
-                menujson.put("name", parentmenu.getMenuName());
-                menujson.put("url", parentmenu.getMenuUrl());
-                menujson.put("img", "");
-                menujson.put("sonMenu", child);
-
-            } else {
-                JSONArray temp = menujson.getJSONArray("sonMenu");
-                temp.addAll(child);
-            }
-            array.add(menujson);
-            parenmap.put(parentmenu.getMenuId().toString(), menujson);
-            if (parentmenu.getFatherMenuId() != 0) {
-                return searchMenuByParentId(parentmenu.getFatherMenuId(), array, parenmap);
-            }
-            return menujson;
-        } else {
-            return child.getJSONObject(0);
-            // return null;
-        }
-    }
 
     /**
      * 获取根据子菜单获取父菜单
@@ -380,7 +208,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * 校验密码
      */
     @Override
-    public boolean validataPass(UcenterMsUserDO adminUser) {
+    public boolean validataPass(UcenterMsUserPO adminUser) {
         if (adminUser.getOldPassword() == null) {
             return false;
         }
@@ -393,7 +221,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * 验证登录名是否存在
      */
     @Override
-    public boolean validataLoginName(UcenterMsUserDO adminUser) {
+    public boolean validataLoginName(UcenterMsUserPO adminUser) {
         int count = sysUserMapper.getAdminUserCountByLoginName(adminUser);
         return count <= 0;
     }
@@ -402,7 +230,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * 更新密码
      */
     @Override
-    public boolean updatePass(UcenterMsUserDO adminUser) {
+    public boolean updatePass(UcenterMsUserPO adminUser) {
         if (adminUser.getOldPassword() == null) {
             return false;
         }
@@ -428,41 +256,43 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * 获取用户操作权限
      */
     @Override
-    public List<SettMsMenuPermissionVO> searchUserButton(UcenterMsUserDO adminUser) {
+    public List<SettMsMenuPermissionVO> searchUserButton(UcenterMsUserPO adminUser) {
         return ListUtils.copyListToList(sysUserMapper.searchUserButton(adminUser), SettMsMenuPermissionVO.class);
     }
 
     /**
-     * 根据用户获取菜单，shiro授权使用
+     * 根据用户获取菜单，授权使用
      */
     @Override
-    public List<String> selectMenuByUname(UcenterMsUserDO adminUser) {
+    public List<String> selectMenuByUname(UcenterMsUserPO adminUser) {
         return selectMenuByUname(adminUser, SHOW);
     }
 
     @Override
-    public List<String> selectMenuByUname(UcenterMsUserDO adminUser, int menuState) {
-        List<SettMsMenuVO> adminMenus = null;
+    public List<String> selectMenuByUname(UcenterMsUserPO adminUser, int menuState) {
         UcenterMsUserVO tempUser = selectUserByULname(adminUser);
+        return new ArrayList<>(findPermissionByUserId(tempUser.getUserId()));
+    }
+
+    @Override
+    public Set<String> findPermissionByUserId(String userId) {
+        List<SettMsMenuVO> adminMenus = null;
+        UcenterMsUserVO tempUser = super.selectById(userId);
         if (tempUser == null) {
             return null;
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        if (tempUser.getIsAdmin() == ADMIN)// 管理员时，全查
-        {
-            paramMap.put("menuState", menuState);
+        // 管理员时，全查
+        if (tempUser.getIsAdmin() == ADMIN) {
             adminMenus = ListUtils.copyListToList(sysMenuMapper.findForAllList(paramMap), SettMsMenuVO.class);
         } else {
-            paramMap = MapUtils.bean2Map(adminUser);
-            paramMap.put("menuState", menuState);
             adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap), SettMsMenuVO.class);
         }
-        List<String> resulstList = readButtonsByList(adminMenus);
-        return resulstList;
+        return readPermissionSet(adminMenus);
     }
 
-    private List<String> readButtonsByList(List<SettMsMenuVO> adminMenus) {
-        List<String> resulstList = new ArrayList<String>();
+    private Set<String> readPermissionSet(List<SettMsMenuVO> adminMenus) {
+        Set<String> resulstList = new HashSet<>();
         for (SettMsMenuVO item : adminMenus) {
             resulstList.add(item.getNamespace());
         }
@@ -470,13 +300,13 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     @Override
-    public boolean delete(UcenterMsUserDO bean) {
+    public boolean delete(UcenterMsUserPO bean) {
         deleteUserRole(bean);
         return super.delete(bean);
     }
 
     @Override
-    public UcenterMsUserVO selectUserByULname(UcenterMsUserDO adminUser) {
+    public UcenterMsUserVO selectUserByULname(UcenterMsUserPO adminUser) {
         return d2v(sysUserMapper.selectUserByULname(adminUser));
     }
 
@@ -501,7 +331,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     @Override
-    public List<LeftMenuVO> getMenu(UcenterMsUserDO user, String menuType) {
+    public List<LeftMenuVO> getMenu(UcenterMsUserPO user, String menuType) {
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
         //如果是saas模式需要判断菜单类型
@@ -512,9 +342,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             } else {
                 paramMap.put("menuType", SettMsMenuService.MENU_TYPE_TENANT);
                 if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))) {
-                    String systemIds = tenantService.selectBean(UcenterMsTenantDO.builder().groupCode(user.getGroupCode()).build()).getSystemIds();
+                    String systemIds = tenantService.selectBean(UcenterMsTenantPO.builder().groupCode(user.getGroupCode()).build()).getSystemIds();
                     if (systemIds != null) {
-                        paramMap.put("systemIds", StringUtil.getStrToIn(systemIds.split(",")));
+                        paramMap.put("systemIds", StringUtils.getStrToIn(systemIds.split(",")));
                     }
                 }
             }
@@ -528,23 +358,23 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = new LeftMenuVO()
-                    .mk("id", adminMenu.getMenuId(), "serverUrl", adminMenu.getServerUrl(), "name",
-                            adminMenu.getMenuName(), "url", adminMenu.getMenuUrl(), "menuServer", adminMenu.getServerNameId(), "image", adminMenu.getImage());
+                    .mk("id", adminMenu.getMenuId(), "name",
+                            adminMenu.getMenuName(), "url", adminMenu.getMenuUrl());
             leftMenu.setNamespace(adminMenu.getNamespace());
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
         List<LeftMenuVO> result = new ArrayList<>();
         menuList.forEach(adminMenu -> {
-            if (ConverterUtils.toInt(adminMenu.getMenuState()) != SettMsMenuService.NOT_SHOW) {
+            if (ConverterUtils.toInt(adminMenu.getIsShow()) != SettMsMenuService.NOT_SHOW) {
                 // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() != BasicsMenuConstant.MENU_ROOT) {
+                if (adminMenu.getFatherMenuId() != null &&  BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId())) {
                     if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
                     }
                 }
                 // 如果是一级菜单则挂写到result去
-                else if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() == BasicsMenuConstant.MENU_ROOT) {
+                else if (adminMenu.getFatherMenuId() != null && BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId())) {
                     result.add(leftMenuMap.get(adminMenu.getMenuId()));
                 }
             }
@@ -553,7 +383,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     @Override
-    public List<VueRouterVO> getRouters(UcenterMsUserDO user, String menuType) {
+    public List<VueRouterVO> getRouters(UcenterMsUserPO user, String menuType) {
         List<LeftMenuVO> menus = getMenu(user, menuType);
         List<VueRouterVO> result = new ArrayList<>();
         VueRouterVO tempRouter = null;
@@ -600,7 +430,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * @param menuList
      * @return
      */
-    private List<SettMsMenuVO> menuFilter(UcenterMsUserDO user, List<SettMsMenuVO> menuList) {
+    private List<SettMsMenuVO> menuFilter(UcenterMsUserPO user, List<SettMsMenuVO> menuList) {
         Set<Integer> userMenuIds = null;
         if (user.getIsAdmin() == ADMIN) {
             userMenuIds = sysUserMapper.selectMenuIdByAdmin(user);
@@ -608,7 +438,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             userMenuIds = sysUserMapper.selectMenuIdByUserId(user);
         }
 
-        Map<Integer, SettMsMenuVO> menuMap = new HashMap<>();
+        Map<String, SettMsMenuVO> menuMap = new HashMap<>();
         menuList.forEach(menu -> {
             menuMap.put(menu.getMenuId(), menu);
         });
@@ -623,21 +453,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         List<SettMsMenuVO> result = new ArrayList<>();
         result.addAll(hasAddMenu);
-        result.sort(new Comparator<SettMsMenuVO>() {
-            @Override
-            public int compare(SettMsMenuVO o1, SettMsMenuVO o2) {
-                if (o1.getFatherMenuId() == null) {
-                    return -1;
-                }
-                if (o2.getFatherMenuId() == null) {
-                    return 1;
-                }
-                if (o1.getFatherMenuId() - o2.getFatherMenuId() == 0) {
-                    return ConverterUtils.toInt(o1.getOrderIndex()) - ConverterUtils.toInt(o2.getOrderIndex());
-                }
-                return o1.getFatherMenuId() - o2.getFatherMenuId();
-            }
-        });
         return result;
     }
 
@@ -648,7 +463,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * @param menuMap
      * @param sysMenu
      */
-    private void initFather(Set<SettMsMenuVO> hasAddMenu, Map<Integer, SettMsMenuVO> menuMap, SettMsMenuVO sysMenu) {
+    private void initFather(Set<SettMsMenuVO> hasAddMenu, Map<String, SettMsMenuVO> menuMap, SettMsMenuVO sysMenu) {
         if (menuMap.containsKey(sysMenu.getFatherMenuId())) {
             SettMsMenuVO father = menuMap.get(sysMenu.getFatherMenuId());
             if (!hasAddMenu.contains(father)) {
@@ -679,7 +494,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             String[] roleList = new String[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
-            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList, false));
+            sysUser.setRoleIds(StringUtils.getStrForIn(roleVectorList, false));
         } else {
             sysUser.setRoleList(new String[0]);
         }
@@ -695,7 +510,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public Boolean deleteSysUserById(String userId) {
         this.deleteById(userId);
-        UcenterMsUserDO sysUser = new UcenterMsUserDO();
+        UcenterMsUserPO sysUser = new UcenterMsUserPO();
         sysUser.setUserId(userId);
         return this.deleteUserRole(sysUser);
     }
@@ -706,7 +521,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     @Override
-    public List<String> getPermissionUrl(UcenterMsUserDO sysUser) {
+    public List<String> getPermissionUrl(UcenterMsUserPO sysUser) {
         // 如果是admin则返回所有的url
         if (sysUser.getIsAdmin() == UcenterMsUserService.SYS_USER_IS_ADMIN) {
             return getPermissionUrlAll();
@@ -735,7 +550,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         });
         dataPermissionTempMap.keySet().forEach(key -> {
             Set<String> dataPermissionsSet = dataPermissionTempMap.get(key);
-            resultMap.put(key, StringUtil.getStrForIn(dataPermissionsSet, true));
+            resultMap.put(key, StringUtils.getStrForIn(dataPermissionsSet, true));
         });
         UcenterMsUserVO user = this.selectById(userId);
         // 如果不是不是管理员，哪些数据权限他没有设置为-1
@@ -771,125 +586,27 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
 
     @Override
-    public List<UcenterMsUserDO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
-        List<UcenterMsUserDO> result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
-        List<UcenterMsUserVO> adminUsers = super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().eq(UcenterMsUserDO::getIsAdmin, Constant.INT_TRUE));
+    public List<UcenterMsUserPO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
+        List<UcenterMsUserPO> result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
+        List<UcenterMsUserVO> adminUsers = super.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>().eq(UcenterMsUserPO::getIsAdmin, Constant.INT_TRUE));
         //把admin也加入进来
         if (!adminUsers.isEmpty()) {
             result.addAll(adminUsers);
         }
         // 按userId删除重复用户
-        List<UcenterMsUserDO> userList = result.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(UcenterMsUserDO::getUserId))), ArrayList::new));
+        List<UcenterMsUserPO> userList = result.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(UcenterMsUserPO::getUserId))), ArrayList::new));
         return userList;
     }
 
 
-    @Override
-    public HttpResult<UcenterMsUserVO> getSysUserByName(String userLoginName) {
-        UcenterMsUserVO msUserVO = this.findBean(new UcenterMsUserVO().mk("userLoginName", userLoginName));
-        if (msUserVO == null) {
-            HttpResult.error("找不到对应用户");
-        }
-        return HttpResult.success(this.selectById(msUserVO.getUserId()));
-    }
-
-    @Override
-    public HttpResult<List<String>> selectMenuByUname(String userLoginName) {
-        List<String> list = this.selectMenuByUname(this.findBean(new UcenterMsUserVO().mk("userLoginName", userLoginName)));
-        return HttpResult.success(list);
-    }
-
-    @Override
-    public HttpResult<Pager<UcenterMsUserVO>> getSysUserList(SysUserForm sysUserForm) {
-        UcenterMsUserVO sysUser = new UcenterMsUserVO();
-        BeanUtils.copyProperties(sysUserForm, sysUser);
-        List<UcenterMsUserVO> sysUsersList = this.findForList(sysUser, sysUserForm.getPageStart() - 1, sysUserForm.getPageSize());
-        if (sysUsersList.size() > 0) {
-            List<UcenterMsUserVO> sysUserVoList = new ArrayList<>();
-            sysUsersList.forEach(sysUserForEach -> {
-                //正则表达式，替换手机号中间4位
-                sysUserForEach.setMobile(sysUserForEach.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-                sysUserVoList.add(sysUserForEach);
-            });
-            int count = this.findCount(sysUser);
-            return count > 0 ? HttpResult.success(new Pager<>(count, sysUserVoList)) : HttpResult.success(new Pager<UcenterMsUserVO>(0, null));
-        } else {
-            return HttpResult.success(new Pager<UcenterMsUserVO>(0, null));
-        }
-    }
-
-    @Override
-    public HttpResult<List<String>> getPermissionUrlByUserIdFeign(String userId) {
-        UcenterMsUserVO sysUser = this.selectById(userId);
-        if (sysUser == null) {
-            return HttpResult.error(null, "没有此用户");
-        } else {
-            return HttpResult.success(this.getPermissionUrl(sysUser));
-        }
-    }
 
     private List<String> getPermissionUrlByUserId(String userId) {
         return sysUserMapper.getPermissionUrlByUserId(userId);
     }
 
-    @Override
-    public HttpResult<Map<String, String>> getDataUserPermisstion(String userId) {
-        ParamChecker.isNotNullOrEmpty(userId, "userId不能为空");
-        return HttpResult.success(this.findUserDataPermissions(userId));
-    }
-
-    @Override
-    public HttpResult<UcenterMsUserVO> getSysUserByUserId(SysUserForm sysUserForm) {
-        UcenterMsUserVO vo = new UcenterMsUserVO();
-        if (!CheckUtils.isNullOrEmpty(sysUserForm) && !CheckUtils.isNullOrEmpty(sysUserForm.getUserId())) {
-            UcenterMsUserVO sysUser = this.selectById(sysUserForm.getUserId());
-            return HttpResult.success(sysUser);
-        }
-        throw new ParamException("userid不可为空");
-    }
-
-    @Override
-    public HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationId(String organizationId) {
-        ParamChecker.isNotNullOrEmpty(organizationId, "organizationId不能为空");
-        List<UcenterMsUserVO> sysUserList = this.findForList(UcenterMsUserVO.builder().organizationId(organizationId).build());
-        return HttpResult.success(sysUserList);
-    }
-
-    @Override
-    public HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationIds(String organizationIds) {
-        ParamChecker.isNotNullOrEmpty(organizationIds, "organizationIds不能为空");
-        Set<String> orgIdsSet = new HashSet<>(Arrays.asList(organizationIds.split(",")));
-        //organizationIds 其中部分可能是单位，如果是单位则把单位的orgid都查出来
-        List<UcenterMsOrganizationVO> orgs = organizationService.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationDO>().in(UcenterMsOrganizationDO::getCompanyId, orgIdsSet));
-        for (UcenterMsOrganizationVO org : orgs) {
-            orgIdsSet.add(org.getId());
-        }
-        List<UcenterMsUserVO> sysUserList = this.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getOrganizationId, orgIdsSet));
-        return HttpResult.success(sysUserList);
-    }
-
-    @Override
-    public HttpResult<List<UcenterMsUserVO>> getUserByIds(String userIds) {
-        List<UcenterMsUserVO> result = super.findByIds(new ArrayList<>(Arrays.asList(userIds.split(","))));
-        if (result.isEmpty()) {
-            return HttpResult.success(result);
-        }
-        List<String> orgIds = result.stream().map(UcenterMsUserVO::getOrganizationId).collect(Collectors.toList());
-        List<UcenterMsOrganizationVO> organizationVOS = this.organizationService.findByIds(orgIds);
-        Map<String, UcenterMsOrganizationVO> orgMap = organizationVOS.stream().collect(Collectors
-                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
-        UcenterMsOrganizationVO tempOrg = null;
-        for (UcenterMsUserVO user : result) {
-            if (orgMap.containsKey(user.getOrganizationId())) {
-                tempOrg = orgMap.get(user.getOrganizationId());
-                user.setCompanyId(tempOrg.getCompanyId());
-            }
-        }
-        return HttpResult.success(result);
-    }
 
 
-    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserDO> wrapper) {
+    public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
         List<UcenterMsUserVO> users = super.selectListMP(wrapper);
         List<UcenterMsOrganizationVO> orgs = this.organizationService.selectListMP(new LambdaQueryWrapper<>());
         Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
@@ -926,28 +643,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return result;
     }
 
-
     private List<String> getPermissionUrlAll() {
         return sysUserMapper.getPermissionUrlAll();
     }
 
-    public HttpResult<List<UcenterMsUserVO>> getUserByMobileList(List<String> mobileList) {
-        List<UcenterMsUserVO> result =
-                super.selectListMP(new LambdaQueryWrapper<UcenterMsUserDO>().in(UcenterMsUserDO::getMobile, mobileList));
-        if (result.isEmpty()) {
-            return HttpResult.success(result);
-        }
-        List<String> orgIds = result.stream().map(UcenterMsUserVO::getOrganizationId).collect(Collectors.toList());
-        List<UcenterMsOrganizationVO> organizationVOS = this.organizationService.findByIds(orgIds);
-        Map<String, UcenterMsOrganizationVO> orgMap = organizationVOS.stream().collect(Collectors
-                .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
-        UcenterMsOrganizationVO tempOrg = null;
-        for (UcenterMsUserVO user : result) {
-            if (orgMap.containsKey(user.getOrganizationId())) {
-                tempOrg = orgMap.get(user.getOrganizationId());
-                user.setCompanyId(tempOrg.getCompanyId());
-            }
-        }
-        return HttpResult.success(result);
-    }
+
 }

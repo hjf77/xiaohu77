@@ -5,16 +5,33 @@
     <parent>
         <artifactId>fhs_base</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <version>3.0.0</version>
     <artifactId>fhs_base_pojo</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
+            <artifactId>easy_trans_anno</artifactId>
+            <version>${fhs.easytrans.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis-plus-annotation</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-jpa-jack</artifactId>
             <version>${fhs.mybatis-jpa-jack.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis-plus</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
@@ -30,6 +47,11 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_excel_anno</artifactId>
             <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${fhs.mp-anno.version}</version>
         </dependency>
     </dependencies>
 

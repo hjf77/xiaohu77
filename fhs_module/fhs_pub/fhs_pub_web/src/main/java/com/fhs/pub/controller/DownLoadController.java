@@ -6,8 +6,6 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
-import com.fhs.module.base.controller.ModelSuperController;
-import com.fhs.pub.dox.PubFileDO;
 import com.fhs.pub.service.FileStorage;
 import com.fhs.pub.service.PubFileService;
 import com.fhs.pub.utils.ThumbnailatorUtils;
@@ -102,7 +100,7 @@ public class DownLoadController extends BaseController {
     public void listData(String fileIds) {
         ParamChecker.isNotNullOrEmpty(fileIds, "文件id不可为空");
         List<PubFileVO> list = pubFileService.findByIds(Arrays.asList(fileIds.split(",")));
-        String json = JsonUtils.list2json(list);
+        String json = JsonUtil.list2json(list);
         this.outJsonp(json);
     }
 
@@ -135,9 +133,8 @@ public class DownLoadController extends BaseController {
     })
     public void downImgMin(HttpServletRequest request, HttpServletResponse response) {
         String fileId = ConverterUtils.toString(request.getParameter("fileId"));
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("fileId", fileId);
-        PubFileVO serviceFile = pubFileService.findBeanFromMap(map);
+        ParamChecker.isNotNull(fileId,"fileId不可为空");
+        PubFileVO serviceFile = pubFileService.selectById(fileId);
         if (serviceFile == null) {
             return;
         }
@@ -218,9 +215,11 @@ public class DownLoadController extends BaseController {
     public void downUploadZip(HttpServletRequest request, HttpServletResponse response) {
         try {
             Map<String, Object> param = new HashMap<>();
-            param.put("fileIds", StringUtil.getStrToIn(request.getParameter("fileIds")));
+            param.put("fileIds", StringUtils.getStrToIn(request.getParameter("fileIds")));
             String fileName = request.getParameter("fileName");
-            List<PubFileVO> list = pubFileService.findForListFromMap(param);
+            String fileIds = request.getParameter("fileIds");
+            ParamChecker.isNotNull(fileIds,"fileIds不可为空");
+            List<PubFileVO> list = pubFileService.selectBatchIdsMP(Arrays.asList(fileIds.split(",")));
             //获取图片的路径
             String[] pngPathList = getPngPathList(list);
             //生成zip路径
@@ -249,7 +248,7 @@ public class DownLoadController extends BaseController {
         if (serviceFile.isEmpty()) {
             return new String[0];
         }
-        String tempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtil.getUUID();
+        String tempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID();
         new File(tempPath).mkdirs();
         String token = null;
         String tempFilePath = null;

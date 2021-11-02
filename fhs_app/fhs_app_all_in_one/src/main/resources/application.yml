@@ -13,6 +13,17 @@ mybatis-plus:
     db-config:
       logic-delete-value: 1
       logic-not-delete-value: 0
+easy-trans:
+  autotrans:
+    package: com.fhs.**.service.**;com.fhs.**.dao.**;
+  #启用redis缓存 如果不用redis请设置为false
+  is-enable-redis: true
+  #启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
+  is-enable-global: true
+  #启用平铺模式
+  is-enable-tile: true
+  #关闭springcloud支持
+  is-enable-cloud: false
 fhs:
   use-vue: false
   vue:
@@ -57,18 +68,8 @@ fhs:
   operator-log:
     enable: true
 
-  activiti:
-    createtb: false #是否创建表
   path: "{
-        'basePath': 'http://localhost:8089/',
-        'fhs_static_url': 'http://localhost:8089/',
-        'fhs_basics_url': 'http://localhost:8089/',
-        'fileSavePath': 'c:/flies',
-        'jbpmFilePath': 'c:/flies/jbpm/xml',
-        'loginOutUrl': 'http://localhost:8089/ms/logout',
-        'fhs_file_url': 'http://localhost:8089/',
-        'index_right_path': 'http://localhost:8089/b/page-ms-index/index_right',
-        'work_flow_url': 'http://localhost:8089/'
+        'fileSavePath': 'c:/flies'
         }"
   other: "{
           'isDevModel': 'true',
@@ -86,11 +87,6 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   application:
     name: fhs_admin_app
-  http:
-    encoding:
-      force: true
-      charset: utf-8
-      enabled: true
   redis:
     database: 11
     # 最大连接数
@@ -105,7 +101,7 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 10.100.14.97
+    host: 10.102.2.201
     password: 123456
     port: 6379
     timeout: 6000
@@ -125,51 +121,17 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://10.100.14.97:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://10.102.2.201:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
     validationQuery: select 'x'
 
-  quartz:
-    job-store-type: jdbc
-    properties:
-      org:
-        quartz:
-          jobStore:
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
-            clusterCheckinInterval: 2000
-            dataSource: basics
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            isClustered: true
-            tablePrefix: QRTZ_
-            useProperties: false
-          scheduler:
-            instanceId: AUTO
-            instanceName: clusteredScheduler
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
-    #Activiti property configuration
-  activiti:
-    database-schema-update: false
-    job-executor-activate: true
-    history-level: full
-    check-process-definitions: false
-    ext:
-      database-schema-update: false
 logging:
   config: classpath:logback-fhs.xml
   level:
     com.fhs.basics: debug
-    com.fhs.pagex: debug
-    com.fhs.flow: debug
     com.fhs.bislogger: debug
 logback:
-  #这里可以配置logstash ip和端口
-  elk:
-    host: 10.100.14.97:5044
   root:
     level: INFO
   file:
@@ -194,4 +156,20 @@ jetcache:
       valueDecoder: java
       asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://123456@10.100.14.97:6379/11  #redis://密码@IP:端口/库
+        - redis://123456@10.102.2.201:6379/11  #redis://密码@IP:端口/库
+# Sa-Token配置
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: Authorization
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false

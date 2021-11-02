@@ -14,14 +14,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.bislogger.api.context.BisLoggerContext;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.anno.NotRepeatDesc;
 import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.autodel.service.AutoDelService;
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.cache.annotation.Cacheable;
@@ -29,10 +27,11 @@ import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.trans.service.AutoTransAble;
-import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
+import com.fhs.trans.service.AutoTransAble;
+import com.fhs.trans.service.impl.TransService;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import com.mybatis.jpa.cache.JpaTools;
@@ -57,7 +56,7 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, AutoTransAble<V>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements BaseService<V, D>, AutoTransAble<V>, InitializingBean {
 
     protected final Logger log = Logger.getLogger(this.getClass());
 
@@ -125,14 +124,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
-    @Deprecated
-    public int addFromMap(Map<String, Object> info) {
-        int result = baseMapper.addFromMap(info);
-        this.refreshCache();
-        return result;
-    }
-
-    @Override
     public int add(D bean) {
         this.initPkeyAndIsDel(bean);
         checkIsExist(bean, false);
@@ -144,13 +135,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
-    @Override
-    @Deprecated
-    public boolean updateFormMap(Map<String, Object> map) {
-        boolean result = baseMapper.updateFormMap(map) > 0;
-        this.refreshCache();
-        return result;
-    }
 
     @Override
     public boolean update(D bean) {
@@ -176,13 +160,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
-    @Override
-    @Deprecated
-    public boolean deleteFromMap(Map<String, Object> map) {
-        boolean result = baseMapper.deleteFromMap(map) > 0;
-        this.refreshCache();
-        return result;
-    }
+
 
     @Override
     public boolean delete(D bean) {
@@ -192,12 +170,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
-    @Override
-    @Deprecated
-    public int findCountFromMap(Map<String, Object> map) {
-        int result = baseMapper.findCountFromMap(map);
-        return result;
-    }
+
 
     @Override
     public int findCount(D bean) {
@@ -208,7 +181,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int findCountJpa(D bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        String extWhereSql = bean.getAdvanceSearchSql();
+        String extWhereSql = bean.findAdvanceSearchSql();
         if (CheckUtils.isNullOrEmpty(extWhereSql)) {
             extWhereSql = null;
         }
@@ -237,23 +210,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return dos2vos(dos);
     }
 
-    @SuppressWarnings({"unchecked"})
-    @Override
-    @Deprecated
-    public List<V> findForListFromMap(Map<String, Object> map) {
-        List<D> dos = baseMapper.findForListFromMap(map);
-        return dos2vos(dos);
-    }
-
-    @Override
-    public List<Map<String, Object>> findMapList(Map<String, Object> map) {
-        return baseMapper.findMapList(map);
-    }
-
-    @Override
-    public V findBeanFromMap(Map<String, Object> map) {
-        return d2v(baseMapper.findBeanFromMap(map));
-    }
 
     @Override
     public V findBean(D bean) {
@@ -262,21 +218,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
 
-    @Override
-    @Deprecated
-    public int updateBatch(List<Map<String, Object>> list) {
-        int result = baseMapper.updateBatch(list);
-        this.refreshCache();
-        return result;
-    }
-
-    @Override
-    @Deprecated
-    public int addBatch(Map<String, Object> paramMap) {
-        int result = baseMapper.addBatch(paramMap);
-        this.refreshCache();
-        return result;
-    }
 
 
     @Override
@@ -298,7 +239,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             field.setAccessible(true);
             try {
                 if (field.get(entity) == null && field.getType() == String.class) {
-                    field.set(entity, StringUtil.getUUID());
+                    field.set(entity, StringUtils.getUUID());
                 }
                 if (entity.getCreateTime() == null) {
                     entity.setCreateTime(new Date());
@@ -400,18 +341,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
-    @Override
-    public int deleteByIdsMp(Collection<? extends Serializable> idList) {
-        for (Serializable id : idList) {
-            BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
-        }
-        return baseMapper.deleteBatchIds(idList);
-    }
 
-    @Override
-    public int deleteMp(Wrapper<D> wrapper) {
-        return baseMapper.delete(wrapper);
-    }
 
     @Override
     public int updateSelectiveById(D entity) {
@@ -486,7 +416,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy) {
         entity.setIsDelete(Constant.INT_FALSE);
-        String extWhereSql = entity.getAdvanceSearchSql();
+        String extWhereSql = entity.findAdvanceSearchSql();
         if (CheckUtils.isNullOrEmpty(extWhereSql)) {
             extWhereSql = null;
         }
@@ -596,7 +526,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
     @Override
-    public Integer selectCountMP(Wrapper<D> queryWrapper) {
+    public Long selectCountMP(Wrapper<D> queryWrapper) {
         return baseMapper.selectCount(queryWrapper);
     }
 

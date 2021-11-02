@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.dox.SettMsModelDO;
+import com.fhs.basics.po.SettMsModelPO;
 import com.fhs.basics.service.SettMsModelService;
 import com.fhs.basics.vo.SettMsModelVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -17,6 +17,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @DataSource("base_business")
-public class SettMsModelServiceImpl extends BaseServiceImpl<SettMsModelVO, SettMsModelDO> implements SettMsModelService {
+public class SettMsModelServiceImpl extends BaseServiceImpl<SettMsModelVO, SettMsModelPO> implements SettMsModelService {
 
 }

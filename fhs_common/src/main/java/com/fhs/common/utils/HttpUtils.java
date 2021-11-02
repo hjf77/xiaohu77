@@ -368,9 +368,9 @@ public class HttpUtils {
     private static void setThreadKey(String apiUrl, Object param) {
         //拼接日志参数 begin
         if (ThreadKey.BUS_KEY.get() == null) {
-            ThreadKey.BUS_KEY.set(StringUtil.getUUID());
+            ThreadKey.BUS_KEY.set(StringUtils.getUUID());
         }
-        log.info("开始请求:{},请求参数:{}", apiUrl, JsonUtils.object2json(param));
+        log.info("开始请求:{},请求参数:{}", apiUrl, JsonUtil.object2json(param));
     }
 
     /**

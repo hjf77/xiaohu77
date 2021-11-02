@@ -1,16 +1,14 @@
 package com.fhs.bislogger.service.impl;
 
-import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.bislogger.dox.LogLoginDO;
 import com.fhs.bislogger.mapper.LogLoginMapper;
 import com.fhs.bislogger.service.LogLoginService;
 import com.fhs.bislogger.util.GetLoginUserMsgUtil;
 import com.fhs.bislogger.vo.LogLoginVO;
-import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.FileUtils;
 import com.fhs.common.utils.NetworkUtil;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +66,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO>
         Map<String, String> userAgent = getLoginUserMsgUtil.getUserAgent(request);
         //获取当前登录人操作系统信息
         String os = getLoginUserMsgUtil.getOsInfo(request);
-        logLoginVO.setLogId(StringUtil.getUUID());
+        logLoginVO.setLogId(StringUtils.getUUID());
         logLoginVO.setUserId(userId);
         logLoginVO.setIpAddress(ip);
         logLoginVO.setIpInfo(addresses);

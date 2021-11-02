@@ -1,7 +1,8 @@
 package com.fhs.basics.controller;
 
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.constant.BaseTransConstant;
-import com.fhs.basics.dox.ServiceAreaDO;
+import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
 import com.fhs.bislogger.api.anno.LogNamespace;
@@ -9,17 +10,10 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 省市区字典controller
@@ -27,7 +21,7 @@ import java.util.Map;
  * @Filename: serviceAreaController.java
  * @Description:
  * @Version: 1.0
- * @Author: qixiaobo
+ * @Author: wanglei
  * @Email: qxb@sxpartner.com
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
@@ -37,7 +31,7 @@ import java.util.Map;
 @Api(tags = {"省市区信息"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = BaseTransConstant.AREA, module = "地区管理")
-public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaDO> {
+public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaPO> {
     @Autowired
     private ServiceAreaService areaService;
 
@@ -45,7 +39,7 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
     /**
      * 刷新区域缓存
      */
-    @RequiresPermissions("area:refreshRedisCache")
+    @SaCheckRole("area:refreshRedisCache")
     @RequestMapping("/refreshRedisCache")
     @ResponseBody
     public HttpResult<Boolean> refreshRedisCache() {

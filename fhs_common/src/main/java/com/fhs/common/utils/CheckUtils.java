@@ -24,7 +24,7 @@ public class CheckUtils {
      * @return 如果对象为null或者空则返回true
      */
     public static boolean isNullOrEmpty(Object obj) {
-        if (obj == null || Constant.EMPTY.equals(StringUtil.toString(obj).trim())) {
+        if (obj == null || Constant.EMPTY.equals(StringUtils.toString(obj).trim())) {
             return true;
         }
         return false;
@@ -37,7 +37,7 @@ public class CheckUtils {
      * @return 如果对象不为空或者null 返回true
      */
     public static boolean isNotEmpty(Object obj) {
-        if (obj == null || Constant.EMPTY.equals(StringUtil.toString(obj).trim())) {
+        if (obj == null || Constant.EMPTY.equals(StringUtils.toString(obj).trim())) {
             return false;
         }
         return true;
@@ -51,7 +51,7 @@ public class CheckUtils {
      */
     public static boolean isNumber(Object obj) {
 
-        return checkPattern(StringUtil.toString(obj).trim(), "^[-+]?[0-9]+(\\.[0-9]+)?$");
+        return checkPattern(StringUtils.toString(obj).trim(), "^[-+]?[0-9]+(\\.[0-9]+)?$");
     }
 
 
@@ -63,7 +63,7 @@ public class CheckUtils {
      */
     public static boolean isPositiveNumber(Object obj) {
 
-        return checkPattern(StringUtil.toString(obj).trim(), "^[0-9]+(\\.[0-9]+)?$");
+        return checkPattern(StringUtils.toString(obj).trim(), "^[0-9]+(\\.[0-9]+)?$");
     }
 
     /**
@@ -73,7 +73,7 @@ public class CheckUtils {
      * @return 是否是Double类型(小数点后2位小数)
      */
     public static boolean isDouble(Object obj) {
-        return checkPattern(StringUtil.toString(obj).trim(), "^[0-9]+(.[0-9]{1,2})?$");
+        return checkPattern(StringUtils.toString(obj).trim(), "^[0-9]+(.[0-9]{1,2})?$");
     }
 
     /**
@@ -83,7 +83,7 @@ public class CheckUtils {
      * @return
      */
     public static boolean isInt(Object obj) {
-        return checkPattern(StringUtil.toString(obj).trim(), "^[0-9]?$");
+        return checkPattern(StringUtils.toString(obj).trim(), "^[0-9]?$");
     }
 
     /**
@@ -257,7 +257,7 @@ public class CheckUtils {
         if (nullFieldList.size() == 0) {
             return "";
         }
-        return StringUtil.getStrForIntegerIn(nullFieldList);
+        return StringUtils.getStrForIntegerIn(nullFieldList);
     }
 
     /**

@@ -72,7 +72,7 @@ public class SHA1Utils {
     private static List<String> getValues(Map<String, Object> maps) {
         List<String> values = new ArrayList<>();
         for (Map.Entry<String, Object> entry : maps.entrySet()) {
-            values.add(StringUtil.toString(entry.getValue()));
+            values.add(StringUtils.toString(entry.getValue()));
         }
         Collections.sort(values);
         return values;

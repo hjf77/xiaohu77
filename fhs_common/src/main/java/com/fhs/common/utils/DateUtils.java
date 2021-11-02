@@ -446,7 +446,7 @@ public class DateUtils {
             String tempFieldNameValue = null;
             for (T bean : listBean) {
                 tempFieldNameValue = ConverterUtils.toString(ReflectUtils.getValue(bean, fieldName));
-                if (StringUtil.isEmpty(tempFieldNameValue)) {
+                if (StringUtils.isEmpty(tempFieldNameValue)) {
                     continue;
                 }
                 if (tempFieldNameValue.substring(0, 10).equals(today)) {
@@ -593,7 +593,7 @@ public class DateUtils {
      */
     public static Map<String, String> getMaxDateAndMinDate(String putInDateList) {
         Map<String, String> dateMap = new HashMap<String, String>();
-        if (StringUtil.isEmpty(putInDateList)) {
+        if (StringUtils.isEmpty(putInDateList)) {
             return null;
         } else {
             String[] allDates = putInDateList.split(",");

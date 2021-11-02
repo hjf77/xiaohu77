@@ -4,11 +4,10 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fhs.basics.api.trans.WordBookTransServiceImpl;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
-import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.core.valid.checker.ParamChecker;
@@ -21,9 +20,9 @@ import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.excel.anno.IgnoreExport;
 import com.fhs.excel.anno.Order;
+import com.fhs.trans.service.impl.DictionaryTransService;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -134,17 +133,17 @@ public class ExcelServiceImpl implements ExcelService {
                 return null;
             }
             //字典的话取字典 如果带ref 则不拼接
-            if (TransType.WORD_BOOK.equals(trans.type()) && doObj instanceof VO) {
+            if (TransType.DICTIONARY.equals(trans.type()) && doObj instanceof VO) {
                 return ((VO) doObj).getTransMap().get(field.getName() + "Name");
             }
-            //auto trans处理
+            /*//auto trans处理
             if (TransType.AUTO_TRANS.equals(trans.type()) && doObj instanceof VO) {
                 //如果jsonkey 是空则返回null
                 if (CheckUtils.isNullOrEmpty(trans.jsonKey())) {
                     return null;
                 }
                 return ((VO) doObj).getTransMap().get(trans.jsonKey());
-            }
+            }*/
         }
         field.setAccessible(true);
         Object value = null;
@@ -158,7 +157,7 @@ public class ExcelServiceImpl implements ExcelService {
         }
         //如果没有加翻译注解的id，注解导出null
         if (field.getName().endsWith("Id")) {
-            return StringUtil.toString(value);
+            return StringUtils.toString(value);
         }
         if (value instanceof Date) {
             //如果加了日期格式化则就按照格式化的来
@@ -168,7 +167,7 @@ public class ExcelServiceImpl implements ExcelService {
             //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
             return DateUtils.formartDate((Date) value, DateUtils.DATETIME_PATTERN);
         }
-        return StringUtil.toString(value);
+        return StringUtils.toString(value);
     }
 
     /**
@@ -224,7 +223,7 @@ public class ExcelServiceImpl implements ExcelService {
         importSett.getDoIniter().init(importSett.getDoModel());
         BaseService service = targetService;
         List<Field> fields = ReflectUtils.getAnnotationField(importSett.getDoModel().getClass(), ApiModelProperty.class);
-        WordBookTransServiceImpl transService = SpringContextUtil.getBeanByName(WordBookTransServiceImpl.class);
+        DictionaryTransService dictionaryTransService = SpringContextUtil.getBeanByName(DictionaryTransService.class);
         //excel错误格式提醒
         StringBuilder valiStr = new StringBuilder();
         //需要反翻译的名称
@@ -233,7 +232,7 @@ public class ExcelServiceImpl implements ExcelService {
         //初始化数据集合
         List<Object> doList = new ArrayList<>();
         for (int i = 0; i < dataArray.length; i++) {
-            doList.add(JsonUtils.jacksonDeserialize(JsonUtils.jacksonSerialize(importSett.getDoModel()), importSett.getDoModel().getClass()));
+            doList.add(JacksonUtil.jacksonDeserialize(JacksonUtil.jacksonSerialize(importSett.getDoModel()), importSett.getDoModel().getClass()));
         }
 
         for (int i = 0; i < titleArray.length; i++) {
@@ -250,13 +249,13 @@ public class ExcelServiceImpl implements ExcelService {
                         //反翻译
                         Trans trans = field.getAnnotation(Trans.class);
                         if (trans != null) {
-                            if (trans.type().equals(TransType.WORD_BOOK)) {
+                            if (trans.type().equals(TransType.DICTIONARY)) {
                                 if (data.toString().contains(",")) {
                                     String[] strs = data.toString().split(",");
                                     StringBuilder tranStr = new StringBuilder();
                                     for (int k = 0; k < strs.length; k++) {
-                                        String tran = transService.getUnWordBookTransMap().get(trans.key() + "_" + strs[k]);
-                                        if (StringUtils.isBlank(tran)) {
+                                        String tran = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + strs[k]);
+                                        if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tran)) {
                                             valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                         }
                                         tranStr.append(tran).append(",");
@@ -264,8 +263,8 @@ public class ExcelServiceImpl implements ExcelService {
                                     tranStr.deleteCharAt(tranStr.length() - 1);
                                     ReflectUtils.setValue(objDo, field, tranStr.toString());
                                 } else {
-                                    String tranStr = transService.getUnWordBookTransMap().get(trans.key() + "_" + data);
-                                    if (StringUtils.isBlank(tranStr)) {
+                                    String tranStr = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + data);
+                                    if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tranStr)) {
                                         valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                         continue;
                                     }
@@ -282,7 +281,7 @@ public class ExcelServiceImpl implements ExcelService {
                         } else {
                             //不需要反翻译时进行非空和长度校验
                             if (field.getAnnotation(NotEmpty.class) != null
-                                    && StringUtils.isBlank(data.toString())) {
+                                    && com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(data.toString())) {
                                 continue;
                             }
                             Length length = field.getAnnotation(Length.class);
@@ -301,7 +300,7 @@ public class ExcelServiceImpl implements ExcelService {
                             } else if (field.getGenericType().equals(Double.class)) {
                                 ReflectUtils.setValue(objDo, field, ConverterUtils.toDouble(data));
                             } else if (field.getGenericType().equals(Date.class)) {
-                                if (StringUtils.isBlank(data.toString())) {
+                                if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(data.toString())) {
                                     continue;
                                 }
                                 try {

@@ -1,12 +1,12 @@
 package com.fhs.pub.vo;
 
-import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.pub.dox.PubFileDO;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 公共文件

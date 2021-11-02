@@ -5,13 +5,12 @@
     <parent>
         <artifactId>fhs_basics</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_basics_api</artifactId>
     <dependencies>
-
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_pojo</artifactId>
@@ -29,14 +28,15 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_trans_service</artifactId>
-            <version>${fhs.release.version}</version>
+            <artifactId>easy_trans_service</artifactId>
+            <version>${fhs.easytrans.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${fhs.swagger.version}</version>
         </dependency>
+
     </dependencies>
 
 </project>

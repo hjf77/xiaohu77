@@ -13,7 +13,7 @@ package com.fhs.pub.dox;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.base.po.BasePO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -22,9 +22,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
@@ -43,7 +40,7 @@ import java.text.DecimalFormat;
 @TableName("t_pub_file")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PubFileDO", description = "PubFile参数")
-public class PubFileDO extends BaseDO<PubFileDO> implements Serializable {
+public class PubFileDO extends BasePO<PubFileDO> implements Serializable {
     private static final long serialVersionUID = 7096338027750227520L;
 
     /**

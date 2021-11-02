@@ -1,9 +1,7 @@
 package com.fhs.basics.vo;
 
-import com.fhs.basics.dox.SettMsMenuDO;
-import com.fhs.core.base.pojo.vo.VO;
-import com.fhs.core.trans.anno.TransTypes;
-import com.fhs.core.trans.constant.TransType;
+import com.fhs.basics.po.SettMsMenuPO;
+import com.fhs.core.trans.vo.VO;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -16,8 +14,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 @ApiModel(value = "SettMsMenuVO", description = "SettMsMenu参数")
-public class SettMsMenuVO extends SettMsMenuDO implements VO {
+public class SettMsMenuVO extends SettMsMenuPO implements VO {
 
 }

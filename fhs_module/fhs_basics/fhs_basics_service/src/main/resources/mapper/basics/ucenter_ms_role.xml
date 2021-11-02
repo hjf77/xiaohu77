@@ -4,7 +4,7 @@
 
     <!-- 通过角色名称获取角色 --><!-- 没找到用处20151228 nsx -->
     <select id="findRoleByGroupCode" parameterType="map"
-            resultType="com.fhs.basics.dox.UcenterMsRoleDO">
+            resultType="com.fhs.basics.po.UcenterMsRolePO">
 		SELECT
 		distinct ar.role_id AS roleId,
 		ar.role_name AS
@@ -23,7 +23,7 @@
 
     <!-- 根据用户获取角色 -->
     <select id="findRolesByUserId" parameterType="string"
-            resultType="com.fhs.basics.dox.UcenterMsRoleDO">
+            resultType="com.fhs.basics.po.UcenterMsRolePO">
 		SELECT
 		distinct ar.role_id AS roleId,
 		ar.role_name AS
@@ -45,7 +45,7 @@
 
     <!-- 获取角色集合 -->
     <select id="findForListFromMap" parameterType="map"
-            resultType="com.fhs.basics.dox.UcenterMsRoleDO">
+            resultType="com.fhs.basics.po.UcenterMsRolePO">
         SELECT
         role_id AS roleId,
         role_name AS roleName,
@@ -88,7 +88,7 @@
 
     <!-- 获取角色集合 --><!-- 没找到用处20151228 nsx -->
     <select id="findForListAll" parameterType="map"
-            resultType="com.fhs.basics.dox.UcenterMsRoleDO">
+            resultType="com.fhs.basics.po.UcenterMsRolePO">
         SELECT
         role_name AS roleName,
         role_id AS roleId,
@@ -111,7 +111,7 @@
 
 
     <!-- 添加权限信息 -->
-    <insert id="addButtons" parameterType="com.fhs.basics.dox.UcenterMsRoleDO"
+    <insert id="addButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO"
             useGeneratedKeys="true" keyProperty="roleId">
         INSERT INTO t_ucenter_ms_role_permission
         (role_id,permission_id )
@@ -123,7 +123,7 @@
     </insert>
 
     <!-- 删除权限信息 -->
-    <delete id="deleteButtons" parameterType="com.fhs.basics.dox.UcenterMsRoleDO">
+    <delete id="deleteButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO">
 		DELETE FROM
 		`t_ucenter_ms_role_permission`
 		WHERE
@@ -132,7 +132,7 @@
 
 
     <!-- 删除角色用户关联 -->
-    <delete id="deleteUserRela" parameterType="com.fhs.basics.dox.UcenterMsRoleDO">
+    <delete id="deleteUserRela" parameterType="com.fhs.basics.po.UcenterMsRolePO">
 		DELETE FROM t_ucenter_ms_role_user_rela WHERE
 		role_id=#{roleId}
 	</delete>
@@ -140,7 +140,7 @@
 
 
     <select id="findBeanFromMap" parameterType="map"
-            resultType="com.fhs.basics.dox.UcenterMsRoleDO">
+            resultType="com.fhs.basics.po.UcenterMsRolePO">
         SELECT role_id AS roleId,
         role_name AS roleName,
         remark,
@@ -162,7 +162,7 @@
     </select>
 
     <!-- 通过角色编号获取权限信息 -->
-    <select id="searchButtons" parameterType="com.fhs.basics.dox.UcenterMsRoleDO"
+    <select id="searchButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO"
             resultType="map">
 		SELECT CAST(boxId AS CHAR) AS boxId FROM(
 		SELECT

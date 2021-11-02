@@ -2,18 +2,13 @@ package com.fhs.pub.controller;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.core.base.controller.BaseController;
-import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
-import com.fhs.module.base.controller.ModelSuperController;
-import com.fhs.pub.dox.PubFileDO;
 import com.fhs.pub.service.FileServerBusiness;
 import com.fhs.pub.service.PubFileService;
 import com.fhs.pub.vo.PubFileVO;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +60,7 @@ public class UploadController extends BaseController {
             fileService.update(file);
         }
         LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
-        super.outWriteJson(JsonUtils.bean2json(file));
+        super.outWriteJson(JsonUtil.bean2json(file));
 
     }
 

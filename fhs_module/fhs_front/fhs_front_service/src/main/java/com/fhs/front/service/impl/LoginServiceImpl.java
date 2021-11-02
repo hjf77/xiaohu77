@@ -6,7 +6,7 @@ import com.alicp.jetcache.anno.CreateCache;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
@@ -104,7 +104,7 @@ public class LoginServiceImpl implements LoginService {
             timeOutSecond = ConverterUtils.toInt(EConfig.getOtherConfigPropertiesValue("access_token_time_out_second"));
             LOGGER.info("读取access_token_time_out_second:" + timeOutSecond);
         }
-        String accessToken = StringUtil.getUUID();
+        String accessToken = StringUtils.getUUID();
         redisCacheService.addStr(ACCESS_TOKEN_USER_KEY + accessToken, userId);
         frontUserTokenMap.put(accessToken, userId);
         LOGGER.info("添加accessToken:" + accessToken);
@@ -121,10 +121,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String addBindAndUser(UcenterFrontUserDO user, String openId, int openIdType) {
-        user.setUserId(StringUtil.getUUID());
+        user.setUserId(StringUtils.getUUID());
         user.preInsert(null);
         userService.insertSelective(user);
-        UcenterFrontUserBindDO bind = UcenterFrontUserBindDO.builder().id(StringUtil.getUUID()).authOpenid(openId)
+        UcenterFrontUserBindDO bind = UcenterFrontUserBindDO.builder().id(StringUtils.getUUID()).authOpenid(openId)
                 .authOpenidType(openIdType).userId(user.getUserId()).build();
         bind.preInsert(null);
         userBindService.insertSelective(bind);

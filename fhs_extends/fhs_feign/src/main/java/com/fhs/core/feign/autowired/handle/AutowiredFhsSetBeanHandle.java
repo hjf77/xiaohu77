@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @Filename: AutowareYLMSetBeanEvent.java
  * @Version: 1.0
- * @Author: qixiaobo
+ * @Author: wanglei
  * @Email: qxb@sxpartner.com
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
@@ -74,7 +74,7 @@ public class AutowiredFhsSetBeanHandle implements ApplicationListener<ContextRef
         if (entitySet != null && !entitySet.isEmpty()) {
             for (Class<?> entity : entitySet) {
                 // 获取该类
-                Object object = SpringContextUtil.getBeanByClass(entity);
+                Object object = SpringContextUtil.getBeanByClassForApi(entity);
                 Field[] fields = entity.getDeclaredFields();
                 if (CheckUtils.isNotEmpty(fields)) {
                     for (Field field : fields) {

@@ -1,16 +1,12 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.constant.BaseTransConstant;
-import com.fhs.basics.dox.SettMsMenuPermissionDO;
-import com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.mapper.SettMsMenuPermissionMapper;
 import com.fhs.basics.service.SettMsMenuPermissionService;
-import com.fhs.basics.vo.SettMsMenuPermissionUrlRelaVO;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
-import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
-import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,32 +23,22 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-@AutoTrans(namespace = BaseTransConstant.MENU_INFO_PERMISSION, fields = "permissionName")
-public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuPermissionVO, SettMsMenuPermissionDO>
+public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuPermissionVO, SettMsMenuPermissionPO>
         implements SettMsMenuPermissionService {
     @Autowired
     private SettMsMenuPermissionMapper mapper;
 
-    /**
-     * 根据类型查询数据
-     *
-     * @param map
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> findMapListByType(Map<String, Object> map) {
-        return mapper.findMapListByType(map);
-    }
+
 
     @Override
     public boolean addBaseMenuBatch(Map<String, Object> map) {
         if (map.containsKey("menuId")) {
-
-            List<SettMsMenuPermissionDO> existsButtonList = mapper.findForListFromMap(map);
+            List<SettMsMenuPermissionPO> existsButtonList = mapper.selectList(new LambdaQueryWrapper<SettMsMenuPermissionPO>()
+                    .eq(SettMsMenuPermissionPO::getMenuId,map.get("menuId")));
             Map<String, Map<String, Object>> baseButtonMap = this.getBaseButton();
             String buttonMethod;
-            for (SettMsMenuPermissionDO button : existsButtonList) {
-                buttonMethod = button.getMethod();
+            for (SettMsMenuPermissionPO button : existsButtonList) {
+                buttonMethod = button.getPermissionCode();
                 if (baseButtonMap.containsKey(buttonMethod)) {
                     baseButtonMap.remove(buttonMethod);
                 }
@@ -64,39 +50,6 @@ public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuP
             }
         }
         return true;
-    }
-
-    @Override
-    public List<SettMsMenuPermissionUrlRelaVO> getUrlByPermissionId(SettMsMenuPermissionDO sysMenuPermission) {
-        return ListUtils.copyListToList(mapper.getUrlByPermissionId(sysMenuPermission), SettMsMenuPermissionUrlRelaVO.class);
-    }
-
-    @Override
-    public Integer getUrlCoutByPermissionId(SettMsMenuPermissionDO sysMenuPermission) {
-        return mapper.getUrlCoutByPermissionId(sysMenuPermission);
-    }
-
-    @Override
-    public boolean addUrl(SettMsMenuPermissionUrlRelaDO sysMenuPermissionUrlRela) {
-        Integer count = mapper.addUrl(sysMenuPermissionUrlRela);
-        return count > 0;
-    }
-
-    @Override
-    public boolean updateUrl(SettMsMenuPermissionUrlRelaDO sysMenuPermissionUrlRela) {
-        Integer count = mapper.updateUrl(sysMenuPermissionUrlRela);
-        return count > 0;
-    }
-
-    @Override
-    public boolean delUrl(SettMsMenuPermissionUrlRelaDO sysMenuPermissionUrlRela) {
-        Integer count = mapper.delUrl(sysMenuPermissionUrlRela);
-        return count > 0;
-    }
-
-    @Override
-    public List<String> getRolePermisssionByRoleId(String roleIds) {
-        return mapper.getRolePermisssionByRoleId(roleIds);
     }
 
     /**
@@ -115,7 +68,7 @@ public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuP
         Map<String, Object> tempMap;
         for (int i = 0; i < buttonArray.length; i++) {
             tempMap = new HashMap<>();
-            tempMap.put("method", buttonArray[i][0]);
+            tempMap.put("permissionCode", buttonArray[i][0]);
             tempMap.put("permissionName", buttonArray[i][1]);
             tempMap.put("permissionType", buttonArray[i][2]);
             resultMap.put(buttonArray[i][0], tempMap);

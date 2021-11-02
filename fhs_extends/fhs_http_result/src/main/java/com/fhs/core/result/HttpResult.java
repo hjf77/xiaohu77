@@ -1,10 +1,9 @@
 package com.fhs.core.result;
 
 
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ThreadKey;
 import com.fhs.core.base.pojo.BaseObject;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -152,14 +151,14 @@ public class HttpResult<V> extends BaseObject<HttpResult> {
     /**
      * 验证失败的返回结果
      */
-    public static ModelAndView validateError(T data, String message) {
+    public static <T> ModelAndView validateError(T data, String message) {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = servletRequestAttributes.getResponse();
         HttpResult<T> result = new HttpResult<T>();
         result.code = 400;
         result.data = data;
         result.message = message;
-        JsonUtils.outJson(response, result.asJson());
+        JsonUtil.outJson(response, result.asJson());
         return null;
     }
 

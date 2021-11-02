@@ -1,7 +1,7 @@
 package com.fhs.basics.controller;
 
 
-import com.fhs.basics.dox.SettMsSystemDO;
+import com.fhs.basics.po.SettMsSystemPO;
 import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author qixiaobo
+ * @author wanglei
  * @version [版本号, 2018-09-26]
  * @Description: 子系统管理
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
@@ -25,7 +25,7 @@ import java.util.List;
 @Api(tags = {"子系统"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sett_ms_system")
-public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemDO> {
+public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemPO> {
 
     @Autowired
     private SettMsSystemService sysSystemService;

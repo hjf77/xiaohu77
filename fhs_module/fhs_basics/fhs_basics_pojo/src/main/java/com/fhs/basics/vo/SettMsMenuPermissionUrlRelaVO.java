@@ -1,9 +1,7 @@
 package com.fhs.basics.vo;
 
-import com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO;
-import com.fhs.core.base.pojo.vo.VO;
-import com.fhs.core.trans.anno.TransTypes;
-import com.fhs.core.trans.constant.TransType;
+import com.fhs.basics.po.SettMsMenuPermissionUrlRelaPO;
+import com.fhs.core.trans.vo.VO;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,8 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 @ApiModel(value = "SettMsMenuPermissionUrlRelaVO", description = "SettMsMenuPermissionUrlRela参数")
-public class SettMsMenuPermissionUrlRelaVO extends SettMsMenuPermissionUrlRelaDO implements VO {
+public class SettMsMenuPermissionUrlRelaVO extends SettMsMenuPermissionUrlRelaPO implements VO {
 
 }

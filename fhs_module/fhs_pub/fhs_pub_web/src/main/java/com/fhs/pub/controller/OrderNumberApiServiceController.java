@@ -2,13 +2,12 @@ package com.fhs.pub.controller;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
 import com.fhs.pub.api.rpc.FeignOrderNumberApiService;
 import com.fhs.pub.service.OrderNumberService;
-import com.fhs.pub.service.impl.OrderNumberServiceImpl;
 import com.fhs.pub.vo.OrderNumberVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +67,7 @@ public class OrderNumberApiServiceController implements FeignOrderNumberApiServi
         OrderNumberVO serviceOrderLog = this.getServiceOrderLog(type, date);
         if (serviceOrderLog == null) {
             serviceOrderLog = new OrderNumberVO();
-            serviceOrderLog.setId(StringUtil.getUUID());
+            serviceOrderLog.setId(StringUtils.getUUID());
             serviceOrderLog.setType(type);
             serviceOrderLog.setTime(date);
             serviceOrderLog.setNumber(1);
@@ -122,7 +121,7 @@ public class OrderNumberApiServiceController implements FeignOrderNumberApiServi
     private List<String> orderNumList(int minOrderIndex, String date) {
         List<String> dataList = new ArrayList<String>();
         for (int i = minOrderIndex; i < (Constant.ONCE_ORDER_NUM_CREATE + minOrderIndex); i++) {
-            dataList.add(StringUtil.formatOrderNumber(date, i));
+            dataList.add(StringUtils.formatOrderNumber(date, i));
         }
         return dataList;
     }

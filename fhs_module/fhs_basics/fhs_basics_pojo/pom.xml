@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_basics</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_basics_pojo</artifactId>
     <dependencies>
         <dependency>
@@ -26,6 +26,11 @@
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>${fhs.swagger-anno.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-core</artifactId>
+            <version>${sa.token.version}</version>
         </dependency>
     </dependencies>
 

@@ -1,7 +1,7 @@
 package com.fhs.app.controller;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.trans.vo.VO;
 import com.fhs.core.jsonfilter.anno.AutoArray;
 import com.fhs.core.jsonfilter.serializer.Str2ArrayValueSerializer;
 import lombok.Data;
@@ -34,7 +34,6 @@ public class JSONTestContorller {
             return null;
         }
 
-        @Override
         public Integer getIsDelete() {
             return null;
         }

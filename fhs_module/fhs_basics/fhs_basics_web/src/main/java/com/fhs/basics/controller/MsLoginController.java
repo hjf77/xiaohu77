@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
-import com.fhs.basics.dox.UcenterMsUserDO;
+import cn.dev33.satoken.stp.StpUtil;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.service.UcenterMsRoleService;
@@ -14,19 +15,13 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.cache.service.RedisCacheService;
-import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
-import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
-import com.fhs.module.base.shiro.StatelessSubject;
+import com.fhs.basics.context.UserContext;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.subject.support.WebDelegatingSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +50,7 @@ public class MsLoginController extends BaseController {
 
     private static Logger LOGGER = Logger.getLogger(MsLoginController.class);
 
-    private static final String USER_KEY = "shiro:user:";
+    private static final String USER_KEY = "auth:user:";
 
     /**
      * 用户锁定key
@@ -72,7 +67,7 @@ public class MsLoginController extends BaseController {
      */
     private static final String LOGIN_VCODE_KEY = "login:vcode:";
 
-    @Value("${server.session.timeout:3600}")
+    @Value("${sa-token.timeout:3600}")
     private Integer sesstionTimeout;
 
     @Value("${fhs.vue.is-verification:true}")
@@ -121,54 +116,6 @@ public class MsLoginController extends BaseController {
     @Value("${fhs.login.user-lock-seconds:300}")
     private int userLockSeconds;
 
-    /**
-     * 用户登录
-     */
-    @PostMapping("/securityLogin")
-    @ApiOperation("登录")
-    public HttpResult<Boolean> securityLogin(UcenterMsUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
-        String identifyCode = request.getParameter("identifyCode");
-        Object sessionIdentify = request.getSession().getAttribute("identifyCode");
-        ParamChecker.isNotNull(sysUser.getUserLoginName(), "登录名不可为空");
-        ParamChecker.isNotNull(sysUser.getPassword(), "密码不可为空");
-        checkUserNameIsLock(sysUser.getUserLoginName());
-        UcenterMsUserVO tempUser = sysUserService.findBean(UcenterMsUserDO.builder().userLoginName(sysUser.getUserLoginName()).build());
-        if (tempUser == null) {
-            throw new ParamException("用户名或者密码输入错误");
-        }
-        //session 失效
-        if (null == sessionIdentify) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, tempUser.getUserId(), false);
-            throw new ParamException("验证码失效，请刷新验证码后重新输入");
-        }
-        if (!sessionIdentify.toString().equals(identifyCode)) {
-            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, tempUser.getUserId(), false);
-            throw new ParamException("验证码错误，请重新输入");
-        }
-        request.getSession().setAttribute("identifyCode", null);
-        String userName = sysUser.getUserLoginName();
-        sysUser = sysUserService.login(sysUser);
-        if (sysUser == null) {
-            logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, tempUser.getUserId(), false);
-            addErrorPassTimes(userName);
-            throw new ParamException("用户名或者密码错误");
-        }
-        clearLockKey(userName);
-        //如果不是admin就去加载全部的数据
-        if (sysUser.getIsAdmin() == Constant.INT_TRUE) {
-            request.getSession().setAttribute(Constant.SESSION_USER_DATA_PERMISSION, new HashMap<>());
-        } else {
-            request.getSession().setAttribute(Constant.SESSION_USER_DATA_PERMISSION, sysUserService.findUserDataPermissions(sysUser.getUserId()));
-        }
-        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserLoginName(), sysUser.getPassword());
-        SecurityUtils.getSubject().login(token);
-        Subject subjects = SecurityUtils.getSubject();
-        // 显示调用，让程序重新去加载授权数据
-        subjects.isPermitted("init");
-        request.getSession().setAttribute(Constant.SESSION_USER, sysUser);
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
-        return HttpResult.success(true);
-    }
 
     /**
      * 判断用户是否锁定
@@ -220,7 +167,7 @@ public class MsLoginController extends BaseController {
      */
     @PostMapping("/vueLogin")
     @ApiOperation("登录 for VUE")
-    public HttpResult<Map<String, String>> vueLogin(UcenterMsUserDO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Map<String, Object>> vueLogin(UcenterMsUserPO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
         checkUserNameIsLock(sysUser.getUserLoginName());
         if (isVerification) {
             String identifyCode = request.getParameter("identifyCode");
@@ -243,21 +190,20 @@ public class MsLoginController extends BaseController {
             throw new ParamException("用户名或者密码错误");
         }
         clearLockKey(userName);
-        String tokenStr = StringUtil.getUUID();
+        StpUtil.login(sysUser.getUserId());
+        String tokenStr = StpUtil.getTokenValue();
         //如果不是admin就去加载全部的数据
         if (sysUser.getIsAdmin() == Constant.INT_TRUE) {
-            redisCacheService.put("shiro:dp:" + tokenStr, new HashMap<>());
+            redisCacheService.put("auth:dp:" + tokenStr, new HashMap<>());
         } else {
-            redisCacheService.put("shiro:dp:" + tokenStr, sysUserService.findUserDataPermissions(sysUser.getUserId()));
+            redisCacheService.put("auth:dp:" + tokenStr, sysUserService.findUserDataPermissions(sysUser.getUserId()));
         }
-        redisCacheService.expire("shiro:dp:" + tokenStr, sesstionTimeout);
-
-        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserLoginName(), sysUser.getPassword());
-        redisCacheService.expire("shiro:" + tokenStr, sesstionTimeout);
-        redisCacheService.put(USER_KEY + tokenStr, sysUser);
-        redisCacheService.expire(USER_KEY + tokenStr, sesstionTimeout);
-        Map<String, String> result = new HashMap<>();
+        redisCacheService.expire("auth:dp:" + tokenStr, sesstionTimeout);
+        StpUtil.getTokenSession().set(Constant.SESSION_USER,sysUser);
+        Map<String, Object> result = new HashMap<>();
         result.put("token", tokenStr);
+        result.put("tokenName", StpUtil.getTokenName());
+        result.put("userInfo", sysUser);
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         return HttpResult.success(result);
     }
@@ -268,21 +214,20 @@ public class MsLoginController extends BaseController {
     @GetMapping("/ms/getUserForVue")
     @ApiOperation("获取用户信息 for VUE")
     public HttpResult<Map<String, Object>> getUserInfo(HttpServletRequest request) {
-        UcenterMsUserVO user = getSessionuser();
+        UcenterMsUserVO user = UserContext.getSessionuser();
         if (user == null) {
             throw new ParamException("token失效");
         }
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("user", user);
+        resultMap.put("permissions", sysUserService.findPermissionByUserId(user.getUserId()));
         if (user.getIsAdmin() == Constant.INT_TRUE) {
             resultMap.put("roles", Arrays.asList("admin"));
-            resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(null));
         } else {
             List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(user.getUserId());
             List<String> collect = roleList.stream().map(UcenterMsRoleVO::getRoleName).collect(Collectors.toList());
-            String roles = StringUtil.join(roleList.stream().map(UcenterMsRoleVO::getRoleId).collect(Collectors.toList()), ",");
+            String roles = StringUtils.join(roleList.stream().map(UcenterMsRoleVO::getRoleId).collect(Collectors.toList()), ",");
             resultMap.put("roles", collect);
-            resultMap.put("permissions", settMsMenuPermissionService.getRolePermisssionByRoleId(roles));
         }
         return HttpResult.success(resultMap);
     }
@@ -294,20 +239,11 @@ public class MsLoginController extends BaseController {
      */
     @GetMapping("/ms/getRouters")
     @ApiOperation("获取路由FOR VUE")
-    public HttpResult<List<VueRouterVO>> getRouters() {
-        UcenterMsUserVO user = getSessionuser();
-        return HttpResult.success(sysUserService.getRouters(user, Constant.MENU_TYPE_VUE));
+    public HttpResult<List<VueRouterVO>> getRouters(String menuType) {
+        UcenterMsUserVO user = UserContext.getSessionuser();
+        return HttpResult.success(sysUserService.getRouters(user, menuType));
     }
 
-    /**
-     * 获取用户信息
-     *
-     * @return
-     */
-    protected UcenterMsUserVO getSessionuser() {
-        HttpServletRequest request = getRequest();
-        return (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
-    }
 
     /**
      * 生成验证码
@@ -319,7 +255,7 @@ public class MsLoginController extends BaseController {
         SCaptcha sCaptcha = new SCaptcha(100, 38);
         String code = sCaptcha.getCode();
         String base64 = Base64Util.byte2Base64(FileUtils.imageToBytes(sCaptcha.getBuffImg()));
-        String uuid = StringUtil.getUUID();
+        String uuid = StringUtils.getUUID();
         redisCacheService.put(LOGIN_VCODE_KEY + uuid, code);
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put("img", base64);
@@ -352,30 +288,10 @@ public class MsLoginController extends BaseController {
     @GetMapping("/logoutForVue")
     @ApiOperation("注销登出 for vue")
     public HttpResult<String> logoutForVue(String token) {
-        redisCacheService.remove("shiro:" + token);
+        redisCacheService.remove("auth:" + token);
         redisCacheService.remove(USER_KEY + token);
+        StpUtil.logout();
         return HttpResult.success("登出成功");
-    }
-
-    /**
-     * 退出
-     *
-     * @param request
-     * @param response
-     * @throws IOException
-     */
-    @GetMapping("ms/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UcenterMsUserVO sysUser = this.getSessionuser();
-        logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), true);
-        request.getSession().removeAttribute(Constant.SESSION_USER);
-        SecurityUtils.getSubject().logout();
-        //如果登录地址已经是http开头的则直接302 如果不是则拼接上basepath
-        if (shrioLoginUrl.contains("http")) {
-            response.sendRedirect(shrioLoginUrl);
-            return;
-        }
-        response.sendRedirect(EConfig.getPathPropertiesValue("basePath") + shrioLoginUrl);
     }
 
 }

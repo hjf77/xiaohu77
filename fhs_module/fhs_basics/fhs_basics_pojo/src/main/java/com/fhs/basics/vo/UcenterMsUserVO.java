@@ -1,9 +1,7 @@
 package com.fhs.basics.vo;
 
-import com.fhs.core.base.pojo.vo.VO;
-import com.fhs.basics.dox.UcenterMsUserDO;
-import com.fhs.core.trans.anno.TransTypes;
-import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.VO;
+import com.fhs.basics.po.UcenterMsUserPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -17,9 +15,8 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 @ApiModel(value = "UcenterMsUserVO", description = "UcenterMsUserVO参数")
-public class UcenterMsUserVO extends UcenterMsUserDO implements VO {
+public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
 
     @ApiModelProperty("组织机构对应的公司id")
     private String companyId;

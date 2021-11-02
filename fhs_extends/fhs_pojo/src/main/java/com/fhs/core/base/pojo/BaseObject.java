@@ -1,6 +1,6 @@
 package com.fhs.core.base.pojo;
 
-import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.MapUtils;
 
 import java.io.Serializable;
@@ -20,7 +20,7 @@ public class BaseObject<T extends BaseObject> implements Serializable {
      * @return json格式
      */
     public String toString() {
-        return JsonUtils.bean2json(this);
+        return JsonUtil.bean2json(this);
     }
 
     /**
@@ -79,7 +79,7 @@ public class BaseObject<T extends BaseObject> implements Serializable {
      * @return
      */
     public String asJson() {
-        return JsonUtils.bean2json(this);
+        return JsonUtil.bean2json(this);
     }
 
 
@@ -90,7 +90,7 @@ public class BaseObject<T extends BaseObject> implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.asJson().equals(JsonUtils.bean2json(obj));
+        return this.asJson().equals(JsonUtil.bean2json(obj));
     }
 }
 

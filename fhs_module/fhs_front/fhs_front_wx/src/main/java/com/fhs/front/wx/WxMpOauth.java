@@ -2,7 +2,7 @@ package com.fhs.front.wx;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.front.dox.UcenterFrontUserDO;
@@ -113,7 +113,7 @@ public class WxMpOauth implements FhsOauth302, InitializingBean {
         if (bind == null) {
             try {
                 WxMpUser mpUser = wxTools.getWxMpService().getUserService().userInfo(openId);
-                UcenterFrontUserDO user = UcenterFrontUserVO.builder().userId(StringUtil.getUUID())
+                UcenterFrontUserDO user = UcenterFrontUserVO.builder().userId(StringUtils.getUUID())
                         .nickName(mpUser.getNickname()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity()).isEnable(Constant.INT_TRUE)
                         .sex(ConverterUtils.toString(mpUser.getSex())).language(mpUser.getLanguage()).imagePath(mpUser.getHeadImgUrl()).build();
                 userId = loginService.addBindAndUser(user, openId, UcenterFrontUserBindService.OPENID_TYPE_WXMP);

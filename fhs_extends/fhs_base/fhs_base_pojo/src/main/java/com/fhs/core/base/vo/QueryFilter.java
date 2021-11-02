@@ -1,25 +1,18 @@
 package com.fhs.core.base.vo;
 
-import ch.qos.logback.core.pattern.ConverterUtil;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.StringUtil;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -160,15 +153,15 @@ public class QueryFilter<T> {
     private static final String WHERE_SQL_TAG = "whereSql";
     private static final String ORDER_SQL_TAG = "orderBySql";
 
-    private String[] convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
+    private List<String>  convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
         if (list == null) {
             return null;
         } else {
-            String[] ary = new String[list.size()];
+            List<String> result = new ArrayList<>();
             for (int i = 0; i < list.size(); ++i) {
-                ary[i] = getField(list.get(i).getProperty(), currentModelClass);
+                result.add(getField(list.get(i).getProperty(), currentModelClass));
             }
-            return ary;
+            return result;
         }
     }
 

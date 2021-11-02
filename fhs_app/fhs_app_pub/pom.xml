@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_app</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_app_pub</artifactId>
     <description>
         公共服务的启动模块,分布式模式运行,需要cas

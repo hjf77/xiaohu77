@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_extends</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <artifactId>fhs_feign</artifactId>
     <dependencies>
         <dependency>
@@ -21,7 +21,11 @@
             <artifactId>spring-cloud-netflix-core</artifactId>
             <version>${fhs.spring-cloud-starter.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>easy_cloud_anno</artifactId>
+            <version>${fhs.easycloud.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
