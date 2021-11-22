@@ -64,6 +64,10 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
         }
     }
 
+    public String transKey(String groupCode,String key){
+        return wordBookTransMap.get(groupCode + "_" + key);
+    }
+
     /**
      * 反向翻译
      *

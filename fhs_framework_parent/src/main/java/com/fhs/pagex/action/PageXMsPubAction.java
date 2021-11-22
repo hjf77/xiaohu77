@@ -313,6 +313,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         String resultJson = service.findListPage(paramMap,namespace);
         List<JSONObject> dataList = new ArrayList<>();
         JSONArray jsonArray = JSON.parseArray(resultJson);
+        super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         jsonArray = joinService.initJoinData(jsonArray,namespace);
         listExtendsHanleService.processingData(namespace,jsonArray);
         for(int i = 0;i<jsonArray.size();i++)
