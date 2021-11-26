@@ -2,6 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.basics.mapper.SettMsMenuMapper">
 
+	<select id="findForAllList" resultType="com.fhs.basics.po.SettMsMenuPO"
+			parameterType="map">
+		SELECT * FROM (SELECT
+						   m.menu_name AS menuName,
+						   m.menu_id AS menuId,
+						   CONCAT(m.namespace,':',b.method) AS namespace,
+						   m.menu_url AS menuUrl ,
+						   m.father_menu_id AS fatherMenuId
+					   FROM
+						   t_sett_ms_menu m
+							   LEFT JOIN
+						   t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
+					   WHERE
+						   m.`namespace` IS NOT NULL
+						 AND m.`namespace` !=''
+		AND m.`is_enable`
+		= 1
+		AND b.`is_enable` = 1
+					   ORDER BY
+						   m.father_menu_id,m.order_index
+					  ) m
+		WHERE
+			m.`namespace` IS NOT NULL
+	</select>
 
 
     <select id="getMenuPermissionTree" resultType="com.fhs.basics.vo.TreeMenuPermissionVO">

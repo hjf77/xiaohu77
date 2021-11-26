@@ -45,4 +45,6 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuPO> {
      */
     List<TreeMenuPermissionVO> getMenuPermissionTree();
 
+    List<SettMsMenuPO> findForAllList(Map<String, Object> paramMap);
+
 }
