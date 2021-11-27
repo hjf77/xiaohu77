@@ -4,14 +4,16 @@
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}" id="menuItem">
           <i v-if="isNest" class="diandian"></i>
-         <item :icon="onlyOneChild.meta.icon" :title="onlyOneChild.meta.title" />
+          <i v-if="onlyOneChild.meta.icon" :class="onlyOneChild.meta.icon"></i>
+          <span >{{onlyOneChild.meta.title}}</span>
         </el-menu-item>
       </app-link>
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body :class="{'collapse':collapse}">
       <template slot="title">
-        <item v-if="item.meta" :title="item.meta.title" :icon="item.meta.icon"/>
+        <i v-if="item.meta.icon" :class="item.meta.icon"></i>
+        <span >{{item.meta.title}}</span>
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -29,14 +31,13 @@
 <script>
 import path from 'path-browserify'
 import { isExternal } from '@/utils/validate'
-import Item from './Item.vue'
 import AppLink from './Link.vue'
 import FixiOSBug from './FixiOSBug'
 
 
 export default {
   name: 'SidebarItem',
-  components: {  AppLink,Item },
+  components: {  AppLink },
   mixins: [FixiOSBug],
   props: {
     // route object
