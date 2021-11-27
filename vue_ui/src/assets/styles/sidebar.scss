@@ -94,7 +94,7 @@
     & .nest-menu .el-submenu>.el-submenu__title,
   & .el-submenu .el-menu-item {
     min-width: $sideBarWidth !important;
-    background-color: $subMenuBg !important;  
+    background-color: $subMenuBg !important;
     color: #d3faf7 !important;    //二级菜单静置的文字颜色
     i{
       color: #d3faf7 !important;
@@ -125,7 +125,7 @@
   }
 
   }
-  
+
 
   .hideSidebar {
     .sidebar-container {
@@ -260,7 +260,7 @@
         width:3px;
         height:56px;
         position: absolute;
-        left:5px;
+        left:1px;
         top:0;
         background-color: #8ECBCB;
       }

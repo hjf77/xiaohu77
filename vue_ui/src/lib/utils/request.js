@@ -49,13 +49,38 @@ const request = axios.create({
     timeout: setting.timeout
 });
 
+let parseAdvanceParam = function (_data){
+  let result = {
+    groupRelation: "AND",
+    params: {},
+    querys: [],
+    sorter: [],
+  };
+  for (let dataKey in _data) {
+    if(dataKey.indexOf('OP') == -1 && dataKey!='parse' && _data[dataKey]){
+      result.querys.push({
+        group: "main",
+        operation: _data[dataKey + 'OP'] ? _data[dataKey + 'OP'] : '=',
+        property: dataKey,
+        relation: "AND",
+        value: _data[dataKey],
+      });
+    }
+  }
+
+  return result;
+}
+
 // request拦截器
 request.interceptors.request.use(config => {
     config.headers[setting.tokenField] = setting.token() // 让每个请求携带自定义token 请根据实际情况自行修改
     /*
         todo 判断请求url 如果是 get开头则设置为get post put delete 则设置为 这些 如果没指定则为get
      */
-  config.headers['Content-Type']='application/json;charset=utf-8'
+    config.headers['Content-Type']='application/json;charset=utf-8'
+    if(config.data && config.data.parse){
+      config.data = parseAdvanceParam(config.data);
+    }
     /*if(config.data && config.data.useJson){
       config.headers['Content-Type']='application/json;charset=utf-8'
       delete config.data.useJson;

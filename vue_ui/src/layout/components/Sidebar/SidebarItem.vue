@@ -4,15 +4,14 @@
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}" id="menuItem">
           <i v-if="isNest" class="diandian"></i>
-         <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+         <item :icon="onlyOneChild.meta.icon" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body :class="{'collapse':collapse}">
       <template slot="title">
-        <img src="@/assets/icon/personalCenter.png" class="iconStyle">
-        <item v-if="item.meta" :title="item.meta.title" />
+        <item v-if="item.meta" :title="item.meta.title" :icon="item.meta.icon"/>
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -111,6 +110,9 @@ export default {
       background: $menuText;
       margin-right: 4px;
   }
+ ::v-deep .el-submenu__title {
+   padding-left: 17px !important;
+ }
   #menuItem:hover .diandian{
     background: $menuActiveText;
   }

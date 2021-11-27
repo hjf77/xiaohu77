@@ -18,9 +18,6 @@ import permission from './directive/permission'
 import './assets/icons' // icon
 import './permission' // permission control
 import {
-  getConfigKey
-} from "@/api/system/config";
-import {
   parseTime,
   resetForm,
   addDateRange,
@@ -62,7 +59,6 @@ Vue.prototype.$on = function (event, func) {
 /*import moment from 'moment'//导入文件
 Vue.prototype.$moment = moment;//赋值使用*/
 
-Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange

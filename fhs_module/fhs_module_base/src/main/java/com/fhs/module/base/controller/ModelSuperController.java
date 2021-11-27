@@ -183,7 +183,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      */
     @LogMethod
     @ResponseBody
-    @GetMapping("info/{id}")
+    @GetMapping("{id}")
     @ApiOperation("根据id获取单挑数据信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "path")}
@@ -207,7 +207,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
 
     @NotRepeat
     @ResponseBody
-    @PostMapping("/")
+    @PostMapping
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e, HttpServletRequest request,
@@ -258,7 +258,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      * @param e bean
      */
     @ResponseBody
-    @PutMapping("/")
+    @PutMapping
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,

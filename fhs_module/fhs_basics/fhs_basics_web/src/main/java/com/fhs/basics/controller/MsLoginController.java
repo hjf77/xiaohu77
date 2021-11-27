@@ -17,6 +17,7 @@ import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.basics.context.UserContext;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -24,10 +25,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -167,7 +166,10 @@ public class MsLoginController extends BaseController {
      */
     @PostMapping("/login")
     @ApiOperation("登录 for VUE")
-    public HttpResult<Map<String, Object>> login(UcenterMsUserPO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Map<String, Object>> login(@RequestBody  UcenterMsUserPO sysUser,
+                                                 String uuid, HttpServletRequest request) {
+        ParamChecker.isNotNull(sysUser.getUserLoginName(),"用户名不能为空");
+        ParamChecker.isNotNull(sysUser.getPassword(),"密码不能为空");
         checkUserNameIsLock(sysUser.getUserLoginName());
         if (isVerification) {
             String identifyCode = request.getParameter("identifyCode");

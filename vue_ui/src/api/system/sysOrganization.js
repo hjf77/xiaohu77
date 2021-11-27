@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
 // 查询部门列表
-export function listDept(query) {
+export function listDept(data) {
   return request({
-    url: '/ms/sysOrganization/findListData',
-    method: 'get',
-    params: query
+    url: '/ms/sysOrganization/tree',
+    method: 'POST',
+    data
   })
 }
 
 // 查询部门详细
 export function getDept(deptId) {
   return request({
-    url: '/ms/sysOrganization/info/' + deptId,
+    url: '/ms/sysOrganization/' + deptId,
     method: 'get'
   })
 }
@@ -28,7 +28,7 @@ export function treeselect() {
 // 新增部门
 export function addDept(data) {
   return request({
-    url: '/ms/sysOrganization/insertOrganization',
+    url: '/ms/sysOrganization',
     method: 'post',
     data: data
   })
@@ -37,8 +37,8 @@ export function addDept(data) {
 // 修改部门
 export function updateDept(data) {
   return request({
-    url: '/ms/sysOrganization/update',
-    method: 'POST',
+    url: '/ms/sysOrganization',
+    method: 'PUT',
     data: data
   })
 }
@@ -47,14 +47,7 @@ export function updateDept(data) {
 export function delDept(deptId) {
   return request({
     url: '/ms/sysOrganization/' + deptId,
-    method: 'delete'
+    method: 'DELETE'
   })
 }
-//查询内部员工
-// export function InternalStaff(data){
-//   return request({
-//     url:'/ms/trainStudent/findListAdvance',
-//     method:'POST',
-//     data:data
-//   })
-// }
+

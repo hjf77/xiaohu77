@@ -70,8 +70,6 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     /**
      * 同级菜单排行第几
      */
-    @NotNull(message = "同级菜单排行第几字段不可为null", groups = {Update.class, Delete.class})
-    @Length(message = "同级菜单排行第几字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("ranking")
     @ApiModelProperty(value = "同级菜单排行第几")
     private Integer ranking;

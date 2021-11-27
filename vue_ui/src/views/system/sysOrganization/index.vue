@@ -11,26 +11,18 @@
         />
       </el-form-item>
       <el-form-item >
-        <el-select v-model="queryParams.isEnable" placeholder="部门状态" clearable size="small">
-          <el-option
-            v-for="dict in statusOptions"
-            :key="dict.wordbookCode"
-            :label="dict.wordbookDesc"
-            :value="dict.wordbookCode"
-          />
-        </el-select>
+        <pagex-select v-model="queryParams.isEnable" placeholder="部门状态" clearable size="small" dict-code="isEnable"></pagex-select>
       </el-form-item>
       <el-form-item>
         <el-button
-          class="filter-item"
           type="primary"
           icon="el-icon-search"
           size="mini"
           @click="handleQuery"
         >搜索
         </el-button>
+        <el-button   type="primary" size="mini" plain @click="resetQuery">重置</el-button>
         <el-button
-          class="filter-item"
           type="primary"
           icon="el-icon-plus"
           size="mini"
@@ -38,7 +30,6 @@
           v-hasPermi="['sysOrganization:add']"
         >新增
         </el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -51,19 +42,11 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column prop="name" label="部门名称"  min-width="60%"></el-table-column>
-      <el-table-column label="状态"  min-width="10%"   align="center">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.isEnable"
-            :active-value="1"
-            :inactive-value="0"
-            @change="handleStatusChange(scope.row)"
-          ></el-switch>
-        </template>
+      <el-table-column prop="data.isEnableName" label="状态"  min-width="10%"   align="center">
       </el-table-column>
       <el-table-column label="创建时间" align="center" min-width="10%"  prop="createTime" >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.data.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="20%" class-name="small-padding fixed-width">
@@ -97,57 +80,36 @@
     </el-table>
 
     <!-- 添加或修改部门对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-row>
-          <el-col :span="24" v-if="form.parentId !== ''">
-            <el-form-item label="上级部门" prop="parentId">
-              <treeselect :disabled="this.form.id != undefined" v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" placeholder="选择上级部门"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="部门名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入部门名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="部门状态">
-              <el-radio-group v-model="form.isEnable">
-                <el-radio
-                  v-for="dict in statusOptions"
-                  :key="dict.wordbookCode"
-                  :label="dict.wordbookCode"
-                >{{dict.wordbookDesc}}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否单位">
-              <el-radio-group v-model="form.isCompany">
-                <el-radio
-                  :disabled="isEdit"
-                  v-for="dict in isCompanyOptions"
-                  :key="dict.wordbookCode"
-                  :label="dict.wordbookCode"
-                >{{dict.wordbookDesc}}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="审批人" prop="extJson">
-              <pagex-formTreeSelect
-                                    httpMehod="GET"
-                                    v-model="form.extJson"
-                                    api="/ms/sysUser/getUserCompanyTree"
-              ></pagex-formTreeSelect>
-            </el-form-item>
-          </el-col>
-
-
-        </el-row>
-      </el-form>
+    <el-dialog :title="title" :visible.sync="open" class="pagex-dialog-theme"  >
+      <div class="pagex-from-theme">
+        <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+          <el-row>
+            <el-col :span="24" v-if="form.parentId !== ''">
+              <el-form-item label="上级部门" prop="parentId">
+                <pagex-formTreeSelect
+                  :disabled="this.form.id != undefined" v-model="form.parentId"
+                  api="/ms/sysOrganization/tree"
+                ></pagex-formTreeSelect>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="部门名称" prop="name">
+                <el-input v-model="form.name" placeholder="请输入部门名称"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="部门状态">
+                <pagex-radio v-model="form.isEnable"  :isValueNum="true" dict-code="isEnable"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="是否子公司">
+                <pagex-radio v-model="form.isCompany" :disabled="this.form.id != undefined" :isValueNum="true" dict-code="yesOrNo"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -163,7 +125,7 @@
 
   export default {
     name: 'sysOrganization',
-    components: { Treeselect },
+    components: {Treeselect },
     data() {
       return {
         // 遮罩层
@@ -176,17 +138,13 @@
         title: '',
         // 是否显示弹出层
         open: false,
-        // 状态数据字典
-        statusOptions: [],
-        // 是否是企业数据字典
-        isCompanyOptions: [],
         isEdit:false,
         // 查询参数
         queryParams: {
+          nameOP:'like',
+          parse: true,
           name: undefined,
           isEnable: undefined,
-          page:1,
-          rows:1000
         },
         // 表单参数
         form: {
@@ -208,13 +166,6 @@
     },
     created() {
       this.getList()
-      this.getDicts('is_enable').then(response => {
-        this.statusOptions = response
-      })
-      this.getDicts('yesOrNo').then(response => {
-        this.isCompanyOptions = response
-      })
-
     },
     methods: {
       /** 查询部门列表 */
@@ -224,27 +175,6 @@
           this.deptList = this.handleTree(response, 'deptId')
           this.loading = false
         })
-      },
-      /** 转换部门数据结构 */
-      normalizer(node) {
-        if (node.children && !node.children.length) {
-          delete node.children
-        }
-        return {
-          id: node.id,
-          label: node.name,
-          children: node.children
-        }
-      },
-      /** 查询部门下拉树结构 */
-      getTreeselect() {
-        listDept().then(response => {
-          this.deptOptions = this.handleTree(response, 'deptId')
-        })
-      },
-      // 字典状态字典翻译
-      statusFormat(row, column) {
-        return this.selectDictLabel(this.statusOptions, row.isEnable)
       },
       // 取消按钮
       cancel() {
@@ -267,19 +197,18 @@
       },
       /** 重置按钮操作 */
       resetQuery() {
-        this.queryParams = {};
-        this.resetForm("queryForm");
+        this.queryParams.name = undefined;
+        this.queryParams.isEnable = undefined;
         this.handleQuery();
       },
       /** 新增按钮操作 */
       handleAdd(row) {
         this.reset()
-        this.getTreeselect()
         if (row != undefined) {
           this.form.parentId = row.id
         }
-        this.$set(this.form,'isCompany','0')
-        this.$set(this.form,'isEnable','1')
+        this.$set(this.form,'isCompany',0)
+        this.$set(this.form,'isEnable',1)
         this.open = true
         this.isEdit = false;
         this.title = '添加部门'
@@ -287,12 +216,9 @@
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset()
-        this.getTreeselect()
         this.isEdit = true;
         getDept(row.id).then(response => {
           this.form = response
-          this.$set(this.form,'isCompany',response.isCompany.toString())
-          this.$set(this.form,'isEnable', response.isEnable.toString())
           this.open = true
           this.title = '修改部门'
         })

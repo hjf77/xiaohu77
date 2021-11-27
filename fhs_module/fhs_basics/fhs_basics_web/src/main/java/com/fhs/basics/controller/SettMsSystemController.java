@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @Api(tags = {"子系统"})
 @ApiGroup(group = "group_default")
-@RequestMapping("ms/sett_ms_system")
+@RequestMapping("ms/settMsSystem")
 public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemPO> {
 
     @Autowired

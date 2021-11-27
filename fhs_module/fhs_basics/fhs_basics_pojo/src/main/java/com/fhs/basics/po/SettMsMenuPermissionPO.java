@@ -107,7 +107,7 @@ public class SettMsMenuPermissionPO extends BasePO<SettMsMenuPermissionPO> {
     /**
      * 状态
      */
-    @Transient
+    @TableField(exist = false)
     @ApiModelProperty("状态")
     private String state;
 

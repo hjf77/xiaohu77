@@ -13,7 +13,7 @@
       :value-consists-of="'LEAF_PRIORITY'"
       @select="selectFn"
       :clearable="clearable"
-      :disabled="isDisabled"
+      :disabled="disabled"
     />
   </div>
 </template>
@@ -46,7 +46,7 @@ export default {
       type: Boolean,
       default: true
     },
-    isDisabled:{
+    disabled:{
       type: Boolean,
       default: false
     },

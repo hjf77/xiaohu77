@@ -1,3 +1,4 @@
+<!--此VUE 使用了ruoyi 原来的代码-->
 <template>
   <div class="app-container">
     <el-row :gutter="20">
@@ -10,12 +11,12 @@
           row-key="id"
           :expand-row-keys="expandedKeys"
           border highlight-current-row
-          @row-click="getPermissionClick"
+          @row-click="refreshPermissions"
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
         >
-          <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="200"></el-table-column>
-          <el-table-column prop="orderIndex" label="菜单序号" :show-overflow-tooltip="true" width="100"></el-table-column>
-          <el-table-column prop="menuUrl" label="菜单链接" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="name" label="菜单名称" :show-overflow-tooltip="true" width="200"></el-table-column>
+          <el-table-column prop="data.orderIndex" label="菜单序号" :show-overflow-tooltip="true" width="100"></el-table-column>
+          <el-table-column prop="data.menuUrl" label="菜单链接" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button size="mini"
@@ -73,8 +74,8 @@
         </el-row>
         <el-table v-loading="loading" :data="permissionList">
           <el-table-column prop="permissionName" label="权限名称" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="method" label="权限编码" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="transMap.isEnableName" label="状态" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="permissionCode" label="权限编码" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="isEnableName" label="状态" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button size="mini"
@@ -99,126 +100,81 @@
     </el-row>
 
     <!-- 添加或修改菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="上级菜单" prop="fatherMenuId">
-              <treeselect
-                v-model="form.fatherMenuId"
-                :options="menuOptions"
-                :normalizer="normalizer"
-                :show-count="true"
-                placeholder="选择上级菜单"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="菜单名称" prop="menuName">
-              <el-input v-model="form.menuName" placeholder="请输入菜单名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="显示排序" prop="orderIndex">
-              <el-input-number v-model="form.orderIndex" controls-position="right" :min="0"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="space" prop="namespace">
-              <el-input v-model="form.namespace" placeholder="请输入mamespace"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="所在服务" prop="serverNameId">
-              <el-select v-model="form.serverNameId" placeholder="请选择所在服务">
-                <el-option
-                  v-for="item in serverOptions"
-                  :key="item.id"
-                  :label="item.serverName"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="链接地址" prop="menuUrl">
-              <el-input v-model="form.menuUrl" placeholder="请输入链接地址"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.isEnable">
-                <el-radio
-                  v-for="dict in visibleOptions"
-                  :value="dict.wordbookCode"
-                  :label="dict.wordbookCode"
-                >{{dict.wordbookDesc}}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否隐藏">
-              <el-radio-group v-model="form.menuState">
-                <el-radio
-                  v-for="dict in yesOrNoOptions"
-                  :value="dict.wordbookCode"
-                  :label="dict.wordbookCode"
-                >{{dict.wordbookDesc}}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="子系统" prop="systemId">
-              <el-select v-model="form.systemId" placeholder="请选择子系统">
-                <el-option
-                  v-for="item in systemOptions"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="菜单类型" prop="menuType">
-              <el-select v-model="form.menuType" placeholder="请选择菜单类型">
-                <el-option
-                  v-for="item in menuTypeOptions"
-                  :key="item.wordbookCode"
-                  :label="item.wordbookDesc"
-                  :value="item.wordbookCode"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <!--
-                  <el-col :span="24">
-                      <el-form-item v-if="form.image != 'F'" label="菜单图标">
-                        <el-popover
-                          placement="bottom-start"
-                          width="460"
-                          trigger="click"
-                          @show="$refs['iconSelect'].reset()"
-                        >
-                          <IconSelect ref="iconSelect" @selected="selected" />
-                          <el-input slot="reference" v-model="form.icon" placeholder="点击选择图标" readonly>
-                            <svg-icon
-                              v-if="form.icon"
-                              slot="prefix"
-                              :icon-class="form.icon"
-                              class="el-input__icon"
-                              style="height: 32px;width: 16px;"
-                            />
-                            <i v-else slot="prefix" class="el-icon-search el-input__icon" />
-                          </el-input>
-                        </el-popover>
-                      </el-form-item>
-                    </el-col>
-          -->
-        </el-row>
-      </el-form>
+    <el-dialog :title="title" :visible.sync="open"  class="pagex-dialog-theme">
+      <div class="pagex-from-theme">
+        <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="上级菜单" prop="fatherMenuId">
+                <pagex-formTreeSelect
+                  v-model="form.fatherMenuId"
+                  api="/ms/sysMenu/tree"
+                ></pagex-formTreeSelect>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="菜单名称" prop="menuName">
+                <el-input v-model="form.menuName" placeholder="请输入菜单名称"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="显示排序" prop="orderIndex">
+                <el-input-number v-model="form.orderIndex" controls-position="right" :min="0"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="命名空间" prop="namespace">
+                <el-input v-model="form.namespace" placeholder="请输入命名空间"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="路由地址" prop="menuUrl">
+                <el-input v-model="form.menuUrl" placeholder="请输入路由地址"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="状态">
+                <pagex-radio  v-model="form.isEnable" :isValueNum="true" dict-code="isEnable"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="是否显示">
+                <pagex-radio  v-model="form.isShow" :isValueNum="true" dict-code="yesOrNo"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="图标">
+                <e-icon-picker v-model="form.icon"/>
+              </el-form-item>
+            </el-col>
+
+  <!--          <el-col :span="12">
+              <el-form-item label="子系统" prop="systemId">
+                <el-select v-model="form.systemId" placeholder="请选择子系统">
+                  <el-option
+                    v-for="item in systemOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>-->
+  <!--          <el-col :span="12">
+              <el-form-item label="菜单类型" prop="menuType">
+                <el-select v-model="form.menuType" placeholder="请选择菜单类型">
+                  <el-option
+                    v-for="item in menuTypeOptions"
+                    :key="item.wordbookCode"
+                    :label="item.wordbookDesc"
+                    :value="item.wordbookCode"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>-->
+          </el-row>
+        </el-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -226,45 +182,35 @@
     </el-dialog>
 
     <!-- 添加或修改权限对话框 -->
-    <el-dialog :title="title" :visible.sync="permissionOpen" width="600px">
-      <el-form ref="permissionForm" :model="permissionForm" :rules="permissionRules" label-width="80px">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="权限名称" prop="permissionName">
-              <el-input v-model="permissionForm.permissionName" placeholder="请输入权限名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="权限编码" prop="method">
-              <el-input v-model="permissionForm.method" placeholder="请输入权限编码"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="权限类型" prop="permissionType">
-              <el-select v-model="permissionForm.permissionType" placeholder="请选择权限类型" @change="menuTypeChange">
-                <el-option
-                  v-for="item in permissionTypeOptions"
-                  :key="item.wordbookCode"
-                  :label="item.wordbookDesc"
-                  :value="item.wordbookCode"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="permissionForm.isEnable ">
-                <el-radio
-                  v-for="dict in visibleOptions"
-                  :value="dict.wordbookCode"
-                  :label="dict.wordbookCode"
-                >{{dict.wordbookDesc}}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+    <el-dialog :title="title" :visible.sync="permissionOpen" v-if="permissionOpen" class="pagex-dialog-theme" >
+      <div class="pagex-from-theme">
+        <el-form ref="permissionForm" :model="permissionForm" :rules="permissionRules" label-width="120px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="权限名称" prop="permissionName">
+                <el-input v-model="permissionForm.permissionName" placeholder="请输入权限名称"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="权限编码" prop="permissionCode">
+                <el-input v-model="permissionForm.permissionCode" placeholder="请输入权限编码"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="权限类型" prop="permissionType">
+                <pagex-select v-model="permissionForm.permissionType" :isValueNum="true"  dict-code="permissionType" placeholder="请选择权限类型"
+                              :style="{width: '318px'}">
+                </pagex-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="状态">
+                <pagex-radio  v-model="permissionForm.isEnable" :isValueNum="true"  dict-code="isEnable"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="permissionSubmitForm">确 定</el-button>
         <el-button @click="permissionCancel">取 消</el-button>
@@ -280,8 +226,6 @@
     delMenu,
     addMenu,
     updateMenu,
-    getMenuTree,
-    getServerOptions,
     getSystemOptions,
     getPermissionList,
     getPermission,
@@ -290,12 +234,9 @@
     updatePermission,
     delPermission
   } from '@/api/system/menu'
-  import Treeselect from '@riophae/vue-treeselect'
-  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
   export default {
     name: 'sysMenu',
-    components: { Treeselect },
     data() {
       return {
         // 遮罩层
@@ -352,17 +293,8 @@
           namespace: [
             { required: true, message: 'namespace不能为空', trigger: 'blur' }
           ],
-          serverNameId: [
-            { required: true, message: '所在服务不能为空', trigger: 'blur' }
-          ],
           menuUrl: [
             { required: true, message: '链接地址不能为空', trigger: 'blur' }
-          ],
-          systemId: [
-            { required: true, message: '子系统不能为空', trigger: 'blur' }
-          ],
-          menuType: [
-            { required: true, message: '菜单类型不能为空', trigger: 'blur' }
           ]
         },
         // 权限表单参数
@@ -372,35 +304,20 @@
           permissionName: [
             { required: true, message: '权限名称不能为空', trigger: 'blur' }
           ],
-          method: [
-            { required: true, message: '方法名称不能为空', trigger: 'blur' }
+          permissionCode: [
+            { required: true, message: '权限编码不能为空', trigger: 'blur' }
           ],
           permissionType: [
-            { required: true, message: '菜单类型不能为空', trigger: 'blur' }
+            { required: true, message: '权限类型不能为空', trigger: 'blur' }
           ]
         }
       }
     },
     created() {
-      this.getList()
-      this.getDicts('is_enable').then(response => {
-        this.visibleOptions = response
-      })
-      this.getDicts('yesOrNo').then(response => {
-        this.yesOrNoOptions = response
-      })
-      this.getDicts('menu_type').then(response => {
-        this.menuTypeOptions = response
-      })
-      this.getDicts('permission_type').then(response => {
-        this.permissionTypeOptions = response
-      })
-      getServerOptions().then(response => {
-        this.serverOptions = response
-      })
-      getSystemOptions().then(response => {
+      this.getList();
+      /*getSystemOptions().then(response => {
         this.systemOptions = response
-      })
+      })*/
     },
     methods: {
       // 选择图标
@@ -410,27 +327,10 @@
       /** 查询菜单列表 */
       getList() {
         this.loading = true
-        listMenu(this.queryParams).then(response => {
+        listMenu({}).then(response => {
           this.menuList = response
           this.expandedKeys.push(response[0].id)
           this.loading = false
-        })
-      },
-      /** 转换菜单数据结构 */
-      normalizer(node) {
-        if (node.children && !node.children.length) {
-          delete node.children
-        }
-        return {
-          id: node.menuId,
-          label: node.menuName,
-          children: node.children
-        }
-      },
-      /** 查询菜单下拉树结构 */
-      getTreeselect() {
-        listMenu().then(response => {
-          this.menuOptions = response
         })
       },
       // 取消按钮
@@ -446,13 +346,12 @@
           menuName: undefined,
           icon: undefined,
           namespace: undefined,
-          serverNameId: undefined,
           menuUrl: undefined,
           menuType: undefined,
           orderIndex: undefined,
           isFrame: undefined,
-          menuState: '0',
-          isEnable: '1',
+          isShow: 1,
+          isEnable: 1,
           systemId: undefined
         }
         this.resetForm('form')
@@ -462,9 +361,9 @@
         this.permissionForm = {
           menuId: undefined,
           permissionName: undefined,
-          method: undefined,
+          permissionCode: undefined,
           permissionType: undefined,
-          isEnable: '1'
+          isEnable: 1
         }
         this.resetForm('permissionForm')
       },
@@ -475,9 +374,8 @@
       /** 新增按钮操作 */
       handleAdd(row) {
         this.reset()
-        this.getTreeselect()
         if (row != null) {
-          this.form.fatherMenuId = row.menuId
+          this.form.fatherMenuId = row.id
         }
         this.open = true
         this.title = '添加菜单'
@@ -485,15 +383,9 @@
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset()
-        this.getTreeselect()
-        getMenu(row.menuId).then(response => {
-          this.form = response
-          this.form.isEnable = response.isEnable.toString()
-          this.form.menuState = response.menuState.toString()
-          this.form.serverNameId = response.serverNameId.toString()
-          this.open = true
-          this.title = '修改菜单'
-        })
+        this.form = row.data
+        this.open = true
+        this.title = '修改菜单'
       },
       /** 提交按钮 */
       submitForm: function() {
@@ -525,16 +417,15 @@
       },
       /** 删除按钮操作 */
       handleDelete(row) {
-        this.$confirm('是否确认删除名称为"' + row.menuName + '"的数据项?', '警告', {
+        this.$confirm('是否确认删除名称为"' + row.name + '"的数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(function() {
-          return delMenu(row.menuId)
         }).then(() => {
-          this.getList()
-          this.msgSuccess('删除成功')
-        }).catch(function() {
+           delMenu(row.id).then(() => {
+             this.getList()
+             this.msgSuccess('删除成功')
+           })
         })
       },
       /***************************************** start 以下权限相关 *********************************/
@@ -544,8 +435,8 @@
         this.permissionReset()
       },
       /** 查询权限菜单列表 */
-      getPermissionClick(row) {
-        this.permissionMenuId = row.menuId || row
+      refreshPermissions(row) {
+        this.permissionMenuId = row.id || row;
         getPermissionList(this.permissionMenuId).then(response => {
           this.permissionList = response
         })
@@ -560,7 +451,7 @@
           if (response.result) {
             this.msgSuccess('新增成功')
             this.open = false
-            this.getPermissionClick(this.permissionMenuId)
+            this.refreshPermissions(this.permissionMenuId)
           } else {
             this.msgError(response.msg)
           }
@@ -581,8 +472,6 @@
         this.permissionReset()
         getPermission(row.permissionId).then(response => {
           this.permissionForm = response
-          this.permissionForm.isEnable = response.isEnable.toString()
-          this.permissionForm.permissionType = response.permissionType.toString()
           this.permissionOpen = true
           this.title = '修改权限'
         })
@@ -591,13 +480,13 @@
       permissionSubmitForm: function() {
         this.$refs['permissionForm'].validate(valid => {
           if (valid) {
-            this.permissionForm.menuId = parseInt(this.permissionMenuId)
+            this.permissionForm.menuId = this.permissionMenuId
             if (this.permissionForm.permissionId != undefined) {
               updatePermission(this.permissionForm).then(response => {
                 if (response.code === 200) {
                   this.msgSuccess('修改成功')
                   this.permissionOpen = false
-                  this.getPermissionClick(this.permissionMenuId)
+                  this.refreshPermissions(this.permissionMenuId)
                 } else {
                   this.msgError(response.msg)
                 }
@@ -607,7 +496,7 @@
                 if (response.code === 200) {
                   this.msgSuccess('新增成功')
                   this.permissionOpen = false
-                  this.getPermissionClick(this.permissionMenuId)
+                  this.refreshPermissions(this.permissionMenuId)
                 } else {
                   this.msgError(response.msg)
                 }
@@ -622,18 +511,13 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(function() {
-          return delPermission(row.permissionId)
-        }).then(() => {
-          this.getPermissionClick(this.permissionMenuId)
-          this.msgSuccess('删除成功')
-        }).catch(function() {
+        }).then(()=>{
+           delPermission(row.permissionId).then(()=>{
+            this.refreshPermissions(this.permissionMenuId)
+            this.msgSuccess('删除成功')
+          })
         })
       },
-      /** 下拉选中事件 **/
-      menuTypeChange(index) {
-        var data = this.permissionTypeOptions[index - 1]
-      }
     }
   }
 </script>

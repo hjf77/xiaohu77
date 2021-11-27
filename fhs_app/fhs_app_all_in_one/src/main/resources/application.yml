@@ -42,7 +42,7 @@ fhs:
     enable-cas: false
     #登录地址
     url: /b/page/login
-    error-pass-lock-times: 2 #2次密码输入错误就锁定
+    error-pass-lock-times: 100 #2次密码输入错误就锁定
     user-lock-seconds: 60 ##10秒解除锁定
   mybatis-jpa:
     #多个用;分隔
