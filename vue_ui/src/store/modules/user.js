@@ -1,4 +1,4 @@
-import { login, logout, getInfo, stuLogin } from '@/api/login'
+import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import Cookies from 'js-cookie'
 
@@ -45,29 +45,15 @@ const user = {
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
-      // 外协人员登录
-      if (userInfo.xueyuan) {
-        return new Promise((resolve, reject) => {
-          stuLogin(username, password, code, uuid).then(res => {
-            setToken(res.data.token)
-            commit('SET_TOKEN', res.data.token)
-            commit('SET_OUTSOURCE', userInfo.xueyuan)
-            resolve()
-          }).catch(error => {
-            reject(error)
-          })
+      return new Promise((resolve, reject) => {
+        login(username, password, code, uuid).then(res => {
+          setToken(res.data.token)
+          commit('SET_TOKEN', res.data.token)
+          resolve()
+        }).catch(error => {
+          reject(error)
         })
-      } else {
-        return new Promise((resolve, reject) => {
-          login(username, password, code, uuid).then(res => {
-            setToken(res.data.token)
-            commit('SET_TOKEN', res.data.token)
-            resolve()
-          }).catch(error => {
-            reject(error)
-          })
-        })
-      }
+      })
     },
 
     // 获取用户信息

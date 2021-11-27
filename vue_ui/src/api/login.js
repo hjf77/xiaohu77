@@ -9,7 +9,7 @@ export function login(userLoginName, password, identifyCode, uuid) {
     uuid
   }
   return request({
-    url: '/vueLogin',
+    url: '/login',
     method: 'post',
     data: data
   })
@@ -18,7 +18,7 @@ export function login(userLoginName, password, identifyCode, uuid) {
 // 获取用户详细信息
 export function getInfo() {
   return request({
-    url: '/ms/getUserForVue',
+    url: '/ms/getUser',
     method: 'get'
   })
 }
@@ -26,7 +26,7 @@ export function getInfo() {
 // 退出方法
 export function logout(token) {
   return request({
-    url: `/logoutForVue?token=${token}`,
+    url: `/logout?token=${token}`,
     method: 'GET'
   })
 }
@@ -34,23 +34,10 @@ export function logout(token) {
 // 获取验证码
 export function getCodeImg() {
   return request({
-    url: '/defaultKaptchaForVue',
+    url: '/defaultKaptcha',
     method: 'get'
   })
 }
 
-// 外协人员登录
-export function stuLogin(userLoginName, password, identifyCode, uuid) {
-  const data = {
-    userLoginName,
-    password,
-    identifyCode,
-    uuid
-  }
-  return request({
-    url: '/stu/vueLogin',
-    method: 'post',
-    data: data
-  })
-}
+
 

@@ -4,7 +4,7 @@
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}" id="menuItem">
           <i v-if="isNest" class="diandian"></i>
-<!--          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />-->
+         <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
@@ -12,8 +12,7 @@
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body :class="{'collapse':collapse}">
       <template slot="title">
         <img src="@/assets/icon/personalCenter.png" class="iconStyle">
-<!--        <item v-if="item.meta" :title="item.meta.title" />-->
-        <!-- :icon="item.meta && item.meta.icon" -->
+        <item v-if="item.meta" :title="item.meta.title" />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -29,16 +28,16 @@
 </template>
 
 <script>
-import path from 'path'
+import path from 'path-browserify'
 import { isExternal } from '@/utils/validate'
-/*import Item from './Item.vue'*/
+import Item from './Item.vue'
 import AppLink from './Link.vue'
 import FixiOSBug from './FixiOSBug'
 
 
 export default {
   name: 'SidebarItem',
-  components: {  AppLink },
+  components: {  AppLink,Item },
   mixins: [FixiOSBug],
   props: {
     // route object
@@ -59,6 +58,9 @@ export default {
       required: true
     }
   },
+  created() {
+    console.log(this.item);
+  },
   data() {
     this.onlyOneChild = null
     return {}
@@ -69,9 +71,7 @@ export default {
         if (item.hidden) {
           return false
         } else {
-          // Temp set(will be used if only has one showing child)
           this.onlyOneChild = item
-          // this.onlyOneChild = item.
           return true
         }
       })

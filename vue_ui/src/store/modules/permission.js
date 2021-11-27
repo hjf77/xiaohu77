@@ -1,7 +1,7 @@
 import { constantRoutes } from '@/router'
 import { getRouters } from '@/api/menu'
 import Layout from '@/layout/index.vue'
-const view = path => resolve => require([`@/views/${path}`], resolve)
+const modules = import.meta.glob('/src/views/**/*.vue')
 
 const permission = {
   state: {
@@ -20,37 +20,14 @@ const permission = {
     // 生成路由
     GenerateRoutes({ commit }, outsource) {
       return new Promise(resolve => {
-        // 外协人员
-        if (outsource) {
-          let routerObj = [
-            {
-              path: '/train',
-              component: 'Layout',
-              redirect: '',
-              children: [
-                {
-                  path: 'exam',
-                  component:'train/exam/index',
-                  name: '培训考试',
-                  meta: { title: '培训考试', icon: 'dashboard', noCache: true }
-                }
-              ]
-            },
-          ]
-          const tempRouter = filterAsyncRouter(routerObj)
-          tempRouter.push({ path: '*', redirect: '/404', hidden: true })
-          commit('SET_ROUTES', tempRouter)
-          resolve(tempRouter)
-        } else {
-          // 向后端请求路由数据
-          getRouters().then(res => {
-            const accessedRoutes = filterAsyncRouter(res.data)
-            accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
-            console.log(accessedRoutes);
-            commit('SET_ROUTES', accessedRoutes)
-            resolve(accessedRoutes)
-          })
-        }
+        // 向后端请求路由数据
+        getRouters().then(res => {
+          const accessedRoutes = filterAsyncRouter(res.data)
+          accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
+          console.log(accessedRoutes);
+          commit('SET_ROUTES', accessedRoutes)
+          resolve(accessedRoutes)
+        })
       })
     }
   }
@@ -64,7 +41,7 @@ function filterAsyncRouter(asyncRouterMap) {
       if (route.component === 'Layout') {
         route.component = Layout
       } else {
-        route.component = view(route.component)
+        route.component = modules['/src/views/' + route.component + '.vue']
       }
     }
     if (route.children != null && route.children && route.children.length) {

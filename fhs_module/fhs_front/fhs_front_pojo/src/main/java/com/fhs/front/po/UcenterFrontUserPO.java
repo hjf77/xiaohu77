@@ -1,4 +1,4 @@
-package com.fhs.front.dox;
+package com.fhs.front.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
