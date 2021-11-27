@@ -1,7 +1,7 @@
 package com.fhs.front.mapper;
 
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.fhs.front.dox.UcenterFrontUserBindDO;
+import com.fhs.front.po.UcenterFrontUserBindPO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @since 2019-03-11 14:37:18
  */
 @Repository
-@MapperDefinition(domainClass = UcenterFrontUserBindDO.class, orderBy = " update_time DESC")
-public interface UcenterFrontUserBindMapper extends FhsBaseMapper<UcenterFrontUserBindDO> {
+@MapperDefinition(domainClass = UcenterFrontUserBindPO.class, orderBy = " update_time DESC")
+public interface UcenterFrontUserBindMapper extends FhsBaseMapper<UcenterFrontUserBindPO> {
 
 }

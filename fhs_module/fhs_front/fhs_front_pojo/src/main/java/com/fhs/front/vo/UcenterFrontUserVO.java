@@ -1,8 +1,7 @@
 package com.fhs.front.vo;
 
 import com.fhs.core.trans.vo.VO;
-import com.fhs.core.trans.constant.TransType;
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -19,7 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterFrontUserVO", description = "UcenterFrontUser参数")
-public class UcenterFrontUserVO extends UcenterFrontUserDO implements VO {
+public class UcenterFrontUserVO extends UcenterFrontUserPO implements VO {
 
     /**
      * openidmap

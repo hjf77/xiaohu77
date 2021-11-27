@@ -100,7 +100,7 @@
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
-        m.menu_state AS menuState,
+        m.is_show AS isShow,
         s.server_url AS serverUrl,
         CONCAT(s.server_url,m.menu_url) AS menuUrl,
         m.father_menu_id AS
@@ -112,8 +112,7 @@
         = b.permission_id
         LEFT JOIN t_ucenter_ms_role_user_rela ru ON rt.role_id =
         ru.role_id
-        LEFT JOIN t_ucenter_ms_user u ON u.user_id= ru.user_id LEFT JOIN
-        t_sett_ms_menu_server s ON s.id = m.server_name_id
+        LEFT JOIN t_ucenter_ms_user u ON u.user_id= ru.user_id
         WHERE m.is_enable = 1
         and m.is_enable = b.is_enable
         <if test="userId !=null">
@@ -131,51 +130,42 @@
         menu_name AS menuName,
         father_menu_id AS
         fatherMenuId,
-        s.server_url as serverUrl,
-        CONCAT(server_url ,menu_url) AS menuUrl,
+        menu_url AS menuUrl,
         menu_type AS menuType,
         is_enable AS
         isEnable,
-        image,
-        server_name_id AS serverNameId,
+        icon,
         order_index AS orderIndex,
         namespace,
-        check_help_url AS checkHelpUrl,
-        menu_state AS menuState,
-        configuration_home_menu AS
-        configurationHomeMenu,
+        is_show AS isShow,
         system_id AS systemId
         FROM
-        `t_sett_ms_menu` m,t_sett_ms_menu_server s
-        WHERE m.`server_name_id`=s.`id`
+        `t_sett_ms_menu` m
+        <where>
         <!-- 查询制定的菜单类型 -->
-        <if test="menuType !=null and menuType!='3' ">
+        <if test="menuType !=null">
             AND (m.menu_type=#{menuType} OR m.menu_type=2)
         </if>
-        <if test=" menuType=='3' ">
-            AND m.menu_type=3
-        </if>
-        <if test="menuType ==null">
-            AND m.menu_type !=3
-        </if>
+
         <if test="systemIds != null and systemIds != ''">
             AND system_id IN(${systemIds})
         </if>
         AND m.is_enable=1
         AND m.is_delete = 0
+        </where>
         ORDER BY
         father_menu_id,order_index
     </select>
 
     <!-- 查询admin 拥有的所有的权限列表 -->
-    <select id="selectMenuIdByAdmin" resultType="int" parameterType="com.fhs.basics.po.UcenterMsUserPO">
+    <select id="selectMenuIdByAdmin" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT menu_id
-        FROM t_sett_ms_menu_permission
+        FROM t_sett_ms_menu_permission group by menu_id
     </select>
 
     <!-- 查询一个用户拥有的所有的权限列表 -->
-    <select id="selectMenuIdByUserId" resultType="int" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT m.menu_id AS menuId
+    <select id="selectMenuIdByUserId" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
+        SELECT distinct (m.menu_id) AS menuId
         FROM `t_sett_ms_menu` m
                  LEFT JOIN `t_sett_ms_menu_permission` b ON
             b.menu_id = m.menu_id
@@ -184,7 +174,6 @@
                  LEFT JOIN `t_ucenter_ms_role_user_rela` ru ON
             rt.role_id = ru.role_id
                  LEFT JOIN `t_ucenter_ms_user` u ON u.user_id = ru.user_id
-                 LEFT JOIN `t_sett_ms_menu_server` s ON s.id = m.server_name_id
                  LEFT JOIN `t_ucenter_ms_role` r ON ru.role_id = r.role_id
         WHERE m.is_enable = 1
           AND r.is_delete = 0
@@ -198,17 +187,13 @@
         SELECT m.menu_name AS menuName,
         m.menu_id AS
         menuId,
-        m.image AS image,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
+        m.icon AS icon,
+        menu_url AS menuUrl,
         m.father_menu_id AS
-        fatherMenuId,
-        m.check_help_url AS checkHelpUrl
-        FROM t_sett_ms_menu m ,
-        t_sett_ms_menu_server s
+        fatherMenuId
+        FROM t_sett_ms_menu m
         WHERE
         m.father_menu_id!=-1
-        AND s.id =
-        m.server_name_id
         <if test="menuType !=null">
             AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
         </if>
@@ -249,7 +234,7 @@
         FROM (SELECT m.menu_name                                 AS menuName,
                      m.menu_id                                   AS menuId,
                      CONCAT(m.namespace, ':', b.permission_code) AS namespace,
-                     CONCAT(s.server_url, m.menu_url)            AS menuUrl,
+                     m.menu_url                                  AS menuUrl,
                      m.father_menu_id                            AS
                                                                     fatherMenuId
               FROM t_sett_ms_menu m
@@ -264,9 +249,7 @@
                                     ru.role_id
                        LEFT JOIN t_ucenter_ms_user u
                                  ON u.user_id = ru.user_id
-                       LEFT JOIN
-                   t_sett_ms_menu_server s
-                   ON s.id = m.server_name_id
+
               WHERE m.`namespace` IS NOT NULL
                 AND m.`namespace` != ''
 		AND u.user_login_name = #{userLoginName}
@@ -297,14 +280,12 @@
         SELECT m.menu_name AS menuName,
         m.menu_id as menuId,
         CONCAT(m.namespace,':',b.permission_code) AS namespace,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
+        menu_url AS menuUrl,
         m.father_menu_id AS
         fatherMenuId
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id LEFT JOIN
-        t_sett_ms_menu_server s ON s.id =
-        m.server_name_id
+        b.menu_id = m.menu_id
         WHERE m.is_enable=b.is_enable
         AND m.is_enable=1
         AND
@@ -385,17 +366,15 @@
     <select id="readMenuByIds" parameterType="map" resultType="com.fhs.basics.po.SettMsMenuPO">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
+        menu_url AS menuUrl,
         namespace,
         menu_type AS
         menuType,
-        image,
+        icon,
         is_attention AS isAttention,
         m.father_menu_id AS
         fatherMenuId
-        FROM t_sett_ms_menu m LEFT JOIN t_sett_ms_menu_server s ON
-        s.id =
-        m.server_name_id
+        FROM t_sett_ms_menu m
         WHERE m.menu_id in
         <foreach collection="Ids" index="index" item="item" open="("
                  separator="," close=")">
@@ -470,14 +449,12 @@
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
         CONCAT(m.namespace,':',b.permission_code ) AS namespace,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
+        menu_url AS menuUrl,
         m.father_menu_id AS
         fatherMenuId
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id LEFT JOIN
-        t_sett_ms_menu_server s ON s.id =
-        m.server_name_id
+        b.menu_id = m.menu_id
         <if test="menuType !=null">
             where m.menu_type LIKE CONCAT('%',#{menuType},'%')
         </if>
@@ -490,19 +467,15 @@
             parameterType="map">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
+        menu_url AS menuUrl,
         m.father_menu_id AS
         fatherMenuId,
-        m.image AS image,
-        m.order_index AS orderIndex,
-        m.Check_help_url AS
-        CheckHelpUrl
+        m.icon AS icon,
+        m.order_index AS orderIndex
         FROM t_sett_ms_menu m
         LEFT
         JOIN t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id LEFT JOIN
-        t_sett_ms_menu_server s ON s.id =
-        m.server_name_id
+        b.menu_id = m.menu_id
         <where>
             <if test="Ids.size() > 0">
                 AND b.permission_id IN
@@ -527,15 +500,13 @@
             parameterType="map">
         SELECT m.menu_name AS menuName,
         m.menu_id as menuId,
-        CONCAT(m.namespace,':',b.method) AS namespace,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
+        CONCAT(m.namespace,':',b.permission_code) AS namespace,
+        menu_url AS menuUrl,
         m.father_menu_id AS
         fatherMenuId
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id LEFT JOIN
-        t_sett_ms_menu_server s ON s.id =
-        m.server_name_id
+        b.menu_id = m.menu_id
         WHERE b.permission_id IN
         <foreach collection="Ids" index="index" item="item" open="("
                  separator="," close=")">
@@ -591,16 +562,12 @@
         SELECT m.menu_name                      AS menuName,
                m.menu_id                        AS
                                                    menuId,
-               CONCAT(s.server_url, m.menu_url) AS menuUrl,
+               m.menu_url                        AS menuUrl,
                m.father_menu_id                 AS
                                                    fatherMenuId,
-               m.order_index                    AS orderIndex,
-               m.check_help_url                 AS
-                                                   checkHelpUrl
+               m.order_index                    AS orderIndex
         FROM t_sett_ms_menu m
-                 LEFT JOIN t_sett_ms_menu_server s ON
-                s.id
-                = m.server_name_id
+
         WHERE m.is_enable
             = 0
           AND m.father_menu_id!=-1
@@ -619,9 +586,7 @@
         FROM t_sett_ms_menu m
         LEFT JOIN
         t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id LEFT JOIN
-        t_sett_ms_menu_server s ON s.id =
-        m.server_name_id
+        b.menu_id = m.menu_id
         WHERE b.permission_id IN
         (${menuIds})
         <if test="menuType !=null">
@@ -715,7 +680,7 @@
         <if test="companyId != null and companyId != ''">
             AND o.company_id=#{companyId}
         </if>
-        AND m.namespace=#{namespace} AND p.method=#{permissonMethodCode}
+        AND m.namespace=#{namespace} AND p.permission_code=#{permissonMethodCode}
 
     </select>
 

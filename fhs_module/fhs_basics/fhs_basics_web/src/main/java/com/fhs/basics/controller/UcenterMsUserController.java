@@ -108,24 +108,14 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
     @NotRepeat
+    @Override
     @ResponseBody
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> save(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser, HttpServletRequest request,
+    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser, HttpServletRequest request,
                                     HttpServletResponse response) {
-        return addUser(sysUser);
-    }
 
-    /**
-     * 添加平台用户
-     * @param sysUser
-     */
-    @NotRepeat
-    @SaCheckRole("sysUser:add")
-    @PostMapping("addUser")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult addUser( UcenterMsUserVO sysUser) {
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
@@ -151,6 +141,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             throw new ParamException("用户名重复");
         }
     }
+
 
     /**
      * 获取密码
@@ -201,7 +192,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @desc 根据id删除对象
      */
     @SaCheckRole("sysUser:del")
-    @RequestMapping("/delSysUser")
+    @DeleteMapping("/delSysUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
         UcenterMsUserVO sysUser = sysUserService.selectById(id);
@@ -212,28 +203,19 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         return HttpResult.success(true);
     }
 
-    @ResponseBody
+    @Override
     @PutMapping("/")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class)UcenterMsUserVO sysUser, HttpServletRequest request,
+    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class)UcenterMsUserVO sysUser, HttpServletRequest request,
                                             HttpServletResponse response) {
-        return update(sysUser);
-    }
-    /**
-     * 更新用户信息
-     * @param sysUser
-     */
-    @SaCheckRole("sysUser:update")
-    @RequestMapping("updateUser")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> update(UcenterMsUserVO sysUser) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);
         }
         sysUserService.updateUser(sysUser);
         return HttpResult.success(Boolean.TRUE);
     }
+
 
 
     /**

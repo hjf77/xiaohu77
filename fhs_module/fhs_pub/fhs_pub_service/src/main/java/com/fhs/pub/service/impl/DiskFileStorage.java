@@ -5,7 +5,7 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.logger.Logger;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import com.fhs.pub.service.FileStorage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,13 +32,13 @@ public class DiskFileStorage implements FileStorage {
      * @param token       token(可为null)
      * @return serviceFile+token定位到的文件对象
      */
-    private File getFile(PubFileDO serviceFile, String token) {
+    private File getFile(PubFilePO serviceFile, String token) {
         String fileName = (null == token ? serviceFile.getFileId() : token) + serviceFile.getFileSuffix();
         return new File(EConfig.getPathPropertiesValue("fileSavePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
     }
 
     @Override
-    public void uploadFile(PubFileDO serviceFile, MultipartFile fileData) {
+    public void uploadFile(PubFilePO serviceFile, MultipartFile fileData) {
         File file = getFile(serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(fileData.getInputStream(), file);
@@ -49,7 +49,7 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFile(PubFileDO serviceFile, File fileData) {
+    public void uploadFile(PubFilePO serviceFile, File fileData) {
         File file = getFile(serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(new FileInputStream(fileData), file);
@@ -60,7 +60,7 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFileByToken(byte[] bytes, String token, PubFileDO serviceFile) {
+    public void uploadFileByToken(byte[] bytes, String token, PubFilePO serviceFile) {
         File file = getFile(serviceFile, token);
         try (FileOutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
@@ -70,7 +70,7 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public void downloadFile(PubFileDO serviceFile, HttpServletResponse response) {
+    public void downloadFile(PubFilePO serviceFile, HttpServletResponse response) {
         File file = getFile(serviceFile, null);
         if (file.exists()) {
             FileUtils.download(file, response, serviceFile.getFileName());
@@ -80,7 +80,7 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public void downloadFileByToken(String token, PubFileDO serviceFile, HttpServletResponse response) {
+    public void downloadFileByToken(String token, PubFilePO serviceFile, HttpServletResponse response) {
         File file = getFile(serviceFile, token);
         if (file.exists()) {
             FileUtils.download(file, response, file.getName());
@@ -88,12 +88,12 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public boolean checkFileIsExist(String token, PubFileDO serviceFile) {
+    public boolean checkFileIsExist(String token, PubFilePO serviceFile) {
         return getFile(serviceFile, token).exists();
     }
 
     @Override
-    public InputStream getFileInputStream(PubFileDO serviceFile) throws FileNotFoundException {
+    public InputStream getFileInputStream(PubFilePO serviceFile) throws FileNotFoundException {
         return new FileInputStream(getFile(serviceFile, null));
     }
 }

@@ -1,4 +1,4 @@
-package com.fhs.bislogger.dox;
+package com.fhs.bislogger.po;
 
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.*;
@@ -23,7 +23,7 @@ import lombok.*;
 @AllArgsConstructor
 @TableName("t_log_history_data")
 @EqualsAndHashCode(callSuper = true)
-public class LogHistoryDataDO extends BasePO<LogHistoryDataDO> {
+public class LogHistoryDataPO extends BasePO<LogHistoryDataPO> {
     private static final long serialVersionUID = 312083419921410582L;
 
     /**

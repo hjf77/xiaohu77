@@ -1,4 +1,4 @@
-package com.fhs.bislogger.dox;
+package com.fhs.bislogger.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @TableName("t_log_login")
 @EqualsAndHashCode(callSuper = true)
-public class LogLoginDO extends BasePO<LogLoginDO> {
+public class LogLoginPO extends BasePO<LogLoginPO> {
     private static final long serialVersionUID = 330446860714574816L;
 
     /**

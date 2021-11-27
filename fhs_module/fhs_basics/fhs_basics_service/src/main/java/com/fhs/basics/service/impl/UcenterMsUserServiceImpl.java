@@ -332,7 +332,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public List<LeftMenuVO> getMenu(UcenterMsUserPO user, String menuType) {
-
         Map<String, Object> paramMap = new HashMap<String, Object>();
         //如果是saas模式需要判断菜单类型
         if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))) {
@@ -349,25 +348,20 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 }
             }
         }
-        if (menuType != null && Constant.MENU_TYPE_VUE.equals(menuType)) {
-            paramMap.put("menuType", menuType);
-        }
         List<SettMsMenuVO> menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(paramMap), SettMsMenuVO.class);
         menuList = menuFilter(user, menuList);
-        Map<Integer, LeftMenuVO> leftMenuMap = new HashMap<>();
+        Map<String, LeftMenuVO> leftMenuMap = new HashMap<>();
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
-            LeftMenuVO leftMenu = new LeftMenuVO()
-                    .mk("id", adminMenu.getMenuId(), "name",
-                            adminMenu.getMenuName(), "url", adminMenu.getMenuUrl());
-            leftMenu.setNamespace(adminMenu.getNamespace());
+            LeftMenuVO leftMenu = LeftMenuVO.builder().id(adminMenu.getMenuId()).name(adminMenu.getMenuName())
+                    .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).sonMenu(new ArrayList<>()).build();
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
         List<LeftMenuVO> result = new ArrayList<>();
         menuList.forEach(adminMenu -> {
             if (ConverterUtils.toInt(adminMenu.getIsShow()) != SettMsMenuService.NOT_SHOW) {
                 // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null &&  BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId())) {
+                if (adminMenu.getFatherMenuId() != null &&  (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
                     if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
@@ -407,9 +401,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         vueRouterVO.setAlwaysShow(isFirst);
         vueRouterVO.setPath(isFirst ? "/" + menu.getNamespace() : menu.getNamespace());
         String component = null;
-        if (menu.getServerUrl() != null && menu.getUrl() != null) {
-            component = menu.getUrl().replace(menu.getServerUrl(), "");
-        }
+        component = menu.getUrl();
         vueRouterVO.setComponent(isFirst ? "Layout" : component);
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
         vueRouterVO.getMeta().put("title", menu.getName());
@@ -431,7 +423,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * @return
      */
     private List<SettMsMenuVO> menuFilter(UcenterMsUserPO user, List<SettMsMenuVO> menuList) {
-        Set<Integer> userMenuIds = null;
+        Set<String> userMenuIds = null;
         if (user.getIsAdmin() == ADMIN) {
             userMenuIds = sysUserMapper.selectMenuIdByAdmin(user);
         } else {
@@ -444,7 +436,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         });
         // 已经添加进结果的菜单
         Set<SettMsMenuVO> hasAddMenu = new HashSet<>();
-        for (Integer userMenuId : userMenuIds) {
+        for (String userMenuId : userMenuIds) {
             if (menuMap.containsKey(userMenuId)) {
                 hasAddMenu.add(menuMap.get(userMenuId));
                 // 能看到儿子就能看到爸爸，找儿子的爸爸

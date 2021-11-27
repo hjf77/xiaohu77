@@ -1,7 +1,7 @@
 package com.fhs.front.service;
 
 import com.fhs.core.base.service.BaseService;
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import com.fhs.front.vo.UcenterFrontUserVO;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author jackwong
  * @since 2019-03-11 14:14:58
  */
-public interface UcenterFrontUserService extends BaseService<UcenterFrontUserVO, UcenterFrontUserDO> {
+public interface UcenterFrontUserService extends BaseService<UcenterFrontUserVO, UcenterFrontUserPO> {
 
     /**
      * 未知

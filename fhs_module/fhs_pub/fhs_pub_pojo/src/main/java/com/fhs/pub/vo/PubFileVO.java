@@ -1,7 +1,7 @@
 package com.fhs.pub.vo;
 
 import com.fhs.core.trans.vo.VO;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PubFileVO", description = "PubFile参数")
-public class PubFileVO extends PubFileDO implements VO {
+public class PubFileVO extends PubFilePO implements VO {
     // 文件相对路径, 用于nginx代理文件
     private String filePath;
 

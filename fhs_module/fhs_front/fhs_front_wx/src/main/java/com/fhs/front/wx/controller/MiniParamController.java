@@ -8,7 +8,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.result.HttpResult;
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import com.fhs.front.service.LoginService;
 import com.fhs.front.service.UcenterFrontUserBindService;
 import com.fhs.front.service.UcenterFrontUserService;
@@ -95,7 +95,7 @@ public class MiniParamController {
                 HttpResult.error(null, "用户信息校验失败");
             }
             WxMaUserInfo userInfo = wxService.getUserService().getUserInfo(loginVo.getSessionKey(), loginVo.getEncryptedData(), loginVo.getIv());
-            UcenterFrontUserDO user = UcenterFrontUserVO.builder().userId(StringUtils.getUUID())
+            UcenterFrontUserPO user = UcenterFrontUserVO.builder().userId(StringUtils.getUUID())
                     .nickName(userInfo.getNickName()).provinceId(userInfo.getProvince()).cityId(userInfo.getCity()).isEnable(Constant.INT_TRUE)
                     .sex(ConverterUtils.toString(userInfo.getGender())).language(userInfo.getLanguage()).imagePath(userInfo.getAvatarUrl()).build();
             userId = loginService.addBindAndUser(user, loginVo.getOpenid(), UcenterFrontUserBindService.OPENID_TYPE_WX_MINI_PARAM);

@@ -10,7 +10,9 @@ import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +43,8 @@ public class SettMsMenuPermissionController extends ModelSuperController<SettMsM
      * @param request
      * @paramreponse
      */
-    @RequestMapping("addBaseMenuBatch")
+    @ApiOperation("批量添加权限")
+    @PostMapping("addBaseMenuBatch")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
     public void addBaseMenuBatch(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = super.getParameterMap();

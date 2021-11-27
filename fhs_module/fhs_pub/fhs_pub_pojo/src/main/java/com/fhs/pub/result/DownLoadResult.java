@@ -1,6 +1,6 @@
 package com.fhs.pub.result;
 
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 
 public class DownLoadResult {
 
@@ -8,7 +8,7 @@ public class DownLoadResult {
 
     private String rvMsg = "ok!";
 
-    private PubFileDO serviceFile;
+    private PubFilePO serviceFile;
 
     public Integer getRvCode() {
         return rvCode;
@@ -26,11 +26,11 @@ public class DownLoadResult {
         this.rvMsg = rvMsg;
     }
 
-    public PubFileDO getServiceFile() {
+    public PubFilePO getServiceFile() {
         return serviceFile;
     }
 
-    public void setServiceFile(PubFileDO serviceFile) {
+    public void setServiceFile(PubFilePO serviceFile) {
         this.serviceFile = serviceFile;
     }
 }

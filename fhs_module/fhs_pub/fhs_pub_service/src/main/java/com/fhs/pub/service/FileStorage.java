@@ -1,6 +1,6 @@
 package com.fhs.pub.service;
 
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ public interface FileStorage {
      * @param fileData
      */
 
-    void uploadFile(PubFileDO serviceFile, MultipartFile fileData);
+    void uploadFile(PubFilePO serviceFile, MultipartFile fileData);
 
 
     /**
@@ -33,7 +33,7 @@ public interface FileStorage {
      * @param fileData
      */
 
-    void uploadFile(PubFileDO serviceFile, File fileData);
+    void uploadFile(PubFilePO serviceFile, File fileData);
 
     /**
      * 根据文件字节数组,serviceFile和文件名做文件上传
@@ -43,7 +43,7 @@ public interface FileStorage {
      * @param serviceFile
      */
 
-    void uploadFileByToken(byte[] bytes, String token, PubFileDO serviceFile);
+    void uploadFileByToken(byte[] bytes, String token, PubFilePO serviceFile);
 
     /**
      * 根据serviceFile下载文件
@@ -52,7 +52,7 @@ public interface FileStorage {
      * @param response
      */
 
-    void downloadFile(PubFileDO serviceFile, HttpServletResponse response);
+    void downloadFile(PubFilePO serviceFile, HttpServletResponse response);
 
     /**
      * 根据文件名和serviceFile下载文件
@@ -62,7 +62,7 @@ public interface FileStorage {
      * @param serviceFile
      */
 
-    void downloadFileByToken(String token, PubFileDO serviceFile, HttpServletResponse response);
+    void downloadFileByToken(String token, PubFilePO serviceFile, HttpServletResponse response);
 
     /**
      * 判断一个文件是否存在
@@ -71,7 +71,7 @@ public interface FileStorage {
      * @param serviceFile file
      * @return true 存在 false不存在
      */
-    boolean checkFileIsExist(String token, PubFileDO serviceFile);
+    boolean checkFileIsExist(String token, PubFilePO serviceFile);
 
     /**
      * 获取一个inputstreqam
@@ -79,5 +79,5 @@ public interface FileStorage {
      * @param serviceFile 文件
      * @return inputstream
      */
-    InputStream getFileInputStream(PubFileDO serviceFile) throws FileNotFoundException;
+    InputStream getFileInputStream(PubFilePO serviceFile) throws FileNotFoundException;
 }

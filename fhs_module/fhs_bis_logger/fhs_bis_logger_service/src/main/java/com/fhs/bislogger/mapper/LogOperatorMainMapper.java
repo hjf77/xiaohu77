@@ -1,6 +1,6 @@
 package com.fhs.bislogger.mapper;
 
-import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.po.LogOperatorMainPO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
@@ -16,8 +16,8 @@ import java.util.Map;
  * @since 2020-04-23 13:59:14
  */
 @Repository
-@MapperDefinition(domainClass = LogOperatorMainDO.class, orderBy = " update_time DESC")
-public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainDO> {
+@MapperDefinition(domainClass = LogOperatorMainPO.class, orderBy = " update_time DESC")
+public interface LogOperatorMainMapper extends FhsBaseMapper<LogOperatorMainPO> {
 
     /**
      * 查询模块列表

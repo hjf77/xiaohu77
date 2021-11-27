@@ -2,7 +2,7 @@ package com.fhs.pub.service.impl;
 
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
-import com.fhs.pub.dox.OrderNumberDO;
+import com.fhs.pub.po.OrderNumberPO;
 import com.fhs.pub.service.OrderNumberService;
 import com.fhs.pub.vo.OrderNumberVO;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("serviceOrderLogServiceImpl")
 @DataSource("base_business")
-public class OrderNumberServiceImpl extends BaseServiceImpl<OrderNumberVO, OrderNumberDO> implements OrderNumberService {
+public class OrderNumberServiceImpl extends BaseServiceImpl<OrderNumberVO, OrderNumberPO> implements OrderNumberService {
 
 }

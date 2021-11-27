@@ -1,9 +1,8 @@
 package com.fhs.bislogger.vo;
 
 
-import com.fhs.bislogger.dox.LogOperatorExtParamDO;
+import com.fhs.bislogger.po.LogOperatorExtParamPO;
 import com.fhs.core.trans.vo.VO;
-import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -18,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "LogOperatorExtParamDO", description = "LogOperatorExtParam参数")
-public class LogOperatorExtParamVO extends LogOperatorExtParamDO implements VO {
+public class LogOperatorExtParamVO extends LogOperatorExtParamPO implements VO {
 
     /**
      * 模型

@@ -1,7 +1,7 @@
 package com.fhs.front.mapper;
 
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +14,9 @@ import java.util.List;
  * @since 2019-03-11 14:14:58
  */
 @Repository
-@MapperDefinition(domainClass = UcenterFrontUserDO.class, orderBy = " update_time DESC")
-public interface UcenterFrontUserMapper extends FhsBaseMapper<UcenterFrontUserDO> {
+@MapperDefinition(domainClass = UcenterFrontUserPO.class, orderBy = " update_time DESC")
+public interface UcenterFrontUserMapper extends FhsBaseMapper<UcenterFrontUserPO> {
 
-    List<UcenterFrontUserDO> findListFilterMobile();
+    List<UcenterFrontUserPO> findListFilterMobile();
 
 }

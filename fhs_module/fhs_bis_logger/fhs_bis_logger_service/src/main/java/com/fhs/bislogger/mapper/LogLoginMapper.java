@@ -1,6 +1,6 @@
 package com.fhs.bislogger.mapper;
 
-import com.fhs.bislogger.dox.LogLoginDO;
+import com.fhs.bislogger.po.LogLoginPO;
 import com.fhs.bislogger.vo.LogLoginVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
@@ -17,8 +17,8 @@ import java.util.List;
  * @since 2020-04-23 13:58:43
  */
 @Repository
-@MapperDefinition(domainClass = LogLoginDO.class, orderBy = " update_time DESC")
-public interface LogLoginMapper extends FhsBaseMapper<LogLoginDO> {
+@MapperDefinition(domainClass = LogLoginPO.class, orderBy = " update_time DESC")
+public interface LogLoginMapper extends FhsBaseMapper<LogLoginPO> {
 
     /**
      * 汇总前20名 登录玩家的登录次数，根基时间段查询

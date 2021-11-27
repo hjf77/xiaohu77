@@ -1,7 +1,10 @@
 package com.fhs.basics.vo;
 
 import com.fhs.core.base.pojo.BaseObject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,9 @@ import java.util.List;
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class LeftMenuVO extends BaseObject<LeftMenuVO> {
 
     /**
@@ -27,7 +33,7 @@ public class LeftMenuVO extends BaseObject<LeftMenuVO> {
     /**
      * id.
      */
-    private Integer id;
+    private String id;
 
     /**
      * 菜单名称.

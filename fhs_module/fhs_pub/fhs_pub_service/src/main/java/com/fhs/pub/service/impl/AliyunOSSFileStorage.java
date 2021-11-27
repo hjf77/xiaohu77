@@ -4,7 +4,7 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import com.fhs.common.utils.FileUtils;
 import com.fhs.logger.Logger;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import com.fhs.pub.service.FileStorage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +34,7 @@ public class AliyunOSSFileStorage implements FileStorage {
 
 
     @Override
-    public void uploadFile(PubFileDO serviceFile, MultipartFile file) {
+    public void uploadFile(PubFilePO serviceFile, MultipartFile file) {
         // 上传文件
         try {
             this.upload(file.getInputStream(), serviceFile.getFileId());
@@ -44,7 +44,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFile(PubFileDO serviceFile, File fileData) {
+    public void uploadFile(PubFilePO serviceFile, File fileData) {
         // 上传文件
         try {
             this.upload(new FileInputStream(fileData), serviceFile.getFileId());
@@ -74,7 +74,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFileByToken(byte[] bytes, String token, PubFileDO serviceFile) {
+    public void uploadFileByToken(byte[] bytes, String token, PubFilePO serviceFile) {
         // 上传文件
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream((bytes))) {
             upload(byteArrayInputStream, token);
@@ -84,7 +84,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void downloadFile(PubFileDO serviceFile, HttpServletResponse response) {
+    public void downloadFile(PubFilePO serviceFile, HttpServletResponse response) {
         download(serviceFile.getFileId(), response, serviceFile.getFileName());
     }
 
@@ -104,12 +104,12 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void downloadFileByToken(String token, PubFileDO serviceFile, HttpServletResponse response) {
+    public void downloadFileByToken(String token, PubFilePO serviceFile, HttpServletResponse response) {
         download(token, response, null);
     }
 
     @Override
-    public boolean checkFileIsExist(String token, PubFileDO serviceFile) {
+    public boolean checkFileIsExist(String token, PubFilePO serviceFile) {
         // 初始化 阿里文件服务客户端
         OSSClient ossClient = this.getClient();
         token = token == null ? serviceFile.getFileId() : token;
@@ -126,7 +126,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public InputStream getFileInputStream(PubFileDO serviceFile) throws FileNotFoundException {
+    public InputStream getFileInputStream(PubFilePO serviceFile) throws FileNotFoundException {
         // 初始化 阿里文件服务客户端
         OSSClient ossClientdownForId = this.getClient();
         try {

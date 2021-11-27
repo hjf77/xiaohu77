@@ -1,6 +1,6 @@
 package com.fhs.bislogger.service;
 
-import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.po.LogOperatorMainPO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Namespace;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @since 2020-04-23 13:59:14
  */
 @Namespace("log_operator_main")
-public interface LogOperatorMainService extends BaseService<LogOperatorMainVO, LogOperatorMainDO> {
+public interface LogOperatorMainService extends BaseService<LogOperatorMainVO, LogOperatorMainPO> {
 
     /**
      * 查询模块列表

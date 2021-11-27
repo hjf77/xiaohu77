@@ -151,7 +151,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @GetMapping("advanceExportExcel")
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcelForVue(HttpServletResponse response, String fileName, String ids) throws IOException {
+    public void exportExcel(HttpServletResponse response, String fileName, String ids) throws IOException {
         QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
         wrapper = wrapper == null ? new QueryWrapper() : wrapper;
         wrapper = (QueryWrapper) wrapper.clone();
@@ -172,104 +172,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
 
-    /**
-     * 有数据导出excel by jackwang
-     *
-     * @param dataList 数据集合
-     */
-    protected void exportExcel(List<V> dataList) {
-        HttpServletRequest request = getRequest();
-        HttpServletResponse response = getResponse();
-        ExcelExportTools.exportExcel(dataList, request, response);
-    }
-
-    /**
-     * 获取需要导出的数据
-     *
-     * @return 需要导出的数据
-     */
-    private List<V> getExportData() {
-        HttpServletRequest request = getRequest();
-        Object param = request.getSession().getAttribute(this.getClass() + "preLoadParam");
-        //如果session中拿不到参数，则自己new一个
-        if (param == null) {
-            //子类集成我的时候传的泛型是什么就new什么
-            Type t = this.getClass().getGenericSuperclass();
-            if (t instanceof ParameterizedType) {
-                Type[] p = ((ParameterizedType) t).getActualTypeArguments();
-                if (p.length > 0) {
-                    try {
-                        param = Class.forName(p[0].getTypeName()).newInstance();
-                    } catch (InstantiationException e) {
-                        log.error(this, e);
-                    } catch (IllegalAccessException e) {
-                        log.error(this, e);
-                    } catch (ClassNotFoundException e) {
-                        log.error(this, e);
-                    }
-                }
-            }
-        }
-        if (param == null) {
-            throw new ParamException("导出没有调用查询方法设置查询参数");
-        }
-        return baseService.findForList((D) param);
-    }
-
-    /**
-     * 格式化导出数据
-     *
-     * @param request  request
-     * @param dataList 需要被格式化的数据
-     * @return 格式化后的数据
-     */
-    private Object[][] parseExportData(HttpServletRequest request, List<V> dataList) {
-        final Map<String, String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
-        final Object[][] rows = new Object[dataList.size()][fieldMap.size()];
-        Set<String> fieldSet = fieldMap.keySet();
-        for (int i = 0; i < dataList.size(); i++) {
-            V rowData = dataList.get(i);
-            Object[] row = new Object[fieldSet.size()];
-            rows[i] = row;
-            int fieldIndex = 0;
-            for (String field : fieldSet) {
-                Object value = null;
-                if (field.contains("transMap")) {
-                    value = ((VO) rowData).getTransMap().get(field.replace("transMap.", ""));
-                } else {
-                    value = ReflectUtils.getValue(rowData, field);
-                }
-                row[fieldIndex] = value;
-                fieldIndex++;
-            }
-        }
-        return rows;
-    }
-
-    /**
-     * 获取excel的title
-     *
-     * @return title集合
-     */
-    private String[] getExportTitleArray() {
-        HttpServletRequest request = getRequest();
-        return ExcelExportTools.getExportTitleArray(request);
-    }
-
-    /**
-     * 将导出的列配置信息缓存到session中
-     *
-     * @param fieldSett 导出配置
-     * @param request   request
-     * @return 成功
-     */
-    @ResponseBody
-    @PostMapping("setExportField")
-    @ApiOperation(value = "设置到处的excel字段")
-    public HttpResult setExportField(@RequestBody String fieldSett, HttpServletRequest request) {
-        ExcelExportTools.setExportField(fieldSett, request);
-        return HttpResult.success();
-    }
 
     /**
      * 根据ID集合查询对象数据
@@ -337,11 +239,11 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      * @param request
      * @return
      */
-    @DeleteMapping("/{id}")
     @ResponseBody
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "删除-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> delForVue(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
+    public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
             baseService.deleteById(id);
             return HttpResult.success(true);
@@ -359,7 +261,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @PutMapping("/")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
+    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
                                             HttpServletResponse response) {
         if (isPermitted(request, "update")) {
             if (e instanceof BasePO) {

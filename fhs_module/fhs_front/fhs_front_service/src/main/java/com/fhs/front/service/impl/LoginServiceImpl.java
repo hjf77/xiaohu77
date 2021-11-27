@@ -11,8 +11,8 @@ import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
-import com.fhs.front.dox.UcenterFrontUserBindDO;
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserBindPO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import com.fhs.front.interfaces.FhsOauth302;
 import com.fhs.front.service.LoginService;
 import com.fhs.front.service.UcenterFrontUserBindService;
@@ -120,11 +120,11 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String addBindAndUser(UcenterFrontUserDO user, String openId, int openIdType) {
+    public String addBindAndUser(UcenterFrontUserPO user, String openId, int openIdType) {
         user.setUserId(StringUtils.getUUID());
         user.preInsert(null);
         userService.insertSelective(user);
-        UcenterFrontUserBindDO bind = UcenterFrontUserBindDO.builder().id(StringUtils.getUUID()).authOpenid(openId)
+        UcenterFrontUserBindPO bind = UcenterFrontUserBindPO.builder().id(StringUtils.getUUID()).authOpenid(openId)
                 .authOpenidType(openIdType).userId(user.getUserId()).build();
         bind.preInsert(null);
         userBindService.insertSelective(bind);

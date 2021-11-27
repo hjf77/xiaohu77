@@ -1,15 +1,10 @@
 package com.fhs.bislogger.vo;
 
 
-import com.fhs.bislogger.dox.LogLoginDO;
-import com.fhs.common.utils.NumberUtil;
+import com.fhs.bislogger.po.LogLoginPO;
 import com.fhs.core.trans.vo.VO;
-import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 登录日志(LogLogin)实体类
@@ -22,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "LogLoginDO", description = "LogLogin参数")
-public class LogLoginVO extends LogLoginDO implements VO {
+public class LogLoginVO extends LogLoginPO implements VO {
 
     /**
      * 用户名称

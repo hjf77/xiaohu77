@@ -8,7 +8,7 @@
  * 修改单号:  &lt;修改单号&gt;
  * 修改内容:  &lt;修改内容&gt;
  */
-package com.fhs.pub.dox;
+package com.fhs.pub.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -40,7 +40,7 @@ import java.text.DecimalFormat;
 @TableName("t_pub_file")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PubFileDO", description = "PubFile参数")
-public class PubFileDO extends BasePO<PubFileDO> implements Serializable {
+public class PubFilePO extends BasePO<PubFilePO> implements Serializable {
     private static final long serialVersionUID = 7096338027750227520L;
 
     /**

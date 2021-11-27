@@ -16,14 +16,12 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import com.fhs.pub.service.PubFileService;
 import com.fhs.pub.vo.PubFileVO;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 文件CRUD service
@@ -35,7 +33,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("file")
-public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> implements PubFileService {
+public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFilePO> implements PubFileService {
 
     /**
      * 文件查询方法重写
@@ -72,7 +70,7 @@ public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFileDO> im
      * @return
      */
     @Override
-    public String getAllPath(PubFileDO serviceFile) {
+    public String getAllPath(PubFilePO serviceFile) {
         if (serviceFile == null) {
             throw new ParamException("文件不存在");
         }

@@ -11,11 +11,8 @@
 package com.fhs.pub.service;
 
 import com.fhs.core.base.service.BaseService;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import com.fhs.pub.vo.PubFileVO;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 文件CRUD service
@@ -26,7 +23,7 @@ import java.util.Map;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface PubFileService extends BaseService<PubFileVO, PubFileDO> {
+public interface PubFileService extends BaseService<PubFileVO, PubFilePO> {
     /**
      * 根据fileId查询文件信息
      *
@@ -56,6 +53,6 @@ public interface PubFileService extends BaseService<PubFileVO, PubFileDO> {
      * @param serviceFile 文件对象
      * @return 文件路径
      */
-    public String getAllPath(PubFileDO serviceFile);
+    public String getAllPath(PubFilePO serviceFile);
 
 }

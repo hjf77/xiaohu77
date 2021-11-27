@@ -3,9 +3,9 @@ package com.fhs.bislogger.controller;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsUserVO;
-import com.fhs.bislogger.dox.LogHistoryDataDO;
-import com.fhs.bislogger.dox.LogOperatorExtParamDO;
-import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.po.LogHistoryDataPO;
+import com.fhs.bislogger.po.LogOperatorExtParamPO;
+import com.fhs.bislogger.po.LogOperatorMainPO;
 import com.fhs.bislogger.service.LogHistoryDataService;
 import com.fhs.bislogger.service.LogOperatorExtParamService;
 import com.fhs.bislogger.service.LogOperatorMainService;
@@ -32,7 +32,7 @@ import java.util.*;
 @RestController
 @Api(tags = {"操作日志"})
 @RequestMapping("/ms/logOperatorMain")
-public class LogOperatorMainController extends ModelSuperController<LogOperatorMainVO, LogOperatorMainDO> {
+public class LogOperatorMainController extends ModelSuperController<LogOperatorMainVO, LogOperatorMainPO> {
 
     @Autowired
     private LogOperatorMainService logOperatorMainService;
@@ -107,7 +107,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     public void getExtendedParameters(String mainId) {
         ParamChecker.isNotNullOrEmpty(mainId, "mainId不能为空");
         List<LogOperatorExtParamVO> logExtParamList =
-                logOperatorExtParamService.findForList(LogOperatorExtParamDO.builder().mainId(mainId).build());
+                logOperatorExtParamService.findForList(LogOperatorExtParamPO.builder().mainId(mainId).build());
         ParamChecker.isNotNull(logExtParamList, "mainId不存在");
         for (LogOperatorExtParamVO logOperatorExtParamVO : logExtParamList) {
             if (namespaceModuleMap != null && namespaceModuleMap.size() > 0) {
@@ -144,7 +144,7 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
     @RequestMapping("/getLogHistoryData")
     public LogHistoryDataVO getLogHistoryData(String pkey, Integer version, String namespace) {
         LogHistoryDataVO logHistoryData =
-                logHistoryDataService.selectBean(LogHistoryDataDO.builder().pkey(pkey).version(version).namespace(namespace).build());
+                logHistoryDataService.selectBean(LogHistoryDataPO.builder().pkey(pkey).version(version).namespace(namespace).build());
         if (logHistoryData != null) {
             if (namespaceModuleMap != null && namespaceModuleMap.size() > 0) {
                 String model = namespaceModuleMap.get(logHistoryData.getNamespace());
@@ -163,10 +163,10 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
      * @return
      */
     @RequestMapping("/getLogHistoryDataList")
-    public Pager<LogHistoryDataVO> getLogHistoryDataList(String namespace, String pkey, LogHistoryDataDO logHistoryDataDO) {
+    public Pager<LogHistoryDataVO> getLogHistoryDataList(String namespace, String pkey, LogHistoryDataPO logHistoryDataDO) {
         PageSizeInfo pgeSizeInfo = getPageSizeInfo();
         List<LogHistoryDataVO> logHistoryDataList =
-                logHistoryDataService.findForList(LogHistoryDataDO.builder().namespace(namespace).pkey(pkey).build(), pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+                logHistoryDataService.findForList(LogHistoryDataPO.builder().namespace(namespace).pkey(pkey).build(), pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
         ParamChecker.isNotNull(logHistoryDataList, "namespace或pkey不存在");
         int countJpa = logHistoryDataService.findCountJpa(logHistoryDataDO);
         return new Pager<>(countJpa, logHistoryDataList);

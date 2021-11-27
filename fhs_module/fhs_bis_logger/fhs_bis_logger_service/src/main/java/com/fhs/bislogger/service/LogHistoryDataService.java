@@ -1,6 +1,6 @@
 package com.fhs.bislogger.service;
 
-import com.fhs.bislogger.dox.LogHistoryDataDO;
+import com.fhs.bislogger.po.LogHistoryDataPO;
 import com.fhs.bislogger.vo.LogHistoryDataVO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Namespace;
@@ -12,7 +12,7 @@ import com.fhs.core.cache.annotation.Namespace;
  * @since 2020-04-23 14:27:40
  */
 @Namespace("log_history_data")
-public interface LogHistoryDataService extends BaseService<LogHistoryDataVO, LogHistoryDataDO> {
+public interface LogHistoryDataService extends BaseService<LogHistoryDataVO, LogHistoryDataPO> {
 
     /**
      * 获取某个主键某个namespace最后一个版本的数据

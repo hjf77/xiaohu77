@@ -7,7 +7,7 @@
 		SELECT * FROM (SELECT
 						   m.menu_name AS menuName,
 						   m.menu_id AS menuId,
-						   CONCAT(m.namespace,':',b.method) AS namespace,
+						   CONCAT(m.namespace,':',b.permission_code) AS namespace,
 						   m.menu_url AS menuUrl ,
 						   m.father_menu_id AS fatherMenuId
 					   FROM

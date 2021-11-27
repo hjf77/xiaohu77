@@ -1,8 +1,7 @@
 package com.fhs.front.vo;
 
 import com.fhs.core.trans.vo.VO;
-import com.fhs.core.trans.constant.TransType;
-import com.fhs.front.dox.UcenterFrontUserBindDO;
+import com.fhs.front.po.UcenterFrontUserBindPO;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -16,6 +15,6 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterFrontUserBindVO", description = "UcenterFrontUserBind参数")
-public class UcenterFrontUserBindVO extends UcenterFrontUserBindDO implements VO {
+public class UcenterFrontUserBindVO extends UcenterFrontUserBindPO implements VO {
 
 }

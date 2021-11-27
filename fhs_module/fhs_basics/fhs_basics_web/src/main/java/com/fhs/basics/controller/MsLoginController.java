@@ -165,9 +165,9 @@ public class MsLoginController extends BaseController {
     /**
      * 用户登录
      */
-    @PostMapping("/vueLogin")
+    @PostMapping("/login")
     @ApiOperation("登录 for VUE")
-    public HttpResult<Map<String, Object>> vueLogin(UcenterMsUserPO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Map<String, Object>> login(UcenterMsUserPO sysUser, String uuid, HttpServletRequest request, HttpServletResponse response) {
         checkUserNameIsLock(sysUser.getUserLoginName());
         if (isVerification) {
             String identifyCode = request.getParameter("identifyCode");
@@ -211,7 +211,7 @@ public class MsLoginController extends BaseController {
     /**
      * vue获取用户信息
      */
-    @GetMapping("/ms/getUserForVue")
+    @GetMapping("/ms/getUser")
     @ApiOperation("获取用户信息 for VUE")
     public HttpResult<Map<String, Object>> getUserInfo(HttpServletRequest request) {
         UcenterMsUserVO user = UserContext.getSessionuser();
@@ -248,9 +248,9 @@ public class MsLoginController extends BaseController {
     /**
      * 生成验证码
      */
-    @GetMapping("/defaultKaptchaForVue")
+    @GetMapping("/defaultKaptcha")
     @ApiOperation("验证码FOR VUE")
-    public HttpResult<Map<String, String>> defaultKaptchaForVue()
+    public HttpResult<Map<String, String>> defaultKaptcha()
             throws Exception {
         SCaptcha sCaptcha = new SCaptcha(100, 38);
         String code = sCaptcha.getCode();
@@ -263,31 +263,11 @@ public class MsLoginController extends BaseController {
         return HttpResult.success(resultMap);
     }
 
-    /**
-     * 生成验证码
-     *
-     * @param request
-     * @param response
-     * @throws Exception
-     */
-    @GetMapping("/defaultKaptcha")
-    @ApiOperation("验证码")
-    public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        SCaptcha sCaptcha = new SCaptcha();
-        String code = sCaptcha.getCode();
-        HttpSession session = request.getSession();
-        session.setAttribute("identifyCode", code);
-        try {
-            sCaptcha.write(response.getOutputStream());
-        } catch (IOException e) {
-            LOGGER.error("二维码生成错误", e);
-        }
-    }
 
-    @GetMapping("/logoutForVue")
+
+    @GetMapping("/logout")
     @ApiOperation("注销登出 for vue")
-    public HttpResult<String> logoutForVue(String token) {
+    public HttpResult<String> logout(String token) {
         redisCacheService.remove("auth:" + token);
         redisCacheService.remove(USER_KEY + token);
         StpUtil.logout();

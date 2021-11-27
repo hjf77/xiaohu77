@@ -1,7 +1,7 @@
 package com.fhs.pub.service;
 
 import com.fhs.core.base.service.BaseService;
-import com.fhs.pub.dox.OrderNumberDO;
+import com.fhs.pub.po.OrderNumberPO;
 import com.fhs.pub.vo.OrderNumberVO;
 
 
@@ -13,5 +13,5 @@ import com.fhs.pub.vo.OrderNumberVO;
  * 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
-public interface OrderNumberService extends BaseService<OrderNumberVO, OrderNumberDO> {
+public interface OrderNumberService extends BaseService<OrderNumberVO, OrderNumberPO> {
 }

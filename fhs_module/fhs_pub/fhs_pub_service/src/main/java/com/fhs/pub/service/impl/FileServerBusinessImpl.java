@@ -5,7 +5,7 @@ import com.fhs.common.utils.StringUtils;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
 import com.fhs.pub.api.rpc.FeignFileApiService;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 import com.fhs.pub.service.FileServerBusiness;
 import com.fhs.pub.service.FileStorage;
 import com.fhs.pub.service.PubFileService;
@@ -62,7 +62,7 @@ public class FileServerBusinessImpl implements FileServerBusiness, FeignFileApiS
      * @param sf
      * @return
      */
-    private boolean insertDataToDB(PubFileDO sf) {
+    private boolean insertDataToDB(PubFilePO sf) {
         return (fileService.insertSelective(sf) > 0);
     }
 

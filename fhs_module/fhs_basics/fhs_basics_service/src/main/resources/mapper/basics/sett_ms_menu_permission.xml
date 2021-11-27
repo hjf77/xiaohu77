@@ -6,7 +6,7 @@
 		INSERT INTO `t_sett_ms_menu_permission` (
 		  `permission_id`,
 		  `permission_name`,
-		  `method`,
+		  `permission_code`,
 		  `menu_id`,
 		  `is_enable`,
 		  `permission_type`

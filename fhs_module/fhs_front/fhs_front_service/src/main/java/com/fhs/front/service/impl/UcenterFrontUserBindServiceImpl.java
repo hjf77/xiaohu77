@@ -2,7 +2,7 @@ package com.fhs.front.service.impl;
 
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
-import com.fhs.front.dox.UcenterFrontUserBindDO;
+import com.fhs.front.po.UcenterFrontUserBindPO;
 import com.fhs.front.service.UcenterFrontUserBindService;
 import com.fhs.front.vo.UcenterFrontUserBindVO;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("ucenterFrontUserBindService")
 @DataSource("base_business")
-public class UcenterFrontUserBindServiceImpl extends BaseServiceImpl<UcenterFrontUserBindVO, UcenterFrontUserBindDO> implements UcenterFrontUserBindService {
+public class UcenterFrontUserBindServiceImpl extends BaseServiceImpl<UcenterFrontUserBindVO, UcenterFrontUserBindPO> implements UcenterFrontUserBindService {
 
 }

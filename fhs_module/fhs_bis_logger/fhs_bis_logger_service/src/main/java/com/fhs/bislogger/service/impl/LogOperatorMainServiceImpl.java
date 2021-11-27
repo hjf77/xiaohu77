@@ -2,9 +2,9 @@ package com.fhs.bislogger.service.impl;
 
 import com.fhs.bislogger.api.rpc.FeignBisLoggerApiService;
 import com.fhs.bislogger.constant.LoggerConstant;
-import com.fhs.bislogger.dox.LogHistoryDataDO;
-import com.fhs.bislogger.dox.LogOperatorExtParamDO;
-import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.po.LogHistoryDataPO;
+import com.fhs.bislogger.po.LogOperatorExtParamPO;
+import com.fhs.bislogger.po.LogOperatorMainPO;
 import com.fhs.bislogger.service.LogHistoryDataService;
 import com.fhs.bislogger.service.LogOperatorExtParamService;
 import com.fhs.bislogger.vo.LogAddOperatorLogVO;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("log")
-public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainDO> implements LogOperatorMainService, FeignBisLoggerApiService {
+public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService, FeignBisLoggerApiService {
 
     @Autowired
     private LogOperatorExtParamService logOperatorExtParamService;
@@ -81,7 +81,7 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
             extParamVO.preInsert(logAddOperatorLogVO.getOperatorMainVO().getCreateUser());
         }
         logOperatorExtParamService.batchInsert(ListUtils.copyListToPararentList(
-                logAddOperatorLogVO.getOperatorExtParamVOList(), LogOperatorExtParamDO.class));
+                logAddOperatorLogVO.getOperatorExtParamVOList(), LogOperatorExtParamPO.class));
         LogHistoryDataVO oldHis = null;
         for (LogHistoryDataVO historyDataVO : logAddOperatorLogVO.getHistoryDataVOList()) {
             if (hisMap.containsKey(historyDataVO.getNamespace() + "_" + historyDataVO.getPkey())) {
@@ -93,7 +93,7 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
             historyDataVO.setVersion(oldHis == null ? 1 : (oldHis.getVersion() + 1));
         }
         logHistoryDataService.batchInsert(ListUtils.copyListToPararentList(logAddOperatorLogVO.getHistoryDataVOList(),
-                LogHistoryDataDO.class));
+                LogHistoryDataPO.class));
     }
 
     @Override

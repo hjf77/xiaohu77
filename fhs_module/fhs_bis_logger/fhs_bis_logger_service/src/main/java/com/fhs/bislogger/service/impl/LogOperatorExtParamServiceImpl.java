@@ -1,15 +1,11 @@
 package com.fhs.bislogger.service.impl;
 
-import com.fhs.bislogger.dox.LogOperatorExtParamDO;
+import com.fhs.bislogger.po.LogOperatorExtParamPO;
 import com.fhs.bislogger.vo.LogOperatorExtParamVO;
-import com.fhs.bislogger.mapper.LogOperatorExtParamMapper;
 import com.fhs.bislogger.service.LogOperatorExtParamService;
 import com.fhs.core.db.ds.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
-
-import java.util.List;
 
 /**
  * 扩展参数(LogOperatorExtParam)表服务实现类
@@ -19,6 +15,6 @@ import java.util.List;
  */
 @Service
 @DataSource("log")
-public class LogOperatorExtParamServiceImpl extends BaseServiceImpl<LogOperatorExtParamVO, LogOperatorExtParamDO> implements LogOperatorExtParamService {
+public class LogOperatorExtParamServiceImpl extends BaseServiceImpl<LogOperatorExtParamVO, LogOperatorExtParamPO> implements LogOperatorExtParamService {
 
 }

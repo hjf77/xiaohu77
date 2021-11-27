@@ -1,7 +1,7 @@
 package com.fhs.pub.vo;
 
 import com.fhs.core.trans.vo.VO;
-import com.fhs.pub.dox.OrderNumberDO;
+import com.fhs.pub.po.OrderNumberPO;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,5 +17,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "OrderNumberVO", description = "OrderNumber参数")
-public class OrderNumberVO extends OrderNumberDO implements VO {
+public class OrderNumberVO extends OrderNumberPO implements VO {
 }

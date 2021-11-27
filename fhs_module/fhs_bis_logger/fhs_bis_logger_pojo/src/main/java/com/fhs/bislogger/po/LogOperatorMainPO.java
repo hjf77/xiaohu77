@@ -1,4 +1,4 @@
-package com.fhs.bislogger.dox;
+package com.fhs.bislogger.po;
 
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
@@ -25,7 +25,7 @@ import lombok.*;
 @AllArgsConstructor
 @TableName("t_log_operator_main")
 @EqualsAndHashCode(callSuper = true)
-public class LogOperatorMainDO extends BasePO<LogOperatorMainDO> {
+public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
     private static final long serialVersionUID = -83321483098557581L;
     @TableId(value = "log_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty(value = "主键id")

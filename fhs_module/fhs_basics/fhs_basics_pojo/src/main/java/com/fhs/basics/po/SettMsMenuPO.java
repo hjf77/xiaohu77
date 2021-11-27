@@ -112,7 +112,9 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @TableField("menu_type")
     @Trans(type = TransType.DICTIONARY, key = "menu_type")
     @ApiModelProperty("菜单类型")
-    private String menuType;
+    private Integer menuType;
+
+
 
 
     @TableField(exist = false)
@@ -159,7 +161,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     private Integer isEnable;
 
 
-    private String checkHelpUrl;
 
     /**
      * 子菜单
@@ -194,18 +195,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
      */
     @ApiModelProperty("图标")
     private String icon;
-
-    /**
-     * 给菜单类型0 运营菜单 1 园区菜单
-     */
-    public void setMenuType(String menuType) {
-        this.menuType = menuType;
-        if (CheckUtils.isNullOrEmpty(menuType)) {
-            menuTypes = new String[0];
-            return;
-        }
-        this.menuTypes = menuType.split(",");
-    }
 
 
     @Override

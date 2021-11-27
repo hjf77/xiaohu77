@@ -1,9 +1,8 @@
 package com.fhs.bislogger.vo;
 
 
-import com.fhs.bislogger.dox.LogHistoryDataDO;
+import com.fhs.bislogger.po.LogHistoryDataPO;
 import com.fhs.core.trans.vo.VO;
-import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -18,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "LogHistoryDataDO", description = "LogHistoryData参数")
-public class LogHistoryDataVO extends LogHistoryDataDO implements VO {
+public class LogHistoryDataVO extends LogHistoryDataPO implements VO {
 
     /**
      * 模型

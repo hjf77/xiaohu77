@@ -1,7 +1,7 @@
 package com.fhs.front.service;
 
 
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import com.fhs.front.interfaces.FhsOauth302;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +42,7 @@ public interface LoginService {
      * @param openIdType openid类型
      * @return
      */
-    String addBindAndUser(UcenterFrontUserDO user, String openId, int openIdType);
+    String addBindAndUser(UcenterFrontUserPO user, String openId, int openIdType);
 
     /**
      * 获取系统支持的OAUTH登录服务

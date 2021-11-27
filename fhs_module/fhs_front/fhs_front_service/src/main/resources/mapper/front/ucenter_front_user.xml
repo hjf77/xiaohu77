@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fhs.front.mapper.UcenterFrontUserMapper">
 
-    <select id="findListFilterMobile" resultType="com.fhs.front.dox.UcenterFrontUserDO">
+    <select id="findListFilterMobile" resultType="com.fhs.front.po.UcenterFrontUserPO">
         SELECT * FROM t_ucenter_front_user WHERE is_delete = 0 AND mobile != ''
     </select>
 

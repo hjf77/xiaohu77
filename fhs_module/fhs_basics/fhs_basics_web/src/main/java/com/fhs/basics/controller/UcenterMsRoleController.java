@@ -70,27 +70,13 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         return sysRoleService.getRolePermissionButtons(roleId);
     }
 
-    /**
-     * @desc 新增修改后台用户  获取当前机构下的角色数据
-     */
-    @RequestMapping("/getCurrentOrganizationSysRoles")
-    public List<UcenterMsRoleVO> getCurrentOrganizationSysRoles(HttpServletRequest request, HttpServletResponse response) {
-        //获取当前登录用户
-        UcenterMsUserVO sysUser = super.getSessionuser();
-        UcenterMsRoleVO sysRole = new UcenterMsRoleVO();
-        return sysRoleService.findForList(sysRole);
-    }
-
-
-
-
 
     @ResponseBody
     @PutMapping("/")
     @SaCheckRole("sysRole:update")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> updateForVue(@RequestBody @Validated(Update.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
+    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
                                             HttpServletResponse response) {
         UcenterMsRoleVO oldRole = sysRoleService.selectById(sysRole.getRoleId());
         if (Constant.ENABLED == oldRole.getIsEnable() && Constant.DISABLE == sysRole.getIsEnable()) {
@@ -112,13 +98,14 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
 
 
     @NotRepeat
+    @Override
     @ResponseBody
     @SaCheckRole("sysRole:add")
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> save(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
-                                    HttpServletResponse response) {
+    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
+                                   HttpServletResponse response) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
@@ -134,7 +121,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @SaCheckRole("sysRole:del")
     @ApiOperation(value = "删除-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> delForVue(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
+    public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
         UcenterMsRoleVO role = new UcenterMsRoleVO();
         role.setRoleId(ConverterUtils.toInt(id));
         sysRoleService.deleteRole(role);

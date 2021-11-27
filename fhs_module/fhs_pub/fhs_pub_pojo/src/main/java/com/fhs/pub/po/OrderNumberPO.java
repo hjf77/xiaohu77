@@ -1,4 +1,4 @@
-package com.fhs.pub.dox;
+package com.fhs.pub.po;
 
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.Add;
@@ -35,7 +35,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_order_log")
 @ApiModel(value = "OrderNumberDO", description = "OrderNumber参数")
-public class OrderNumberDO extends BasePO<OrderNumberDO> {
+public class OrderNumberPO extends BasePO<OrderNumberPO> {
     private static final long serialVersionUID = 1L;
     /**
      * 主键id

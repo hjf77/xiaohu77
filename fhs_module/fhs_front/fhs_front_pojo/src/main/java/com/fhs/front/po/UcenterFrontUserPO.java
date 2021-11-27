@@ -26,7 +26,7 @@ import org.hibernate.validator.constraints.Length;
 @TableName("t_ucenter_front_user")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterFrontUserDO", description = "UcenterFrontUser参数")
-public class UcenterFrontUserDO extends BasePO<UcenterFrontUserDO> {
+public class UcenterFrontUserPO extends BasePO<UcenterFrontUserPO> {
     private static final long serialVersionUID = 545604903343287075L;
 
     /**

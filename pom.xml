@@ -24,7 +24,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <fhs.servlet-api.version>3.1.0</fhs.servlet-api.version>
         <fhs.release.version>3.0.0</fhs.release.version>
-        <fhs.easytrans.version>1.1.3</fhs.easytrans.version>
+        <fhs.easytrans.version>1.1.5</fhs.easytrans.version>
         <fhs.easycloud.version>1.0.0</fhs.easycloud.version>
         <fhs.swagger.version>2.6.1</fhs.swagger.version>
         <sa.token.version>1.27.0</sa.token.version>

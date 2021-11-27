@@ -7,7 +7,7 @@ import com.fhs.pub.ueditor.define.AppInfo;
 import com.fhs.pub.ueditor.define.BaseState;
 import com.fhs.pub.ueditor.define.FileType;
 import com.fhs.pub.ueditor.define.State;
-import com.fhs.pub.dox.PubFileDO;
+import com.fhs.pub.po.PubFilePO;
 
 import com.fhs.pub.service.PubFileService;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +54,7 @@ public class BinaryUploader {
                 storageState.putInfo("original", originFileName);
                 // 新增数据库
                 PubFileService service = SpringContextUtil.getBeanByName(PubFileService.class);
-                PubFileDO serviceFile = new PubFileDO();
+                PubFilePO serviceFile = new PubFilePO();
                 serviceFile.setFileName(originFileName);
                 serviceFile.setFileSuffix(suffix);
                 serviceFile.setFileId(fileId);

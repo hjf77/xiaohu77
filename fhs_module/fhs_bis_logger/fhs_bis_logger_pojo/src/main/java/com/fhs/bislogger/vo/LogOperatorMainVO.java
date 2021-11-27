@@ -1,9 +1,8 @@
 package com.fhs.bislogger.vo;
 
 
-import com.fhs.bislogger.dox.LogOperatorMainDO;
+import com.fhs.bislogger.po.LogOperatorMainPO;
 import com.fhs.core.trans.vo.VO;
-import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
@@ -18,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "LogOperatorMainDO", description = "LogOperatorMain参数")
-public class LogOperatorMainVO extends LogOperatorMainDO implements VO {
+public class LogOperatorMainVO extends LogOperatorMainPO implements VO {
 
     /**
      * 访问次数

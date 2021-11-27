@@ -8,8 +8,8 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.front.api.rpc.FeignFrontUserApiService;
-import com.fhs.front.dox.UcenterFrontUserBindDO;
-import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.po.UcenterFrontUserBindPO;
+import com.fhs.front.po.UcenterFrontUserPO;
 import com.fhs.front.form.GetSingleFrontUserForm;
 import com.fhs.front.mapper.UcenterFrontUserMapper;
 import com.fhs.front.service.LoginService;
@@ -35,7 +35,7 @@ import java.util.Map;
 @Cacheable("frontUser")
 @Service("UcenterFrontUserService")
 @DataSource("base_business")
-public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserDO> implements UcenterFrontUserService, FeignFrontUserApiService {
+public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserPO> implements UcenterFrontUserService, FeignFrontUserApiService {
 
     @Autowired
     private LoginService loginService;
@@ -61,7 +61,7 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
         if (user == null) {
             throw new ParamException("用户id无效：" + userId);
         }
-        List<UcenterFrontUserBindVO> binds = frontUserBindService.findForList(UcenterFrontUserBindDO.builder().userId(user.getUserId()).build());
+        List<UcenterFrontUserBindVO> binds = frontUserBindService.findForList(UcenterFrontUserBindPO.builder().userId(user.getUserId()).build());
         Map<Integer, String> openIdMap = new HashMap<>();
         binds.forEach(bind -> {
             openIdMap.put(bind.getAuthOpenidType(), bind.getAuthOpenid());
@@ -93,7 +93,7 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
 
     @Override
     public List<UcenterFrontUserVO> findListFilterMobile() {
-        List<UcenterFrontUserDO> listFilterMobile = ucenterFrontUserMapper.findListFilterMobile();
+        List<UcenterFrontUserPO> listFilterMobile = ucenterFrontUserMapper.findListFilterMobile();
         List<UcenterFrontUserVO> ucenterFrontUserVOS = this.dos2vos(listFilterMobile);
         return ucenterFrontUserVOS;
     }

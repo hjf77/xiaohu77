@@ -56,7 +56,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
      */
     @TableField("create_user")
     @ApiModelProperty("创建人")
-    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.dox.UcenterMsUserDO", alias = "createUser",fields = "userName")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "createUser",fields = "userName")
     protected String createUser;
 
     /**
@@ -73,7 +73,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
      */
     @ApiModelProperty("修改人")
     @TableField("update_user")
-    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.dox.UcenterMsUserDO", alias = "updateUser",fields = "userName")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "updateUser",fields = "userName")
     protected String updateUser;
 
     /**

@@ -1,7 +1,7 @@
 package com.fhs.pub.mapper;
 
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.fhs.pub.dox.OrderNumberDO;
+import com.fhs.pub.po.OrderNumberPO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 
 /**
@@ -12,6 +12,6 @@ import com.mybatis.jpa.annotation.MapperDefinition;
  * 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
-@MapperDefinition(domainClass = OrderNumberDO.class)
-public interface OrderNumberMapper extends FhsBaseMapper<OrderNumberDO> {
+@MapperDefinition(domainClass = OrderNumberPO.class)
+public interface OrderNumberMapper extends FhsBaseMapper<OrderNumberPO> {
 }

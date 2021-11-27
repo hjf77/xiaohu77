@@ -11,6 +11,7 @@ import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
      * 刷新区域缓存
      */
     @SaCheckRole("area:refreshRedisCache")
-    @RequestMapping("/refreshRedisCache")
+    @GetMapping("/refreshRedisCache")
     @ResponseBody
     public HttpResult<Boolean> refreshRedisCache() {
         areaService.refreshRedisCache();

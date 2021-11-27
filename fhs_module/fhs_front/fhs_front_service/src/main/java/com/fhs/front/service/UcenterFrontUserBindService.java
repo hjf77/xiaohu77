@@ -1,7 +1,7 @@
 package com.fhs.front.service;
 
 import com.fhs.core.base.service.BaseService;
-import com.fhs.front.dox.UcenterFrontUserBindDO;
+import com.fhs.front.po.UcenterFrontUserBindPO;
 import com.fhs.front.vo.UcenterFrontUserBindVO;
 
 /**
@@ -10,7 +10,7 @@ import com.fhs.front.vo.UcenterFrontUserBindVO;
  * @author jackwong
  * @since 2019-03-11 14:37:18
  */
-public interface UcenterFrontUserBindService extends BaseService<UcenterFrontUserBindVO, UcenterFrontUserBindDO> {
+public interface UcenterFrontUserBindService extends BaseService<UcenterFrontUserBindVO, UcenterFrontUserBindPO> {
 
     /**
      * 公众号

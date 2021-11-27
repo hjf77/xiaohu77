@@ -1,7 +1,7 @@
 package com.fhs.bislogger.service.impl;
 
 import com.fhs.bislogger.constant.LoggerConstant;
-import com.fhs.bislogger.dox.LogLoginDO;
+import com.fhs.bislogger.po.LogLoginPO;
 import com.fhs.bislogger.mapper.LogLoginMapper;
 import com.fhs.bislogger.service.LogLoginService;
 import com.fhs.bislogger.util.GetLoginUserMsgUtil;
@@ -37,7 +37,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @DataSource("log")
-public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginDO> implements LogLoginService {
+public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO> implements LogLoginService {
 
     @Autowired
     private LogLoginMapper logLoginMapper;
