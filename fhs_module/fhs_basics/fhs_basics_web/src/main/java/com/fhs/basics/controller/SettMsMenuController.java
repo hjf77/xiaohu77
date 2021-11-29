@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("ms/sysMenu")
 @Api(tags = {"菜单"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = BaseTransConstant.MENU_INFO, module = "菜单管理")
+@LogNamespace(namespace = "sysMenu", module = "菜单管理")
 public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuPO> {
 
     private static final Logger LOG = Logger.getLogger(SettMsMenuController.class);

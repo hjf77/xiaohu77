@@ -40,7 +40,7 @@ import java.util.*;
 @Api(tags = {"角色"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysRole")
-@LogNamespace(namespace = BaseTransConstant.ROLE_INFO, module = "角色管理")
+@LogNamespace(namespace = "sysRole", module = "角色管理")
 public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRolePO> {
 
     /**

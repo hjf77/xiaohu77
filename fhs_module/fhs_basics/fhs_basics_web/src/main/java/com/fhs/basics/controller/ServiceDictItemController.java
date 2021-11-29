@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("ms/dictItem")
 @Api(tags = {"字典"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = "dict", module = "字典管理")
+@LogNamespace(namespace = "dictItem", module = "字典项管理")
 public class ServiceDictItemController extends ModelSuperController<ServiceDictItemVO, ServiceDictItemPO> {
 
 }

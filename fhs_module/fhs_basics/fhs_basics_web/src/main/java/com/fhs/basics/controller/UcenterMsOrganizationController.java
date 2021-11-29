@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 @Api(tags = {"后台组织机构"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysOrganization")
-@LogNamespace(namespace = BaseTransConstant.ORG, module = "机构管理")
+@LogNamespace(namespace = "sysOrganization", module = "机构管理")
 public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationPO> {
 
     /**

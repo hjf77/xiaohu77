@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping("ms/sysMenuPermission")
 @Api(tags = {"菜单权限"})
 @ApiGroup(group = "group_default")
-@LogNamespace(namespace = BaseTransConstant.MENU_INFO_PERMISSION, module = "菜单权限管理")
+@LogNamespace(namespace = "sysMenuPermission", module = "菜单权限管理")
 public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionPO> {
 
     @Autowired

@@ -5,6 +5,7 @@ import com.fhs.basics.po.SettMsSystemPO;
 import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -28,6 +29,7 @@ import java.util.List;
 @Api(tags = {"子系统"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/settMsSystem")
+@LogNamespace(namespace = "settMsSystem", module = "子系统管理")
 public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemPO> {
 
     @Autowired

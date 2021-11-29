@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Api(tags = {"系统用户"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysUser")
-@LogNamespace(namespace = BaseTransConstant.USER_INFO, module = "用户管理")
+@LogNamespace(namespace = "sysUser", module = "用户管理")
 public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserPO> {
 
 
