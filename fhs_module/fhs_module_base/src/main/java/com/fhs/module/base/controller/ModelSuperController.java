@@ -90,9 +90,9 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      * @param request
      * @throws Exception
      */
-    @PostMapping("pagerAdvance")
     @ResponseBody
-    @ApiOperation("后台-高级分页查询-vue推荐")
+    @PostMapping("pagerAdvance")
+    @ApiOperation("后台-高级分页查询")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
         if (isPermitted(request, "see")) {
             QueryWrapper wrapper = filter.asWrapper(getDOClass());
@@ -111,10 +111,9 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      * @param request
      * @throws Exception
      */
-    @PostMapping("findListAdvance")
     @ResponseBody
-    @LogMethod(voParamIndex = 0)
-    @ApiOperation("后台-高级查询不分页一般用于下拉-vue推荐")
+    @PostMapping("findListAdvance")
+    @ApiOperation("后台-高级查询不分页一般用于下拉")
     public List<V> findListAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
         if (isPermitted(request, "see")) {
             //这里的是1是DO的index
@@ -130,9 +129,8 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      * @param request response
      * @throws Exception
      */
-    @GetMapping("findList")
     @ResponseBody
-    @LogMethod(voParamIndex = 0)
+    @GetMapping("findList")
     @ApiOperation("后台-不分页查询集合-一般用于下拉")
     public List<V> findList(V e, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -311,49 +309,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
 
-    private static final Map<String, String> BASE_FIELD_MAP = new HashMap<>();
-
-    static {
-        BASE_FIELD_MAP.put("transMap.createUserUserName", "create_user");
-        BASE_FIELD_MAP.put("transMap.updateUserUserName", "update_user");
-        BASE_FIELD_MAP.put("transMap.businessIdEntName", "business_id");
-        BASE_FIELD_MAP.put("transMap.verifyUserIdUserName", "verify_user_id");
-    }
-
-    /**
-     * 格式化order by xx asc desc
-     *
-     * @param request request
-     * @return order by 内容
-     */
-    protected String formartOrderBy(HttpServletRequest request) {
-        String fieldName = request.getParameter("sortTzwName");
-        String order = request.getParameter("order");
-        if (CheckUtils.isNullOrEmpty(fieldName) || CheckUtils.isNullOrEmpty(order)) {
-            return "";
-        }
-        Map<String, String> fieldMap = getFormartField();
-        // 如果子类设置了某个字段的db 字段名则取 子类设置的
-        if (fieldMap != null && fieldMap.containsKey(fieldName)) {
-            fieldName = fieldMap.get(fieldName);
-        } else {
-            // 如果子类
-            if (BASE_FIELD_MAP.containsKey(fieldName)) {
-                fieldName = BASE_FIELD_MAP.get(fieldName);
-            } else {
-                // 如果带翻译的话，把后面的 name去掉
-                if (fieldName.contains("transMap")) {
-                    fieldName = fieldName.replace("transMap.", "");
-                    fieldName = fieldName.substring(0, fieldName.lastIndexOf("Name"));
-                }
-                for (char i = 'A'; i < 'Z'; i++) {
-                    fieldName = fieldName.replaceAll(i + "", "_" + i);
-                }
-            }
-
-        }
-        return fieldName.toLowerCase() + " " + order;
-    }
 
     /**
      * @param queryFilter
@@ -375,6 +330,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
 
     @PutMapping("/updateField")
     @ApiOperation("批量修改某个字段")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
     public HttpResult<Boolean> updateField(@RequestBody @Validated UpdateFieldVO<D> vo) throws InstantiationException, IllegalAccessException {
         String[] ids = vo.getIds().split(",");
         List<D> dos = new ArrayList<>();
@@ -390,14 +346,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
 
-    /**
-     * 获取格式化字段的参数
-     *
-     * @return key 前端字段，val db字段
-     */
-    public Map<String, String> getFormartField() {
-        return null;
-    }
 
     @Override
     public EMap<String, Object> getParameterMap() {
