@@ -1,10 +1,11 @@
 package com.fhs.bislogger.service;
 
 import com.fhs.bislogger.po.LogOperatorMainPO;
+import com.fhs.bislogger.vo.LogAddOperatorLogVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.service.BaseService;
-import com.fhs.core.cache.annotation.Namespace;
-
+import com.fhs.easycloud.anno.CloudApi;
+import com.fhs.easycloud.anno.CloudMethod;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * @author wanglei
  * @since 2020-04-23 13:59:14
  */
-@Namespace("log_operator_main")
+@CloudApi(serviceName = "basic",primary = false)
 public interface LogOperatorMainService extends BaseService<LogOperatorMainVO, LogOperatorMainPO> {
 
     /**
@@ -48,5 +49,12 @@ public interface LogOperatorMainService extends BaseService<LogOperatorMainVO, L
      * @return
      */
     int getReportCount(Map<String, Object> paramMap);
+
+    /**
+     * 添加操作日志
+     * @param logAddOperatorLogVO 数据
+     */
+    @CloudMethod
+    void addLog( LogAddOperatorLogVO logAddOperatorLogVO);
 
 }

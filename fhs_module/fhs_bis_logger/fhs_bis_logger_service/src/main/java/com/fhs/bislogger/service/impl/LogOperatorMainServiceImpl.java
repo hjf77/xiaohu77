@@ -14,6 +14,7 @@ import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.bislogger.mapper.LogOperatorMainMapper;
 import com.fhs.bislogger.service.LogOperatorMainService;
 import com.fhs.common.utils.ListUtils;
+import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.db.ds.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("log")
+@Namespace("log_operator_main")
 public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService, FeignBisLoggerApiService {
 
     @Autowired

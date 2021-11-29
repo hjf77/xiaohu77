@@ -5,17 +5,16 @@ import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.bislogger.api.context.BisLoggerContext;
-import com.fhs.bislogger.api.rpc.FeignBisLoggerApiService;
 import com.fhs.bislogger.constant.LoggerConstant;
+import com.fhs.bislogger.service.LogOperatorMainService;
 import com.fhs.bislogger.vo.LogAddOperatorLogVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
-import com.fhs.common.constant.Constant;
 import com.fhs.basics.context.UserContext;
-import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
+import com.fhs.trans.utils.TransUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,13 +23,13 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -53,9 +52,10 @@ public class OperatorLogAop {
     @Autowired
     private TransService transService;
 
-    private FeignBisLoggerApiService bisLoggerApiService;
+    @Autowired
+    private LogOperatorMainService bisLoggerApiService;
 
-    private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+    private Map<Method, Integer> VO_INDEX_MAP = new HashMap<>();
 
 
     /**
@@ -72,9 +72,6 @@ public class OperatorLogAop {
      */
     @Around("operatorLogAopPoint()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        if (bisLoggerApiService == null) {
-            bisLoggerApiService = SpringContextUtil.getBeanByClassForApi(FeignBisLoggerApiService.class);
-        }
         String mainId = StringUtils.getUUID();
         BisLoggerContext.init(mainId);
         String methodName = joinPoint.getSignature().getName();
@@ -94,7 +91,11 @@ public class OperatorLogAop {
             error = e;
             throw e;
         } finally {
-            addLog(joinPoint, method, classTarget, result, error);
+            final Object finalResult = result;
+            final  Exception finalError = error;
+            CompletableFuture.runAsync(() -> {
+                addLog(joinPoint, method, classTarget, finalResult, finalError);
+            });
             BisLoggerContext.clear();
         }
 
@@ -125,7 +126,14 @@ public class OperatorLogAop {
         VO vo = getReqParamVO(joinPoint, method, logMethod);
         Object[] args = joinPoint.getArgs();
         if (vo != null) {
-            this.transService.transOne(vo);
+            //创建代理对象平铺数据
+            try {
+                vo = (VO)TransUtil.transOne(vo,transService,true);
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
+            }
             mainVO.setReqParam(BisLoggerContext.formartJson(JSONObject.toJSONString(vo), vo.getClass()));
         } else if (logMethod.reqBodyParamIndex() != LoggerConstant.INDEX_NOT) {
             mainVO.setReqParam(BisLoggerContext.formartJson(JSONObject.toJSONString(args[logMethod.reqBodyParamIndex()]), args[logMethod.reqBodyParamIndex()].getClass()));
@@ -154,14 +162,7 @@ public class OperatorLogAop {
      * @param log
      */
     private void addLog(LogAddOperatorLogVO log) {
-        singleThreadExecutor.submit(() -> {
-            try {
-                bisLoggerApiService.addLog(log);
-            } catch (Exception e) {
-                LOGGER.error("日志插入错误", e);
-            }
-
-        });
+        bisLoggerApiService.addLog(log);
     }
 
 
@@ -230,7 +231,6 @@ public class OperatorLogAop {
         return null;
     }
 
-    private Map<Method, Integer> VO_INDEX_MAP = new HashMap<>();
 
 
 }
