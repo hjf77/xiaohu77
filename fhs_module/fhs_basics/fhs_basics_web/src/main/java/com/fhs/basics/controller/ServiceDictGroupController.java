@@ -1,8 +1,10 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.fhs.basics.po.ServiceDictGroupPO;
 import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.service.ServiceDictGroupService;
+import com.fhs.basics.vo.ServiceDictGroupVO;
 import com.fhs.basics.vo.ServiceDictItemVO;
 import com.fhs.bislogger.api.anno.LogNamespace;
 import com.fhs.core.result.HttpResult;
@@ -30,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 @Api(tags = {"字典分组"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = "dictGroup", module = "字典分组管理")
-public class ServiceDictGroupController extends ModelSuperController<ServiceDictItemVO, ServiceDictItemPO> {
+public class ServiceDictGroupController extends ModelSuperController<ServiceDictGroupVO, ServiceDictGroupPO> {
 
     private static final Logger LOG = Logger.getLogger(ServiceDictGroupController.class);
 

@@ -159,8 +159,9 @@
 
     <!-- 查询admin 拥有的所有的权限列表 -->
     <select id="selectMenuIdByAdmin" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT menu_id
-        FROM t_sett_ms_menu_permission group by menu_id
+        SELECT DISTINCT (m.menu_id) AS menuId
+        FROM `t_sett_ms_menu` m
+        ORDER BY m.father_menu_id, m.order_index
     </select>
 
     <!-- 查询一个用户拥有的所有的权限列表 -->

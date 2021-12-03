@@ -61,11 +61,10 @@ export default defineConfig({
     port:3001,
     cors:true,
     proxy: {
-      [API_LOCATION]: {
+      '/api/basic': {
         target: 'http://127.0.0.1:8089/',
-        rewrite: (path) => path.replace(API_LOCATION, '') // 根据环境变量配置代理
+        rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
       }
-
     }
   //   hmr: {
   //     port: 443,

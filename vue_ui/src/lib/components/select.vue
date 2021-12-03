@@ -115,7 +115,7 @@ export default {
     this.newValueField = this.valueField;
     if (this.dictCode) {
       this.newURL =
-        "/ms/dictItem/findList?dictGroupCode=" + this.dictCode;
+        "/basic/ms/dictItem/findList?dictGroupCode=" + this.dictCode;
       this.newValueField = "dictCode";
       this.newLabelField = "dictDesc";
     }

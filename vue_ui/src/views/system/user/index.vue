@@ -41,9 +41,9 @@
   </base-container>
 </template>
 <script>
-import crudMixins from "../../../mixins/crudMixins";
-import Organization from "../../../components/Organization";
-import userForm from "./components/userForm";
+import crudMixins from "@/mixins/crudMixins";
+import Organization from "@/components/Organization/index.vue";
+import userForm from "@/views/system/user/components/userForm.vue";
 import {mapGetters} from "vuex"
 
 export default {
@@ -62,7 +62,7 @@ export default {
       title: '新增',
       loading: false,
       rightContent: false,//右侧内容区域
-      api: "/ms/sysUser/pagerAdvance",
+      api: "/basic/ms/sysUser/pagerAdvance",
       sortSett: [ //默认排序
         {
           direction: "DESC",
@@ -106,7 +106,7 @@ export default {
               click: (_row) => {
                 this.title ='编辑';
                 this.$pagexRequest({
-                    url: "/ms/sysUser/info/" + _row.userId,
+                    url: "/basic/ms/sysUser/" + _row.userId,
                     method: "get",
                 }).then((res) => {
                     let roleIdArray = [];
@@ -128,7 +128,7 @@ export default {
               size: "mini",
               permission: ['sysUser:del'],
               idFieldName:'userId',
-              api:'/ms/sysUser/'
+              api:'/basic/ms/sysUser/'
             }
           ]
         }

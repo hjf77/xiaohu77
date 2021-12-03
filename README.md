@@ -14,20 +14,23 @@
         <br>
         <br>
         <a href="http://www.jeasyui.net/">
-            <img src="https://img.shields.io/badge/easyui-1.4.3-green.svg" alt="bootstrap">
+            <img src="https://img.shields.io/badge/vite-2-green.svg" alt="bootstrap">
         </a> 
         <a href="https://www.layui.com">
-            <img src="https://img.shields.io/badge/layui-2.5.5-blue.svg" alt="bootstrap">
-        </a>  
+            <img src="https://img.shields.io/badge/vue-2-blue.svg" alt="bootstrap">
+        </a> 
+ <a href="https://www.layui.com">
+            <img src="https://img.shields.io/badge/elementui-2-yellow.svg" alt="bootstrap">
+        </a> 
         +
         <a href="http://spring.io/projects/spring-boot">
-            <img src="https://img.shields.io/badge/spring--boot-2.2.5-green.svg" alt="spring-boot">
+            <img src="https://img.shields.io/badge/spring--boot-2.3.12-green.svg" alt="spring-boot">
         </a>
         <a href="http://mp.baomidou.com">
-            <img src="https://img.shields.io/badge/mybatis--plus-3.0-blue.svg" alt="mybatis-plus">
+            <img src="https://img.shields.io/badge/mybatis--plus-3.4-blue.svg" alt="mybatis-plus">
         </a>  
         <a href="http://ibeetl.com/">
-            <img src="https://img.shields.io/badge/beetl-3.0.11-yellow.svg" alt="beetl">
+            <img src="https://img.shields.io/badge/saToken-2.7-yellow.svg" alt="beetl">
         </a> 
     </p>
 </p>
@@ -45,16 +48,16 @@ http://114.116.18.95:8080/   admin  123456
 # 2. 思维导图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0701/092840_63cea85d_339743.jpeg "思维导图.jpg")
 # 3. 技术栈
-- 前端:Easyui(美化过的Easyui),Layui(首页)，Validform，My 97(定制过主题)。
+- 前端:vite2 + vue2 + elementUI2 + veeValidate2
 - 后端校验：hibernate vilidator。
-- 后端：SpringBoot2.25 + Springcloud（可选）
-- ORM：Mybatis JPA Mybatis Plus
-- 模板引擎：beetl
-- 无后端业务的快速开发引擎:PAGEX
+- 后端：SpringBoot2.3.12 + Springcloud（可选）
+- ORM：Mybatis Plus 3.4
+- 模板引擎：beetl（邮件收发）
+- 权限:Sa-token
 - 分布式配置：Nacos
-- 缓存：jetcache+spring data cache
+- 缓存：jetcache
 - 分布式任务：shedlock
-- 文档:swagger
+- 文档:swagger+bootstrapUI
 
 # 4. 和其他框架差异化特性
 ## -&#8194;&#8194; 翻译服务
@@ -195,4 +198,3 @@ var add = {
 # 写到最后
 
 目前国内有很多快速开发平台，每个也有每个不同的特色，FHS不一定是最好的，但是我们愿意做百花齐放的快开平台的一朵鲜花，和很多脑子一热写个快开平台或者打算以此盈利不同，FHS 是长久维护的，也是全开源的，希望路过的同学给个Star 抱拳拉！
-         

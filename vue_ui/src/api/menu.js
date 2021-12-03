@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取路由
 export const getRouters = () => {
   return request({
-    url: '/ms/getRouters',
+    url: '/basic/ms/getRouters',
     method: 'get'
   })
 }

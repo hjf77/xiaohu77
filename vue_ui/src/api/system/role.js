@@ -4,7 +4,7 @@ import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询角色列表
 export function listRole(params) {
   return request({
-    url: '/ms/sysRole/findPage/',
+    url: '/basic/ms/sysRole/findPage/',
     params,
     method: 'get',
   })
@@ -13,7 +13,7 @@ export function listRole(params) {
 // 查询角色详细
 export function getRole(roleId) {
   return request({
-    url: '/ms/sysRole/info/' + roleId,
+    url: '/basic/ms/sysRole/info/' + roleId,
     method: 'get'
   })
 }
@@ -21,7 +21,7 @@ export function getRole(roleId) {
 // 新增角色
 export function addRole(data) {
   return request({
-    url: '/ms/sysRole/addSysRole',
+    url: '/basic/ms/sysRole/addSysRole',
     method: 'post',
     data: data
   })
@@ -30,7 +30,7 @@ export function addRole(data) {
 // 修改角色
 export function updateRole(data) {
   return request({
-    url: '/ms/sysRole/updateSysRole',
+    url: '/basic/ms/sysRole/updateSysRole',
     method: 'put',
     data: data
   })
@@ -39,7 +39,7 @@ export function updateRole(data) {
 // 角色数据权限
 export function dataScope() {
   return request({
-    url: '/ms/sysMenu/getMenuPermissionTree',
+    url: '/basic/ms/sysMenu/getMenuPermissionTree',
     method: 'put',
   })
 }
@@ -47,7 +47,7 @@ export function dataScope() {
 // 删除角色
 export function delRole(role) {
   return request({
-    url: '/ms/sysRole/delSysRole/',
+    url: '/basic/ms/sysRole/delSysRole/',
     method: 'put',
     data: role
   })
@@ -56,7 +56,7 @@ export function delRole(role) {
 // 根据机构id获取角色下拉框数据
 export function getSelectOrganSysRoles(organizationId) {
   return request({
-    url: '/ms/sysRole/getSelectOrganSysRoles/'+organizationId,
+    url: '/basic/ms/sysRole/getSelectOrganSysRoles/'+organizationId,
     method: 'get',
   })
 }
@@ -64,7 +64,7 @@ export function getSelectOrganSysRoles(organizationId) {
 // 根据角色id获取菜单权限数据
 export function getPermissionByRoleId(roleId) {
   return request({
-    url: '/ms/sysRole/getRolePermissionButtons?roleId='+roleId,
+    url: '/basic/ms/sysRole/getRolePermissionButtons?roleId='+roleId,
     method: 'POST',
   })
 }

@@ -36,7 +36,7 @@
                 <!-- 大于13个字符显示省略号...； -->
                 <span>{{ data.name | ellipsis(13) }}</span>
             </el-tooltip>
-        
+
       </div>
     </el-tree>
   </div>
@@ -64,7 +64,7 @@ export default {
     },
     api:{
       type:String,
-      default:"/ms/sysOrganization/getCompanyTree?hierarchy=2"
+      default:"/basic/ms/sysOrganization/getCompanyTree?hierarchy=2"
     },
     methodType:{
       type:String,
@@ -162,10 +162,10 @@ export default {
       let _api = this.api
       let _method = this.methodType
       if (this.type === '1') {//所有单位
-        _api = '/ms/sysOrganization/getCompanyTree?isHandleId=0'
+        _api = '/basic/ms/sysOrganization/getCompanyTree?isHandleId=0'
 
       } else if(this.type === '2') {//到部门
-        _api = '/ms/sysOrganization/selectTree'
+        _api = '/basic/ms/sysOrganization/selectTree'
         _method = 'POST'
       }
       try {

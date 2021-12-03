@@ -465,7 +465,7 @@ export default {
         tableName: tableName
       }
       this.$pagexRequest({
-        url: "/ms/table/getTableInfo",
+        url: "/basic/ms/table/getTableInfo",
         params
       }).then(res => {
         this.baseForm = res
@@ -474,7 +474,7 @@ export default {
 
     //生成代码
     createCode() {
-      postFile("/ms/generateCode/generate", this.baseForm)
+      postFile("/basic/ms/generateCode/generate", this.baseForm)
     },
 
     //禁止点击全选按钮

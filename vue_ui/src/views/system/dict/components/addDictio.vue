@@ -9,8 +9,8 @@
   <div>
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
-      addApi="/ms/wordbook/"
-      updateApi="/ms/wordbook/"
+      addApi="/basic/ms/wordbook/"
+      updateApi="/basic/ms/wordbook/"
       :init="init"
       :data="formData"
       :isEdit="isEdit"

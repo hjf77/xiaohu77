@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询部门列表
 export function listDept(data) {
   return request({
-    url: '/ms/sysOrganization/tree',
+    url: '/basic/ms/sysOrganization/tree',
     method: 'POST',
     data
   })
@@ -12,7 +12,7 @@ export function listDept(data) {
 // 查询部门详细
 export function getDept(deptId) {
   return request({
-    url: '/ms/sysOrganization/' + deptId,
+    url: '/basic/ms/sysOrganization/' + deptId,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getDept(deptId) {
 // 查询部门下拉树结构
 export function treeselect() {
   return request({
-    url: '/ms/sysOrganization/getOrgIdComBoxData',
+    url: '/basic/ms/sysOrganization/getOrgIdComBoxData',
     method: 'post'
   })
 }
@@ -28,7 +28,7 @@ export function treeselect() {
 // 新增部门
 export function addDept(data) {
   return request({
-    url: '/ms/sysOrganization',
+    url: '/basic/ms/sysOrganization',
     method: 'post',
     data: data
   })
@@ -37,7 +37,7 @@ export function addDept(data) {
 // 修改部门
 export function updateDept(data) {
   return request({
-    url: '/ms/sysOrganization',
+    url: '/basic/ms/sysOrganization',
     method: 'PUT',
     data: data
   })
@@ -46,7 +46,7 @@ export function updateDept(data) {
 // 删除部门
 export function delDept(deptId) {
   return request({
-    url: '/ms/sysOrganization/' + deptId,
+    url: '/basic/ms/sysOrganization/' + deptId,
     method: 'DELETE'
   })
 }

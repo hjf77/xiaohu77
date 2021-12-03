@@ -108,7 +108,7 @@
               <el-form-item label="上级菜单" prop="fatherMenuId">
                 <pagex-formTreeSelect
                   v-model="form.fatherMenuId"
-                  api="/ms/sysMenu/tree"
+                  api="/basic/ms/sysMenu/tree"
                 ></pagex-formTreeSelect>
               </el-form-item>
             </el-col>

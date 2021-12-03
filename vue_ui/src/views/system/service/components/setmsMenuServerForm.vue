@@ -47,8 +47,8 @@
                      id: this.init.id ? this.init.id : null,
 
                 },
-                addApi: "/ms/sett_ms_menu_server/",
-                updateApi: "/ms/sett_ms_menu_server/",
+                addApi: "/basic/ms/sett_ms_menu_server/",
+                updateApi: "/basic/ms/sett_ms_menu_server/",
                 controls: [
                      {"name":"serverName","rule":"required","label":"服务名称","type":"text"},
                      {"name":"serverUrl","rule":"required","label":"服务url","type":"text"},

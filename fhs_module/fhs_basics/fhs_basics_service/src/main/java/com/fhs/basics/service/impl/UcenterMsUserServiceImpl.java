@@ -424,7 +424,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * @return
      */
     private List<SettMsMenuVO> menuFilter(UcenterMsUserPO user, List<SettMsMenuVO> menuList) {
-        Set<String> userMenuIds = null;
+        List<String> userMenuIds = null;
         if (user.getIsAdmin() == ADMIN) {
             userMenuIds = sysUserMapper.selectMenuIdByAdmin(user);
         } else {
@@ -436,7 +436,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             menuMap.put(menu.getMenuId(), menu);
         });
         // 已经添加进结果的菜单
-        Set<SettMsMenuVO> hasAddMenu = new HashSet<>();
+        Set<SettMsMenuVO> hasAddMenu = new LinkedHashSet<>();
         for (String userMenuId : userMenuIds) {
             if (menuMap.containsKey(userMenuId)) {
                 hasAddMenu.add(menuMap.get(userMenuId));

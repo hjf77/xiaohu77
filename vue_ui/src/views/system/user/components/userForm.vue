@@ -43,6 +43,7 @@
                 formData: {
                     roleIds: this.isEdit ? this.init.roleIds : [],
                     organizationId: this.init.organizationId,
+                    isEnable:1,
                     userId: this.init.userId,
                 },
                 onSubmit: function (model) {
@@ -50,8 +51,8 @@
                     model.password = model.password != 'defaultPass' ? md5(model.password) : model.password;
                     return true;
                 },
-                addApi: "/ms/sysUser/",
-                updateApi: "/ms/sysUser/",
+                addApi: "/basic/ms/sysUser/",
+                updateApi: "/basic/ms/sysUser/",
                 controls: [
                     {
                         type: "text",
@@ -66,7 +67,7 @@
                         label: "部门",
                         rule: "required",
                         query: {},
-                        api: 'ms/sysOrganization/tree',
+                        api: '/basic/ms/sysOrganization/tree',
                         selectOn: (node) => {
                             this.changeRoleSelect(node.id);
                         }
@@ -119,6 +120,7 @@
                         name: "sex",
                         label: "性别",
                         dictCode: "sex",
+                        isValueNum: true,
                     },
                     {
                         type: "textarea",
@@ -136,7 +138,7 @@
             changeRoleSelect(orgId) {
                 //部门切换后角色也切换
                 this.$pagexRequest({
-                    url: "ms/sysRole/getSelectOrganSysRoles/" + orgId,
+                    url: "/basic/ms/sysRole/findList?organizationId=" + orgId,
                     method: "get",
                 }).then((res) => {
                     if (!this.isEditFirst) {

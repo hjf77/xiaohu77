@@ -1,6 +1,5 @@
 package com.fhs.bislogger.service.impl;
 
-import com.fhs.bislogger.api.rpc.FeignBisLoggerApiService;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.bislogger.po.LogHistoryDataPO;
 import com.fhs.bislogger.po.LogOperatorExtParamPO;
@@ -34,7 +33,7 @@ import java.util.Map;
 @Service
 @DataSource("log")
 @Namespace("log_operator_main")
-public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService, FeignBisLoggerApiService {
+public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService{
 
     @Autowired
     private LogOperatorExtParamService logOperatorExtParamService;

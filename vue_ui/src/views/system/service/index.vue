@@ -47,7 +47,7 @@
         data() {
             return {
                 rightContent: false,//右侧内容区域
-                api: "/ms/sett_ms_menu_server/pagerAdvance",
+                api: "/basic/ms/sett_ms_menu_server/pagerAdvance",
                 isEdit: false,
                 open: false,
                 isDetail:false,
@@ -114,7 +114,7 @@
                             {
                                 name: "删除",
                                 type: "danger",
-                                api: "/ms/sett_ms_menu_server/",
+                                api: "/basic/ms/sett_ms_menu_server/",
                                 size: "mini",
                                 permission: ["sett_ms_menu_server:del"],
                             },

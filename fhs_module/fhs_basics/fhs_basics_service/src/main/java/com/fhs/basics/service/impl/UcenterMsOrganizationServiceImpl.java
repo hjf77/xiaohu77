@@ -83,6 +83,11 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         return initCompanyName(super.findByIds(ids));
     }
 
+    /**
+     * 初始化部门的单位名称
+     * @param vos
+     * @return
+     */
     private List<UcenterMsOrganizationVO> initCompanyName(List<UcenterMsOrganizationVO> vos) {
         Set<String> idsSet = vos.stream().map(UcenterMsOrganizationVO::getCompanyId).collect(Collectors.toSet());
         if (!idsSet.isEmpty()) {

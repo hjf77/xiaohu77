@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询菜单列表
 export function listMenu(data) {
   return request({
-    url: '/ms/sysMenu/tree',
+    url: '/basic/ms/sysMenu/tree',
     method: 'post',
     data
   })
@@ -12,7 +12,7 @@ export function listMenu(data) {
 // 查询菜单详细
 export function getMenu(menuId) {
   return request({
-    url: '/ms/sysMenu/' + menuId,
+    url: '/basic/ms/sysMenu/' + menuId,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getMenu(menuId) {
 // 新增菜单
 export function addMenu(data) {
   return request({
-    url: '/ms/sysMenu',
+    url: '/basic/ms/sysMenu',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addMenu(data) {
 // 修改菜单
 export function updateMenu(data) {
   return request({
-    url: '/ms/sysMenu',
+    url: '/basic/ms/sysMenu',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateMenu(data) {
 // 删除菜单
 export function delMenu(menuId) {
   return request({
-    url: '/ms/sysMenu/' + menuId,
+    url: '/basic/ms/sysMenu/' + menuId,
     method: 'delete'
   })
 }
@@ -46,7 +46,7 @@ export function delMenu(menuId) {
 // 子系统 下拉数据
 export function getSystemOptions() {
   return request({
-    url: '/ms/settMsSystem/findList',
+    url: '/basic/ms/settMsSystem/findList',
     method: 'get'
   })
 }
@@ -54,7 +54,7 @@ export function getSystemOptions() {
 //查询 权限菜单列表
 export function getPermissionList(menuId) {
   return request({
-    url: '/ms/sysMenuPermission/findList?menuId=' + menuId,
+    url: '/basic/ms/sysMenuPermission/findList?menuId=' + menuId,
     method: 'get'
   })
 }
@@ -62,7 +62,7 @@ export function getPermissionList(menuId) {
 //查询 权限菜单
 export function getPermission(permissionId) {
   return request({
-    url: '/ms/sysMenuPermission/' + permissionId,
+    url: '/basic/ms/sysMenuPermission/' + permissionId,
     method: 'get'
   })
 }
@@ -70,7 +70,7 @@ export function getPermission(permissionId) {
 // 批量增加增删
 export function addAllPermission(menuId) {
   return request({
-    url: '/ms/sysMenuPermission/addBaseMenuBatch?menuId=' + menuId,
+    url: '/basic/ms/sysMenuPermission/addBaseMenuBatch?menuId=' + menuId,
     method: 'post',
   })
 }
@@ -78,7 +78,7 @@ export function addAllPermission(menuId) {
 // 新增权限
 export function addPermission(data) {
   return request({
-    url: '/ms/sysMenuPermission',
+    url: '/basic/ms/sysMenuPermission',
     method: 'POST',
     data: data
   })
@@ -87,7 +87,7 @@ export function addPermission(data) {
 // 修改权限
 export function updatePermission(data) {
   return request({
-    url: '/ms/sysMenuPermission',
+    url: '/basic/ms/sysMenuPermission',
     method: 'PUT',
     data: data
   })
@@ -96,7 +96,7 @@ export function updatePermission(data) {
 // 删除权限
 export function delPermission(permissionId) {
   return request({
-    url: '/ms/sysMenuPermission/' + permissionId,
+    url: '/basic/ms/sysMenuPermission/' + permissionId,
     method: 'delete'
   })
 }

@@ -7,6 +7,7 @@ import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.service.SettMsMenuService;
 import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.basics.vo.TreeMenuPermissionVO;
+import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.base.autodel.anno.AutoDel;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 菜单业务实现类
@@ -47,11 +50,12 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
      */
     @Override
     public List<TreeMenuPermissionVO> getMenuPermissionTree() {
-        List<TreeMenuPermissionVO> TreeMenuPermissionVO = mapper.getMenuPermissionTree();
+        List<TreeMenuPermissionVO> treeMenuPermissionVOList = mapper.getMenuPermissionTree();
         //找不到爸爸的才会放到此里面
         List<TreeMenuPermissionVO> result = new ArrayList<>();
-        Map<String, TreeMenuPermissionVO> map = new HashMap<>();
-        for (TreeMenuPermissionVO tree : TreeMenuPermissionVO) {
+        Map<String, TreeMenuPermissionVO> map = treeMenuPermissionVOList.stream().collect(Collectors
+                .toMap(TreeMenuPermissionVO::getId, Function.identity()));;
+        for (TreeMenuPermissionVO tree : treeMenuPermissionVOList) {
             map.put(tree.getId(), tree);
             //找爸爸
             if (map.containsKey(tree.getParentId())) {

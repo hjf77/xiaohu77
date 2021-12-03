@@ -141,4 +141,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         // 给本controller配置接收list的长度Integer.MAX_VALUE，仅在本controller有效
         binder.setAutoGrowCollectionLimit(Integer.MAX_VALUE);
     }
+
+
+
 }

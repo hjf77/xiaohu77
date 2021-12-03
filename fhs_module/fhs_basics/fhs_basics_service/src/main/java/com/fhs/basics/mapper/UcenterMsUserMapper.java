@@ -242,7 +242,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return 用户有权限的 菜单id
      */
     @NotMultiTenancyCheck
-    Set<String> selectMenuIdByAdmin(UcenterMsUserPO user);
+    List<String> selectMenuIdByAdmin(UcenterMsUserPO user);
 
     /**
      * 根据userid获取user有权限的菜单
@@ -251,7 +251,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return 用户有权限的 菜单id
      */
     @NotMultiTenancyCheck
-    Set<String> selectMenuIdByUserId(UcenterMsUserPO user);
+    List<String> selectMenuIdByUserId(UcenterMsUserPO user);
 
     /**
      * 根据条件查询用户数

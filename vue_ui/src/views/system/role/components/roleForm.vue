@@ -55,6 +55,7 @@
                     methods: this.isEdit ? this.init.methods : [],
                     organizationId: this.init.organizationId,
                     roleId: this.init.roleId,
+                    isEnable : 1
                 },
                 onSubmit:(model) =>  {
                     model.methods = this.$refs.permissions.getCheckedKeys();
@@ -64,8 +65,8 @@
                     this.msgError('您至少为此角色分配一个权限');
                     return false;
                 },
-                addApi: "/ms/sysRole/",
-                updateApi: "/ms/sysRole/",
+                addApi: "/basic/ms/sysRole/",
+                updateApi: "/basic/ms/sysRole/",
                 permissionTreeOptions:[],
                 expandedKeys: [],
                 menuProps: {
@@ -79,24 +80,24 @@
                         label: "角色名称",
                         rule: "required",
                     },
-
+                    {
+                      type: "select",
+                      name: "isEnable",
+                      label: "状态",
+                      rule: "required",
+                      dictCode: "isEnable",
+                      isValueNum: true,
+                    },
                     {
                         type: "treeSelect",
                         name: "organizationId",
                         label: "部门",
                         rule: "required",
                         query: {},
-                        api: 'ms/sysOrganization/tree'
-                    },
-                    {
-                        type: "select",
-                        name: "isEnable",
-                        label: "状态",
-                        rule: "required",
                         width:'740',
-                        dictCode: "isEnable",
-                        isValueNum: true,
+                        api: '/basic/ms/sysOrganization/tree'
                     },
+
                     {
                         type: "slot",
                         name: "methods",
@@ -118,9 +119,8 @@
         },
         methods: {
             initPermissionOptions() {
-                //部门切换后角色也切换
                 this.$pagexRequest({
-                    url: "/ms/sysMenu/getMenuPermissionTree",
+                    url: "/basic/ms/sysMenu/getMenuPermissionTree",
                     method: "get",
                 }).then((res) => {
                     this.permissionTreeOptions = res;

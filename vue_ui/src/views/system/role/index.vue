@@ -41,9 +41,9 @@
   </base-container>
 </template>
 <script>
-import crudMixins from "../../../mixins/crudMixins";
-import Organization from "../../../components/Organization";
-import roleForm from "./components/roleForm";
+import crudMixins from "@/mixins/crudMixins";
+import Organization from "@/components/Organization/index.vue";
+import roleForm from "@/views/system/role/components/roleForm.vue";
 import {mapGetters} from "vuex"
 
 export default {
@@ -64,7 +64,7 @@ export default {
       title: '新增',
       loading: false,
       rightContent: false,//右侧内容区域
-      api: "/ms/sysRole/pagerAdvance",
+      api: "/basic/ms/sysRole/pagerAdvance",
       sortSett: [
         {
           direction: "DESC",
@@ -107,7 +107,7 @@ export default {
               click: (_row) => {
                 this.title ='编辑';
                 this.$pagexRequest({
-                    url: "/ms/sysRole/getRolePermissionButtons?roleId=" + _row.roleId,
+                    url: "/basic/ms/sysRole/getRolePermissionButtons?roleId=" + _row.roleId,
                     method: "get",
                 }).then((res) => {
                     _row.methods = res
@@ -123,7 +123,7 @@ export default {
               size: "mini",
               permission: ['sysRole:del'],
               idFieldName:'roleId',
-              api:'/ms/sysRole/'
+              api:'/basic/ms/sysRole/'
             }
           ]
         }

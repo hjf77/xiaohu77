@@ -13,10 +13,10 @@ export default {
   data() {
     return {
       crudOption: {
-        api: '/ms/word_book_group/pagerAdvance',
-        addApi: '/ms/word_book_group/',
-        updateApi: '/ms/word_book_group/',
-        delApi: '/ms/word_book_group/',
+        api: '/basic/ms/dictGroup/pagerAdvance',
+        addApi: '/basic/ms/dictGroup/',
+        updateApi: '/basic/ms/dictGroup/',
+        delApi: '/basic/ms/dictGroup/',
         queryOneApi: '',
         isNeedPager: false,
         align: "center", //对齐方式
@@ -61,7 +61,7 @@ export default {
             isRight: true,
             click: () => {
               this.$pagexRequest({
-                url: '/ms/wordbook/refreshRedisCache?wordbookGroupCode=',
+                url: '/basic/ms/wordbook/refreshRedisCache?wordbookGroupCode=',
                 method: "GET",
               }).then((res) => {
                 this.$message({
@@ -82,7 +82,7 @@ export default {
             label: '分组编码', name: 'wordbookGroupCode', type: 'formart',
             formart: "<label style='cursor:pointer'>${wordbookGroupCode}</label>",
             click: function (_row) {
-              this.$router.push({path: '/dict/type/data/',query:{dictCode: _row.wordbookGroupCode}});
+              this.$router.push({path: '/dict/type/data/',query:{dictCode: _row.groupCode}});
             }
           },
           {
@@ -100,7 +100,7 @@ export default {
                 name: "删除",
                 code: "del",
                 type: "text",
-                api: '/ms/word_book_group/',
+                api: '/basic/ms/dictGroup/',
                 size: 'mini',
                 idFieldName: 'groupId'
               },
@@ -108,10 +108,9 @@ export default {
                 name: "刷新缓存",
                 type: "text",
                 size: 'mini',
-                api: '/ms/wordbook/refreshRedisCache?wordbookGroupCode=',
                 click: (row) => {
                   this.$pagexRequest({
-                    url: `/ms/wordbook/refreshRedisCache?wordbookGroupCode=${row.wordbookGroupCode}`,
+                    url: `/basic/ms/wordbook/refreshRedisCache?groupCode=${row.groupCode}`,
                     method: "GET",
                   }).then((res) => {
                     this.$message({

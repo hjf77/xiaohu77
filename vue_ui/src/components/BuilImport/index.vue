@@ -28,7 +28,7 @@ export default {
         },
         excelImportApi:{
             type:String,
-            default:()=>'/ms/workRules/pubImportExcel'
+            default:()=>''
         },
         formData:{
             type:Object,
@@ -71,7 +71,7 @@ export default {
     methods:{
         // 下载模板
         downloadHandle(){
-            getFile(`/ms/excel_template/download?excelTemplateName=${this.excelTemplateName}.xlsx`)
+            getFile(`/basic/ms/excel_template/download?excelTemplateName=${this.excelTemplateName}.xlsx`)
         },
     }
 }
