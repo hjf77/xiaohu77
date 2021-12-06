@@ -18,6 +18,7 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.google.common.collect.HashMultimap;
@@ -234,10 +235,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         if (adminUser.getOldPassword() == null) {
             return false;
         }
+        adminUser.setPassword(adminUser.getOldPassword());
         int count = sysUserMapper.validataPass(adminUser);
         if (count > 0) {
             if (adminUser.getNewPassword() == null) {
-                return false;
+                throw  new ParamException("新密码不可为空");
             }
             adminUser.setPassword(adminUser.getNewPassword());
             count = sysUserMapper.updatePass(adminUser);
@@ -247,7 +249,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             }
             return count > 0;
         } else {
-            return false;
+            throw  new ParamException("密码不正确");
         }
     }
 
