@@ -9,6 +9,7 @@ import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.LeftMenuVO;
+import com.fhs.basics.vo.SysUserOrgVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.bislogger.api.anno.LogMethod;
@@ -65,51 +66,15 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 获取用户jsontree 用于easyui下拉tree数据源
      */
     @GetMapping("getUserTree")
-    public void getUserTree() {
-        super.outJsonp(JsonUtil.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode())));
+    @ApiOperation("获取用户组织tree")
+    public   List<SysUserOrgVO> getUserTree() {
+        return sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode());
     }
 
-    /**
-     * 获取用户List
-     */
-    @GetMapping("getUserList")
-    public List<UcenterMsUserVO> getUserList() {
-        UcenterMsUserVO ucenterMsUserVO = new UcenterMsUserVO();
-        ucenterMsUserVO.setIsDelete(Constant.NO_DELETE);
-        ucenterMsUserVO.setGroupCode(super.getSessionuser().getGroupCode());
-        return sysUserService.findForList(ucenterMsUserVO);
-    }
 
-    /**
-     * 根据用户id获取用户详情
-     *
-     * @param userId 用户id
-     */
-    @GetMapping("getUserById")
-    @LogMethod
-    public void getUserById(String userId) {
-        super.outJsonp(JsonUtil.bean2json(sysUserService.selectById(userId)));
-    }
 
-    /**
-     * 获取用户列表
-     *
-     * @param
-     */
-    @GetMapping("getUserByIdList")
-    @LogMethod
-    public void getUserByIdList(String userIds) {
-        if (CheckUtils.isNullOrEmpty(userIds)) {
-            super.outJsonp("[]");
-            return;
-        }
-        List<UcenterMsUserVO> byIds = sysUserService.findByIds(Arrays.asList(userIds.split(",")));
-        super.outJsonp(JsonUtil.list2json(byIds));
-    }
-
-    @NotRepeat
     @Override
-    @ResponseBody
+    @NotRepeat
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
