@@ -10,8 +10,8 @@
     >
       <template v-slot:form="prop">
         <!-- 新增 修改 弹框-->
-        <el-dialog slot="form" :title="title" :visible.sync="open" width="50%">
-          <addDictio :dictCode="dictCode" v-if="open" :init="init" :isEdit="isEdit"></addDictio>
+        <el-dialog slot="form" :title="title"  v-if="open" :visible.sync="open"  class="pagex-dialog-theme">
+          <addDictio :dictGroupCode="groupCode"  :init="init" :isEdit="isEdit"></addDictio>
         </el-dialog>
       </template>
     </pagex-crud>
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import addDictio from "@/views/system/dict/components/addDictio";
-import crudMixins from "../../../mixins/crudMixins";
+import crudMixins from "@/mixins/crudMixins";
+import addDictio from "@/views/system/dict/components/addDictio.vue";
 
 export default {
   name: "Data",
@@ -30,8 +30,8 @@ export default {
   mixins: [crudMixins],
   data() {
     return {
-      dictCode: '',
-      api: '/basic/ms/wordbook/pagerAdvance',
+      groupCode: '',
+      api: '/basic/ms/dictItem/pagerAdvance',
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [
         {
@@ -51,14 +51,14 @@ export default {
       querys: [
         {
           operation: "=",
-          property: "wordbookGroupCode",
+          property: "dictGroupCode",
           relation: "AND",
         }
       ],
       columns: [
-        {label: '分组编码', name: 'wordbookGroupCode'},
-        {label: '字典code', name: 'wordbookCode'},
-        {label: '字典翻译', name: 'wordbookDesc'},
+        {label: '分组编码', name: 'dictGroupCode'},
+        {label: '字典code', name: 'dictCode'},
+        {label: '字典翻译', name: 'dictDesc'},
         {label: '字典排序', name: 'orderNum'},
         {
           label: '操作',
@@ -79,9 +79,9 @@ export default {
             {
               name: "删除",
               type: "danger",
-              api: '/basic/ms/wordbook/',
+              api: '/basic/ms/dictItem/',
               size: 'mini',
-              idFieldName: 'wordbookId'
+              idFieldName: 'dictId'
             }
           ],
         }
@@ -90,10 +90,10 @@ export default {
     };
   },
   created() {
-    this.dictCode = this.$route.query && this.$route.query.dictCode;
-    this.querys[0].value = this.dictCode
+    this.groupCode = this.$route.query && this.$route.query.groupCode;
+    this.querys[0].value = this.groupCode
 
-    if (this.dictCode) {
+    if (this.groupCode) {
       this.$nextTick(() => {
         this.crud = true
       })

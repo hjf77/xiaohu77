@@ -53,7 +53,7 @@ public class ServiceDictItemPO extends BasePO<ServiceDictItemPO> {
     /**
      * 字典code
      */
-    @NotNull(message = "字典编码", groups = {Update.class, Delete.class})
+    @NotNull(message = "字典编码不能为空", groups = {Update.class, Delete.class})
     @Length(message = "字典code字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("dict_code")
     @ApiModelProperty("字典code")

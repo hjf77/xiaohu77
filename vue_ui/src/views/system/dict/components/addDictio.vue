@@ -9,36 +9,25 @@
   <div>
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
-      addApi="/basic/ms/wordbook/"
-      updateApi="/basic/ms/wordbook/"
+      addApi="/basic/ms/dictItem/"
+      updateApi="/basic/ms/dictItem/"
       :init="init"
       :data="formData"
       :isEdit="isEdit"
       :controls="[
               {
                 type: 'text',
-                name: 'wordbookCode',
+                name: 'dictCode',
                 label: '字典code',
                 rule:'required',
                 placeholder: '请输入字典code'
               },
               {
                 type: 'text',
-                name: 'wordbookDesc',
+                name: 'dictDesc',
                 label: '字典翻译',
                 rule:'required',
                 placeholder: '请输入字典翻译'
-              },{
-                type: 'text',
-                name: 'wordbookDescEN',
-                label: '翻译英文',
-                placeholder: '请输入翻译英文'
-              },
-              {
-                type: 'text',
-                name: 'wordbookDescTW',
-                label: '翻译繁体',
-                placeholder: '请输入翻译繁体'
               },
               {
                 type: 'inputNumber',
@@ -48,6 +37,11 @@
                 options:{max:100,min:0},
                 placeholder:'请输入排序序号'
               },
+              {
+                type: 'textarea',
+                name: 'ext',
+                label: '扩展信息',
+              }
             ]"
     >
     </pagex-form>
@@ -57,13 +51,12 @@
 <script>
 export default {
   name: "addDict",
-
   data() {
     return {
       formData:{
-        wordbookGroupCode:'',
+        dictGroupCode:'',
         orderNum:0,
-        wordbookId: this.init.wordbookId
+        dictId: this.init.dictId
       }
     }
   },
@@ -71,24 +64,14 @@ export default {
     open: Boolean,
     init: Object,
     isEdit: Boolean,
-    dictCode: String
+    dictGroupCode: String
   },
   mounted() {
     console.log(this.isEdit)
   },
   created() {
-    this.formData.wordbookGroupCode = this.dictCode;
+    this.formData.dictGroupCode = this.dictGroupCode;
   },
   methods: {}
 }
 </script>
-
-<style scoped lang="scss">
-::v-deep .el-form--label-left .el-form-item__label{
-  text-align: right;
-  width: 117px !important;
-}
-::v-deep .el-form-item__content{
-  margin-left: 117px !important;
-}
-</style>

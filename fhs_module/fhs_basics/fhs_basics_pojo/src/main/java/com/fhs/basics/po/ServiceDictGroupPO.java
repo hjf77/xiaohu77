@@ -20,6 +20,7 @@ import com.fhs.core.valid.group.Update;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * 字典分组
@@ -47,7 +48,7 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
      * ID
      */
     @TableId(value = "group_id", type = IdType.AUTO)
-    @NotEmpty(message = "id不能为空", groups = {Update.class})
+    @NotNull(message = "id不能为空", groups = {Update.class})
     @ApiModelProperty("主键id")
     private Integer groupId;
 

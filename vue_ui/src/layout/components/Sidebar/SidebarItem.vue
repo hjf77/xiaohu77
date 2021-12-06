@@ -59,7 +59,6 @@ export default {
     }
   },
   created() {
-    console.log(this.item);
   },
   data() {
     this.onlyOneChild = null

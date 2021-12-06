@@ -62,7 +62,6 @@ export default {
 
     //html转字符串
     columnFormart(_row, _column) {
-      console.log(_column);
       return handleStrParam(_column.formart, _row);
     },
 
