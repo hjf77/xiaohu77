@@ -236,13 +236,13 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      *
      * @param sysUser 前端用户信息
      */
-    @PostMapping("updatePass")
+    @PutMapping("updatePass")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2, desc = "修改个人密码")
-    public void updatePass(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
+    public HttpResult updatePass(@RequestBody UcenterMsUserVO sysUser) {
         UcenterMsUserVO user = super.getSessionuser();
         sysUser.setUserId(user.getUserId());
-        boolean isSuccess = sysUserService.updatePass(sysUser);
-        super.outToClient(isSuccess);
+        sysUserService.updatePass(sysUser);
+        return HttpResult.success();
     }
 
     /**
