@@ -1,5 +1,6 @@
 package com.fhs.core.exception.advice;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.fhs.common.utils.AESUtil;
 import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ThreadKey;
@@ -136,7 +137,7 @@ public class ControllerExceptionAdvice {
             return null;
         } else if (ex instanceof ParamsInValidException) {
             httpResult.setMessage(ex.getMessage());
-            JsonUtil.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson(),400);
             return null;
         } else if (ex instanceof MethodArgumentNotValidException) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) (ex)).getBindingResult();
@@ -149,7 +150,7 @@ public class ControllerExceptionAdvice {
                 errMsg.append(field + ":" + defaultMessage + ";  ");
             }
             httpResult.setMessage(errMsg.toString());
-            JsonUtil.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson(),400);
             return null;
         } else if (ex instanceof BusinessException) {
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
@@ -160,32 +161,36 @@ public class ControllerExceptionAdvice {
         } else if (ex instanceof ParamException) {
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode(400);
-            JsonUtil.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson(),400);
+            return null;
+        }  else if (ex instanceof NotLoginException) {
+            httpResult.setMessage(ex.getMessage());
+            httpResult.setCode(401);
+            JsonUtil.outJson(response, httpResult.asJson(),401);
             return null;
         } else if (ex instanceof CheckException) {
             JsonUtil.outJson(response, ((CheckException) ex).getResult().asJson());
             return null;
         } else if (ex instanceof DuplicateKeyException) {
-            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
+            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson(),400);
             return null;
         } else if (ex instanceof SQLIntegrityConstraintViolationException) {
-            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
+            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson(),400);
             return null;
         } else if (ex instanceof NotPremissionException) {
-            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.NO_PERMISSION).asJson());
+            JsonUtil.outJson(response, HttpResult.otherResult(PubResult.NO_PERMISSION).asJson(),403);
             return null;
         } else if (ex instanceof ResultException) {
             JsonUtil.outJson(response, ((ResultException) ex).getHttpResult().asJson());
             return null;
         } else {
-
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
             httpResult = HttpResult.otherResult(PubResult.SYSTEM_ERROR);
             httpResult.setMessage("系统错误，请联系管理员,NONCE:" + ThreadKey.BUS_KEY.get());
             if (EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword") != null) {
                 httpResult.setExceptionInfo(AESUtil.encrypt(getStackTrace(ex), EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")));
             }
-            JsonUtil.outJson(response, httpResult.asJson());
+            JsonUtil.outJson(response, httpResult.asJson(),500);
         }
         return null;
     }

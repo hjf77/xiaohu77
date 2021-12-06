@@ -30,7 +30,7 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-core</artifactId>
-            <version>${sa.token.version}</version>
+            <version>${fhs.sa-token.version}</version>
         </dependency>
     </dependencies>
 
