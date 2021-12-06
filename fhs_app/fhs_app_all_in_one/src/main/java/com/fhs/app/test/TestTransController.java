@@ -1,3 +1,4 @@
+/*
 package com.fhs.app.test;
 
 import com.fhs.core.base.po.BasePO;
@@ -29,3 +30,4 @@ public class TestTransController {
         private String userId ;
     }
 }
+*/

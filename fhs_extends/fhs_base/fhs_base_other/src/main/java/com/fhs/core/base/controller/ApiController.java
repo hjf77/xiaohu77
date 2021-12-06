@@ -1,7 +1,7 @@
 package com.fhs.core.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.JsonUtil;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.exception.ParamException;
@@ -84,7 +84,7 @@ public class ApiController {
                 }
                 index++;
             }
-            Object service = SpringContextUtil.getBeanByClassForApi(clazz);
+            Object service = FhsSpringContextUtil.getBeanByClassForApi(clazz);
             try {
                 Object result = method.invoke(service, params);
                 JsonUtil.outJson(response, JsonUtil.bean2json(result));

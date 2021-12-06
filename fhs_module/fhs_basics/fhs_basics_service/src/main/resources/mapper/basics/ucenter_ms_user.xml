@@ -77,23 +77,7 @@
     </insert>
 
 
-    <!-- 删除用户信息 -->
-    <delete id="delete" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        DELETE
-        FROM `t_ucenter_ms_user`
-        WHERE user_id = #{userId}
-    </delete>
 
-    <!-- 查询用户总条数 -->
-    <select id="findCount" resultType="int">
-        SELECT COUNT(1)
-        FROM `t_ucenter_ms_user`
-        <where>
-            <if test="userName !=null and userName!=''">
-                AND user_name LIKE CONCAT('%', #{userName}, '%')
-            </if>
-        </where>
-    </select>
 
     <!-- 通过用户编号查询菜单 -->
     <select id="selectMenuByUid" resultType="com.fhs.basics.po.SettMsMenuPO"

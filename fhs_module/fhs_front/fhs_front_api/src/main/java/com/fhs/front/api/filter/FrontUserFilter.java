@@ -1,7 +1,7 @@
 package com.fhs.front.api.filter;
 
 import com.fhs.common.constant.Constant;
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.CookieUtil;
 import com.fhs.common.utils.JsonUtil;
@@ -48,7 +48,7 @@ public class FrontUserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         if (frontUserService == null) {
-            frontUserService = SpringContextUtil.getBeanByClassForApi(FeignFrontUserApiService.class);
+            frontUserService = FhsSpringContextUtil.getBeanByClassForApi(FeignFrontUserApiService.class);
         }
 
         HttpServletRequest request = (HttpServletRequest) req;

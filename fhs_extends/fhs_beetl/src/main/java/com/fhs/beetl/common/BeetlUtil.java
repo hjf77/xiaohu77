@@ -1,6 +1,6 @@
 package com.fhs.beetl.common;
 
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.EMap;
 import org.beetl.core.Template;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
@@ -29,7 +29,7 @@ public class BeetlUtil {
      */
     public static String renderBeelt(String viewPath, Map<String, Object> parameterMap) {
         if (beetlGroupUtilConfiguration == null) {
-            beetlGroupUtilConfiguration = SpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
+            beetlGroupUtilConfiguration = FhsSpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
         }
         Template template = beetlGroupUtilConfiguration.getGroupTemplate().getTemplate(viewPath);
         for (String key : parameterMap.keySet()) {

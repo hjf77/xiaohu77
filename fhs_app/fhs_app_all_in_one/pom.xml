@@ -41,21 +41,17 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
-        <dependency>
+      <!--  <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_web_log_view</artifactId>
             <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>5.3</version>
-        </dependency>
+        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_front_web</artifactId>
             <version>${fhs.release.version}</version>
@@ -64,18 +60,14 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_front_wx</artifactId>
             <version>${fhs.release.version}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_generate</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.smattme</groupId>
-            <artifactId>mysql-backup4j</artifactId>
-            <version>1.0.1</version>
-        </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
@@ -87,10 +79,7 @@
             <version>${fhs.mp-anno.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+
     </dependencies>
 
 </project>

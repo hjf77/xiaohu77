@@ -1,18 +1,14 @@
 package com.fhs.common.spring;
 
-import com.fhs.common.utils.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -36,7 +32,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component("fhsSpringContextUtil")
-public class SpringContextUtil implements ApplicationContextAware {
+public class FhsSpringContextUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
 
     private static final String ERRORMESSAGE = "获取对象错误:";
@@ -44,12 +40,12 @@ public class SpringContextUtil implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         log.info("------SpringContextUtil setApplicationContext-------");
-        SpringContextUtil.applicationContext = applicationContext;
+        FhsSpringContextUtil.applicationContext = applicationContext;
     }
 
     public static void setStaticApplicationContext(ApplicationContext applicationContext) throws BeansException {
         log.info("------SpringContextUtil setApplicationContext-------");
-        SpringContextUtil.applicationContext = applicationContext;
+        FhsSpringContextUtil.applicationContext = applicationContext;
     }
 
     public static ApplicationContext getApplicationContext() {
@@ -115,7 +111,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         String[] names = getApplicationContext().getBeanNamesForType(clazz);
         List<T> result = new ArrayList<>();
         for (String name : names) {
-            result.add((T) SpringContextUtil.getBean(name));
+            result.add((T) FhsSpringContextUtil.getBean(name));
         }
         return result;
     }
@@ -128,7 +124,7 @@ public class SpringContextUtil implements ApplicationContextAware {
      */
     @SuppressWarnings("unchecked")
     public static <T> T getBeanByClassForApi(Class<T> clazz) {
-        String[] names = SpringContextUtil.getApplicationContext().getBeanNamesForType(clazz);
+        String[] names = FhsSpringContextUtil.getApplicationContext().getBeanNamesForType(clazz);
         T resultBean = null;
         String serviceName = clazz.getName();
         if (names.length > 1) {
@@ -136,12 +132,12 @@ public class SpringContextUtil implements ApplicationContextAware {
                 if (name.equals(serviceName)) {
                     continue;
                 }
-                resultBean = (T) SpringContextUtil.getBean(name);
+                resultBean = (T) FhsSpringContextUtil.getBean(name);
                 break;
             }
         }
         if (resultBean == null) {
-            resultBean = (T) SpringContextUtil.getBean(serviceName);
+            resultBean = (T) FhsSpringContextUtil.getBean(serviceName);
         }
         return resultBean;
     }

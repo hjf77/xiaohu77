@@ -1,7 +1,7 @@
 package com.fhs.core.base.autodel.service;
 
 import com.fhs.common.spring.ScannerUtils;
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.exception.ParamException;
@@ -49,7 +49,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
             Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = null;
             for (Class<?> serviceClazz : serviceClazzSet) {
                 // 获取该类
-                Object baseService = SpringContextUtil.getBeanByClass(serviceClazz);
+                Object baseService = FhsSpringContextUtil.getBeanByClass(serviceClazz);
                 if (!(baseService instanceof BaseServiceImpl)) {
                     LOGGER.warn("AutoValid 只能用到BaseServiceImpl上,不能用到:" + baseService.getClass());
                     continue;
@@ -82,7 +82,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
         Set<Class<? extends BaseServiceImpl>> classSet = itemTBLSett.keySet();
         classSet.forEach(cl -> {
             LOGGER.debug("auto del,main namespace:" + namespace + ",pkey:" + pkey);
-            SpringContextUtil.getBeanByClass(cl).deleteForMainTblPkey(itemTBLSett.get(cl).field(), pkey);
+            FhsSpringContextUtil.getBeanByClass(cl).deleteForMainTblPkey(itemTBLSett.get(cl).field(), pkey);
         });
     }
 
@@ -104,7 +104,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
         classSet.forEach(cl -> {
             AutoDelSett sett = itemTBLSett.get(cl);
             if (sett.isChecker()) {
-                int count = SpringContextUtil.getBeanByClass(cl).findCountForMainTblPkey(sett.field(), pkey);
+                int count = FhsSpringContextUtil.getBeanByClass(cl).findCountForMainTblPkey(sett.field(), pkey);
                 if (count > 0) {
                     throw new ParamException("有关联" + sett.desc() + "未删除");
                 }

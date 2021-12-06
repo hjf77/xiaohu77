@@ -1,6 +1,6 @@
 package com.fhs.module.base.filter;
 
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtil;
 import com.fhs.core.feign.config.FeignConfiguration;
@@ -31,7 +31,7 @@ public class ApiAuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         if (apiToken == null) {
-            apiToken = SpringContextUtil.getBeanByName(FeignConfiguration.class).getApiToken();
+            apiToken = FhsSpringContextUtil.getBeanByName(FeignConfiguration.class).getApiToken();
         }
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String reqApiToken = request.getHeader("apiToken");

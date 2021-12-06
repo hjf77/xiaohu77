@@ -1,6 +1,6 @@
 package com.fhs.pub.ueditor.upload;
 
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.pub.ueditor.define.AppInfo;
@@ -53,7 +53,7 @@ public class BinaryUploader {
                 storageState.putInfo("type", suffix);
                 storageState.putInfo("original", originFileName);
                 // 新增数据库
-                PubFileService service = SpringContextUtil.getBeanByName(PubFileService.class);
+                PubFileService service = FhsSpringContextUtil.getBeanByName(PubFileService.class);
                 PubFilePO serviceFile = new PubFilePO();
                 serviceFile.setFileName(originFileName);
                 serviceFile.setFileSuffix(suffix);

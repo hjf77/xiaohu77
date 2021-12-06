@@ -1,10 +1,8 @@
 package com.fhs.module.base.filter;
 
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.core.config.EConfig;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -42,7 +40,7 @@ public class TemplateConfigSettFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse rep, FilterChain filterChain)
             throws IOException, ServletException {
         if (!isInit) {
-            BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = SpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
+            BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = FhsSpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
             Set<String> keys = EConfig.PATH.stringPropertyNames();
             Map<String, Object> shared = new HashMap<String, Object>();
             for (String key : keys) {

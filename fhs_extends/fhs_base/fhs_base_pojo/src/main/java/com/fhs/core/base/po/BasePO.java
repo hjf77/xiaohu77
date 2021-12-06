@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.SuperBean;
@@ -180,7 +180,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
         // 如果父类直接是basedo代表是个do如果父类不是basedo代表应是个vo
         Class clazz = this.getClass().getSuperclass() == BasePO.class ? this.getClass() : this.getClass().getSuperclass();
         Type[] types = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
-        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, types[0].getTypeName(), 1);
+        BaseService baseService = FhsSpringContextUtil.getBeanByClass(BaseService.class, types[0].getTypeName(), 1);
         return baseService;
     }
 

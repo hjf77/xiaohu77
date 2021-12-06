@@ -1,3 +1,4 @@
+/*
 package com.fhs.app.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -19,15 +20,19 @@ import java.sql.SQLException;
 @Configuration
 public class SeataConfig implements EnvironmentAware , ApplicationContextAware {
 
-    /**
+    */
+/**
      * 坏境
-     */
+     *//*
+
     private Environment env;
 
-    /**
+    */
+/**
      * 设置当前环境
      * @param environment 环境
-     */
+     *//*
+
     @Override
     public void setEnvironment(Environment environment) {
         this.env = environment;
@@ -41,12 +46,14 @@ public class SeataConfig implements EnvironmentAware , ApplicationContextAware {
     }
 
 
-    /**
+    */
+/**
      * 设置数据源
      *
      * @param dataSourceName 库名称
      * @return 数据源
-     */
+     *//*
+
     private DataSource getDataSource(String dataSourceName) {
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setName(env.getProperty(dataSourceName + ".name"));
@@ -80,3 +87,4 @@ public class SeataConfig implements EnvironmentAware , ApplicationContextAware {
         ObjectHolder.INSTANCE.setObject("ApplicationContext",applicationContext);
     }
 }
+*/

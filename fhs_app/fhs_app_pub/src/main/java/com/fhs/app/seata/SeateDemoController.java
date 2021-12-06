@@ -1,3 +1,4 @@
+/*
 package com.fhs.app.seata;
 
 import com.fhs.common.utils.StringUtils;
@@ -25,3 +26,4 @@ public class SeateDemoController {
         return HttpResult.success(true);
     }
 }
+*/

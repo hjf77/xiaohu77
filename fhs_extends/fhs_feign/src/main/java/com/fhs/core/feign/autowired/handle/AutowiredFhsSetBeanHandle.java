@@ -2,7 +2,7 @@ package com.fhs.core.feign.autowired.handle;
 
 import com.fhs.common.spring.AnnotationTypeFilterBuilder;
 import com.fhs.common.spring.SpringClassScanner;
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
@@ -67,20 +67,20 @@ public class AutowiredFhsSetBeanHandle implements ApplicationListener<ContextRef
             throw new RuntimeException(e);
         }
         // 如果还没初始化，手动给一个
-        if (SpringContextUtil.getApplicationContext() == null) {
-            SpringContextUtil.setStaticApplicationContext(contextRefreshedEvent.getApplicationContext());
+        if (FhsSpringContextUtil.getApplicationContext() == null) {
+            FhsSpringContextUtil.setStaticApplicationContext(contextRefreshedEvent.getApplicationContext());
         }
         // 遍历所有class，获取所有用@autowareYLM注释的字段
         if (entitySet != null && !entitySet.isEmpty()) {
             for (Class<?> entity : entitySet) {
                 // 获取该类
-                Object object = SpringContextUtil.getBeanByClassForApi(entity);
+                Object object = FhsSpringContextUtil.getBeanByClassForApi(entity);
                 Field[] fields = entity.getDeclaredFields();
                 if (CheckUtils.isNotEmpty(fields)) {
                     for (Field field : fields) {
                         if (field.isAnnotationPresent(AutowiredFhs.class)) {
                             // 获取到该字段的对象
-                            Object serviceObject = SpringContextUtil.getBeanByClassForApi(field.getType());
+                            Object serviceObject = FhsSpringContextUtil.getBeanByClassForApi(field.getType());
                             // 为该类下，该字段名赋值
                             ReflectUtils.setValue(object, field.getName(), serviceObject);
                         }

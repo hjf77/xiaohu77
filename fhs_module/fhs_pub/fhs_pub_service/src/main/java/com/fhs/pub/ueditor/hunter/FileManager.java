@@ -1,6 +1,6 @@
 package com.fhs.pub.ueditor.hunter;
 
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.pub.ueditor.define.AppInfo;
 import com.fhs.pub.ueditor.define.BaseState;
 import com.fhs.pub.ueditor.define.MultiState;
@@ -76,7 +76,7 @@ public class FileManager {
         BaseState fileState = null;
 
         File file = null;
-        PubFileService service = (PubFileService) SpringContextUtil.getBeansByClass(PubFileService.class);
+        PubFileService service = (PubFileService) FhsSpringContextUtil.getBeansByClass(PubFileService.class);
         for (Object obj : files) {
             if (obj == null) {
                 break;

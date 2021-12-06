@@ -1,6 +1,6 @@
 package com.fhs.core.excel.register;
 
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.excel.service.TransRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,9 @@ public class TransRpcServiceRegister implements ApplicationListener<ApplicationR
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         List<TransRpcService> services = null;
         if (isCloudModel) {
-            services = SpringContextUtil.getBeansByClass(TransRpcService.class);
+            services = FhsSpringContextUtil.getBeansByClass(TransRpcService.class);
         } else {
-            String[] names = SpringContextUtil.getApplicationContext().getBeanNamesForType(TransRpcService.class);
+            String[] names = FhsSpringContextUtil.getApplicationContext().getBeanNamesForType(TransRpcService.class);
             services = new ArrayList<>();
             for (String name : names) {
                 try {
@@ -41,9 +41,9 @@ public class TransRpcServiceRegister implements ApplicationListener<ApplicationR
                     if (clazz.isInterface()) {
                         continue;
                     }
-                    services.add((TransRpcService) SpringContextUtil.getBeanByName(clazz));
+                    services.add((TransRpcService) FhsSpringContextUtil.getBeanByName(clazz));
                 } catch (ClassNotFoundException e) {
-                    services.add((TransRpcService) SpringContextUtil.getBean(name));
+                    services.add((TransRpcService) FhsSpringContextUtil.getBean(name));
                 }
             }
         }

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.common.excel.ExcelUtils;
-import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.*;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
@@ -223,7 +223,7 @@ public class ExcelServiceImpl implements ExcelService {
         importSett.getDoIniter().init(importSett.getDoModel());
         BaseService service = targetService;
         List<Field> fields = ReflectUtils.getAnnotationField(importSett.getDoModel().getClass(), ApiModelProperty.class);
-        DictionaryTransService dictionaryTransService = SpringContextUtil.getBeanByName(DictionaryTransService.class);
+        DictionaryTransService dictionaryTransService = FhsSpringContextUtil.getBeanByName(DictionaryTransService.class);
         //excel错误格式提醒
         StringBuilder valiStr = new StringBuilder();
         //需要反翻译的名称
