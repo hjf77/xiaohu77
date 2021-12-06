@@ -114,7 +114,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser, HttpServletRequest request,
-                                    HttpServletResponse response) {
+                                   HttpServletResponse response) {
 
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
@@ -207,15 +207,14 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @PutMapping("/")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class)UcenterMsUserVO sysUser, HttpServletRequest request,
-                                            HttpServletResponse response) {
+    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) UcenterMsUserVO sysUser, HttpServletRequest request,
+                                      HttpServletResponse response) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);
         }
         sysUserService.updateUser(sysUser);
         return HttpResult.success(Boolean.TRUE);
     }
-
 
 
     /**
@@ -237,6 +236,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param sysUser 前端用户信息
      */
     @PutMapping("updatePass")
+    @ApiOperation("修改登录人密码")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2, desc = "修改个人密码")
     public HttpResult updatePass(@RequestBody UcenterMsUserVO sysUser) {
         UcenterMsUserVO user = super.getSessionuser();
@@ -251,8 +251,9 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param formSysUser 前端参数
      */
     @PostMapping("updateOwnUserInfo")
+    @ApiOperation("修改登录人个人信息")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 2, desc = "修改个人信息")
-    public void updateOwnUserInfo(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO formSysUser) {
+    public HttpResult updateOwnUserInfo(@RequestBody UcenterMsUserVO formSysUser) {
         UcenterMsUserVO user = super.getSessionuser();
         formSysUser.setUserName(formSysUser.getUserName());
         //把密码设置为空不修改密码
@@ -260,8 +261,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         formSysUser.setEmail(formSysUser.getEmail());
         formSysUser.setMobile(formSysUser.getMobile());
         formSysUser.setUserId(user.getUserId());
-        super.outToClient(sysUserService.updateSelectiveById(formSysUser) > 0);
-
+        sysUserService.updateSelectiveById(formSysUser);
+        return HttpResult.success();
     }
 
     /**
@@ -271,19 +272,14 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param response
      */
     @PostMapping("validataPass")
-    public void validataPass(HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> validataPass(HttpServletRequest request, HttpServletResponse response) {
         String param = request.getParameter("param");
         UcenterMsUserVO user = super.getSessionuser();
         UcenterMsUserVO sysUser = new UcenterMsUserVO();
         sysUser.setUserId(user.getUserId());
         sysUser.setOldPassword(param);
         boolean isSuccess = sysUserService.validataPass(sysUser);
-        if (isSuccess) {
-            super.outWrite("y");
-        } else {
-            super.outWrite("原密码错误");
-        }
-
+        return isSuccess ? HttpResult.success(true) : HttpResult.error(false);
     }
 
 
