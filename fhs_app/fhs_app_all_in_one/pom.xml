@@ -11,7 +11,7 @@
     <version>3.0.0</version>
     <artifactId>fhs_app_all_in_one</artifactId>
     <description>
-        本项目把所有的依赖都加到一个里面了,适用于非分布式部署模式,同时也没有使用Apollo和cas
+        本项目把所有的依赖都加到一个里面了,适用于非分布式部署模式,同时也没有使用Ncos等
     </description>
     <dependencies>
         <dependency>

@@ -1,8 +1,5 @@
 <template>
   <div id="generateApp">
-    <div class="xhb-crud-top">
-      <span class="soft-name">FHS代码生成器</span>
-    </div>
     <div class="xhb-crud-header">
       <div class="xhb-crud--header-menu">
         <el-button type="success " size="mini">暂存</el-button>
@@ -192,11 +189,11 @@
                     </el-form-item>
                     <el-form-item label="请求类型(POST需要配合querys参数)">
                       <pagex-select v-model="configForm.extParam.methodType" :options="[{
-                                                                                  value: 'GET',
-                                                                                  label: 'GET'
+                                                                                  id: 'GET',
+                                                                                  title: 'GET'
                                                                                 }, {
-                                                                                  value: 'POST',
-                                                                                  label: 'POST'
+                                                                                  id: 'POST',
+                                                                                  title: 'POST'
                                                                                 }]">
 
                       </pagex-select>
@@ -247,16 +244,16 @@
                     </el-form-item>
                     <el-form-item label="请求类型(POST需要配合querys参数)">
                       <pagex-select v-model="configForm.extParam.methodType" :options="[{
-                                                                                  value: 'GET',
-                                                                                  label: 'GET'
+                                                                                  id: 'GET',
+                                                                                  title: 'GET'
                                                                                 }, {
-                                                                                  value: 'POST',
-                                                                                  label: 'POST'
+                                                                                  id: 'POST',
+                                                                                  title: 'POST'
                                                                                 }]">
 
                       </pagex-select>
                     </el-form-item>
-                    <el-form-item label="label字段名(组件默认值为title)">
+                    <el-form-item label="label字段名(组件默认值为name)">
                       <el-input type="text" v-model="configForm.extParam.labelField"></el-input>
                     </el-form-item>
                     <el-form-item label="value字段名(组件默认值为id)">
@@ -294,7 +291,6 @@
 <script>
 import {deepClone} from "../utils";
 import {postFile} from "../utils/download";
-import PagexSelect from "@/lib/components/select";
 
 const statusList = [
   {
@@ -308,7 +304,6 @@ const statusList = [
 ]
 export default {
   name: "generate",
-  components: {PagexSelect},
   data() {
     return {
       formCreate: false,

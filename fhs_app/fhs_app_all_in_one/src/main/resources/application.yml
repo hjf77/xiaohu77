@@ -38,10 +38,6 @@ fhs:
   autodel:
     service-packege: com.**.service.**
   login:
-    #是否开启cas默认关闭
-    enable-cas: false
-    #登录地址
-    url: /b/page/login
     error-pass-lock-times: 100 #2次密码输入错误就锁定
     user-lock-seconds: 60 ##10秒解除锁定
   mybatis-jpa:
