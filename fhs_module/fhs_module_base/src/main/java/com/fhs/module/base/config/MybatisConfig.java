@@ -44,7 +44,7 @@ public class MybatisConfig implements InitializingBean {
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
 
-    @Bean("persistentEnhancerScaner")
+    @Bean("fhsPersistentEnhancerScaner")
     public PersistentEnhancerScaner getPersistentEnhancerScaner() {
         PersistentEnhancerScaner scanner = new PersistentEnhancerScaner();
         scanner.setEntityPackage(entityPackage);
