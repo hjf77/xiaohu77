@@ -105,7 +105,8 @@ import SizeSelect from '@/components/SizeSelect/index.vue'
 import Search from '@/components/HeaderSearch/index.vue'
 import RuoYiGit from '@/components/RuoYi/Git/index.vue'
 import RuoYiDoc from '@/components/RuoYi/Doc/index.vue'
-
+import {updateUserPwd} from  '@/api/system/user'
+import md5 from "js-md5";
 export default {
   components: {
     Breadcrumb,
@@ -197,11 +198,10 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           updateUserPwd(
-            this.user.oldPassword,
-            this.user.newPassword,
-            this.userInfo.account
+            md5(this.user.oldPassword),
+            md5(this.user.newPassword)
           ).then((response) => {
-            if (response.state) {
+            if (response.result) {
               this.msgSuccess("修改成功");
               this.dialogFormVisible = false;
             } else {
