@@ -66,7 +66,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
         Map<String, String> userAgent = getLoginUserMsgUtil.getUserAgent(request);
         //获取当前登录人操作系统信息
         String os = getLoginUserMsgUtil.getOsInfo(request);
-        logLoginVO.setLogId(StringUtils.getUUID());
+        logLoginVO.setLogId(idHelper.nextId());
         logLoginVO.setUserId(userId);
         logLoginVO.setIpAddress(ip);
         logLoginVO.setIpInfo(addresses);

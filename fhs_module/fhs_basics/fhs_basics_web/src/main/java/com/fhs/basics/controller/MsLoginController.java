@@ -85,14 +85,6 @@ public class MsLoginController extends BaseController {
     @Autowired
     private UcenterMsUserService sysUserService;
 
-    /**
-     * 子系统服务
-     */
-    @Autowired
-    private SettMsSystemService sysSystemService;
-
-    @Autowired
-    private SettMsMenuPermissionService settMsMenuPermissionService;
 
     @Autowired
     private UcenterMsRoleService roleService;

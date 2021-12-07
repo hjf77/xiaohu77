@@ -452,7 +452,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public List<V> findByIds(List ids) {
-        return this.selectBatchIdsMP(ids);
+        return baseMapper.selectBatchIds(ids);
     }
 
 

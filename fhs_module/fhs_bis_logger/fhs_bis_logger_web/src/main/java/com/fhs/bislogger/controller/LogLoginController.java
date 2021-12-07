@@ -29,7 +29,6 @@ public class LogLoginController extends ModelSuperController<LogLoginVO, LogLogi
 
     /**
      * 获取前20名用户登录汇总
-     *
      * @param statTime
      * @param endTime
      * @return

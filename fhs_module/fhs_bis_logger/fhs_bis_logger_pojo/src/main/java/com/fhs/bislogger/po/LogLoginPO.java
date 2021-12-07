@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.po.BasePO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -36,9 +38,9 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
     /**
      * 日志id
      */
-    @TableId(value = "log_id", type = IdType.ASSIGN_UUID)
+    @TableId(value = "log_id", type = IdType.NONE)
     @ApiModelProperty(value = "主键id")
-    private String logId;
+    private Long logId;
 
     /**
      * 访问次数
@@ -54,6 +56,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
     @Length(message = "用户id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("user_id")
     @ApiModelProperty(value = "用户id")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser", alias = "login")
     private Long userId;
 
     /**
@@ -94,6 +97,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 状态 0成功 1 失败
      */
     @TableField("state")
+    @Trans(type=TransType.DICTIONARY,key = "log_login_state")
     @ApiModelProperty(value = "状态 0成功 1 失败")
     private Integer state;
 
@@ -101,6 +105,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 类型0 登入 1 登出
      */
     @TableField("type")
+    @Trans(type=TransType.DICTIONARY,key = "log_login_type")
     @ApiModelProperty(value = "类型0 登入 1 登出")
     private Integer type;
 
@@ -108,6 +113,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 0 用户名不存在 1 密码错误 2 验证码错误 3 验证码失效 4 其他
      */
     @TableField("error_info")
+    @Trans(type=TransType.DICTIONARY,key = "log_login_error")
     @ApiModelProperty(value = "0 用户名不存在 1 密码错误 2 验证码错误 3 验证码失效 4 其他")
     private Integer errorInfo;
 
