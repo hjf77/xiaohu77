@@ -2,7 +2,6 @@ package com.fhs.basics.mapper;
 
 import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Map;
  * @date 2020-05-18 16:16:03
  */
 @Repository
-@MapperDefinition(domainClass = SettMsMenuPermissionPO.class)
 public interface SettMsMenuPermissionMapper extends FhsBaseMapper<SettMsMenuPermissionPO> {
 
 

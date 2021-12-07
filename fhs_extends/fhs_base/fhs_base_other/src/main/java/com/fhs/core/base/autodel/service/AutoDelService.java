@@ -104,7 +104,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
         classSet.forEach(cl -> {
             AutoDelSett sett = itemTBLSett.get(cl);
             if (sett.isChecker()) {
-                int count = FhsSpringContextUtil.getBeanByClass(cl).findCountForMainTblPkey(sett.field(), pkey);
+                Long count = FhsSpringContextUtil.getBeanByClass(cl).findCountForMainTblPkey(sett.field(), pkey);
                 if (count > 0) {
                     throw new ParamException("有关联" + sett.desc() + "未删除");
                 }

@@ -7,7 +7,6 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
-import com.mybatis.jpa.annotation.Like;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -50,7 +49,6 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 区域主键
      */
     @Id
-    @Like
     @NotNull(message = "area的id字段 不可为null ", groups = {Update.class, Delete.class})
     @Max(message = "area的id超过int最大值", value = 2147483647, groups = {Delete.class, Update.class})
     @Min(message = "area的id小于int最大值", value = -2147483648, groups = {Delete.class, Update.class})
@@ -61,7 +59,6 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
     /**
      * 区域名称
      */
-    @Like
     @Length(message = "area的areaName字段的长度最大为16", groups = {Add.class, Update.class}, max = 16, min = 0)
     @Column(name = "area_name", nullable = true, length = 16)
     @ApiModelProperty("区域名称")
@@ -70,7 +67,6 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
     /**
      * 区域代码
      */
-    @Like
     @Length(message = "area的areaCode字段的长度最大为128", groups = {Add.class, Update.class}, max = 128, min = 0)
     @Column(name = "area_code", nullable = true, length = 128)
     @ApiModelProperty("区域代码")

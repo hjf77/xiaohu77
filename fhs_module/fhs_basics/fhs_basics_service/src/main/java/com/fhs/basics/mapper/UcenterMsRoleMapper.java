@@ -2,9 +2,6 @@ package com.fhs.basics.mapper;
 
 import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.mybatis.jpa.annotation.MapperDefinition;
-import com.mybatis.jpa.annotation.MultiTenancyCheck;
-import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -18,8 +15,6 @@ import java.util.Map;
  * @date 2020-05-18 16:21:03
  */
 @Repository
-@MultiTenancyCheck
-@MapperDefinition(domainClass = UcenterMsRolePO.class)
 public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
     /**
      * 添加角色的按钮信息
@@ -27,7 +22,6 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param adminRole
      * @return
      */
-    @NotMultiTenancyCheck
     public int addButtons(UcenterMsRolePO adminRole);
 
     /**
@@ -36,7 +30,6 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param adminRole
      * @return
      */
-    @NotMultiTenancyCheck
     public int deleteButtons(UcenterMsRolePO adminRole);
 
     /**
@@ -45,7 +38,6 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param adminRole
      * @return
      */
-    @NotMultiTenancyCheck
     public List<Map<String, Object>> searchButtons(UcenterMsRolePO adminRole);
 
     /**
@@ -54,10 +46,8 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param roleId
      * @return
      */
-    @NotMultiTenancyCheck
     public List<String> getRolePermissionButtons(@Param("roleId") String roleId);
 
-    @NotMultiTenancyCheck
     public List<String> searchButtonId(Map<String, Object> map);
 
     /**
@@ -66,7 +56,6 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param map
      * @return
      */
-    @NotMultiTenancyCheck
     public List<UcenterMsRolePO> findRoleByGroupCode(Map<String, Object> map);
 
     /**
@@ -75,8 +64,7 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param userId 用户id
      * @return 用户角色集合
      */
-    @NotMultiTenancyCheck
-    public List<UcenterMsRolePO> findRolesByUserId(@Param("userId") String userId);
+    public List<UcenterMsRolePO> findRolesByUserId(@Param("userId") Long userId);
 
     /**
      * 获取所有角色
@@ -92,7 +80,6 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param paramMap 查询条件
      * @return 关联用户数量
      */
-    @NotMultiTenancyCheck
     Integer findUserCountByRoleId(Map<String, Object> paramMap);
 
     /**
@@ -100,6 +87,5 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      *
      * @param adminRole
      */
-    @NotMultiTenancyCheck
     void deleteUserRela(UcenterMsRolePO adminRole);
 }

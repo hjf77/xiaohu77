@@ -37,7 +37,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         UcenterMsUserPO adminUser = new UcenterMsUserPO();
         adminUser.setGroupCode(tenant.getGroupCode());
         adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode() + "123456").toLowerCase());
-        adminUser.setUserId(StringUtils.getUUID());
+        adminUser.setUserId(idHelper.nextId());
         adminUser.setIsAdmin(Constant.INT_TRUE);
         adminUser.setUserName(tenant.getTenantName());
         adminUser.setUserLoginName(tenant.getGroupCode() + "_admin");

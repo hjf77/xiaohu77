@@ -57,7 +57,7 @@ public class UploadController extends BaseController {
         //如果给了扩展字段则更新扩展字段
         if (CheckUtils.isNotEmpty(ext)) {
             file.setExt(ext);
-            fileService.update(file);
+            fileService.updateSelectiveById(file);
         }
         LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         super.outWriteJson(JsonUtil.bean2json(file));

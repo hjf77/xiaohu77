@@ -89,32 +89,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     boolean updateUser(UcenterMsUserPO adminUser);
 
-    /**
-     * 根据用户查询菜单
-     *
-     * @param adminUser
-     * @return
-     */
-    List<SettMsMenuVO> selectMenuByUid(UcenterMsUserPO adminUser);
 
-    /**
-     * 根据父节点查询菜单
-     *
-     * @param map
-     * @return
-     */
-    SettMsMenuVO selectParentMenuById(Map<String, Object> map);
-
-
-
-
-    /**
-     * 根据用户查询权限
-     *
-     * @param adminUser
-     * @return
-     */
-    List<SettMsMenuPermissionVO> searchUserButton(UcenterMsUserPO adminUser);
 
     /**
      * 监测原始密码是否正确
@@ -154,7 +129,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     @CloudMethod
-    Set<String> findPermissionByUserId(String userId);
+    Set<String> findPermissionByUserId(Long userId);
 
     /**
      * 通过登录名获取用户
@@ -172,23 +147,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     boolean validataLoginName(UcenterMsUserPO adminUser);
 
-    /**
-     * 运营商登录验证
-     *
-     * @param paramMap
-     * @return
-     */
-    Map<String, Object> checkOperatorLogin(Map<String, Object> paramMap);
 
-    /**
-     * 根据名称获取用户信息
-     */
-    UcenterMsUserVO findUserByName(String userName);
-
-    /**
-     * 根据用户名称查询所有权限
-     */
-    List<String> findMenuButtonByName(String userName);
 
 
     /**
@@ -213,23 +172,8 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     /**
      * 删除用户
      */
-    Boolean deleteSysUserById(String userId);
+    Boolean deleteSysUserById(Long userId);
 
-    /**
-     * 根据条件查询用户数
-     *
-     * @param paramMap 查询条件
-     * @return 用户数
-     */
-    Integer findUserByOrgId(Map<String, Object> paramMap);
-
-    /**
-     * 获取用户权限URL
-     *
-     * @param sysUser 后台用户
-     * @return 用户权限URL列表
-     */
-    List<String> getPermissionUrl(UcenterMsUserPO sysUser);
 
     /**
      * 根据用户id获取用户的数据权限
@@ -239,7 +183,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param userId 用户id
      * @return 用户数据权限信息
      */
-    Map<String, String> findUserDataPermissions(String userId);
+    Map<String, String> findUserDataPermissions(Long userId);
 
     /**
      * 根据集团编码获取集团下所有的用户tree

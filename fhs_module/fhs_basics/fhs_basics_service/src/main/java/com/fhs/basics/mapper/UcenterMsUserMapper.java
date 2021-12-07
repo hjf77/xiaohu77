@@ -5,9 +5,6 @@ import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.vo.SysUserOrgVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.mybatis.jpa.annotation.MapperDefinition;
-import com.mybatis.jpa.annotation.MultiTenancyCheck;
-import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -22,13 +19,10 @@ import java.util.Set;
  * @date 2020-05-18 16:23:28
  */
 @Repository
-@MultiTenancyCheck
-@MapperDefinition(domainClass = UcenterMsUserPO.class)
 public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
     /**
      * 用户登录
      */
-    @NotMultiTenancyCheck
     UcenterMsUserPO login(UcenterMsUserPO adminUser);
 
     /**
@@ -37,7 +31,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     int addUserRole(UcenterMsUserPO adminUser);
 
     /**
@@ -46,7 +39,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     List<Map<String, Object>> searchUserRole(UcenterMsUserPO adminUser);
 
     /**
@@ -55,7 +47,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     int deleteUserRole(UcenterMsUserPO adminUser);
 
     /**
@@ -64,7 +55,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> selectMenuByUid(UcenterMsUserPO adminUser);
 
     /**
@@ -73,7 +63,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param map
      * @return
      */
-    @NotMultiTenancyCheck
     SettMsMenuPO selectParentMenuById(Map<String, Object> map);
 
     /**
@@ -82,7 +71,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param map
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> readMenuByIds(Map<String, Object> map);
 
     /**
@@ -91,7 +79,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      * @paramsysUserGroupcode
      */
-    @NotMultiTenancyCheck
     int validataPass(UcenterMsUserPO adminUser);
 
     /**
@@ -100,7 +87,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      * @paramsysUserGroupcode
      */
-    @NotMultiTenancyCheck
     int getAdminUserCountByLoginName(UcenterMsUserPO adminUser);
 
     /**
@@ -117,7 +103,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPermissionPO> searchUserButton(UcenterMsUserPO adminUser);
 
     /**
@@ -126,7 +111,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      * @paramadminUser
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPermissionPO> searchUserButtonIds(Map<String, Object> map);
 
     /**
@@ -135,7 +119,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      * @paramadminUser
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> searchUserButtonAll(Map<String, Object> map);
 
     /**
@@ -144,7 +127,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param map
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> readMenuByButtonIds(Map<String, Object> map);
 
     /**
@@ -153,7 +135,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> selectMenuByButtonIds(Map<String, Object> adminUser);
 
     /**
@@ -162,7 +143,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      * @paramadminUser
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> selectMenuByUname(Map<String, Object> paramMap);
 
     /**
@@ -171,7 +151,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param adminUser
      * @return
      */
-    @NotMultiTenancyCheck
     UcenterMsUserPO selectUserByULname(UcenterMsUserPO adminUser);
 
     /**
@@ -180,7 +159,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param map
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> selectMenuByButtons(Map<String, Object> map);
 
     /**
@@ -188,7 +166,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      *
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> selectMenuAll(Map<String, Object> map);
 
     /**
@@ -197,7 +174,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param map
      * @return
      */
-    @NotMultiTenancyCheck
     List<Map<String, Object>> searchButtons(Map<String, Object> map);
 
     /**
@@ -206,7 +182,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param fatherMenuIds
      * @return List<SettMsMenuDO>
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> getFatherMenu(@Param("fatherMenuIds") String fatherMenuIds);
 
     /**
@@ -214,7 +189,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      *
      * @return
      */
-    @NotMultiTenancyCheck
     List<SettMsMenuPO> selectNotPlanfromMenuAll(Map<String, Object> map);
 
     /**
@@ -223,7 +197,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param paramMap
      * @return
      */
-    @NotMultiTenancyCheck
     List<Integer> findAllHasPermissionId(Map<String, Object> paramMap);
 
     /**
@@ -232,7 +205,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param paramMap
      * @return
      */
-    @NotMultiTenancyCheck
     Map<String, Object> checkOperatorLogin(Map<String, Object> paramMap);
 
     /**
@@ -241,7 +213,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param user SysUser用户
      * @return 用户有权限的 菜单id
      */
-    @NotMultiTenancyCheck
     List<String> selectMenuIdByAdmin(UcenterMsUserPO user);
 
     /**
@@ -250,7 +221,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param user 普通用户
      * @return 用户有权限的 菜单id
      */
-    @NotMultiTenancyCheck
     List<String> selectMenuIdByUserId(UcenterMsUserPO user);
 
     /**
@@ -259,7 +229,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param paramMap 查询条件
      * @return 用户数
      */
-    @NotMultiTenancyCheck
     Integer findUserByOrgId(Map<String, Object> paramMap);
 
     /**
@@ -268,15 +237,13 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param userId 用户ID
      * @return 用户权限URL列表
      */
-    @NotMultiTenancyCheck
-    List<String> getPermissionUrlByUserId(@Param("userId") String userId);
+    List<String> getPermissionUrlByUserId(@Param("userId") Long userId);
 
     /**
      * 查询所有权限URL
      *
      * @return 用户权限URL列表
      */
-    @NotMultiTenancyCheck
     List<String> getPermissionUrlAll();
 
     /**
@@ -296,6 +263,5 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @param permissonMethodCode 权限编码
      * @return
      */
-    @NotMultiTenancyCheck
     List<UcenterMsUserPO> getUserByOrgAndPermission(@Param("companyId") String companyId, @Param("namespace") String namespace, @Param("permissonMethodCode") String permissonMethodCode);
 }

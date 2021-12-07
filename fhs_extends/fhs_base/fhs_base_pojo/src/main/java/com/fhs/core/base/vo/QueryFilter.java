@@ -57,7 +57,7 @@ public class QueryFilter<T> {
     )
     private String groupRelation;
 
-    private QueryFilter() {
+    public QueryFilter() {
         this.groupRelation = AND;
     }
 
@@ -173,7 +173,7 @@ public class QueryFilter<T> {
      * @return
      */
     @JSONField(serialize = false)
-    private String getField(String fieldName, Class<T> currentModelClass) {
+    public  String getField(String fieldName, Class<T> currentModelClass) {
         if (currentModelClass == null) {
             return fieldName;
         }

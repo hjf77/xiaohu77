@@ -3,7 +3,6 @@ package com.fhs.bislogger.mapper;
 import com.fhs.bislogger.po.LogLoginPO;
 import com.fhs.bislogger.vo.LogLoginVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.mybatis.jpa.annotation.MapperDefinition;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,6 @@ import java.util.List;
  * @since 2020-04-23 13:58:43
  */
 @Repository
-@MapperDefinition(domainClass = LogLoginPO.class, orderBy = " update_time DESC")
 public interface LogLoginMapper extends FhsBaseMapper<LogLoginPO> {
 
     /**

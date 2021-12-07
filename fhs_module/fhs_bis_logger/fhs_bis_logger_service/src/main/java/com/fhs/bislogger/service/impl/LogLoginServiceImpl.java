@@ -43,9 +43,9 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
     private LogLoginMapper logLoginMapper;
 
     @Override
-    public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, String userId, boolean typeOut) {
+    public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, Long userId, boolean typeOut) {
         LogLoginVO logLoginVO = new LogLoginVO();
-        int count = this.findCount(logLoginVO);
+        Long count = this.findCount(logLoginVO);
         GetLoginUserMsgUtil getLoginUserMsgUtil = new GetLoginUserMsgUtil();
         String ip = null;
         String addresses = null;
@@ -84,7 +84,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
         if (typeOut) {
             logLoginVO.setType(LoggerConstant.LOG_LOGIN_OUT);
         }
-        this.add(logLoginVO);
+        this.insertSelective(logLoginVO);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class ApiDemoController {
 
     @RequestMapping("/seata/add")
     public void insert(String uuid){
-        settAlipaySettService.add(SettAlipaySettPO.builder().appId(uuid).alipayKey("11")
+        settAlipaySettService.insertSelective(SettAlipaySettPO.builder().appId(uuid).alipayKey("11")
                 .appPrivateKey("22").appId("test").appKey("key").extendsCode("11").name("33").id(StringUtils.getUUID()).build());
     }
 }

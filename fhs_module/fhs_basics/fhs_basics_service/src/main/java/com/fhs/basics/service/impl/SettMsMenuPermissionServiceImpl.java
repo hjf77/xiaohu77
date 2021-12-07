@@ -5,6 +5,8 @@ import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.mapper.SettMsMenuPermissionMapper;
 import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
+import com.fhs.core.base.autodel.anno.AutoDel;
+import com.fhs.core.base.autodel.anno.AutoDelSett;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,14 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
+@AutoDel(mainServiceSetts = {
+        @AutoDelSett(namespace = "sett_ms_menu", isChecker = true, field = "menuId", desc = "菜单")
+})
 public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuPermissionVO, SettMsMenuPermissionPO>
         implements SettMsMenuPermissionService {
+
     @Autowired
     private SettMsMenuPermissionMapper mapper;
-
-
 
     @Override
     public boolean addBaseMenuBatch(Map<String, Object> map) {

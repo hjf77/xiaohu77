@@ -3,7 +3,7 @@ package com.fhs.generate.vo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
-import com.mybatis.jpa.common.ColumnNameUtil;
+import com.fhs.generate.util.ColumnNameUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -1,9 +1,9 @@
 package com.fhs.core.db.ds;
 
 import com.fhs.common.utils.ReflectUtils;
+import com.fhs.core.db.anno.CatDBFlag;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.logger.Logger;
-import com.mybatis.jpa.annotation.CatTableFlag;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
@@ -47,7 +47,7 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
     /**
      * CatDBFlag 是不是在一个bean中.
      */
-    private Map<Method, Boolean> isBeanCattableFlagMap = new HashMap<>();
+    private Map<Method, Boolean> isBeanCatDBFlagMap = new HashMap<>();
 
     /**
      * 如果是bean的话，这个bean是第几个参数.
@@ -262,11 +262,11 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
                                           Method objMethod, DataSourceNameChoose dataSourceNameChoose)
             throws NoSuchMethodException, SecurityException, IllegalArgumentException, IllegalAccessException {
         /*
-          1  分库的时候需要获取分库标记(catDBFlag)，分库标记 字段 用@CatTableFlag 标记
-             @CatTableFlag 可能被标记到一个 bean的某个字段上比如 user有一个 sex字段，男的一个库，女的一个库，那么我们要获取到本次参数中到底是男还是女
+          1  分库的时候需要获取分库标记(catDBFlag)，分库标记 字段 用@CatDBFlag 标记
+             @CatDBFlag 可能被标记到一个 bean的某个字段上比如 user有一个 sex字段，男的一个库，女的一个库，那么我们要获取到本次参数中到底是男还是女
              这个男女就是catDBFlag的val   selectUser(User user)
-             @CatTableFlag 可能被标记到一个参数上，比如 selectUserBySex(@CatTableFlag int sex);这个时候catDBFlag 就是第一个参数
-             @CatTableFlag  可能被标记到一个map中，比如selectUser(@CatTableFlag("sex") Map paramMap);
+             @CatDBFlag 可能被标记到一个参数上，比如 selectUserBySex(@CatDBFlag int sex);这个时候catDBFlag 就是第一个参数
+             @CatDBFlag  可能被标记到一个map中，比如selectUser(@CatDBFlag("sex") Map paramMap);
                              这代表实际参数中map有一个key是sex 他的值就是catDBFlag的值
            2 根据方法的类型(读，还是写) 来调用dataSourceNameChoose getReadDataSourceName 或者getWriteDataSourceName 来获取实际的datasource name返回
 
@@ -274,20 +274,20 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
         String catDBFlag = null;
         String dataSourceName = null;
         // 如果已经有了此method的标记则表示可以从缓存里面取了
-        if (isBeanCattableFlagMap.containsKey(objMethod)) {
+        if (isBeanCatDBFlagMap.containsKey(objMethod)) {
             // 如果目标是个bean 则需要找到这个bean 然后通过反射获取到分表标志
-            if (isBeanCattableFlagMap.get(objMethod)) {
-                catDBFlag = getCacheBeanCatTableFlag(args, objMethod);
+            if (isBeanCatDBFlagMap.get(objMethod)) {
+                catDBFlag = getCacheBeanCatDBFlag(args, objMethod);
             } else // 如果目标是个map或者 其他的 则进此分支
             {
-                catDBFlag = getCacheParamCatTableFlag(args, objMethod);
+                catDBFlag = getCacheParamCatDBFlag(args, objMethod);
             }
         } else // 如果缓存中没有则需要重新开始计算
         {
-            catDBFlag = getParamCatTableFlag(paramClasses, args, objMethod);
+            catDBFlag = getParamCatDBFlag(paramClasses, args, objMethod);
             if (catDBFlag == null) {
                 try {
-                    catDBFlag = getBeanParamCatTableFlag(args, objMethod);
+                    catDBFlag = getBeanParamCatDBFlag(args, objMethod);
                 } catch (Exception e) {
                     LOG.error(this, e);
                 }
@@ -304,7 +304,7 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
     }
 
     /**
-     * 如果一个参数是一个dto 并且使用了@cattableflag 则返回标记字段的数据.
+     * 如果一个参数是一个dto 并且使用了@CatDBFlag 则返回标记字段的数据.
      *
      * @param args      参数
      * @param objMethod method对象
@@ -312,14 +312,14 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
      * @throws IllegalArgumentException the illegal argument exception
      * @throws IllegalAccessException   the illegal access exception
      */
-    private String getCacheBeanCatTableFlag(Object[] args, Method objMethod)
+    private String getCacheBeanCatDBFlag(Object[] args, Method objMethod)
             throws IllegalArgumentException, IllegalAccessException {
         return fieldBeanMap.get(objMethod).get(args[methodBeanIndexMap.get(objMethod)]).toString();
     }
 
     /**
-     * 如果一个参数使用了@cattableflag 标记了 那么这个参数可以是一个字符串也可以是一个int或者一个map
-     * 如果是int或者字符串，则直接取她们的值，如果是个map那么取map.get(cattableflag.value())
+     * 如果一个参数使用了@CatDBFlag 标记了 那么这个参数可以是一个字符串也可以是一个int或者一个map
+     * 如果是int或者字符串，则直接取她们的值，如果是个map那么取map.get(CatDBFlag.value())
      *
      * @param args      参数
      * @param objMethod method对象
@@ -327,7 +327,7 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
      * @throws IllegalArgumentException the illegal argument exception
      * @throws IllegalAccessException   the illegal access exception
      */
-    private String getCacheParamCatTableFlag(Object[] args, Method objMethod)
+    private String getCacheParamCatDBFlag(Object[] args, Method objMethod)
             throws IllegalArgumentException, IllegalAccessException {
         if (methodCatDBFlagParamIsMap.get(objMethod)) {
             return ((Map<?, ?>) args[methodCatDBFlagParamIndexMap.get(objMethod)])
@@ -338,7 +338,7 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
     }
 
     /**
-     * 如果一个参数是一个dto 并且使用了@cattableflag 则返回标记字段的数据.
+     * 如果一个参数是一个dto 并且使用了@CatDBFlag 则返回标记字段的数据.
      *
      * @param args      参数
      * @param objMethod method对象
@@ -348,7 +348,7 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
      * @throws IllegalArgumentException the illegal argument exception
      * @throws IllegalAccessException   the illegal access exception
      */
-    private String getBeanParamCatTableFlag(Object[] args, Method objMethod)
+    private String getBeanParamCatDBFlag(Object[] args, Method objMethod)
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         String catDBFlag = null;
         Class<?> tempClass = null;
@@ -356,13 +356,13 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
         for (int i = 0; i < args.length; i++) {
             tempClass = args[i].getClass();
             // 如果此参数的class中有分表标记则进去判断字段获取catDBFlag
-            if ((tempAnnotation = tempClass.getAnnotation(CatTableFlag.class)) != null) {
-                CatTableFlag catTableFlag = (CatTableFlag) tempAnnotation;
-                String fieldName = catTableFlag.value();
+            if ((tempAnnotation = tempClass.getAnnotation(CatDBFlag.class)) != null) {
+                CatDBFlag CatDBFlag = (CatDBFlag) tempAnnotation;
+                String fieldName = CatDBFlag.value();
                 Field field = ReflectUtils.getDeclaredField(tempClass, fieldName);
                 field.setAccessible(true);
                 catDBFlag = field.get(args[i]).toString();
-                isBeanCattableFlagMap.put(objMethod, true);
+                isBeanCatDBFlagMap.put(objMethod, true);
                 methodBeanIndexMap.put(objMethod, i);
                 fieldBeanMap.put(objMethod, field);
             }
@@ -371,15 +371,15 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
     }
 
     /**
-     * 如果一个参数使用了@cattableflag 标记了 那么这个参数可以是一个字符串也可以是一个int或者一个map
-     * 如果是int或者字符串，则直接取她们的值，如果是个map那么取map.get(cattableflag.value())
+     * 如果一个参数使用了@CatDBFlag 标记了 那么这个参数可以是一个字符串也可以是一个int或者一个map
+     * 如果是int或者字符串，则直接取她们的值，如果是个map那么取map.get(CatDBFlag.value())
      *
      * @param paramClasses 参数class类型
      * @param args         参数
      * @param objMethod    method对象
      * @return 分库的标识符
      */
-    private String getParamCatTableFlag(Class<?>[] paramClasses, Object[] args, Method objMethod) {
+    private String getParamCatDBFlag(Class<?>[] paramClasses, Object[] args, Method objMethod) {
         String catDBFlag = null;
         // 获取所有的参数的注解
         Annotation[][] parameterAnnotations = objMethod.getParameterAnnotations();
@@ -387,15 +387,15 @@ public class DynamicCatDBProcessor extends ReadWriteDataSourceProcessor {
             int index = 0;
             for (Annotation[] parameterAnnotation : parameterAnnotations) {
                 for (Annotation annotation : parameterAnnotation) {
-                    // 如果判断有CatTableFlag 注解 则需要判断当前是否是个map，如果是map那么调用map.get方法获取分库标记，如果是普通的数据类型那么本身就是分库标记
-                    if (annotation instanceof CatTableFlag) {
+                    // 如果判断有CatDBFlag 注解 则需要判断当前是否是个map，如果是map那么调用map.get方法获取分库标记，如果是普通的数据类型那么本身就是分库标记
+                    if (annotation instanceof CatDBFlag) {
                         methodCatDBFlagParamIndexMap.put(objMethod, index);
-                        isBeanCattableFlagMap.put(objMethod, false);
+                        isBeanCatDBFlagMap.put(objMethod, false);
                         if (args[index] instanceof Map) {
                             methodCatDBFlagParamIsMap.put(objMethod, true);
-                            CatTableFlag catTableFlag = (CatTableFlag) annotation;
-                            catDBFlag = ((Map<?, ?>) args[index]).get(catTableFlag.value()).toString();
-                            methodCatDBFlagParamMapKeyMap.put(objMethod, catTableFlag.value());
+                            CatDBFlag CatDBFlag = (CatDBFlag) annotation;
+                            catDBFlag = ((Map<?, ?>) args[index]).get(CatDBFlag.value()).toString();
+                            methodCatDBFlagParamMapKeyMap.put(objMethod, CatDBFlag.value());
                         } else {
                             catDBFlag = args[index].toString();
                             methodCatDBFlagParamIsMap.put(objMethod, false);

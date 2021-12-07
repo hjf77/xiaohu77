@@ -196,11 +196,10 @@ public class MsLoginController extends BaseController {
         String tokenStr = StpUtil.getTokenValue();
         //如果不是admin就去加载全部的数据
         if (sysUser.getIsAdmin() == Constant.INT_TRUE) {
-            redisCacheService.put("auth:dp:" + tokenStr, new HashMap<>());
+            StpUtil.getTokenSession().set(Constant.SESSION_USER_DATA_PERMISSION,new HashMap<>());
         } else {
-            redisCacheService.put("auth:dp:" + tokenStr, sysUserService.findUserDataPermissions(sysUser.getUserId()));
+            StpUtil.getTokenSession().set(Constant.SESSION_USER_DATA_PERMISSION,sysUserService.findUserDataPermissions(sysUser.getUserId()));
         }
-        redisCacheService.expire("auth:dp:" + tokenStr, sesstionTimeout);
         StpUtil.getTokenSession().set(Constant.SESSION_USER,sysUser);
         Map<String, Object> result = new HashMap<>();
         result.put("token", tokenStr);

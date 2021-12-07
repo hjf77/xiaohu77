@@ -27,12 +27,10 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.logger.Logger;
-import com.fhs.module.base.common.ExcelExportTools;
 import com.fhs.basics.context.UserContext;
 import com.fhs.trans.service.impl.TransService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mybatis.jpa.context.DataPermissonContext;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -69,7 +67,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     /**
      * 用于导出用的缓存
      */
-    protected Cache<String, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+    protected Cache<Long, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
     protected BaseService<V, D> baseService;
@@ -350,7 +348,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @Override
     public EMap<String, Object> getParameterMap() {
         EMap<String, Object> result = super.getParameterMap();
-        result.put("permission", DataPermissonContext.getDataPermissonMap());
         result.put("loginUserId", getSessionuser().getUserId());
         return result;
     }

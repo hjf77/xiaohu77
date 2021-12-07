@@ -22,6 +22,7 @@ import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -79,7 +80,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
 
     @Override
-    public List<UcenterMsOrganizationVO> findByIds(List<?> ids) {
+    public List<UcenterMsOrganizationVO> findByIds(List ids) {
         return initCompanyName(super.findByIds(ids));
     }
 
@@ -112,12 +113,12 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         // 如果是启用改为禁用
         if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == org.getIsEnable()) {
             // 查询当前机构下级机构数
-            Integer orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(org.getId()).isEnable(Constant.ENABLED).build());
+            Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(org.getId()).isEnable(Constant.ENABLED).build());
             if (orgCount > Constant.ENABLED) {
                 throw new ParamException("拥有子结构不可禁用");
             }
             // 查询当前机构和下级机构人员
-            Integer userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(oldOrg.getId()).build());
+            Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(oldOrg.getId()).build());
             if (userCount > Constant.ENABLED) {
                 throw new ParamException("该机构下拥有用户,不可禁用!");
             }
@@ -129,14 +130,14 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     }
 
     @Override
-    public int deleteById(Object id) {
+    public int deleteById(Serializable id) {
         // 查询当前机构下级机构数
-        Integer orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(ConverterUtils.toString(id)).build());;
+        Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(ConverterUtils.toString(id)).build());;
         if (orgCount > Constant.ENABLED) {
             throw new ParamException("该机构拥有子机构,不可删除!");
         }
         // 查询当前机构和下级机构人员
-        Integer userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(ConverterUtils.toString(id)).build());
+        Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(ConverterUtils.toString(id)).build());
         if (userCount > Constant.ENABLED) {
             throw new ParamException("该机构下拥有用户,不可删除!");
         }

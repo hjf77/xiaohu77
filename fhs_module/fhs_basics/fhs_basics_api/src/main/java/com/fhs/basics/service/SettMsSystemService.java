@@ -16,17 +16,6 @@ import java.util.List;
  */
 public interface SettMsSystemService extends BaseService<SettMsSystemVO, SettMsSystemPO> {
 
-    /**
-     * 超管用户
-     */
-    public static final int ADMIN = 1;
-
-    /**
-     * 获取全部商户的combbox
-     *
-     * @return
-     */
-    List<ComboboxNodeVO> getSystemComBoxData();
 
     /**
      * 查询当前登录用户拥有权限的子系统列表

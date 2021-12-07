@@ -94,7 +94,7 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
     @Override
     public List<UcenterFrontUserVO> findListFilterMobile() {
         List<UcenterFrontUserPO> listFilterMobile = ucenterFrontUserMapper.findListFilterMobile();
-        List<UcenterFrontUserVO> ucenterFrontUserVOS = this.dos2vos(listFilterMobile);
+        List<UcenterFrontUserVO> ucenterFrontUserVOS = this.pos2vos(listFilterMobile);
         return ucenterFrontUserVOS;
     }
 }

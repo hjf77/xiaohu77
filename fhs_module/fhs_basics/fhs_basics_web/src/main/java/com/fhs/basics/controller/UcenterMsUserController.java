@@ -19,6 +19,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
@@ -87,7 +88,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             UcenterMsUserVO loginSysUser = super.getSessionuser();
             sysUser.setUpdateTime(new Date());
             sysUser.setUpdateUser(loginSysUser.getUserId());
-            if (StringUtils.isEmpty(sysUser.getUserId())) { //新增
+            if (sysUser.getUserId() == null) { //新增
                 sysUser.setCreateTime(new Date());
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());
@@ -121,20 +122,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         super.outWrite(isSuccess);
     }
 
-    /**
-     * jsonp接口.用于其他系统用户列表
-     *
-     * @param request
-     */
-    @GetMapping("findUsers")
-    @LogMethod
-    public void findUsersJsonp(HttpServletRequest request) {
-        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
-        UcenterMsUserPO queryParam = UcenterMsUserPO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
-        List<UcenterMsUserVO> users = sysUserService.selectPage(queryParam,
-                pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
-        super.outJsonp(new Pager<UcenterMsUserVO>(sysUserService.selectCount(queryParam), users).asJson());
-    }
+
 
     @GetMapping("getUserByCompanyId")
     @ApiOperation("根据单位id获取单位下的用户集合")
@@ -159,7 +147,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @SaCheckRole("sysUser:del")
     @DeleteMapping("/delSysUser")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
+    public HttpResult<Boolean> delSysUser(@RequestParam("id") Long id, HttpServletRequest request) {
         UcenterMsUserVO sysUser = sysUserService.selectById(id);
         if (sysUser.getIsAdmin() == sysUserService.SYS_USER_IS_ADMIN) {
             throw new ParamException("超级用户不可删除");
@@ -248,23 +236,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-    /**
-     * @param request http请求
-     * @param
-     * @return 前端分页请求
-     * @desc 后台用户分页
-     */
-    @SaCheckRole("sysUser:see")
-    @GetMapping("/findPage/{organizationId}")
-    @ResponseBody
-    @LogMethod
-    public Pager<UcenterMsUserVO> findPage(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, UcenterMsUserVO sysUser) {
-        if (!CheckUtils.isNullOrEmpty(organizationId)) sysUser.setOrganizationId(organizationId);
-        PageSizeInfo pgeSizeInfo = getPageSizeInfo();
-        List<UcenterMsUserVO> dataList = sysUserService.findForList(sysUser, pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
-        int count = sysUserService.findCountJpa(sysUser);
-        return new Pager<UcenterMsUserVO>(count, dataList);
-    }
 
 
     /**

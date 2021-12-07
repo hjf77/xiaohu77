@@ -44,7 +44,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 访问次数
      */
     @TableField(value = "visit_number")
-    private Integer visitNumber;
+    private Long visitNumber;
 
     /**
      * 用户id
@@ -54,7 +54,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
     @Length(message = "用户id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("user_id")
     @ApiModelProperty(value = "用户id")
-    private String userId;
+    private Long userId;
 
     /**
      * ip

@@ -67,10 +67,12 @@ public abstract class BaseController {
      *
      * @return 分页参数
      */
-    protected PageSizeInfo getPageSizeInfo() {
+    protected FhsPager getPageSizeInfo() {
         HttpServletRequest request = getRequest();
-        return this.getPageSizeInfo(ConverterUtils.toInt(request.getParameter(Constant.PAGE)),
-                ConverterUtils.toInt(request.getParameter(Constant.ROWS)));
+        FhsPager result = new FhsPager();
+        result.setCurrent(ConverterUtils.toInt(request.getParameter(Constant.PAGE)));
+        result.setPageSize(ConverterUtils.toInt(request.getParameter(Constant.PAGE_SIZE)));
+        return result;
     }
 
 

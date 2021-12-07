@@ -4,25 +4,24 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.SuperBean;
-import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.vo.QueryField;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.excel.anno.IgnoreExport;
-import com.mybatis.jpa.annotation.Between;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
+import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 所有的do请都继承此do
@@ -57,12 +56,11 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     @TableField("create_user")
     @ApiModelProperty("创建人")
     @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "createUser",fields = "userName")
-    protected String createUser;
+    protected Long createUser;
 
     /**
      * 创建时间
      */
-    @Between
     @TableField("create_time")
     @ApiModelProperty("创建时间")
     @JSONField(format = DateUtils.DATETIME_PATTERN)
@@ -74,12 +72,11 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     @ApiModelProperty("修改人")
     @TableField("update_user")
     @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "updateUser",fields = "userName")
-    protected String updateUser;
+    protected Long updateUser;
 
     /**
      * 更新时间
      */
-    @Between
     @ApiModelProperty("修改时间")
     @TableField("update_time")
     @JSONField(format = DateUtils.DATETIME_PATTERN)
@@ -96,7 +93,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     /**
      * 插入之前调用
      */
-    public void preInsert(String userId) {
+    public void preInsert(Long userId) {
         Date now = new Date();
         this.createTime = now;
         this.updateTime = now;
@@ -108,7 +105,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     /**
      * 更新之前调用
      */
-    public void preUpdate(String userId) {
+    public void preUpdate(Long userId) {
         this.updateTime = new Date();
         this.updateUser = userId;
     }
@@ -122,10 +119,10 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     @Override
     @JsonIgnore
     @JSONField(serialize = false, deserialize = false)
-    public Object getPkey() {
+    public Serializable getPkey() {
         Field idField = getIdField(true);
         try {
-            return idField.get(this);
+            return (Serializable)idField.get(this);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             return null;
@@ -174,78 +171,35 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
         return fieldList.get(0);
     }
 
-    @JSONField(serialize = false)
-    @JsonIgnore
-    public BaseService findBaseService() {
-        // 如果父类直接是basedo代表是个do如果父类不是basedo代表应是个vo
-        Class clazz = this.getClass().getSuperclass() == BasePO.class ? this.getClass() : this.getClass().getSuperclass();
-        Type[] types = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
-        BaseService baseService = FhsSpringContextUtil.getBeanByClass(BaseService.class, types[0].getTypeName(), 1);
-        return baseService;
-    }
-
     /**
-     * 插入
-     *
+     * 把本身不为null的属性转换为wrapper
      * @return
      */
-    public int insert() {
-        return this.findBaseService().insertSelective((BasePO) this);
-    }
-
-    /**
-     * 以自己当做参数查询
-     *
-     * @return
-     */
-    public <V> List<V> findForList() {
-        return this.findBaseService().findForList((BasePO) this);
-    }
-
-    /**
-     * 根据主键修改 不包含null
-     *
-     * @return
-     */
-    public boolean updateSelectiveById() {
-        return this.findBaseService().updateJpa((BasePO) this);
-    }
-
-    /**
-     * 根据主键修改 包含null
-     *
-     * @return
-     */
-    public boolean updateByPkey() {
-        return this.findBaseService().update((BasePO) this);
-    }
-
-
-    /**
-     * 把自己当做参数做删除
-     *
-     * @return
-     */
-    public boolean deleteByPkey() {
-        return this.findBaseService().delete((BasePO) this);
-    }
-
-    /**
-     * 查询总数
-     *
-     * @return
-     */
-    public int findCount() {
-        return this.findBaseService().findCount((BasePO) this);
-    }
-
-    /**
-     * 查询单个
-     *
-     * @return
-     */
-    public <V> V findOne() {
-        return (V) this.findBaseService().findBean((BasePO) this);
+    public QueryWrapper<T> asWrapper(){
+        List<Field>  fields = ReflectUtils.getAnnotationField(this.getClass(),TableField.class);
+        //过滤掉忽略字段
+        fields = fields.stream().filter(field -> {
+            return field.getAnnotation(TableField.class).exist();
+        }).collect(Collectors.toList());
+        List<Field>  idFields = ReflectUtils.getAnnotationField(this.getClass(),TableId.class);
+        if(!idFields.isEmpty()){
+            fields.addAll(idFields);
+        }
+        QueryFilter<T> filter = new QueryFilter<>();
+        Object value = null;
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                value = field.get(this);
+                //不等于null不等于空的时候加入到条件里去
+                if(value!=null && !"".equals(value)){
+                    filter.getQuerys().add(QueryField.builder().property(field.getName()).value(value).operation("=").group("main").relation("AND").build());
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return filter.asWrapper(this.getClass());
     }
 
 }

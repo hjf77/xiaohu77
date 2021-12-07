@@ -11,9 +11,9 @@ public class ActiveRecordTestController {
 
     @RequestMapping("/test")
     public HttpResult test(){
-       UcenterMsUserPO.builder().userId("10").userName("wangelixxx222").password("1").userLoginName("wangelixxx").mobile("13455555555")
+       /*UcenterMsUserPO.builder().userId(10L).userName("wangelixxx222").password("1").userLoginName("wangelixxx").mobile("13455555555")
                 .build().insert();
-
+*/
         return HttpResult.success();
     }
 }

@@ -66,7 +66,7 @@ public class FrontUserLoginWebApiAction {
     @ApiOperation(value = "使用用户名密码登录")
     public HttpResult<String> loginByUsernameAndPassword(@RequestBody UcenterFrontUserVO userVO) {
         userVO.setPasswd(Md5Util.MD5(userVO.getPasswd()));
-        userVO = frontUserService.findBean(userVO);
+        userVO = frontUserService.selectBean(userVO);
         ParamChecker.isNotNull(userVO, "用户名密码无效");
         return HttpResult.success(loginService.login(userVO.getUserId()));
     }

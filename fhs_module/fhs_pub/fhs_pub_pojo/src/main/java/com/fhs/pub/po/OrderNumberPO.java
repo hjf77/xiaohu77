@@ -1,5 +1,8 @@
 package com.fhs.pub.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
@@ -28,19 +31,18 @@ import javax.validation.constraints.NotNull;
  * 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "t_service_order_log")
+@TableName("t_service_order_log")
 @ApiModel(value = "OrderNumberDO", description = "OrderNumber参数")
 public class OrderNumberPO extends BasePO<OrderNumberPO> {
     private static final long serialVersionUID = 1L;
     /**
      * 主键id
      */
-    @Id
+    @TableId("id")
     @NotNull(message = "pubservice的id字段 不可为null ", groups = {Update.class, Delete.class})
     @Column(name = "id", nullable = false, length = 32)
     @ApiModelProperty("主键id")
@@ -49,14 +51,14 @@ public class OrderNumberPO extends BasePO<OrderNumberPO> {
     /**
      * 类型
      */
-    @Column(name = "type", nullable = true, length = 20)
+    @TableField("type")
     @ApiModelProperty("类型")
     private String type;
 
     /**
      * 时间
      */
-    @Column(name = "time", nullable = true, length = 50)
+    @TableField("time")
     @ApiModelProperty("时间")
     private String time;
 

@@ -17,6 +17,7 @@ import com.fhs.core.db.ds.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -71,7 +72,7 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
 
 
     @Override
-    public int deleteById(Object id) {
+    public int deleteById(Serializable id) {
         msMenuPermissionService.deleteBean(SettMsMenuPermissionPO.builder().menuId(ConverterUtils.toString(id)).build());
         return super.deleteById(id);
     }

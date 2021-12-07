@@ -99,7 +99,7 @@ public class DownLoadController extends BaseController {
     @ApiOperation("根据逗号分隔的id获取文件详情")
     public void listData(String fileIds) {
         ParamChecker.isNotNullOrEmpty(fileIds, "文件id不可为空");
-        List<PubFileVO> list = pubFileService.findByIds(Arrays.asList(fileIds.split(",")));
+        List<PubFileVO> list = pubFileService.selectBatchIdsMP(Arrays.asList(fileIds.split(",")));
         String json = JsonUtil.list2json(list);
         this.outJsonp(json);
     }

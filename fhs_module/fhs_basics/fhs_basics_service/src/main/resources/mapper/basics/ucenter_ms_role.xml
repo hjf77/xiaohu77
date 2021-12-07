@@ -139,27 +139,6 @@
 
 
 
-    <select id="findBeanFromMap" parameterType="map"
-            resultType="com.fhs.basics.po.UcenterMsRolePO">
-        SELECT role_id AS roleId,
-        role_name AS roleName,
-        remark,
-        is_enable AS
-        isEnable,
-        organization_id AS organizationId,
-        data_permissions AS dataPermissions,
-        create_user AS createUser,
-        create_time AS createTime,
-        update_user AS updateUser,
-        update_time AS updateTime
-        FROM `t_ucenter_ms_role`
-        <where>
-            <if test="roleName !=null and roleName!=''">
-                and role_name=#{roleName}
-            </if>
-        </where>
-
-    </select>
 
     <!-- 通过角色编号获取权限信息 -->
     <select id="searchButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO"

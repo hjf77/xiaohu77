@@ -7,6 +7,7 @@ import com.fhs.basics.mapper.SettMsSystemMapper;
 import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.SettMsSystemVO;
+import com.fhs.common.constant.Constant;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.trans.anno.AutoTrans;
@@ -32,24 +33,12 @@ public class SettMsSystemServiceImpl extends BaseServiceImpl<SettMsSystemVO, Set
 
     @Override
     public List<SettMsSystemVO> getSystemList(UcenterMsUserPO sysUser) {
-        if (ADMIN == sysUser.getIsAdmin()) {
+        if (Constant.INT_TRUE == sysUser.getIsAdmin()) {
             return this.select();
         } else {
-            return dos2vos(mapper.getSystemList(sysUser));
+            return pos2vos(mapper.getSystemList(sysUser));
         }
 
-    }
-
-    @Override
-    public List<ComboboxNodeVO> getSystemComBoxData() {
-        List<SettMsSystemVO> sysSystems = this.select();
-        List<ComboboxNodeVO> nodeList = new ArrayList<>();
-        ComboboxNodeVO node = null;
-        for (SettMsSystemVO sysSystem : sysSystems) {
-            node = new ComboboxNodeVO(sysSystem.getId(), sysSystem.getName());
-            nodeList.add(node);
-        }
-        return nodeList;
     }
 
 }

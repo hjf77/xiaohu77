@@ -5,6 +5,7 @@ import com.fhs.basics.mapper.UcenterMsRoleMapper;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
+import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,16 +135,18 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean deleteRole(UcenterMsRolePO adminRole) {
+    public int deleteById(Serializable primaryValue) {
+        UcenterMsRoleVO role = new UcenterMsRoleVO();
+        role.setRoleId(ConverterUtils.toInt(primaryValue));
         // 删除按钮信息
-        boolean count = deleteButtons(adminRole);
+        boolean count = deleteButtons(role);
         if (count) {
             // 删除角色用户关联
-            mapper.deleteUserRela(adminRole);
+            mapper.deleteUserRela(role);
             // 删除角色信息
-            return mapper.deleteBean(adminRole) > 0;
+            return super.deleteById(primaryValue);
         }
-        return false;
+        return 0;
     }
 
     /**
@@ -196,18 +200,10 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     }
 
     /**
-     * 通过角色名称获取角色
-     */
-    @Override
-    public List<UcenterMsRoleVO> findRoleByGroupCode(Map<String, Object> map) {
-        return ListUtils.copyListToList(this.mapper.findRoleByGroupCode(map), UcenterMsRoleVO.class);
-    }
-
-    /**
      * 根据用户获取角色
      */
     @Override
-    public List<UcenterMsRoleVO> findRolesByUserId(String userId) {
+    public List<UcenterMsRoleVO> findRolesByUserId(Long userId) {
         return ListUtils.copyListToList(mapper.findRolesByUserId(userId), UcenterMsRoleVO.class);
     }
 

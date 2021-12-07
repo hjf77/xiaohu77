@@ -29,7 +29,7 @@ public interface LogLoginService extends BaseService<LogLoginVO, LogLoginPO> {
      * @param userId
      * @param typeOut   登出 = true
      */
-    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, String userId, boolean typeOut);
+    void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, Long userId, boolean typeOut);
 
     /**
      * 汇总前20名 登录玩家的登录次数，根基时间段查询

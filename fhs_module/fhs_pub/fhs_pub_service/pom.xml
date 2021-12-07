@@ -12,11 +12,7 @@
     <artifactId>fhs_pub_service</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>mybatis-jpa-jack</artifactId>
-            <version>${fhs.mybatis-jpa-jack.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_pub_pojo</artifactId>

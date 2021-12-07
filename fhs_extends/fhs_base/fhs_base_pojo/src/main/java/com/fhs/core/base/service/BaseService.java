@@ -3,9 +3,8 @@ package com.fhs.core.base.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.core.base.po.BasePO;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.trans.vo.VO;
-import com.mybatis.jpa.annotation.CatTableFlag;
-import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,47 +13,13 @@ import java.util.Map;
 
 /**
  * 所有的service 都必须实现此service 如果是简单的CRUD操作，
- * 允许action直接调用baseserivce实现类里面的方法。
- * 调用的时候优先使用mybatis jpa的方法，再而使用 mybatis plugs的方法最后不行再自己写sql
- * 20150729修订 调整返回类型
- *
+ * 允许controller直接调用baseserivce实现类里面的方法。
  * @author wanglei
  * @version [版本号, 2015年5月27日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface BaseService<V extends VO, D extends BasePO> {
-
-
-
-    /**
-     * 将一个obj插入到数据库
-     *
-     * @param bean bean
-     * @return 默认为影响条数
-     */
-    int add(D bean);
-
-
-    /**
-     * 更新数据库数据，参数为object
-     * 此方法支持将值设置为null
-     *
-     * @param bean object
-     * @return 默认为影响条数
-     */
-    boolean update(D bean);
-
-    /**
-     * 更新数据库数据，参数为object
-     * 此方法忽略值为null的属性
-     *
-     * @param bean object
-     * @return 默认为影响条数
-     */
-    @Deprecated
-    boolean updateJpa(D bean);
-
+public interface BaseService<V extends VO, P extends BasePO> {
 
 
     /**
@@ -63,7 +28,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param bean bean
      * @return 默认为影响条数
      */
-    boolean delete(D bean);
+    boolean delete(P bean);
 
 
 
@@ -73,15 +38,9 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param bean bean
      * @return 结果
      */
-    int findCount(D bean);
+    Long findCount(P bean);
 
-    /**
-     * 查询 返回一行一列 结果为int类型 参数为obj
-     *
-     * @param bean bean
-     * @return 结果
-     */
-    int findCountJpa(D bean);
+
 
     /**
      * 查询数据 参数为object
@@ -89,7 +48,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param bean bean
      * @return 查询出来的数据集合
      */
-    List<V> findForList(D bean);
+    List<V> findForList(P bean);
 
     /**
      * 查询数据 参数为object
@@ -97,18 +56,12 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param bean bean
      * @return 查询出来的数据集合
      */
-    List<V> findForList(D bean, int pageStart, int pageSize);
+    FhsPager<V> findForPager(P bean, FhsPager fhsPager);
 
 
 
 
-    /**
-     * 查询一条数据 返回object
-     *
-     * @param bean 过滤条件
-     * @return
-     */
-    V findBean(D bean);
+
 
 
 
@@ -119,7 +72,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param entity do
      * @return 受影响的行数
      */
-    int insertSelective(D entity);
+    int insertSelective(P entity);
 
 
     /**
@@ -129,7 +82,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @return 受影响的行数
      * @since 1.0.0
      */
-    int batchInsert(List<D> list);
+    boolean batchInsert(List<P> list);
 
     /**
      * 根据id删除数据 -- jpa方法
@@ -138,7 +91,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @return 受影响行数
      * @since 1.0.0
      */
-    int deleteById(Object primaryValue);
+    int deleteById(Serializable primaryValue);
 
 
     /**
@@ -148,7 +101,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @return 受影响行数
      * @since 1.0.0
      */
-    int updateSelectiveById(D entity);
+    int updateSelectiveById(P entity);
 
 
     /**
@@ -157,7 +110,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param list 需要更新的数据
      * @return 受影响条数
      */
-    int batchUpdate(List<D> list);
+    boolean batchUpdate(List<P> list);
 
     /**
      * 根据id、查询 -- jpa方法
@@ -166,27 +119,11 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @return model
      * @since 1.0.0
      */
-    V selectById(Object primaryValue);
+    V selectById(Serializable primaryValue);
 
-    /**
-     * 根据分页参数返回结果
-     * 如果不需要分页 pageStart或者pageSize传0即可
-     *
-     * @param entity    用来做过滤的参数
-     * @param pageStart 开始number
-     * @param pageSize  一页多少行数据
-     * @return 符合条件的数据
-     */
-    List<V> selectPage(D entity, long pageStart, long pageSize);
 
-    /**
-     * 根据参数查询总数
-     * 如果不需要分页 pageStart或者pageSize传0即可
-     *
-     * @param entity 用来做过滤的参数
-     * @return 符合条件的数据条数
-     */
-    long selectCount(D entity);
+
+
 
     /**
      * select(这里用一句话描述这个方法的作用) -- jpa方法
@@ -197,24 +134,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      */
     List<V> select();
 
-    /**
-     * 批量插入.
-     *
-     * @param list 需要插入的集合
-     * @param flag 分表标志
-     * @return 受影响的行数
-     * @since 1.0.0
-     */
-    int batchInsertCatTable(List<D> list, @CatTableFlag String flag);
 
-    /**
-     * 给句id获取流水表数据,分表
-     *
-     * @param id
-     * @param catTableFlag
-     * @return
-     */
-    V selectByIdCatTable(String id, @CatTableFlag String catTableFlag);
 
     /**
      * 根据参数不为空的字段作为过滤条件查询
@@ -222,7 +142,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param param 参数
      * @return 结果
      */
-    V selectBean(D param);
+    V selectBean(P param);
 
     /**
      * 根据实体删除对象
@@ -230,45 +150,9 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param entity
      * @return
      */
-    int deleteBean(D entity);
+    int deleteBean(P entity);
 
 
-    /**
-     * 调用一个方法返回一个对象
-     *
-     * @param param 参数
-     * @return 对象
-     */
-    Object callSqlIdForOne(String sqlId, Object param);
-
-    /**
-     * 调用一个方法返回一个集合
-     *
-     * @param param 参数
-     * @return 集合
-     */
-    List<V> callSqlIdForMany(String sqlId, Object param);
-
-    /**
-     * 调用一个方法返回一个int
-     *
-     * @param param 参数
-     * @return int
-     */
-    int callSqlIdForInt(String sqlId, Object param);
-
-
-    /**
-     * 根据分页参数返回结果
-     * 如果不需要分页 pageStart或者pageSize传-1即可
-     *
-     * @param entity    用来做过滤的参数
-     * @param pageStart 开始number
-     * @param pageSize  一页多少行数据
-     * @param orderBy   排序字段
-     * @return 符合条件的数据
-     */
-    List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy);
 
 
     /**
@@ -277,7 +161,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param idList id集合
      * @return 受影响行数
      */
-    int deleteBatchIds(List<?> idList);
+    int deleteBatchIds(Collection<? extends Serializable>  idList);
 
     /**
      * 根据id集合查询
@@ -285,7 +169,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param idList id集合
      * @return 对应的结果
      */
-    List<V> selectBatchIdsMP(@Param("coll") Collection<? extends Serializable> idList);
+    List<V> selectBatchIdsMP(Collection<? extends Serializable> idList);
 
     /**
      * 查询单个
@@ -293,7 +177,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param queryWrapper 过滤条件
      * @return 单个对象
      */
-    V selectOneMP(Wrapper<D> queryWrapper);
+    V selectOneMP(Wrapper<P> queryWrapper);
 
     /**
      * 查询count
@@ -301,7 +185,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param queryWrapper 过滤条件
      * @return 符合条件的数据数量
      */
-    Long selectCountMP(Wrapper<D> queryWrapper);
+    Long selectCountMP(Wrapper<P> queryWrapper);
 
     /**
      * 查询list
@@ -309,7 +193,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param queryWrapper 过滤条件
      * @return 集合
      */
-    List<V> selectListMP(Wrapper<D> queryWrapper);
+    List<V> selectListMP(Wrapper<P> queryWrapper);
 
     /**
      * 查询返回map集合
@@ -317,7 +201,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param queryWrapper 过滤条件
      * @return 集合
      */
-    List<Map<String, Object>> selectMapsMP(Wrapper<D> queryWrapper);
+    List<Map<String, Object>> selectMapsMP(Wrapper<P> queryWrapper);
 
     /**
      * 查询object
@@ -325,7 +209,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param queryWrapper 过滤条件
      * @return 集合
      */
-    List<Object> selectObjsMP(Wrapper<D> queryWrapper);
+    List<Object> selectObjsMP(Wrapper<P> queryWrapper);
 
     /**
      * 查询带分页
@@ -334,7 +218,7 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param queryWrapper 过滤条件
      * @return 分页数据
      */
-    IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper);
+    IPage<V> selectPageMP(IPage<P> page, Wrapper<P> queryWrapper);
 
     /**
      * 查询分页-返回map
@@ -344,15 +228,9 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @return 分页数据
      */
     @Deprecated
-    IPage<Map<String, Object>> selectMapsPageMP(IPage<D> page, Wrapper<D> queryWrapper);
+    IPage<Map<String, Object>> selectMapsPageMP(IPage<P> page, Wrapper<P> queryWrapper);
 
-    /**
-     * 根据id集合查询
-     *
-     * @param ids ids
-     * @return 对应的PO
-     */
-    List<V> findByIds(List<? extends Object> ids);
+
 
     /**
      * vo转do
@@ -360,14 +238,11 @@ public interface BaseService<V extends VO, D extends BasePO> {
      * @param vo vo
      * @return po
      */
-    D v2d(V vo);
+    P v2d(V vo);
 
-    /**
-     * 获取do的class
-     *
-     * @return
-     */
-    Class<D> getDOClass();
+
+
+    Class<P> getPoClass();
 
     /**
      * 获取vo的class

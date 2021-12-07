@@ -13,11 +13,6 @@
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>mybatis-jpa-jack</artifactId>
-            <version>${fhs.mybatis-jpa-jack.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_exception</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
@@ -30,6 +25,11 @@
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-core</artifactId>
             <version>${fhs.sa-token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.27</version>
         </dependency>
     </dependencies>
 

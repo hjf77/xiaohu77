@@ -54,13 +54,7 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
      */
     boolean deleteButtons(UcenterMsRolePO adminRole);
 
-    /**
-     * 删除角色信息
-     *
-     * @param adminRole
-     * @return
-     */
-    boolean deleteRole(UcenterMsRolePO adminRole);
+
 
     /**
      * 修改角色信息
@@ -94,13 +88,7 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
      */
     List<String> searchButtonId(Map<String, Object> map);
 
-    /**
-     * 根据角色获取角色对象
-     *
-     * @param map
-     * @return
-     */
-    List<UcenterMsRoleVO> findRoleByGroupCode(Map<String, Object> map);
+
 
     /**
      * 获取一个用户的所有角色
@@ -108,7 +96,7 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
      * @param userId 用户id
      * @return 角色集合
      */
-    List<UcenterMsRoleVO> findRolesByUserId(String userId);
+    List<UcenterMsRoleVO> findRolesByUserId(Long userId);
 
     /**
      * 根据roleid查询用户关联表用户数

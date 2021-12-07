@@ -6,7 +6,6 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
-import com.mybatis.jpa.annotation.Like;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -48,7 +47,6 @@ public class SettMsSystemPO extends BasePO<SettMsSystemPO> {
     /**
      * 子系统名称
      */
-    @Like
     @NotEmpty
     @NotNull(message = "子系统名称字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "子系统名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)

@@ -12,7 +12,6 @@ package com.fhs.pub.mapper;
 
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.pub.po.PubFilePO;
-import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 
 
@@ -25,6 +24,5 @@ import org.springframework.stereotype.Repository;
  * @since [产品/模块版本]
  */
 @Repository
-@MapperDefinition(domainClass = PubFilePO.class)
 public interface PubFileMapper extends FhsBaseMapper<PubFilePO> {
 }

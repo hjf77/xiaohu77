@@ -23,7 +23,6 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
-import com.mybatis.jpa.annotation.Like;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -59,7 +58,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     @NotNull(message = "userid不能为空", groups = {Update.class, Delete.class})
     @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     @ApiModelProperty("用户id")
-    private String userId;
+    private Long userId;
 
     /**
      * 登录名
@@ -75,7 +74,6 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
      */
     @NotNull(message = "姓名不能为空", groups = {Update.class, Add.class})
     @Length(message = "姓名最大20", max = 20, min = 0)
-    @Like
     @TableField("user_name")
     @ApiModelProperty("姓名")
     private String userName;

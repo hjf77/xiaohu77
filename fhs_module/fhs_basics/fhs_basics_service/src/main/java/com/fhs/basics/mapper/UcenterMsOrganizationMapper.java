@@ -2,8 +2,6 @@ package com.fhs.basics.mapper;
 
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.mybatis.jpa.annotation.MapperDefinition;
-import com.mybatis.jpa.annotation.MultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +12,6 @@ import org.springframework.stereotype.Repository;
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
 @Repository
-@MultiTenancyCheck
-@MapperDefinition(domainClass = UcenterMsOrganizationPO.class)
 public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrganizationPO> {
 
 

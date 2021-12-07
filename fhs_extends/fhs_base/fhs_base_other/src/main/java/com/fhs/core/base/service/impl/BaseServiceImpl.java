@@ -1,6 +1,5 @@
 package com.fhs.core.base.service.impl;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.CacheUpdateManager;
 import com.alicp.jetcache.anno.CacheType;
@@ -10,7 +9,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.fhs.bislogger.api.context.BisLoggerContext;
 import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
@@ -33,9 +35,10 @@ import com.fhs.logger.Logger;
 import com.fhs.trans.service.AutoTransAble;
 import com.fhs.trans.service.impl.TransService;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
-import com.mybatis.jpa.annotation.CatTableFlag;
-import com.mybatis.jpa.cache.JpaTools;
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.binding.MapperMethod;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -56,15 +60,19 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements BaseService<V, D>, AutoTransAble<V>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements BaseService<V, P>, AutoTransAble<V>, InitializingBean {
+
+    public static final int DEFAULT_BATCH_SIZE = 1000;
 
     protected final Logger log = Logger.getLogger(this.getClass());
+
+    protected Log mybatisLog = LogFactory.getLog(getClass());
 
     /**
      * 缓存 默认时间：半个小时
      */
-    @CreateCache(expire = 1800, name = "docache:", cacheType = CacheType.BOTH)
-    private Cache<String, D> doCache;
+    @CreateCache(expire = 1800, name = "poCache:", cacheType = CacheType.BOTH)
+    private Cache<String, P> poCache;
 
     /**
      * do的namespace
@@ -79,18 +87,14 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
     @Autowired
     protected TransService transService;
 
-
-    /**
-     * 缓存的namespace
-     */
-    private String naspaces;
-
+    @Autowired
+    protected IdHelper idHelper;
 
     /**
      * 利用spring4新特性泛型注入
      */
     @Autowired
-    protected FhsBaseMapper<D> baseMapper;
+    protected FhsBaseMapper<P> baseMapper;
 
     @Autowired
     private CacheUpdateManager cacheUpdateManager;
@@ -100,12 +104,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
 
     @Autowired
     private AutoDelService autoDelService;
-
-    private static final Set<String> exist = new HashSet<>();
-
-    @Autowired
-    private SqlSessionTemplate sqlsession;
-
 
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
@@ -123,48 +121,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
         }
     }
 
-    @Override
-    public int add(D bean) {
-        this.initPkeyAndIsDel(bean);
-        checkIsExist(bean, false);
-        int result = baseMapper.insertSelective(bean);
-        BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
-        BisLoggerContext.addHistoryData(bean, this.namespace);
-        this.refreshCache();
-        this.addCache(bean);
-        return result;
-    }
-
 
     @Override
-    public boolean update(D bean) {
-        checkIsExist(bean, true);
-        boolean result = baseMapper.updateByIdJpa(bean) > 0;
-        this.refreshCache();
-        this.updateCache(bean);
-        return result;
-    }
-
-
-    @Override
-    @Deprecated
-    public boolean updateJpa(D bean) {
-        checkIsExist(bean, true);
-        boolean result = baseMapper.updateSelectiveById(bean) > 0;
-        if (BisLoggerContext.isNeedLogger()) {
-            BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
-            BisLoggerContext.addHistoryData(this.selectById(bean.getPkey()), this.namespace);
-        }
-        this.refreshCache();
-        this.updateCache(bean);
-        return result;
-    }
-
-
-
-    @Override
-    public boolean delete(D bean) {
-        boolean result = baseMapper.deleteBean(bean) > 0;
+    public boolean delete(P bean) {
+        boolean result = baseMapper.delete(bean.asWrapper()) > 0;
         BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         this.refreshCache();
         return result;
@@ -173,27 +133,17 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
 
 
     @Override
-    public int findCount(D bean) {
+    public Long findCount(P bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        return (int) baseMapper.selectCountJpa(bean);
+        return baseMapper.selectCount(bean.asWrapper());
     }
 
     @Override
-    public int findCountJpa(D bean) {
-        bean.setIsDelete(Constant.INT_FALSE);
-        String extWhereSql = bean.findAdvanceSearchSql();
-        if (CheckUtils.isNullOrEmpty(extWhereSql)) {
-            extWhereSql = null;
-        }
-        return (int) baseMapper.selectCountAdvance(bean, extWhereSql);
-    }
-
     @SuppressWarnings({"unchecked"})
-    @Override
-    public List<V> findForList(D bean) {
+    public List<V> findForList(P bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        List<D> dos = baseMapper.selectPageJpa(bean, -1, -1);
-        return dos2vos(dos);
+        List<P> dos = baseMapper.selectList(bean.asWrapper());
+        return pos2vos(dos);
     }
 
     /**
@@ -202,37 +152,29 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      * @param bean bean
      * @return 查询出来的数据集合
      */
+
+    @Override
     @SuppressWarnings({"unchecked"})
-    @Override
-    public List<V> findForList(D bean, int pageStart, int pageSize) {
+    public FhsPager<V> findForPager(P bean,FhsPager fhsPager) {
         bean.setIsDelete(Constant.INT_FALSE);
-        List<D> dos = baseMapper.selectPageJpa(bean, pageStart, pageSize);
-        return dos2vos(dos);
+        FhsPager result = baseMapper.selectPage(fhsPager,bean.asWrapper());
+        result.setRecords(pos2vos(result.getRecords()));
+        return result;
     }
 
-
     @Override
-    public V findBean(D bean) {
-        bean.setIsDelete(Constant.INT_FALSE);
-        return d2v(baseMapper.selectBean(bean));
-    }
-
-
-
-
-    @Override
-    public int insertSelective(D entity) {
+    public int insertSelective(P entity) {
         initPkeyAndIsDel(entity);
         addCache(entity);
         checkIsExist(entity, false);
-        int result = baseMapper.insertSelective(entity);
+        int result = baseMapper.insert(entity);
         this.refreshCache();
         BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
         BisLoggerContext.addHistoryData(entity, this.namespace);
         return result;
     }
 
-    private void initPkeyAndIsDel(D entity) {
+    private void initPkeyAndIsDel(P entity) {
         entity.setIsDelete(Constant.INT_FALSE);
         Field field = entity.getIdField(false);
         if (field != null) {
@@ -240,6 +182,9 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
             try {
                 if (field.get(entity) == null && field.getType() == String.class) {
                     field.set(entity, StringUtils.getUUID());
+                }
+                if (field.get(entity) == null && field.getType() == Long.class) {
+                    field.set(entity, idHelper.nextId());
                 }
                 if (entity.getCreateTime() == null) {
                     entity.setCreateTime(new Date());
@@ -256,10 +201,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      *
      * @param entity 实体类
      */
-    protected void addCache(D entity) {
-        if (this.isCacheable && JpaTools.persistentMetaMap.containsKey(entity.getClass().getName())) {
+    protected void addCache(P entity) {
+        if (this.isCacheable ) {
             String pkey = getPkeyVal(entity);
-            this.doCache.put(namespace + ":" + pkey, entity);
+            this.poCache.put(namespace + ":" + pkey, entity);
         }
     }
 
@@ -274,10 +219,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
             Map<String, String> message = new HashMap<>();
             message.put("transType", TransType.AUTO_TRANS);
             message.put("namespace", autoTrans.namespace());
-            redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
+            redisCacheService.convertAndSend("trans", JsonUtil.map2json(message));
         }
-        if (this.naspaces != null) {
-            this.cacheUpdateManager.clearCache(naspaces);
+        if (this.namespace != null) {
+            this.cacheUpdateManager.clearCache(namespace);
         }
     }
 
@@ -288,7 +233,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      */
     protected void removeCache(Object pkey) {
         if (this.isCacheable) {
-            this.doCache.remove(namespace + ":" + pkey);
+            this.poCache.remove(namespace + ":" + pkey);
         }
     }
 
@@ -298,29 +243,29 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      * @param entity do
      * @return 主键值
      */
-    private String getPkeyVal(D entity) {
+    private String getPkeyVal(P entity) {
         return ConverterUtils.toString(entity.getPkey());
     }
 
 
     @Override
-    public int batchInsert(List<D> list) {
+    public boolean batchInsert(List<P> list) {
         if (list == null || list.isEmpty()) {
-            return 0;
+            return false;
         }
-        //如果do标记了重复数据校验,则进行重复数据校验
-        if (this.getDOClass().isAnnotationPresent(NotRepeatDesc.class)) {
+        //如果po标记了重复数据校验,则进行重复数据校验
+        if (this.getPoClass().isAnnotationPresent(NotRepeatDesc.class)) {
             Set<String> hasData = new HashSet<>();
-            List<Field> fields = ReflectUtils.getAnnotationField(this.getDOClass(), NotRepeatField.class);
+            List<Field> fields = ReflectUtils.getAnnotationField(this.getPoClass(), NotRepeatField.class);
             StringBuilder errorMsg = new StringBuilder();
             boolean isHasError = false;
-
         }
-        for (D d : list) {
+        for (P d : list) {
             initPkeyAndIsDel(d);
         }
-        int result = baseMapper.batchInsert(list);
-        for (D d : list) {
+        String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
+        boolean result = executeBatch(list, DEFAULT_BATCH_SIZE, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+        for (P d : list) {
             BisLoggerContext.addExtParam(this.namespace, d.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
             BisLoggerContext.addHistoryData(d, this.namespace);
         }
@@ -329,12 +274,10 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
     }
 
     @Override
-    public int deleteById(Object primaryValue) {
-        autoDelService.deleteCheck(this.naspaces, primaryValue);
-        D d = baseMapper.selectByIdJpa(primaryValue);
-        d.setIsDelete(Constant.INT_TRUE);
-        int result = baseMapper.updateByIdJpa(d);
-        autoDelService.deleteItemTBL(this.naspaces, primaryValue);
+    public int deleteById(Serializable primaryValue) {
+        autoDelService.deleteCheck(this.namespace, primaryValue);
+        int result = baseMapper.deleteById(primaryValue);
+        autoDelService.deleteItemTBL(this.namespace, primaryValue);
         this.refreshCache();
         removeCache(primaryValue);
         BisLoggerContext.addExtParam(this.namespace, primaryValue, LoggerConstant.OPERATOR_TYPE_DEL);
@@ -344,11 +287,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
 
 
     @Override
-    public int updateSelectiveById(D entity) {
+    public int updateSelectiveById(P entity) {
         checkIsExist(entity, true);
         updateCache(entity);
         this.refreshCache();
-        int reuslt = baseMapper.updateSelectiveById(entity);
+        int reuslt = baseMapper.updateById(entity);
         if (BisLoggerContext.isNeedLogger()) {
             BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
             BisLoggerContext.addHistoryData(this.selectById(entity.getPkey()), this.namespace);
@@ -361,26 +304,30 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      *
      * @param entity
      */
-    protected void updateCache(D entity) {
+    protected void updateCache(P entity) {
         if (this.isCacheable) {
             String pkey = this.getPkeyVal(entity);
-            this.doCache.remove(namespace + ":" + pkey);
-            this.doCache.put(namespace + ":" + pkey, entity);
+            this.poCache.remove(namespace + ":" + pkey);
+            this.poCache.put(namespace + ":" + pkey, entity);
         }
     }
 
     @Override
-    public int batchUpdate(List<D> entitys) {
+    public boolean batchUpdate(List<P> entitys) {
         if (entitys == null || entitys.isEmpty()) {
-            return 0;
+            return false;
         }
-        int result = baseMapper.batchUpdateById(entitys);
-        for (D entity : entitys) {
+        String sqlStatement = getSqlStatement(SqlMethod.UPDATE_BY_ID);
+        boolean result = executeBatch(entitys, DEFAULT_BATCH_SIZE, (sqlSession, entity) -> {
+            MapperMethod.ParamMap<P> param = new MapperMethod.ParamMap<>();
+            param.put(Constants.ENTITY, entity);
+            sqlSession.update(sqlStatement, param);
+        });
+        for (P entity : entitys) {
             updateCache(entity);
         }
-
         if (BisLoggerContext.isNeedLogger()) {
-            List<Object> ids = entitys.stream().map(D::getPkey).collect(Collectors.toList());
+            List<Object> ids = entitys.stream().map(P::getPkey).collect(Collectors.toList());
             List<V> vos = this.findByIds(ids);
             for (V vo : vos) {
                 BisLoggerContext.addExtParam(this.namespace, vo.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
@@ -392,189 +339,130 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
     }
 
     @Override
-    public V selectById(Object primaryValue) {
+    public V selectById(Serializable primaryValue) {
         if (this.isCacheable) {
             String pkey = ConverterUtils.toString(primaryValue);
-            D result = this.doCache.get(namespace + ":" + pkey);
+            P result = this.poCache.get(namespace + ":" + pkey);
             if (result == null) {
-                result = baseMapper.selectByIdJpa(primaryValue);
+                result = baseMapper.selectById(primaryValue);
                 if (result != null) {
-                    this.doCache.put(namespace + ":" + pkey, result);
+                    this.poCache.put(namespace + ":" + pkey, result);
                 }
             }
-            return d2v(result, false);
+            return p2v(result, false);
         }
-        return d2v(baseMapper.selectByIdJpa(primaryValue), false);
+        return p2v(baseMapper.selectById(primaryValue), false);
     }
 
     @Override
-    public List<V> selectPage(D entity, long pageStart, long pageSize) {
-        entity.setIsDelete(Constant.INT_FALSE);
-        return dos2vos(baseMapper.selectPageJpa(entity, pageStart, pageSize));
-    }
-
-    @Override
-    public List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy) {
-        entity.setIsDelete(Constant.INT_FALSE);
-        String extWhereSql = entity.findAdvanceSearchSql();
-        if (CheckUtils.isNullOrEmpty(extWhereSql)) {
-            extWhereSql = null;
-        }
-        return dos2vos(baseMapper.selectAdvance(entity, extWhereSql, pageStart, pageSize, orderBy));
-    }
-
-
-    @Override
-    public long selectCount(D entity) {
-        entity.setIsDelete(Constant.INT_FALSE);
-        return baseMapper.selectCountJpa(entity);
+    public V selectById(Object primaryValue) {
+        return p2v(baseMapper.selectById((Serializable) primaryValue), false);
     }
 
     @Override
     public List<V> select() {
-        return ListUtils.copyListToList(baseMapper.select(), this.getVOClass());
+        return ListUtils.copyListToList(baseMapper.selectList(new QueryWrapper<>()), this.getVOClass());
     }
 
-    @Override
-    public int batchInsertCatTable(List<D> list, @CatTableFlag String flag) {
-        return baseMapper.batchInsertCatTable(list, flag);
-    }
+
 
     @Override
-    public V selectByIdCatTable(String id, @CatTableFlag String catTableFlag) {
-        return d2v(baseMapper.selectByIdCatTable(id, catTableFlag));
-    }
-
-    @Override
-    public V selectBean(D param) {
-        param.setIsDelete(Constant.INT_FALSE);
-        return d2v(baseMapper.selectBean(param));
+    public V selectBean(P param) {
+        return p2v(baseMapper.selectOne((QueryWrapper<P>)param.asWrapper()));
     }
 
 
     @Override
-    public int deleteBean(D entity) {
-        List<D> dos = baseMapper.selectPageJpa(entity, -1, -1);
-        if (dos.isEmpty()) {
+    public int deleteBean(P entity) {
+        List<P> pos = baseMapper.selectList(entity.asWrapper());
+        if (pos.isEmpty()) {
             return 0;
         }
-        for (D d : dos) {
-            d.setIsDelete(Constant.INT_TRUE);
-            autoDelService.deleteCheck(this.naspaces, d.getPkey());
-            autoDelService.deleteItemTBL(this.naspaces, d.getPkey());
-            BisLoggerContext.addExtParam(this.namespace, d.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
+        for (P p : pos) {
+            autoDelService.deleteCheck(this.namespace, p.getPkey());
+            autoDelService.deleteItemTBL(this.namespace, p.getPkey());
+            BisLoggerContext.addExtParam(this.namespace, p.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         }
         //批量修改为已删除
-        return baseMapper.batchUpdateById(dos);
+        return baseMapper.delete(entity.asWrapper());
     }
+
+
 
 
     @Override
-    public Object callSqlIdForOne(String sqlId, Object param) {
-        return sqlsession.selectOne(naspaces + "." + sqlId, param);
-    }
-
-    /**
-     * 初始化namespace
-     */
-    public void initNamespace() {
-        if (naspaces == null) {
-            String modelName = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
-            naspaces = JpaTools.statementAdapterMap.get(modelName).getNameSpace();
-        }
-    }
-
-    @Override
-    public List<V> callSqlIdForMany(String sqlId, Object param) {
-        return sqlsession.selectList(naspaces + "." + sqlId, param);
-    }
-
-    @Override
-    public int callSqlIdForInt(String sqlId, Object param) {
-        return sqlsession.selectOne(naspaces + "." + sqlId, param);
-    }
-
-
-    @Override
-    public int deleteBatchIds(List<?> idList) {
+    public int deleteBatchIds(Collection<? extends Serializable> idList) {
         if (idList == null || idList.isEmpty()) {
             return 0;
         }
         for (Object id : idList) {
-            autoDelService.deleteCheck(this.naspaces, id);
-            autoDelService.deleteItemTBL(this.naspaces, id);
+            autoDelService.deleteCheck(this.namespace, id);
+            autoDelService.deleteItemTBL(this.namespace, id);
             BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
         }
-        List<D> dos = baseMapper.selectByIds(idList);
-        if (dos.isEmpty()) {
-            return 0;
-        }
-        for (D d : dos) {
-            d.setIsDelete(Constant.INT_TRUE);
-        }
-        return baseMapper.batchUpdateById(dos);
+        return baseMapper.deleteBatchIds(idList);
     }
 
     @Override
     public List<V> selectBatchIdsMP(Collection<? extends Serializable> idList) {
-        return dos2vos(baseMapper.selectBatchIds(idList));
+        return pos2vos(baseMapper.selectBatchIds(idList));
     }
 
     @Override
-    public V selectOneMP(Wrapper<D> queryWrapper) {
-        return d2v(baseMapper.selectOne(queryWrapper));
+    public V selectOneMP(Wrapper<P> queryWrapper) {
+        return p2v(baseMapper.selectOne(queryWrapper));
     }
 
     @Override
-    public Long selectCountMP(Wrapper<D> queryWrapper) {
+    public Long selectCountMP(Wrapper<P> queryWrapper) {
         return baseMapper.selectCount(queryWrapper);
     }
 
     @Override
-    public List<V> selectListMP(Wrapper<D> queryWrapper) {
-        return dos2vos(baseMapper.selectList(queryWrapper));
+    public List<V> selectListMP(Wrapper<P> queryWrapper) {
+        return pos2vos(baseMapper.selectList(queryWrapper));
     }
 
     @Override
-    public List<Map<String, Object>> selectMapsMP(Wrapper<D> queryWrapper) {
+    public List<Map<String, Object>> selectMapsMP(Wrapper<P> queryWrapper) {
         return baseMapper.selectMaps(queryWrapper);
     }
 
     @Override
-    public List<Object> selectObjsMP(Wrapper<D> queryWrapper) {
+    public List<Object> selectObjsMP(Wrapper<P> queryWrapper) {
         return baseMapper.selectObjs(queryWrapper);
     }
 
     @Override
-    public IPage<V> selectPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
+    public IPage<V> selectPageMP(IPage<P> page, Wrapper<P> queryWrapper) {
         ParamChecker.isNotNull(page, "前端调用接口的时候没传分页信息");
         page = baseMapper.selectPage(page, queryWrapper);
         FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
         result.setPageSize(page.getSize());
         result.setPage(page.getCurrent());
-        result.setRecords(this.dos2vos(page.getRecords()));
+        result.setRecords(this.pos2vos(page.getRecords()));
         return result;
     }
 
     @Override
-    public IPage<Map<String, Object>> selectMapsPageMP(IPage<D> page, Wrapper<D> queryWrapper) {
+    public IPage<Map<String, Object>> selectMapsPageMP(IPage<P> page, Wrapper<P> queryWrapper) {
         return null;
     }
 
     @Override
-    public List<V> findByIds(List<?> ids) {
-        return ListUtils.copyListToList(baseMapper.selectByIds(ids), this.getVOClass());
+    public List<V> findByIds(List ids) {
+        return this.selectBatchIdsMP(ids);
     }
 
 
-    protected Class<D> doClass;
+    protected Class<P> poClass;
 
     protected Class<V> voClass;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.doClass = getTypeArgumentsClass(1);
+        this.poClass = getTypeArgumentsClass(1);
         this.voClass = getTypeArgumentsClass(0);
         init();
     }
@@ -603,13 +491,13 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      * @return
      */
     @Override
-    public D v2d(V vo) {
-        return (D) vo;
+    public P v2d(V vo) {
+        return (P) vo;
     }
 
     @Override
-    public Class<D> getDOClass() {
-        return this.doClass;
+    public Class<P> getPoClass() {
+        return this.poClass;
     }
 
     @Override
@@ -620,26 +508,26 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
     /**
      * po转vo
      *
-     * @param d d
+     * @param p p
      * @return vo
      */
-    public V d2v(D d) {
-        return d2v(d, true);
+    public V p2v(P p) {
+        return p2v(p, true);
     }
 
     /**
      * po转vo
      *
-     * @param d d
+     * @param p p
      * @return vo
      */
-    public V d2v(D d, boolean needTrans) {
+    public V p2v(P p, boolean needTrans) {
         try {
-            if (d == null) {
+            if (p == null) {
                 return null;
             }
             V vo = voClass.newInstance();
-            BeanUtils.copyProperties(d, vo);
+            BeanUtils.copyProperties(p, vo);
             if (needTrans) {
                 transService.transOne(vo);
             }
@@ -655,11 +543,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
     /**
      * do集合转vo集合
      *
-     * @param dos
+     * @param pos
      * @return
      */
-    public List<V> dos2vos(List<D> dos) {
-        List<V> vos = ListUtils.copyListToList(dos, this.getVOClass());
+    public List<V> pos2vos(List<P> pos) {
+        List<V> vos = ListUtils.copyListToList(pos, this.getVOClass());
         transService.transMore(vos);
         return vos;
     }
@@ -673,9 +561,9 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      */
     public int deleteForMainTblPkey(String field, Object mainTblPkey) {
         try {
-            D d = this.getDOClass().newInstance();
-            ReflectUtils.setValue(d, field, mainTblPkey);
-            return this.deleteBean(d);
+            P p = this.getPoClass().newInstance();
+            ReflectUtils.setValue(p, field, mainTblPkey);
+            return this.deleteBean(p);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -691,17 +579,17 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      * @param mainTblPkey 主表id
      * @return 多少条子表数据
      */
-    public int findCountForMainTblPkey(String field, Object mainTblPkey) {
+    public Long findCountForMainTblPkey(String field, Object mainTblPkey) {
         try {
-            D d = this.getDOClass().newInstance();
-            ReflectUtils.setValue(d, field, mainTblPkey);
-            return this.findCount(d);
+            P p = this.getPoClass().newInstance();
+            ReflectUtils.setValue(p, field, mainTblPkey);
+            return this.findCount(p);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return 0;
+        return 0L;
     }
 
     /**
@@ -711,8 +599,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
      * @param isUpdate 是否是更新(更新会排除掉自己)
      */
     @Transactional(rollbackFor = Exception.class)
-    protected void checkIsExist(D newData, boolean isUpdate) {
-        QueryWrapper<D> wrapper = new QueryWrapper<>();
+    protected void checkIsExist(P newData, boolean isUpdate) {
+        QueryWrapper<P> wrapper = new QueryWrapper<>();
         List<Field> fieldList = ReflectUtils.getAnnotationField(newData.getClass(), NotRepeatField.class);
         // 如果没配置直接return false
         if (fieldList.isEmpty()) {
@@ -750,4 +638,12 @@ public abstract class BaseServiceImpl<V extends VO, D extends BasePO> implements
         return false;
     }
 
+    protected <E> boolean executeBatch(Collection<E> list, int batchSize, BiConsumer<SqlSession, E> consumer) {
+        return SqlHelper.executeBatch(this.poClass, this.mybatisLog, list, batchSize, consumer);
+    }
+
+
+    protected String getSqlStatement(SqlMethod sqlMethod) {
+        return SqlHelper.getSqlStatement(this.baseMapper.getClass(), sqlMethod);
+    }
 }

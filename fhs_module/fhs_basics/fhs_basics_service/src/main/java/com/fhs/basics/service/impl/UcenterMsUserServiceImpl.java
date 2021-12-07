@@ -43,8 +43,8 @@ import java.util.stream.Collectors;
  */
 
 @Primary
-@Service("ucenterMsUserService")
-@DataSource("base_business")
+@Service
+@DataSource("basic")
 @AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = "userName")
 public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserPO> implements UcenterMsUserService {
 
@@ -140,8 +140,8 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Transactional(propagation = Propagation.REQUIRED)
     public Map<String, Object> addUser(UcenterMsUserPO adminUser) {
         int count = 0;
-        if (StringUtils.isEmpty(adminUser.getUserId())) { //新增
-            adminUser.setUserId(StringUtils.getUUID());
+        if (null == adminUser.getUserId()) { //新增
+            adminUser.setUserId(idHelper.nextId());
             count = this.insertSelective(adminUser);
         } else {//修改
             count = super.updateSelectiveById(adminUser);
@@ -183,27 +183,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return false;
     }
 
-    /**
-     * 根据用户查询菜单
-     */
-    @Override
-    public List<SettMsMenuVO> selectMenuByUid(UcenterMsUserPO adminUser) {
-        return ListUtils.copyListToList(sysUserMapper.selectMenuByUid(adminUser), SettMsMenuVO.class);
-    }
 
-
-
-
-
-    /**
-     * 获取根据子菜单获取父菜单
-     */
-    @Override
-    public SettMsMenuVO selectParentMenuById(Map<String, Object> map) {
-        SettMsMenuVO result = new SettMsMenuVO();
-        BeanUtils.copyProperties(sysUserMapper.selectParentMenuById(map), result);
-        return result;
-    }
 
     /**
      * 校验密码
@@ -254,13 +234,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-    /**
-     * 获取用户操作权限
-     */
-    @Override
-    public List<SettMsMenuPermissionVO> searchUserButton(UcenterMsUserPO adminUser) {
-        return ListUtils.copyListToList(sysUserMapper.searchUserButton(adminUser), SettMsMenuPermissionVO.class);
-    }
+
 
     /**
      * 根据用户获取菜单，授权使用
@@ -277,7 +251,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     @Override
-    public Set<String> findPermissionByUserId(String userId) {
+    public Set<String> findPermissionByUserId(Long userId) {
         List<SettMsMenuVO> adminMenus = null;
         UcenterMsUserVO tempUser = super.selectById(userId);
         if (tempUser == null) {
@@ -309,28 +283,10 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public UcenterMsUserVO selectUserByULname(UcenterMsUserPO adminUser) {
-        return d2v(sysUserMapper.selectUserByULname(adminUser));
+        return p2v(sysUserMapper.selectUserByULname(adminUser));
     }
 
-    @Override
-    public Map<String, Object> checkOperatorLogin(Map<String, Object> paramMap) {
-        paramMap.put("password", ENCodeUtils.encodeByMD5(ConverterUtils.toString(paramMap.get("password"))).toLowerCase());
-        return sysUserMapper.checkOperatorLogin(paramMap);
-    }
 
-    @Override
-    public UcenterMsUserVO findUserByName(String userName) {
-        UcenterMsUserVO adminUser = new UcenterMsUserVO();
-        adminUser.setUserLoginName(userName);
-        return selectUserByULname(adminUser);
-    }
-
-    @Override
-    public List<String> findMenuButtonByName(String userName) {
-        UcenterMsUserVO adminUser = new UcenterMsUserVO();
-        adminUser.setUserLoginName(userName);
-        return selectMenuByUname(adminUser);
-    }
 
     @Override
     public List<LeftMenuVO> getMenu(UcenterMsUserPO user, String menuType) {
@@ -503,30 +459,17 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public Boolean deleteSysUserById(String userId) {
+    public Boolean deleteSysUserById(Long userId) {
         this.deleteById(userId);
         UcenterMsUserPO sysUser = new UcenterMsUserPO();
         sysUser.setUserId(userId);
         return this.deleteUserRole(sysUser);
     }
 
-    @Override
-    public Integer findUserByOrgId(Map<String, Object> paramMap) {
-        return sysUserMapper.findUserByOrgId(paramMap);
-    }
+
 
     @Override
-    public List<String> getPermissionUrl(UcenterMsUserPO sysUser) {
-        // 如果是admin则返回所有的url
-        if (sysUser.getIsAdmin() == UcenterMsUserService.SYS_USER_IS_ADMIN) {
-            return getPermissionUrlAll();
-        }
-        return getPermissionUrlByUserId(sysUser.getUserId());
-
-    }
-
-    @Override
-    public Map<String, String> findUserDataPermissions(String userId) {
+    public Map<String, String> findUserDataPermissions(Long userId) {
         List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(userId);
         Map<String, String> resultMap = new HashMap<>();
         //谷歌的map value是一个hashset
@@ -595,7 +538,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
 
 
-    private List<String> getPermissionUrlByUserId(String userId) {
+    private List<String> getPermissionUrlByUserId(Long userId) {
         return sysUserMapper.getPermissionUrlByUserId(userId);
     }
 
@@ -630,13 +573,15 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 List<UcenterMsUserVO> orgUser = userOrgMap.get(org.getId());
                 for (UcenterMsUserVO ucenterMsUserVO : orgUser) {
                     nodeMap.get(companyId).getChildren().add(TreeNode.builder().name(ucenterMsUserVO.getUserName() + "(用户)(" + ucenterMsUserVO.getTransMap().get("orgName") + ")")
-                            .id(ucenterMsUserVO.getUserId()).parentId(companyId).data(ucenterMsUserVO).children(new ArrayList<>()).build());
+                            .id(ucenterMsUserVO.getUserId().toString()).parentId(companyId).data(ucenterMsUserVO).children(new ArrayList<>()).build());
                 }
             }
 
         }
         return result;
     }
+
+
 
     private List<String> getPermissionUrlAll() {
         return sysUserMapper.getPermissionUrlAll();

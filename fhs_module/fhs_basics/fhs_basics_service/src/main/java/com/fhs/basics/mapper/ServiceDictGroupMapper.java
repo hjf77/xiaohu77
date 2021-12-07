@@ -2,7 +2,6 @@ package com.fhs.basics.mapper;
 
 import com.fhs.basics.po.ServiceDictGroupPO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
-import com.mybatis.jpa.annotation.MapperDefinition;
 
 /**
  * 字典分组
@@ -12,6 +11,5 @@ import com.mybatis.jpa.annotation.MapperDefinition;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@MapperDefinition(domainClass = ServiceDictGroupPO.class)
 public interface ServiceDictGroupMapper extends FhsBaseMapper<ServiceDictGroupPO> {
 }

@@ -24,7 +24,7 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         // 返回权限
-        return new ArrayList<>(ucenterMsUserService.findPermissionByUserId(ConverterUtils.toString(loginId)));
+        return new ArrayList<>(ucenterMsUserService.findPermissionByUserId(ConverterUtils.toLong(loginId)));
     }
 
     /**

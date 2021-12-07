@@ -13,6 +13,7 @@ import com.fhs.bislogger.vo.LogHistoryDataVO;
 import com.fhs.bislogger.vo.LogOperatorExtParamVO;
 import com.fhs.bislogger.vo.LogOperatorMainVO;
 import com.fhs.core.base.pojo.pager.Pager;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.trans.service.impl.TransService;
 import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,23 +155,6 @@ public class LogOperatorMainController extends ModelSuperController<LogOperatorM
         return logHistoryData;
     }
 
-    /**
-     * 根据namespace和pkey查询数据列表
-     *
-     * @param namespace        namespace
-     * @param pkey             主键
-     * @param logHistoryDataDO
-     * @return
-     */
-    @RequestMapping("/getLogHistoryDataList")
-    public Pager<LogHistoryDataVO> getLogHistoryDataList(String namespace, String pkey, LogHistoryDataPO logHistoryDataDO) {
-        PageSizeInfo pgeSizeInfo = getPageSizeInfo();
-        List<LogHistoryDataVO> logHistoryDataList =
-                logHistoryDataService.findForList(LogHistoryDataPO.builder().namespace(namespace).pkey(pkey).build(), pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
-        ParamChecker.isNotNull(logHistoryDataList, "namespace或pkey不存在");
-        int countJpa = logHistoryDataService.findCountJpa(logHistoryDataDO);
-        return new Pager<>(countJpa, logHistoryDataList);
-    }
 
 
     /**

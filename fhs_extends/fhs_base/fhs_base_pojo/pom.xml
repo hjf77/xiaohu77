@@ -23,17 +23,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>mybatis-jpa-jack</artifactId>
-            <version>${fhs.mybatis-jpa-jack.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>mybatis-plus</artifactId>
-                    <groupId>com.baomidou</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>${fhs.swagger-anno.version}</version>

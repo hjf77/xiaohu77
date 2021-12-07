@@ -11,7 +11,6 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
-import com.mybatis.jpa.context.MultiTenancyContext;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,12 +43,11 @@ public class UcenterMsTenantController extends ModelSuperController<UcenterMsTen
         String newPass = StringUtils.getUUID();
         UcenterMsUserVO user = new UcenterMsUserVO();
         user.setUserLoginName(groupCode + "_admin");
-        MultiTenancyContext.setProviderId(null);
         user = userService.selectBean(user);
         ParamChecker.isNotNull(user, "用户信息为空，请联系运维");
         user.setIsEnable(Constant.INT_TRUE);
         user.setPassword(Md5Util.MD5(newPass).toLowerCase());
-        userService.updateJpa(user);
+        userService.updateSelectiveById(user);
         return HttpResult.success(newPass);
     }
 }
