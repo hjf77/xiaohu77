@@ -21,7 +21,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSchedulerLock(defaultLockAtMostFor = "PT60S")
 public class TaskSchedulerConfig {
 
-    @Bean
+    @Bean("fhsLockProvider")
     public LockProvider lockProvider(RedisConnectionFactory connectionFactory) {
         return new RedisLockProvider(connectionFactory);
     }

@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "fhs.operator-log", name = "enable", havingValue = "true", matchIfMissing = false)
 public class OperatorLogConfig {
 
-    @Bean
+    @Bean("fhsOperatorLogAop")
     public OperatorLogAop OperatorLogAop() {
         return new OperatorLogAop();
     }

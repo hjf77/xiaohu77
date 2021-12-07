@@ -33,7 +33,7 @@ public class TransactionConfig {
     @Value("${fhs.transcatoin.interceptors:}")
     private String transcationInterceptor;
 
-    @Bean
+    @Bean("fhsDataSourceTransactionManager")
     @ConditionalOnMissingBean({DataSourceTransactionManager.class})
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
@@ -41,7 +41,7 @@ public class TransactionConfig {
         return transactionManager;
     }
 
-    @Bean(name = "txAdvice")
+    @Bean(name = "fhsTxAdvice")
     public TransactionInterceptor getAdvisor(DataSourceTransactionManager transactionManager) throws Exception {
         Properties properties = new Properties();
         properties.setProperty("get*", "PROPAGATION_REQUIRED,-Exception,readOnly");
@@ -62,7 +62,7 @@ public class TransactionConfig {
     public MyBeanNameAutoProxyCreator txProxy() {
         MyBeanNameAutoProxyCreator creator = new MyBeanNameAutoProxyCreator();
         if (CheckUtils.isNullOrEmpty(transcationInterceptor)) {
-            creator.setInterceptorNames(new String[]{"txAdvice"});
+            creator.setInterceptorNames(new String[]{"fhsTxAdvice"});
         } else {
             String[] interceptorNamesSett = transcationInterceptor.split(",");
             String[] interceptorNames = new String[interceptorNamesSett.length + 1];
@@ -70,7 +70,7 @@ public class TransactionConfig {
             for (String name : interceptorNamesSett) {
                 interceptorNames[i++] = name;
             }
-            interceptorNames[interceptorNamesSett.length] = "txAdvice";
+            interceptorNames[interceptorNamesSett.length] = "fhsTxAdvice";
             creator.setInterceptorNames(interceptorNames);
         }
 

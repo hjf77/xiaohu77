@@ -10,7 +10,7 @@ public class MyabtisPlusPluginsConfig {
     /**
      * mybatis-plus分页插件
      */
-    @Bean
+    @Bean("fhsPaginationInnerInterceptor")
     public PaginationInnerInterceptor paginationInterceptor() {
         PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
         return paginationInterceptor;

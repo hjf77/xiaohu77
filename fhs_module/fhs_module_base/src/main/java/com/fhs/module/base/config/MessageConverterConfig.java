@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Configuration
 public class MessageConverterConfig extends WebMvcConfigurerAdapter {
-    @Bean
+    @Bean("fhsHttpMessageConverter")
     public HttpMessageConverter<?> fastJsonHttpMessageConverters() {
         JsonFilterHttpMessageConverter fastJsonHttpMessageConverter = new JsonFilterHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
@@ -67,7 +67,7 @@ public class MessageConverterConfig extends WebMvcConfigurerAdapter {
         return fastJsonHttpMessageConverter;
     }
 
-    @Bean
+    @Bean("fhsResponseBodyConverter")
     public HttpMessageConverter<String> responseBodyConverter() {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(
                 Charset.forName("UTF-8"));

@@ -34,8 +34,9 @@ import java.util.Map;
 @Order(1)
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Bean("redisCacheManager")
+
     @Primary
+    @Bean("fhsRedisCacheManager")
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
 
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
@@ -60,8 +61,9 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @param factory RedisConnectionFactory对象
      * @return redisTemplate对象
      */
-    @Bean("redisTemplate")
+
     @Primary
+    @Bean("fhsRedisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate template = new RedisTemplate();
         template.setConnectionFactory(factory);
@@ -83,7 +85,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @param listenerAdapter   监听适配器
      * @return
      */
-    @Bean
+    @Bean("fhsRedisMessageListenerContainer")
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);

@@ -18,7 +18,7 @@ public class FHSAopConfig {
      *
      * @return
      */
-    @Bean
+    @Bean("fhsParamArrayHandle")
     public ParamArrayHandle paramArrayHandle() {
         return new ParamArrayHandle();
     }

@@ -56,7 +56,7 @@ public class MybatisConfig {
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
 
-    @Bean
+    @Bean("fhsXMLMapperLoader")
     public XMLMapperLoader getXMLMapperLoader(MybatisPlusProperties plusProperties) {
         XMLMapperLoader loader = new XMLMapperLoader();
         loader.setEnabled(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel")));//开启xml热加载
