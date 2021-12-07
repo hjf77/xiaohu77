@@ -40,6 +40,8 @@
 
 http://82.157.62.164/login   admin  123456
 
+正在完善...可能会有各种各样的低级错误
+
 # 预览图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/110012_1d20674d_339743.png "fhs1.png")
  
