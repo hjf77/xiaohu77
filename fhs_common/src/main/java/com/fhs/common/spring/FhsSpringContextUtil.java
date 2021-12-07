@@ -39,12 +39,10 @@ public class FhsSpringContextUtil implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        log.info("------SpringContextUtil setApplicationContext-------");
         FhsSpringContextUtil.applicationContext = applicationContext;
     }
 
     public static void setStaticApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        log.info("------SpringContextUtil setApplicationContext-------");
         FhsSpringContextUtil.applicationContext = applicationContext;
     }
 

@@ -18,6 +18,16 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_basics_web</artifactId>
             <version>${fhs.release.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bcpkix-jdk15on</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>ecj</artifactId>
+                    <groupId>org.eclipse.jdt</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>

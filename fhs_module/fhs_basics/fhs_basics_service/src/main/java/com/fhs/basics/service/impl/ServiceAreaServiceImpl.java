@@ -70,5 +70,4 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
         }
     }
 
-
 }

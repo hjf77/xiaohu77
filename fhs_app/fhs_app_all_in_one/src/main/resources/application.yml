@@ -108,20 +108,16 @@ spring:
     timeout: 6000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    filters: stat
-    initialSize: 1
-    maxActive: 20
-    maxOpenPreparedStatements: 20
-    maxWait: 60000
-    minEvictableIdleTimeMillis: 300000
-    minIdle: 1
-    name: basics
-    poolPreparedStatements: true
-    testOnBorrow: false
-    testOnReturn: false
-    testWhileIdle: trueserver
-    timeBetweenEvictionRunsMillis: 60000
-    type: com.alibaba.druid.pool.DruidDataSource
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: DatebookHikariCP
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
     url: jdbc:mysql://10.102.2.201:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
