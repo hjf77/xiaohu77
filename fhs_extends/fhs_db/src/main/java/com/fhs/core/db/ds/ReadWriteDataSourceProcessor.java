@@ -19,7 +19,7 @@ import java.util.Map.Entry;
 /**
  * 就来判断一个方法是读还是写了
  *
- * @author jackwong
+ * @author wanglei
  */
 public abstract class ReadWriteDataSourceProcessor implements BeanPostProcessor {
 

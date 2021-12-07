@@ -277,7 +277,7 @@ public class DateUtils {
      * @return 日期字符串
      *
      * <pre>
-     * <li>Author: jackwong</li>
+     * <li>Author: wanglei</li>
      * <li>Date: 2017年10月12日</li>
      *         </pre>
      */

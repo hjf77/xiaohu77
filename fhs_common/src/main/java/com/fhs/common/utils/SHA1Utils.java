@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * 实现sha1签名算法
  * <p>
- * jackwong
+ * wanglei
  * 2017年9月28日 下午2:53:41
  *
  * @version 1.0.0

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 /**
  * 公众号配置(settMpSett)表服务实现类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:09:24
  */
 @Service("ucenterMpSettService")

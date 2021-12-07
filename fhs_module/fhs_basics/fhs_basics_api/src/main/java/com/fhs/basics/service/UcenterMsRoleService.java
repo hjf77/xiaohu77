@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @Description: 角色服务
  * @Version: 1.0
- * @Author: jackwong
+ * @Author: wanglei
  * @Date 2020-03-19
  */
 public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, UcenterMsRolePO> {

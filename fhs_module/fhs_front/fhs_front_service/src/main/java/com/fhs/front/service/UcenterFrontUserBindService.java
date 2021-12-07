@@ -7,7 +7,7 @@ import com.fhs.front.vo.UcenterFrontUserBindVO;
 /**
  * 前端用户openid绑定
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:37:18
  */
 public interface UcenterFrontUserBindService extends BaseService<UcenterFrontUserBindVO, UcenterFrontUserBindPO> {

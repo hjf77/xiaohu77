@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 租户管理(UcenterMsTenant)实体类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-05-15 14:21:04
  */
 @Data

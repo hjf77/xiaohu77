@@ -5,9 +5,9 @@ import java.lang.annotation.*;
 /**
  * fhs framework 对于 jetcahce的扩展注解
  * 用于namespaces  的数据改变之后 自动清除缓存
- * by jackwong
+ * by wanglei
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-19 16:15:18
  */
 @Documented

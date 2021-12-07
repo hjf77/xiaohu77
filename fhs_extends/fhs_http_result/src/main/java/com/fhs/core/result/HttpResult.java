@@ -15,9 +15,9 @@ import java.util.Map;
 /**
  * HttpResult
  * <p>
- * jackwong jackwong 2017年9月27日 下午12:03:03
+ * jackwong wanglei 2017年9月27日 下午12:03:03
  *
- * @author jackwong
+ * @author wanglei
  * @version 1.0.0
  */
 public class HttpResult<V> extends BaseObject<HttpResult> {

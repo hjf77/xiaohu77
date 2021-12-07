@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * 配置文件工具，自定义配置文件使用此工具类读取
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2015年8月3日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

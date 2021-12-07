@@ -2,10 +2,10 @@ package com.fhs.core.exception;
 
 /**
  * 参数异常
- * jackwong
+ * wanglei
  * 2017年9月27日 下午1:16:15
  *
- * @author jackwong
+ * @author wanglei
  * @version 1.0.0
  */
 public class ParamException extends RuntimeException {

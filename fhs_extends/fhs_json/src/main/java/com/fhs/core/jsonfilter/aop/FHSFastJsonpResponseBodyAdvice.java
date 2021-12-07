@@ -19,10 +19,10 @@ import java.util.HashSet;
 
 /**
  * update from https://github.com/Liuyis/jsonfilter
- * by jackwong
+ * by wanglei
  * json转换器前置解析注解内容
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-19 14:44:21
  */
 @Order(1)

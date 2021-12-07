@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 /**
  * 加密解密工具类
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2015年3月3日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
@@ -27,11 +27,11 @@ public class ENCodeUtils {
     public static String encodeByMD5(String originString) {
         if (originString != null) {
             try {
-                //创建具有指定算法名称的信息摘要  
+                //创建具有指定算法名称的信息摘要
                 MessageDigest md = MessageDigest.getInstance("MD5");
-                //使用指定的字节数组对摘要进行最后更新，然后完成摘要计算  
+                //使用指定的字节数组对摘要进行最后更新，然后完成摘要计算
                 byte[] results = md.digest(originString.getBytes());
-                //将得到的字节数组变成字符串返回  
+                //将得到的字节数组变成字符串返回
                 String resultString = byteArrayToHexString(results);
                 return resultString.toUpperCase();
             } catch (Exception ex) {

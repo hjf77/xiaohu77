@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 支付宝设置(settAlipaySett)实体类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-19 16:10:29
  */
 

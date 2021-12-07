@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * 序列化反序列化工具类
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-21 13:40:16
  */
 public class SerializeUtil {

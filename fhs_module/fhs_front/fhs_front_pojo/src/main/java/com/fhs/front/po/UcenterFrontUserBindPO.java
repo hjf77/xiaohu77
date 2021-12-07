@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 前端用户绑定(UcenterFrontUserBind)实体类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:37:18
  */
 

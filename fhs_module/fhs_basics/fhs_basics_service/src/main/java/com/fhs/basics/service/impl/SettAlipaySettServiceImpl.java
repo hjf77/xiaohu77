@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 /**
  * 支付宝设置(settAlipaySett)表服务实现类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-19 16:10:29
  */
 @Service("settAlipaySettService")

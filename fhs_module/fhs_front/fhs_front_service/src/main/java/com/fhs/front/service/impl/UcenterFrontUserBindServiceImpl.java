@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 /**
  * (UcenterFrontUserBind)表服务实现类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:37:18
  */
 @Service("ucenterFrontUserBindService")

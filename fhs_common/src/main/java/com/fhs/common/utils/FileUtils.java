@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 /**
  * <文件工具类>
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2013年8月5日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 前端用户表(UcenterFrontUser)表数据库访问层
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:14:58
  */
 @Repository

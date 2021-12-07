@@ -6,11 +6,11 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
- * 本程序为liujiduo创建，jackwong
+ * 本程序为liujiduo创建，wanglei
  * 现在没发现什么中文问题，如果发现有乱码
  * 请参考-http://log-cd.iteye.com/blog/585647
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2016年6月1日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
@@ -119,7 +119,7 @@ public final class ZipUtil {
 /**
  * 用于关闭流对象
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2016年6月1日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

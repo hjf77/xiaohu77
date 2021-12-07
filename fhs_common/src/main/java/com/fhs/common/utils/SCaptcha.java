@@ -13,7 +13,7 @@ import java.util.Random;
  * 验证码工具类
  * Linux 会报错，需要开启awt支持方可解决
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-21 13:36:22
  */
 public class SCaptcha {

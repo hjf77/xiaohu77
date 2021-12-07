@@ -8,7 +8,7 @@ import java.util.Set;
  * 提供强制转换的map
  * 本来继承与hashmap
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2016年12月12日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

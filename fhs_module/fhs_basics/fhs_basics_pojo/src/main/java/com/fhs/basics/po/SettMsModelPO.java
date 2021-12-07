@@ -14,7 +14,7 @@ import javax.persistence.*;
 /**
  * 模块(SettMsModel)实体类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2020-05-18 15:10:29
  */
 @Data

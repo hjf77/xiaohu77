@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 /**
  * 公众号配置(settMpSett)表数据库访问层
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:09:24
  */
 @Repository

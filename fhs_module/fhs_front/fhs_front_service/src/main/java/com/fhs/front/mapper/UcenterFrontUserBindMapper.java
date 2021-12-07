@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 /**
  * (UcenterFrontUserBind)表数据库访问层
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:37:18
  */
 @Repository

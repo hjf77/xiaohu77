@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * update from https://github.com/Liuyis/jsonfilter
- * by jackwong
+ * by wanglei
  * json过滤器中间对象
  *
  * @author user

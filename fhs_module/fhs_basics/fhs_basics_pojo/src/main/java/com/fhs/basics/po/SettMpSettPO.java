@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 公众号配置(settMpSett)实体类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:24:39
  */
 

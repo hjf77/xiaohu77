@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2018/03/29 14:04:42]
  * @Description:根据条件创建代理对象，用于声明式事物
  * @versio 1.0

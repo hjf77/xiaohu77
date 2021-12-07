@@ -3,10 +3,10 @@ package com.fhs.core.exception;
 /**
  * BaseException
  * 此类暂时没用
- * jackwong
+ * wanglei
  * 2017年9月27日 下午1:17:28
  *
- * @author jackwong
+ * @author wanglei
  * @version 1.0.0
  */
 public class BaseException extends Exception {

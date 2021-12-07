@@ -3,10 +3,10 @@ package com.fhs.core.exception;
 /**
  * 业务异常
  * 此类可以携带自定义错误码
- * jackwong
+ * wanglei
  * 2017年9月27日 下午1:16:15
  *
- * @author jackwong
+ * @author wanglei
  * @version 1.0.0
  */
 public class BusinessException extends RuntimeException {

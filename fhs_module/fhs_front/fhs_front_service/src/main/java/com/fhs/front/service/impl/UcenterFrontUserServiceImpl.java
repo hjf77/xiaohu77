@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * 前端用户表(UcenterFrontUser)表服务实现类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:14:58
  */
 @Primary

@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 微信工具 by jackwong
+ * 微信工具 by wanglei
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-05-18 11:52:49
  */
 @Component

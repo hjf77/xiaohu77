@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * 租户管理(UcenterMsTenant)表服务实现类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-05-15 14:21:04
  */
 @Service("ucenterMsTenantService")

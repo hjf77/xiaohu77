@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @Description: 用户登录服务
  * @Version: 1.0
- * @Author: jackwong
+ * @Author: wanglei
  * @Date 2020-03-19
  */
 public interface LoginService {

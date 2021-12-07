@@ -7,7 +7,7 @@ import com.fhs.core.base.service.BaseService;
 /**
  * 公众号配置(settMpSett)表服务接口
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-11 14:09:24
  */
 public interface SettMpSettService extends BaseService<SettMpSettVO, SettMpSettPO> {

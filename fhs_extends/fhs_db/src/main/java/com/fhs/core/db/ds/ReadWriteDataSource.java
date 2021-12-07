@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.AbstractDataSource;
 /**
  * 自定义datasource，来支持datasource路由功能
  *
- * @author wanglei/jackwong
+ * @author wanglei
  */
 public class ReadWriteDataSource extends AbstractDataSource {
 

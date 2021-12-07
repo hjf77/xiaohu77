@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 /**
  * 前端用户表(UcenterFrontUser)实体类
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-03-25 13:58:21
  */
 

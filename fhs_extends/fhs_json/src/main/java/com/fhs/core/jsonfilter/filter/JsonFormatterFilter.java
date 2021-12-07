@@ -12,7 +12,7 @@ import java.util.Collection;
  * json格式化 实现
  * by wanglei
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-19 15:01:18
  */
 public class JsonFormatterFilter extends BeforeFilter {

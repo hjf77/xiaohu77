@@ -10,7 +10,7 @@ import java.util.*;
  * 记得maven安装html2excel.jar  -- 现在叫myexcel了
  * https://github.com/liaochong/myexcel
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-21 14:16:15
  */
 public class TableUtils {

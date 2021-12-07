@@ -23,7 +23,7 @@ import java.util.*;
  * 如果要做合并单元格或者对excel的字体，边框有要求请参考https://blog.csdn.net/shuaizai88/article/details/72723935
  * 并且将html2excel.jar安装到本地maven仓库中
  *
- * @author jackwong
+ * @author wanglei
  * @version [版本号, 2013年8月7日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

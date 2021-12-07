@@ -7,10 +7,10 @@ import java.util.*;
 
 /**
  * update from https://github.com/Liuyis/jsonfilter
- * by jackwong
+ * by wanglei
  * json过滤器
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-19 15:03:18
  */
 public class SimpleSerializerFilter extends SimplePropertyPreFilter {

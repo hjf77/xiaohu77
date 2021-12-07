@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 /**
  * AES加密解密工具类
  *
- * @author jackwong
+ * @author wanglei
  */
 @Slf4j
 public class AESUtil {

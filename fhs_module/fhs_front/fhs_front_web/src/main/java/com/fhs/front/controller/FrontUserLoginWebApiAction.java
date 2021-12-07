@@ -21,9 +21,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * 前段用户登录注册 by jackwong
+ * 前段用户登录注册 by wanglei
  *
- * @author jackwong
+ * @author wanglei
  * @since 2019-05-18 11:51:21
  */
 @RestController

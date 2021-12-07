@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * 字典翻译服务
  *
- * @author jackwong
+ * @author wanglei
  * @date 2020-05-18 14:41:20
  */
 @Component
