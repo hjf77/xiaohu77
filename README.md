@@ -13,13 +13,13 @@
         </span>
         <br>
         <br>
-        <a href="http://www.jeasyui.net/">
+        <a href="https://vitejs.cn/">
             <img src="https://img.shields.io/badge/vite-2-green.svg" alt="bootstrap">
         </a> 
-        <a href="https://www.layui.com">
+        <a href="https://cn.vuejs.org/">
             <img src="https://img.shields.io/badge/vue-2-blue.svg" alt="bootstrap">
         </a> 
- <a href="https://www.layui.com">
+ <a href="https://element.eleme.cn/">
             <img src="https://img.shields.io/badge/elementui-2-yellow.svg" alt="bootstrap">
         </a> 
         +
@@ -38,7 +38,9 @@
 -----------------------------------------------------------------------------------------------
 # 体验地址
 
-http://114.116.18.95:8080/   admin  123456
+http://82.157.62.164/login   admin  123456
+
+正在完善...可能会有各种各样的低级错误
 
 # 预览图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/110012_1d20674d_339743.png "fhs1.png")
@@ -60,101 +62,7 @@ http://114.116.18.95:8080/   admin  123456
 - 文档:swagger+bootstrapUI
 
 # 4. 和其他框架差异化特性
-## -&#8194;&#8194; 翻译服务
-&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;  无需表关联,将id 翻译为其他表的title/name 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/105618_248af047_339743.jpeg "微信图片_20200430153628.jpg")
-
-## - &#8194;&#8194;&#8194;&#8194;一款帮你写代码的引擎-PAGEX
-&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;只需要写一个js的配置文件即可实现CRUD+导出功能,引擎代码量很少,二次开发简单.预留了很多钩子函数,方便前端扩展.
-
-&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;下面是使用PAGEX引擎开发的学生管理的demo
-```javascript
-   var modelConfig = {
-    title: '学生管理', pkey: 'id', type: 'uuid', orderBy: 'update_time Desc',
-    namespace: "demo_student_management", table: 't_demo_student_management',trans: true};
-var listPage = {
-
-    listFieldSett: function () {
-        return [
-            // 前台显示的数据
-            {name: 'name', title: '姓名', width: '10%', align: 'center'},
-            {name: 'sex', title: '性别', width: '10%', align: 'center',trans:'book',key:'sex',showField:'transMap.sexName'},
-            {name: 'age', title: '年龄', width: '10%', align: 'center'},
-            {name: 'idcard', title: '身份证', width: '20%', align: 'center'},
-            {name: 'grade', title: '班级', width: '15%', align: 'center',trans:'book',key:'grade',showField:'transMap.gradeName'},
-            {name: 'hobby', title: '爱好', width: '15%', align: 'center'},
-            {name: 'email', title: '邮箱', width: '15%', align: 'center'},
-            {name: 'mobile', title: '手机号', width: '10%', align: 'center'},
-            {name: 'create_time', title: '创建时间', width: '14%', align: 'center'},
-            {name:'create_user',title:'创建人',width:'10%',align:'center',trans:'auto',showField:'transMap.create_userUserName'},
-            {name: 'update_time', title: '更新时间', width: '14%', align: 'center'},
-            {name:'update_user',title:'修改人',width:'10%',align:'center',trans:'auto',showField:'transMap.update_userUserName'},
-        ]
-    },
-    isColumnButton: function () {
-        return false;
-    },
-    filters: function () {
-        return [
-            {name: 'name', type: 'input', title: '姓名', filterType: 'like'}
-        ];
-    },
-    buttons: function () {
-        return [
-            {title:'批量导入学生',fun:'importExcel',permissionsCode:'demo_student_management:see'},
-            {title:'导出学生列表',fun:'exportStuExcel',permissionsCode:'demo_student_management:see'},
-        ];
-    },
-    disableButtons: function () {
-        return ['export'];
-    },
-    otherFunctions: function () {
-        return {
-            importExcel:function(){
-                openDialog('${path.basePath}/b/page-ms-demo/demo_student_import_excel', '批量导入学生');
-            },
-            exportStuExcel: function () {
-                location.href = "${path.basePath}/ms/demoStudentManagement/exportExcel"
-            }
-        }
-    }
-};
-
-var add = {
-    formFields: function () {
-        // 添加的数据
-        return [
-            {name: 'name', title: '姓名', required: true, type: 'input'},
-            {name: 'sex', title: '性别', required: true, type: 'book',code:'sex'},
-            {name: 'age', title: '年龄', required: true, type: 'input',dataType:'n'},
-            {name: 'idcard', title: '身份证', required: true, type: 'input',dataType:'idNumber'},
-            {name: 'grade', title: '班级', required: true, type: 'book',code:'grade'},
-            {name: 'header', title: '图片', required: true, type: 'up',placeholder:'请上传图片'},
-            {name: 'hobby', title: '爱好', type: 'input'},
-            {name: 'email', title: '邮箱', required: true, type: 'input',dataType:'e'},
-            {name: 'mobile', title: '电话', required: true, type: 'input',dataType:'m'},
-        ];
-    },
-    otherFunctions: function () {
-        return {
-            ready: function () {
-            },
-            loadSuccess: function (info) {
-
-            },
-            onSave: function () {
-            },
-            saveSucess: function () {
-
-            },
-            saveError: function () {
-
-            }
-        }
-    }
-
-};
-```
+-v3 版本  readme文件待完善..... 还没时间搞
 
 ## - &#8194;&#8194;&#8194;&#8194;更好用的校验框架
 &#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;集成了validate-springboot-starter，在兼容hibernate Validator和javax validation的同时，支持了更多自定义玩法。
