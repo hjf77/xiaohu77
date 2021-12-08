@@ -3,6 +3,7 @@ package com.fhs.basics.mapper;
 import com.fhs.basics.po.SettMsMenuPO;
 import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.vo.LoginVO;
 import com.fhs.basics.vo.SysUserOrgVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
     /**
      * 用户登录
      */
-    UcenterMsUserPO login(UcenterMsUserPO adminUser);
+    UcenterMsUserPO login(LoginVO loginVO);
 
     /**
      * 添加用户角色

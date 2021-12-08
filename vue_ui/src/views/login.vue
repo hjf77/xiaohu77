@@ -31,7 +31,7 @@
       </el-form-item>
       <el-form-item prop="code">
         <el-input
-          v-model="loginForm.code"
+          v-model="loginForm.identifyCode"
           auto-complete="off"
           placeholder="验证码"
           style="width: 63%"
@@ -68,6 +68,7 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
+import md5 from "js-md5";
 export default {
   name: "Login",
   data() {
@@ -86,7 +87,7 @@ export default {
         username: "",
         password: "",
         rememberMe: false,
-        code: "",
+        identifyCode: "",
         uuid: ""
       },
       loginRules: {
@@ -96,7 +97,7 @@ export default {
         password: [
           { required: true, trigger: "blur", message: "密码不能为空" }
         ],
-        code: [{ required: true, trigger: "change", message: "验证码不能为空" }]
+        identifyCode: [{ required: true, trigger: "change", message: "验证码不能为空" }]
       },
       loading: false,
       redirect: undefined
@@ -152,8 +153,14 @@ export default {
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
+          let payload = {
+            username: this.loginForm.username ,
+            password:  md5(this.loginForm.password),
+            uuid: this.loginForm.uuid,
+            identifyCode: this.loginForm.identifyCode
+          };
           this.$store
-            .dispatch("Login", this.loginForm)
+            .dispatch("Login", payload)
             .then(() => {
               this.$router.push({ path: this.redirect || "/" });
             })

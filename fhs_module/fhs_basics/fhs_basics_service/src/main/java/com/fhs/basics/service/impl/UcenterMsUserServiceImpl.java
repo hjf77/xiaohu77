@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -80,8 +81,8 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
 
     @Override
-    public UcenterMsUserVO login(UcenterMsUserPO adminUser) {
-        adminUser = sysUserMapper.login(adminUser);
+    public UcenterMsUserVO login(LoginVO loginVO) {
+        UcenterMsUserPO adminUser = sysUserMapper.login(loginVO);
         if (adminUser == null) {
             return null;
         }
@@ -431,7 +432,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * @desc 根据用户id获取用户信息
      */
     @Override
-    public UcenterMsUserVO selectById(Object userId) {
+    public UcenterMsUserVO selectById(Serializable userId) {
         //根据id获取用户信息
         UcenterMsUserVO sysUser = super.selectById(userId);
         //根据用户id获取当前用户的角色

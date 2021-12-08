@@ -452,7 +452,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public List<V> findByIds(List ids) {
-        return baseMapper.selectBatchIds(ids);
+        return pos2vos(baseMapper.selectBatchIds(ids),false);
     }
 
 
@@ -547,8 +547,14 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @return
      */
     public List<V> pos2vos(List<P> pos) {
+        return pos2vos(pos,true);
+    }
+
+    public List<V> pos2vos(List<P> pos,boolean isTrans) {
         List<V> vos = ListUtils.copyListToList(pos, this.getVOClass());
-        transService.transMore(vos);
+        if(isTrans){
+            transService.transMore(vos);
+        }
         return vos;
     }
 

@@ -6,6 +6,7 @@ import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.service.SettMsSystemService;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.vo.LoginVO;
 import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.vo.VueRouterVO;
@@ -157,27 +158,25 @@ public class MsLoginController extends BaseController {
      * 用户登录
      */
     @PostMapping("/login")
-    @ApiOperation("登录 for VUE")
-    public HttpResult<Map<String, Object>> login(@RequestBody  UcenterMsUserPO sysUser,
-                                                 String uuid, HttpServletRequest request) {
-        ParamChecker.isNotNull(sysUser.getUserLoginName(),"用户名不能为空");
-        ParamChecker.isNotNull(sysUser.getPassword(),"密码不能为空");
-        checkUserNameIsLock(sysUser.getUserLoginName());
+    @ApiOperation("登录")
+    public HttpResult<Map<String, Object>> login(@RequestBody LoginVO loginVO, HttpServletRequest request) {
+        ParamChecker.isNotNull(loginVO.getUserLoginName(),"用户名不能为空");
+        ParamChecker.isNotNull(loginVO.getPassword(),"密码不能为空");
+        checkUserNameIsLock(loginVO.getUserLoginName());
         if (isVerification) {
-            String identifyCode = request.getParameter("identifyCode");
-            Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + uuid);
+            String identifyCode = loginVO.getIdentifyCode();
+            Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + loginVO.getUuid());
             if (null == sessionIdentify) {
-                logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
+                logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
                 throw new ParamException("验证码失效，请刷新验证码后重新输入");
             }
             if (!sessionIdentify.toString().equals(identifyCode)) {
-                logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
+                logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
                 throw new ParamException("验证码错误，请重新输入");
             }
         }
-        sysUser.setPassword(Md5Util.MD5(sysUser.getPassword()));
-        String userName = sysUser.getUserLoginName();
-        sysUser = sysUserService.login(sysUser);
+        String userName = loginVO.getUserLoginName();
+        UcenterMsUserPO sysUser = sysUserService.login(loginVO);
         if (sysUser == null) {
             logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, null, false);
             addErrorPassTimes(userName);

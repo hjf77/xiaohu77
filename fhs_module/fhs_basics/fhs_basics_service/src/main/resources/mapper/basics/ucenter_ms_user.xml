@@ -3,7 +3,7 @@
 <mapper namespace="com.fhs.basics.mapper.UcenterMsUserMapper">
     <!-- 登录 -->
     <select id="login" resultType="com.fhs.basics.po.UcenterMsUserPO"
-            parameterType="com.fhs.basics.po.UcenterMsUserPO">
+            parameterType="com.fhs.basics.vo.LoginVO">
         SELECT
         user_name AS userName,
         is_enable AS isEnable,

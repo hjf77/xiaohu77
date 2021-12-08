@@ -32,7 +32,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
-    UcenterMsUserVO login(UcenterMsUserPO adminUser);
+    UcenterMsUserVO login(LoginVO loginVO);
 
     /**
      * 发送邮件

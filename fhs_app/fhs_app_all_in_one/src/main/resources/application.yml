@@ -30,9 +30,8 @@ easy-trans:
   #关闭springcloud支持
   is-enable-cloud: false
 fhs:
-  use-vue: false
   vue:
-    is-verification: false
+    is-verification: true
   autoware:
     package: com.fhs.*;com.fhs.*.*;
   autodel:
@@ -169,7 +168,7 @@ sa-token:
   # token风格
   token-style: uuid
   # 是否输出操作日志
-  is-log: false
+  is-log: true
 #
 management:
   endpoints:

@@ -98,6 +98,7 @@ request.interceptors.request.use(config => {
 // 响应拦截器
 request.interceptors.response.use(
     res => {
+        console.log(res);
         const code = res.data[setting.codeField];
         //也没有message也没有code字段代表直接返回数据的老接口
         if(!res.data[setting.codeField] && !res.data[setting.msgField]){
@@ -121,6 +122,9 @@ request.interceptors.response.use(
     },
     error => {
         let { message } = error;
+        if(error.response && error.response.data && error.response.data.message){
+           message = error.response.data.message;
+        }
         if (message == "Network Error") {
             message = "网络错误";
         } else if (message.includes("timeout")) {
