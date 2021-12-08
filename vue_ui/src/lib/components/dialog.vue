@@ -11,7 +11,7 @@ export default {
             type:Boolean,
             default:false,
         },
-        eventBusName: {
+      namespace: {
           type: String,
           default: () => null,
         }
@@ -21,12 +21,15 @@ export default {
     },
     mounted() {
       this.$nextTick(()=>{
-        if(this.eventBusName){
-          this.$EventBus.$on(this.eventBusName,() => {
+        if(this.namespace){
+          this.$EventBus.$on(this.namespace + '_closeDialog',() => {
             this.$emit('update:visible', false);
           })
         }
       })
+    },
+    beforeDestroy() {
+      this.$EventBus.$off(this.namespace + '_closeDialog');
     },
     methods:{
 

@@ -440,7 +440,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
         result.setPageSize(page.getSize());
-        result.setPage(page.getCurrent());
+        result.setCurrent(page.getCurrent());
         result.setRecords(this.pos2vos(page.getRecords()));
         return result;
     }

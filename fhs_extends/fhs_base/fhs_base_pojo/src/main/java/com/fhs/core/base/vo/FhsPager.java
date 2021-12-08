@@ -29,7 +29,7 @@ import java.util.Map;
 public class FhsPager<T> implements IPage<T> {
 
     @ApiModelProperty("数据")
-    private List<T> rows;
+    private List<T> records;
 
     @ApiModelProperty("总条数")
     private long total;
@@ -42,8 +42,6 @@ public class FhsPager<T> implements IPage<T> {
     @JsonIgnore
     private long current;
 
-    @ApiModelProperty("当前第几页")
-    private long page;
 
     @ApiModelProperty("每页多少条")
     private long pageSize;
@@ -58,14 +56,13 @@ public class FhsPager<T> implements IPage<T> {
     }
 
     @Override
-    @JSONField(serialize = false)
     public List<T> getRecords() {
-        return new ArrayList<>(this.getRows());
+        return records;
     }
 
     @Override
     public IPage<T> setRecords(List<T> records) {
-        this.setRows(records);
+        this.records = records;
         return this;
     }
 
@@ -73,11 +70,6 @@ public class FhsPager<T> implements IPage<T> {
     public IPage<T> setTotal(long total) {
         this.total = total;
         return this;
-    }
-
-    public void setPage(long page) {
-        this.page = page;
-        this.current = page;
     }
 
     public void setPageSize(long pageSize) {

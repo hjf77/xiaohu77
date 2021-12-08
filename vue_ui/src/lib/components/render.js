@@ -28,6 +28,7 @@ import cascader from "./cascader.vue";
 import transfer from "./transfer.vue";
 import treeSelect from "./treeSelect.vue"
 import previewPicture from "./previewPicture.vue";
+import crudForm from "./crudForm.vue";
 
 import Vue from "vue";
 import getProps from "../utils/getProps";
@@ -69,6 +70,7 @@ const comList = {
   transfer,
   treeSelect,
   previewPicture,
+  crudForm,
   render: renderCom
 };
 Object.entries(comList).forEach(([key, val]) => {

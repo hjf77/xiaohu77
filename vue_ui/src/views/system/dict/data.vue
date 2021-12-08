@@ -36,7 +36,6 @@ export default {
       buttons: [
         {
           title: '新增',
-          name: 'add',
           type: 'primary',
           size: 'mini',
           icon: 'el-icon-plus',
@@ -66,7 +65,7 @@ export default {
           type: 'textBtn',
           textBtn: [
             {
-              name: "编辑",
+              title: "编辑",
               type: "bottom",
               size: 'mini',
               click: (_row, name) => {
@@ -77,7 +76,7 @@ export default {
               }
             },
             {
-              name: "删除",
+              title: "删除",
               type: "danger",
               api: '/basic/ms/dictItem/',
               size: 'mini',

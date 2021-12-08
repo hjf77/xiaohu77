@@ -1,8 +1,7 @@
 <template>
-  <base-container>
-    <base-crud :option="crudOption" :before-open="beforeOpen">
-    </base-crud>
-  </base-container>
+
+    <pagex-crudForm :namespace="namespace" :title="title" :crudSett="crudSett" :formSett="formSett" :idFieldName="idFieldName" >
+    </pagex-crudForm>
 
 </template>
 
@@ -12,37 +11,15 @@ export default {
   name: "Dict",
   data() {
     return {
-      crudOption: {
+      namespace:'dictGroup',
+      title:'字典分组',
+      idFieldName:'groupId',
+      crudSett:{
         api: '/basic/ms/dictGroup/pagerAdvance',
-        addApi: '/basic/ms/dictGroup/',
-        updateApi: '/basic/ms/dictGroup/',
-        delApi: '/basic/ms/dictGroup/',
-        queryOneApi: '',
-        isNeedPager: false,
-        align: "center", //对齐方式
         sortSett: [{
           "direction": "DESC",
           "property": "updateTime"
         }],
-        formOption: {
-          group:
-            [
-              {
-                type: 'text',
-                name: 'groupName',
-                label: '分组名称',
-                rule: 'required',
-                placeholder: '请输入分组名称'
-              }, {
-              type: 'text',
-              name: 'groupCode',
-              label: '分组编码',
-              rule: 'required',
-              placeholder: '请输入分组编码'
-            }
-            ],
-
-        },
         buttons: [
           {
             title: '新增',
@@ -52,10 +29,6 @@ export default {
             size: 'mini',
             icon: 'el-icon-plus',
           }
-        ],
-        filters: [
-          {label: '分组名称:', name: 'groupName', placeholder: "分组名称", type: 'text', operation: 'like'},
-          {label: '分组编码:', name: 'groupCode', placeholder: "分组编码", type: 'text', operation: 'like'}
         ],
         columns: [
           {label: '分组名称', name: 'groupName'},
@@ -72,29 +45,55 @@ export default {
             type: 'textBtn',
             textBtn: [
               {
-                name: "编辑",
-                code: "edit",
-                type: "text",
+                title: "编辑",
+                type: "bottom",
                 size: 'mini'
               },
               {
-                name: "删除",
-                code: "del",
-                type: "text",
-                api: '/basic/ms/dictGroup/',
+                title: "详情",
+                type: "success",
+                size: 'mini'
+              },
+              {
+                title: "删除",
+                type: "danger",
                 size: 'mini',
-                idFieldName: 'groupId'
+                api: '/basic/ms/dictGroup/'
               }
             ],
           }
         ],
+        filters: [
+          {label: '分组名称:', name: 'groupName', placeholder: "分组名称", type: 'text', operation: 'like'},
+          {label: '分组编码:', name: 'groupCode', placeholder: "分组编码", type: 'text', operation: 'like'}
+        ],
+      },
+      formSett:{
+        addApi: '/basic/ms/dictGroup/',
+        updateApi: '/basic/ms/dictGroup/',
+        data:{
+
+        },
+        controls:[
+          {
+            type: 'text',
+            name: 'groupName',
+            label: '分组名称',
+            rule: 'required',
+            placeholder: '请输入分组名称'
+          }, {
+            type: 'text',
+            name: 'groupCode',
+            label: '分组编码',
+            rule: 'required',
+            placeholder: '请输入分组编码'
+          }
+        ]
       },
     }
   },
   methods: {
-    beforeOpen(done, type) {
-      done()
-    }
+
   }
 };
 </script>

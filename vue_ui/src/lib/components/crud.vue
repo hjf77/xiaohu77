@@ -1,3 +1,10 @@
+<--
+本vue文件严禁写任何业务代码，如果需要扩展请通过插槽扩展。
+请注意属性名命名
+by wanglei
+-->
+
+
 <template>
   <div class="crud-container">
     <div class="clear"></div>
@@ -39,7 +46,7 @@
                 range-separator="~"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :default-time="['00:00:00', '23:59:59']"
+                :default-time="['00:00:00', '23:59:59']"
               >
               </el-date-picker>
               <el-date-picker
@@ -78,24 +85,24 @@
         </div>
       </el-form>
     </div>
-    <!-- 表格上方共呢个区域 -->
-    <slot name="fn"></slot>
+    <!-- 留的自定义插槽 -->
+    <slot name="topSlot"></slot>
     <!-- 表格上方共呢个区域 -->
     <div class="list">
       <div v-for="(i, v) in realButtons" :key="v" class="btn_div">
-        <span v-if="centerShow" class="centerTitle">系统</span>
+        <!--左边的按钮-->
         <div class="lf" v-if="!i.isRight">
           <el-button
             v-hasPermi="i.permission ? i.permission : 'none'"
             :type="i.type"
             :icon="i.icon"
             :size="i.size"
-            :plain="i.title=='批量导出' || i.title=='批量导入'"
             @click="check(i)"
             style="margin: 0px 20px 20px 0px;"
           >{{ i.title }}
           </el-button>
         </div>
+        <!--右边的按钮-->
         <div class="lr" v-else>
           <el-button
             v-hasPermi="i.permission ? i.permission : 'none'"
@@ -108,9 +115,7 @@
           </el-button>
         </div>
       </div>
-      <div class="lr count">
-        <slot :questionObj="questionObj"></slot>
-      </div>
+      <!--表格-->
       <el-table
         class="crud-table"
         :header-cell-style="{'text-align':'center'}"
@@ -118,7 +123,7 @@
         size="small"
         :data="data"
         @selection-change="handleSelectionChange"
-        @row-click="LineClick && rowClick(arguments)"
+        @row-click="lineClick && rowClick(arguments)"
         :highlight-current-row="highlight"
         :height="height"
         stripe
@@ -126,6 +131,7 @@
         :tree-props="{children: 'children'}"
       >
         <template v-for="(item, index) in realColumns">
+          <!--多选框-->
           <el-table-column
             :key="index"
             v-if="item.type === 'selection'"
@@ -133,28 +139,7 @@
             align="center"
           >
           </el-table-column>
-          <el-table-column
-            :key="index"
-            :label="item.label"
-            v-else-if="item.type == 'cascader'"
-            align="center"
-            :width="item.width || 240"
-          >
-            <template slot-scope="scope">
-              <pagex-cascader
-                v-bind="item"
-                v-model="scope.row[item.name]"
-                :url="item.api"
-                :methodType="item.methodType"
-                :querys="item.querys"
-                :labelField="item.labelField"
-                :valueField="item.valueField"
-                :isValueNum="item.isValueNum"
-                :propsField = "item.propsField"
-                :style="{ 'width': item.width ? item.width + 'px' : '230px' }"
-              ></pagex-cascader>
-            </template>
-          </el-table-column>
+          <!--序号-->
           <el-table-column
             :key="index"
             v-else-if="item.type === 'index'"
@@ -168,7 +153,7 @@
               <span>{{scope.row.index}}</span>
             </template>
           </el-table-column>
-
+          <!--默认列-->
           <el-table-column
             :prop="item.name"
             v-else-if="!item.type"
@@ -179,6 +164,7 @@
             align="center"
           >
           </el-table-column>
+          <!--自己指定格式化-->
           <el-table-column
             :prop="item.name"
             :show-overflow-tooltip="true"
@@ -195,7 +181,7 @@
               ></div>
             </template>
           </el-table-column>
-
+          <!--带tips-->
           <el-table-column
             :prop="item.name"
             v-else-if="item.type === 'popover'"
@@ -215,41 +201,7 @@
             :key="'operation' + index"
           >
           </el-table-column>
-
-          <el-table-column
-            :prop="item.name"
-            v-else-if="item.type === 'filters'"
-            :label="item.label"
-            :key="'operation' + index"
-            :fixed="item.fixed"
-          >
-            <template slot-scope="scope">
-              <div v-for="i in item.filter">
-                <div v-if="i.name == scope.row[item.name]">{{ i.filters }}</div>
-              </div>
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            :prop="item.name"
-            v-else-if="item.type === 'isShared' || item.type === 'switch'"
-            :label="item.label"
-            :key="'operation' + index"
-            :fixed="item.fixed"
-            :align="item.align || 'center'"
-          >
-            <template slot-scope="scope">
-              <el-switch
-                v-model="switchValue[index + '_' + item.name]"
-                v-if="switchHandel(item, scope.row, index)"
-                active-color="#13ce66"
-                @change="switchChange(item, scope.row)"
-                inactive-color="#909399"
-              >
-              </el-switch>
-            </template>
-          </el-table-column>
-
+          <!--按钮-->
           <el-table-column
             v-else-if="item.type === 'textBtn'"
             :label="item.label"
@@ -264,12 +216,12 @@
                 v-if="proxyBtnIf(scope.row, index, val)"
                 :key="index"
                 :type="val.type"
-                :size="val.size"
+                :size="val.size || 'mini'"
                 :disabled="proxyBtnDisabled(scope.row, index, val)"
                 plain
                 @click="handleClick(scope.row, val)"
               >
-                {{ val.name }}
+                {{ val.title }}
               </el-button>
             </template>
           </el-table-column>
@@ -278,8 +230,8 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="query.page"
-        :page-size="query.rows"
+        :current-page.sync="query.pageSize"
+        :page-size="query.current"
         :page-sizes="page_sizes"
         layout="total, sizes, prev, pager, next, jumper"
         background
@@ -308,7 +260,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    LineClick: {
+    lineClick: {
       type: Boolean,
       default: false,
     },
@@ -316,27 +268,15 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
+    namespace: {
       type: String,
       default: "",
-    },
-    uid: {
-      type: [String, Number],
-      default: "default",
     },
     api: {
       type: String,
       default: "",
     },
     paramsQuery: Object,
-    title: {
-      type: String,
-      default: "",
-    },
-    slots: {
-      type: Object,
-      default: () => ({}),
-    },
     columns: {
       type: Array,
       default: () => [],
@@ -344,10 +284,6 @@ export default {
     filters: {
       type: Array,
       default: () => [],
-    },
-    methods: {
-      type: Object,
-      default: () => ({}),
     },
     sortSett: {
       type: Array,
@@ -377,10 +313,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    eventBusName: {
-      type: String,
-      default: ''
-    },
     tableList:{
       type:Array,
       default:() => {
@@ -394,16 +326,14 @@ export default {
   },
   data() {
     return {
-      // 题库管理统计
-      questionObj: {},
       switchValue: {}, //列表开关上的状态
       data: [],
       multipleSelection: [],
       total: 0,
       page_sizes: [10, 20, 50, 100],
       query: {
-        rows: 10,
-        page: 1,
+        pageSizeNumber: 10,
+        current: 1,
         params: {},
       },
       realColumns:[],
@@ -426,7 +356,7 @@ export default {
   },
   created() {
     if (this.minPageSize) {
-      this.query.rows = this.minPageSize;
+      this.query.pageSizeNumber = this.minPageSize;
       this.page_sizes.unshift(this.minPageSize);
     }
 
@@ -468,19 +398,21 @@ export default {
         });
       }
     });
+
     this.getList();
   },
   mounted() {
     this.$nextTick(()=>{
-      if(this.eventBusName){
-        this.$EventBus.$on(this.eventBusName,() => {
+      if(this.namespace){
+        this.$EventBus.$on(this.namespace + '_reload',() => {
+          console.log(this.query);
           this.getList()
         })
       }
     })
   },
   beforeDestroy() {
-    this.$EventBus.$off(this.eventBusName)
+    this.$EventBus.$off(this.namespace + '_reload')
   },
   methods: {
     // 已选择数据，禁用按钮
@@ -515,33 +447,12 @@ export default {
       }
       return true;
     },
-    switchHandel(item, _row, index) {
-      this.switchValue[index + "_" + item.name] = _row[item.name] == 1;
-      return true;
-    },
-    switchChange(item, _row) {
-      let _data = {id: _row.id};
-      _data[item.name] = _row[item.name] == "0" ? "1" : "0";
-      this.$pagexRequest({
-        url: item.url,
-        data: _data,
-        method: "PUT",
-      }).then((res) => {
-        if (res.data) {
-          this.msgSuccess(res.message || "修改成功");
-          this.getList();
-        } else {
-          this.msgError(res.message || "修改失败");
-        }
-      });
-    },
-
     formartReqFilter: function () {
       let result = {
         groupRelation: "AND",
         pagerInfo: {
-          page: this.query.page,
-          pageSize: this.query.rows,
+          current: this.query.current,
+          pageSize: this.query.pageSizeNumber,
           showTotal: true,
         },
         params: this.paramsQuery,
@@ -574,7 +485,7 @@ export default {
       return arr;
     },
     handleClick(row, val) {
-      if (val.name == "删除" && !val.click) {
+      if (val.title == "删除" && !val.click) {
         this.$confirm("是否删除此数据?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -622,7 +533,7 @@ export default {
       }
     },
     check(val) {
-      if (val.name == "del") {
+      if (val.title == "删除") {
         if (this.multipleSelection.length == 0) {
           this.$message({
             type: "error",
@@ -705,7 +616,7 @@ export default {
       }
     },
     search() {
-      this.query.page = 1;
+      this.query.current = 1;
       this.getList();
       this.$emit("search", true);
     },
@@ -719,6 +630,7 @@ export default {
       this.search();
     },
     async getList(addData) {
+
       if (this.api) {
         const res = await this.$pagexRequest({
           url: this.api,
@@ -726,19 +638,16 @@ export default {
           method: this.methodType,
         });
         if(this.isNeedPager){
-          if (res.extMap) {
-            this.questionObj = res.extMap
-          }
-          if (res.rows) {
-            this.data = res.rows;
+          if (res.records) {
+            this.data = res.records;
           } else {
             this.data = [];
             this.$emit("nullvalue", 0);
           }
           if (res.total) {
-            this.total = res.total;
+            this.total = new Number(res.total);
           }
-          this.setTableIndex(this.data)
+        //  this.setTableIndex(this.data)
         }else{
           this.data = res;
           if(addData){
@@ -756,17 +665,17 @@ export default {
       }
     },
     handleSizeChange(val) {
-      this.query.rows = val;
+      this.query.pageSizeNumber = val;
       this.getList();
     },
     handleCurrentChange(val) {
-      this.query.page = val;
+      this.query.current = val;
       this.getList();
     },
     // 树形列表index层级，实现方法（可复制直接调用）
     setTableIndex(arr, index) {
       arr.forEach((item, key) => {
-        item.index = key + 1 + (this.query.page - 1) * this.query.rows;
+        item.index = key + 1 + (this.query.current - 1) * this.query.pageSizeNumber;
         if (index) {
           item.index = index + "-" + (key + 1);
         }

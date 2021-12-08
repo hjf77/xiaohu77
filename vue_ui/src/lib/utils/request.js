@@ -98,7 +98,6 @@ request.interceptors.request.use(config => {
 // 响应拦截器
 request.interceptors.response.use(
     res => {
-        console.log(res);
         const code = res.data[setting.codeField];
         //也没有message也没有code字段代表直接返回数据的老接口
         if(!res.data[setting.codeField] && !res.data[setting.msgField]){

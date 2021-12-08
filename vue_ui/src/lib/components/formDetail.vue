@@ -1,30 +1,30 @@
 <template>
   <el-scrollbar class="scrollbar" :style="styleName">
     <div class="form-detail-container">
-      <el-form class="pageX-form-detail" ref="form" :model="form" :inline="true" :label-width="labelWidth+'px'" :style="{ '--labelWidth': labelWidth+'px' }">
+      <el-form class="pageX-form-detail" ref="form" :model="init" :inline="true" :label-width="labelWidth+'px'" :style="{ '--labelWidth': labelWidth+'px' }">
         <template v-for="(item,index) in list" v-if="!item.isDetailHide">
           <el-form-item :class="{'labelLeft': item.isAndClass}" v-if="item.type == 'textarea'" :label="item.label+' :'" :key="index"
                         :style="{width:item.width?(item.width+'px'):'100%'}">
-            <div class="type-textarea-span" :title="form[item.name]">{{ form[item.name] ? form[item.name] : '无' }}</div>
+            <div class="type-textarea-span" :title="init[item.name]">{{ init[item.name] ? init[item.name] : '无' }}</div>
           </el-form-item>
 
           <el-form-item v-else-if="item.type == 'transfer'" :label="item.label+' :'" :key="index"
                         :style="{width:item.width?(item.width+'px'):'100%'}">
-            <div class="type-textarea-span" :title="form[item.name]">{{ form[item.name] ? form[item.name] : '无' }}</div>
+            <div class="type-textarea-span" :title="init[item.name]">{{ init[item.name] ? init[item.name] : '无' }}</div>
           </el-form-item>
 
           <el-form-item v-else-if="item.type == 'file' || item.type == 'uploadFileAsync'" :label="item.label+' :'" :key="index"
                         :style="{width:item.width?(item.width+'px'):'100%'}">
-            <div v-if="form[item.name]" class="type-file-span">
-              <pagex-fileDetail :fileIds="form[item.name]" :is-download="item.isDownload"></pagex-fileDetail>
+            <div v-if="init[item.name]" class="type-file-span">
+              <pagex-fileDetail :fileIds="init[item.name]" :is-download="item.isDownload"></pagex-fileDetail>
             </div>
             <div v-else class="type-textarea-span">无</div>
           </el-form-item>
 
           <el-form-item v-else-if="item.type == 'uploadPicture'" :label="item.label+' :'" :key="index"
                         :style="{width:item.width?(item.width+'px'):'100%'}">
-            <div v-if="form[item.name]" class="type-file-span">
-              <pagex-previewPicture :fileIds="form[item.name]"></pagex-previewPicture>
+            <div v-if="init[item.name]" class="type-file-span">
+              <pagex-previewPicture :fileIds="init[item.name]"></pagex-previewPicture>
             </div>
             <div v-else class="type-textarea-span">无</div>
           </el-form-item>
@@ -32,27 +32,27 @@
           <el-form-item v-else-if="item.type == 'select'" :label="item.label+' :'" :key="index"
                         >
             <div class="type-text-span" :style="{width:item.width?(item.width+'px'):'305px'}">
-              <span v-if="item.click && form[item.name]" style="cursor: pointer;color: #0477E1" @click="handleClick(item, form[item.prop])" :title=" form[item.name]">{{ form[item.name] ? form[item.name] : '无' }}</span>
-              <span v-else :title=" form[item.name]">{{ form[item.name] ? form[item.name] : '无' }}</span>
+              <span v-if="item.click && init[item.name]" style="cursor: pointer;color: #0477E1" @click="handleClick(item, init[item.prop])" :title=" init[item.name]">{{ init[item.name] ? init[item.name] : '无' }}</span>
+              <span v-else :title=" init[item.name]">{{ init[item.name] ? init[item.name] : '无' }}</span>
             </div>
 
           </el-form-item>
           <el-form-item v-else-if="item.type == 'textareaEditor'" :label="item.label+' :'" :key="index"
                         :style="{width:item.width?(item.width+'px'):'100%'}">
-            <div class="type-textarea-span" v-html="form[item.name] || '无'" :title="form[item.name] | htmlText"></div>
+            <div class="type-textarea-span" v-html="init[item.name] || '无'" :title="init[item.name] | htmlText"></div>
           </el-form-item>
           <el-form-item v-else-if="item.type == 'slot'" :label="item.label+' :'" :key="index"
                         :style="{width:item.width?(item.width+'px'):'100%'}">
             <slot
-              v-bind:data="form[item.name]"
+              v-bind:data="init[item.name]"
               v-if="item.type === 'slot'"
               :name="item.name"
-              :title="form[item.name]"
+              :title="init[item.name]"
             ></slot>
           </el-form-item>
           <el-form-item v-else="item.type == 'text'" :label="item.label+' :'" :key="index"
                         >
-            <div class="type-text-span" :style="{width:item.width?(item.width+'px'):'305px'}" :title=" form[item.name]">{{ form[item.name] ? form[item.name] : '无' }}</div>
+            <div class="type-text-span" :style="{width:item.width?(item.width+'px'):'305px'}" :title=" init[item.name]">{{ init[item.name] ? init[item.name] : '无' }}</div>
           </el-form-item>
         </template>
       </el-form>
@@ -82,10 +82,6 @@ export default {
       type:Number,
       default:()=>120
     },
-    data:{
-      type:Object || Array,
-      default:null
-    },
     buttons: {
       type: Array,
       default: () => [],
@@ -93,6 +89,10 @@ export default {
     isCancle: {
       type: Boolean,
       default: true
+    },
+    init: {
+      type: Object,
+      default: {}
     },
     controls: {
       /**
@@ -114,9 +114,9 @@ export default {
       type:String,
       default:"auto"
     },
-    eventBusName: {
-      type: Array,
-      default: () => [],
+    namespace: {
+      type: String,
+      default: null,
     }
   },
   filters: {
@@ -135,16 +135,11 @@ export default {
   },
   data() {
     return {
-      list: [],
-      form: {},
-      formData: {},
-      examinedata: {},
+      list: []
     };
   },
   created() {
     this.initControls();
-    this.loadData();
-    this.formData = deepClone(this.data);
   },
   methods: {
     // 确认事件
@@ -174,13 +169,6 @@ export default {
       this.$set(this, 'list', list || [])
     },
 
-    /**
-     * 初始化数据
-     */
-    async loadData() {
-      const _data = deepClone(this.data)
-      this.$set(this, "form", _data)
-    },
 
     /**
      * 取消并企图关闭弹窗
@@ -188,11 +176,8 @@ export default {
      */
     cancel(){
       // 通过 $EventBus 刷新指定页面的列表
-      if (this.eventBusName.length > 0) {
-        this.eventBusName.forEach((item) => {
-          this.$EventBus.$emit(item,'cancel')
-        })
-        this.$emit('closeDialog')
+      if (this.namespace) {
+        this.$EventBus.$emit(this.namespace + '_closeDialog')
       }else{
         this.reloadable.$parent.$parent.$parent.open = false;
         this.reloadable.$parent.$parent.open = false;

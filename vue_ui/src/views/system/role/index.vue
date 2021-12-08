@@ -100,7 +100,7 @@ export default {
           width: '260px',
           textBtn: [
             {
-              name: "编辑",
+              title: "编辑",
               type: "primary",
               size: "mini",
               permission: ['sysRole:update'],
@@ -118,7 +118,7 @@ export default {
               },
             },
             {
-              name: "删除",
+              title: "删除",
               type: "danger",
               size: "mini",
               permission: ['sysRole:del'],

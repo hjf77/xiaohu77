@@ -355,6 +355,10 @@ export default {
         type: Function,
         default: null,
     },
+    namespace: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     styleName() {
@@ -479,17 +483,21 @@ export default {
     },
     cancel() {
       if(this.isColseParent){
-        this.$emit("open", false);
-        this.reloadable.$parent.$parent.open = false;
-        this.reloadable.open = false;
-        // 自定义弹窗
-        this.reloadable.dialogVisible = false;
-        this.reloadable.$parent.$parent.dialogVisible = false;
-        this.reloadable.$parent.$parent.$parent.dialogVisible = false;
-        this.reloadable.$parent.dialogVisible = false;
-        this.reloadable.$parent.open = false;
-        this.reloadable.$parent.$parent.open = false;
-        this.reloadable.$parent.$parent.$parent.open = false;
+        if (this.namespace) {
+          this.$EventBus.$emit(this.namespace + '_closeDialog');
+        }else {
+          this.$emit("open", false);
+          this.reloadable.$parent.$parent.open = false;
+          this.reloadable.open = false;
+          // 自定义弹窗
+          this.reloadable.dialogVisible = false;
+          this.reloadable.$parent.$parent.dialogVisible = false;
+          this.reloadable.$parent.$parent.$parent.dialogVisible = false;
+          this.reloadable.$parent.dialogVisible = false;
+          this.reloadable.$parent.open = false;
+          this.reloadable.$parent.$parent.open = false;
+          this.reloadable.$parent.$parent.$parent.open = false;
+        }
       }else{
         this.$emit("open", false);
       }
@@ -548,21 +556,21 @@ export default {
                 this.msgSuccess(
                   res.message || (this.isEdit ? "修改成功" : "新增成功")
                 );
-                this.reload();
-                this.$emit("open", false);
-                this.reloadable.open = false;
-                this.reloadable.$parent.open = false;
-                this.reloadable.$parent.$parent.open = false;
-                // 自定义弹窗
-                this.reloadable.dialogVisible = false;
-                this.$parent.reloadable.dialogVisible = false;
-                this.reloadable.$parent.dialogVisible = false;
-                this.reloadable.$parent.$parent.dialogVisible = false;
-                // 通过 $EventBus 刷新指定页面的列表
-                if (this.eventBusName.length > 0) {
-                  this.eventBusName.forEach((item) => {
-                    this.$EventBus.$emit(item,this.model)
-                  })
+                // 通过 $EventBus 刷新指定页面的列表 和关闭指定弹框
+                if (this.namespace) {
+                  this.$EventBus.$emit(this.namespace + '_reload',this.model)
+                  this.$EventBus.$emit(this.namespace + '_closeDialog');
+                }else{
+                  this.reload();
+                  this.$emit("open", false);
+                  this.reloadable.open = false;
+                  this.reloadable.$parent.open = false;
+                  this.reloadable.$parent.$parent.open = false;
+                  // 自定义弹窗
+                  this.reloadable.dialogVisible = false;
+                  this.$parent.reloadable.dialogVisible = false;
+                  this.reloadable.$parent.dialogVisible = false;
+                  this.reloadable.$parent.$parent.dialogVisible = false;
                 }
               }
             })
@@ -634,7 +642,7 @@ export default {
     },
     //获取到 详情信息
     edit() {
-      if (this.isEdit ) {
+      if (this.isEdit) {
         this.realControls.forEach((i) => {
           this.$set(this.model, i.name, this.init[i.name]);
         });
