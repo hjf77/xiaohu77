@@ -120,37 +120,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @TableField(exist = false)
     private String[] menuTypes;
 
-    /**
-     * 适配的主页菜单
-     */
-    @TableField(exist = false)
-    @ApiModelProperty("适配的主页菜单")
-    private String configurationHomeMenu;
-
-    @TableField(exist = false)
-    private String[] configurationHomeMenus;
-
-
-    public String[] getConfigurationHomeMenus() {
-        return configurationHomeMenus;
-    }
-
-    public void setConfigurationHomeMenus(String[] configurationHomeMenus) {
-        this.configurationHomeMenus = configurationHomeMenus;
-    }
-
-    public String getConfigurationHomeMenu() {
-        return configurationHomeMenu;
-    }
-
-    public void setConfigurationHomeMenu(String configurationHomeMenu) {
-        this.configurationHomeMenu = configurationHomeMenu;
-        if (CheckUtils.isNullOrEmpty(configurationHomeMenu)) {
-            configurationHomeMenus = new String[0];
-            return;
-        }
-        this.configurationHomeMenus = configurationHomeMenu.split(",");
-    }
 
     /**
      * 是否禁用 0:启用 1:禁用
@@ -177,12 +146,7 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @Trans(type = TransType.DICTIONARY, key = "yesOrNo")
     private Integer isShow;
 
-    public List<SettMsMenuPO> getSonMenu() {
-        if (sonMenu == null) {
-            sonMenu = new ArrayList<>();
-        }
-        return sonMenu;
-    }
+
 
     /**
      * 排序
