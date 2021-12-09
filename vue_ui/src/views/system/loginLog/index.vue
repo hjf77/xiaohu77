@@ -38,7 +38,7 @@
                 sortSett: [
                     {
                         direction: "DESC",
-                        property: "updateTime",
+                        property: "createTime",
                     },
                 ],
                 //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
