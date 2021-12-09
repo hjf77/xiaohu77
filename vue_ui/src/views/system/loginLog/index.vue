@@ -48,13 +48,14 @@
                 columns: [
                      {label: '用户', name: 'loginUserName', width: 150},
                      {label: '用户名', name: 'loginName', width: 150},
+                     {label: '时间', name: 'createTime'},
                      {label: 'ip', name: 'ipAddress', width: 150},
                      {label: 'ip信息', name: 'ipInfo', width: 150},
                      {label: '浏览器', name: 'browser', width: 150},
                      {label: '操作系统', name: 'os', width: 150},
                      {label: '状态', name: 'stateName', width: 150},
                      {label: '类型', name: 'typeName', width: 150},
-                     {label: '错误类型', name: 'errorInfoName', width: 150}
+                     {label: '错误类型', name: 'errorInfoName'}
 
                 ],
                 filters:[

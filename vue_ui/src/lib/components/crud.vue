@@ -645,7 +645,7 @@ export default {
             this.$emit("nullvalue", 0);
           }
           if (res.total) {
-            this.total = new Number(res.total);
+            this.total = parseInt(res.total);
           }
         //  this.setTableIndex(this.data)
         }else{
