@@ -124,7 +124,7 @@ by wanglei
         :data="data"
         @selection-change="handleSelectionChange"
         @row-click="lineClick && rowClick(arguments)"
-        :highlight-current-row="highlight"
+        :highlight-pageNumber-row="highlight"
         :height="height"
         stripe
         row-key="id"
@@ -229,9 +229,9 @@ by wanglei
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="query.pageSize"
-        :page-size="query.current"
+        @current-change="handlepageNumberChange"
+        :pageNumber-page="query.pageNumber"
+        :page-size="query.pageSizeNumber"
         :page-sizes="page_sizes"
         layout="total, sizes, prev, pager, next, jumper"
         background
@@ -333,7 +333,7 @@ export default {
       page_sizes: [10, 20, 50, 100],
       query: {
         pageSizeNumber: 10,
-        current: 1,
+        pageNumber: 1,
         params: {},
       },
       realColumns:[],
@@ -451,7 +451,7 @@ export default {
       let result = {
         groupRelation: "AND",
         pagerInfo: {
-          current: this.query.current,
+          pageNumber: this.query.pageNumber,
           pageSize: this.query.pageSizeNumber,
           showTotal: true,
         },
@@ -616,7 +616,7 @@ export default {
       }
     },
     search() {
-      this.query.current = 1;
+      this.query.pageNumber = 1;
       this.getList();
       this.$emit("search", true);
     },
@@ -668,14 +668,14 @@ export default {
       this.query.pageSizeNumber = val;
       this.getList();
     },
-    handleCurrentChange(val) {
-      this.query.current = val;
+    handlepageNumberChange(val) {
+      this.query.pageNumber = val;
       this.getList();
     },
     // 树形列表index层级，实现方法（可复制直接调用）
     setTableIndex(arr, index) {
       arr.forEach((item, key) => {
-        item.index = key + 1 + (this.query.current - 1) * this.query.pageSizeNumber;
+        item.index = key + 1 + (this.query.pageNumber - 1) * this.query.pageSizeNumber;
         if (index) {
           item.index = index + "-" + (key + 1);
         }

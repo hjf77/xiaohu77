@@ -1,6 +1,9 @@
 package com.fhs.module.base.auth;
 
 import cn.dev33.satoken.stp.StpInterface;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.common.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +21,30 @@ public class StpInterfaceImpl implements StpInterface {
     @Autowired
     private UcenterMsUserService ucenterMsUserService;
 
+    @CreateCache(expire = 1800, name = "user:permission", cacheType = CacheType.BOTH)
+    private Cache<Object, List<String>> permissionCache;
+
+    /**
+     * 清理缓存
+     * @param userId
+     */
+    public void clearCache(Long userId){
+        permissionCache.remove(userId);
+    }
+
     /**
      * 返回一个账号所拥有的权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
+        List<String> permissions =  permissionCache.get(loginId);
+        if(permissions==null){
+            permissions = new ArrayList<>(ucenterMsUserService.findPermissionByUserId(ConverterUtils.toLong(loginId)));
+            permissionCache.put(loginId,permissions);
+            return permissions;
+        }
         // 返回权限
-        return new ArrayList<>(ucenterMsUserService.findPermissionByUserId(ConverterUtils.toLong(loginId)));
+        return permissions;
     }
 
     /**

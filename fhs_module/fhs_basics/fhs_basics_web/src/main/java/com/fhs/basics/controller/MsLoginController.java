@@ -21,6 +21,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.logger.Logger;
 import com.fhs.basics.context.UserContext;
+import com.fhs.module.base.auth.StpInterfaceImpl;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -108,6 +109,9 @@ public class MsLoginController extends BaseController {
     @Value("${fhs.login.user-lock-seconds:300}")
     private int userLockSeconds;
 
+    @Autowired
+    private StpInterfaceImpl stpInterface;
+
 
     /**
      * 判断用户是否锁定
@@ -185,6 +189,7 @@ public class MsLoginController extends BaseController {
         clearLockKey(userName);
         StpUtil.login(sysUser.getUserId());
         String tokenStr = StpUtil.getTokenValue();
+        stpInterface.clearCache(sysUser.getUserId());
         //如果不是admin就去加载全部的数据
         if (sysUser.getIsAdmin() == Constant.INT_TRUE) {
             StpUtil.getTokenSession().set(Constant.SESSION_USER_DATA_PERMISSION,new HashMap<>());

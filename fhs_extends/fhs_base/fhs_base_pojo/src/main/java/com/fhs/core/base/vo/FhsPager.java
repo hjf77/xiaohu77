@@ -1,5 +1,7 @@
 package com.fhs.core.base.vo;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -34,17 +36,22 @@ public class FhsPager<T> implements IPage<T> {
     @ApiModelProperty("总条数")
     private long total;
 
-    @ApiModelProperty("每页多少条")
     @JsonIgnore
+    @ApiModelProperty("每页多少条")
+    @JSONField(serialize = false)
     private long size;
 
-    @ApiModelProperty("当前第几页")
     @JsonIgnore
+    @ApiModelProperty("当前第几页-仅仅后端用")
+    @JSONField(serialize = false)
     private long current;
 
 
     @ApiModelProperty("每页多少条")
     private long pageSize;
+
+    @ApiModelProperty("当前第几页-给前端用")
+    private long pageNumber;
 
     @ApiModelProperty("分页扩展字段")
     private Map<String, Object> extMap;
@@ -77,21 +84,25 @@ public class FhsPager<T> implements IPage<T> {
         this.size = pageSize;
     }
 
-    @Override
-    @JSONField(serialize = false)
-    public IPage<T> setSize(long size) {
-        this.size = size;
-        return this;
+    public void setPageNumber(long pageNumber){
+        this.current = pageNumber;
+        this.pageNumber = pageNumber;
     }
 
     @Override
     @JSONField(serialize = false)
+    public IPage<T> setSize(long size) {
+        this.size = size;
+        this.pageSize = size;
+        return this;
+    }
+
+    @Override
     public long getCurrent() {
         return current;
     }
 
     @Override
-    @JSONField(serialize = false)
     public IPage<T> setCurrent(long current) {
         this.current = current;
         return this;
