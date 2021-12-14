@@ -43,6 +43,12 @@
     </modules>
 
     <dependencies>
+        <!--指定高版本log4j，修复大家都懂的的漏洞-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.15.0</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
