@@ -14,8 +14,7 @@
     <modules>
         <module>fhs_app_all_in_one</module>
         <module>fhs_app_basics</module>
-        <module>fhs_app_pub</module>
-        <module>fhs_app_front_login_demo</module>
+
     </modules>
 
     <build>

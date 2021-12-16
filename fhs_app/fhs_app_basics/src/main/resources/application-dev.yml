@@ -1,0 +1,78 @@
+fhs:
+  path: "{
+        'fileSavePath': 'c:/flies'
+        }"
+  other: "{
+          'isDevModel': 'true',
+          'apiToken': 'fhs_framework',
+          'access_token_time_out_second': '500'
+          }"
+spring:
+  redis:
+    database: 11
+    # 最大连接数
+    maxTotal: 5000
+    # 最大空闲连接数
+    maxIdle: 1000
+    # 建立连接时，最大等待时间
+    maxWaitMillis: 60000
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        max-wait: -1
+        min-idle: 10
+    host: 10.102.2.201
+    password: 123456
+    port: 6379
+    timeout: 6000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: DatebookHikariCP
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+    url: jdbc:mysql://10.102.2.201:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    validationQuery: select 'x'
+
+logging:
+  config: classpath:logback-fhs.xml
+  level:
+    com.fhs.basics: debug
+    com.fhs.bislogger: debug
+logback:
+  root:
+    level: INFO
+  file:
+    #日志存放路径
+    dir: c:/logs/all_in_one/
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  hidePackages: com.alibaba
+  local:
+    default:
+      type: linkedhashmap
+      limit: 100
+      keyConvertor: fastjson
+      expireAfterWriteInMillis: 300000
+  remote: #阿里的jetcache2级缓存
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      valueEncoder: java
+      valueDecoder: java
+      asyncResultTimeoutInMillis: 3000
+      uri:
+        - redis://123456@10.102.2.201:6379/11  #redis://密码@IP:端口/库
+
+

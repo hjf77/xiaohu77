@@ -20,7 +20,18 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <version>${fhs.alibaba.cloud.version}</version>
         </dependency>
+
         <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>${fhs.alibaba.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>fhs_config</artifactId>
+            <groupId>com.fhs-opensource</groupId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+      <!--  <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
             <version>${fhs.alibaba.cloud.version}</version>
@@ -30,7 +41,7 @@
                     <artifactId>seata-spring-boot-starter</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
        <!-- <dependency>
             <groupId>io.seata</groupId>
             <artifactId>seata-spring-boot-starter</artifactId>

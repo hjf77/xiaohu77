@@ -1,0 +1,102 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+  application:
+    name: basic
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.102.2.201:8848
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml # 配置文件格式
+        enabled: false #如果不用nacos 请放开此配置并且将 application-dev-config-template.yml 改名字为application-dev.yml 如果使用使用nacos 则删除此配置 并且在nacos上新建 data id ： basic-dev.yaml的配置文件 还要删除改名字为application-dev.yml
+
+###################  项目启动端口  ###################
+server:
+  port: 8081
+  context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+
+# 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*/*.xml
+  type-aliases-package: com.fhs.basics.dox;
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+easy-trans:
+  autotrans:
+    package: com.fhs.**.service.**;com.fhs.**.dao.**;
+  #启用redis缓存 如果不用redis请设置为false
+  is-enable-redis: true
+  #启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
+  is-enable-global: true
+  #启用平铺模式
+  is-enable-tile: true
+fhs:
+  vue:
+    is-verification: true
+  autoware:
+    package: com.fhs.*;com.fhs.*.*;
+  autodel:
+    service-packege: com.**.service.**
+  login:
+    error-pass-lock-times: 100 #2次密码输入错误就锁定
+    user-lock-seconds: 60 ##10秒解除锁定
+  mybatis-jpa:
+    #多个用;分隔
+    entity-package: com.**.**.po
+    mapper-package: com.**.**.mapper
+  safe:
+    enable-xss: true #xss注入控制
+  session:
+    timeout: 1800
+  task:
+    default-lock-Minutes: 10
+    pool-size: 10
+  transcatoin: #声明式事物 类名包含service的，但是不包含api，action,dao的类开启
+    contains: service
+    not-contains: api;controller;mapper
+    #声明式事物管理，具体请访问官网
+    package: com.fhs;
+  cache: #CacheUpdateManager 支持缓存包扫码
+    packages: com.fhs.**.service.impl
+  disable-apollo: true
+  swagger: # ip:port/doc.html 是swagger-ui的地址,本插件用的是swagger-bootstrap-ui
+    enable: true
+    basepackage: com.fhs
+    service:
+      description: 项目api
+      developer: fhs developers
+      name: 公共接口文档
+  operator-log:
+    enable: true
+
+# Sa-Token配置
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: Authorization
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: true
