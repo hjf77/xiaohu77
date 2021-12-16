@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author wanglei
  * @since 2019-05-18 11:34:35
  */
-@WebFilter(urlPatterns = {"/api/*","/easyTrans/proxy/*","/easyCloud/proxy/"}, filterName = "apiAuthFilter", asyncSupported = true)
+@WebFilter(urlPatterns = {"/api/*","/easyTrans/proxy/*","/easyCloud/proxy/*"}, filterName = "apiAuthFilter", asyncSupported = true)
 public class ApiAuthFilter implements Filter {
 
     String apiToken = null;

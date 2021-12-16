@@ -2,6 +2,7 @@ fhs:
   path: "{
         'fileSavePath': 'c:/flies'
         }"
+  #isDevModel 是开发者模式(才开启xml刷新) apiToken 是服务之间互相调用(不走网关)的时候互相认证的token，网关会拦截所有 /api/* /easyTrans/proxy/* /easyCloud/proxy/* 不对外开放
   other: "{
           'isDevModel': 'true',
           'apiToken': 'fhs_framework',
