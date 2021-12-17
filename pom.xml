@@ -6,11 +6,9 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.12.RELEASE</version>
+        <version>2.5.6</version>
         <relativePath/>
     </parent>
-
-
 
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_framework</artifactId>
@@ -25,15 +23,20 @@
         <fhs.servlet-api.version>3.1.0</fhs.servlet-api.version>
         <fhs.release.version>3.0.0</fhs.release.version>
         <fhs.easytrans.version>1.1.7</fhs.easytrans.version>
-        <fhs.easycloud.version>1.0.0</fhs.easycloud.version>
+        <fhs.easycloud.version>1.0.1</fhs.easycloud.version>
         <fhs.swagger.version>2.6.1</fhs.swagger.version>
         <fhs.jetcache.version>2.5.16</fhs.jetcache.version>
         <fhs.mybatis-jpa-jack.version>1.0.10</fhs.mybatis-jpa-jack.version>
-        <fhs.spring-cloud-starter.version>2.1.5.RELEASE</fhs.spring-cloud-starter.version>
+        <fhs.spring-cloud-starter.version>3.0.4</fhs.spring-cloud-starter.version>
         <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
         <fhs.mp-anno.version>3.4.3.4</fhs.mp-anno.version>
+        <fhs.fastjson.version>1.2.78</fhs.fastjson.version>
         <fhs.sa-token.version>1.27.0</fhs.sa-token.version>
         <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
+        <spring-boot.version>2.5.6</spring-boot.version>
+        <spring-cloud.version>2020.0.4</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
+        <alibaba.nacos.version>2.0.3</alibaba.nacos.version>
     </properties>
 
 
@@ -43,9 +46,14 @@
         <module>fhs_module</module>
         <module>fhs_spring_cloud</module>
         <module>fhs_app</module>
-    </modules>
 
-    <dependencies>
+    </modules>
+`     <dependencies>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -60,7 +68,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.78</version>
+            <version>${fhs.fastjson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -75,10 +83,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
@@ -90,8 +95,15 @@
             <artifactId>mybatis-plus-extension</artifactId>
             <version>${fhs.mp-anno.version}</version>
         </dependency>
-    </dependencies>
-
+        <!-- SpringBoot 依赖配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${spring-boot.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>`
     <build>
         <pluginManagement>
             <plugins>
@@ -112,29 +124,6 @@
                     <configuration>
                         <skip>true</skip>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.4</version>
-                    <configuration>
-                        <encoding>${chartset.UTF8}</encoding>
-                        <aggregate>true</aggregate>
-                        <charset>${chartset.UTF8}</charset>
-                        <docencoding>${chartset.UTF8}</docencoding>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                            <configuration>
-                                <additionalparam>-Xdoclint:none</additionalparam>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

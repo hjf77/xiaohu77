@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: fhs-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.102.2.201:8848
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml # 配置文件格式
+        enabled: false #如果不用nacos 请放开此配置并且将 application-dev-config-template.yml 改名字为application-dev.yml 如果使用使用nacos 则删除此配置 并且在nacos上新建 data id ： basic-dev.yaml的配置文件 还要删除改名字为application-dev.yml
+
+###################  项目启动端口  ###################
+server:
+  port: 8082

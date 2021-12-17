@@ -54,7 +54,7 @@ logback:
     level: INFO
   file:
     #日志存放路径
-    dir: c:/logs/basic/
+    dir: c:/logs/demo/
 
 jetcache:
   statIntervalMinutes: 15

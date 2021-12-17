@@ -1,19 +1,15 @@
 package com.fhs.front.api.filter;
 
-import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.CookieUtil;
-import com.fhs.common.utils.JsonUtil;
 import com.fhs.core.config.EConfig;
-import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
-import com.fhs.front.api.rpc.FeignFrontUserApiService;
 import com.fhs.front.form.GetSingleFrontUserForm;
+import com.fhs.front.service.UcenterFrontUserService;
 import com.fhs.front.vo.UcenterFrontUserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +34,7 @@ public class FrontUserFilter implements Filter {
 
 
     /* 前台用户service */
-    private FeignFrontUserApiService frontUserService;
+    private UcenterFrontUserService frontUserService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -48,7 +44,7 @@ public class FrontUserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         if (frontUserService == null) {
-            frontUserService = FhsSpringContextUtil.getBeanByClassForApi(FeignFrontUserApiService.class);
+            frontUserService = FhsSpringContextUtil.getBeanByClassForApi(UcenterFrontUserService.class);
         }
 
         HttpServletRequest request = (HttpServletRequest) req;
@@ -94,17 +90,9 @@ public class FrontUserFilter implements Filter {
     }
 
     private boolean loginByToken(HttpServletRequest request, HttpServletResponse response, String token) {
-
         HttpResult<UcenterFrontUserVO> resultFrontUser = null;
-        try {
-            resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(token).build());
-        } catch (ParamException e) {
-            LOGGER.error("获取前端用户信息错误,accessToken为{}", token);
-            JsonUtil.outJson(response, HttpResult.otherCodeMsgResult(HttpResult.AUTHORITY_ERROR, "token失效").asJson());
-            return false;
-        }
         HttpSession session = request.getSession();
-        session.setAttribute("frontUser", resultFrontUser.getData());
+        session.setAttribute("frontUser", frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(token).build()));
         return true;
     }
 
@@ -118,14 +106,7 @@ public class FrontUserFilter implements Filter {
     private boolean login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         String accessToken = request.getParameter("accessToken");
-        HttpResult<UcenterFrontUserVO> resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(accessToken).build());
-        if (resultFrontUser.getCode() != Constant.SUCCESS_CODE) {
-            LOGGER.error("获取前端用户信息错误,accessToken为{}", accessToken);
-            LOGGER.error("获取前端用户信息错误,返回结果为{}", resultFrontUser);
-            send2Login(response, request);
-            return false;
-        }
-        UcenterFrontUserVO frontUser = resultFrontUser.getData();//前端用户信息
+        UcenterFrontUserVO frontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(accessToken).build());//前端用户信息
         if (frontUser == null) {
             send2Login(response, request);
             return false;

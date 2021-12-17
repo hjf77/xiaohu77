@@ -1,6 +1,5 @@
 package com.fhs.pub.api.rpc;
 
-import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.HttpResult;
 import feign.Param;
 import feign.RequestLine;
@@ -12,7 +11,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author user
  * @since 2020-05-18 11:13:15
  */
-@FeignClient(value = "system", configuration = FeignConfiguration.class)
+//@FeignClient(value = "system", configuration = FeignConfiguration.class)
 public interface FeignOrderNumberApiService {
 
     /**

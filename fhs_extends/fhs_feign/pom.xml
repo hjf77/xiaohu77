@@ -18,11 +18,6 @@
             <version>${fhs.spring-cloud-starter.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-netflix-core</artifactId>
-            <version>${fhs.spring-cloud-starter.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>easy_cloud_anno</artifactId>
             <version>${fhs.easycloud.version}</version>

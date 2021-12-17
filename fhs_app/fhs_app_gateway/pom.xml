@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+
+    <groupId>com.fhs-opensource</groupId>
+    <artifactId>fhs_app_gateway</artifactId>
+    <version>3.0.0</version>
+    <modelVersion>4.0.0</modelVersion>
+    <description>网关默认不集成seata和Sentinel做分布式事务，如果有需要请自行集成(可以参考ruoyicloud https://gitee.com/y_project/RuoYi-Cloud/)</description>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <fhs.release.version>3.0.0</fhs.release.version>
+        <fhs.swagger.version>2.6.1</fhs.swagger.version>
+        <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
+        <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
+        <alibaba.nacos.version>2.0.3</alibaba.nacos.version>
+    </properties>
+
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>${alibaba.nacos.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_spring_cloud</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+
+        <!-- SpringCloud Gateway -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.78</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>4.1.69.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--  &lt;!&ndash; SpringCloud Alibaba Sentinel &ndash;&gt;
+          <dependency>
+              <groupId>com.alibaba.cloud</groupId>
+              <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+          </dependency>
+
+          &lt;!&ndash; SpringCloud Alibaba Sentinel Gateway &ndash;&gt;
+          <dependency>
+              <groupId>com.alibaba.cloud</groupId>
+              <artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
+          </dependency>
+
+          &lt;!&ndash; Sentinel Datasource Nacos &ndash;&gt;
+          <dependency>
+              <groupId>com.alibaba.csp</groupId>
+              <artifactId>sentinel-datasource-nacos</artifactId>
+          </dependency>
+        -->
+
+
+    </dependencies>
+
+</project>

@@ -123,6 +123,9 @@ public class FhsSpringContextUtil implements ApplicationContextAware {
     @SuppressWarnings("unchecked")
     public static <T> T getBeanByClassForApi(Class<T> clazz) {
         String[] names = FhsSpringContextUtil.getApplicationContext().getBeanNamesForType(clazz);
+        if(names.length==0){
+            throw new IllegalArgumentException(clazz + "没有一个实现注册到spring中，请检查是否是没有实现类或者没被扫描到");
+        }
         T resultBean = null;
         String serviceName = clazz.getName();
         if (names.length > 1) {
@@ -135,7 +138,7 @@ public class FhsSpringContextUtil implements ApplicationContextAware {
             }
         }
         if (resultBean == null) {
-            resultBean = (T) FhsSpringContextUtil.getBean(serviceName);
+            resultBean = (T) FhsSpringContextUtil.getBean(names[0]);
         }
         return resultBean;
     }

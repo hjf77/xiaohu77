@@ -35,7 +35,7 @@ import java.util.Map;
 @Cacheable("frontUser")
 @Service("UcenterFrontUserService")
 @DataSource("base_business")
-public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserPO> implements UcenterFrontUserService, FeignFrontUserApiService {
+public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserPO> implements UcenterFrontUserService {
 
     @Autowired
     private LoginService loginService;
@@ -48,7 +48,7 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
     private UcenterFrontUserBindService frontUserBindService;
 
     @Override
-    public HttpResult<UcenterFrontUserVO> getSingleFrontUser(GetSingleFrontUserForm getSingleFrontUserForm) {
+    public UcenterFrontUserVO getSingleFrontUser(GetSingleFrontUserForm getSingleFrontUserForm) {
         String userId = getSingleFrontUserForm.getUserId();
         if (userId == null) {
             userId = loginService.getUserIdByAccessToken(getSingleFrontUserForm.getAccessToken());
@@ -67,29 +67,10 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
             openIdMap.put(bind.getAuthOpenidType(), bind.getAuthOpenid());
         });
         user.setOpenIdMap(openIdMap);
-        return HttpResult.success(user);
+        return user;
     }
 
-    @Override
-    public HttpResult<Boolean> update(UcenterFrontUserVO frontUserVo) {
-        ParamChecker.isNotNull(frontUserVo.getUserId(), "用户id不能为空");
-        boolean result = 0 < this.updateSelectiveById(UcenterFrontUserVO.builder().userId(frontUserVo.getUserId()).mobile(frontUserVo.getMobile()).realName(frontUserVo.getRealName()).build());
-        return HttpResult.success(result);
-    }
 
-    @Override
-    public HttpResult<Boolean> add(UcenterFrontUserVO frontUserVo) {
-        return HttpResult.success(this.insertSelective(frontUserVo) > 0);
-    }
-
-    @Override
-    public HttpResult<UcenterFrontUserVO> find(UcenterFrontUserVO frontUserVo) {
-        frontUserVo = this.selectBean(frontUserVo);
-        if (frontUserVo == null) {
-            return HttpResult.error(null);
-        }
-        return HttpResult.success(frontUserVo);
-    }
 
     @Override
     public List<UcenterFrontUserVO> findListFilterMobile() {

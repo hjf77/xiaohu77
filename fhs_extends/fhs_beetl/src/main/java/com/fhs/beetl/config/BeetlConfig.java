@@ -2,6 +2,7 @@ package com.fhs.beetl.config;
 import com.fhs.common.utils.EMap;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.beetl.FhsBeetlClasspathResourceLoader;
+import io.swagger.annotations.ApiOperation;
 import org.beetl.core.Template;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 import org.beetl.ext.spring.BeetlSpringViewResolver;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -74,7 +76,8 @@ public class BeetlConfig extends BaseController {
      * @param fileName 文件名称
      * @return ModelAndView 对象
      */
-    @RequestMapping("/b/{dir}/{fileName}")
+    @GetMapping("/b/{dir}/{fileName}")
+    @ApiOperation("渲染beetl模板")
     public ModelAndView renderBeelts(@PathVariable("dir") String dir, @PathVariable("fileName") String fileName) {
         ModelAndView view = new ModelAndView();
         view.setViewName(dir.replace("-", "/") + "/" + fileName);

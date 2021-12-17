@@ -14,7 +14,8 @@
     <modules>
         <module>fhs_app_all_in_one</module>
         <module>fhs_app_basics</module>
-
+        <module>fhs_app_demo</module>
+        <module>fhs_app_gateway</module>
     </modules>
 
     <build>
@@ -23,7 +24,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.4.2.RELEASE</version>
                 <configuration>
                     <executable>true</executable>
                     <includeSystemScope>true</includeSystemScope>
