@@ -27,10 +27,7 @@
             <artifactId>knife4j-spring-ui</artifactId>
             <version>${knife4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-ui</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>com.alibaba.nacos</groupId>

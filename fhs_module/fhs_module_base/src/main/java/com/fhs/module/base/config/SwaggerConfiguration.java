@@ -115,7 +115,9 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
                 .select()
                 .apis(this.getPredicateWithGroup("group_default"))
                 .paths(PathSelectors.any())
-                .build().securityContexts(Lists.newArrayList(new SecurityContext[]{this.securityContext()})).securitySchemes(Lists.newArrayList(new SecurityScheme[]{this.apiKey()}));
+                .build().securityContexts(Lists.newArrayList(new SecurityContext[]{this.securityContext()})).securitySchemes(Lists.newArrayList(new SecurityScheme[]{this.apiKey()}))
+                //不要尝试注释掉此行，网关集成的时候会报错
+                .host("http://fhs-opensource.hello");
     }
 
     private Predicate<RequestHandler> getPredicateWithGroup(final String group) {

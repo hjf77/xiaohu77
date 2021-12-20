@@ -32,10 +32,10 @@ public class SingleApplication {
     public static void main(String[] args) {
         try{
             // 建议仅在开发或者排除时开启此配置
-            new SpringApplicationBuilder(SingleApplication.class)
+           /* new SpringApplicationBuilder(SingleApplication.class)
                     .applicationStartup(new BufferingApplicationStartup(20480))
-                    .run(args);
-            //SpringApplication.run(SingleApplication.class, args);
+                    .run(args);*/
+            SpringApplication.run(SingleApplication.class, args);
         }catch (Exception e){
             e.printStackTrace();
         }

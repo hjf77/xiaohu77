@@ -2,7 +2,7 @@ spring:
   cloud:
     gateway:
       routes:
-        - id:  apiconsumer ##路由 ID（不是网关ID），保持唯一
+        - id:  basic ##路由 ID（不是网关ID），保持唯一
           #目标服务地址 （加 lb 根据注册中心服务名匹配）
           uri: lb://basic
           predicates:

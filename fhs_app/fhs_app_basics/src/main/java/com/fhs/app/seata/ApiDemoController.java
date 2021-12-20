@@ -4,6 +4,7 @@ import com.fhs.basics.po.SettAlipaySettPO;
 import com.fhs.basics.service.SettAlipaySettService;
 import com.fhs.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +13,7 @@ public class ApiDemoController {
     @Autowired
     private SettAlipaySettService settAlipaySettService;
 
-    @RequestMapping("/seata/add")
+    @GetMapping("/seata/add")
     public void insert(String uuid){
         settAlipaySettService.insertSelective(SettAlipaySettPO.builder().appId(uuid).alipayKey("11")
                 .appPrivateKey("22").appId("test").appKey("key").extendsCode("11").name("33").id(StringUtils.getUUID()).build());
