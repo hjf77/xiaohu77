@@ -40,29 +40,30 @@
 
 http://82.157.62.164/login   admin  123456
 
-正在完善...可能会有各种各样的低级错误
+
 
 # 预览图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/110012_1d20674d_339743.png "fhs1.png")
- 
-# 1. 项目技术架构
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0509/104222_be2c1c69_339743.jpeg "技术架构.jpg")
-# 2. 思维导图
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0701/092840_63cea85d_339743.jpeg "思维导图.jpg")
+
 # 3. 技术栈
 - 前端:vite2 + vue2 + elementUI2 + veeValidate2
 - 后端校验：hibernate vilidator。
-- 后端：SpringBoot2.3.12 + Springcloud（可选）
+- 后端：SpringBoot2.5.6 + Springcloud 2020.1（可选） + Spring Gateway（可选）
 - ORM：Mybatis Plus 3.4
 - 模板引擎：beetl（邮件收发）
 - 权限:Sa-token
-- 分布式配置：Nacos
+- 分布式配置：Nacos 2.0.3
 - 缓存：jetcache
 - 分布式任务：shedlock
 - 文档:swagger+bootstrapUI
 
 # 4. 和其他框架差异化特性
--v3 版本  readme文件待完善..... 还没时间搞
+## - &#8194;&#8194;&#8194;&#8194;翻译组件
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;翻译组件可以只通过注解把你表里的id转换为名称，把你的字典码转换为字典注释(比如0转换为男1转换为女)，详情见：https://gitee.com/fhs-opensource/easy_trans
+## - &#8194;&#8194;&#8194;&#8194;All in One模式 开发 微服务模式部署
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;微服务开发对于电脑内存要求比较高，调试个东西要启动好多个微服务还要启动网关，调用链路复杂的点一下不知道调用到谁那里去了，要解决还要自己机器跑nacos，fhs 首创，all in one 模式开发，微服务模式部署，在开发环境直接把所有的模块集成到一个springBoot项目启动，部署的时候又使用微服务+网关模式部署  参考：fhs_app/fhs_app_all_in_one 和  fhs_app/fhs_app_basics的做法 即可实现。
+## - &#8194;&#8194;&#8194;&#8194;更简单的微服务调用
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194; 传统微服务玩法是第一我定义一个fegin api接口，然后写一个controller ，在写一个service实现 需要三个步骤，fhs 集成了easy cloud，只需要在service层给对应的方法上加@CloudMethod 即可完成接口暴露，哪个微服务用到直接 Autowired service接口即可。详情：https://gitee.com/fhs-opensource/easy_cloud
 
 ## - &#8194;&#8194;&#8194;&#8194;更好用的校验框架
 &#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;集成了validate-springboot-starter，在兼容hibernate Validator和javax validation的同时，支持了更多自定义玩法。
@@ -70,17 +71,113 @@ http://82.157.62.164/login   admin  123456
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/091910_067bf345_339743.png "v1.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/092128_5cfa06b3_339743.png "v2.png")
 
-## - &#8194;&#8194;&#8194;&#8194;可能是首创的表单填充框架
-在开发和测试阶段，测试表单或者做测试数据的时候都要频繁的给表单录入数据，有了表单填充框架，可以在测试和开发的时候一键填充测试数据，然后在根据情况修改下少数字段的值即可，可以节约很多时间来造无聊的数据(主要根据校验规则去造对应的数据，邮箱，姓名，身份证号，手机号通过字典+随机数生成数据，下拉默认选中第一个)。
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/092456_f084f69a_339743.png "tianchong.png")
+## - &#8194;&#8194;&#8194;&#8194;JSON驱动的VUE 列表和表单组件
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;avue今年又获得了GVP，证明了越来越多的前端程序员开始接受JSON驱动来写VUE 页面，fhs 也将组件封装为JSON驱动的组件，比如简单的CRUD，就可以这么写：
+```html
+<template>
 
-## - &#8194;&#8194;&#8194;&#8194;更容易看懂的审计日志
- &#8194;&#8194;&#8194;&#8194; 您只需要给对应的控制器和方法上加上注解，我们就能生成更容易看懂的审计日志（框架通过 swagger 属性注解和翻译服务实现此功能）。
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/100056_bda23f82_339743.png "shenji.png")
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0716/100105_7241f9d5_339743.png "shenji2.png")
+    <pagex-crudForm :namespace="namespace" :title="title" :crudSett="crudSett" :formSett="formSett" :idFieldName="idFieldName" >
+    </pagex-crudForm>
+
+</template>
+
+<script>
+
+export default {
+  name: "Dict",
+  data() {
+    return {
+      namespace:'dictGroup',
+      title:'字典分组',
+      idFieldName:'groupId',//主键
+      crudSett:{ // 列表配置
+        api: '/basic/ms/dictGroup/pagerAdvance', //列表接口
+        sortSett: [{//排序
+          "direction": "DESC",
+          "property": "updateTime"
+        }],
+        buttons: [//列表上的按钮
+          {
+            title: '新增',
+            name: 'add',
+            code: "add",
+            type: 'primary',
+            size: 'mini',
+            icon: 'el-icon-plus', // 支持写click 自定义点击事件，新增组件会自带事件
+          }
+        ],
+        columns: [
+          {label: '分组名称', name: 'groupName'},//列 分组名称
+          {//分组编码列，点击之后跳转到字典项列表
+            label: '分组编码', name: 'groupCode', type: 'formart',
+            formart: "<label style='cursor:pointer'>${groupCode}</label>",//格式化显示效果
+            click: function (_row) {
+              this.$router.push({path: '/dict/type/data/',query:{groupCode: _row.groupCode}});
+            }
+          },
+          {
+            label: '操作',//操作列
+            name: 'operation',
+            type: 'textBtn',
+            textBtn: [
+              {
+                title: "编辑",
+                type: "bottom",
+                size: 'mini'
+              },
+              {
+                title: "详情",
+                type: "success",
+                size: 'mini'
+              },
+              {
+                title: "删除",
+                type: "danger",
+                size: 'mini',
+                api: '/basic/ms/dictGroup/'
+              }
+            ],
+          }
+        ],
+        filters: [//过滤条件
+          {label: '分组名称:', name: 'groupName', placeholder: "分组名称", type: 'text', operation: 'like'},//like 是后台过滤规则，模糊匹配 支持> < != between like 等等
+          {label: '分组编码:', name: 'groupCode', placeholder: "分组编码", type: 'text', operation: 'like'}
+        ],
+      },
+      formSett:{// 表单
+        addApi: '/basic/ms/dictGroup/',//新增表单的url，默认的post 
+        updateApi: '/basic/ms/dictGroup/',//修改表单的url 默认是post
+        data:{
+           //这里写默认值，比如groupName:'默认编码'
+        },
+        controls:[//表单字段
+          {
+            type: 'text',
+            name: 'groupName',
+            label: '分组名称',
+            rule: 'required',
+            placeholder: '请输入分组名称'
+          }, {
+            type: 'text',
+            name: 'groupCode',
+            label: '分组编码',
+            rule: 'required',
+            placeholder: '请输入分组编码'
+          }
+        ]
+      },
+    }
+  },
+  methods: {
+     //自定义方法
+  }
+};
+</script>
+
+```
+
 
 # 使用说明
-
 
  &#8194;&#8194;&#8194;&#8194;1  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages?sort_id=2052774&doc_id=333929
  
@@ -95,7 +192,6 @@ http://82.157.62.164/login   admin  123456
  
  &#8194;&#8194;&#8194;&#8194;4  视频:<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1DK4y1s7AL/  基础介绍和翻译服务使用<br/>
-&#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1Hi4y1V7pW/  pagex的使用<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1eh411o7Td/  新项目使用fhs<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV115411Y7NR/  代码生成器使用1<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1vK4y1s7hT/  代码生成器使用2<br/>
