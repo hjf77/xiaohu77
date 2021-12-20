@@ -62,7 +62,7 @@ export default defineConfig({
     cors:true,
     proxy: {
       '/api/basic': {
-        target: 'http://127.0.0.1:8081/',
+        target: 'http://127.0.0.1:8089/',
         rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
       }
     }
