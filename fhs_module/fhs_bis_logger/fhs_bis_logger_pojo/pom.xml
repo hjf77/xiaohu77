@@ -32,7 +32,6 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>${fhs.swagger-anno.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -3,27 +3,34 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-
+    <parent>
+        <artifactId>fhs_framework</artifactId>
+        <groupId>com.fhs-opensource</groupId>
+        <version>3.0.0</version>
+    </parent>
 
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_app_gateway</artifactId>
     <version>3.0.0</version>
     <modelVersion>4.0.0</modelVersion>
-    <description>网关默认不集成seata和Sentinel做分布式事务，如果有需要请自行集成(可以参考ruoyicloud https://gitee.com/y_project/RuoYi-Cloud/)</description>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <fhs.release.version>3.0.0</fhs.release.version>
-        <fhs.swagger.version>2.6.1</fhs.swagger.version>
-        <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
-        <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
-        <alibaba.nacos.version>2.0.3</alibaba.nacos.version>
-    </properties>
-
-
+    <description>网关默认不集成seata和Sentinel做分布式事务，如果有需要请自行集成(可以参考ruoyicloud https://gitee.com/y_project/RuoYi-Cloud/)
+    </description>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-ui</artifactId>
+            <version>${knife4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-ui</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
@@ -76,8 +83,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.78</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>

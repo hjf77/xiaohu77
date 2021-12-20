@@ -44,6 +44,7 @@ public class MyBeanNameAutoProxyCreator extends AbstractAutoProxyCreator {
     @Override
     protected Object[] getAdvicesAndAdvisorsForBean(Class<?> beanClass, String beanName, TargetSource customTargetSource) throws BeansException {
 
+
         String beanClassName = beanClass.getName();
         LOG.debug("check bean " + beanClass);
         if (beanClass.getPackage() == null) {

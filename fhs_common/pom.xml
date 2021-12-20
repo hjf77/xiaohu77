@@ -121,8 +121,6 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>1.5.10</version>
-			<scope>compile</scope>
 		</dependency>
 
 

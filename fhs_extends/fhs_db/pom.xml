@@ -31,6 +31,17 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.27</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${fhs.mp-anno.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

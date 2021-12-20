@@ -1,9 +1,13 @@
 package com.fhs.module.base.config;
 
+import com.fhs.excel.anno.Order;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.*;
@@ -92,11 +96,27 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     }
 
 
+    /**
+     * 非spirngcloud模式下启用
+     *
+     * @return
+     */
     @Bean
+    @ConditionalOnMissingClass("com.alibaba.cloud.nacos.NacosConfigAutoConfiguration")
     public Docket defaultApi() {
         return (new Docket(DocumentationType.SWAGGER_2)).groupName("默认接口").apiInfo(this.apiInfo()).useDefaultResponseMessages(false).forCodeGeneration(false).select().apis(this.getPredicateWithGroup("group_default")).paths(PathSelectors.any()).build().securityContexts(Lists.newArrayList(new SecurityContext[]{this.securityContext()})).securitySchemes(Lists.newArrayList(new SecurityScheme[]{this.apiKey()}));
     }
 
+    @Bean
+    @ConditionalOnClass(name = "com.alibaba.cloud.nacos.NacosConfigAutoConfiguration")
+    public Docket groupRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(this.getPredicateWithGroup("group_default"))
+                .paths(PathSelectors.any())
+                .build().securityContexts(Lists.newArrayList(new SecurityContext[]{this.securityContext()})).securitySchemes(Lists.newArrayList(new SecurityScheme[]{this.apiKey()}));
+    }
 
     private Predicate<RequestHandler> getPredicateWithGroup(final String group) {
         return new Predicate<RequestHandler>() {
