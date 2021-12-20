@@ -11,5 +11,10 @@
     <version>3.0.0</version>
     <artifactId>fhs_front_interfaces</artifactId>
     
-
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>
