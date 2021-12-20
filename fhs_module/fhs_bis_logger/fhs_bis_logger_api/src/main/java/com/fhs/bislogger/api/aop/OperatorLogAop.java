@@ -93,9 +93,7 @@ public class OperatorLogAop {
         } finally {
             final Object finalResult = result;
             final  Exception finalError = error;
-            CompletableFuture.runAsync(() -> {
-                addLog(joinPoint, method, classTarget, finalResult, finalError);
-            });
+            addLog(joinPoint, method, classTarget, finalResult, finalError);
             BisLoggerContext.clear();
         }
 
@@ -152,7 +150,10 @@ public class OperatorLogAop {
         operatorLogVO.setOperatorMainVO(mainVO);
         operatorLogVO.setHistoryDataVOList(BisLoggerContext.getLogHistoryDataVOList());
         operatorLogVO.setOperatorExtParamVOList(BisLoggerContext.getLogOperatorExtParamList());
-        this.addLog(operatorLogVO);
+        CompletableFuture.runAsync(() -> {
+            this.addLog(operatorLogVO);
+        });
+
     }
 
 
