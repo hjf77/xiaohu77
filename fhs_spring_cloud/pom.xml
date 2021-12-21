@@ -12,7 +12,7 @@
     <version>3.0.0</version>
     <properties>
     </properties>
-
+    <description>如果不是springcloud项目请勿以来此项目</description>
     <dependencies>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

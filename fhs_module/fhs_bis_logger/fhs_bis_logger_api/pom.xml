@@ -15,6 +15,7 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_feign</artifactId>
             <version>${fhs.release.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>

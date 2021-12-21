@@ -20,8 +20,8 @@
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_feign</artifactId>
-            <version>3.0.0</version>
-            <scope>compile</scope>
+            <version>${fhs.release.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 
