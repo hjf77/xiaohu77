@@ -90,8 +90,8 @@ public class DownLoadController extends BaseController {
      *
      * @return
      */
+    @ApiOperation("根据文件id获取文件信息")
     @RequestMapping(value = "getFileById", method = RequestMethod.GET)
-    @ResponseBody
     public PubFileVO obtainFileNameById(HttpServletRequest request) {
         String fileId = request.getParameter("fileId");
         PubFileVO serviceFile = pubFileService.selectById(fileId);

@@ -33,11 +33,6 @@
             <version>${fhs.swagger.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>5.8.2</version>
-        </dependency>
-        <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-core</artifactId>
             <version>${fhs.sa-token.version}</version>
