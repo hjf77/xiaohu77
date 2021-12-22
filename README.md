@@ -189,6 +189,8 @@ export default {
  &#8194;&#8194;&#8194;&#8194; B 创建数据库，导入sql&docs 下的fhs-demo.sql （如果遇到部分sql执行失败，请手动执行） <br/>
  &#8194;&#8194;&#8194;&#8194; C 修改fhs_app/fhs_app_all_in_one/src/main/resources/application.yml redis(2处，jetcache和spring的redis)和mysql配置 <br/>
  &#8194;&#8194;&#8194;&#8194; C 启动fhs_app/fhs_app_all_in_one/src/main/java/com/fhs/app/SingleApplication.java <br/>
+
+&#8194;&#8194;&#8194;&#8194; 如果遇到下载不了的jar，请使用中央仓库官方地址：https://repo1.maven.org/maven2/ 阿里云的easycloud core 好像down不下来，或者手动下载下来放到本地仓库目录中。
  
  &#8194;&#8194;&#8194;&#8194;4  视频:<br/>
 &#8194;&#8194;&#8194;&#8194;https://www.bilibili.com/video/BV1DK4y1s7AL/  基础介绍和翻译服务使用<br/>
