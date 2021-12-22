@@ -23,18 +23,18 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_cache</artifactId>
+            <artifactId>fhs_module_base</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_config</artifactId>
-            <version>${fhs.release.version}</version>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.11.2</version>
         </dependency>
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_db</artifactId>
-            <version>${fhs.release.version}</version>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>1.7.2</version>
         </dependency>
     </dependencies>
 

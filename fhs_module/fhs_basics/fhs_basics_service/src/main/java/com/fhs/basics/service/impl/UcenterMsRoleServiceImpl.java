@@ -9,7 +9,7 @@ import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
-import com.fhs.logger.Logger;
+import com.fhs.core.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;

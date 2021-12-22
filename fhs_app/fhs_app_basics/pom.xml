@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_basics_web</artifactId>
+            <artifactId>fhs_basics_service</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>

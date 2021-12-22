@@ -213,7 +213,7 @@ export default {
     //上传文件
     uploadFile(file, fn) {
       let fd = new FormData();
-      fd.append("Filedata", file.file || file.raw); //传文件
+      fd.append("file", file.file || file.raw); //传文件
       this.$pagexRequest({
         method: "post",
         url: "/upload/file?ext=" + this.$store.state.user.user.companyId,

@@ -13,10 +13,6 @@
     <modules>
         <module>fhs_basics</module>
         <module>fhs_module_base</module>
-        <module>fhs_pub</module>
-        <module>fhs_front</module>
-        <module>fhs_bis_logger</module>
-        <module>fhs_web_log_view</module>
         <module>fhs_generate</module>
     </modules>
     <artifactId>fhs_module</artifactId>

@@ -18,15 +18,10 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_cache</artifactId>
+            <artifactId>fhs_core</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_db</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_base_pojo</artifactId>
@@ -37,16 +32,7 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>${fhs.spring-cloud-starter.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_valid</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_bis_logger_api</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
+
 
     </dependencies>
 

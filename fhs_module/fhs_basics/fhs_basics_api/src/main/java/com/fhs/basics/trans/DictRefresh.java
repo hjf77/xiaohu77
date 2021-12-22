@@ -1,13 +1,12 @@
 package com.fhs.basics.trans;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.service.ServiceDictItemService;
 import com.fhs.basics.vo.ServiceDictItemVO;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.logger.Logger;
 import com.fhs.trans.listener.TransMessageListener;
 import com.fhs.trans.service.impl.DictionaryTransService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,10 +22,10 @@ import java.util.stream.Collectors;
  * @author wanglei
  * @date 2020-05-18 14:41:20
  */
+@Slf4j
 @Component
 public class DictRefresh implements  ApplicationRunner {
 
-    private static final Logger LOGGER = Logger.getLogger(DictRefresh.class);
 
     @Autowired
     private ServiceDictItemService serviceDictItemService;

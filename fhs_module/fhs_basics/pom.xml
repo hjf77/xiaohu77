@@ -16,8 +16,6 @@
     </dependencies>
     <modules>
         <module>fhs_basics_api</module>
-        <module>fhs_basics_pojo</module>
         <module>fhs_basics_service</module>
-        <module>fhs_basics_web</module>
     </modules>
 </project>

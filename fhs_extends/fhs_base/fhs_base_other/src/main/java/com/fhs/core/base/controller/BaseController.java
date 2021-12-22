@@ -3,7 +3,7 @@ package com.fhs.core.base.controller;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.vo.FhsPager;
-import com.fhs.logger.Logger;
+import com.fhs.core.logger.Logger;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;

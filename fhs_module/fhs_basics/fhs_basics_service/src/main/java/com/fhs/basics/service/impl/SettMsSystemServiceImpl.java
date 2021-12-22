@@ -1,11 +1,9 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.po.SettMsSystemPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.mapper.SettMsSystemMapper;
 import com.fhs.basics.service.SettMsSystemService;
-import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.core.base.service.impl.BaseServiceImpl;

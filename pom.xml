@@ -47,10 +47,21 @@
         <module>fhs_module</module>
         <module>fhs_spring_cloud</module>
         <module>fhs_app</module>
-
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.fhs-opensource</groupId>
+                <artifactId>easy_trans_mybatis_plus_extend</artifactId>
+                <version>${fhs.easytrans.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-core</artifactId>
+                <version>2.6.1</version>
+                <scope>compile</scope>
+            </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
@@ -67,6 +78,13 @@
                 <version>${fhs.mp-anno.version}</version>
                 <scope>compile</scope>
             </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId> mybatis-plus-boot-starter</artifactId>
+                <version>${fhs.mp-anno.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-core</artifactId>

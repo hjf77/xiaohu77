@@ -1,6 +1,6 @@
 package com.fhs.module.base.config;
 
-import com.fhs.bislogger.api.aop.OperatorLogAop;
+import com.fhs.basics.api.aop.OperatorLogAop;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

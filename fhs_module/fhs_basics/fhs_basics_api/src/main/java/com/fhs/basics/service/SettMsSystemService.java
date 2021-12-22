@@ -2,7 +2,6 @@ package com.fhs.basics.service;
 
 import com.fhs.basics.po.SettMsSystemPO;
 import com.fhs.basics.po.UcenterMsUserPO;
-import com.fhs.basics.vo.ComboboxNodeVO;
 import com.fhs.basics.vo.SettMsSystemVO;
 import com.fhs.core.base.service.BaseService;
 

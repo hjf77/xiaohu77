@@ -13,8 +13,6 @@ import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.fhs.bislogger.api.context.BisLoggerContext;
-import com.fhs.bislogger.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.anno.NotRepeatDesc;
@@ -31,7 +29,7 @@ import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.fhs.logger.Logger;
+import com.fhs.core.logger.Logger;
 import com.fhs.trans.service.AutoTransAble;
 import com.fhs.trans.service.impl.TransService;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
@@ -125,7 +123,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     @Override
     public boolean delete(P bean) {
         boolean result = baseMapper.delete(bean.asWrapper()) > 0;
-        BisLoggerContext.addExtParam(this.namespace, bean.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         this.refreshCache();
         return result;
     }
@@ -169,8 +166,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         checkIsExist(entity, false);
         int result = baseMapper.insert(entity);
         this.refreshCache();
-        BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
-        BisLoggerContext.addHistoryData(entity, this.namespace);
         return result;
     }
 
@@ -265,10 +260,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         }
         String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
         boolean result = executeBatch(list, DEFAULT_BATCH_SIZE, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
-        for (P d : list) {
-            BisLoggerContext.addExtParam(this.namespace, d.getPkey(), LoggerConstant.OPERATOR_TYPE_ADD);
-            BisLoggerContext.addHistoryData(d, this.namespace);
-        }
         this.refreshCache();
         return result;
     }
@@ -280,7 +271,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         autoDelService.deleteItemTBL(this.namespace, primaryValue);
         this.refreshCache();
         removeCache(primaryValue);
-        BisLoggerContext.addExtParam(this.namespace, primaryValue, LoggerConstant.OPERATOR_TYPE_DEL);
         return result;
     }
 
@@ -292,10 +282,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         updateCache(entity);
         this.refreshCache();
         int reuslt = baseMapper.updateById(entity);
-        if (BisLoggerContext.isNeedLogger()) {
-            BisLoggerContext.addExtParam(this.namespace, entity.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
-            BisLoggerContext.addHistoryData(this.selectById(entity.getPkey()), this.namespace);
-        }
         return reuslt;
     }
 
@@ -325,14 +311,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         });
         for (P entity : entitys) {
             updateCache(entity);
-        }
-        if (BisLoggerContext.isNeedLogger()) {
-            List<Object> ids = entitys.stream().map(P::getPkey).collect(Collectors.toList());
-            List<V> vos = this.findByIds(ids);
-            for (V vo : vos) {
-                BisLoggerContext.addExtParam(this.namespace, vo.getPkey(), LoggerConstant.OPERATOR_TYPE_UPDATE);
-                BisLoggerContext.addHistoryData(this.selectById(vo.getPkey()), this.namespace);
-            }
         }
         this.refreshCache();
         return result;
@@ -381,7 +359,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         for (P p : pos) {
             autoDelService.deleteCheck(this.namespace, p.getPkey());
             autoDelService.deleteItemTBL(this.namespace, p.getPkey());
-            BisLoggerContext.addExtParam(this.namespace, p.getPkey(), LoggerConstant.OPERATOR_TYPE_DEL);
         }
         //批量修改为已删除
         return baseMapper.delete(entity.asWrapper());
@@ -398,7 +375,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         for (Object id : idList) {
             autoDelService.deleteCheck(this.namespace, id);
             autoDelService.deleteItemTBL(this.namespace, id);
-            BisLoggerContext.addExtParam(this.namespace, id, LoggerConstant.OPERATOR_TYPE_DEL);
         }
         return baseMapper.deleteBatchIds(idList);
     }

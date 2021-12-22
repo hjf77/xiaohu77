@@ -18,12 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_safe</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_json</artifactId>
+            <artifactId>fhs_core</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
@@ -43,11 +38,6 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_basics_pojo</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_basics_api</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
@@ -56,16 +46,7 @@
             <artifactId>fhs_excel_core</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_beetl</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_bis_logger_api</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_feign</artifactId>
@@ -102,17 +83,7 @@
             <artifactId>tomcat-embed-jasper</artifactId>
             <version>8.5.31</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-mp</artifactId>
-            <version>3.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xstream</artifactId>
-                    <groupId>com.thoughtworks.xstream</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

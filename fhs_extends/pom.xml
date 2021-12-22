@@ -13,20 +13,11 @@
     <version>3.0.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>fhs_logger</module>
-        <module>fhs_cache</module>
-        <module>fhs_exception</module>
-        <module>fhs_config</module>
-        <module>fhs_http_result</module>
         <module>fhs_pojo</module>
-        <module>fhs_valid</module>
-        <module>fhs_json</module>
-        <module>fhs_db</module>
         <module>fhs_base</module>
         <module>fhs_feign</module>
-        <module>fhs_safe</module>
-        <module>fhs_beetl</module>
         <module>fhs_excel</module>
+        <module>fhs_core</module>
     </modules>
 
     <dependencies>

@@ -18,22 +18,12 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_logger</artifactId>
+            <artifactId>fhs_core</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_basics_service</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_bis_logger_service</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_beetl</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
     </dependencies>

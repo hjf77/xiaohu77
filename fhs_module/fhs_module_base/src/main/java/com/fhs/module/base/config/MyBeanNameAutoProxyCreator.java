@@ -1,6 +1,6 @@
 package com.fhs.module.base.config;
 
-import com.fhs.logger.Logger;
+import com.fhs.core.logger.Logger;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
 import org.springframework.beans.BeansException;
