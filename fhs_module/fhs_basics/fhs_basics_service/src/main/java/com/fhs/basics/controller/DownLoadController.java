@@ -68,25 +68,6 @@ public class DownLoadController extends BaseController {
     }
 
 
-    /**
-     * 根据文件名称下载文件
-     *
-     * @return
-     */
-    @RequestMapping(value = "fileByName", method = RequestMethod.GET)
-    @ApiOperation("文件名称下载文件--已废弃")
-    public void downloadForName(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String fileName = request.getParameter("fileName");
-            // 文件下载路径
-            String fileId = fileName.substring(0, fileName.indexOf("."));
-            PubFileVO serviceFile = pubFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile, response);
-        } catch (Exception e) {
-            LOG.error(this, e);
-            throw new RuntimeException("下载文件异常:" + e.getMessage());
-        }
-    }
 
     /**
      * 文件列表
@@ -144,62 +125,31 @@ public class DownLoadController extends BaseController {
         int maxHeight = CheckUtils.isNullOrEmpty(request.getParameter("imgFileHeight"))
                 ? ConverterUtils.toInt(EConfig.getOtherConfigPropertiesValue("imgFileWidth"))
                 : ConverterUtils.toInt(request.getParameter("imgFileHeight"));
-
-        // 文件后缀
-        String suffix = serviceFile.getFileSuffix();
-        // 文件下载路径
-        String downFilePath = EConfig.getPathPropertiesValue("fileSavePath");
-        // 文件上传时间
-        String uploadDate = serviceFile.getUploadDate();
         // fileId
         fileId = serviceFile.getFileId();
-        // 图片规格
-        String fileIdWH = fileId + "_" + maxWidth + "_" + maxHeight + suffix;
-        String filePath = uploadDate + File.separator + suffix.replace(".", "") + File.separator;
+        String minFileKey = fileId + "_" + maxWidth + "_" + maxHeight;
         //兼容旧数据
-
         // 文件名
+        serviceFile.setFileId(minFileKey);
         String showFileName = serviceFile.getFileName();
-        String minPath = downFilePath + filePath + fileIdWH;
-        File file = new File(minPath);
-        if (fileStorage.checkFileIsExist(minPath, serviceFile)) {
-            fileStorage.downloadFileByToken(minPath, serviceFile, response);
+        if (fileStorage.checkFileIsExist(serviceFile)) {
+            fileStorage.downloadFile(serviceFile, response);
         } else {
             byte[] fileByte;
-            try (InputStream is = fileStorage.getFileInputStream(serviceFile)) {
+            PubFileVO sourceFileVo = pubFileService.selectById(fileId);
+            //裁剪后下载
+            try (InputStream is = fileStorage.getFileInputStream(sourceFileVo)) {
                 fileByte = ThumbnailatorUtils
                         .zoom2Bytes(is, maxWidth, maxHeight);
-                file.createNewFile();
-                fileStorage.uploadFileByToken(fileByte, minPath, serviceFile);
-                FileUtils.download(file, response, showFileName);
+                FileUtils.download(fileByte,response,serviceFile.getFileName());
+                fileStorage.uploadFileByToken(fileByte,  serviceFile);
             } catch (IOException e) {
-                e.printStackTrace();
                 LOG.error(this, e);
             }
         }
     }
 
 
-    /**
-     * 根据文件id下载文件
-     *
-     * @return
-     */
-    @ApiOperation("根据文件id下载--废弃")
-    @RequestMapping(value = "fileFofFileId", method = RequestMethod.GET)
-    public void downloadFofFileId(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String fileId = request.getParameter("fileId");
-            // 文件下载路径
-            if (fileId.indexOf(".") > 0) {
-                fileId = fileId.substring(0, fileId.indexOf("."));
-            }
-            PubFileVO serviceFile = pubFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile, response);
-        } catch (Exception e) {
-            throw new RuntimeException("下载文件异常:" + e.getMessage());
-        }
-    }
 
 
     /**

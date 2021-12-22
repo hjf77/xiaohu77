@@ -10,6 +10,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.result.PubResult;
 import com.fhs.core.logger.Logger;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -163,7 +165,12 @@ public class ControllerExceptionAdvice {
             httpResult.setCode(400);
             JsonUtil.outJson(response, httpResult.asJson(),400);
             return null;
-        }  else if (ex instanceof NotLoginException) {
+        } else if (ex instanceof MaxUploadSizeExceededException) {
+            httpResult.setMessage("文件过大，请联系后台修改最大上传限制");
+            httpResult.setCode(400);
+            JsonUtil.outJson(response, httpResult.asJson(),400);
+            return null;
+        } else if (ex instanceof NotLoginException) {
             httpResult.setMessage(ex.getMessage());
             httpResult.setCode(401);
             JsonUtil.outJson(response, httpResult.asJson(),401);

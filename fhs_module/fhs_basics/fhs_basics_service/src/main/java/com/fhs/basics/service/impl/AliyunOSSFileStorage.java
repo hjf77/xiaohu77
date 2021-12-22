@@ -74,10 +74,10 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFileByToken(byte[] bytes, String token, PubFilePO serviceFile) {
+    public void uploadFileByToken(byte[] bytes, PubFilePO serviceFile) {
         // 上传文件
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream((bytes))) {
-            upload(byteArrayInputStream, token);
+            upload(byteArrayInputStream, serviceFile.getFileId());
         } catch (IOException e) {
             LOG.error("文件上传失败", e);
         }
@@ -103,16 +103,12 @@ public class AliyunOSSFileStorage implements FileStorage {
         }
     }
 
-    @Override
-    public void downloadFileByToken(String token, PubFilePO serviceFile, HttpServletResponse response) {
-        download(token, response, null);
-    }
 
     @Override
-    public boolean checkFileIsExist(String token, PubFilePO serviceFile) {
+    public boolean checkFileIsExist(PubFilePO serviceFile) {
         // 初始化 阿里文件服务客户端
         OSSClient ossClient = this.getClient();
-        token = token == null ? serviceFile.getFileId() : token;
+        String token = serviceFile.getFileId();
         try {
             // 获取文件输出流
             boolean result = ossClient.doesObjectExist(bucketname, token);

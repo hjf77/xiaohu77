@@ -39,11 +39,10 @@ public interface FileStorage {
      * 根据文件字节数组,serviceFile和文件名做文件上传
      *
      * @param bytes
-     * @param token
      * @param serviceFile
      */
 
-    void uploadFileByToken(byte[] bytes, String token, PubFilePO serviceFile);
+    void uploadFileByToken(byte[] bytes,  PubFilePO serviceFile);
 
     /**
      * 根据serviceFile下载文件
@@ -54,28 +53,17 @@ public interface FileStorage {
 
     void downloadFile(PubFilePO serviceFile, HttpServletResponse response);
 
-    /**
-     * 根据文件名和serviceFile下载文件
-     *
-     * @param token
-     * @param response
-     * @param serviceFile
-     */
 
-    void downloadFileByToken(String token, PubFilePO serviceFile, HttpServletResponse response);
 
     /**
      * 判断一个文件是否存在
-     *
-     * @param token       token
      * @param serviceFile file
      * @return true 存在 false不存在
      */
-    boolean checkFileIsExist(String token, PubFilePO serviceFile);
+    boolean checkFileIsExist(PubFilePO serviceFile);
 
     /**
      * 获取一个inputstreqam
-     *
      * @param serviceFile 文件
      * @return inputstream
      */

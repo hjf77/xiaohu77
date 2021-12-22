@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.logger.Logger;
@@ -19,7 +20,6 @@ import java.util.List;
 @Service
 public class FileServerBusinessImpl implements FileServerBusiness{
 
-    private static final Logger LOG = Logger.getLogger(FileServerBusinessImpl.class);
 
     @Autowired
     private PubFileService fileService;
@@ -28,11 +28,11 @@ public class FileServerBusinessImpl implements FileServerBusiness{
     private FileStorage fileStorage;
 
     @Override
-    public PubFileVO uploadFile(MultipartFile fileData) {
+    public PubFileVO uploadFile(MultipartFile fileData,String fileId) {
         PubFileVO sf = new PubFileVO();
         String fileName = fileData.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        String fileId = StringUtils.getUUID();
+        fileId = CheckUtils.isNullOrEmpty(fileId) ? StringUtils.getUUID() : fileId;
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
         sf.setFileName(fileName);
@@ -43,14 +43,7 @@ public class FileServerBusinessImpl implements FileServerBusiness{
         return sf;
     }
 
-    @Override
-    public List<PubFileVO> uploadFileForList(List<MultipartFile> allFileData) {
-        List<PubFileVO> rvList = new ArrayList<PubFileVO>();
-        for (MultipartFile fileData : allFileData) {
-            rvList.add(this.uploadFile(fileData));
-        }
-        return rvList;
-    }
+
 
     /**
      * @param sf

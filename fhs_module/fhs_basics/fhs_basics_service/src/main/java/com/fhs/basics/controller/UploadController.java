@@ -46,12 +46,12 @@ public class UploadController {
      */
     @RequestMapping(value = "file", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ApiOperation("上传文件")
-    public PubFileVO uploadFile(@RequestPart MultipartFile file, String ext) {
+    public PubFileVO uploadFile(@RequestPart MultipartFile file, String ext,String fileId) {
         if (file == null) {
             throw new ParamException("文件为空");
         }
         LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
-        PubFileVO pubFileVO = fileServerBusiness.uploadFileForList(Arrays.asList(file)).get(0);
+        PubFileVO pubFileVO = fileServerBusiness.uploadFile(file,fileId);
         //如果给了扩展字段则更新扩展字段
         if (CheckUtils.isNotEmpty(ext)) {
             pubFileVO.setExt(ext);

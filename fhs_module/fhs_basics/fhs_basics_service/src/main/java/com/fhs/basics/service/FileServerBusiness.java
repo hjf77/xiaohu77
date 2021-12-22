@@ -13,10 +13,9 @@ import java.util.List;
  * @since 2019-05-18 11:22:55
  */
 public interface FileServerBusiness {
-    /**
-     * filep
-     */
-    String fileP = File.separator;
+
+
+
 
 
     /**
@@ -25,13 +24,7 @@ public interface FileServerBusiness {
      * @param fileData
      * @return
      */
-    PubFileVO uploadFile(MultipartFile fileData);
+    PubFileVO uploadFile(MultipartFile fileData,String fileId);
 
-    /**
-     * 上传多个文件
-     *
-     * @param allFileData
-     * @return
-     */
-    List<PubFileVO> uploadFileForList(List<MultipartFile> allFileData);
+
 }

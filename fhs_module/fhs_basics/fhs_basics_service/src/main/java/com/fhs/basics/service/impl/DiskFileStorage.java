@@ -29,17 +29,16 @@ public class DiskFileStorage implements FileStorage {
      * 获取文件对象
      *
      * @param serviceFile serviceFile
-     * @param token       token(可为null)
      * @return serviceFile+token定位到的文件对象
      */
-    private File getFile(PubFilePO serviceFile, String token) {
-        String fileName = (null == token ? serviceFile.getFileId() : token) + serviceFile.getFileSuffix();
+    private File getFile(PubFilePO serviceFile) {
+        String fileName = serviceFile.getFileId() + serviceFile.getFileSuffix();
         return new File(EConfig.getPathPropertiesValue("fileSavePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
     }
 
     @Override
     public void uploadFile(PubFilePO serviceFile, MultipartFile fileData) {
-        File file = getFile(serviceFile, null);
+        File file = getFile(serviceFile);
         try {
             FileUtils.copyInputStreamToFile(fileData.getInputStream(), file);
             serviceFile.setFileSize(file.length());
@@ -50,7 +49,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void uploadFile(PubFilePO serviceFile, File fileData) {
-        File file = getFile(serviceFile, null);
+        File file = getFile(serviceFile);
         try {
             FileUtils.copyInputStreamToFile(new FileInputStream(fileData), file);
             serviceFile.setFileSize(file.length());
@@ -60,8 +59,8 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFileByToken(byte[] bytes, String token, PubFilePO serviceFile) {
-        File file = getFile(serviceFile, token);
+    public void uploadFileByToken(byte[] bytes,  PubFilePO serviceFile) {
+        File file = getFile(serviceFile);
         try (FileOutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
         } catch (IOException e) {
@@ -71,7 +70,7 @@ public class DiskFileStorage implements FileStorage {
 
     @Override
     public void downloadFile(PubFilePO serviceFile, HttpServletResponse response) {
-        File file = getFile(serviceFile, null);
+        File file = getFile(serviceFile);
         if (file.exists()) {
             FileUtils.download(file, response, serviceFile.getFileName());
             return;
@@ -80,20 +79,12 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
-    public void downloadFileByToken(String token, PubFilePO serviceFile, HttpServletResponse response) {
-        File file = getFile(serviceFile, token);
-        if (file.exists()) {
-            FileUtils.download(file, response, file.getName());
-        }
-    }
-
-    @Override
-    public boolean checkFileIsExist(String token, PubFilePO serviceFile) {
-        return getFile(serviceFile, token).exists();
+    public boolean checkFileIsExist( PubFilePO serviceFile) {
+        return getFile(serviceFile).exists();
     }
 
     @Override
     public InputStream getFileInputStream(PubFilePO serviceFile) throws FileNotFoundException {
-        return new FileInputStream(getFile(serviceFile, null));
+        return new FileInputStream(getFile(serviceFile));
     }
 }
