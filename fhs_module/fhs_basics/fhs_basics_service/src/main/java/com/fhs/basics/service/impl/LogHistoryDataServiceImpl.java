@@ -17,6 +17,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
  * @since 2020-04-23 14:27:40
  */
 @Service
+@DataSource("basic")
 public class LogHistoryDataServiceImpl extends BaseServiceImpl<LogHistoryDataVO, LogHistoryDataPO> implements LogHistoryDataService {
 
     @Autowired

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Primary
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 public class ServiceWordBookServiceImpl extends BaseServiceImpl<ServiceDictItemVO, ServiceDictItemPO> implements ServiceDictItemService {
 
 

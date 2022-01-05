@@ -3,6 +3,7 @@ package com.fhs.basics.service.impl;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.StringUtils;
+import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.logger.Logger;
 import com.fhs.basics.po.PubFilePO;
 import com.fhs.basics.service.FileServerBusiness;
@@ -16,8 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+
 @Service
+@DataSource("basic")
 public class FileServerBusinessImpl implements FileServerBusiness{
 
 

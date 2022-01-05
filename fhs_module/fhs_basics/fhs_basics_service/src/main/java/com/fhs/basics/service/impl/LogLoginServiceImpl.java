@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-@DataSource("log")
+@DataSource("basic")
 public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO> implements LogLoginService {
 
     @Autowired

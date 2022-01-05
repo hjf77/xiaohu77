@@ -31,7 +31,7 @@ import java.util.Map;
  * @since 2020-04-23 13:59:14
  */
 @Service
-@DataSource("log")
+@DataSource("basic")
 @Namespace("log_operator_main")
 public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService{
 

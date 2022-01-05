@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @date 2020-05-18 16:42:36
  */
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 @AutoDel(mainServiceSetts = {
         @AutoDelSett(namespace = "sett_ms_system", isChecker = true, field = "systemId", desc = "菜单")
 })

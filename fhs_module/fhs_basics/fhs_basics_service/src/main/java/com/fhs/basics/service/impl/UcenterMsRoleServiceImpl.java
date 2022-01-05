@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Primary
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, UcenterMsRolePO> implements UcenterMsRoleService {
 
     private static final Logger LOG = Logger.getLogger(UcenterMsRoleServiceImpl.class);

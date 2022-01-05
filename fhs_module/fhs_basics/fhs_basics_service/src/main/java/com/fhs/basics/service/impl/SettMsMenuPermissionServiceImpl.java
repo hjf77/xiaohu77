@@ -24,7 +24,7 @@ import java.util.Map;
  * @date 2020-05-18 16:40:36
  */
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 @AutoDel(mainServiceSetts = {
         @AutoDelSett(namespace = "sett_ms_menu", isChecker = true, field = "menuId", desc = "菜单")
 })

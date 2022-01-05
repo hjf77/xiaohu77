@@ -18,7 +18,7 @@ import java.io.*;
  */
 
 @Service
-@DataSource("file")
+@DataSource("basic")
 public class DiskFileStorage implements FileStorage {
 
     private static final Logger LOG = Logger.getLogger(DiskFileStorage.class);
