@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_app</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0</version>
+        <version>3.0.0_ofpl</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0</version>
+    <version>3.0.0_ofpl</version>
     <artifactId>fhs_app_basics</artifactId>
     <description>
         basics的启动模块,分布式模式运行,配置文件可以选择在nacos或者放本地都可以，前面可以加网关，也可以不加网关使用
