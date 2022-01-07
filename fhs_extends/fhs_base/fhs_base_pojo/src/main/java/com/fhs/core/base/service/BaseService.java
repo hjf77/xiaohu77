@@ -31,7 +31,6 @@ public interface BaseService<V extends VO, P extends BasePO> {
      */
     int insertSelective(P entity);
 
-
     /**
      * 批量插入 -- jpa方法
      *

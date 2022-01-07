@@ -276,11 +276,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return resulstList;
     }
 
-    @Override
-    public boolean delete(UcenterMsUserPO bean) {
-        deleteUserRole(bean);
-        return super.deleteBean(bean);
-    }
+
 
     @Override
     public UcenterMsUserVO selectUserByULname(UcenterMsUserPO adminUser) {
