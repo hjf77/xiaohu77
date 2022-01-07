@@ -264,10 +264,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    pagination: {
-      type: Boolean,
-      default: false,
-    },
     namespace: {
       type: String,
       default: "",

@@ -17,7 +17,6 @@
 /fhs_module/src
 /fhs_module/fhs_basics/src
 /fhs_extends/fhs_base/src
-/fhs_spring_cloud/src
 /fhs_extends/fhs_cache/target
 /fhs_extends/fhs_config/target
 /fhs_extends/fhs_db/target

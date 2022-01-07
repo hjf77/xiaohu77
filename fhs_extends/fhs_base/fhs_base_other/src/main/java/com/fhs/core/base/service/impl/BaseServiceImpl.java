@@ -120,12 +120,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
 
-    @Override
-    public boolean delete(P bean) {
-        boolean result = baseMapper.delete(bean.asWrapper()) > 0;
-        this.refreshCache();
-        return result;
-    }
+
 
 
 
@@ -467,7 +462,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @return
      */
     @Override
-    public P v2d(V vo) {
+    public P v2p(V vo) {
         return (P) vo;
     }
 
