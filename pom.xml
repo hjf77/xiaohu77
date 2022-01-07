@@ -28,7 +28,7 @@
         <fhs.spring-cloud-starter.version>3.0.4</fhs.spring-cloud-starter.version>
         <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
         <fhs.mp-anno.version>3.4.3.4</fhs.mp-anno.version>
-        <fhs.fastjson.version>1.2.78</fhs.fastjson.version>
+        <fhs.fastjson.version>1.2.79</fhs.fastjson.version>
         <fhs.sa-token.version>1.27.0</fhs.sa-token.version>
         <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
         <spring-boot.version>2.5.6</spring-boot.version>
