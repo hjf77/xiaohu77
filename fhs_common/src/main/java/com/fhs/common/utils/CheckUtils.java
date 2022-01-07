@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * <验证工具类>
@@ -28,6 +29,12 @@ public class CheckUtils {
             return true;
         }
         return false;
+    }
+
+    public static boolean isNotEmpty(Object[] objs) {
+        return objs != null && !Stream.of(objs).allMatch((obj) -> {
+            return "".equals(StringUtils.toString(obj).trim());
+        });
     }
 
     /**
