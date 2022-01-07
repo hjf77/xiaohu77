@@ -14,56 +14,13 @@ import java.util.Map;
 /**
  * 所有的service 都必须实现此service 如果是简单的CRUD操作，
  * 允许controller直接调用baseserivce实现类里面的方法。
+ *
  * @author wanglei
  * @version [版本号, 2015年5月27日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
 public interface BaseService<V extends VO, P extends BasePO> {
-
-
-    /**
-     * 删除数据库 数据 参数为object
-     *
-     * @param bean bean
-     * @return 默认为影响条数
-     */
-    boolean delete(P bean);
-
-
-
-    /**
-     * 查询 返回一行一列 结果为int类型 参数为obj
-     *
-     * @param bean bean
-     * @return 结果
-     */
-    Long findCount(P bean);
-
-
-
-    /**
-     * 查询数据 参数为object
-     *
-     * @param bean bean
-     * @return 查询出来的数据集合
-     */
-    List<V> findForList(P bean);
-
-    /**
-     * 查询数据 参数为object
-     *
-     * @param bean bean
-     * @return 查询出来的数据集合
-     */
-    FhsPager<V> findForPager(P bean, FhsPager fhsPager);
-
-
-
-
-
-
-
 
 
     /**
@@ -83,6 +40,25 @@ public interface BaseService<V extends VO, P extends BasePO> {
      * @since 1.0.0
      */
     boolean batchInsert(List<P> list);
+
+
+
+    /**
+     * 根据实体删除对象
+     *
+     * @param entity
+     * @return
+     */
+    int deleteBean(P entity);
+
+    /**
+     * 根据id集合删除
+     *
+     * @param idList id集合
+     * @return 受影响行数
+     */
+    int deleteBatchIds(Collection<? extends Serializable> idList);
+
 
     /**
      * 根据id删除数据 -- jpa方法
@@ -122,7 +98,30 @@ public interface BaseService<V extends VO, P extends BasePO> {
     V selectById(Serializable primaryValue);
 
 
+    /**
+     * 查询 返回一行一列 结果为int类型 参数为obj
+     *
+     * @param bean bean
+     * @return 结果
+     */
+    Long findCount(P bean);
 
+
+    /**
+     * 查询数据 参数为object
+     *
+     * @param bean bean
+     * @return 查询出来的数据集合
+     */
+    List<V> findForList(P bean);
+
+    /**
+     * 查询数据 参数为object
+     *
+     * @param bean bean
+     * @return 查询出来的数据集合
+     */
+    FhsPager<V> findForPager(P bean, FhsPager fhsPager);
 
 
     /**
@@ -135,7 +134,6 @@ public interface BaseService<V extends VO, P extends BasePO> {
     List<V> select();
 
 
-
     /**
      * 根据参数不为空的字段作为过滤条件查询
      *
@@ -144,24 +142,6 @@ public interface BaseService<V extends VO, P extends BasePO> {
      */
     V selectBean(P param);
 
-    /**
-     * 根据实体删除对象
-     *
-     * @param entity
-     * @return
-     */
-    int deleteBean(P entity);
-
-
-
-
-    /**
-     * 根据id集合删除
-     *
-     * @param idList id集合
-     * @return 受影响行数
-     */
-    int deleteBatchIds(Collection<? extends Serializable>  idList);
 
     /**
      * 根据id集合查询
@@ -231,15 +211,13 @@ public interface BaseService<V extends VO, P extends BasePO> {
     IPage<Map<String, Object>> selectMapsPageMP(IPage<P> page, Wrapper<P> queryWrapper);
 
 
-
     /**
      * vo转do
      *
      * @param vo vo
      * @return po
      */
-    P v2d(V vo);
-
+    P v2p(V vo);
 
 
     Class<P> getPoClass();

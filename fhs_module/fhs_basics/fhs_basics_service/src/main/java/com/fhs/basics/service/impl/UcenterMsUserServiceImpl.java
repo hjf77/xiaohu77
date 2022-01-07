@@ -279,7 +279,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public boolean delete(UcenterMsUserPO bean) {
         deleteUserRole(bean);
-        return super.delete(bean);
+        return super.deleteBean(bean);
     }
 
     @Override

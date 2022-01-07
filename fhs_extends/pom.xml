@@ -15,7 +15,7 @@
     <modules>
         <module>fhs_pojo</module>
         <module>fhs_base</module>
-        <module>fhs_feign</module>
+        <module>fhs_api</module>
         <module>fhs_excel</module>
         <module>fhs_core</module>
     </modules>

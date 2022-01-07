@@ -20,7 +20,7 @@
       >
         <template v-slot:form="prop">
           <!-- 新增 修改 弹框-->
-          <el-dialog
+          <pagex-dialog
             v-if="open"
             class="pagex-dialog-theme"
             slot="form"
@@ -34,7 +34,7 @@
               :org="org"
             >
             </user-form>
-          </el-dialog>
+          </pagex-dialog>
         </template>
       </pagex-crud>
     </template>
