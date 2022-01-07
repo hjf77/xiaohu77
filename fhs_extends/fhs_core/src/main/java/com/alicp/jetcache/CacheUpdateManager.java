@@ -43,7 +43,7 @@ public class CacheUpdateManager implements ApplicationContextAware, ApplicationL
      */
     @Value("${fhs.cache.packages:com.**.service.**}")
     private String packageNames;
-    @Autowired
+    @Autowired(required = false)
     private ConfigMap cacheConfigMap;
     private ApplicationContext applicationContext;
     private GlobalCacheConfig globalCacheConfig;

@@ -46,7 +46,18 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_spring_cloud</artifactId>
             <version>${fhs.release.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jetcache-starter-redis-lettuce</artifactId>
+                    <groupId>com.alicp.jetcache</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
 
         <!-- SpringCloud Gateway -->
         <dependency>
