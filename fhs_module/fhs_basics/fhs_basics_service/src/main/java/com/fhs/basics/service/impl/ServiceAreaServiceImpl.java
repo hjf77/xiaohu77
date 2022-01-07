@@ -28,7 +28,7 @@ import java.util.Map;
  * Copyright (c) 2017 All Rights Reserved.
  */
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 @AutoTrans(namespace = BaseTransConstant.AREA, useRedis = true, fields = "areaName")
 public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, ServiceAreaPO> implements ServiceAreaService {
     /**

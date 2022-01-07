@@ -28,8 +28,8 @@ import java.util.List;
  * 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
+@DataSource("basic")
 @Service("serviceOrderLogServiceImpl")
-@DataSource("base_business")
 public class OrderNumberServiceImpl extends BaseServiceImpl<OrderNumberVO, OrderNumberPO> implements OrderNumberService {
 
     /**

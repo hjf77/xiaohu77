@@ -1,6 +1,7 @@
 package com.fhs.module.base.auth;
 
 import cn.dev33.satoken.stp.StpInterface;
+import cn.dev33.satoken.stp.StpUtil;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
@@ -37,10 +38,10 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        List<String> permissions =  permissionCache.get(loginId);
+        List<String> permissions =  permissionCache.get(StpUtil.getTokenInfo().tokenValue);
         if(permissions==null){
             permissions = new ArrayList<>(ucenterMsUserService.findPermissionByUserId(ConverterUtils.toLong(loginId)));
-            permissionCache.put(loginId,permissions);
+            permissionCache.put(StpUtil.getTokenInfo().tokenValue,permissions);
             return permissions;
         }
         // 返回权限

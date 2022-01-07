@@ -22,7 +22,7 @@ import java.util.Map;
  * @since [产品/模块版本]
  */
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGroupVO, ServiceDictGroupPO> implements ServiceDictGroupService {
 
 

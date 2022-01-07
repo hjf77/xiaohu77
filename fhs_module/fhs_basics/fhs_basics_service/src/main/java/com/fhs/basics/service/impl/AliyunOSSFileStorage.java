@@ -3,6 +3,7 @@ package com.fhs.basics.service.impl;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import com.fhs.common.utils.FileUtils;
+import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.logger.Logger;
 import com.fhs.basics.po.PubFilePO;
 import com.fhs.basics.service.FileStorage;
@@ -15,6 +16,7 @@ import java.io.*;
 /**
  * 阿里云文件存储
  */
+@DataSource("basic")
 public class AliyunOSSFileStorage implements FileStorage {
 
     private static final Logger LOG = Logger.getLogger(AliyunOSSFileStorage.class);

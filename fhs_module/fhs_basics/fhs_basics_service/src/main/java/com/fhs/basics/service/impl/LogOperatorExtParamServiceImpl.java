@@ -14,7 +14,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
  * @since 2020-04-23 13:58:59
  */
 @Service
-@DataSource("log")
+@DataSource("basic")
 public class LogOperatorExtParamServiceImpl extends BaseServiceImpl<LogOperatorExtParamVO, LogOperatorExtParamPO> implements LogOperatorExtParamService {
 
 }

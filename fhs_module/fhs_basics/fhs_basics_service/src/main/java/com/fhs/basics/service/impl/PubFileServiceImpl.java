@@ -32,7 +32,7 @@ import java.io.File;
  * @since [产品/模块版本]
  */
 @Service
-@DataSource("file")
+@DataSource("basic")
 public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFilePO> implements PubFileService {
 
 

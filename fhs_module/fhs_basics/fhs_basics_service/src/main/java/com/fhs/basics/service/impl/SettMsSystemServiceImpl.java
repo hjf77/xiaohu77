@@ -22,7 +22,7 @@ import java.util.List;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 @AutoTrans(namespace = "sett_ms_system", fields = "name")
 public class SettMsSystemServiceImpl extends BaseServiceImpl<SettMsSystemVO, SettMsSystemPO> implements SettMsSystemService {
 

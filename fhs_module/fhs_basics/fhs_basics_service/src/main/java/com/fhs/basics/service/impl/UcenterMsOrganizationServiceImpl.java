@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Service
-@DataSource("base_business")
+@DataSource("basic")
 @AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", defaultAlias = "org")
 public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationPO> implements UcenterMsOrganizationService {
 
