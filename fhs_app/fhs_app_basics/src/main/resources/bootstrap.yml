@@ -10,7 +10,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 10.102.2.201:8848
+        server-addr: 192.168.0.213:8848
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml # 配置文件格式
@@ -31,7 +31,7 @@ server:
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
-  type-aliases-package: com.fhs.basics.dox;
+  type-aliases-package: com.fhs.basics.po;
   global-config:
     db-config:
       logic-delete-value: 1
@@ -49,7 +49,7 @@ fhs:
   vue:
     is-verification: true
   autoware:
-    package: com.fhs.*;com.fhs.*.*;
+    package: com.fhs.*;com.fhs.*.*;com.xhb.*;com.xhb.*.*;
   autodel:
     service-packege: com.**.service.**
   login:
