@@ -49,7 +49,7 @@
 
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_feign</artifactId>
+            <artifactId>fhs_api</artifactId>
             <version>${fhs.release.version}</version>
             <type>pom</type>
         </dependency>

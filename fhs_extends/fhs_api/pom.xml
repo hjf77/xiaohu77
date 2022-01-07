@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>3.0.0</version>
-    <artifactId>fhs_feign</artifactId>
+    <artifactId>fhs_api</artifactId>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
