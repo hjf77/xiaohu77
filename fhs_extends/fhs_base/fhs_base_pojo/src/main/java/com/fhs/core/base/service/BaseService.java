@@ -31,7 +31,6 @@ public interface BaseService<V extends VO, P extends BasePO> {
     boolean delete(P bean);
 
 
-
     /**
      * 查询 返回一行一列 结果为int类型 参数为obj
      *
