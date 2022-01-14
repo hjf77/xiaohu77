@@ -7,6 +7,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 用户上线文
@@ -21,12 +24,15 @@ public class UserContext {
         return (UcenterMsUserVO) StpUtil.getTokenSession().get(Constant.SESSION_USER);
     }
 
+
     /**
-     * 获取request
-     *
+     * 获取数据权限
      * @return
      */
-    private static HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    public static Map<String, Set<String>> getDataPermission(){
+        if(StpUtil.isLogin()){
+            StpUtil.getTokenSession().get(Constant.SESSION_USER_DATA_PERMISSION);
+        }
+        return new HashMap<>();
     }
 }
