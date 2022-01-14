@@ -8,14 +8,14 @@
 	<parent>
 		<artifactId>fhs_framework</artifactId>
 		<groupId>com.fhs-opensource</groupId>
-		<version>3.0.0_ofpl</version>
+		<version>3.0.0_tower</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<groupId>com.fhs-opensource</groupId>
 	<artifactId>fhs_common</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.0_ofpl</version>
+	<version>3.0.0_tower</version>
 	<name>fhs_common</name>
 	<url>https://gitee.com/fhs-opensource/fhs_common</url>
 

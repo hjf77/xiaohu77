@@ -13,14 +13,14 @@
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_framework</artifactId>
     <description>fhs framework开源版本2.0</description>
-    <version>3.0.0_ofpl</version>
+    <version>3.0.0_tower</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <fhs.release.version>3.0.0_ofpl</fhs.release.version>
+        <fhs.release.version>3.0.0_tower</fhs.release.version>
         <fhs.easytrans.version>1.1.8</fhs.easytrans.version>
         <fhs.easycloud.version>1.0.1</fhs.easycloud.version>
         <fhs.swagger.version>2.6.1</fhs.swagger.version>

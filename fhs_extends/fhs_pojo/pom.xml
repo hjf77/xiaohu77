@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_extends</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0_ofpl</version>
+        <version>3.0.0_tower</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0_ofpl</version>
+    <version>3.0.0_tower</version>
     <artifactId>fhs_pojo</artifactId>
     <dependencies>
         <dependency>
