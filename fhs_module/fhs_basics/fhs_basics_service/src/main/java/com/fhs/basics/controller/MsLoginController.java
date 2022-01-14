@@ -184,12 +184,6 @@ public class MsLoginController extends BaseController {
         StpUtil.login(sysUser.getUserId());
         String tokenStr = StpUtil.getTokenValue();
         stpInterface.clearCache(sysUser.getUserId());
-        //如果不是admin就去加载全部的数据
-        if (sysUser.getIsAdmin() == Constant.INT_TRUE) {
-            StpUtil.getTokenSession().set(Constant.SESSION_USER_DATA_PERMISSION,new HashMap<>());
-        } else {
-            StpUtil.getTokenSession().set(Constant.SESSION_USER_DATA_PERMISSION,sysUserService.findUserDataPermissions(sysUser.getUserId()));
-        }
         StpUtil.getTokenSession().set(Constant.SESSION_USER,sysUser);
         Map<String, Object> result = new HashMap<>();
         result.put("token", tokenStr);
