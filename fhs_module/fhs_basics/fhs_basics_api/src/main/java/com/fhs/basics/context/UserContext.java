@@ -28,7 +28,7 @@ public class UserContext {
      */
     public static Map<String, Set<String>> getDataPermission(){
         if(StpUtil.isLogin()){
-            StpUtil.getTokenSession().get(Constant.SESSION_USER_DATA_PERMISSION);
+            return (Map)StpUtil.getTokenSession().get(Constant.SESSION_USER_DATA_PERMISSION);
         }
         return new HashMap<>();
     }

@@ -175,15 +175,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     Boolean deleteSysUserById(Long userId);
 
 
-    /**
-     * 根据用户id获取用户的数据权限
-     * map - key -> 数据权限的类型，value是数据权限的id集合
-     * 比如 parkIds->'1','2' 已经处理好了逗号，直接使用 IN 过滤 就可以
-     *
-     * @param userId 用户id
-     * @return 用户数据权限信息
-     */
-    Map<String, String> findUserDataPermissions(Long userId);
+
 
     /**
      * 根据集团编码获取集团下所有的用户tree

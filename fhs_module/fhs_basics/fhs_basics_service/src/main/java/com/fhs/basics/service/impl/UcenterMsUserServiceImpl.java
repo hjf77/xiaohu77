@@ -465,40 +465,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
 
 
-    @Override
-    public Map<String, String> findUserDataPermissions(Long userId) {
-        List<UcenterMsRoleVO> roleList = roleService.findRolesByUserId(userId);
-        Map<String, String> resultMap = new HashMap<>();
-        //谷歌的map value是一个hashset
-        final HashMultimap<String, String> dataPermissionTempMap = HashMultimap.create();
-        //有多个角色，把多个角色的数据权限合并
-        roleList.forEach(role -> {
-            if (CheckUtils.isNotEmpty(role.getDataPermissions())) {
-                final JSONObject oneRoleDataPermisstionMap = JSON.parseObject(role.getDataPermissions());
-                oneRoleDataPermisstionMap.keySet().forEach(key -> {
-                    String tempPermissions = oneRoleDataPermisstionMap.getString(key);
-                    if (CheckUtils.isNotEmpty(tempPermissions)) {
-                        dataPermissionTempMap.putAll(key, ListUtils.array2List(tempPermissions.split(",")));
-                    }
-                });
-            }
-        });
-        dataPermissionTempMap.keySet().forEach(key -> {
-            Set<String> dataPermissionsSet = dataPermissionTempMap.get(key);
-            resultMap.put(key, StringUtils.getStrForIn(dataPermissionsSet, true));
-        });
-        UcenterMsUserVO user = this.selectById(userId);
-        // 如果不是不是管理员，哪些数据权限他没有设置为-1
-        if (user.getIsAdmin() != Constant.INT_TRUE) {
-            String[] permissonDataKeys = ConverterUtils.toString(EConfig.getOtherConfigPropertiesValue("permissonDataKey")).split(",");
-            for (String permissonDataKey : permissonDataKeys) {
-                if (!resultMap.containsKey(permissonDataKey)) {
-                    resultMap.put(permissonDataKey, "-1");
-                }
-            }
-        }
-        return resultMap;
-    }
+
 
     @Override
     public List<SysUserOrgVO> getUserOrgTreeList(String groupCode) {
