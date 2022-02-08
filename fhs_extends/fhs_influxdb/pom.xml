@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhs_extends</artifactId>
+        <groupId>com.fhs-opensource</groupId>
+        <version>3.0.0_ofpl</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <version>1.0.0_ofpl</version>
+    <artifactId>fhs_influxdb</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <influxdb-java.version>2.20</influxdb-java.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.influxdb</groupId>
+            <artifactId>influxdb-java</artifactId>
+            <version>${influxdb-java.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
