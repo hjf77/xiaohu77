@@ -96,7 +96,7 @@ public class InfluxdbTemplate {
      * @param entity 实体
      * @param TimeUnit
      */
-    public void insertTimeForMilli(List<?> entity, TimeUnit timeU) {
+    public void insertTimeForMilli(List<?> entity) {
         List<String> data = new ArrayList<>();
         for (Object object : entity) {
             data.add(InfluxdbUtils.saveTimeForMilli(object).lineProtocol());
