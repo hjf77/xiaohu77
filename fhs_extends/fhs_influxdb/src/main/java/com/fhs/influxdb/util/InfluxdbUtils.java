@@ -160,6 +160,41 @@ public class InfluxdbUtils {
     }
 
     /**
+     * 保存
+     * time 精度为毫秒
+     * @param object
+     * @param timeU 设置时间精度
+     * @return
+     */
+    public static Point saveTimeForMilli(Object object) {
+        Class<?> clazz = object.getClass();
+        Measurement measurement = clazz.getAnnotation(Measurement.class);
+        Point.Builder builder = Point.measurement(measurement.name());
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            try {
+                Column column = field.getAnnotation(Column.class);
+                field.setAccessible(true);
+                if (column.tag()) {
+                    builder.tag(column.name(), field.get(object).toString());
+                } else {
+                    if (field.get(object) != null) {
+                        if("time".equals(column.name())){
+                            builder.time(CommonUtils.parseLocalDateTimeToInstant((LocalDateTime) field.get(object)).toEpochMilli(), TimeUnit.MILLISECONDS);
+                        } else {
+                            builder.field(column.name(), field.get(object));
+                        }
+
+                    }
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                log.error("Influxdb save error. error :{}", e.getMessage());
+            }
+        }
+        return builder.build();
+    }
+
+    /**
      * 删除数据
      * influxdb-java 本身删除不会返回清理的条数
      * 因此这里的 1 仅为默认成功返回
