@@ -1,19 +1,21 @@
 package com.fhs.influxdb.util;
 
+import com.fhs.influxdb.annotation.Aggregate;
+import com.fhs.influxdb.annotation.Count;
+import com.fhs.influxdb.core.Query;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.ObjectUtils;
-import com.fhs.influxdb.annotation.Aggregate;
-import com.fhs.influxdb.annotation.Count;
-import com.fhs.influxdb.core.Query;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +182,8 @@ public class InfluxdbUtils {
                 } else {
                     if (field.get(object) != null) {
                         if("time".equals(column.name())){
-                            builder.time(CommonUtils.parseLocalDateTimeToInstant((LocalDateTime) field.get(object)).toEpochMilli(), TimeUnit.MILLISECONDS);
+                            DateTimeFormatter df = DateTimeFormatter.ofPattern(field.getAnnotation(DateTimeFormat.class).pattern());
+                            builder.time(CommonUtils.parseLocalDateTimeToInstant(LocalDateTime.parse((String) field.get(object), df)).toEpochMilli(), TimeUnit.MILLISECONDS);
                         } else {
                             builder.field(column.name(), field.get(object));
                         }
