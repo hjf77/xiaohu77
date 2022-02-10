@@ -1,12 +1,10 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.service.FileServerBusiness;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.JsonUtils;
-import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
-import com.fhs.basics.service.FileServerBusiness;
 import com.fhs.basics.service.PubFileService;
 import com.fhs.basics.vo.PubFileVO;
 import io.swagger.annotations.Api;
@@ -14,11 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 /**
  * @author qiuhang
