@@ -28,6 +28,11 @@
             <version>${fhs.easytrans.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>easy_trans_ext</artifactId>
+            <version>${fhs.easytrans.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${fhs.swagger.version}</version>
