@@ -84,6 +84,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
 
     @TableLogic
     @IgnoreExport
+    @JsonIgnore
     @TableField("is_delete")
     @JSONField(serialize = false)
     @ApiModelProperty("是否删除")
