@@ -13,6 +13,8 @@ import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -259,7 +261,14 @@ public class InfluxdbUtils {
             field.set(obj, v);
         } else if (type.equals(LocalDateTime.class)) {
             field.set(obj, CommonUtils.parseStringToLocalDateTime(value.get(i).toString()));
-        } else {
+        } else if(type.equals(Date.class)){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            try {
+                field.set(obj,sdf.parse(value.get(i).toString()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else {
             field.set(obj, value.get(i));
         }
     }
