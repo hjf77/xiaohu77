@@ -56,7 +56,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
      * 用户id
      */
     @NotNull(message = "userid不能为空", groups = {Update.class, Delete.class})
-    @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
+    @TableId(value = "user_id")
     @ApiModelProperty("用户id")
     private Long userId;
 

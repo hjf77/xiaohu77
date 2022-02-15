@@ -52,7 +52,7 @@ public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {
     /**
      * 角色id
      */
-    @TableId(value="role_id",type = IdType.AUTO)
+    @TableId(value="role_id")
     @ApiModelProperty("角色id")
     private Integer roleId;
 
