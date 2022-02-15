@@ -140,7 +140,6 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
      * 组织机构ID
      */
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
-    @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @TableField("organization_id")
     @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
     @ApiModelProperty("组织机构编号")

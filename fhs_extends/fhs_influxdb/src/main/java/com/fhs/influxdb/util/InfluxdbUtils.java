@@ -9,17 +9,14 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class InfluxdbUtils {
@@ -182,8 +179,7 @@ public class InfluxdbUtils {
                 } else {
                     if (field.get(object) != null) {
                         if("time".equals(column.name())){
-                            DateTimeFormatter df = DateTimeFormatter.ofPattern(field.getAnnotation(DateTimeFormat.class).pattern());
-                            builder.time(CommonUtils.parseLocalDateTimeToInstant(LocalDateTime.parse((String) field.get(object), df)).toEpochMilli(), TimeUnit.MILLISECONDS);
+                            builder.time(((Date) field.get(object)).toInstant().toEpochMilli(), TimeUnit.MILLISECONDS);
                         } else {
                             builder.field(column.name(), field.get(object));
                         }
@@ -265,7 +261,14 @@ public class InfluxdbUtils {
             field.set(obj, v);
         } else if (type.equals(LocalDateTime.class)) {
             field.set(obj, CommonUtils.parseStringToLocalDateTime(value.get(i).toString()));
-        } else {
+        } else if(type.equals(Date.class)){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            try {
+                field.set(obj,sdf.parse(value.get(i).toString()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else {
             field.set(obj, value.get(i));
         }
     }
