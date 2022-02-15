@@ -620,7 +620,24 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
 
-    protected String getSqlStatement(SqlMethod sqlMethod) {
-        return SqlHelper.getSqlStatement(this.baseMapper.getClass(), sqlMethod);
+    /**
+     * mapper的类名
+     */
+    private String mapperClassName;
+
+    protected synchronized String getSqlStatement(SqlMethod sqlMethod) {
+        String mapperClass = mapperClassName;
+        // 如果没有指定mapperClass，则取根据po类名自动拼接
+        if (StringUtils.isEmpty(mapperClassName)) {
+            mapperClass = this.getPoClass().getName().replace(".po", ".mapper")
+                    .replace("PO", "Mapper").replace("Po", "Mapper");
+            try {
+                Class.forName(mapperClass);
+                mapperClassName = mapperClass;
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("批处理需要mapper类:" + mapperClass + ",请按照规范放置po位置和mapper位置，以及检查命名规范");
+            }
+        }
+        return mapperClass + "." + sqlMethod.getMethod();
     }
 }
