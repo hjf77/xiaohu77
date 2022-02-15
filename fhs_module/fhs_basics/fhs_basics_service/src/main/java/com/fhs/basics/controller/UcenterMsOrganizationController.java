@@ -64,4 +64,15 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         return TreeUtils.formartTree(orgs);
     }
 
+    /**
+     * 跟据parentId联动查询组织机构
+     * @param ucenterMsOrganizationPO
+     * @return
+     */
+    @ApiOperation("跟据parentId联动查询组织机构")
+    @PostMapping("selectOrgList")
+    public List<UcenterMsOrganizationVO> selectOrgList(@RequestBody UcenterMsOrganizationPO ucenterMsOrganizationPO){
+        List<UcenterMsOrganizationVO> orgList = sysOrganizationService.findForList(ucenterMsOrganizationPO);
+        return orgList;
+    }
 }
