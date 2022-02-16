@@ -162,7 +162,6 @@ public class InfluxdbUtils {
      * 保存
      * time 精度为毫秒
      * @param object
-     * @param timeU 设置时间精度
      * @return
      */
     public static Point saveTimeForMilli(Object object) {
@@ -192,6 +191,41 @@ public class InfluxdbUtils {
         }
         return builder.build();
     }
+
+    /**
+     * 保存
+     * time 精度为秒
+     * @param object
+     * @return
+     */
+    public static Point saveTimeForSecond(Object object) {
+        Class<?> clazz = object.getClass();
+        Measurement measurement = clazz.getAnnotation(Measurement.class);
+        Point.Builder builder = Point.measurement(measurement.name());
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            try {
+                Column column = field.getAnnotation(Column.class);
+                field.setAccessible(true);
+                if (column.tag()) {
+                    builder.tag(column.name(), field.get(object).toString());
+                } else {
+                    if (field.get(object) != null) {
+                        if("time".equals(column.name())){
+                            builder.time(((Date) field.get(object)).toInstant().getEpochSecond(), TimeUnit.SECONDS);
+                        } else {
+                            builder.field(column.name(), field.get(object));
+                        }
+
+                    }
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                log.error("Influxdb save error. error :{}", e.getMessage());
+            }
+        }
+        return builder.build();
+    }
+
 
     /**
      * 删除数据
@@ -262,7 +296,12 @@ public class InfluxdbUtils {
         } else if (type.equals(LocalDateTime.class)) {
             field.set(obj, CommonUtils.parseStringToLocalDateTime(value.get(i).toString()));
         } else if(type.equals(Date.class)){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            SimpleDateFormat sdf = null;
+            if (value.get(i).toString().length()>25){
+                sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            }else {
+                sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+            }
             try {
                 field.set(obj,sdf.parse(value.get(i).toString()));
             } catch (ParseException e) {
