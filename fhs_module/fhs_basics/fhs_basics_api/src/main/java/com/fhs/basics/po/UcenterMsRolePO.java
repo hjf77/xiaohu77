@@ -85,7 +85,6 @@ public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {
     /**
      * 所属机构 -- 多个以逗号分割
      */
-    @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @TableField("organization_id")
     @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
     @ApiModelProperty("组织机构id")
