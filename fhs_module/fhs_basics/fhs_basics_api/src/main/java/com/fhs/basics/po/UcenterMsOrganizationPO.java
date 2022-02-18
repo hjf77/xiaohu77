@@ -105,4 +105,8 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     @ApiModelProperty(value = "所属单位id")
     private String companyId;
 
+    @TableField("is_pipeline")
+    @ApiModelProperty(value = "是否是管道（0:否，1:是）")
+    private Integer isPipeline;
+
 }

@@ -68,7 +68,10 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         ranking = ranking + 1;
         String id = parentId + StringUtils.formatCountWith0("", "%03d", ranking);
         organization.setRanking(ranking);
-        organization.setId(id);
+        //是管道时不重置ID
+        if (organization.getIsPipeline() != 1){
+            organization.setId(id);
+        }
         //如果当前节点是企业的话，那么企业id用自己的id
         if (organization.getIsCompany() != null && organization.getIsCompany() == Constant.INT_TRUE) {
             organization.setCompanyId(organization.getId());
