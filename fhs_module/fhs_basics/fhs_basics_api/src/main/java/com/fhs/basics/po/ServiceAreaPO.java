@@ -1,6 +1,7 @@
 package com.fhs.basics.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.basics.constant.BaseTransConstant;
@@ -56,6 +57,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 区域名称
      */
     @Length(message = "area的areaName字段的长度最大为16", groups = {Add.class, Update.class}, max = 16, min = 0)
+    @TableField("area_name")
     @ApiModelProperty("区域名称")
     private String areaName;
 
@@ -63,6 +65,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 区域代码
      */
     @Length(message = "area的areaCode字段的长度最大为128", groups = {Add.class, Update.class}, max = 128, min = 0)
+    @TableField("area_code")
     @ApiModelProperty("区域代码")
     private String areaCode;
 
@@ -70,6 +73,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 区域简称
      */
     @Length(message = "area的areaShort字段的长度最大为32", groups = {Add.class, Update.class}, max = 32, min = 0)
+    @TableField("area_short")
     @ApiModelProperty("区域简称")
     private String areaShort;
 
@@ -77,6 +81,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 是否热门(0:否、1:是)
      */
     @Length(message = "area的areaIsHot字段的长度最大为1", groups = {Add.class, Update.class}, max = 1, min = 0)
+    @TableField("area_is_hot")
     @ApiModelProperty("是否热门")
     private String areaIsHot;
 
@@ -85,6 +90,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      */
     @Max(message = "{area的areaSequence字段大于int最大值}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{area的areaSequence字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
+    @TableField("area_sequence")
     @ApiModelProperty("区域序列")
     private Integer areaSequence;
 
@@ -93,7 +99,8 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      */
     @Max(message = "{area的areaParentId字段大于int最大值}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{area的areaParentId字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.AREA + "#area")
+    //@Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.AREA + "#area")
+    @TableField("area_parent_id")
     @ApiModelProperty("上级主键")
     private Integer areaParentId;
 
@@ -101,12 +108,14 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 初始时间
      */
     @ApiModelProperty("初始时间")
+    @TableField("init_date")
     private String initDate;
 
     /**
      * 初始地址
      */
     @Length(message = "area的initAddr字段的长度最大为16", groups = {Add.class, Update.class}, max = 16, min = 0)
+    @TableField("init_addr")
     @ApiModelProperty("初始地址")
     private String initAddr;
 

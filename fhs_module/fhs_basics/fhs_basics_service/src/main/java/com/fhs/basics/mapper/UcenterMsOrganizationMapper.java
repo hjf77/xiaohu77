@@ -1,9 +1,12 @@
 package com.fhs.basics.mapper;
 
 import com.fhs.basics.po.UcenterMsOrganizationPO;
+import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author wanglei
@@ -23,4 +26,6 @@ public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrga
      * @return 当前最大的排行
      */
     Integer findRank(@Param("parentId") String parentId);
+
+    List<UcenterMsOrganizationVO> selectOrgTree();
 }

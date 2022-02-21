@@ -66,13 +66,20 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
 
     /**
      * 跟据parentId联动查询组织机构
+     *
      * @param ucenterMsOrganizationPO
      * @return
      */
     @ApiOperation("跟据parentId联动查询组织机构")
     @PostMapping("selectOrgList")
-    public List<UcenterMsOrganizationVO> selectOrgList(@RequestBody UcenterMsOrganizationPO ucenterMsOrganizationPO){
+    public List<UcenterMsOrganizationVO> selectOrgList(@RequestBody UcenterMsOrganizationPO ucenterMsOrganizationPO) {
         List<UcenterMsOrganizationVO> orgList = sysOrganizationService.findForList(ucenterMsOrganizationPO);
         return orgList;
+    }
+
+    @PostMapping(value = "/selectOrgTree")
+    @ApiOperation("查询组织机构不包含管道信息")
+    public List<TreeNode<Treeable>> selectOrgTree() {
+        return sysOrganizationService.selectOrgTree();
     }
 }
