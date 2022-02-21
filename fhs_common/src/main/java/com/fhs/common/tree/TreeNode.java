@@ -39,6 +39,9 @@ public class TreeNode<T> {
      */
     @ApiModelProperty(value = "父节点id")
     private String parentId;
+
+    @ApiModelProperty(value = "管道编码")
+    private String number;
     /**
      * 节点数据
      */
