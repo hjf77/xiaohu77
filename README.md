@@ -43,19 +43,10 @@ http://82.157.62.164/login   admin  123456
 
 
 # 预览图
-![输入图片说明](Snipaste_2021-12-20_18-08-20.png)
+![输入图片说明](fhs.jpg)
 
 # 3. 技术栈
-- 前端:vite2 + vue2 + elementUI2 + veeValidate2
-- 后端校验：hibernate vilidator。
-- 后端：SpringBoot2.5.6 + Springcloud 2020.1（可选） + Spring Gateway（可选）
-- ORM：Mybatis Plus 3.4
-- 模板引擎：beetl（邮件收发）
-- 权限:Sa-token
-- 分布式配置：Nacos 2.0.3
-- 缓存：jetcache
-- 分布式任务：shedlock
-- 文档:swagger+bootstrapUI
+![输入图片说明](222.jpg)
 
 # 4. 和其他框架差异化特性
 ## - &#8194;&#8194;&#8194;&#8194;翻译组件
