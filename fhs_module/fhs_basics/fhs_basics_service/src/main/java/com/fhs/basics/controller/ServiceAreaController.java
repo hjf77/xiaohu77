@@ -6,6 +6,7 @@ import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
 import com.fhs.basics.api.anno.LogNamespace;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 省市区字典controller
@@ -48,4 +53,27 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
         return HttpResult.success(true);
     }
 
+    /**
+     * 无权限也可以查询省市区
+     * @param e
+     * @param request response
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<ServiceAreaVO> findList(ServiceAreaVO e, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return areaService.findForList(e);
+    }
+
+    /**
+     * 无权限也可以查询省市区
+     * @param filter
+     * @param request
+     * @return
+     */
+    @Override
+    public List<ServiceAreaVO> findListAdvance(QueryFilter<ServiceAreaPO> filter, HttpServletRequest request) {
+        return areaService.selectListMP(filter.asWrapper(getDOClass()));
+    }
 }
