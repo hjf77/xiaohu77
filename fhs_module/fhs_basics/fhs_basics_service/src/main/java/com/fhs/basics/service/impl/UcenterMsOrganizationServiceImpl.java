@@ -114,12 +114,12 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == org.getIsEnable()) {
             // 查询当前机构下级机构数
             Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(org.getId()).isEnable(Constant.ENABLED).build());
-            if (orgCount > Constant.ENABLED) {
+            if (orgCount > 0) {
                 throw new ParamException("拥有子结构不可禁用");
             }
             // 查询当前机构和下级机构人员
             Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(oldOrg.getId()).build());
-            if (userCount > Constant.ENABLED) {
+            if (userCount > 0) {
                 throw new ParamException("该机构下拥有用户,不可禁用!");
             }
         }
@@ -133,12 +133,12 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     public int deleteById(Serializable id) {
         // 查询当前机构下级机构数
         Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(ConverterUtils.toString(id)).build());;
-        if (orgCount > Constant.ENABLED) {
+        if (orgCount > 0) {
             throw new ParamException("该机构拥有子机构,不可删除!");
         }
         // 查询当前机构和下级机构人员
         Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(ConverterUtils.toString(id)).build());
-        if (userCount > Constant.ENABLED) {
+        if (userCount > 0) {
             throw new ParamException("该机构下拥有用户,不可删除!");
         }
         return super.deleteById(id);
