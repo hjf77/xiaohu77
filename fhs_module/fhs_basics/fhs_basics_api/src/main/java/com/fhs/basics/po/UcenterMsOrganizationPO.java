@@ -65,7 +65,7 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     @TableField("parent_id")
     @ApiModelProperty(value = "父类编号")
     @NotRepeatField
-    @Trans(type=TransType.AUTO_TRANS,key = "org",ref="parent")
+    //@Trans(type=TransType.AUTO_TRANS,key = "org",ref="parent")
     private String parentId;
 
     /**
