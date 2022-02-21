@@ -24,5 +24,7 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     UcenterMsOrganizationVO selectById(Serializable primaryValue);
 
 
-    List<TreeNode<Treeable>> selectOrgTree();
+    List<TreeNode<Treeable>> selectOrgTreeByCentralStat();
+
+    List<TreeNode<Treeable>> selectOrgTreeByOpeArea();
 }

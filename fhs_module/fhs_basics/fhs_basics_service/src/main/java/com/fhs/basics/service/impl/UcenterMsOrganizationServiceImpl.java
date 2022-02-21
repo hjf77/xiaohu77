@@ -152,9 +152,16 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     public List<UcenterMsOrganizationVO> select() {
         return initCompanyName(super.select());
     }
+
     @Override
-    public List<TreeNode<Treeable>> selectOrgTree() {
-        List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTree();
+    public List<TreeNode<Treeable>> selectOrgTreeByCentralStat() {
+        List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTreeByCentralStat();
+        return TreeUtils.formartTree(msOrganizationVOS);
+    }
+
+    @Override
+    public List<TreeNode<Treeable>> selectOrgTreeByOpeArea() {
+        List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTreeByOpeArea();
         return TreeUtils.formartTree(msOrganizationVOS);
     }
 }

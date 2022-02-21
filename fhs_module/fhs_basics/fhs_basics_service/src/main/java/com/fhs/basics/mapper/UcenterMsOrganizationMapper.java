@@ -27,5 +27,7 @@ public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrga
      */
     Integer findRank(@Param("parentId") String parentId);
 
-    List<UcenterMsOrganizationVO> selectOrgTree();
+    List<UcenterMsOrganizationVO> selectOrgTreeByCentralStat();
+
+    List<UcenterMsOrganizationVO> selectOrgTreeByOpeArea();
 }

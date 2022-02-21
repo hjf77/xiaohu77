@@ -77,9 +77,15 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         return orgList;
     }
 
-    @PostMapping(value = "/selectOrgTree")
-    @ApiOperation("查询组织机构不包含管道信息")
-    public List<TreeNode<Treeable>> selectOrgTree() {
-        return sysOrganizationService.selectOrgTree();
+    @PostMapping(value = "/selectOrgTreeByCentralStat")
+    @ApiOperation("查询组织机构不包含管道信息--到中心站")
+    public List<TreeNode<Treeable>> selectOrgTreeByCentralStat() {
+        return sysOrganizationService.selectOrgTreeByCentralStat();
+    }
+
+    @PostMapping(value = "/selectOrgTreeOpeArea")
+    @ApiOperation("查询组织机构不包含管道信息--到作业区")
+    public List<TreeNode<Treeable>> selectOrgTreeByOpeArea() {
+        return sysOrganizationService.selectOrgTreeByOpeArea();
     }
 }
