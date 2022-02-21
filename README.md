@@ -43,7 +43,7 @@ http://82.157.62.164/login   admin  123456
 
 
 # 预览图
-![输入图片说明](Snipaste_2021-12-20_18-08-20.png)
+![输入图片说明](fhs.jpg)
 
 # 3. 技术栈
 - 前端:vite2 + vue2 + elementUI2 + veeValidate2
