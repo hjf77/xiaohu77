@@ -2,22 +2,23 @@ package com.fhs.basics.service.impl;
 
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.context.UserContext;
-import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.mapper.UcenterMsOrganizationMapper;
+import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.tree.TreeNode;
+import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtils;
+import com.fhs.common.utils.TreeUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
-import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
-import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -150,5 +151,10 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     @Override
     public List<UcenterMsOrganizationVO> select() {
         return initCompanyName(super.select());
+    }
+    @Override
+    public List<TreeNode<Treeable>> selectOrgTree() {
+        List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTree();
+        return TreeUtils.formartTree(msOrganizationVOS);
     }
 }
