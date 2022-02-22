@@ -4,19 +4,14 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.common.tree.Treeable;
 import com.fhs.core.base.po.BasePO;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -35,12 +30,13 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("t_service_area")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ServiceAreaDO", description = "ServiceArea参数")
-public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
+public class ServiceAreaPO extends BasePO<ServiceAreaPO> implements Treeable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -119,4 +115,23 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
     @ApiModelProperty("初始地址")
     private String initAddr;
 
+    @Override
+    public void clearTransCache() {
+        super.clearTransCache();
+    }
+
+    @Override
+    public String getId(){
+        return id+"";
+    }
+
+    @Override
+    public String getParentId() {
+        return areaParentId+"";
+    }
+
+    @Override
+    public String getName() {
+        return areaName;
+    }
 }

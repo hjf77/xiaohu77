@@ -6,16 +6,17 @@ import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
 import com.fhs.basics.api.anno.LogNamespace;
+import com.fhs.common.tree.TreeNode;
+import com.fhs.common.tree.Treeable;
+import com.fhs.common.utils.TreeUtils;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +52,18 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
     public HttpResult<Boolean> refreshRedisCache() {
         areaService.refreshRedisCache();
         return HttpResult.success(true);
+    }
+
+    /**
+     * 区域下拉tree
+     * @param filter
+     * @return
+     */
+    @ApiOperation("下拉专用tree")
+    @PostMapping("selectAreaTree")
+    public List<TreeNode<Treeable>> selectTree(@RequestBody QueryFilter<ServiceAreaPO> filter) {
+        List<ServiceAreaVO> areas = areaService.selectListMP(filter.asWrapper(ServiceAreaPO.class));
+        return TreeUtils.formartTree(areas);
     }
 
     /**
