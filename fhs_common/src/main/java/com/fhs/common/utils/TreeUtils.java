@@ -30,6 +30,9 @@ public class TreeUtils {
         List<Treeable> treeDatas = tempDatas;
         for (Treeable tree : treeDatas) {
             tempNode = new TreeNode();
+            if (StringUtils.isEmpty(tree.getParentId()) && tree.getId().length() == 3) {
+                continue;
+            }
             tempNode.setId(tree.getId());
             tempNode.setName(tree.getName());
             tempNode.setParentId(tree.getParentId());
