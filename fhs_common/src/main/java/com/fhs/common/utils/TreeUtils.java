@@ -29,9 +29,6 @@ public class TreeUtils {
         List tempDatas = datas;
         List<Treeable> treeDatas = tempDatas;
         for (Treeable tree : treeDatas) {
-            if (StringUtils.isEmpty(tree.getParentId())) {
-                continue;
-            }
             tempNode = new TreeNode();
             tempNode.setId(tree.getId());
             tempNode.setName(tree.getName());
