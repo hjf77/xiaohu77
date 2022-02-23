@@ -30,4 +30,6 @@ public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrga
     List<UcenterMsOrganizationVO> selectOrgTreeByCentralStat();
 
     List<UcenterMsOrganizationVO> selectOrgTreeByOpeArea();
+
+    List<UcenterMsOrganizationPO> selectOrgTree(@Param("orgLevel") String orgLevel);
 }

@@ -196,6 +196,26 @@ public class HttpResult<V> extends BaseObject<HttpResult> {
         return result;
     }
 
+    /**
+     * 成功 只返回code 和 message
+     */
+    public static HttpResult<Map> OK(String message) {
+        HttpResult<Map> result = new HttpResult<Map>();
+        result.code = 200;
+        result.message = message;
+        return result;
+    }
+
+    /**
+     * 失败 只返回code 和 message
+     */
+    public static HttpResult<Map> fail(int code, String message) {
+        HttpResult<Map> result = new HttpResult<Map>();
+        result.code = 200;
+        result.message = message;
+        return result;
+    }
+
 
     public String getBusinessKey() {
         return businessKey;

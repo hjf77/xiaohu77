@@ -17,4 +17,20 @@
         SELECT id,name,parent_id,ranking,is_enable,group_code,ext_json,is_company,company_id,is_pipeline,create_user,create_time,update_user,update_time,is_delete
         FROM t_ucenter_ms_organization WHERE is_delete = 0 AND (is_pipeline = 0 or ISNULL(is_pipeline)) <![CDATA[AND CHAR_LENGTH (id)<=12]]>
     </select>
+
+    <select id="selectOrgTree" resultType="com.fhs.basics.po.UcenterMsOrganizationPO">
+         SELECT id,name,parent_id,ranking,is_enable,group_code,ext_json,is_company,company_id,is_pipeline,create_user,create_time,update_user,update_time,is_delete
+        FROM t_ucenter_ms_organization WHERE is_delete = 0 AND (is_pipeline = 0 or ISNULL(is_pipeline))
+        <if test="orgLevel!= null and orgLevel != '' and orgLevel == 'oilpro'">
+            <![CDATA[AND CHAR_LENGTH (id)<=9]]>
+        </if>
+        <if test="orgLevel!= null and orgLevel != '' and orgLevel == 'opeArea'">
+            <![CDATA[AND CHAR_LENGTH (id)<=12]]>
+        </if>
+
+        <if test="orgLevel!= null and orgLevel != '' and orgLevel == 'centralStat'">
+            <![CDATA[AND CHAR_LENGTH (id)<=15]]>
+        </if>
+
+    </select>
 </mapper>
