@@ -167,8 +167,8 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     public List<String> selectAllParentId(UcenterMsOrganizationPO po) {
         List<String> code = new ArrayList<>();
         while (!po.getParentId().equals("001")){
-            code.add(po.getId());
             po = mapper.selectById(po.getParentId());
+            code.add(po.getId());
         }
         Collections.reverse(code);
         return code;
