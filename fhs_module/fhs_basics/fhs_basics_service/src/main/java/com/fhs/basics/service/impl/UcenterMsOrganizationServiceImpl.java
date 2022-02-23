@@ -164,4 +164,16 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTreeByOpeArea();
         return TreeUtils.formartTree(msOrganizationVOS);
     }
+
+    @Override
+    public List<String> selectAllParentId(UcenterMsOrganizationPO po) {
+        List<String> code = new ArrayList<>();
+        while (!po.getParentId().equals("001")){
+            code.add(po.getId());
+            po = mapper.selectById(po.getParentId());
+        }
+        Collections.reverse(code);
+        return code;
+    }
+
 }
