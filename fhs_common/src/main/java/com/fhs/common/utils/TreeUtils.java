@@ -30,9 +30,6 @@ public class TreeUtils {
         List<Treeable> treeDatas = tempDatas;
         for (Treeable tree : treeDatas) {
             tempNode = new TreeNode();
-            if (StringUtils.isEmpty(tree.getParentId()) && tree.getId().length() == 3) {
-                continue;
-            }
             tempNode.setId(tree.getId());
             tempNode.setName(tree.getName());
             tempNode.setParentId(tree.getParentId());
@@ -65,7 +62,7 @@ public class TreeUtils {
         return formartTree(datas, null);
     }
 
-    public static List<TreeNode<TreeableByPipeline>> formartTreeByPipeline(List datas) {
+    public static List<TreeNode<TreeableByPipeline>> formartTreeByPipeline(List datas, String needCompany) {
         if (datas.isEmpty()) {
             return new ArrayList<>();
         }
@@ -79,6 +76,9 @@ public class TreeUtils {
         List tempDatas = datas;
         List<TreeableByPipeline> treeDatas = tempDatas;
         for (TreeableByPipeline tree : treeDatas) {
+            if (!needCompany.equals("yes") && StringUtils.isEmpty(tree.getParentId())) {
+                continue;
+            }
             tempNode = new TreeNode();
             tempNode.setId(tree.getId());
             tempNode.setName(tree.getName());
@@ -98,4 +98,38 @@ public class TreeUtils {
         return result;
     }
 
+    public static List<TreeNode<Treeable>> formartTreeByCompany(List datas) {
+        if (datas.isEmpty()) {
+            return new ArrayList<>();
+        }
+        if (!(datas.get(0) instanceof Treeable)) {
+            throw new RuntimeException("PO请实现Treeable接口");
+        }
+
+        List<TreeNode<Treeable>> result = new ArrayList<>();
+        Map<String, TreeNode<Treeable>> nodeMap = new LinkedHashMap<>();
+        TreeNode<Treeable> tempNode = null;
+        List tempDatas = datas;
+        List<Treeable> treeDatas = tempDatas;
+        for (Treeable tree : treeDatas) {
+            if (StringUtils.isEmpty(tree.getParentId())) {
+                continue;
+            }
+            tempNode = new TreeNode();
+            tempNode.setId(tree.getId());
+            tempNode.setName(tree.getName());
+            tempNode.setParentId(tree.getParentId());
+            tempNode.setData(tree);
+            nodeMap.put(tempNode.getId(), tempNode);
+        }
+        for (String id : nodeMap.keySet()) {
+            tempNode = nodeMap.get(id);
+            if (nodeMap.containsKey(tempNode.getParentId())) {
+                nodeMap.get(tempNode.getParentId()).getChildren().add(tempNode);
+            } else {
+                result.add(tempNode);
+            }
+        }
+        return result;
+    }
 }

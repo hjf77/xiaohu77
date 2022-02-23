@@ -70,7 +70,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         String id = parentId + StringUtils.formatCountWith0("", "%03d", ranking);
         organization.setRanking(ranking);
         //是管道时不重置ID
-        if (organization.getIsPipeline() != 1){
+        if (organization.getIsPipeline() != 1) {
             organization.setId(id);
         }
         //如果当前节点是企业的话，那么企业id用自己的id
@@ -81,8 +81,6 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     }
 
 
-
-
     @Override
     public List<UcenterMsOrganizationVO> findByIds(List ids) {
         return initCompanyName(super.findByIds(ids));
@@ -90,6 +88,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
     /**
      * 初始化部门的单位名称
+     *
      * @param vos
      * @return
      */
@@ -136,7 +135,8 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     @Override
     public int deleteById(Serializable id) {
         // 查询当前机构下级机构数
-        Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(ConverterUtils.toString(id)).build());;
+        Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(ConverterUtils.toString(id)).build());
+        ;
         if (orgCount > 0) {
             throw new ParamException("该机构拥有子机构,不可删除!");
         }
@@ -153,15 +153,13 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         return initCompanyName(super.select());
     }
 
-    @Override
-    public List<TreeNode<Treeable>> selectOrgTreeByCentralStat() {
-        List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTreeByCentralStat();
-        return TreeUtils.formartTree(msOrganizationVOS);
-    }
 
     @Override
-    public List<TreeNode<Treeable>> selectOrgTreeByOpeArea() {
-        List<UcenterMsOrganizationVO> msOrganizationVOS = mapper.selectOrgTreeByOpeArea();
-        return TreeUtils.formartTree(msOrganizationVOS);
+    public List<TreeNode<Treeable>> selectOrgTree(String needCompany, String orgLevel) {
+        List<UcenterMsOrganizationPO> ucenterMsOrganizationPOS = mapper.selectOrgTree(orgLevel);
+        if (StringUtils.isEmpty(needCompany) || needCompany.equals("yes")) {
+            return TreeUtils.formartTree(ucenterMsOrganizationPOS);
+        }
+        return TreeUtils.formartTreeByCompany(ucenterMsOrganizationPOS);
     }
 }

@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Wrapper;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -76,16 +78,15 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         List<UcenterMsOrganizationVO> orgList = sysOrganizationService.findForList(ucenterMsOrganizationPO);
         return orgList;
     }
-
-    @PostMapping(value = "/selectOrgTreeByCentralStat")
-    @ApiOperation("查询组织机构不包含管道信息--到中心站")
-    public List<TreeNode<Treeable>> selectOrgTreeByCentralStat() {
-        return sysOrganizationService.selectOrgTreeByCentralStat();
-    }
-
-    @PostMapping(value = "/selectOrgTreeOpeArea")
-    @ApiOperation("查询组织机构不包含管道信息--到作业区")
-    public List<TreeNode<Treeable>> selectOrgTreeByOpeArea() {
-        return sysOrganizationService.selectOrgTreeByOpeArea();
+    /**
+     * 跟据parentId联动查询组织机构
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation("查询组织机构--带公司或者不带--指定到哪一级--不带管道信息")
+    @GetMapping("selectOrgTree/{needCompany}/{orgLevel}")
+    public List<TreeNode<Treeable>> selectOrgTree(String needCompany,String orgLevel) {
+        return sysOrganizationService.selectOrgTree(needCompany,orgLevel);
     }
 }
