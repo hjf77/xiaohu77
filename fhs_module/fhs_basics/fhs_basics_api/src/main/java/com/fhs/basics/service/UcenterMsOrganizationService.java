@@ -23,11 +23,6 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     @CloudMethod
     UcenterMsOrganizationVO selectById(Serializable primaryValue);
 
-
-    List<TreeNode<Treeable>> selectOrgTreeByCentralStat();
-
-    List<TreeNode<Treeable>> selectOrgTreeByOpeArea();
-
     List<String> selectAllParentId(UcenterMsOrganizationPO po);
 
     List<TreeNode<Treeable>> selectOrgTree(String needCompany, String orgLevel);
