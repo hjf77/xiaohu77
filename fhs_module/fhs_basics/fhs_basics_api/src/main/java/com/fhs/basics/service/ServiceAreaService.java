@@ -3,7 +3,10 @@ package com.fhs.basics.service;
 import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.vo.ServiceAreaVO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.easycloud.anno.CloudApi;
+import com.fhs.easycloud.anno.CloudMethod;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -18,7 +21,7 @@ import java.util.Map;
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
-
+@CloudApi(serviceName = "basic", primary = false)
 public interface ServiceAreaService extends BaseService<ServiceAreaVO, ServiceAreaPO> {
 
 
@@ -36,5 +39,8 @@ public interface ServiceAreaService extends BaseService<ServiceAreaVO, ServiceAr
      */
     void refreshRedisCache();
 
+
+    @CloudMethod
+    List<String> selectAllParentId(String id);
 
 }

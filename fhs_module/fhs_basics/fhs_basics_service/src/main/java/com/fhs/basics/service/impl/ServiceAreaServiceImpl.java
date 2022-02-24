@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.basics.mapper.ServiceAreaMapper;
 import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
@@ -13,6 +14,8 @@ import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +39,9 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
      */
     @Autowired
     private RedisCacheService<String> redisCacheService;
+
+    @Autowired
+    private ServiceAreaMapper serviceAreaManager;
 
     @Override
     public String findAddressById(Map<String, Object> map) {
@@ -68,6 +74,21 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
                 }
             }
         }
+    }
+
+    @Override
+    public List<String> selectAllParentId(String id) {
+        ServiceAreaPO serviceAreaPO = serviceAreaManager.selectById(id);
+        List<String> code = new ArrayList<>();
+        while (!serviceAreaPO.getAreaParentId().equals(0)){
+            code.add(serviceAreaPO.getId());
+            serviceAreaPO = serviceAreaManager.selectById(serviceAreaPO.getAreaParentId());
+            if(serviceAreaPO.getAreaParentId().equals(0)){
+                code.add(serviceAreaPO.getId());
+            }
+        }
+        Collections.reverse(code);
+        return code;
     }
 
 }
