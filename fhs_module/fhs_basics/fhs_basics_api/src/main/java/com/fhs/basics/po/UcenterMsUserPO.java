@@ -121,6 +121,13 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private Integer isEnable;
 
     /**
+     * 备注
+     */
+    @TableField("remark")
+    @ApiModelProperty("备注")
+    private String remark;
+
+    /**
      * 是否超管 0:否 1:是
      */
     @ApiModelProperty("是管理员")
