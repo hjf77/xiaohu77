@@ -22,7 +22,7 @@
 	</select>
 
     <!-- 根据用户获取角色 -->
-    <select id="findRolesByUserId" parameterType="string"
+    <select id="findRolesByUserId" parameterType="long"
             resultType="com.fhs.basics.po.UcenterMsRolePO">
 		SELECT
 		distinct ar.role_id AS roleId,
