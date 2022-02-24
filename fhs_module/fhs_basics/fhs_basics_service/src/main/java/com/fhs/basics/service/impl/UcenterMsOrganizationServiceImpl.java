@@ -164,6 +164,11 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     }
 
     @Override
+    public List<UcenterMsOrganizationPO> selectOrg(String orgLevel) {
+        return this.mapper.selectOrg(orgLevel);
+    }
+
+    @Override
     public List<String> selectAllParentId(String id) {
         UcenterMsOrganizationPO organizationPO = mapper.selectById(id);
         List<String> code = new ArrayList<>();

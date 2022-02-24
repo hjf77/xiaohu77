@@ -27,4 +27,6 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     List<String> selectAllParentId(String id);
 
     List<TreeNode<Treeable>> selectOrgTree(String needCompany, String orgLevel);
+
+    List<UcenterMsOrganizationPO> selectOrg(String orgLevel);
 }

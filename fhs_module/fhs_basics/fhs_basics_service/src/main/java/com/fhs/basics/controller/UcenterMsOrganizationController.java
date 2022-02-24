@@ -79,7 +79,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         return orgList;
     }
     /**
-     * 跟据parentId联动查询组织机构
+     * 查询组织机构--带公司或者不带--指定到哪一级--不带管道信息
      *
      * @param
      * @return
@@ -88,5 +88,17 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     @GetMapping("selectOrgTree/{needCompany}/{orgLevel}")
     public List<TreeNode<Treeable>> selectOrgTree(String needCompany,String orgLevel) {
         return sysOrganizationService.selectOrgTree(needCompany,orgLevel);
+    }
+
+    /**
+     * 查询组织机构--带公司或者不带--指定到哪一级--不带管道信息
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation("指定查某级机构List--不带管道信息")
+    @GetMapping("selectOrg/{orgLevel}")
+    public List<UcenterMsOrganizationPO> selectOrg(String orgLevel) {
+        return sysOrganizationService.selectOrg(orgLevel);
     }
 }
