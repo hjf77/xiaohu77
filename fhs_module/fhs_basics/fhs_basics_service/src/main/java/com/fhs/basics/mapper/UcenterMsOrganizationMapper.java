@@ -18,7 +18,6 @@ import java.util.List;
 public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrganizationPO> {
 
 
-
     /**
      * 查询当前最大的同爸爸排行是第几
      *
@@ -32,4 +31,6 @@ public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrga
     List<UcenterMsOrganizationVO> selectOrgTreeByOpeArea();
 
     List<UcenterMsOrganizationPO> selectOrgTree(@Param("orgLevel") String orgLevel);
+
+    List<UcenterMsOrganizationPO> selectOrg(@Param("orgLevel") String orgLevel);
 }
