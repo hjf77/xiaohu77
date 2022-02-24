@@ -1,7 +1,7 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.mapper.UcenterMsRoleMapper;
+import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
@@ -9,6 +9,7 @@ import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -50,6 +51,10 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public boolean addRole(UcenterMsRolePO adminRole) {
+        long countMP = this.findCount(UcenterMsRolePO.builder().roleName(adminRole.getRoleName()).build());
+        if (countMP != 0) {
+            throw new ParamException("角色名称不能重复");
+        }
         // 插入角色信息
         int count = super.insertSelective(adminRole);
         if (count > 0) {
@@ -93,7 +98,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
                 String buttonId = itemarr[1].split(":")[1];
                 list.add(buttonId);
             } else {
-                if(itemarr.length>1){
+                if (itemarr.length > 1) {
                     String buttonType = itemarr[1].split(":")[1];
                     String menuId = itemarr[1].split(":")[0];
                     Map<String, Object> map = new HashMap<String, Object>();
@@ -213,9 +218,9 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     }
 
 
-
     /**
      * 更新角色授权
+     *
      * @param adminRole
      * @return
      */
