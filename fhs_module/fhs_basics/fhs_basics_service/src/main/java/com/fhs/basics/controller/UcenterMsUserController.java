@@ -65,10 +65,9 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      */
     @GetMapping("getUserTree")
     @ApiOperation("获取用户组织tree")
-    public   List<SysUserOrgVO> getUserTree() {
+    public List<SysUserOrgVO> getUserTree() {
         return sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode());
     }
-
 
 
     @Override
@@ -120,7 +119,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-
     @GetMapping("getUserByCompanyId")
     @ApiOperation("根据单位id获取单位下的用户集合")
     public List<UcenterMsUserVO> getUserByCompanyId(String companyId) {
@@ -159,11 +157,18 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) UcenterMsUserVO sysUser, HttpServletRequest request,
                                       HttpServletResponse response) {
-        if ("defaultPass".equals(sysUser.getPassword())) {
-            sysUser.setPassword(null);
+        boolean notExist = sysUserService.validataLoginName(sysUser);
+        if (notExist) {
+            if ("defaultPass".equals(sysUser.getPassword())) {
+                sysUser.setPassword(null);
+            }
+            sysUserService.updateUser(sysUser);
+            return HttpResult.success(Boolean.TRUE);
+
+        } else {
+            throw new ParamException("用户名/登录名重复");
         }
-        sysUserService.updateUser(sysUser);
-        return HttpResult.success(Boolean.TRUE);
+
     }
 
 
@@ -231,8 +236,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         boolean isSuccess = sysUserService.validataPass(sysUser);
         return isSuccess ? HttpResult.success(true) : HttpResult.error(false);
     }
-
-
 
 
     /**
