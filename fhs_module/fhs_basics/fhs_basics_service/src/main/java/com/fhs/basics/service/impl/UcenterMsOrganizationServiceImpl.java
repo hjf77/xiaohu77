@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.mapper.UcenterMsOrganizationMapper;
@@ -178,6 +179,30 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         }
         Collections.reverse(code);
         return code;
+    }
+
+    @Override
+    public String selectOrgList(String id) {
+        String ids = "";
+        QueryWrapper wrapper = new QueryWrapper();
+        if(id.length() == 3 || id.length() == 6){//判断用户是否所属公司 / 输油处、采油厂
+            wrapper.apply(" ( id like '"+ id +"%' and length(id) <= 12) ");
+            List<UcenterMsOrganizationPO> ucenterMsOrganizationPOS = mapper.selectList(wrapper);
+            for (UcenterMsOrganizationPO ucenterMsOrganizationPO : ucenterMsOrganizationPOS) {
+                ids += ucenterMsOrganizationPO.getId() + ",";
+            }
+            ids = ids.substring(0,ids.length() -1);
+        }else if(id.length() == 9){//用户所属采油厂
+            wrapper.apply(" ( id like '"+ id +"%' and length(id) <= 12) ");
+            List<UcenterMsOrganizationPO> ucenterMsOrganizationPOS = mapper.selectList(wrapper);
+            for (UcenterMsOrganizationPO ucenterMsOrganizationPO : ucenterMsOrganizationPOS) {
+                ids += ucenterMsOrganizationPO.getId() + ",";
+            }
+            ids += id.substring(0,6);
+        }else if(id.length() == 12){//用户所属作业区
+            ids += id.substring(0,6)+","+id.substring(0,9)+","+id.substring(0,12);
+        }
+        return ids;
     }
 
 }
