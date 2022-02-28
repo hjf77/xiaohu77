@@ -16,6 +16,7 @@ import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
+import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.*;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -260,5 +261,10 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @ApiOperation("获取公司tree(带用户)")
     public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
         return sysUserService.getUserCompanyTree(new QueryWrapper<>());
+    }
+    @GetMapping("getOrgTreeByUser")
+    @ApiOperation("根据当前用户获取组织机构")
+    public List<TreeNode<Treeable>> getOrgTreeByUser() {
+        return sysUserService.getOrgTreeByUser(this.getSessionuser().getOrganizationId(),new ArrayList<UcenterMsOrganizationVO>());
     }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.vo.*;
 import com.fhs.common.tree.TreeNode;
+import com.fhs.common.tree.Treeable;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
@@ -203,4 +204,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper);
+
+
+    List<TreeNode<Treeable>> getOrgTreeByUser(String organizationId,List<UcenterMsOrganizationVO>ucenterMsOrganizationVOS);
 }
