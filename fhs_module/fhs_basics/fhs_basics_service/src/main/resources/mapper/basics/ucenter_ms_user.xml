@@ -530,14 +530,14 @@
         COUNT(1)
         FROM `t_ucenter_ms_user`
         <where>
-          <!--  <if test="userId !=null and userId != ''">
+            <if test="userId !=null and userId != ''">
                 AND user_id != #{userId}
-            </if>-->
+            </if>
             <if test="userName !=null and userName != ''">
-                or user_name = #{userName}
+                AND user_name = #{userName}
             </if>
             <if test="userLoginName !=null and userLoginName != ''">
-                or user_login_name = #{userLoginName}
+                AND user_login_name = #{userLoginName}
             </if>
         </where>
     </select>
