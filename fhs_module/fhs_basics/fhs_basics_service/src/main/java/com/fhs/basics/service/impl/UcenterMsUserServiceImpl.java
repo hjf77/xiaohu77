@@ -263,6 +263,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         if (tempUser.getIsAdmin() == ADMIN) {
             adminMenus = ListUtils.copyListToList(sysMenuMapper.findForAllList(paramMap), SettMsMenuVO.class);
         } else {
+            paramMap.put("userLoginName",tempUser.getUserLoginName());
             adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap), SettMsMenuVO.class);
         }
         return readPermissionSet(adminMenus);
