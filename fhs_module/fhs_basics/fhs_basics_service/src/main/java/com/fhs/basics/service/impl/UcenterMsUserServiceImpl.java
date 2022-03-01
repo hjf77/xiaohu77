@@ -482,6 +482,16 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return result;
     }
 
+    /**
+     * 查询组织机构某个角色下的所有用户信息
+     * @param paramMap roleId 角色id
+     * @param paramMap organizationId 组织机构id
+     * @return
+     */
+    @Override
+    public List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap) {
+        return sysUserMapper.findOrgRoleList(paramMap);
+    }
 
     @Override
     public List<UcenterMsUserPO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {

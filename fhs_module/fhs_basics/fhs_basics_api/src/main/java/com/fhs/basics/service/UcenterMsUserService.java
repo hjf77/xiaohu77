@@ -206,5 +206,14 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper);
 
 
-    List<TreeNode<Treeable>> getOrgTreeByUser(String organizationId,List<UcenterMsOrganizationVO>ucenterMsOrganizationVOS);
+    List<TreeNode<Treeable>> getOrgTreeByUser(String organizationId, List<UcenterMsOrganizationVO>ucenterMsOrganizationVOS);
+
+    /**
+     * 查询组织机构某个角色下的所有用户信息
+     * @param paramMap roleId 角色id
+     * @param paramMap organizationId 组织机构id
+     * @return
+     */
+    @CloudMethod
+    List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap);
 }
