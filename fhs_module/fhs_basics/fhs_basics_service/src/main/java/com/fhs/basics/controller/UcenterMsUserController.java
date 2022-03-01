@@ -101,7 +101,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             }
             return HttpResult.success(retult);
         } else {
-            throw new ParamException("用户名重复");
+            throw new ParamException("用户名/登录名重复");
         }
     }
 

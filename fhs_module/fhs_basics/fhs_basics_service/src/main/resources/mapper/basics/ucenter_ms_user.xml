@@ -537,8 +537,9 @@
                 AND user_name = #{userName}
             </if>
             <if test="userLoginName !=null and userLoginName != ''">
-                AND user_login_name = #{userLoginName}
+                OR user_login_name = #{userLoginName}
             </if>
+            AND is_delete = 0
         </where>
     </select>
     <!-- 根据传来的fatherIds查出所有的father信息 -->
