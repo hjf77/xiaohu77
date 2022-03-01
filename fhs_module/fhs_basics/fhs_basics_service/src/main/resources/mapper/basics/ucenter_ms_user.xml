@@ -670,5 +670,19 @@
 
     </select>
 
+    <select id="findOrgRoleList" resultType="com.fhs.basics.po.UcenterMsUserPO" parameterType="map">
+        select
+               u.user_id as userId,
+               u.user_name as userName,
+               u.user_login_name as userLoginName
+        from t_ucenter_ms_user u
+        left join t_ucenter_ms_role_user_rela r on u.user_id = r.user_id
+        where 1=1
+          and r.role_id = #{roleId}
+          AND u.organization_id LIKE CONCAT(#{organizationId}, '%')
+          and u.is_delete = '0'
+            and u.is_enable = '1'
+    </select>
+
 </mapper>
 
