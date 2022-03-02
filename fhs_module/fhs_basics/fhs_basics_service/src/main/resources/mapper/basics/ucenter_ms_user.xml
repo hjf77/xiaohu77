@@ -530,14 +530,11 @@
         COUNT(1)
         FROM `t_ucenter_ms_user`
         <where>
-            <if test="userId !=null and userId != ''">
+            <if test="userId !=null">
                 AND user_id != #{userId}
             </if>
-            <if test="userName !=null and userName != ''">
-                AND user_name = #{userName}
-            </if>
-            <if test="userLoginName !=null and userLoginName != ''">
-                OR user_login_name = #{userLoginName}
+            <if test="userLoginName != null and userLoginName != ''">
+                AND user_login_name = #{userLoginName}
             </if>
             AND is_delete = 0
         </where>
