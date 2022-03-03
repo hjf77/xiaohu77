@@ -400,6 +400,21 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         List<SettMsMenuVO> result = new ArrayList<>();
         result.addAll(hasAddMenu);
+        result.sort(new Comparator<SettMsMenuVO>() {
+            @Override
+            public int compare(SettMsMenuVO o1, SettMsMenuVO o2) {
+                if (o1.getFatherMenuId() == null) {
+                    return -1;
+                }
+                if (o2.getFatherMenuId() == null) {
+                    return 1;
+                }
+                if (o1.getFatherMenuId().compareTo(o2.getFatherMenuId()) == 0) {
+                    return ConverterUtils.toInt(o1.getOrderIndex()) - ConverterUtils.toInt(o2.getOrderIndex());
+                }
+                return o1.getFatherMenuId().compareTo(o2.getFatherMenuId());
+            }
+        });
         return result;
     }
 
