@@ -83,9 +83,9 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
         while (!serviceAreaPO.getAreaParentId().equals(0)){
             code.add(serviceAreaPO.getId());
             serviceAreaPO = serviceAreaManager.selectById(serviceAreaPO.getAreaParentId());
-            if(serviceAreaPO.getAreaParentId().equals(0)){
-                code.add(serviceAreaPO.getId());
-            }
+        }
+        if(serviceAreaPO.getAreaParentId().equals(0)){
+            code.add(serviceAreaPO.getId());
         }
         Collections.reverse(code);
         return code;
