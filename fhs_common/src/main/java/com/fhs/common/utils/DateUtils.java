@@ -430,6 +430,21 @@ public class DateUtils {
     }
 
     /**
+     * 两个时间相差多少秒
+     */
+    public static long getDistanceTimeSecond(Date str1, Date str2) {
+        long time1 = str1.getTime();
+        long time2 = str2.getTime();
+        long diff;
+        if (time1 < time2) {
+            diff = time2 - time1;
+        } else {
+            diff = time1 - time2;
+        }
+        return diff / 1000;
+    }
+
+    /**
      * 格式化时间，如果时间是今天，则显示HH:mm；如果是昨天，显示昨天；如果是之前，则显示 YYYY-MM-DD <一句话功能简述> <功能详细描述>
      *
      * @param <T>
