@@ -13,6 +13,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -288,8 +289,9 @@ public class InfluxdbUtils {
             BigDecimal v = new BigDecimal(value.get(i).toString());
             field.set(obj, v.floatValue());
         } else if (type.equals(Double.class)) {
-            BigDecimal v = new BigDecimal(value.get(i).toString());
-            field.set(obj, v.doubleValue());
+            DecimalFormat df = new DecimalFormat("#.00");
+            String format = df.format(new BigDecimal(value.get(i).toString()));
+            field.set(obj, Double.valueOf(format));
         } else if (type.equals(BigDecimal.class)) {
             BigDecimal v = new BigDecimal(value.get(i).toString());
             field.set(obj, v);
