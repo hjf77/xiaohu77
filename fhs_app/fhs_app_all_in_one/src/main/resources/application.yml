@@ -31,7 +31,7 @@ easy-trans:
   is-enable-cloud: false
 fhs:
   vue:
-    is-verification: true
+    is-verification: false
   autoware:
     package: com.fhs.*;com.fhs.*.*;
   autodel:
