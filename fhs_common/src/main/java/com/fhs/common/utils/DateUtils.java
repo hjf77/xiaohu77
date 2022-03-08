@@ -441,7 +441,7 @@ public class DateUtils {
         } else {
             diff = time1 - time2;
         }
-        return diff / 1000;
+        return diff;
     }
 
     /**
@@ -762,6 +762,14 @@ public class DateUtils {
             e.printStackTrace();
             return new SimpleDateFormat(DateUtils.DATETIME_PATTERN_DATE).format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         }
+    }
+
+    /**
+     * 根据formatter获取对应时间字符串LocalDateTime
+     */
+    public static LocalDateTime getLocalDateTimeByDataStr(String formatter, String timeStr) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(formatter);
+        return LocalDateTime.parse(timeStr, df);
     }
 
     /**
