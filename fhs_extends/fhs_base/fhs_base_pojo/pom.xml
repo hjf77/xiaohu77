@@ -56,7 +56,7 @@
         <dependency>
             <artifactId>tools</artifactId>
             <groupId>com.java</groupId>
-            <version>1.0</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 
