@@ -27,17 +27,10 @@
                     <artifactId>ecj</artifactId>
                     <groupId>org.eclipse.jdt</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>jdk.tools</artifactId>
-                    <groupId>jdk.tools</groupId>
-                </exclusion>
+
             </exclusions>
         </dependency>
-        <dependency>
-            <artifactId>tools</artifactId>
-            <groupId>com.java</groupId>
-            <version>1.0.1</version>
-        </dependency>
+
 
         <!--在线定时任务模块,不需要的话可以去掉-->
        <!-- <dependency>
