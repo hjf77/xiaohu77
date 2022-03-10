@@ -167,6 +167,82 @@ export default {
 
 ```
 
+## - &#8194;&#8194;&#8194;&#8194;Mybatis Plus查询增强    
+ Mybatis的wrapper是我见过特别好的查询api设计，但是条件稍微多一点就写的很长，我们通过APT技术(类似lombok对po进行编译时增强)，对PO进行增强，使用PO来替代原生Wrapper构造，和activeRecord配合起来简直不要太美。上demo:
+```java
+//有po定义如下：
+@Data
+@Wrapperable //增强注解 类似lombok的@data 注解
+@TableName("user")
+public class User {
+
+    @TableId("user_id")
+    private Integer userId;
+
+    @TableField("name")
+    private String name;
+
+    @TableField("age")
+    private Integer age;
+
+    @TableField("sex")
+    private String sex;
+
+
+}
+
+
+ @GetMapping("/one")
+    public User one() {
+        return User.newOBJ().nameLike("小").one();
+    }
+
+    @GetMapping("/oneField")
+    public User oneField() {
+        //这里只查id和name2个字段
+        return User.newOBJ().nameLike("小").one(new String[]{User.USERID, User.NAME});
+    }
+
+    @GetMapping("/list")
+    public List<User> list() {
+        return User.newOBJ().ageBetween(10, 25).list();
+    }
+
+    @GetMapping("/listField")
+    public List<User> listField() {
+        return User.newOBJ().ageBetween(10, 20).list(new String[]{User.USERID, User.NAME});
+    }
+
+    @GetMapping("/delete")
+    public int delete() {
+        return User.newOBJ().ageBetween(50, 80).delete();
+    }
+
+    @GetMapping("/count")
+    public Long count() {
+        return  User.newOBJ().ageBetween(10,26).count();
+    }
+
+    
+    @GetMapping("/update")
+    public int update() {
+        User user = User.newOBJ();
+        user.setAge(19);
+		//把小明的年龄改为19
+        return user.nameEQ("小明").update();
+    }
+```
+ 如果想单独使用此插件，也可访问我们的mp_Ext开源项目：https://gitee.com/fhs-opensource/fhs_mp
+
+### class和提示已经支持自动生成的方法有：    
+bean2Wrapper,list,list(String[] fields),one,one(String[] fileds),count,delete,update,newOBJ    
+### 已经支持的wrapper相关操作方法有：    
+eq,neq,ge,gt,le,lt,like,notLike,likeLeft,likeRight,in,notIn,between,orderByAsc,orderByDesc,isNull,notNull
+
+### 千万注意：
+本功能和lombok一样需要搭配idea插件使用，不然class虽然增强了但是idea 无法识别这些方法报错，但是不影响运行，我们提供了配套的idea插件 ： https://gitee.com/fhs-opensource/fhs_mp/tree/master/idea_plugin
+要求idea版本为 2021.2.2 以及 以上。
+并且idea加入以下配置：setting-Build,Execution,Deployment-Compiler Shared build process VM 的value设置为 option -Djps.track.ap.dependencies=false
 
 # 使用说明
 
