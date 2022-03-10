@@ -36,6 +36,7 @@
         <dependency>
             <artifactId>com.java</artifactId>
             <groupId>tools</groupId>
+            <version>1.0</version>
         </dependency>
 
         <!--在线定时任务模块,不需要的话可以去掉-->
