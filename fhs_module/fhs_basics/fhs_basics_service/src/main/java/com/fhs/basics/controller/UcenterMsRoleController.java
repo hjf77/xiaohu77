@@ -64,7 +64,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * @param roleId
      */
     @GetMapping("getRolePermissionButtons")
-    public String[] getRolePermissionButtons(String roleId) {
+    public String[] getRolePermissionButtons(Integer roleId) {
         return sysRoleService.getRolePermissionButtons(roleId);
     }
 
