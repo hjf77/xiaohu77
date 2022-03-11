@@ -24,7 +24,10 @@
         </a> 
         +
         <a href="http://spring.io/projects/spring-boot">
-            <img src="https://img.shields.io/badge/spring--boot-2.3.12-green.svg" alt="spring-boot">
+            <img src="https://img.shields.io/badge/spring--boot-2.5.6-green.svg" alt="spring-boot">
+        </a>
+         <a href="http://spring.io/projects/spring-boot">
+            <img src="https://img.shields.io/badge/spring--cloud-2020.0.4-green.svg" alt="spring-boot">
         </a>
         <a href="http://mp.baomidou.com">
             <img src="https://img.shields.io/badge/mybatis--plus-3.4-blue.svg" alt="mybatis-plus">
