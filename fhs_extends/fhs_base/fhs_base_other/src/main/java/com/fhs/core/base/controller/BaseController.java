@@ -237,10 +237,9 @@ public abstract class BaseController {
      */
     protected void outWrite(String str) {
         HttpServletResponse response = getResponse();
-        response.setContentType("text/html;charset=UTF-8");// 解决中文乱码
         PrintWriter pw = null;
         try {
-            response.setContentType("text/html");
+            response.setContentType("application/json;charset=UTF-8");
             pw = response.getWriter();
             pw.print(str);
             pw.flush();
