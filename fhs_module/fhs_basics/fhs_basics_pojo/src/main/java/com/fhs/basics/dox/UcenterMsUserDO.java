@@ -159,6 +159,28 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     private String header;
 
     /**
+     * 课程id
+     */
+    @TableField("curriculum_id")
+    @ApiModelProperty("课程id")
+    private String curriculumId;
+
+    /**
+     * 班级id
+     */
+    @TableField("classes_id")
+    @ApiModelProperty("班级id")
+    private String classesId;
+
+    /**
+     * type
+     */
+    @TableField("type")
+    @ApiModelProperty("type")
+    private String type;
+
+
+    /**
      * 状态
      */
 

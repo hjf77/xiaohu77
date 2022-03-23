@@ -26,7 +26,7 @@ fhs:
     enable-cas: false
     #登录地址
     url: /b/page/login
-    error-pass-lock-times: 2 #2次密码输入错误就锁定
+    error-pass-lock-times: 100 #2次密码输入错误就锁定
     user-lock-seconds: 60 ##10秒解除锁定
   mybatis-jpa:
     #多个用;分隔
@@ -105,9 +105,9 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 10.100.14.97
-    password: 123456
-    port: 6379
+    host: 82.157.62.164
+    password: wanglei1992
+    port: 16379
     timeout: 6000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -125,9 +125,9 @@ spring:
     testWhileIdle: trueserver
     timeBetweenEvictionRunsMillis: 60000
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://10.100.14.97:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://82.157.62.164:3306/student?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: 123456
+    password: wanglei1992
     validationQuery: select 'x'
 
   quartz:
@@ -194,4 +194,4 @@ jetcache:
       valueDecoder: java
       asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://123456@10.100.14.97:6379/11  #redis://密码@IP:端口/库
+        - redis://wanglei1992@82.157.62.164:16379/11  #redis://密码@IP:端口/库

@@ -1,5 +1,7 @@
 package com.fhs.pagex.service;
 
+import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.common.constant.Constant;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.result.PubResult;
 import com.fhs.logger.Logger;
@@ -101,7 +103,13 @@ public enum HandelPageXService {
                 param = param == null ? "" : param;
                 html = html.replace("${" + needReplace + "}", param);
             }
-
+            //如果是param开头的就取param的
+            else if (trimNeedReplace.startsWith("session.")) {
+                UcenterMsUserVO user = (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+                Object param = user.asMap().get(trimNeedReplace.replace("session.user.", ""));
+                param = param == null ? "" : param;
+                html = html.replace("${" + needReplace + "}", "" + param);
+            }
         }
         return html;
     }

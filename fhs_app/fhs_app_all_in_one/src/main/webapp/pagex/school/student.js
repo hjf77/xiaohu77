@@ -8,6 +8,7 @@ var listPage = {
             {name: 'num', title: '学号', width: '10%', align: 'center'},
             {name: 'sex', title: '性别', width: '10%', align: 'center',key:'sex',trans:'book',showField:'transMap.sexName'},
             {name: 'birthday', title: '生日', width: '10%', align: 'center'},
+            {name: 'classes_id', title: '班级', width: '10%', align: 'center',trans:'pagex',key:'school_classes',showField:'transMap.classesName'},
             {name: 'create_time', title: '创建时间', width: '15%', align: 'center'},
             {name:'create_user',title:'创建人',width:'10%',align:'center',trans:'auto',showField:'transMap.create_userUserName'},
             {name: 'update_time', title: '更新时间', width: '14%', align: 'center'},
@@ -19,7 +20,8 @@ var listPage = {
     },
     filters: function () {
         return [
-            {name: 'user_name', type: 'input', title: '姓名', filterType: 'like'}
+            {name: 'user_name', type: 'input', title: '姓名', filterType: 'like'},
+            {name: 'num', type: 'input', title: '学号', filterType: '='}
         ];
     },
     buttons: function () {
@@ -43,6 +45,8 @@ var add = {
             {name: 'user_login_name', title: '登录名',  type: 'input', required: true},
             {name: 'password', title: '密码',  type: 'password', required: true},
             {name: 'type', title: '类型',  type: 'hide', value:'student'},
+            {name: 'classes_id', title: '班级', required: true, type: 'select',url:'${path.basePath}/ms/x/school_classes/findListData',valueField:'id',textField:'name'}
+
         ];
     },
     otherFunctions: function () {
@@ -52,7 +56,7 @@ var add = {
             loadSuccess: function (info) {
                 $("input[name='password']").val('default');
                 $("input[name='password']").attr('passval',info.password);
-                $('#userLoginName').readOnly();
+                $('#userLoginName').attr("readonly","readonly");
             },
             onSave: function () {
                 if($("input[name='password']").val() !='default'){

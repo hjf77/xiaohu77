@@ -1,11 +1,11 @@
 var modelConfig = {
-    title: '必修课学生关联', pkey: 'id', type: 'uuid', orderBy: 'update_time Desc',
-    namespace: "school_curriculum_student_rela", table: 't_school_curriculum_student_rela',trans: true};
+    title: '学院管理', pkey: 'id', type: 'uuid', orderBy: 'update_time Desc',
+    namespace: "school_college", table: 't_school_college',trans: true,joinColumns:'{"name":"collegeName"}'};
 var listPage = {
     listFieldSett: function () {
         return [
-            {name: 'student_id', title: '学生', width: '10%', align: 'center',trans:'pagex',key:'student',showField:'transMap.studentName'},
-            {name: 'curriculum_id', title: '课程', width: '10%', align: 'center',trans:'pagex',key:'school_curriculum',showField:'transMap.curriculumName'},
+            {name: 'name', title: '学院名称', width: '20%', align: 'center'},
+            {name: 'code', title: '编号', width: '10%', align: 'center'},
             {name: 'create_time', title: '创建时间', width: '15%', align: 'center'},
             {name:'create_user',title:'创建人',width:'10%',align:'center',trans:'auto',showField:'transMap.create_userUserName'},
             {name: 'update_time', title: '更新时间', width: '14%', align: 'center'},
@@ -17,7 +17,7 @@ var listPage = {
     },
     filters: function () {
         return [
-            {name: 'student_id', type: 'select',showAll:true, title: '学生', type: 'select',url:'${path.basePath}/ms/x/teacher/findListData?type=student',valueField:'userId',textField:'userName'}
+            {name: 'name', type: 'input', title: '系名称', filterType: 'like'}
         ];
     },
     buttons: function () {
@@ -34,8 +34,8 @@ var listPage = {
 var add = {
     formFields: function () {
         return [
-            {name: 'student_id', title: '学生', required: true, type: 'select',url:'${path.basePath}/ms/x/teacher/findListData?type=student',valueField:'userId',textField:'userName'},
-            {name: 'curriculum_id', title: '课程', required: true, type: 'select',url:'${path.basePath}/ms/x/school_curriculum/findListData',valueField:'id',textField:'name'}
+            {name: 'name', title: '学院名称', required: true, type: 'input'},
+            {name: 'code', title: '编号', required: true, type: 'input'}
         ];
     },
     otherFunctions: function () {
@@ -53,9 +53,6 @@ var add = {
             },
             saveError: function () {
 
-            },
-            getConflictMsg:function(){
-                return '此学生已经选择过此课程';
             }
         }
     }
