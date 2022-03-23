@@ -28,6 +28,22 @@ export default {
             type: 'primary',
             size: 'mini',
             icon: 'el-icon-plus',
+          },
+          {
+            title: '刷新缓存',
+            name: 'refresh',
+            type: 'primary',
+            size: 'mini',
+            click:function(){
+              this.$pagexRequest({
+                method: "get",
+                url: "/basic//ms/dictGroup/refreshRedisCache",
+              })
+                .then( (res) => {this.$message({
+                  type: "success",
+                  message: "刷新成功",
+                });});
+            }
           }
         ],
         columns: [
