@@ -16,8 +16,7 @@ public interface ServiceDictGroupService extends BaseService<ServiceDictGroupVO,
     /**
      * 刷新redis缓存
      *
-     * @param groupCode
      * @return
      */
-    boolean refreshRedisCache(String groupCode);
+    boolean refreshRedisCache();
 }
