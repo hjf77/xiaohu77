@@ -7,6 +7,7 @@ import com.fhs.common.utils.JsonUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.trans.constant.TransType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +31,10 @@ public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGrou
     private RedisCacheService redisCacheService;
 
     @Override
-    public boolean refreshRedisCache(String groupCode) {
+    public boolean refreshRedisCache() {
         //刷新字典缓存
         Map<String,String> body = new HashMap<>();
-        body.put("transType","dict");
+        body.put("transType", TransType.DICTIONARY);
         redisCacheService.convertAndSend("trans", JsonUtil.map2json(body));
         return true;
     }

@@ -204,7 +204,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     protected void refreshCache() {
         cacheUpdateManager.clearCache(namespace);
         AutoTrans autoTrans = this.getClass().getAnnotation(AutoTrans.class);
-        if (autoTrans != null) {
+        if (autoTrans != null && (autoTrans.useCache() || autoTrans.useRedis())) {
             //发送刷新的消息
             Map<String, String> message = new HashMap<>();
             message.put("transType", TransType.AUTO_TRANS);

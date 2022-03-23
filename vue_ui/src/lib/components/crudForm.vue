@@ -85,15 +85,15 @@ export default {
             if(btn.title=='编辑'){
               btn.click = this.editFun;
               if(this.namespace){
-                _item.permission = [this.namespace + ':update'];
+                btn.permission = [this.namespace + ':update'];
               }
             }
             if(btn.title=='删除'){
               if(this.namespace){
-                _item.permission = [this.namespace + ':del'];
+                btn.permission = [this.namespace + ':del'];
               }
-              if(!_item.idFieldName){
-                _item.idFieldName = this.idFieldName;
+              if(!btn.idFieldName){
+                btn.idFieldName = this.idFieldName;
               }
 
             }

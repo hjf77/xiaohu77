@@ -38,16 +38,12 @@ public class ServiceDictGroupController extends ModelSuperController<ServiceDict
     private ServiceDictGroupService wordbookAndGroupService;
 
     /**
-     * 刷新redis缓存
-     *
-     * @param request
-     * @param response
+     * 刷新字典缓存
      */
-    @SaCheckRole("dictGroup:refreshRedisCache")
     @GetMapping("refreshRedisCache")
     @ApiOperation("刷新字典缓存")
-    public HttpResult<Boolean> refreshRedisCache(String groupCode, HttpServletRequest request, HttpServletResponse response) {
-        wordbookAndGroupService.refreshRedisCache(groupCode);
+    public HttpResult<Boolean> refreshRedisCache() {
+        wordbookAndGroupService.refreshRedisCache();
         return HttpResult.success(true);
     }
 

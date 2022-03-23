@@ -24,7 +24,10 @@
         </a> 
         +
         <a href="http://spring.io/projects/spring-boot">
-            <img src="https://img.shields.io/badge/spring--boot-2.3.12-green.svg" alt="spring-boot">
+            <img src="https://img.shields.io/badge/spring--boot-2.5.6-green.svg" alt="spring-boot">
+        </a>
+         <a href="http://spring.io/projects/spring-boot">
+            <img src="https://img.shields.io/badge/spring--cloud-2020.0.4-green.svg" alt="spring-boot">
         </a>
         <a href="http://mp.baomidou.com">
             <img src="https://img.shields.io/badge/mybatis--plus-3.4-blue.svg" alt="mybatis-plus">
@@ -43,10 +46,10 @@ http://82.157.62.164/login   admin  123456
 
 
 # 预览图
-![输入图片说明](fhs.jpg)
 
+![输入图片说明](img/fhs.jpg)
 # 3. 技术栈
-![输入图片说明](222.jpg)
+![输入图片说明](img/jiagou.jpg)
 
 # 4. 和其他框架差异化特性
 ## - &#8194;&#8194;&#8194;&#8194;翻译组件
@@ -243,6 +246,8 @@ eq,neq,ge,gt,le,lt,like,notLike,likeLeft,likeRight,in,notIn,between,orderByAsc,o
 本功能和lombok一样需要搭配idea插件使用，不然class虽然增强了但是idea 无法识别这些方法报错，但是不影响运行，我们提供了配套的idea插件 ： https://gitee.com/fhs-opensource/fhs_mp/tree/master/idea_plugin
 要求idea版本为 2021.2.2 以及 以上。
 并且idea加入以下配置：setting-Build,Execution,Deployment-Compiler Shared build process VM 的value设置为 option -Djps.track.ap.dependencies=false
+![输入图片说明](img/sett.png)    
+如果你不想使用此特性，可以注释掉 fhs_base_pojo Pom的mp_ext 的引入，此特性为实验特性，暂时不建议生产使用。
 
 # 使用说明
 
