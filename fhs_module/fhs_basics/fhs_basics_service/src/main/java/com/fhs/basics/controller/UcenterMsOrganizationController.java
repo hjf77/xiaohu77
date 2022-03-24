@@ -1,7 +1,5 @@
 package com.fhs.basics.controller;
 
-
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
@@ -11,8 +9,6 @@ import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.TreeUtils;
 import com.fhs.core.base.vo.QueryFilter;
-import com.fhs.core.exception.ParamException;
-import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -20,7 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Wrapper;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -86,7 +81,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @ApiOperation("查询组织机构--带公司或者不带--指定到哪一级--不带管道信息")
     @GetMapping("selectOrgTree/{needCompany}/{orgLevel}")
-    public List<TreeNode<Treeable>> selectOrgTree(String needCompany,String orgLevel) {
+    public List<TreeNode<Treeable>> selectOrgTree(@PathVariable("needCompany") String needCompany,@PathVariable("orgLevel") String orgLevel) {
         return sysOrganizationService.selectOrgTree(needCompany,orgLevel);
     }
 
@@ -98,7 +93,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @ApiOperation("指定查某级机构List--不带管道信息")
     @GetMapping("selectOrg/{orgLevel}")
-    public List<UcenterMsOrganizationPO> selectOrg(String orgLevel) {
+    public List<UcenterMsOrganizationPO> selectOrg(@PathVariable("orgLevel") String orgLevel) {
         return sysOrganizationService.selectOrg(orgLevel);
     }
 }
