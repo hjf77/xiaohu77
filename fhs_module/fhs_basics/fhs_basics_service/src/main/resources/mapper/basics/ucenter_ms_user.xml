@@ -173,24 +173,21 @@
 	</select>
 
     <!-- 查询一个用户拥有的所有的权限列表 -->
-    <select id="selectMenuIdByUserId" resultType="int" parameterType="com.fhs.basics.dox.UcenterMsUserDO">
-		SELECT m.menu_id AS menuId
-		FROM `t_sett_ms_menu` m
-		LEFT JOIN `t_sett_ms_menu_permission` b ON
-		b.menu_id = m.menu_id
-		LEFT JOIN `t_ucenter_ms_role_permission` rt ON
-		rt.permission_id = b.permission_id
-		LEFT JOIN `t_ucenter_ms_role_user_rela` ru ON
-		rt.role_id = ru.role_id
-		LEFT JOIN `t_ucenter_ms_user` u ON u.user_id = ru.user_id
-		LEFT JOIN `t_sett_ms_menu_server` s ON s.id = m.server_name_id
-		LEFT JOIN `t_ucenter_ms_role` r ON  ru.role_id = r.role_id
-		WHERE m.is_enable = 1
-		AND r.is_delete = 0
-		AND m.is_enable = b.is_enable
-		AND u.user_id = #{userId}
-		ORDER BY
-		m.father_menu_id,m.order_index
+    <select id="selectMenuIdByRoleId" resultType="int" parameterType="com.fhs.basics.dox.UcenterMsUserDO">
+        SELECT DISTINCT m.menu_id AS menuId
+        FROM `t_sett_ms_menu` m
+                 LEFT JOIN `t_sett_ms_menu_permission` b ON
+            b.menu_id = m.menu_id
+                 LEFT JOIN `t_ucenter_ms_role_permission` rt ON
+            rt.permission_id = b.permission_id
+                 LEFT JOIN `t_sett_ms_menu_server` s ON s.id = m.server_name_id
+                 LEFT JOIN `t_ucenter_ms_role` r ON  rt.role_id = r.role_id
+        WHERE m.is_enable = 1
+          AND r.is_delete = 0
+          AND m.is_enable = b.is_enable
+          AND r.role_id=#{roleId}
+        ORDER BY
+            m.father_menu_id,m.order_index
 	</select>
 
     <select id="selectNotPlanfromMenuAll" resultType="com.fhs.basics.dox.SettMsMenuDO"
@@ -241,45 +238,40 @@
 	</sql>
 
     <!-- 通过用户登录名查询菜单集合 -->
-    <select id="selectMenuByUname" resultType="com.fhs.basics.dox.SettMsMenuDO"
+    <select id="selectMenuByRoleId" resultType="com.fhs.basics.dox.SettMsMenuDO"
             parameterType="map">
-		SELECT
-		*
-		FROM
-		(SELECT
-		m.menu_name AS menuName,
-		m.menu_id AS menuId,
-		CONCAT(m.namespace, ':', b.method) AS namespace,
-		CONCAT(s.server_url, m.menu_url) AS menuUrl,
-		m.father_menu_id AS
-		fatherMenuId
-		FROM
-		t_sett_ms_menu m
-		LEFT JOIN t_sett_ms_menu_permission b
-		ON
-		b.menu_id = m.menu_id
-		LEFT JOIN t_ucenter_ms_role_permission rt
-		ON rt.permission_id =
-		b.permission_id
-		LEFT JOIN t_ucenter_ms_role_user_rela ru
-		ON rt.role_id =
-		ru.role_id
-		LEFT JOIN t_ucenter_ms_user u
-		ON u.user_id = ru.user_id
-		LEFT JOIN
-		t_sett_ms_menu_server s
-		ON s.id = m.server_name_id
-		WHERE m.`namespace` IS
-		NOT NULL
-		AND m.`namespace` != ''
-		AND u.user_login_name =
-		#{userLoginName}
+        SELECT
+            *
+        FROM
+            (SELECT
+                 m.menu_name AS menuName,
+                 m.menu_id AS menuId,
+                 CONCAT(m.namespace, ':', b.method) AS namespace,
+                 CONCAT(s.server_url, m.menu_url) AS menuUrl,
+                 m.father_menu_id AS
+                     fatherMenuId
+             FROM
+                 t_sett_ms_menu m
+                     LEFT JOIN t_sett_ms_menu_permission b
+                               ON
+                                   b.menu_id = m.menu_id
+                     LEFT JOIN t_ucenter_ms_role_permission rt
+                               ON rt.permission_id =
+                                  b.permission_id
+
+                     LEFT JOIN
+                 t_sett_ms_menu_server s
+                 ON s.id = m.server_name_id
+             WHERE m.`namespace` IS
+                 NOT NULL
+               AND m.`namespace` != ''
+		and rt.role_id=#{roleId}
 		AND m.is_enable
 		= b.is_enable
 		AND m.is_enable = 1
-		ORDER BY m.father_menu_id,
-		m.order_index) me
-		WHERE me.`namespace` IS NOT NULL
+             ORDER BY m.father_menu_id,
+                 m.order_index) me
+        WHERE me.`namespace` IS NOT NULL
 	</select>
 
     <select id="selectUserByULname" resultType="com.fhs.basics.dox.UcenterMsUserDO"

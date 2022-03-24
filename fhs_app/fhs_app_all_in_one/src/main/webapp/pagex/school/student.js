@@ -25,13 +25,18 @@ var listPage = {
         ];
     },
     buttons: function () {
-        return [];
+        return [ {title:'学生选修课成绩录入',fun:'electiveCourses',isRow:true,permissionsCode:'student:see'}];
     },
     disableButtons: function () {
         return [];
     },
     otherFunctions: function () {
-        return {}
+        return {
+            electiveCourses:function(_row){
+                var _openFrameMsg = {url:'${path.basePath}/ms/pagex/school_elective_courses_list.jsp?userId=' + _row.userId,title:_row.userName + '的选修课成绩录入'}
+                top.postMessage(_openFrameMsg, '*');
+            }
+        }
     }
 };
 
@@ -44,6 +49,7 @@ var add = {
             {name: 'birthday', title: '出生日期', type:'date', required: true},
             {name: 'user_login_name', title: '登录名',  type: 'input', required: true},
             {name: 'password', title: '密码',  type: 'password', required: true},
+            {name: 'elective_courses', title: '选修课(多个逗号分割)',  type: 'input', required: true},
             {name: 'type', title: '类型',  type: 'hide', value:'student'},
             {name: 'classes_id', title: '班级', required: true, type: 'select',url:'${path.basePath}/ms/x/school_classes/findListData',valueField:'id',textField:'name'}
 

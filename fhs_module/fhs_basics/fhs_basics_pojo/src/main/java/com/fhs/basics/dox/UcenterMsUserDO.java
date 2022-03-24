@@ -168,6 +168,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     /**
      * 班级id
      */
+    @Trans(type = "pagex",key = "school_classes")
     @TableField("classes_id")
     @ApiModelProperty("班级id")
     private String classesId;
@@ -178,6 +179,29 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @TableField("type")
     @ApiModelProperty("type")
     private String type;
+
+    /**
+     * 选修课
+     */
+    @TableField("elective_courses")
+    @ApiModelProperty("选修课")
+    private String electiveCourses;
+
+    /**
+     * 生日
+     */
+    @TableField("birthday")
+    @ApiModelProperty("生日")
+    private String birthday;
+
+    /**
+     * 编号
+     */
+    @TableField("num")
+    @ApiModelProperty("编号")
+    private String num;
+
+
 
 
     /**

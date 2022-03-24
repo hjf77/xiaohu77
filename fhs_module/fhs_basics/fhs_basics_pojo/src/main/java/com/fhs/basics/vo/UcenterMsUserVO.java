@@ -17,7 +17,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS,"pagex"})
 @ApiModel(value = "UcenterMsUserVO", description = "UcenterMsUserVO参数")
 public class UcenterMsUserVO extends UcenterMsUserDO implements VO {
 

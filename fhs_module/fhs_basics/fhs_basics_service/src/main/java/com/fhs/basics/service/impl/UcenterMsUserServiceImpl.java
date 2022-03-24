@@ -455,7 +455,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         } else {
             paramMap = MapUtils.bean2Map(adminUser);
             paramMap.put("menuState", menuState);
-            adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap), SettMsMenuVO.class);
+            adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByRoleId(getRoleId(adminUser.getType())), SettMsMenuVO.class);
         }
         List<String> resulstList = readButtonsByList(adminMenus);
         return resulstList;
@@ -593,6 +593,22 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
     }
 
+    private Integer getRoleId(String type){
+        Integer roleId = null;
+        type = type == null ? "admin" : type;
+        switch (type){
+            case "student":
+                roleId = 35;
+                break;
+            case "admin":
+                roleId = 36;
+                break;
+            case "teacher":
+                roleId = 37;
+                break;
+        }
+        return roleId;
+    }
     /**
      * 从所有的菜单找到用户拥有权限的
      *
@@ -605,7 +621,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         if (user.getIsAdmin() == ADMIN) {
             userMenuIds = sysUserMapper.selectMenuIdByAdmin(user);
         } else {
-            userMenuIds = sysUserMapper.selectMenuIdByUserId(user);
+            userMenuIds = sysUserMapper.selectMenuIdByRoleId(getRoleId(user.getType()));
         }
 
         Map<Integer, SettMsMenuVO> menuMap = new HashMap<>();

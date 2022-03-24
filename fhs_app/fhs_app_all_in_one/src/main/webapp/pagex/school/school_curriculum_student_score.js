@@ -27,10 +27,10 @@ var listPage = {
         ];
     },
     buttons: function () {
-        return [{title:'审批',fun:'apply',permissionsCode:'school_curriculum_student_score:see',isRow:true},];
+        return [{title:'审批',fun:'apply',isRow:true,permissionsCode:'school_curriculum_student_score:apply'},];
     },
     disableButtons: function () {
-        return [];
+        return ['export','view'];
     },
     otherFunctions: function () {
         return {

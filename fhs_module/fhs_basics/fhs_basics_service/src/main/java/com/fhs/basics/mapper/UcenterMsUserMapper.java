@@ -163,7 +163,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO> {
      * @paramadminUser
      */
     @NotMultiTenancyCheck
-    List<SettMsMenuDO> selectMenuByUname(Map<String, Object> paramMap);
+    List<SettMsMenuDO> selectMenuByRoleId(@Param("roleId") Integer roleId);
 
     /**
      * 通过登录名获取用户
@@ -247,11 +247,11 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO> {
     /**
      * 根据userid获取user有权限的菜单
      *
-     * @param user 普通用户
+     * @param roleId 角色id
      * @return 用户有权限的 菜单id
      */
     @NotMultiTenancyCheck
-    Set<Integer> selectMenuIdByUserId(UcenterMsUserDO user);
+    Set<Integer> selectMenuIdByRoleId(@Param("roleId") Integer roleId);
 
     /**
      * 根据条件查询用户数
