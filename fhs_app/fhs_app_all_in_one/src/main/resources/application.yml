@@ -13,7 +13,7 @@ server:
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
-  type-aliases-package: com.fhs.basics.dox;
+  type-aliases-package: com.fhs.basics.po;
   global-config:
     db-config:
       logic-delete-value: 1
@@ -101,12 +101,12 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 10.102.2.201
-    password: 123456
-    port: 6379
+    host: 82.157.62.164
+    password: wanglei1992
+    port: 16379
     timeout: 6000
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: DatebookHikariCP
@@ -117,9 +117,9 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       connection-test-query: SELECT 1
-    url: jdbc:mysql://10.102.2.201:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:p6spy:mysql://82.157.62.164:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: 123456
+    password: wanglei1992
     validationQuery: select 'x'
 
 logging:
@@ -152,7 +152,7 @@ jetcache:
       valueDecoder: java
       asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://123456@10.102.2.201:6379/11  #redis://密码@IP:端口/库
+        - redis://wanglei1992@82.157.62.164:16379/11  #redis://密码@IP:端口/库
 # Sa-Token配置
 sa-token:
   # token名称 (同时也是cookie名称)
