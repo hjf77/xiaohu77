@@ -42,7 +42,7 @@
             <version>${fhs.mp-anno.version}</version>
         </dependency>
         <!--mybatis plus扩展-->
-        <dependency>
+       <!-- <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>mp_ext</artifactId>
             <version>1.0.2</version>
@@ -52,12 +52,9 @@
                     <groupId>jdk.tools</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <artifactId>tools</artifactId>
-            <groupId>com.java</groupId>
-            <version>1.0.1</version>
-        </dependency>
+        </dependency>-->
+
+
     </dependencies>
 
 
