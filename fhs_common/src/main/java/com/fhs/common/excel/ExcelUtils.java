@@ -844,6 +844,10 @@ public class ExcelUtils {
         return readExcelContent07(new XSSFWorkbook(is), titleRowNum, colNum);
     }
 
+    public static Object[][] readExcelContent07Time(InputStream is, int titleRowNum, int colNum,String dateFormat) throws IOException {
+        return readExcelContent07Time(new XSSFWorkbook(is), titleRowNum, colNum,dateFormat);
+    }
+
     /**
      * 读取Excel数据内容
      *
@@ -912,6 +916,54 @@ public class ExcelUtils {
         return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
     }
 
+    public static Object[][] readExcelContent07Time(XSSFWorkbook wb, int titleRowNum, int colNum,String dateFormat) {
+        XSSFSheet sheet;
+
+        sheet = wb.getSheetAt(0);
+        // 得到数据的总行数
+        int rowNum = sheet.getLastRowNum();
+
+        // 如果该sheet没有数据，退出
+        if (0 == rowNum) {
+            return null;
+        }
+
+        XSSFRow row = sheet.getRow(titleRowNum);
+        if (null == row) {
+            return null;
+        }
+
+        // 正文内容应该从第二行开始,第一行为表头的标题
+        Object[][] dataArray = new Object[rowNum - titleRowNum][colNum];
+        // 添加到数组的行数，
+        int dataRow = 0;
+        // 空行数
+        int nullRows = 0;
+        for (int i = titleRowNum + 1; i <= rowNum; i++) {
+            row = sheet.getRow(i);
+            if (row == null) {
+                nullRows++;
+                continue;
+            }
+            int j = 0;
+            // 是否是空行，如果为空行，则赋值的数组行数不会变，下一次循环会覆盖
+            boolean isNullFlag = true;
+            while (j < colNum) {
+
+                dataArray[dataRow][j] = getCellValueTime(row.getCell(j),dateFormat);
+                j++;
+                if (!"".equals(getCellValue(row.getCell(j)))) {
+                    isNullFlag = false;
+                }
+            }
+            if (isNullFlag) {
+                nullRows++;
+            } else {
+                dataRow++;
+            }
+        }
+        return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
+    }
 
     /**
      * 读取excel内容
@@ -925,6 +977,140 @@ public class ExcelUtils {
         return readExcelContent03(new HSSFWorkbook(is), titleRowNum, colNum);
     }
 
+    /**
+     * 读取excel内容
+     * @param is excel inputstream
+     * @param titleRowNum 行号
+     * @param colNum  一共多少列
+     * @param dateFormat  时间格式
+     * @return
+     * @throws IOException
+     */
+    public static Object[][] readExcelContent03Time(InputStream is, int titleRowNum, int colNum,String dateFormat) throws IOException {
+        return readExcelContent03Time(new HSSFWorkbook(is), titleRowNum, colNum,dateFormat);
+    }
+
+    /**
+     * 读取excel内容
+     * @param is excel inputstream
+     * @param titleRowNum 行号
+     * @param colNum  一共多少列
+     * @param dateFormat  时间格式
+     * @return
+     * @throws IOException
+     */
+    public static Object[][] readExcelContent03Time(HSSFWorkbook wb, int titleRowNum, int colNum,String dateFormat) {
+        HSSFSheet sheet;
+
+        // 获取sheet个数
+        int sheetNO = wb.getNumberOfSheets();
+        String[] name = null;
+        name = new String[sheetNO + 1];
+        sheet = wb.getSheetAt(0);
+
+        // 得到数据的总行数
+        int rowNum = sheet.getLastRowNum();
+
+        // 如果该sheet没有数据，跳过当前循环
+        if (0 == rowNum) {
+            return null;
+        }
+        HSSFRow row = sheet.getRow(titleRowNum + 1);
+        if (null == row) {
+            return null;
+        }
+
+        // 正文内容应该从第二行开始,第一行为表头的标题
+        Object[][] dataArray = new Object[rowNum - titleRowNum][colNum];
+        // 添加到数组的行数，
+        int dataRow = 0;
+        // 空行数
+        int nullRows = 0;
+        for (int i = titleRowNum + 1; i <= rowNum; i++) {
+            row = sheet.getRow(i);
+            if (null == row) {
+                nullRows++;
+                continue;
+            }
+            int j = 0;
+            // 是否是空行，如果为空行，则赋值的数组行数不会变，下一次循环会覆盖
+            boolean isNullFlag = true;
+            while (j < colNum) {
+
+                dataArray[dataRow][j] = getCellValueTime(row.getCell(j),dateFormat);
+                j++;
+                if (!"".equals(getCellValue(row.getCell(j)))) {
+                    isNullFlag = false;
+                }
+            }
+            if (isNullFlag) {
+                nullRows++;
+            } else {
+                dataRow++;
+            }
+        }
+        return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
+    }
+    @SuppressWarnings("deprecation")
+    public static String getCellValueTime(Cell cell,String dateFormat) {
+        String value = "";
+        if (null == cell) {
+            return value;
+        }
+        switch (cell.getCellType()) {
+            // 数值型
+            case NUMERIC:
+                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                    // 如果是date类型则 ，获取该cell的date值
+                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+                    SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+                    value = format.format(date);
+                    ;
+                } else {// 纯数字
+                    BigDecimal big = new BigDecimal(cell.getNumericCellValue());
+                    value = big.toString();
+                    // 解决1234.0 去掉后面的.0
+                    if (null != value && !"".equals(value.trim())) {
+                        String[] item = value.split("[.]");
+                        if (1 < item.length && "0".equals(item[1])) {
+                            value = item[0];
+                        }
+                    }
+                }
+                break;
+            // 字符串类型
+            case STRING:
+                value = cell.getStringCellValue().toString();
+                break;
+            // 公式类型
+            case FORMULA:
+                // 读公式计算值
+                value = String.valueOf(cell.getNumericCellValue());
+                if (value.equals("NaN")) {// 如果获取的数据值为非法值,则转换为获取字符串
+                    value = cell.getStringCellValue().toString();
+                }
+                break;
+            // 布尔类型
+            case BOOLEAN:
+                value = " " + cell.getBooleanCellValue();
+                break;
+            // 空值
+            case BLANK:
+                value = "";
+                break;
+            // 故障
+            case ERROR:
+                value = "";
+                log.error("excel出现故障");
+                break;
+            default:
+                value = cell.getStringCellValue().toString();
+        }
+        if ("null".endsWith(value.trim())) {
+            value = "";
+        }
+        return value;
+    }
     /**
      * 读取excel内容
      *
