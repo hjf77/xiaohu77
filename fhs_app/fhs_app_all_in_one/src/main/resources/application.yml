@@ -45,6 +45,8 @@ fhs:
     mapper-package: com.**.**.mapper
   safe:
     enable-xss: true #xss注入控制
+  beetl:
+    enable: false #默认不适用beetl
   session:
     timeout: 1800
   task:
@@ -76,11 +78,9 @@ fhs:
           'access_token_time_out_second': '500',
           'systemTitle': 'FHS演示系统'
           }"
-  wxmini:
-    enable: true
-    appid: wx42e064f24b987ca0
-    secret: 0735b2cc9adeb123e3dd321253bf27e6
 spring:
+  profiles:
+    active: dev
   main:
     allow-bean-definition-overriding: true
   mvc:
@@ -88,7 +88,6 @@ spring:
   application:
     name: fhs_admin_app
   redis:
-    database: 11
     # 最大连接数
     maxTotal: 5000
     # 最大空闲连接数
@@ -101,12 +100,8 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 82.157.62.164
-    password: wanglei1992
-    port: 16379
     timeout: 6000
   datasource:
-    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: DatebookHikariCP
@@ -117,9 +112,6 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       connection-test-query: SELECT 1
-    url: jdbc:p6spy:mysql://82.157.62.164:3306/fhs-demo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
-    username: root
-    password: wanglei1992
     validationQuery: select 'x'
 
 logging:
@@ -152,7 +144,7 @@ jetcache:
       valueDecoder: java
       asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://wanglei1992@82.157.62.164:16379/11  #redis://密码@IP:端口/库
+        - redis://${spring.redis.password}@${spring.redis.host}:${spring.redis.port}/${spring.redis.database}  #redis://密码@IP:端口/库
 # Sa-Token配置
 sa-token:
   # token名称 (同时也是cookie名称)
