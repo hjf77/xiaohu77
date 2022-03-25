@@ -9,3 +9,6 @@
 | |              | || |              | || |              | || |              | || |              | |
 | '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'
+FHSV3:https://gitee.com/fhs-opensource/fhs-framework
+EASY-CLOUD:https://gitee.com/fhs-opensource/easy_cloud
+EASY-TRANS:https://gitee.com/fhs-opensource/easy_trans
