@@ -17,7 +17,6 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.excel.anno.IgnoreExport;
 import com.mybatis.jpa.annotation.Between;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
 
 import java.lang.reflect.Field;
