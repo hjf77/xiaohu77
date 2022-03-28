@@ -8,6 +8,10 @@ import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 /**
  * 字典管理controller
  *
@@ -21,4 +25,17 @@ import org.springframework.web.bind.annotation.*;
 @LogNamespace(namespace = "dictItem", module = "字典项管理")
 public class ServiceDictItemController extends ModelSuperController<ServiceDictItemVO, ServiceDictItemPO> {
 
+    /**
+     * 重写去掉权限校验
+     * @param e
+     * @param request  response
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<ServiceDictItemVO> findList(ServiceDictItemVO e, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<ServiceDictItemVO> dataList = baseService.findForList( e);
+        return dataList;
+    }
 }
