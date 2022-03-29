@@ -29,6 +29,9 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     public PubFileVO uploadFile(MultipartFile fileData,String fileId) {
         PubFileVO sf = new PubFileVO();
         String fileName = fileData.getOriginalFilename();
+        if (fileName.contains(" ")){
+            fileName = fileName.replaceAll(" ", ""); //去掉所有空格，包括首尾、中间
+        }
         String suffix = fileName.substring(fileName.lastIndexOf("."));
         fileId = CheckUtils.isNullOrEmpty(fileId) ? StringUtils.getUUID() : fileId;
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
@@ -40,8 +43,6 @@ public class FileServerBusinessImpl implements FileServerBusiness {
         this.insertDataToDB(sf);
         return sf;
     }
-
-
 
     /**
      * @param sf
