@@ -41,7 +41,7 @@ public class TemplateConfigSettFilter implements Filter {
             throws IOException, ServletException {
         if (!isInit) {
             BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = FhsSpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
-            if (beetlGroupUtilConfiguration.getGroupTemplate() != null) {
+            if (beetlGroupUtilConfiguration != null && beetlGroupUtilConfiguration.getGroupTemplate() != null) {
                 Set<String> keys = EConfig.PATH.stringPropertyNames();
                 Map<String, Object> shared = new HashMap<String, Object>();
                 for (String key : keys) {
