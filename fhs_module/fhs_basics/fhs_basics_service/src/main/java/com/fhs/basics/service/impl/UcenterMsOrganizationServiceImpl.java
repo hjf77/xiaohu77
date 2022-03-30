@@ -201,6 +201,8 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
             ids += id.substring(0,6);
         }else if(id.length() == 12){//用户所属作业区
             ids += id.substring(0,6)+","+id.substring(0,9)+","+id.substring(0,12);
+        }else if(id.length() == 15){//用户所属作业区
+            ids += id.substring(0,6)+","+id.substring(0,9)+","+id.substring(0,12)+","+id.substring(0,15);
         }
         return ids;
     }
