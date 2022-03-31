@@ -408,6 +408,15 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     public IPage<V> selectPageMP(IPage<P> page, Wrapper<P> queryWrapper) {
         ParamChecker.isNotNull(page, "前端调用接口的时候没传分页信息");
         page = baseMapper.selectPage(page, queryWrapper);
+        return pagerConverter(page);
+    }
+
+    /**
+     * 分页数据转换-由po转换为vo
+     * @param page  分页数据
+     * @return 转换后的结果
+     */
+    protected FhsPager<V> pagerConverter(IPage<P> page){
         FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
         result.setPageSize(page.getSize());

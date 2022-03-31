@@ -41,19 +41,21 @@ public class TemplateConfigSettFilter implements Filter {
             throws IOException, ServletException {
         if (!isInit) {
             BeetlGroupUtilConfiguration beetlGroupUtilConfiguration = FhsSpringContextUtil.getBeanByName(BeetlGroupUtilConfiguration.class);
-            Set<String> keys = EConfig.PATH.stringPropertyNames();
-            Map<String, Object> shared = new HashMap<String, Object>();
-            for (String key : keys) {
-                shared.put(key, EConfig.PATH.get(key));
-                req.getServletContext().setAttribute(key, EConfig.PATH.get(key));
+            if (beetlGroupUtilConfiguration != null && beetlGroupUtilConfiguration.getGroupTemplate() != null) {
+                Set<String> keys = EConfig.PATH.stringPropertyNames();
+                Map<String, Object> shared = new HashMap<String, Object>();
+                for (String key : keys) {
+                    shared.put(key, EConfig.PATH.get(key));
+                    req.getServletContext().setAttribute(key, EConfig.PATH.get(key));
+                }
+                keys = EConfig.OTHER_CONFIG.stringPropertyNames();
+                for (String key : keys) {
+                    shared.put(key, EConfig.OTHER_CONFIG.get(key));
+                    req.getServletContext().setAttribute(key, EConfig.OTHER_CONFIG.get(key));
+                }
+                // beetl共享变量，所有的模板都能访问到
+                beetlGroupUtilConfiguration.getGroupTemplate().setSharedVars(shared);
             }
-            keys = EConfig.OTHER_CONFIG.stringPropertyNames();
-            for (String key : keys) {
-                shared.put(key, EConfig.OTHER_CONFIG.get(key));
-                req.getServletContext().setAttribute(key, EConfig.OTHER_CONFIG.get(key));
-            }
-            // beetl共享变量，所有的模板都能访问到
-            beetlGroupUtilConfiguration.getGroupTemplate().setSharedVars(shared);
             isInit = true;
         }
         filterChain.doFilter(req, rep);
