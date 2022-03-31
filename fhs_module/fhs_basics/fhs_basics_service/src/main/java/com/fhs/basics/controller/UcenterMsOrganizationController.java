@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
@@ -49,7 +50,9 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     @ApiOperation("下拉专用tree")
     @PostMapping("selectTree")
     public List<TreeNode<Treeable>> selectTree(@RequestBody QueryFilter<UcenterMsOrganizationPO> filter) {
-        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(filter.asWrapper(UcenterMsOrganizationPO.class));
+        QueryWrapper queryWrapper = filter.asWrapper(UcenterMsOrganizationPO.class);
+        queryWrapper.apply("id like '"+this.getSessionuser().getOrganizationId()+"%'");
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(queryWrapper);
         Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
         for (UcenterMsOrganizationVO org : orgs) {

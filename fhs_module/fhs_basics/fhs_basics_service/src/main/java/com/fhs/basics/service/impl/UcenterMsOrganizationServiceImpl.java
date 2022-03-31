@@ -157,7 +157,8 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
     @Override
     public List<TreeNode<Treeable>> selectOrgTree(String needCompany, String orgLevel) {
-        List<UcenterMsOrganizationPO> ucenterMsOrganizationPOS = mapper.selectOrgTree(orgLevel);
+        String organizationId = UserContext.getSessionuser().getOrganizationId();
+        List<UcenterMsOrganizationPO> ucenterMsOrganizationPOS = mapper.selectOrgTree(orgLevel,organizationId);
         if (StringUtils.isEmpty(needCompany) || needCompany.equals("yes")) {
             return TreeUtils.formartTree(ucenterMsOrganizationPOS);
         }
