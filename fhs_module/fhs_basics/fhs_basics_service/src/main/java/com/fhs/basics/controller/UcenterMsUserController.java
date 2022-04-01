@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
@@ -19,6 +20,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.vo.QueryField;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
@@ -285,7 +287,17 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @PostMapping("advancedPaging")
     @ApiOperation("后台-高级分页查询--(自定义)")
     public IPage<UcenterMsUserVO> advancedPaging(@RequestBody QueryFilter<UcenterMsUserVO> filter, HttpServletRequest request) {
+        List<QueryField> querys = filter.getQuerys();
+        boolean falg = true;
+        for (QueryField query:querys) {
+            if ("tumu.organization_id".equals(query.getProperty())){
+                falg = false;
+            }
+        }
         QueryWrapper wrapper = filter.asWrapper(getDOClass());
+        if (falg){
+            wrapper.apply("( tumu.organization_id like '"+ UserContext.getSessionuser().getOrganizationId() +"%')");
+        }
         this.setExportCache(wrapper);
         wrapper.apply("tumrur.is_detele = '0' and tumu.is_delete = '0' ");
         return sysUserService.advancedPaging(filter.getPagerInfo(), wrapper);
