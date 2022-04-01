@@ -22,6 +22,7 @@ import com.fhs.ucenter.service.SysUserService;
 import com.fhs.ucenter.service.UcenterMsTenantService;
 import com.google.common.collect.HashMultimap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,9 +60,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Autowired
     private SysRoleService roleService;
 
-    @Autowired
-    private SysUserService sysUserService;
 
+    @Lazy
     @Autowired
     private UcenterMsTenantService tenantService;
 
@@ -116,7 +116,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         }
         List<SysUser> userList = new ArrayList<>(1);
         userList.add(adminUser);
-        sysUserService.refreshUserCache(userList);
+        refreshUserCache(userList);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         if (count > 0) {
             // 添加用户成功时插入当前用户角色
@@ -675,7 +675,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
             Set<String> dataPermissionsSet = dataPermissionTempMap.get(key);
             resultMap.put(key, StringUtil.getStrForIn(dataPermissionsSet, true));
         });
-        SysUser user = sysUserService.selectById(userId);
+        SysUser user = selectById(userId);
         // 如果不是不是管理员，哪些数据权限他没有设置为-1
         if (user.getIsAdmin() != Constant.INT_TRUE) {
             String[] permissonDataKeys = ConverterUtils.toString(EConfig.getOtherConfigPropertiesValue("permissonDataKey")).split(",");
