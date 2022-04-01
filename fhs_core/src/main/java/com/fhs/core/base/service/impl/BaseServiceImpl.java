@@ -4,10 +4,7 @@ import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.DateUtils;
-import com.fhs.common.utils.Logger;
-import com.fhs.common.utils.ReflectUtils;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.core.base.service.BaseService;
@@ -61,6 +58,9 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Autowired
     protected TransService transService;
+    
+    @Autowired
+    protected IdHelper idHelper;
 
     /**
      * 利用spring4新特性泛型注入
