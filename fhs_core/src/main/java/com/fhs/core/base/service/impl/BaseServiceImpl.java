@@ -58,7 +58,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Autowired
     protected TransService transService;
-    
+
     @Autowired
     protected IdHelper idHelper;
 
