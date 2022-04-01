@@ -3,6 +3,7 @@ package com.fhs.basics.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
@@ -18,6 +19,8 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.vo.QueryFilter;
+import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
@@ -29,12 +32,15 @@ import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +59,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     @Autowired
     private UcenterMsUserService sysUserService;
-
+    @Autowired
+    private StringRedisTemplate redisTemplate;
     /**
      * 机构服务
      */
@@ -266,5 +273,21 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @ApiOperation("根据当前用户获取组织机构")
     public List<TreeNode<Treeable>> getOrgTreeByUser() {
         return sysUserService.getOrgTreeByUser(this.getSessionuser().getOrganizationId(),new ArrayList<UcenterMsOrganizationVO>());
+    }
+
+    /**
+     * 查询bean列表数据
+     *
+     * @param request
+     * @throws Exception
+     */
+    @ResponseBody
+    @PostMapping("advancedPaging")
+    @ApiOperation("后台-高级分页查询--(自定义)")
+    public IPage<UcenterMsUserVO> advancedPaging(@RequestBody QueryFilter<UcenterMsUserVO> filter, HttpServletRequest request) {
+        QueryWrapper wrapper = filter.asWrapper(getDOClass());
+        this.setExportCache(wrapper);
+        wrapper.apply("tumrur.is_detele = '0' and tumu.is_delete = '0' ");
+        return sysUserService.advancedPaging(filter.getPagerInfo(), wrapper);
     }
 }

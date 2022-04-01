@@ -681,5 +681,22 @@
             and u.is_enable = '1'
     </select>
 
+    <select id="advancedPaging" resultType="com.fhs.basics.vo.UcenterMsUserVO">
+        SELECT
+            tumu.*,
+            tumr.role_name as roleName,
+            ( SELECT `name` FROM t_ucenter_ms_organization WHERE tumu.organization_id = id ) AS centralStat,
+            ( SELECT `name` FROM t_ucenter_ms_organization WHERE id =(SELECT`parent_id` FROM t_ucenter_ms_organization WHERE tumu.organization_id = id )) AS opeArea,
+            ( SELECT `name` FROM t_ucenter_ms_organization WHERE id =(SELECT `parent_id` FROM t_ucenter_ms_organization WHERE id =( SELECT `parent_id` FROM t_ucenter_ms_organization
+            WHERE tumu.organization_id = id ))) AS oilpro,
+            (SELECT `name` FROM t_ucenter_ms_organization WHERE id =( SELECT `parent_id` FROM t_ucenter_ms_organization WHERE id =(SELECT `parent_id` FROM t_ucenter_ms_organization WHERE id =( SELECT `parent_id` FROM t_ucenter_ms_organization
+            WHERE tumu.organization_id = id ))) ) as company
+        FROM
+            t_ucenter_ms_role AS tumr
+                LEFT JOIN t_ucenter_ms_role_user_rela AS tumrur ON tumr.role_id = tumrur.role_id
+                LEFT JOIN t_ucenter_ms_user AS tumu ON tumu.user_id = tumrur.user_id
+            ${ew.customSqlSegment}
+    </select>
+
 </mapper>
 

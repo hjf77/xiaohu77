@@ -1,11 +1,13 @@
 package com.fhs.basics.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.vo.*;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
 
@@ -216,4 +218,14 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     @CloudMethod
     List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap);
+
+
+    /**
+     * 可以根据单位，角色查询用户列表信息
+     * @param page 分页参数
+     * @param wrapper 接口参数
+     * @return
+     */
+    @CloudMethod
+    IPage<UcenterMsUserVO> advancedPaging(FhsPager<UcenterMsUserVO> page, QueryWrapper<UcenterMsUserVO> wrapper);
 }

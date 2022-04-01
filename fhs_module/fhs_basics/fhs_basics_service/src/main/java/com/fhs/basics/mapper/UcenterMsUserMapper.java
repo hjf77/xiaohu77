@@ -1,11 +1,14 @@
 package com.fhs.basics.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.po.SettMsMenuPO;
 import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.vo.LoginVO;
 import com.fhs.basics.vo.SysUserOrgVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
+import com.fhs.core.base.vo.FhsPager;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -273,4 +276,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      */
     List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap);
+
+    FhsPager<UcenterMsUserVO> advancedPaging(FhsPager<UcenterMsUserVO> page, @Param("ew") QueryWrapper<UcenterMsUserVO> queryWrapper);
 }

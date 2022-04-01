@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
@@ -19,6 +20,7 @@ import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
@@ -506,6 +508,20 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap) {
         return sysUserMapper.findOrgRoleList(paramMap);
+    }
+
+    @Override
+    public IPage<UcenterMsUserVO> advancedPaging(FhsPager<UcenterMsUserVO> page, QueryWrapper<UcenterMsUserVO> wrapper) {
+        ParamChecker.isNotNull(page, "前端调用接口的时候没传分页信息");
+        page = sysUserMapper.advancedPaging(page, wrapper);
+        List<UcenterMsUserVO> records = page.getRecords();
+        this.transService.transMore(records);
+        FhsPager<UcenterMsUserVO> result = new FhsPager();
+        result.setTotal(page.getTotal());
+        result.setPageSize(page.getSize());
+        result.setPageNumber(page.getCurrent());
+        result.setRecords(records);
+        return result;
     }
 
     @Override
