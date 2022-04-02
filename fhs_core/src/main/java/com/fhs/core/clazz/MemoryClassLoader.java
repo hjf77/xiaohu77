@@ -6,6 +6,7 @@ import com.sun.tools.javac.util.ListBuffer;
 import com.sun.tools.javac.util.Log;
 import org.springframework.boot.ApplicationHome;
 import org.springframework.boot.loader.jar.JarFile;
+
 import javax.tools.*;
 import javax.tools.JavaFileObject.Kind;
 import java.io.*;
@@ -179,7 +180,7 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     private static final Object lock = new Object();
 
-    private boolean isInit = false;
+    private static boolean isInit = false;
 
 
     public void init() {
@@ -254,7 +255,6 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
                                          Set<Kind> kinds,
                                          boolean recurse)
             throws IOException {
-
 
         if ("CLASS_PATH".equals(location.getName()) && MemoryClassLoader.isJar()) {
             List<JavaFileObject> result = getLibJarsOptions(packageName);
