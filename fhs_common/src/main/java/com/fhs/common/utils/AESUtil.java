@@ -26,6 +26,9 @@ public class AESUtil {
      * @return
      */
     public static String encrypt(String content, String password) {
+        if(password == null){
+            password = "123456";
+        }
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
 //kgen.init(128, new SecureRandom(password.getBytes()));//适用windows
