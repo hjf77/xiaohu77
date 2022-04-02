@@ -16,8 +16,7 @@ import java.util.Map;
 
 @Service
 @DataSource("base_business")
-public class SysMenuPermissionServiceImpl extends BaseServiceImpl<SysMenuPermission> implements SysMenuPermissionService
-{
+public class SysMenuPermissionServiceImpl extends BaseServiceImpl<SysMenuPermission> implements SysMenuPermissionService {
     @Autowired
     SysMenuPermissionDAO dao;
 
@@ -28,26 +27,24 @@ public class SysMenuPermissionServiceImpl extends BaseServiceImpl<SysMenuPermiss
      * @return
      */
     @Override
-    public List<Map<String, Object>> findMapListByType(Map<String, Object> map)
-    {
+    public List<Map<String, Object>> findMapListByType(Map<String, Object> map) {
         return dao.findMapListByType(map);
     }
 
     @Override
-    public boolean addBaseMenuBatch(Map<String, Object> map)
-    {
-        if(map.containsKey("menuId")){
+    public boolean addBaseMenuBatch(Map<String, Object> map) {
+        if (map.containsKey("menuId")) {
 
             List<SysMenuPermission> existsButtonList = dao.findForListFromMap(map);
-            Map<String,Map<String, Object>> baseButtonMap = this.getBaseButton();
+            Map<String, Map<String, Object>> baseButtonMap = this.getBaseButton();
             String buttonMethod;
-            for(SysMenuPermission button : existsButtonList){
+            for (SysMenuPermission button : existsButtonList) {
                 buttonMethod = button.getMethod();
-                if(baseButtonMap.containsKey(buttonMethod)){
+                if (baseButtonMap.containsKey(buttonMethod)) {
                     baseButtonMap.remove(buttonMethod);
                 }
             }
-            if(baseButtonMap.size() > 0){
+            if (baseButtonMap.size() > 0) {
                 map.put("baseButtonList", new ArrayList<Map<String, Object>>(baseButtonMap.values()));
                 // 一键添加增删改查菜单
                 dao.addBaseMenuBatch(map);
@@ -85,21 +82,20 @@ public class SysMenuPermissionServiceImpl extends BaseServiceImpl<SysMenuPermiss
     }
 
     /**
-     *
      * 获取基础权限的数据，组装为map，key为权限，value为权限的信息
      *
      * @return
      */
-    private Map<String,Map<String, Object>> getBaseButton(){
+    private Map<String, Map<String, Object>> getBaseButton() {
         String[][] buttonArray = {
-            {"see","查询","1"},
-            {"add","添加","2"},
-            {"update","修改","3"},
-            {"del","删除","4"}
+                {"see", "查询", "1"},
+                {"add", "添加", "2"},
+                {"update", "修改", "3"},
+                {"del", "删除", "4"}
         };
-        Map<String,Map<String, Object>> resultMap = new HashMap<>();
+        Map<String, Map<String, Object>> resultMap = new HashMap<>();
         Map<String, Object> tempMap;
-        for(int i = 0; i < buttonArray.length; i++){
+        for (int i = 0; i < buttonArray.length; i++) {
             tempMap = new HashMap<>();
             tempMap.put("method", buttonArray[i][0]);
             tempMap.put("permissionName", buttonArray[i][1]);

@@ -9,6 +9,7 @@ import org.apache.xmlbeans.XmlToken;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTNonVisualDrawingProps;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTPositiveSize2D;
 import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,9 +33,9 @@ public class CustomXWPFDocument extends XWPFDocument {
 
     /**
      * @param ind
-     * @param width 宽
-     * @param height 高
-     * @param paragraph  段落
+     * @param width     宽
+     * @param height    高
+     * @param paragraph 段落
      */
     public void createPicture(String blipId, int ind, int width, int height, XWPFParagraph paragraph) {
         final int EMU = 9525;

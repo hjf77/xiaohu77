@@ -17,7 +17,7 @@ import java.util.Map;
  * pagex 前端配置 DTO
  */
 @Data
-public class PageXFrontDTO extends  PagexBaseDTO {
+public class PageXFrontDTO extends PagexBaseDTO {
 
     /**
      * 前段对象
@@ -27,13 +27,14 @@ public class PageXFrontDTO extends  PagexBaseDTO {
     /**
      * 前段接口配置
      */
-    private Map<String,FrontApi> frontApiMap = new HashMap();
+    private Map<String, FrontApi> frontApiMap = new HashMap();
 
     /**
      * 解析js 返回对象
+     *
      * @param js js
      * @throws NoSuchMethodException 如果调用某些方法找不到
-     * @throws ScriptException 脚本本身有问题
+     * @throws ScriptException       脚本本身有问题
      */
     public PageXFrontDTO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
@@ -44,29 +45,27 @@ public class PageXFrontDTO extends  PagexBaseDTO {
 
     /**
      * 初始化前段接口
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initFrontApi() throws NoSuchMethodException, ScriptException {
-        List<Map<String,Object>> apiSetts = super.getListM("apis",frontObject);
+        List<Map<String, Object>> apiSetts = super.getListM("apis", frontObject);
         FrontApi api = null;
-        for(Map<String,Object> apiSett:apiSetts)
-        {
-            api =  FrontApi.builder().name(ConverterUtils.toString(apiSett.get("name")))
+        for (Map<String, Object> apiSett : apiSetts) {
+            api = FrontApi.builder().name(ConverterUtils.toString(apiSett.get("name")))
                     .type(ConverterUtils.toString(apiSett.get("type"))).
-                            isJSONP(ConverterUtils.toBoolean(apiSett.get("jsonp"))).build();
-            if(apiSett.get("inF")!=null)
-            {
+                    isJSONP(ConverterUtils.toBoolean(apiSett.get("jsonp"))).build();
+            if (apiSett.get("inF") != null) {
                 api.setHasINF(true);
                 api.setInFs(ConverterUtils.toString(apiSett.get("inF")).split(","));
             }
-            if(apiSett.get("outF")!=null)
-            {
+            if (apiSett.get("outF") != null) {
                 api.setHasEXF(true);
                 api.setExFs(ConverterUtils.toString(apiSett.get("exF")).split(","));
             }
             api.setWheres(ConverterUtils.toString(apiSett.get("where")).split(","));
-            frontApiMap.put(ConverterUtils.toString(apiSett.get("name")),api);
+            frontApiMap.put(ConverterUtils.toString(apiSett.get("name")), api);
         }
     }
 
@@ -80,7 +79,7 @@ public class PageXFrontDTO extends  PagexBaseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class FrontApi{
+    public static class FrontApi {
         /**
          * 接口名字
          */

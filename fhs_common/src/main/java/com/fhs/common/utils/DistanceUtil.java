@@ -1,18 +1,16 @@
 package com.fhs.common.utils;
 
-public class DistanceUtil
-{
+public class DistanceUtil {
     /**
      * 计算地球上任意两点(经纬度)距离
-     * 
+     *
      * @param long1 第一点经度
-     * @param lat1 第一点纬度
+     * @param lat1  第一点纬度
      * @param long2 第二点经度
-     * @param lat2 第二点纬度
+     * @param lat2  第二点纬度
      * @return 返回距离 单位：米
      */
-    public static double Distance(double long1, double lat1, double long2, double lat2)
-    {
+    public static double Distance(double long1, double lat1, double long2, double lat2) {
         double a, b, R;
         R = 6378137; // 地球半径
         lat1 = lat1 * Math.PI / 180.0;

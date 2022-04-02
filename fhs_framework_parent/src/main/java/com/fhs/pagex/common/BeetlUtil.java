@@ -28,13 +28,11 @@ public class BeetlUtil {
         for (String key : parameterMap.keySet()) {
             template.binding(key, parameterMap.get(key));
         }
-        if(PagexServletContext.getRequest()!=null)
-        {
+        if (PagexServletContext.getRequest() != null) {
             template.binding("parameter", getParameterMap(PagexServletContext.getRequest()));
         }
         return template.render();
     }
-
 
 
     private static EMap<String, Object> getParameterMap(HttpServletRequest request) {

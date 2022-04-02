@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.IdHelper;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.exception.ParamException;
 import com.fhs.pagex.bean.DefaultPageXBean;
@@ -20,6 +21,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.script.ScriptException;
@@ -43,6 +45,10 @@ import java.util.Set;
  */
 @Service
 public class PageXAutoSqlService {
+
+    @Autowired
+    private IdHelper idHelper;
+
     /**
      *
      */
@@ -182,8 +188,14 @@ public class PageXAutoSqlService {
             groupCodeSql = ",group_code";
             groupCodeValSql = ",#{groupCode}";
         }
+        String pkeyValue = "null";
+        if ("uuid".equals(modelConfig.get("type"))) {
+            pkeyValue = "#{pkey}";
+        } else if ("snow".equals(modelConfig.get("type"))) {
+            pkeyValue = idHelper.nextId() + "";
+        }
         sqlBuilder.append(",`create_time`,`create_user`,`update_time`,`update_user`  " + groupCodeSql + ")  VALUES ("
-                + ("uuid".equals(modelConfig.get("type")) ? "#{pkey}" : "null"));
+                + pkeyValue);
         sqlBuilder.append(valueFieldBuilder);
         if (sqlBuilder.length() != 0) {
             sqlBuilder.append(",");

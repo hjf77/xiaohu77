@@ -11,29 +11,32 @@ public class FHSAopConfig {
 
     /**
      * 参数校验aop
+     *
      * @return
      */
     @Bean
-    public OrdinaryActionParamCheckAop getParamCheckAop(){
-        return  new OrdinaryActionParamCheckAop();
+    public OrdinaryActionParamCheckAop getParamCheckAop() {
+        return new OrdinaryActionParamCheckAop();
     }
 
     /**
      * fegin接口校验
+     *
      * @return
      */
     @Bean
-    public FeignParamCheckAop getFeignParamCheckAop(){
-        return  new FeignParamCheckAop();
+    public FeignParamCheckAop getFeignParamCheckAop() {
+        return new FeignParamCheckAop();
     }
 
     /**
      * 日志记录aop
+     *
      * @return
      */
     @Bean
-    public ActionInterceptAndCreateLogAop getActionInterceptAndCreateLogAop(){
-        return  new ActionInterceptAndCreateLogAop ();
+    public ActionInterceptAndCreateLogAop getActionInterceptAndCreateLogAop() {
+        return new ActionInterceptAndCreateLogAop();
     }
 
     /**

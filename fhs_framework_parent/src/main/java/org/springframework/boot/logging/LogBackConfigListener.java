@@ -41,10 +41,14 @@ public class LogBackConfigListener implements GenericApplicationListener {
     public static final int DEFAULT_ORDER = -2147483628;
     public static final String CONFIG_PROPERTY = "logging.config";
     public static final String REGISTER_SHUTDOWN_HOOK_PROPERTY = "logging.register-shutdown-hook";
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     @Deprecated
     public static final String PATH_PROPERTY = "logging.path";
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     @Deprecated
     public static final String FILE_PROPERTY = "logging.file";
     public static final String PID_KEY = "PID";
@@ -81,7 +85,7 @@ public class LogBackConfigListener implements GenericApplicationListener {
             Class[] var3 = supportedTypes;
             int var4 = supportedTypes.length;
 
-            for(int var5 = 0; var5 < var4; ++var5) {
+            for (int var5 = 0; var5 < var4; ++var5) {
                 Class<?> supportedType = var3[var5];
                 if (supportedType.isAssignableFrom(type)) {
                     return true;
@@ -94,7 +98,7 @@ public class LogBackConfigListener implements GenericApplicationListener {
 
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ApplicationEnvironmentPreparedEvent) {
-            this.onApplicationEnvironmentPreparedEvent((ApplicationEnvironmentPreparedEvent)event);
+            this.onApplicationEnvironmentPreparedEvent((ApplicationEnvironmentPreparedEvent) event);
         }
     }
 
@@ -168,7 +172,7 @@ public class LogBackConfigListener implements GenericApplicationListener {
         LoggingInitializationContext initializationContext = new LoggingInitializationContext(environment);
         String logConfig = environment.getProperty("logging.config");
         if (this.ignoreLogConfig(logConfig)) {
-            system.initialize(initializationContext, (String)null, logFile);
+            system.initialize(initializationContext, (String) null, logFile);
         } else {
             try {
                 system.cleanUp();
@@ -196,12 +200,12 @@ public class LogBackConfigListener implements GenericApplicationListener {
     }
 
     protected void initializeLogLevel(LoggingSystem system, LogLevel level) {
-        List<String> loggers = (List)LOG_LEVEL_LOGGERS.get(level);
+        List<String> loggers = (List) LOG_LEVEL_LOGGERS.get(level);
         if (loggers != null) {
             Iterator var4 = loggers.iterator();
 
-            while(var4.hasNext()) {
-                String logger = (String)var4.next();
+            while (var4.hasNext()) {
+                String logger = (String) var4.next();
                 system.setLogLevel(logger, level);
             }
         }
@@ -213,16 +217,16 @@ public class LogBackConfigListener implements GenericApplicationListener {
         boolean rootProcessed = false;
         Iterator var5 = levels.entrySet().iterator();
 
-        while(true) {
+        while (true) {
             Entry entry;
             String name;
-            while(true) {
+            while (true) {
                 if (!var5.hasNext()) {
                     return;
                 }
 
-                entry = (Entry)var5.next();
-                name = (String)entry.getKey();
+                entry = (Entry) var5.next();
+                name = (String) entry.getKey();
                 if (!name.equalsIgnoreCase("ROOT")) {
                     break;
                 }
@@ -253,7 +257,7 @@ public class LogBackConfigListener implements GenericApplicationListener {
     }
 
     private void registerShutdownHookIfNecessary(Environment environment, LoggingSystem loggingSystem) {
-        boolean registerShutdownHook = ((Boolean)(new RelaxedPropertyResolver(environment)).getProperty("logging.register-shutdown-hook", Boolean.class, false)).booleanValue();
+        boolean registerShutdownHook = ((Boolean) (new RelaxedPropertyResolver(environment)).getProperty("logging.register-shutdown-hook", Boolean.class, false)).booleanValue();
         if (registerShutdownHook) {
             Runnable shutdownHandler = loggingSystem.getShutdownHandler();
             if (shutdownHandler != null && shutdownHookRegistered.compareAndSet(false, true)) {

@@ -11,13 +11,12 @@ import java.util.Map;
 
 /**
  * 系统权限DAO
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @MapperDefinition(domainClass = SysMenuPermission.class)
 @Repository
-public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
-{
+public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission> {
     /**
      * 根据按钮类型获取按钮集合
      *
@@ -35,7 +34,6 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
     List<SysMenuPermission> readButtonByIds(Map<String, Object> map);
 
     /**
-     *
      * 一键添加增删改查菜单
      *
      * @param map
@@ -44,7 +42,6 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
     int addBaseMenuBatch(Map<String, Object> map);
 
     /**
-     *
      * 查询所有权限，如果传了groupCode，则获取该集团所有应用的所有权限
      *
      * @param paramMap(menuType 0物业菜单，1社区菜单)
@@ -53,7 +50,6 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
     List<Map<String, Object>> getButtonRoleCodeMap(Map<String, Object> paramMap);
 
     /**
-     *
      * <获取有权限的buttonId>
      *
      * @param paramMap
@@ -64,6 +60,7 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
 
     /**
      * 根据权限ID查询权限URL关联信息
+     *
      * @param sysMenuPermission 权限信息
      * @return URL列表
      */
@@ -71,6 +68,7 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
 
     /**
      * 根据权限ID查询URL总数
+     *
      * @param sysMenuPermission 权限信息
      * @return URL总数
      */
@@ -78,6 +76,7 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
 
     /**
      * 添加权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL关联信息
      * @return
      */
@@ -85,6 +84,7 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
 
     /**
      * 修改权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL信息
      * @return
      */
@@ -92,6 +92,7 @@ public interface SysMenuPermissionDAO extends BaseDao<SysMenuPermission>
 
     /**
      * 删除权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL信息
      * @return
      */

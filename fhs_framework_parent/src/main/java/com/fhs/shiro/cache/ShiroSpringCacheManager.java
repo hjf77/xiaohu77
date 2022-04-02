@@ -26,11 +26,11 @@ public class ShiroSpringCacheManager implements CacheManager, Destroyable {
     }
 
     @Override
-    public <K, V> Cache<K, V> getCache(String name)  {
-        if (name == null ){
+    public <K, V> Cache<K, V> getCache(String name) {
+        if (name == null) {
             return null;
         }
-        return new ShiroSpringCache<K,V>(name,getCacheManager());
+        return new ShiroSpringCache<K, V>(name, getCacheManager());
     }
 
 

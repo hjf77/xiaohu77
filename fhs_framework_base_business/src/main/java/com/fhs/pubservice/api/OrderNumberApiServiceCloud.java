@@ -40,35 +40,29 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
     @RequestMapping("/getOrderNumber")
     @Override
     public HttpResult<String> getOrderNumber(String type) {
-        try
-        {
+        try {
             long listSize = redisCacheService.getForListSize(REDIS_KEY + ":" + type);
             LOG.debug("队列中序列条数 ：" + listSize);
             // size为0 说明队列中已经没有序列、可以生成订单号了
-            if (listSize == 0)
-            {
+            if (listSize == 0) {
                 generation(type, DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN_DATE_NO_));// 生成订单号
             }
             //获取订单号
             String orderNo = redisCacheService.getBRPop(REDIS_KEY + ":" + type);
             return HttpResult.success(orderNo);
-        }
-        catch (Exception e1)
-        {
-            LOG.error("订单号默认值设定失败 ",e1);
-            return HttpResult.error(null,"获取订单号失败");
+        } catch (Exception e1) {
+            LOG.error("订单号默认值设定失败 ", e1);
+            return HttpResult.error(null, "获取订单号失败");
         }
     }
 
     /**
      * 生成订单号
      */
-    protected void generation(String type,String date)
-    {
+    protected void generation(String type, String date) {
 
-        ServiceOrderLog serviceOrderLog = this.getServiceOrderLog(type,date);
-        if (serviceOrderLog == null)
-        {
+        ServiceOrderLog serviceOrderLog = this.getServiceOrderLog(type, date);
+        if (serviceOrderLog == null) {
             serviceOrderLog = new ServiceOrderLog();
             serviceOrderLog.setId(StringUtil.getUUID());
             serviceOrderLog.setType(type);
@@ -81,7 +75,7 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
         orderIndex += GeneratedConstant.ONCE_ORDER_NUM_CREATE;
         serviceOrderLog.setNumber(orderIndex);
         serviceOrderLogService.updateSelectiveById(serviceOrderLog);
-        List<String> orderList =  orderNumList(minOrderIndex ,date);
+        List<String> orderList = orderNumList(minOrderIndex, date);
         redisCacheService.addList(REDIS_KEY + ":" + type, orderList);
         // 设定redis失效时间
         redisCacheService.expire(REDIS_KEY + ":" + type, this.getExpireTime());
@@ -93,8 +87,7 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
      * @param type
      * @return
      */
-    private ServiceOrderLog getServiceOrderLog(String type, String date)
-    {
+    private ServiceOrderLog getServiceOrderLog(String type, String date) {
         ServiceOrderLog serviceOrderLog = new ServiceOrderLog();
         serviceOrderLog.setType(type);
         serviceOrderLog.setTime(date);
@@ -107,11 +100,9 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
      *
      * @param type
      */
-    public void updateServiceOrderLog(String type,String date)
-    {
-        ServiceOrderLog serviceOrderLog = this.getServiceOrderLog(type,date);
-        if (serviceOrderLog != null)
-        {
+    public void updateServiceOrderLog(String type, String date) {
+        ServiceOrderLog serviceOrderLog = this.getServiceOrderLog(type, date);
+        if (serviceOrderLog != null) {
             serviceOrderLog.setNumber(1);
             serviceOrderLogService.updateSelectiveById(serviceOrderLog);
         }
@@ -124,11 +115,9 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
      * @param date
      * @return
      */
-    private List<String> orderNumList(int minOrderIndex,String date)
-    {
+    private List<String> orderNumList(int minOrderIndex, String date) {
         List<String> dataList = new ArrayList<String>();
-        for (int i = minOrderIndex; i < (GeneratedConstant.ONCE_ORDER_NUM_CREATE + minOrderIndex); i++)
-        {
+        for (int i = minOrderIndex; i < (GeneratedConstant.ONCE_ORDER_NUM_CREATE + minOrderIndex); i++) {
             dataList.add(StringUtil.formatOrderNumber(date, i));
         }
         return dataList;
@@ -139,8 +128,7 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
      *
      * @return
      */
-    private int getExpireTime()
-    {
+    private int getExpireTime() {
         long now = System.currentTimeMillis();
         final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
@@ -149,7 +137,7 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         final long diff = cal.getTimeInMillis() - now;
-        return Integer.valueOf(diff/1000 + "");
+        return Integer.valueOf(diff / 1000 + "");
     }
 
 }

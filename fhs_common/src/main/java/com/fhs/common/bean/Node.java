@@ -11,14 +11,10 @@ import java.util.List;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: wanglei@sxpartner.com
- * @History:
- * 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History: 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class Node
-{
-    public Node(String id, String text, String state, boolean checked,int index)
-    {
+public class Node {
+    public Node(String id, String text, String state, boolean checked, int index) {
         super();
         this.id = id;
         this.text = text;
@@ -33,7 +29,7 @@ public class Node
     private String id;
 
     /**
-     *级别
+     * 级别
      */
     private int index;
 
@@ -58,67 +54,53 @@ public class Node
     private List<Node> children = new ArrayList<>();
 
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(int index)
-    {
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public List<Node> getChildren()
-    {
+    public List<Node> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Node> children)
-    {
+    public void setChildren(List<Node> children) {
         this.children = children;
     }
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId(String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getText()
-    {
+    public String getText() {
         return text;
     }
 
-    public void setText(String text)
-    {
+    public void setText(String text) {
         this.text = text;
     }
 
-    public String getState()
-    {
+    public String getState() {
         return state;
     }
 
-    public void setState(String state)
-    {
+    public void setState(String state) {
         this.state = state;
     }
 
-    public boolean isChecked()
-    {
+    public boolean isChecked() {
         return checked;
     }
 
-    public void setChecked(boolean checked)
-    {
+    public void setChecked(boolean checked) {
         this.checked = checked;
     }
-
-
 
 
 }

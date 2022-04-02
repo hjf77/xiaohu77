@@ -22,8 +22,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-public class ServiceWordbookGroupServiceImpl implements ServiceWordbookGroupService
-{
+public class ServiceWordbookGroupServiceImpl implements ServiceWordbookGroupService {
 
     @Autowired
     private ServiceWordbookGroupDAO dao;
@@ -32,21 +31,18 @@ public class ServiceWordbookGroupServiceImpl implements ServiceWordbookGroupServ
     private WordbookDAO wordbookDao;
 
     @Override
-    public int add(ServiceWordbookGroup bean)
-    {
+    public int add(ServiceWordbookGroup bean) {
         return dao.add(bean);
     }
 
     @Override
-    public boolean update(ServiceWordbookGroup bean)
-    {
+    public boolean update(ServiceWordbookGroup bean) {
         return dao.update(bean) > 0;
     }
 
     @Override
     @Transactional
-    public boolean delete(ServiceWordbookGroup bean)
-    {
+    public boolean delete(ServiceWordbookGroup bean) {
         int result = dao.delete(bean);
         wordbookDao.batchDelete(bean.getWordbookGroupCode());
         return result > 0;
@@ -54,20 +50,17 @@ public class ServiceWordbookGroupServiceImpl implements ServiceWordbookGroupServ
     }
 
     @Override
-    public int findCount(ServiceWordbookGroup bean)
-    {
+    public int findCount(ServiceWordbookGroup bean) {
         return dao.findCount(bean);
     }
 
     @Override
-    public List<ServiceWordbookGroup> findForListFromMap(Map<String, Object> map)
-    {
+    public List<ServiceWordbookGroup> findForListFromMap(Map<String, Object> map) {
         return dao.findForListFromMap(map);
     }
 
     @Override
-    public ServiceWordbookGroup findBean(ServiceWordbookGroup bean)
-    {
+    public ServiceWordbookGroup findBean(ServiceWordbookGroup bean) {
         return dao.findBean(bean);
     }
 }

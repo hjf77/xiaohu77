@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @RestController
 @RequestMapping("/api/logAdminOperatorLog")
@@ -39,18 +37,18 @@ public class LogAdminOperatorLogApiServiceCloud implements FeignlogAdminOperator
 
     /**
      * 插入一条操作日志
+     *
      * @param logAdminOperatorLogVo 操作日志vo
      * @return
      */
     @RequestMapping("/addLogAdminOperatorLog")
     @Override
     public HttpResult<Integer> addLogAdminOperatorLog(@RequestBody LogAdminOperatorLogVo logAdminOperatorLogVo) {
-        if(CheckUtils.isNullOrEmpty(logAdminOperatorLogVo.getOperatorId()))
-        {
+        if (CheckUtils.isNullOrEmpty(logAdminOperatorLogVo.getOperatorId())) {
             return HttpResult.success(Constant.ZERO);
         }
-        LogAdminOperatorLog log =new LogAdminOperatorLog();
-        BeanUtils.copyProperties(logAdminOperatorLogVo,log);
+        LogAdminOperatorLog log = new LogAdminOperatorLog();
+        BeanUtils.copyProperties(logAdminOperatorLogVo, log);
         log.setId(StringUtil.getUUID());
         int result = logAdminOperatorLogService.insert(log);
         return HttpResult.success(result);

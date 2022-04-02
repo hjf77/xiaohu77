@@ -1,4 +1,5 @@
 package com.fhs.core.tags;
+
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
@@ -11,20 +12,16 @@ import javax.servlet.jsp.JspException;
  * @Version: 1.0
  * @Author: Lins
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class AddressInputTag extends InputTag
-{
+public class AddressInputTag extends InputTag {
     private final String defaultClassName = "big_text";
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
         defaultClassName(defaultClassName);
-        if(this.isRequired()){
+        if (this.isRequired()) {
             write("<div class='bigLabelDiv'>");
             write("    <label>" + super.getTitle() + "</label>");
             write("</div>");
@@ -37,7 +34,7 @@ public class AddressInputTag extends InputTag
             write("        style='border: 1px solid #C0C0C0; width: 150px; height: auto; display: none; z-index: 110005; position: absolute;'>");
             write("    </div>");
             write("</div>");
-        }else {
+        } else {
             write("<div class='bigLabelDiv'>");
             write("    <label>" + super.getTitle() + "</label>");
             write("</div>");
@@ -52,8 +49,8 @@ public class AddressInputTag extends InputTag
         }
     }
 
-	public String getDefaultClassName() {
-		return defaultClassName;
-	}
+    public String getDefaultClassName() {
+        return defaultClassName;
+    }
 
 }

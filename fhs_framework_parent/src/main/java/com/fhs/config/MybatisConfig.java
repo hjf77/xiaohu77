@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 public class MybatisConfig implements InitializingBean {
 
-    private static Logger LOG =  Logger.getLogger(MybatisConfig.class);
+    private static Logger LOG = Logger.getLogger(MybatisConfig.class);
 
     @Value("${fhs.mybatis-jpa.entity-package}")
     private String entityPackage;
@@ -45,7 +45,7 @@ public class MybatisConfig implements InitializingBean {
     private SqlSessionFactory sqlSessionFactory;
 
     @Bean("persistentEnhancerScaner")
-    public PersistentEnhancerScaner getPersistentEnhancerScaner(){
+    public PersistentEnhancerScaner getPersistentEnhancerScaner() {
         PersistentEnhancerScaner scanner = new PersistentEnhancerScaner();
         scanner.setEntityPackage(entityPackage);
         scanner.setMapperPackage(mapperPackage);
@@ -55,7 +55,7 @@ public class MybatisConfig implements InitializingBean {
 
 
     @Bean
-    public XMLMapperLoader getXMLMapperLoader(MybatisPlusProperties plusProperties){
+    public XMLMapperLoader getXMLMapperLoader(MybatisPlusProperties plusProperties) {
         XMLMapperLoader loader = new XMLMapperLoader();
         loader.setEnabled(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel")));//开启xml热加载
         loader.setMapperLocations(plusProperties.resolveMapperLocations());

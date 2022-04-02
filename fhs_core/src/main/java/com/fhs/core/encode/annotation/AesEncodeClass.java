@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 /**
  * 添加此注解代表一个类需要加解密
  * (只适用于dto)
- * @author jackwong
  *
+ * @author jackwong
  */
-@Target(value={ElementType.TYPE})
+@Target(value = {ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AesEncodeClass {
 

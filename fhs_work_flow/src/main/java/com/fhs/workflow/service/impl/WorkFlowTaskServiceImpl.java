@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 /**
  * 任务service
  * 主要用来查询任务使用，完成任务或者签收以及其他操作使用引擎自带的taskservice操作
- * @author wanglei
  *
+ * @author wanglei
  */
 @Service("WorkFlowTaskServiceImpl")
-public class WorkFlowTaskServiceImpl  implements WorkFlowTaskService {
+public class WorkFlowTaskServiceImpl implements WorkFlowTaskService {
 
     @Autowired
     private WorkFlowTaskDAO workFlowTaskDAO;
-    
+
     @Override
     public List<FlowTask> findNeedClaimTask(Map<String, Object> paramMap) {
         return workFlowTaskDAO.findNeedClaimTask(paramMap);

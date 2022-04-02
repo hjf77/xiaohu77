@@ -37,11 +37,10 @@ import java.util.Map;
  * @Version: 1.0
  */
 @Component
-public class PagexAddService  implements IPageXService, InitializingBean {
+public class PagexAddService implements IPageXService, InitializingBean {
 
 
     private static final Logger LOG = Logger.getLogger(PagexAddService.class);
-
 
 
     /**
@@ -61,37 +60,34 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         }*/
         PagexAddDTO pageAddSett = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
         //formHtml
-        Map<String,Object> paramMap = new HashMap<>();
-        String formHtml = createFormHtml(request, response, pageAddSett,paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+        String formHtml = createFormHtml(request, response, pageAddSett, paramMap);
         //save_url
-        if(!pageAddSett.getModelConfig().containsKey("saveUrl"))
-        {
+        if (!pageAddSett.getModelConfig().containsKey("saveUrl")) {
             pageAddSett.getModelConfig().put("saveUrl", EConfig.getPathPropertiesValue("basePath") +
                     "/ms/x/" + namespace + "/add");
         }
-        if(!pageAddSett.getModelConfig().containsKey("updateUrl"))
-        {
+        if (!pageAddSett.getModelConfig().containsKey("updateUrl")) {
             pageAddSett.getModelConfig().put("updateUrl", EConfig.getPathPropertiesValue("basePath") +
                     "/ms/x/" + namespace + "/update/");
         }
-        if(!pageAddSett.getModelConfig().containsKey("infoUrl"))
-        {
+        if (!pageAddSett.getModelConfig().containsKey("infoUrl")) {
             pageAddSett.getModelConfig().put("infoUrl", EConfig.getPathPropertiesValue("basePath") +
                     "/ms/x/" + namespace + "/info/");
         }
         String resultHtml = null;
         try {
-            paramMap.put("formHtml",formHtml);
-            paramMap.put("modelConfig",pageAddSett.getModelConfig());
-            paramMap.put("otherFunctions",pageAddSett.getOtherFunctions());
-            if(PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().containsKey(namespace)) {
+            paramMap.put("formHtml", formHtml);
+            paramMap.put("modelConfig", pageAddSett.getModelConfig());
+            paramMap.put("otherFunctions", pageAddSett.getOtherFunctions());
+            if (PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().containsKey(namespace)) {
                 paramMap.put("extendsHtml", BeetlUtil.renderBeelt(PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().get(namespace), new HashMap<>()));
             }
-            resultHtml = BeetlUtil.renderBeelt("/pagex/add_update_template.html",paramMap);
+            resultHtml = BeetlUtil.renderBeelt("/pagex/add_update_template.html", paramMap);
             return resultHtml;
         } catch (Exception e) {
             e.printStackTrace();
-            return "code:500,message:" +e.getMessage();
+            return "code:500,message:" + e.getMessage();
         }
 
     }
@@ -104,7 +100,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
      * @param pageAddSett 添加页配置
      * @return 表单内容
      */
-    public String createFormHtml(HttpServletRequest request, HttpServletResponse response, PagexAddDTO pageAddSett,Map<String,Object> paramMap) {
+    public String createFormHtml(HttpServletRequest request, HttpServletResponse response, PagexAddDTO pageAddSett, Map<String, Object> paramMap) {
         String type = null;
         Class fromTagClass = null;
         BaseFormTag formTag = null;
@@ -123,14 +119,12 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         // 获取所有的表单字段
         for (Map<String, Object> field : pageAddSett.getFormFieldSett()) {
             type = ConverterUtils.toString(field.get("type"));
-            if (CheckUtils.isNullOrEmpty(type))
-            {
+            if (CheckUtils.isNullOrEmpty(type)) {
                 continue;
             }
-            if("one2x".equals(type))
-            {
-                formFieldBuilder.append(handelOne2X( readyJsListList ,loadSuccessList, onSaveList, overallJsList,
-                         pageAddSett, field, request,  response,paramMap));
+            if ("one2x".equals(type)) {
+                formFieldBuilder.append(handelOne2X(readyJsListList, loadSuccessList, onSaveList, overallJsList,
+                        pageAddSett, field, request, response, paramMap));
                 continue;
             }
             fromTagClass = FormTagFactory.getTag(type);
@@ -140,7 +134,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
             }
             try {
                 formTag = (BaseFormTag) fromTagClass.newInstance();
-                Map<String,Object> fieldSettMap = new HashMap<>();
+                Map<String, Object> fieldSettMap = new HashMap<>();
                 fieldSettMap.putAll(field);
                 fieldSettMap.put("name", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(fieldSettMap.get("name"))));
                 formTag.setTagSett(fieldSettMap, request, response);
@@ -148,21 +142,21 @@ public class PagexAddService  implements IPageXService, InitializingBean {
                 if (formTag.isNewRow()) {
                     if (preHasEndDiv) {
                         formFieldBuilder.append(formTag.getContentHtml());
-                    } else{
+                    } else {
                         formFieldBuilder.append("</div>" + formTag.getContentHtml());
                     }
                     preHasEndDiv = true;
                 } else { // 如果不是新起一行
                     // 如果上一个为空
                     if (CheckUtils.isNullOrEmpty(preTag)) {
-                        formFieldBuilder.append("<div class=\"fitem\">"+formTag.getContentHtml());
+                        formFieldBuilder.append("<div class=\"fitem\">" + formTag.getContentHtml());
                         preHasEndDiv = false;
                     } else { // 如果上一个不为空
                         if (preHasEndDiv) {
-                            formFieldBuilder.append("<div class=\"fitem\">"+formTag.getContentHtml());
+                            formFieldBuilder.append("<div class=\"fitem\">" + formTag.getContentHtml());
                             preHasEndDiv = false;
-                        } else{
-                            formFieldBuilder.append( formTag.getContentHtml()+"</div>");
+                        } else {
+                            formFieldBuilder.append(formTag.getContentHtml() + "</div>");
                             preHasEndDiv = true;
                         }
                     }
@@ -170,19 +164,19 @@ public class PagexAddService  implements IPageXService, InitializingBean {
                 preTag = formTag;
 
                 // 获取readyJsList
-                if (!CheckUtils.isNullOrEmpty(formTag.readyJs())){
+                if (!CheckUtils.isNullOrEmpty(formTag.readyJs())) {
                     readyJsListList.add(formTag.readyJs());
                 }
                 // 获取loadSuccessList
-                if (!CheckUtils.isNullOrEmpty(formTag.loadSuccessJs())){
+                if (!CheckUtils.isNullOrEmpty(formTag.loadSuccessJs())) {
                     loadSuccessList.add(formTag.loadSuccessJs());
                 }
                 // 获取onSaveList
-                if (!CheckUtils.isNullOrEmpty(formTag.saveJs())){
+                if (!CheckUtils.isNullOrEmpty(formTag.saveJs())) {
                     onSaveList.add(formTag.saveJs());
                 }
                 // 获取overallJsList
-                if (!CheckUtils.isNullOrEmpty(formTag.overallJs())){
+                if (!CheckUtils.isNullOrEmpty(formTag.overallJs())) {
                     overallJsList.add(formTag.overallJs());
                 }
             } catch (InstantiationException e) {
@@ -191,24 +185,24 @@ public class PagexAddService  implements IPageXService, InitializingBean {
                 LOG.error(this, e);
             }
         }
-        request.setAttribute("tagReadyJsList",readyJsListList);
-        request.setAttribute("tagLoadSuccessList",loadSuccessList);
-        request.setAttribute("tagOnSaveList",onSaveList);
-        request.setAttribute("tagOverallJsList",overallJsList);
-        paramMap.put("tagReadyJsList",readyJsListList);
-        paramMap.put("tagLoadSuccessList",loadSuccessList);
-        paramMap.put("tagOnSaveList",onSaveList);
-        paramMap.put("tagOverallJsList",overallJsList);
+        request.setAttribute("tagReadyJsList", readyJsListList);
+        request.setAttribute("tagLoadSuccessList", loadSuccessList);
+        request.setAttribute("tagOnSaveList", onSaveList);
+        request.setAttribute("tagOverallJsList", overallJsList);
+        paramMap.put("tagReadyJsList", readyJsListList);
+        paramMap.put("tagLoadSuccessList", loadSuccessList);
+        paramMap.put("tagOnSaveList", onSaveList);
+        paramMap.put("tagOverallJsList", overallJsList);
         return formFieldBuilder.toString();
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        HandelPageXService.SIGEL.registerPageXService("add_update.jsp",this);
+        HandelPageXService.SIGEL.registerPageXService("add_update.jsp", this);
     }
 
-    private String handelOne2X(List<String> readyJsListList ,List<String> loadSuccessList, List<String> onSaveList, List<String> overallJsList,
-                               PagexAddDTO pageAddSett,Map<String, Object> field,HttpServletRequest request, HttpServletResponse response,Map<String,Object> paramMap){
+    private String handelOne2X(List<String> readyJsListList, List<String> loadSuccessList, List<String> onSaveList, List<String> overallJsList,
+                               PagexAddDTO pageAddSett, Map<String, Object> field, HttpServletRequest request, HttpServletResponse response, Map<String, Object> paramMap) {
         // 头处理
         // template处理
         // load数据处理
@@ -223,7 +217,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         String type = null;
         Class<? extends IOne2XTag> fromTagClass = null;
         IOne2XTag tag = null;
-        List<Map<String,Object>> fieldList = new ArrayList<>();
+        List<Map<String, Object>> fieldList = new ArrayList<>();
         String firstFieldName = null;
         // 获取所有的表单字段
         for (Map<String, Object> tempField : xAddDTO.getFormFieldSett()) {
@@ -232,23 +226,22 @@ public class PagexAddService  implements IPageXService, InitializingBean {
             if (CheckUtils.isNullOrEmpty(type) || !ConverterUtils.toBoolean(tempField.get("one2x"))) {
                 continue;
             }
-            if(firstFieldName==null)
-            {
+            if (firstFieldName == null) {
                 firstFieldName = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(tempField.get("name")));
             }
             fromTagClass = FormTagFactory.getOne2XTag(type);
             try {
                 tag = fromTagClass.newInstance();
                 tag.makeOne2XModel();
-                Map<String,Object> fieldSettMap = new HashMap<>();
+                Map<String, Object> fieldSettMap = new HashMap<>();
                 fieldSettMap.putAll(tempField);
                 fieldSettMap.put("name", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(fieldSettMap.get("name"))));
                 tag.setTagSett(fieldSettMap, request, response);
-                fieldSettMap.put("formHtml",tag.getFormHtml().replaceAll("xnamespace",xnamespace).replaceAll("'","\""));
-                fieldSettMap.put("setValue",tag.setValueJs());
-                fieldSettMap.put("getValue",tag.getValueJs());
-                fieldSettMap.put("loadSuccess",tag.one2XDataLoadSuccessJs());
-                fieldSettMap.put("save",tag.one2XSaveJs());
+                fieldSettMap.put("formHtml", tag.getFormHtml().replaceAll("xnamespace", xnamespace).replaceAll("'", "\""));
+                fieldSettMap.put("setValue", tag.setValueJs());
+                fieldSettMap.put("getValue", tag.getValueJs());
+                fieldSettMap.put("loadSuccess", tag.one2XDataLoadSuccessJs());
+                fieldSettMap.put("save", tag.one2XSaveJs());
                 fieldList.add(fieldSettMap);
             } catch (InstantiationException e) {
                 LOG.error(this, e);
@@ -256,14 +249,14 @@ public class PagexAddService  implements IPageXService, InitializingBean {
                 LOG.error(this, e);
             }
         }
-        paramMap.put("tagSett",field);
-        paramMap.put("fieldList",fieldList);
-        paramMap.put("xnamespace",xnamespace);
-        paramMap.put("modelConfig",xAddDTO.getModelConfig());
-        paramMap.put("firstFieldName",firstFieldName);
-        paramMap.put("sourceModelConfig",pageAddSett.getModelConfig());
+        paramMap.put("tagSett", field);
+        paramMap.put("fieldList", fieldList);
+        paramMap.put("xnamespace", xnamespace);
+        paramMap.put("modelConfig", xAddDTO.getModelConfig());
+        paramMap.put("firstFieldName", firstFieldName);
+        paramMap.put("sourceModelConfig", pageAddSett.getModelConfig());
 
-        paramMap.put("otherFunctions",pageAddSett.getOtherFunctions());
-        return BeetlUtil.renderBeelt("/pagex/one2x_template.html",paramMap);
+        paramMap.put("otherFunctions", pageAddSett.getOtherFunctions());
+        return BeetlUtil.renderBeelt("/pagex/one2x_template.html", paramMap);
     }
 }

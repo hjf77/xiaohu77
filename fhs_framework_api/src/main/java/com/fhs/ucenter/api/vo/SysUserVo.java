@@ -8,10 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * @author zhangqiang
+ * @version [版本号, 2018/08/23 10:54:28]
  * @Description: 返回后端用户的vo
- * @author  zhangqiang
- * @version  [版本号, 2018/08/23 10:54:28]
- * @versio  1.0
+ * @versio 1.0
  * 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  **/
@@ -71,7 +71,7 @@ public class SysUserVo extends BaseVo {
     /**
      * 密码
      */
-    private String  password;
+    private String password;
 
     /**
      * 登录人的userId

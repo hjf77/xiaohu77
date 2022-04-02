@@ -24,16 +24,15 @@ import java.util.Map;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
-@FeignClient(value = "system", configuration=FeignConfiguration.class)
+@FeignClient(value = "system", configuration = FeignConfiguration.class)
 public interface FeignSysUserApiService {
 
     /**
      * 根据用户登录名获取用户信息
+     *
      * @param userLoginName 用户登录名
      * @return HttpResult 包含用户信息
      */
@@ -42,6 +41,7 @@ public interface FeignSysUserApiService {
 
     /**
      * 根据用户登录名获取用户权限列表
+     *
      * @param userLoginName 用户登录名
      * @return 用户权限列表
      */
@@ -49,15 +49,16 @@ public interface FeignSysUserApiService {
     HttpResult<List<String>> selectMenuByUname(@Param("userLoginName") String userLoginName);
 
     /**
-     * @desc 获取后端用户信息(带分页)
      * @param sysUserForm 后端用户的form对象
      * @return 处理结果
+     * @desc 获取后端用户信息(带分页)
      */
     @RequestLine("POST /api/sysUser/getSysUserList")
     HttpResult<Pager<SysUserVo>> getSysUserList(@RequestBody SysUserForm sysUserForm);
 
     /**
      * 根据用户ID获取用户权限URL
+     *
      * @param userId 用户ID
      * @return 用户权限URL列表
      */
@@ -66,31 +67,34 @@ public interface FeignSysUserApiService {
 
     /**
      * 获取用户的数据权限
-     * @param userId  用户id
+     *
+     * @param userId 用户id
      * @return 数据权限配置
      */
     @RequestLine("GET /api/sysUser/getDataUserPermisstion?userId={userId}")
-    HttpResult<Map<String,String>> getDataUserPermisstion(@Param("userId")String userId);
+    HttpResult<Map<String, String>> getDataUserPermisstion(@Param("userId") String userId);
 
 
     /**
-     * @desc 根据userId获取用户信息
      * @param sysUserForm 后端用户form
      * @return 后端用户信息
+     * @desc 根据userId获取用户信息
      */
     @RequestLine("GET /api/sysUser/getSysUserByUserId")
     HttpResult<SysUserVo> getSysUserByUserId(SysUserForm sysUserForm);
 
     /**
      * 根据组织id查询用户
+     *
      * @param organizationId 组织id
      * @return 用户列表
      */
     @RequestLine("GET /api/sysUser/getSysUserByOrganizationId?organizationId={organizationId}")
-    HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@Param("organizationId")String organizationId);
+    HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@Param("organizationId") String organizationId);
 
     /**
      * 添加后管用户
+     *
      * @Param: SysUserVo
      * @Return:
      */
@@ -99,6 +103,7 @@ public interface FeignSysUserApiService {
 
     /**
      * 删除后管用户
+     *
      * @Param: loginNameo
      * @Return:
      */
@@ -106,11 +111,11 @@ public interface FeignSysUserApiService {
     HttpResult delUser(@Param("loginName") String loginName);
 
     /**
-     *@Description:  根据用户名修改密码
+     * @Description: 根据用户名修改密码
      * @Param: [loginName, password]
      * @Return: com.fhs.core.result.HttpResult
      */
 
     @RequestLine("GET /api/sysUser/updatePassWord?loginName={loginName}&password={password}")
-    HttpResult updatePassWord(@Param("loginName")String loginName,@Param("password") String password);
+    HttpResult updatePassWord(@Param("loginName") String loginName, @Param("password") String password);
 }

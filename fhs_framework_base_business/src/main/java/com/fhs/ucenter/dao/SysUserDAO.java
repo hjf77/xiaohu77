@@ -16,17 +16,16 @@ import java.util.Map;
 
 /**
  * 系统用户DAO
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @Repository
 @MultiTenancyCheck
 @MapperDefinition(domainClass = SysUser.class)
-public interface SysUserDAO extends BaseDao<SysUser>
-{
+public interface SysUserDAO extends BaseDao<SysUser> {
     /**
      * 用户登录
-     * */
+     */
     @NotMultiTenancyCheck
     SysUser login(SysUser adminUser);
 
@@ -87,8 +86,8 @@ public interface SysUserDAO extends BaseDao<SysUser>
     /**
      * 监测原始密码是否正确
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     @NotMultiTenancyCheck
     int validataPass(SysUser adminUser);
@@ -96,8 +95,8 @@ public interface SysUserDAO extends BaseDao<SysUser>
     /**
      * 根据登录名获取用户数
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     @NotMultiTenancyCheck
     int getAdminUserCountByLoginName(SysUser adminUser);
@@ -105,8 +104,8 @@ public interface SysUserDAO extends BaseDao<SysUser>
     /**
      * 修改用户密码
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     int updatePass(SysUser adminUser);
 
@@ -122,8 +121,8 @@ public interface SysUserDAO extends BaseDao<SysUser>
     /**
      * 根据权限IDs获取权限对象
      *
-     * @paramadminUser
      * @return
+     * @paramadminUser
      */
     @NotMultiTenancyCheck
     List<SysMenuPermission> searchUserButtonIds(Map<String, Object> map);
@@ -131,8 +130,8 @@ public interface SysUserDAO extends BaseDao<SysUser>
     /**
      * 获取权限对象
      *
-     * @paramadminUser
      * @return
+     * @paramadminUser
      */
     @NotMultiTenancyCheck
     List<SysMenu> searchUserButtonAll(Map<String, Object> map);
@@ -158,8 +157,8 @@ public interface SysUserDAO extends BaseDao<SysUser>
     /**
      * 根据用户名称获取菜单
      *
-     * @paramadminUser
      * @return
+     * @paramadminUser
      */
     @NotMultiTenancyCheck
     List<SysMenu> selectMenuByUname(Map<String, Object> paramMap);
@@ -236,6 +235,7 @@ public interface SysUserDAO extends BaseDao<SysUser>
 
     /**
      * 根据admin有权限的菜单
+     *
      * @param user SysUser用户
      * @return 用户有权限的 菜单id
      */
@@ -244,6 +244,7 @@ public interface SysUserDAO extends BaseDao<SysUser>
 
     /**
      * 根据userid获取user有权限的菜单
+     *
      * @param user 普通用户
      * @return 用户有权限的 菜单id
      */
@@ -252,6 +253,7 @@ public interface SysUserDAO extends BaseDao<SysUser>
 
     /**
      * 根据条件查询用户数
+     *
      * @param paramMap 查询条件
      * @return 用户数
      */
@@ -260,6 +262,7 @@ public interface SysUserDAO extends BaseDao<SysUser>
 
     /**
      * 根据用户ID获取用户权限URL
+     *
      * @param userId 用户ID
      * @return 用户权限URL列表
      */
@@ -268,6 +271,7 @@ public interface SysUserDAO extends BaseDao<SysUser>
 
     /**
      * 查询所有权限URL
+     *
      * @return 用户权限URL列表
      */
     @NotMultiTenancyCheck
@@ -275,6 +279,7 @@ public interface SysUserDAO extends BaseDao<SysUser>
 
     /**
      * 根据集团编码获取集团下所有的用户
+     *
      * @param groupCode 集团编码
      * @return 集团下所有的用户
      */

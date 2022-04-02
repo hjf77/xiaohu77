@@ -98,8 +98,7 @@ public enum HandelPageXService {
             // 如果是path开头的就取path的
             if (trimNeedReplace.startsWith("path.")) {
                 String pathValue = EConfig.getPathPropertiesValue(trimNeedReplace.replace("path.", ""));
-                if(pathValue == null)
-                {
+                if (pathValue == null) {
                     throw new ParamException(trimNeedReplace + "没有配置，请检查配置");
                 }
                 html = html.replace("${" + needReplace + "}", pathValue);

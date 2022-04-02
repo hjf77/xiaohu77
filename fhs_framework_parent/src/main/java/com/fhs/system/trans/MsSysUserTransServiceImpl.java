@@ -21,13 +21,11 @@ import java.util.List;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @Service
-public class MsSysUserTransServiceImpl implements ITransTypeService,InitializingBean{
+public class MsSysUserTransServiceImpl implements ITransTypeService, InitializingBean {
 
     /**
      * redis 缓存服务
@@ -38,47 +36,42 @@ public class MsSysUserTransServiceImpl implements ITransTypeService,Initializing
 
     /**
      * 注册自身为一个服务
+     *
      * @throws Exception
      */
     @Override
-    public void afterPropertiesSet() throws Exception
-    {
+    public void afterPropertiesSet() throws Exception {
         TransService.registerTransType(Constant.USER_INFO, this);
     }
 
     /**
      * 翻译单条数据
-     * @param obj 需要翻译的对象
+     *
+     * @param obj         需要翻译的对象
      * @param toTransList 需要翻译的字段
      */
     @Override
-    public void transOne(SuperBean<?> obj, List<Field> toTransList)
-    {
-        for (Field tempField : toTransList)
-        {
+    public void transOne(SuperBean<?> obj, List<Field> toTransList) {
+        for (Field tempField : toTransList) {
             tempField.setAccessible(true);
             String userId = null;
-            try
-            {
+            try {
                 userId = StringUtil.toString(tempField.get(obj));
-            }
-            catch (IllegalArgumentException | IllegalAccessException e)
-            {
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-            if(!userId.contains(",")){
-                obj.getTransMap().put(tempField.getName() + "UserName", redisCacheService.getStr("ucenter:sysuser:username:"+ userId));
-                obj.getTransMap().put(tempField.getName() + "UserHeader", redisCacheService.getStr("ucenter:sysuser:userheader:"+ userId));
-            }
-            else{
-                String[] userIds  = userId.split(",");
+            if (!userId.contains(",")) {
+                obj.getTransMap().put(tempField.getName() + "UserName", redisCacheService.getStr("ucenter:sysuser:username:" + userId));
+                obj.getTransMap().put(tempField.getName() + "UserHeader", redisCacheService.getStr("ucenter:sysuser:userheader:" + userId));
+            } else {
+                String[] userIds = userId.split(",");
                 StringBuilder nameBuilder = new StringBuilder();
-                for(String tempUserId:userIds){
-                    if(redisCacheService.exists("ucenter:sysuser:username:"+ tempUserId)){
-                        nameBuilder.append(redisCacheService.getStr("ucenter:sysuser:username:"+ tempUserId) + ",");
+                for (String tempUserId : userIds) {
+                    if (redisCacheService.exists("ucenter:sysuser:username:" + tempUserId)) {
+                        nameBuilder.append(redisCacheService.getStr("ucenter:sysuser:username:" + tempUserId) + ",");
                     }
                 }
-                obj.getTransMap().put(tempField.getName() + "UserName",nameBuilder.toString());
+                obj.getTransMap().put(tempField.getName() + "UserName", nameBuilder.toString());
             }
 
         }
@@ -87,14 +80,13 @@ public class MsSysUserTransServiceImpl implements ITransTypeService,Initializing
 
     /**
      * 翻译多条数据
-     * @param objList 需要翻译的对象集合
+     *
+     * @param objList     需要翻译的对象集合
      * @param toTransList 需要翻译的字段集合
      */
     @Override
-    public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList)
-    {
-        for(SuperBean<?> obj : objList)
-        {
+    public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
+        for (SuperBean<?> obj : objList) {
             transOne(obj, toTransList);
         }
     }

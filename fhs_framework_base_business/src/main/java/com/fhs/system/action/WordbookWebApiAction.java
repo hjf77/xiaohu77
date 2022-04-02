@@ -22,13 +22,13 @@ public class WordbookWebApiAction extends BaseAction<Wordbook> {
 
     /**
      * 查询省市区外调接口
+     *
      * @param request
      * @param response
      */
     @RequestMapping("getData")
     @ResponseBody
-    public void getData(HttpServletRequest request, HttpServletResponse response)
-    {
+    public void getData(HttpServletRequest request, HttpServletResponse response) {
         List<Wordbook> list = wordBookService.getWordBookList(request.getParameter("wordbookGroupCode"));
         outJsonp(JsonUtils.list2json(list), response, request);
     }

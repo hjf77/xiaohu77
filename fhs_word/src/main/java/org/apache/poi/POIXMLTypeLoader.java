@@ -8,6 +8,7 @@ package org.apache.poi;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.xmlbeans.XmlOptions;
 
 public class POIXMLTypeLoader {

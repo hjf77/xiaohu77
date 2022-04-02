@@ -10,7 +10,8 @@ import java.util.Map;
 public interface DelayedTask {
     /**
      * 延迟任务执行方法
+     *
      * @param param 参数
      */
-    void doTask(Map<String,Object> param);
+    void doTask(Map<String, Object> param);
 }

@@ -6,8 +6,7 @@ import com.fhs.ucenter.bean.SysRole;
 import java.util.List;
 import java.util.Map;
 
-public interface SysRoleService extends BaseService<SysRole>
-{
+public interface SysRoleService extends BaseService<SysRole> {
     /**
      * 资源类型
      */
@@ -89,7 +88,8 @@ public interface SysRoleService extends BaseService<SysRole>
     public List<SysRole> findRoleByGroupCode(Map<String, Object> map);
 
     /**
-     *  获取一个用户的所有角色
+     * 获取一个用户的所有角色
+     *
      * @param userId 用户id
      * @return 角色集合
      */
@@ -97,6 +97,7 @@ public interface SysRoleService extends BaseService<SysRole>
 
     /**
      * 根据roleid查询用户关联表用户数
+     *
      * @param paramMap 查询条件
      * @return 关联用户数量
      */

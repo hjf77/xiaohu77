@@ -195,7 +195,7 @@ public final class ConfigManager {
 
         try {
 
-            String file = "/META-INF/resources/static/js/ueditor/jsp/"+ConfigManager.configFileName;
+            String file = "/META-INF/resources/static/js/ueditor/jsp/" + ConfigManager.configFileName;
             URL fileURL = this.getClass().getResource(file);
             if (fileURL != null) {
                 try {
@@ -256,7 +256,7 @@ public final class ConfigManager {
     }
 
     protected String getProperty(String name) {
-        String file = "/META-INF/resources/static/js/ueditor/jsp/"+ConfigManager.configFileName;
+        String file = "/META-INF/resources/static/js/ueditor/jsp/" + ConfigManager.configFileName;
         URL fileURL = this.getClass().getResource(file);
         if (fileURL != null) {
             try {

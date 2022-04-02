@@ -10,8 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ThumbnailatorUtils
-{
+public class ThumbnailatorUtils {
 
     /**
      * 指定大小进行缩放
@@ -19,8 +18,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     public static void zoom(String soucerPath, String targetPath, int width, int height)
-        throws IOException
-    {
+            throws IOException {
         /*
          * size(width,height) 若图片横比200小，高比300小，不变 若图片横比200小，高比300大，高缩小到300，图片比例不变 若图片横比200大，高比300小，横缩小到200，图片比例不变
          * 若图片横比200大，高比300大，图片按比例缩小，横为200或高为300
@@ -34,8 +32,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test2()
-        throws IOException
-    {
+            throws IOException {
         /**
          * scale(比例)
          */
@@ -49,8 +46,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test3()
-        throws IOException
-    {
+            throws IOException {
         /**
          * keepAspectRatio(false) 默认是按照比例缩放的
          */
@@ -63,8 +59,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test4()
-        throws IOException
-    {
+            throws IOException {
         /**
          * rotate(角度),正数：顺时针 负数：逆时针
          */
@@ -78,21 +73,20 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test5()
-        throws IOException
-    {
+            throws IOException {
         /**
          * watermark(位置，水印图，透明度)
          */
         Thumbnails.of("images/test.jpg")
-            .size(1280, 1024)
-            .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File("images/watermark.png")), 0.5f)
-            .outputQuality(0.8f)
-            .toFile("C:/image_watermark_bottom_right.jpg");
+                .size(1280, 1024)
+                .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File("images/watermark.png")), 0.5f)
+                .outputQuality(0.8f)
+                .toFile("C:/image_watermark_bottom_right.jpg");
         Thumbnails.of("images/test.jpg")
-            .size(1280, 1024)
-            .watermark(Positions.CENTER, ImageIO.read(new File("images/watermark.png")), 0.5f)
-            .outputQuality(0.8f)
-            .toFile("C:/image_watermark_center.jpg");
+                .size(1280, 1024)
+                .watermark(Positions.CENTER, ImageIO.read(new File("images/watermark.png")), 0.5f)
+                .outputQuality(0.8f)
+                .toFile("C:/image_watermark_center.jpg");
     }
 
     /**
@@ -101,32 +95,31 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test6()
-        throws IOException
-    {
+            throws IOException {
         /**
          * 图片中心400*400的区域
          */
         Thumbnails.of("images/test.jpg")
-            .sourceRegion(Positions.CENTER, 400, 400)
-            .size(200, 200)
-            .keepAspectRatio(false)
-            .toFile("C:/image_region_center.jpg");
+                .sourceRegion(Positions.CENTER, 400, 400)
+                .size(200, 200)
+                .keepAspectRatio(false)
+                .toFile("C:/image_region_center.jpg");
         /**
          * 图片右下400*400的区域
          */
         Thumbnails.of("images/test.jpg")
-            .sourceRegion(Positions.BOTTOM_RIGHT, 400, 400)
-            .size(200, 200)
-            .keepAspectRatio(false)
-            .toFile("C:/image_region_bootom_right.jpg");
+                .sourceRegion(Positions.BOTTOM_RIGHT, 400, 400)
+                .size(200, 200)
+                .keepAspectRatio(false)
+                .toFile("C:/image_region_bootom_right.jpg");
         /**
          * 指定坐标
          */
         Thumbnails.of("images/test.jpg")
-            .sourceRegion(600, 500, 400, 400)
-            .size(200, 200)
-            .keepAspectRatio(false)
-            .toFile("C:/image_region_coord.jpg");
+                .sourceRegion(600, 500, 400, 400)
+                .size(200, 200)
+                .keepAspectRatio(false)
+                .toFile("C:/image_region_coord.jpg");
     }
 
     /**
@@ -135,8 +128,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test7()
-        throws IOException
-    {
+            throws IOException {
         /**
          * outputFormat(图像格式)
          */
@@ -150,8 +142,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     public static byte[] zoom2Bytes(String soucerPath, int width, int height)
-        throws IOException
-    {
+            throws IOException {
         /**
          * toOutputStream(流对象)
          */
@@ -163,16 +154,13 @@ public class ThumbnailatorUtils
     }
 
 
-
-
     /**
      * 输出到OutputStream
      *
      * @throws IOException
      */
     public static byte[] zoom2Bytes(InputStream soucerPath, int width, int height)
-        throws IOException
-    {
+            throws IOException {
         /**
          * toOutputStream(流对象)
          */
@@ -189,8 +177,7 @@ public class ThumbnailatorUtils
      * @throws IOException
      */
     private void test9()
-        throws IOException
-    {
+            throws IOException {
         /**
          * asBufferedImage() 返回BufferedImage
          */

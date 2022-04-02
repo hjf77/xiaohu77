@@ -86,17 +86,17 @@ public class FlowTaskHistory extends BaseDO<FlowTaskHistory> {
      */
     @NotNull(message = "0 未完成 1 已完成字段不可为null", groups = {Update.class, Delete.class})
     @TableField("status")
-    @Trans(type = Constant.WORD_BOOK,key="task_history_status")
+    @Trans(type = Constant.WORD_BOOK, key = "task_history_status")
     private Integer status;
 
     /**
-     *  任务标题
+     * 任务标题
      */
     @TableField("title")
     private String title;
 
     /**
-     *  任务父taskid
+     * 任务父taskid
      */
     @TableField("parent_task_id")
     private String parentTaskId;
@@ -143,7 +143,6 @@ public class FlowTaskHistory extends BaseDO<FlowTaskHistory> {
      */
     @TableField("definition_key")
     private String definitionKey;
-
 
 
     public FlowTaskHistory() {

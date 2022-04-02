@@ -83,7 +83,7 @@ public class UcenterAlipaySett extends BaseDO<UcenterAlipaySett> {
             String alipayKey,
             String extendsCode,
             String appPrivateKey
-            ) {
+    ) {
         this.id = id;
         this.name = name;
         this.appId = appId;

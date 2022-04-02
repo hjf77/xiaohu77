@@ -5,13 +5,12 @@ import com.fhs.ucenter.bean.SysModel;
 
 /**
  * <p>
- *  模块管理service接口
+ * 模块管理service接口
  * </p>
  *
  * @author jianbo.qin
  * @since 2018-05-29
  */
-public interface SysModelService extends BaseService<SysModel>
-{
+public interface SysModelService extends BaseService<SysModel> {
 
 }

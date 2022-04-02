@@ -1,4 +1,5 @@
 package com.fhs.common.utils;
+
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -9,15 +10,14 @@ import java.util.UUID;
  * @author 健博.qin
  */
 public class Signature {
-    
-    private final static String[] hexDigits = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-        "a", "b", "c", "d", "e", "f" };
-    
+
+    private final static String[] hexDigits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "a", "b", "c", "d", "e", "f"};
+
     /**
      * 签名算法
-     * 
-     * @param o
-     *            要参与签名的数据对象
+     *
+     * @param o 要参与签名的数据对象
      * @return 签名
      * @throws IllegalAccessException
      */
@@ -43,12 +43,11 @@ public class Signature {
         return result;
     }
 
-    
+
     /**
      * MD5编码
-     * 
-     * @param origin
-     *            原始字符串
+     *
+     * @param origin 原始字符串
      * @return 经过MD5加密之后的结果
      */
     public static String MD5Encode(String origin) {
@@ -63,12 +62,11 @@ public class Signature {
         }
         return resultString;
     }
-    
+
     /**
      * 转换字节数组为16进制字串
-     * 
-     * @param b
-     *            字节数组
+     *
+     * @param b 字节数组
      * @return 16进制字串
      */
     public static String byteArrayToHexString(byte[] b) {
@@ -78,13 +76,12 @@ public class Signature {
         }
         return resultSb.toString();
     }
-    
+
 
     /**
      * 转换byte到16进制
-     * 
-     * @param b
-     *            要转换的byte
+     *
+     * @param b 要转换的byte
      * @return 16进制格式
      */
     private static String byteToHexString(byte b) {
@@ -97,13 +94,13 @@ public class Signature {
         return hexDigits[d1] + hexDigits[d2];
     }
 
-    
+
     /**
      * 获取随机字符串
-     * 
+     *
+     * @return
      * @Description
      * @author xiaohui.pu
-     * @return
      */
 
     public static String getNonceStr() {

@@ -31,7 +31,8 @@ public class SysUserOrgDTO {
      */
     private List<SysUserOrgDTO> children = new ArrayList<>();
 
-    public SysUserOrgDTO(){}
+    public SysUserOrgDTO() {
+    }
 
     public SysUserOrgDTO(String text, String id, String parentId, Integer isUser, List<SysUserOrgDTO> children) {
         this.text = text;

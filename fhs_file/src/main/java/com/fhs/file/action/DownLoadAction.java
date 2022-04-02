@@ -41,7 +41,6 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
     private FileStorage fileStorage;
 
 
-
     /**
      * 根据文件id下载文件
      *
@@ -54,10 +53,10 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             // 文件下载路径
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
             String fileName = request.getParameter("fileName");
-            if(!StringUtil.isEmpty(fileName)){
+            if (!StringUtil.isEmpty(fileName)) {
                 serviceFile.setFileName(fileName);
             }
-            fileStorage.downloadFile(serviceFile,response);
+            fileStorage.downloadFile(serviceFile, response);
         } catch (Exception e) {
             LOG.error(this, e);
             throw new ParamException("下载文件异常,可能是文件不存在");
@@ -77,7 +76,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             // 文件下载路径
             String fileId = fileName.substring(0, fileName.indexOf("."));
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile,response);
+            fileStorage.downloadFile(serviceFile, response);
         } catch (Exception e) {
             LOG.error(this, e);
             throw new RuntimeException("下载文件异常:" + e.getMessage());
@@ -147,22 +146,22 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
         fileId = serviceFile.getFileId();
         // 图片规格
         String fileIdWH = fileId + "_" + maxWidth + "_" + maxHeight + suffix;
-        String filePath =  uploadDate + File.separator + suffix.replace(".", "") + File.separator;
+        String filePath = uploadDate + File.separator + suffix.replace(".", "") + File.separator;
         //兼容旧数据
 
         // 文件名
         String showFileName = serviceFile.getFileName();
         String minPath = downFilePath + filePath + fileIdWH;
         File file = new File(minPath);
-        if (fileStorage.checkFileIsExist(minPath,serviceFile)) {
-            fileStorage.downloadFileByToken(minPath,serviceFile,response);
+        if (fileStorage.checkFileIsExist(minPath, serviceFile)) {
+            fileStorage.downloadFileByToken(minPath, serviceFile, response);
         } else {
             byte[] fileByte;
-            try (InputStream is = fileStorage.getFileInputStream(serviceFile)){
+            try (InputStream is = fileStorage.getFileInputStream(serviceFile)) {
                 fileByte = ThumbnailatorUtils
                         .zoom2Bytes(is, maxWidth, maxHeight);
                 file.createNewFile();
-                fileStorage.uploadFileByToken(fileByte,minPath,serviceFile);
+                fileStorage.uploadFileByToken(fileByte, minPath, serviceFile);
                 FileUtils.download(file, response, showFileName);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -170,7 +169,6 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             }
         }
     }
-
 
 
     /**
@@ -187,7 +185,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
                 fileId = fileId.substring(0, fileId.indexOf("."));
             }
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
-            fileStorage.downloadFile(serviceFile,response);
+            fileStorage.downloadFile(serviceFile, response);
         } catch (Exception e) {
             throw new RuntimeException("下载文件异常:" + e.getMessage());
         }
@@ -211,11 +209,11 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             //获取图片的路径
             String[] pngPathList = getPngPathList(list);
             //生成zip路径
-            String path = EConfig.getPathPropertiesValue("saveFilePath")+fileName+".zip";
+            String path = EConfig.getPathPropertiesValue("saveFilePath") + fileName + ".zip";
             //打包生成zip
-            ZipUtil.zip(path,pngPathList);
+            ZipUtil.zip(path, pngPathList);
             File file = new File(path);
-            if (file.exists()){
+            if (file.exists()) {
                 FileUtils.download(file, response, file.getName());
             }
             //zip传到客户端之后删除zip文件
@@ -227,16 +225,17 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
 
     /**
      * 获取图片路径
+     *
      * @param serviceFile
      * @return
      */
-    private  String[] getPngPathList(List<ServiceFile> serviceFile) {
+    private String[] getPngPathList(List<ServiceFile> serviceFile) {
         String token = null;
         String[] arr = new String[serviceFile.size()];
-        for (int i = 0;i<serviceFile.size();i++) {
+        for (int i = 0; i < serviceFile.size(); i++) {
             String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + serviceFile.get(i).getFileSuffix();
             String saveFilePath = EConfig.getPathPropertiesValue("saveFilePath") + File.separator + serviceFile.get(i).getUploadDate() + File.separator + serviceFile.get(i).getFileSuffix().replace(".", "") + File.separator + fileName;
-            arr[i] =  saveFilePath;
+            arr[i] = saveFilePath;
         }
         return arr;
     }

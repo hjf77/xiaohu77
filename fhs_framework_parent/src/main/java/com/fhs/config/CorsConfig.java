@@ -8,6 +8,7 @@ import org.springframework.web.filter.CorsFilter;
 
 /**
  * 跨域配置
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.config
  * @ClassName: CacheConfig

@@ -11,8 +11,7 @@ import java.util.Set;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public interface RedisCacheService<E>
-{
+public interface RedisCacheService<E> {
     /**
      * 为缓存添加一个obejct
      *

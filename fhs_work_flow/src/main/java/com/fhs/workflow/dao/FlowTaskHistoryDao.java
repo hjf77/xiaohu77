@@ -22,6 +22,7 @@ public interface FlowTaskHistoryDao extends BaseDao<FlowTaskHistory> {
 
     /**
      * 查询最后一个任务历史
+     *
      * @param instanceId 实例id
      * @return 最后一个任务历史
      */
@@ -29,13 +30,15 @@ public interface FlowTaskHistoryDao extends BaseDao<FlowTaskHistory> {
 
     /**
      * 查询实例最大的ordernum
+     *
      * @param instanceId 实例id
      * @return 最大的ordernum、
      */
-    Integer findMaxOrderNum(@Param("instanceId")String instanceId);
+    Integer findMaxOrderNum(@Param("instanceId") String instanceId);
 
     /**
      * 查询已办纪录
+     *
      * @param paramMap
      * @return
      */
@@ -43,6 +46,7 @@ public interface FlowTaskHistoryDao extends BaseDao<FlowTaskHistory> {
 
     /**
      * 查询已办纪录数量
+     *
      * @param paramMap
      * @return
      */
@@ -50,6 +54,7 @@ public interface FlowTaskHistoryDao extends BaseDao<FlowTaskHistory> {
 
     /**
      * 查询审批历史
+     *
      * @param instanceId
      * @return
      */

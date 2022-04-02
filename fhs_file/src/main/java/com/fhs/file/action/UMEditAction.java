@@ -25,20 +25,21 @@ public class UMEditAction {
 
     /**
      * 上传图片
+     *
      * @param upfile 文件
      * @return 文件对象
      */
     @ResponseBody
     @RequestMapping("imageUp")
-    public String imageUp(MultipartFile upfile,String fileId) {
-        if (upfile == null ) {
+    public String imageUp(MultipartFile upfile, String fileId) {
+        if (upfile == null) {
             throw new ParamException("文件不能为空");
         }
-        ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (upfile),fileId).get (0);
-        String result = "<script>window.name='{\"name\":\""+ file.getFileName() +"\", \"originalName\": \""+  file.getFileName() +"\", \"size\": "+
+        ServiceFile file = fileServerBusiness.uploadFileForList(Arrays.asList(upfile), fileId).get(0);
+        String result = "<script>window.name='{\"name\":\"" + file.getFileName() + "\", \"originalName\": \"" + file.getFileName() + "\", \"size\": " +
                 upfile.getSize()
-                +", \"state\": \"SUCCESS\", \"type\": \""+ file.getFileSuffix() +"\", \"url\": \"" + EConfig.getPathPropertiesValue("basePath")
-                +"/downLoad/file?fileId=" + file.getFileId() + "\"}' </script>";
+                + ", \"state\": \"SUCCESS\", \"type\": \"" + file.getFileSuffix() + "\", \"url\": \"" + EConfig.getPathPropertiesValue("basePath")
+                + "/downLoad/file?fileId=" + file.getFileId() + "\"}' </script>";
         System.out.println(result);
         return result;
     }

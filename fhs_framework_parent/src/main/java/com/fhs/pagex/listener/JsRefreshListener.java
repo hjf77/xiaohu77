@@ -8,8 +8,9 @@ public interface JsRefreshListener {
 
     /**
      * 刷新js
-     * @param namespace  namespace
-     * @param js 新的js内容
+     *
+     * @param namespace namespace
+     * @param js        新的js内容
      */
-    void jsRefresh(String namespace,String js);
+    void jsRefresh(String namespace, String js);
 }

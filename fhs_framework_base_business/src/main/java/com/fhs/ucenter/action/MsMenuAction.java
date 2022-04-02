@@ -25,12 +25,10 @@ import java.util.Map;
  * 系统菜单Action
  *
  * @author jianbo.qin
- *
  */
 @Controller
 @RequestMapping("ms/sysMenu")
-public class MsMenuAction extends ModelSuperAction<SysMenu>
-{
+public class MsMenuAction extends ModelSuperAction<SysMenu> {
 
     private static final Logger LOG = Logger.getLogger(MsMenuAction.class);
 
@@ -46,8 +44,7 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("getMenuTreesData")
     @ResponseBody
-    public List<TreeModel> getOrgStrutureTreesData(HttpServletRequest request, HttpServletResponse response)
-    {
+    public List<TreeModel> getOrgStrutureTreesData(HttpServletRequest request, HttpServletResponse response) {
         List<TreeModel> menuTrees = sysMenuService.findMenuTrees(request.getParameter("id"));
         return menuTrees;
     }
@@ -62,23 +59,17 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
     @RequiresPermissions("sysMenu:add")
     @RequestMapping("addMenu")
     @ResponseBody
-    public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SysMenu adminMenu)
-    {
-        try
-        {
+    public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SysMenu adminMenu) {
+        try {
             String url = adminMenu.getMenuUrl();
-            if (!CheckUtils.isNullOrEmpty(url))
-            {
-                if (url.indexOf("\\") != -1)
-                {
+            if (!CheckUtils.isNullOrEmpty(url)) {
+                if (url.indexOf("\\") != -1) {
                     url = url.replaceAll("\\\\", "/");
                     adminMenu.setMenuUrl(url);
                 }
             }
             sysMenuService.add(adminMenu);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success(true);
@@ -94,8 +85,7 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("toUpdate")
-    public void getBeanData(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
-    {
+    public void getBeanData(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu) {
         SysMenu bean = sysMenuService.findBean(adminMenu);
         String data = JsonUtils.bean2json(bean);
         super.outWrite(data, reponse);
@@ -111,24 +101,18 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
     @RequiresPermissions("sysMenu:update")
     @RequestMapping("updateMenu")
     @ResponseBody
-    public HttpResult updateMenu(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
-    {
-        try
-        {
+    public HttpResult updateMenu(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu) {
+        try {
             String url = adminMenu.getMenuUrl();
-            if (!CheckUtils.isNullOrEmpty(url))
-            {
-                if (url.indexOf("\\") != -1)
-                {
+            if (!CheckUtils.isNullOrEmpty(url)) {
+                if (url.indexOf("\\") != -1) {
                     url = url.replaceAll("\\\\", "/");
                     adminMenu.setMenuUrl(url);
                 }
 
             }
             sysMenuService.update(adminMenu);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
@@ -143,8 +127,7 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("listData")
-    public void listData(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
-    {
+    public void listData(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu) {
 
         Map<String, Object> map = super.getPageTurnNum(request);
         map.put("menuType", adminMenu.getMenuType());
@@ -161,10 +144,9 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("findMenuRootTrees")
-    public void findMenuRootTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
-    {
+    public void findMenuRootTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu) {
         Integer menuType = 0;// 平台菜单
-        List<TreeData> treeList = sysMenuService.findMenuTreeToJson(menuType,super.getSessionuser(request).getGroupCode());
+        List<TreeData> treeList = sysMenuService.findMenuTreeToJson(menuType, super.getSessionuser(request).getGroupCode());
         String jsonTree = JsonUtils.list2json(treeList);
         super.outWrite(jsonTree, reponse);
     }
@@ -176,8 +158,7 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("findMenuParkTrees")
-    public void findMenuParkTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
-    {
+    public void findMenuParkTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu) {
         String menuType = request.getParameter("menuType"); // 0-运营菜单 1-园区菜单
         List<TreeData> treeList = sysMenuService.findMenuTreeToJson(menuType);
         String jsonTree = JsonUtils.list2json(treeList);
@@ -190,8 +171,7 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
      * @paramrequst response adminMenu
      */
     @RequestMapping("searchServer")
-    public void searchServer(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
-    {
+    public void searchServer(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu) {
         List<Map<String, Object>> dataList = sysMenuService.searchServer();
         String jsonTree = JsonUtils.list2json(dataList);
         super.outWrite(jsonTree, reponse);

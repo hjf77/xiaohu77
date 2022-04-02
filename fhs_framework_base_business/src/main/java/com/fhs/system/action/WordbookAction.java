@@ -27,12 +27,10 @@ import java.util.Map;
  * 字典管理Action
  *
  * @author jianbo.qin
- *
  */
 @Controller
 @RequestMapping("ms/wordbook")
-public class WordbookAction extends BaseAction<Wordbook>
-{
+public class WordbookAction extends BaseAction<Wordbook> {
 
     Logger LOG = Logger.getLogger(WordbookAction.class);
 
@@ -52,8 +50,7 @@ public class WordbookAction extends BaseAction<Wordbook>
      * @param reponse
      */
     @RequestMapping("findWordbookForPage")
-    public void findWordbookForPage(Wordbook wordbook, HttpServletRequest request, HttpServletResponse reponse)
-    {
+    public void findWordbookForPage(Wordbook wordbook, HttpServletRequest request, HttpServletResponse reponse) {
 
         Map<String, Object> map = super.getPageTurnNum(request);
         int count = wordbookAndGroupService.findWordbookCount(wordbook);
@@ -63,7 +60,6 @@ public class WordbookAction extends BaseAction<Wordbook>
     }
 
     /**
-     *
      * 添加字典
      *
      * @param wordbook
@@ -73,14 +69,10 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequiresPermissions("wordbook:add")
     @RequestMapping("addWordbook")
     @ResponseBody
-    public HttpResult addWordbook(@Valid Wordbook wordbook, HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public HttpResult addWordbook(@Valid Wordbook wordbook, HttpServletRequest request, HttpServletResponse response) {
+        try {
             wordbookAndGroupService.addWordbook(wordbook);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
@@ -88,7 +80,6 @@ public class WordbookAction extends BaseAction<Wordbook>
     }
 
     /**
-     *
      * 修改字典
      *
      * @param wordbook
@@ -98,21 +89,16 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequiresPermissions("wordbook:update")
     @RequestMapping("updateWordbook")
     @ResponseBody
-    public HttpResult updateWordbook(@Valid  Wordbook wordbook, HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public HttpResult updateWordbook(@Valid Wordbook wordbook, HttpServletRequest request, HttpServletResponse response) {
+        try {
             wordbookAndGroupService.updateWordbook(wordbook);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
     }
 
     /**
-     *
      * 删除字典
      *
      * @param wordbook
@@ -122,21 +108,16 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequiresPermissions("wordbook:del")
     @RequestMapping("delWordbook")
     @ResponseBody
-    public HttpResult delWordbook(Wordbook wordbook, HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public HttpResult delWordbook(Wordbook wordbook, HttpServletRequest request, HttpServletResponse response) {
+        try {
             wordbookAndGroupService.delWordbook(wordbook);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
     }
 
     /**
-     *
      * 根据id获取单个字典
      *
      * @param wordbook
@@ -145,14 +126,12 @@ public class WordbookAction extends BaseAction<Wordbook>
      */
     @RequiresPermissions("wordbook:see")
     @RequestMapping("getWordbookBean")
-    public void getWordbookBean(Wordbook wordbook, HttpServletRequest request, HttpServletResponse response)
-    {
+    public void getWordbookBean(Wordbook wordbook, HttpServletRequest request, HttpServletResponse response) {
         Wordbook bean = wordbookAndGroupService.getWordbookBean(wordbook);
         super.outWriteJson(JsonUtils.bean2json(bean), response);
     }
 
     /**
-     *
      * 根据id获取单个字典类型
      *
      * @param request
@@ -161,8 +140,7 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequiresPermissions("wordbook:see")
     @RequestMapping("getWordbookGroupBean")
     public void getWordbookGroupBean(ServiceWordbookGroup wordbookGroup, HttpServletRequest request,
-        HttpServletResponse response)
-    {
+                                     HttpServletResponse response) {
         ServiceWordbookGroup bean = wordbookAndGroupService.getWordbookGroupBean(wordbookGroup);
         super.outWriteJson(JsonUtils.bean2json(bean), response);
     }
@@ -175,8 +153,7 @@ public class WordbookAction extends BaseAction<Wordbook>
      */
     @RequestMapping("findWordbookGroupForPage")
     public void findWordbookGroupForPage(ServiceWordbookGroup wordbookGroup, HttpServletRequest request,
-        HttpServletResponse reponse)
-    {
+                                         HttpServletResponse reponse) {
         Map<String, Object> map = super.getPageTurnNum(request);
         int count = wordbookAndGroupService.findWordbookGroupCount(wordbookGroup);
         map.putAll(MapUtils.bean2Map(wordbookGroup));
@@ -185,7 +162,6 @@ public class WordbookAction extends BaseAction<Wordbook>
     }
 
     /**
-     *
      * 添加字典类型
      *
      * @param wordbookGroup
@@ -196,21 +172,16 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequestMapping("addWordbookGroup")
     @ResponseBody
     public HttpResult addWordbookGroup(ServiceWordbookGroup wordbookGroup, HttpServletRequest request,
-        HttpServletResponse response)
-    {
-        try
-        {
+                                       HttpServletResponse response) {
+        try {
             wordbookAndGroupService.addWordbookGroup(wordbookGroup);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
     }
 
     /**
-     *
      * 修改字典类型
      *
      * @param wordbookGroup
@@ -221,21 +192,16 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequestMapping("updateWordbookGroup")
     @ResponseBody
     public HttpResult updateWordbookGroup(ServiceWordbookGroup wordbookGroup, HttpServletRequest request,
-        HttpServletResponse response)
-    {
-        try
-        {
+                                          HttpServletResponse response) {
+        try {
             wordbookAndGroupService.updateWordbookGroup(wordbookGroup);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
     }
 
     /**
-     *
      * 删除字典类型
      *
      * @param wordbookGroup
@@ -246,21 +212,16 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequestMapping("delWordbookGroup")
     @ResponseBody
     public HttpResult delWordbookGroup(ServiceWordbookGroup wordbookGroup, HttpServletRequest request,
-        HttpServletResponse response)
-    {
-        try
-        {
+                                       HttpServletResponse response) {
+        try {
             wordbookAndGroupService.delWordbookGroup(wordbookGroup);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
     }
 
     /**
-     *
      * 刷新redis缓存
      *
      * @param request
@@ -269,32 +230,27 @@ public class WordbookAction extends BaseAction<Wordbook>
     @RequiresPermissions("wordbook:refreshRedisCache")
     @RequestMapping("refreshRedisCache")
     @ResponseBody
-    public HttpResult refreshRedisCache(Wordbook wordbook, HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
-            Map<String,String> message = new HashMap<>();
-            message.put("transType","wordbook");
-            message.put("wordbookGroupCode",wordbook.getWordbookGroupCode());
+    public HttpResult refreshRedisCache(Wordbook wordbook, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Map<String, String> message = new HashMap<>();
+            message.put("transType", "wordbook");
+            message.put("wordbookGroupCode", wordbook.getWordbookGroupCode());
             redisCacheService.convertAndSend("trans", JsonUtils.map2json(message));
             wordbookAndGroupService.refreshRedisCache(wordbook);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return HttpResult.error(e);
         }
         return HttpResult.success();
     }
 
-   /**
+    /**
      * 查询数据
      *
      * @return addok
      */
     @RequestMapping("getData")
-    public void getData(HttpServletRequest request, HttpServletResponse response)
-    {
+    public void getData(HttpServletRequest request, HttpServletResponse response) {
         List<Wordbook> list = wordBookService.getWordBookList(request.getParameter("wordbookGroupCode"));
         outJsonp(JsonUtils.list2json(list), response, request);
     }

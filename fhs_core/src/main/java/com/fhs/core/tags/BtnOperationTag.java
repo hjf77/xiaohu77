@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * 列表操作标签
+ *
  * @author qh
  */
 public class BtnOperationTag extends BaseFormTag {
@@ -91,7 +92,7 @@ public class BtnOperationTag extends BaseFormTag {
     private String thWidth = "10%";
 
     /**
-     *  删除请求地址
+     * 删除请求地址
      */
     private String delReqUrl;
 
@@ -127,54 +128,59 @@ public class BtnOperationTag extends BaseFormTag {
     @Override
     public void doTag() throws JspException, IOException {
         String thHtmlInsert = "<th align='{1}' field='{2}' width='{3}' sortable='false' formatter='list_formatter'>操作</th>";
-        thHtmlInsert = thHtmlInsert.replace ( "{1}", this.alignWay );
-        thHtmlInsert = thHtmlInsert.replace ( "{2}", this.pkField );
-        thHtmlInsert = thHtmlInsert.replace ( "{3}", this.thWidth );
+        thHtmlInsert = thHtmlInsert.replace("{1}", this.alignWay);
+        thHtmlInsert = thHtmlInsert.replace("{2}", this.pkField);
+        thHtmlInsert = thHtmlInsert.replace("{3}", this.thWidth);
         write(thHtmlInsert);
 
         String write_del_html = "";
-        String write_view_html =  "";
+        String write_view_html = "";
         String write_edit_html = "";
         String write_other1_html = "";
         String write_other2_html = "";
         Subject subject = SecurityUtils.getSubject();
-        if (this.showDel && subject.isPermitted(this.nameSpace + ":" + "del")){
-            String delBtn = "" +this.delFuncName+ "(\\'" + EConfig.getPathPropertiesValue("basePath") + this.delReqUrl+ "' + val + '\\')";
+        if (this.showDel && subject.isPermitted(this.nameSpace + ":" + "del")) {
+            String delBtn = "" + this.delFuncName + "(\\'" + EConfig.getPathPropertiesValue("basePath") + this.delReqUrl + "' + val + '\\')";
             write_del_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + delBtn + "\" class=\"easyui-linkbutton linkbutton-del\"   plain=\"true\">删除</a>'";
-        };
+        }
+        ;
 
-        if (this.showView && subject.isPermitted(this.nameSpace + ":" + "see")){
-            String viewBtn = ""+ this.viewFuncName + "(\\'' + val + '\\', \\'' + rowIndex + '\\')";
-            write_view_html =  "+ '<a href=\"javascript:void(0)\" onclick=\"" + viewBtn + "\" class=\"easyui-linkbutton linkbutton-view\" plain=\"true\">查看</a>'";
-        };
+        if (this.showView && subject.isPermitted(this.nameSpace + ":" + "see")) {
+            String viewBtn = "" + this.viewFuncName + "(\\'' + val + '\\', \\'' + rowIndex + '\\')";
+            write_view_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + viewBtn + "\" class=\"easyui-linkbutton linkbutton-view\" plain=\"true\">查看</a>'";
+        }
+        ;
 
-        if (this.showEdit && subject.isPermitted(this.nameSpace + ":" + "update")){
+        if (this.showEdit && subject.isPermitted(this.nameSpace + ":" + "update")) {
             String editBtn = "" + this.updateFuncName + "(\\'' + val + '\\', \\'' + rowIndex + '\\')";
             write_edit_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + editBtn + "\" class=\"easyui-linkbutton linkbutton-update\" plain=\"true\">编辑</a>'";
-        };
+        }
+        ;
 
-        if (this.showOtherOpt1 && subject.isPermitted(this.nameSpace + ":" + this.otherOptPermission1)){
+        if (this.showOtherOpt1 && subject.isPermitted(this.nameSpace + ":" + this.otherOptPermission1)) {
             String otherBtn1 = "" + this.otherOptFuncName1 + "(\\'' + val + '\\', \\'' + rowIndex + '\\')";
-            write_other1_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + otherBtn1 + "\" class=\"easyui-linkbutton\" style=\"background-color: #9a9eec !important;\" plain=\"true\">"+this.otherOptName1+"</a>'";
-        };
-        if (this.showOtherOpt2 && subject.isPermitted(this.nameSpace + ":" + this.otherOptPermission2)){
+            write_other1_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + otherBtn1 + "\" class=\"easyui-linkbutton\" style=\"background-color: #9a9eec !important;\" plain=\"true\">" + this.otherOptName1 + "</a>'";
+        }
+        ;
+        if (this.showOtherOpt2 && subject.isPermitted(this.nameSpace + ":" + this.otherOptPermission2)) {
             String otherBtn2 = "" + this.otherOptFuncName2 + "(\\'' + val + '\\', \\'' + rowIndex + '\\')";
-            write_other2_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + otherBtn2 + "\" class=\"easyui-linkbutton\" style=\"background-color: #c79ed7 !important;\" plain=\"true\">"+this.otherOptName2+"</a>'";
-        };
+            write_other2_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + otherBtn2 + "\" class=\"easyui-linkbutton\" style=\"background-color: #c79ed7 !important;\" plain=\"true\">" + this.otherOptName2 + "</a>'";
+        }
+        ;
 
 
         String write_html = "'<div id=\"opreatorFormatter\">' \r\n"
                 + "@write_other1_html \r\n@write_other2_html \r\n"
                 + "@write_edit_html \r\n@write_view_html \r\n@write_del_html \r\n"
                 + "+ \"</div>\"";
-        write_html = write_html.replace ( "@write_other1_html", write_other1_html );
-        write_html = write_html.replace ( "@write_other2_html", write_other2_html );
-        write_html = write_html.replace ( "@write_edit_html", write_edit_html );
-        write_html = write_html.replace ( "@write_view_html", write_view_html );
-        write_html = write_html.replace ( "@write_del_html", write_del_html );
+        write_html = write_html.replace("@write_other1_html", write_other1_html);
+        write_html = write_html.replace("@write_other2_html", write_other2_html);
+        write_html = write_html.replace("@write_edit_html", write_edit_html);
+        write_html = write_html.replace("@write_view_html", write_view_html);
+        write_html = write_html.replace("@write_del_html", write_del_html);
 
         String scriptHtmlInsert = "<script type='text/javascript'>function list_formatter(val,row,rowIndex){ \r\n var _html = @content; \r\n return _html; \r\n }</script>";
-        scriptHtmlInsert = scriptHtmlInsert.replace ("@content", write_html );
+        scriptHtmlInsert = scriptHtmlInsert.replace("@content", write_html);
         write(scriptHtmlInsert);
     }
 

@@ -7,24 +7,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * 任务dao
  * 主要用来查询任务使用，完成任务或者签收以及其他操作使用引擎自带的taskservice操作
- * @author wanglei
  *
+ * @author wanglei
  */
 @Repository
-public interface WorkFlowTaskDAO
-{
+public interface WorkFlowTaskDAO {
     /**
      * 查询待签收任务
+     *
      * @param paramMap 参数map
      * @return 代签收map集合
      */
     List<FlowTask> findNeedClaimTask(Map<String, Object> paramMap);
-    
+
     /**
      * 查询待签收任务总数
+     *
      * @param paramMap 参数map
      * @return 代签收总数
      */
@@ -32,6 +32,7 @@ public interface WorkFlowTaskDAO
 
     /**
      * 查询待办任务
+     *
      * @param paramMap 参数map
      * @return 代签收map集合
      */
@@ -40,6 +41,7 @@ public interface WorkFlowTaskDAO
 
     /**
      * 查询待办任务总数
+     *
      * @param paramMap 参数map
      * @return 代签收总数
      */

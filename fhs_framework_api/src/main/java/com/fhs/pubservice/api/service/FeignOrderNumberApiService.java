@@ -14,9 +14,10 @@ public interface FeignOrderNumberApiService {
 
     /**
      * 获取一个订单号
+     *
      * @param type 订单号类型
      * @return 订单号
      */
     @RequestLine("GET api/orderNumber/getOrderNumber?type={type}")
-    HttpResult<String> getOrderNumber(@Param("type")String type);
+    HttpResult<String> getOrderNumber(@Param("type") String type);
 }

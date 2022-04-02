@@ -13,37 +13,38 @@ import javax.servlet.jsp.JspException;
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *              陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class HeaderTag extends BaseFormTag
-{
+public class HeaderTag extends BaseFormTag {
 
-    /** 宽度. */
+    /**
+     * 宽度.
+     */
     private Integer width;
 
-    /** 高度. */
+    /**
+     * 高度.
+     */
     private Integer height;
 
     public static String staticPath;
+
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
         super.setClassName(super.getClassName() + " ueEditorText");
         write("<div class=\"fitem\">\r\n" + "        <div class=\"fitemDiv\">\r\n"
-            + "            <label>&nbsp;</label> <img id=\"" + super.getName() + "InputImg\" class=\"headerImg\" src=\""
-            + staticPath + "/images/upload_default_show.png\"/>\r\n"
-            + "            <input type=\"hidden\" id=\"" + super.getName() + "\">\r\n" + "        </div>\r\n"
-            + "    </div>\r\n" + "\r\n" + "    <div class=\"fitem\">\r\n" + "        <div class=\"fitemDiv\">\r\n"
-            + "            <div class=\"uploadLableDiv\">\r\n" + "                <label class=\"uploadLable\">"
-            + super.getTitle() + ":</label>\r\n" + "            </div>\r\n" + "            <input type=\"button\" id=\""
-            + super.getName() + "Input\" style=\"display: none;\" />\r\n" + "        </div>\r\n" + "    </div>\r\n"
-            + "\r\n" + "    <input type=\"hidden\" id=\"" + super.getName() + "\" name=\"" + super.getName()
-            + "\" />\r\n" + "\r\n" + "    <div class=\"fitem\">\r\n" + "        <div class=\"bigLabelDiv\">\r\n"
-            + "            <label>&nbsp;</label>\r\n" + "        </div>\r\n");
-        if (this.height != null && this.width != null)
-        {
+                + "            <label>&nbsp;</label> <img id=\"" + super.getName() + "InputImg\" class=\"headerImg\" src=\""
+                + staticPath + "/images/upload_default_show.png\"/>\r\n"
+                + "            <input type=\"hidden\" id=\"" + super.getName() + "\">\r\n" + "        </div>\r\n"
+                + "    </div>\r\n" + "\r\n" + "    <div class=\"fitem\">\r\n" + "        <div class=\"fitemDiv\">\r\n"
+                + "            <div class=\"uploadLableDiv\">\r\n" + "                <label class=\"uploadLable\">"
+                + super.getTitle() + ":</label>\r\n" + "            </div>\r\n" + "            <input type=\"button\" id=\""
+                + super.getName() + "Input\" style=\"display: none;\" />\r\n" + "        </div>\r\n" + "    </div>\r\n"
+                + "\r\n" + "    <input type=\"hidden\" id=\"" + super.getName() + "\" name=\"" + super.getName()
+                + "\" />\r\n" + "\r\n" + "    <div class=\"fitem\">\r\n" + "        <div class=\"bigLabelDiv\">\r\n"
+                + "            <label>&nbsp;</label>\r\n" + "        </div>\r\n");
+        if (this.height != null && this.width != null) {
             write("        &nbsp;&nbsp;&nbsp;&nbsp;请上传尺寸为" + width + "px*" + height + "px的图片\r\n");
         }
         write("    </div>");
@@ -56,8 +57,7 @@ public class HeaderTag extends BaseFormTag
      *
      * @return bean的 宽度
      */
-    public Integer getWidth()
-    {
+    public Integer getWidth() {
         return width;
     }
 
@@ -66,8 +66,7 @@ public class HeaderTag extends BaseFormTag
      *
      * @param width 一个新的 宽度
      */
-    public void setWidth(Integer width)
-    {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
@@ -76,8 +75,7 @@ public class HeaderTag extends BaseFormTag
      *
      * @return bean的 高度
      */
-    public Integer getHeight()
-    {
+    public Integer getHeight() {
         return height;
     }
 
@@ -86,8 +84,7 @@ public class HeaderTag extends BaseFormTag
      *
      * @param height 一个新的 高度
      */
-    public void setHeight(Integer height)
-    {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 

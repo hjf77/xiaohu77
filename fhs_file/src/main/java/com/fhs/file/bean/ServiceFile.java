@@ -26,8 +26,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "t_service_file")
-public class ServiceFile implements Serializable
-{
+public class ServiceFile implements Serializable {
     /**
      * serialVersionUID
      */
@@ -38,12 +37,12 @@ public class ServiceFile implements Serializable
      */
     @Id
     private String fileId;
-    
+
     /**
      * 文件名
      */
     private String fileName;
-    
+
     /**
      * 后缀
      */
@@ -63,58 +62,50 @@ public class ServiceFile implements Serializable
     /**
      * 给id赋值
      */
-    public void setFileId(String fileId)
-    {
+    public void setFileId(String fileId) {
         this.fileId = fileId;
     }
 
     /**
      * 获取id
      */
-    public String getFileId()
-    {
+    public String getFileId() {
         return fileId;
     }
 
     /**
      * 给文件名赋值
      */
-    public void setFileName(String fileName)
-    {
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
     /**
      * 获取文件名
      */
-    public String getFileName()
-    {
+    public String getFileName() {
         return fileName;
     }
 
     /**
      * 给后缀赋值
      */
-    public void setFileSuffix(String fileSuffix)
-    {
+    public void setFileSuffix(String fileSuffix) {
         this.fileSuffix = fileSuffix;
     }
 
     /**
      * 获取后缀
      */
-    public String getFileSuffix()
-    {
+    public String getFileSuffix() {
         return fileSuffix;
     }
 
-    public String getUploadDate()
-    {
+    public String getUploadDate() {
         return uploadDate;
     }
 
-    public void setUploadDate(String uploadDate)
-    {
+    public void setUploadDate(String uploadDate) {
         this.uploadDate = uploadDate;
     }
 

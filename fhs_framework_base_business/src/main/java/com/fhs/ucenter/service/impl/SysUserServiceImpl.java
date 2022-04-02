@@ -141,7 +141,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         boolean count = deleteUserRole(adminUser);
         if (count) {
             // 修改用户信息
-            boolean bean = super.updateSelectiveById(adminUser)>0;
+            boolean bean = super.updateSelectiveById(adminUser) > 0;
             if (bean) {
                 if (adminUser.getRoleList().length > 0) {
                     // 插入新的用户角色
@@ -480,16 +480,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     }
 
     @Override
-    public HttpResult refreshUserCache(List<SysUser> userList){
+    public HttpResult refreshUserCache(List<SysUser> userList) {
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
                 redisCacheService.remove("ucenter:sysuser:username:" + sysUser.getUserId());
                 redisCacheService.remove("ucenter:sysuser:userheader:" + sysUser.getUserId());
-                redisCacheService.addStr("ucenter:sysuser:username:"+ sysUser.getUserId(), sysUser.getUserName());
-                redisCacheService.addStr("ucenter:sysuser:userheader:"+ sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
+                redisCacheService.addStr("ucenter:sysuser:username:" + sysUser.getUserId(), sysUser.getUserName());
+                redisCacheService.addStr("ucenter:sysuser:userheader:" + sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
             }
         });
-        return  HttpResult.success();
+        return HttpResult.success();
     }
 
     @Override
@@ -497,21 +497,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
         //如果是saas模式需要判断菜单类型
-        if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel")))
-        {
+        if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))) {
             //如果不是运营者的集团编码，只能是租户，如果是运营者的编码可以按照参数请求的来
-            if(EConfig.getOtherConfigPropertiesValue("operator_group_code").equals(user.getGroupCode()))
-            {
+            if (EConfig.getOtherConfigPropertiesValue("operator_group_code").equals(user.getGroupCode())) {
                 paramMap.put("menuType", menuType);
-            }
-            else
-            {
+            } else {
                 paramMap.put("menuType", SysMenuService.MENU_TYPE_TENANT);
-                if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel")))
-                {
+                if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))) {
                     String systemIds = tenantService.selectBean(UcenterMsTenant.builder().groupCode(user.getGroupCode()).build()).getSystemIds();
-                    if(systemIds!=null)
-                    {
+                    if (systemIds != null) {
                         paramMap.put("systemIds", StringUtil.getStrToIn(systemIds.split(",")));
                     }
                 }
@@ -694,15 +688,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         //找不到爸爸的才会放到此里面
         List<SysUserOrgDTO> result = new ArrayList<>();
 
-        Map<String,SysUserOrgDTO> fatherDTO = new HashMap<>();
-        for(SysUserOrgDTO user : dbRecord)
-        {
-            fatherDTO.put(user.getId(),user);
-            if(fatherDTO.containsKey(user.getParentId()))
-            {
+        Map<String, SysUserOrgDTO> fatherDTO = new HashMap<>();
+        for (SysUserOrgDTO user : dbRecord) {
+            fatherDTO.put(user.getId(), user);
+            if (fatherDTO.containsKey(user.getParentId())) {
                 fatherDTO.get(user.getParentId()).getChildren().add(user);
-            }
-            else{
+            } else {
                 result.add(user);
             }
         }
@@ -711,7 +702,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     @Override
     public int update(SysUser sysUser, Wrapper<SysUser> updateWrapper) {
-        return sysUserDAO.update(sysUser,updateWrapper);
+        return sysUserDAO.update(sysUser, updateWrapper);
     }
 
     private List<String> getPermissionUrlByUserId(String userId) {

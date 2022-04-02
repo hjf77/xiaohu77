@@ -1,19 +1,17 @@
 package com.fhs.core.exception;
 
-public abstract class YZBNotLogException  extends RuntimeException
-{
+public abstract class YZBNotLogException extends RuntimeException {
 
     /**
-     *serialVersionUID
+     * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
 
-    public YZBNotLogException(String message)
-    {
+    public YZBNotLogException(String message) {
         super(message);
     }
-    public YZBNotLogException()
-    {
+
+    public YZBNotLogException() {
         super();
     }
 }

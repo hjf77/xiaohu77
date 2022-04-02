@@ -12,13 +12,12 @@ import java.util.Map;
 
 /**
  * 角色DAO
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @MultiTenancyCheck
 @MapperDefinition(domainClass = SysRole.class)
-public interface SysRoleDAO extends BaseDao<SysRole>
-{
+public interface SysRoleDAO extends BaseDao<SysRole> {
     /**
      * 添加角色的按钮信息
      *
@@ -70,13 +69,14 @@ public interface SysRoleDAO extends BaseDao<SysRole>
     /**
      * 获取所有角色
      *
-     * @parammap
      * @return
+     * @parammap
      */
     public List<SysRole> findForListAll();
 
     /**
      * 根据roleid查询用户关联表用户数
+     *
      * @param paramMap 查询条件
      * @return 关联用户数量
      */
@@ -85,6 +85,7 @@ public interface SysRoleDAO extends BaseDao<SysRole>
 
     /**
      * 删除角色用户关联
+     *
      * @param adminRole
      */
     @NotMultiTenancyCheck

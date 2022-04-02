@@ -41,7 +41,7 @@ import java.util.Map;
  * shiro 配置包含单点登录支持
  */
 @Configuration
-public class ShiroConfiguration{
+public class ShiroConfiguration {
 
     /*
      *cas server地址
@@ -82,8 +82,7 @@ public class ShiroConfiguration{
         configuration.setAcceptAnyProxy(true);
         CasClient casClient = new CasClient(configuration);
         casClient.setCallbackUrl(shiroServerUrlPrefix + "/callback?client_name=" + clientName);
-        if(isEnableCas)
-        {
+        if (isEnableCas) {
             configuration.setLogoutHandler(shiroCasLogoutHandler());
         }
         casClient.setName(clientName);
@@ -94,9 +93,10 @@ public class ShiroConfiguration{
 
     /**
      * 登出操作
+     *
      * @return
      */
-    public DefaultCasLogoutHandler shiroCasLogoutHandler(){
+    public DefaultCasLogoutHandler shiroCasLogoutHandler() {
         DefaultCasLogoutHandler logoutHandler = new DefaultCasLogoutHandler();
         return logoutHandler;
     }
@@ -116,17 +116,17 @@ public class ShiroConfiguration{
     }
 
 
-
     /**
      * 自定义的缓存管理器
-     * @return  自定义缓存管理器
+     *
+     * @return 自定义缓存管理器
      */
     @Bean(name = "shiroSpringCacheManager")
-    public ShiroSpringCacheManager shiroSpringCacheManager( RedisConnectionFactory factory) {
+    public ShiroSpringCacheManager shiroSpringCacheManager(RedisConnectionFactory factory) {
         RedisTemplate template = new RedisTemplate();
         template.setConnectionFactory(factory);
         //定义key的序列化方式
-        JdkSerializationRedisSerializer valSerializer =new JdkSerializationRedisSerializer();
+        JdkSerializationRedisSerializer valSerializer = new JdkSerializationRedisSerializer();
         template.setValueSerializer(valSerializer);
         GenericJackson2JsonRedisSerializer keySerializer = new GenericJackson2JsonRedisSerializer();
         template.setKeySerializer(keySerializer);
@@ -140,22 +140,20 @@ public class ShiroConfiguration{
     }
 
     @Bean(name = "securityManager")
-    @DependsOn({"shiroRealm","shiroSpringCacheManager"})
+    @DependsOn({"shiroRealm", "shiroSpringCacheManager"})
     public DefaultWebSecurityManager securityManager(RedisConnectionFactory factory) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        if(this.useVue)
-        {
+        if (this.useVue) {
             securityManager = new StatelessSecurityManager();
         }
         securityManager.setCacheManager(shiroSpringCacheManager(factory));// 用户授权/认证信息Cache, 采用EhCache 缓存
        /*if (isEnableCas) {
             securityManager.setSubjectFactory(new CasSubjectFactory());
         }*/
-       // SecurityUtils.setSecurityManager(securityManager);
+        // SecurityUtils.setSecurityManager(securityManager);
         securityManager.setRealm(shiroRealm());
         return securityManager;
     }
-
 
 
     /**
@@ -170,7 +168,7 @@ public class ShiroConfiguration{
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        String realLoginUrl = this.isEnableCas ? casServerUrlPrefix + "/login?service=" +  shiroServerUrlPrefix + "/callback?client_name=" + clientName : shrioLoginUrl;
+        String realLoginUrl = this.isEnableCas ? casServerUrlPrefix + "/login?service=" + shiroServerUrlPrefix + "/callback?client_name=" + clientName : shrioLoginUrl;
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl(realLoginUrl);
         /*
@@ -190,9 +188,8 @@ public class ShiroConfiguration{
          */
         //自定义拦截器
         Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
-        filtersMap.put("pagexFilter",new PageXFilter());
-        if(isEnableCas)
-        {
+        filtersMap.put("pagexFilter", new PageXFilter());
+        if (isEnableCas) {
             //设置pac4j回调Filter
             CallbackFilter callbackFilter = new CallbackFilter();
             callbackFilter.setConfig(config());
@@ -204,7 +201,7 @@ public class ShiroConfiguration{
             logoutFilter.setCentralLogout(true);
             logoutFilter.setLocalLogout(true);
             logoutFilter.setDefaultUrl(shiroServerUrlPrefix + "/callback?client_name=" + clientName);
-            filtersMap.put("logout",logoutFilter);
+            filtersMap.put("logout", logoutFilter);
         }
         shiroFilterFactoryBean.setFilters(filtersMap);
         loadShiroFilterChain(shiroFilterFactoryBean);
@@ -230,7 +227,7 @@ public class ShiroConfiguration{
      *
      * @return
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean
     public ServletListenerRegistrationBean<?> singleSignOutHttpSessionListener() {
         ServletListenerRegistrationBean bean = new ServletListenerRegistrationBean();
@@ -248,7 +245,7 @@ public class ShiroConfiguration{
     private void loadShiroFilterChain(ShiroFilterFactoryBean shiroFilterFactoryBean) {
         /////////////////////// 下面这些规则配置最好配置到配置文件中，注意，此处加入的filter需要保证有序，所以用的LinkedHashMap ///////////////////////
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        if(isEnableCas) {
+        if (isEnableCas) {
             filterChainDefinitionMap.put("/callback", "casFilter");
             filterChainDefinitionMap.put("/logout", "logout");
         }
@@ -262,7 +259,6 @@ public class ShiroConfiguration{
         filterChainDefinitionMap.put("/ms/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
-
 
 
 }

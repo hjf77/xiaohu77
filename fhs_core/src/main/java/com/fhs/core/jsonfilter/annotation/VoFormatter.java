@@ -14,7 +14,8 @@ public @interface VoFormatter {
 
     /**
      * 包含的字段
+     *
      * @return
      */
-    String[] include() ;
+    String[] include();
 }

@@ -7,8 +7,7 @@ import com.fhs.ucenter.bean.UcenterFrontUser;
  * @Version: 1.0
  * @Author: jackwong
  */
-public interface LoginService
-{
+public interface LoginService {
 
     /**
      * 根据accessToken获取userid
@@ -21,6 +20,7 @@ public interface LoginService
 
     /**
      * 根据userid获取accessToken
+     *
      * @param userId userId
      * @return accessToken
      */
@@ -28,8 +28,9 @@ public interface LoginService
 
     /**
      * 添加一个user和bind到db 返回userid
-     * @param user  user
-     * @param openId openid
+     *
+     * @param user       user
+     * @param openId     openid
      * @param openIdType openid类型
      * @return
      */

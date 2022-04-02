@@ -22,19 +22,18 @@ public class ShiroBeetlTag extends Tag implements InitializingBean {
     private BeetlGroupUtilConfiguration beetlGroupUtilConfiguration;
 
     @Override
-    public void render(){
+    public void render() {
         String tagName = (String) this.args[0];
         Map attrs = (Map) args[1];
         String name = (String) attrs.get("name");
         //如果有权限就渲染，没权限就忽略
-        if(SecurityUtils.getSubject().isPermitted(name))
-        {
+        if (SecurityUtils.getSubject().isPermitted(name)) {
             this.doBodyRender();
         }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        beetlGroupUtilConfiguration.getGroupTemplate().registerTag("shiro",ShiroBeetlTag.class);
+        beetlGroupUtilConfiguration.getGroupTemplate().registerTag("shiro", ShiroBeetlTag.class);
     }
 }

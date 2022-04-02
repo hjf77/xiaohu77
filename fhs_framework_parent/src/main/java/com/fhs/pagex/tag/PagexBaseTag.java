@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *  列表页和表单页面字段共同的base类
+ * 列表页和表单页面字段共同的base类
  *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag
@@ -35,9 +35,7 @@ public abstract class PagexBaseTag extends Tag {
     protected static final Set<String> DEFAULT_HANDEL_KEYS = new HashSet<>();
 
 
-
-    static
-    {
+    static {
         DEFAULT_HANDEL_KEYS.add("title");
         DEFAULT_HANDEL_KEYS.add("name");
         DEFAULT_HANDEL_KEYS.add("dataType");
@@ -52,8 +50,7 @@ public abstract class PagexBaseTag extends Tag {
     }
 
 
-    static
-    {
+    static {
         DATA_OPTION_KEY.add("groupFormatter");
         DATA_OPTION_KEY.add("filter");
         DATA_OPTION_KEY.add("formatter");
@@ -78,32 +75,29 @@ public abstract class PagexBaseTag extends Tag {
     /**
      * 标签配置信息
      */
-    protected Map<String,Object> tagSett;
+    protected Map<String, Object> tagSett;
 
     /**
      * 设置tag的配置信息
+     *
      * @param tagSett 标签配置
      * @return
      */
-    public  void setTagSett(Map<String,Object> tagSett, HttpServletRequest request, HttpServletResponse response)
-    {
-        this.request=request;
-        this.response=response;
-        this.tagSett=tagSett;
+    public void setTagSett(Map<String, Object> tagSett, HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
+        this.tagSett = tagSett;
     }
 
 
     /**
      * 如果是easyui的话 自动识别哪些key 放到dataoption中
      */
-    protected  String formartEasyuiDataOptions()
-    {
+    protected String formartEasyuiDataOptions() {
         StringBuilder options = new StringBuilder(" data-options=\"");
-        for (String optionName : DATA_OPTION_KEY)
-        {
-            if(tagSett.containsKey(optionName))
-            {
-                options.append(optionName+":" + ConverterUtils.toString(tagSett.get(optionName)).replace("\"","'") +  ",");
+        for (String optionName : DATA_OPTION_KEY) {
+            if (tagSett.containsKey(optionName)) {
+                options.append(optionName + ":" + ConverterUtils.toString(tagSett.get(optionName)).replace("\"", "'") + ",");
             }
         }
         options.append("\" ");
@@ -112,50 +106,45 @@ public abstract class PagexBaseTag extends Tag {
 
     /**
      * 获取子类不自己处理的属性拼接位html element attr
-     *
      */
-    protected String getOtherAttrValHtml(){
-        String [] handelKeys = getHandelKeys();
-        Map<String,Object> tempTagSett = new HashMap<>();
+    protected String getOtherAttrValHtml() {
+        String[] handelKeys = getHandelKeys();
+        Map<String, Object> tempTagSett = new HashMap<>();
         tempTagSett.putAll(tagSett);
-        for(String key : handelKeys)
-        {
+        for (String key : handelKeys) {
             tempTagSett.remove(key);
         }
         //easyui dataoptions里面的也去掉
-        for(String key : DATA_OPTION_KEY)
-        {
+        for (String key : DATA_OPTION_KEY) {
             tempTagSett.remove(key);
         }
         //大家都支持的attr 也去掉
-        for(String key : DEFAULT_HANDEL_KEYS)
-        {
+        for (String key : DEFAULT_HANDEL_KEYS) {
             tempTagSett.remove(key);
         }
         Set<String> keys = tempTagSett.keySet();
         StringBuilder resultBuilder = new StringBuilder();
-        for(String key:keys)
-        {
-            resultBuilder.append(" " + key +"='" +tempTagSett.get(key) + "'" );
+        for (String key : keys) {
+            resultBuilder.append(" " + key + "='" + tempTagSett.get(key) + "'");
         }
         return resultBuilder.toString();
     }
 
     /**
      * 一些控件默认带class属性，如果程序员又在使用控件的时候又使用到了
+     *
      * @param clazz
      * @return
      */
-    protected  String formartClass(String clazz)
-    {
-        return   " class='" + clazz + " " + ConverterUtils.toString(tagSett.get("class")) + "' ";
+    protected String formartClass(String clazz) {
+        return " class='" + clazz + " " + ConverterUtils.toString(tagSett.get("class")) + "' ";
     }
 
     /**
      * 页面配置中有多个key，哪些key是程序自己处理的，就给base设置一下
      * 系统已经内置了一部分见 defaultHandelKeys
      */
-    protected abstract  String[] getHandelKeys();
+    protected abstract String[] getHandelKeys();
 
 
 }

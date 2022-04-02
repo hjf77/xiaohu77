@@ -15,18 +15,16 @@ import org.springframework.cloud.netflix.feign.FeignClient;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
-@FeignClient(value = "system", configuration=FeignConfiguration.class)
+@FeignClient(value = "system", configuration = FeignConfiguration.class)
 public interface FeignSysRoleApiService {
-
 
 
     /**
      * 根据用户id获取角色
+     *
      * @param userId 用户id
      * @return HttpResult 角色列表
      */
@@ -35,6 +33,7 @@ public interface FeignSysRoleApiService {
 
     /**
      * 根据id查询角色
+     *
      * @param id 角色id
      * @return HttpResult 角色对象
      */

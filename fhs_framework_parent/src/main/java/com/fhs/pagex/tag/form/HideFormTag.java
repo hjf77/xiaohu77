@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * input 表单tag
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class HideFormTag extends  EmptyFormTag{
+public class HideFormTag extends EmptyFormTag {
 
-    static{
+    static {
         FormTagFactory.regTag("hide", HideFormTag.class);
     }
 
@@ -25,7 +26,7 @@ public class HideFormTag extends  EmptyFormTag{
         // 为了防止大家copy不知道怎么写，这里在说明一下，给form中 写的代码在这里 如果 isNewRow() 返回true的话那么 <div class="fitem">以及他的结束都要自己在这个方法中写，
         // 如果返回isNewRow() 返回false的话不需要管<div class="fitem">
         StringBuilder resultHtmlBuilder = new StringBuilder();
-        resultHtmlBuilder.append(" <input type='hidden' " );
+        resultHtmlBuilder.append(" <input type='hidden' ");
         resultHtmlBuilder.append(formartIdNameHtml() + super.formartClass("") + super.getOtherAttrValHtml() + " />");
         return resultHtmlBuilder.toString();
     }

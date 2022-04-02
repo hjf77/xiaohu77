@@ -13,14 +13,11 @@ import java.lang.annotation.Target;
  * @Version: 1.0
  * @Author: jackwong
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface LogDesc
-{
+public @interface LogDesc {
     /**
      * 获取描述内容
      *
@@ -30,6 +27,7 @@ public @interface LogDesc
 
     /**
      * 日志类型
+     *
      * @return
      */
     int type();

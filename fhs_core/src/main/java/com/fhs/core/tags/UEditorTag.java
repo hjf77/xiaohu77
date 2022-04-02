@@ -12,20 +12,16 @@ import javax.servlet.jsp.JspException;
  * @Version: 1.0
  * @Author: Lins
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class UEditorTag extends BaseFormTag
-{
+public class UEditorTag extends BaseFormTag {
 
     // 默认class
     private final String defaultClassName = "ueEditorText";
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
 
         defaultClassName(defaultClassName);
         write("     <div class=\"bigLabelDiv\">");

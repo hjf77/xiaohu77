@@ -10,22 +10,25 @@ import java.util.List;
  *
  */
 public interface FileServerBusiness {
-    /** filep */
-    String fileP =  File.separator;
-
+    /**
+     * filep
+     */
+    String fileP = File.separator;
 
 
     /**
      * 上传文件
+     *
      * @param fileData
      * @return
      */
-    ServiceFile uploadFile(MultipartFile fileData,String fileId);
+    ServiceFile uploadFile(MultipartFile fileData, String fileId);
 
     /**
      * 上传多个文件
+     *
      * @param allFileData
      * @return
      */
-    List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData,String filedId);
+    List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData, String filedId);
 }

@@ -25,28 +25,28 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/webApi/jssdk")
 public class FrontWxJsApiAction extends BaseAction {
 
-    private static final  Logger LOG = Logger.getLogger(FrontWxJsApiAction.class);
+    private static final Logger LOG = Logger.getLogger(FrontWxJsApiAction.class);
 
     @Autowired
     private WxTools wxTools;
 
     /**
      * 获取js sdk签名
+     *
      * @param request
      * @param response
      */
     @RequestMapping("getSignature")
-    public void getJsSdkSignature(HttpServletRequest request, HttpServletResponse response,String extendsCode)
-    {
+    public void getJsSdkSignature(HttpServletRequest request, HttpServletResponse response, String extendsCode) {
         WxMpService wxMpService = wxTools.getWxMpService(extendsCode);
         String url = ConverterUtils.toString(request.getHeader("Referer"));
         url = CheckUtils.isNullOrEmpty(url) ? request.getHeader("referer") : url;
-        ParamChecker.isNotNullOrEmpty(url,"header中referer不能为空");
+        ParamChecker.isNotNullOrEmpty(url, "header中referer不能为空");
         try {
             WxJsapiSignature jsapiSignature = wxMpService.createJsapiSignature(url);
-            super.outJsonp(JsonUtils.bean2json(jsapiSignature),response,request);
+            super.outJsonp(JsonUtils.bean2json(jsapiSignature), response, request);
         } catch (WxErrorException e) {
-            LOG.error("获取jssdk签名错误,url:" + url +",extendsCode:" + extendsCode,e);
+            LOG.error("获取jssdk签名错误,url:" + url + ",extendsCode:" + extendsCode, e);
         }
     }
 

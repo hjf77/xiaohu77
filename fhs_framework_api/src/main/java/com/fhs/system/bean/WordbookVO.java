@@ -12,15 +12,16 @@ import lombok.Data;
  * @since [产品/模块版本]
  */
 @Data
-public class WordbookVO extends BaseVo<WordbookVO>
-{
+public class WordbookVO extends BaseVo<WordbookVO> {
 
     /**
      * id
      */
     private Integer wordbookId;
 
-    /** 加密id */
+    /**
+     * 加密id
+     */
     private String wordbookIdE;
 
     /**

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.List;
 
 @Configuration
-public class FileServiceConfig extends WebMvcConfigurerAdapter{
+public class FileServiceConfig extends WebMvcConfigurerAdapter {
 
 
     /**
@@ -31,13 +31,13 @@ public class FileServiceConfig extends WebMvcConfigurerAdapter{
 
     /**
      * 初始化文件储存器
-     * @return  根据条件初始化文件储存器
+     *
+     * @return 根据条件初始化文件储存器
      */
     @Bean
-    public FileStorage fileStorage(){
+    public FileStorage fileStorage() {
         //如果是阿里云则使用阿里云oss文件储存器
-        if("oss".equals(storageType))
-        {
+        if ("oss".equals(storageType)) {
             return new AliyunOSSFileStorage();
         }
         return new DiskFileStorage();

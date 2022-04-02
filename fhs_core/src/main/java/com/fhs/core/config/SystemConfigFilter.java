@@ -22,15 +22,14 @@ import java.util.Properties;
 
 /**
  * 如果请求 的是systemConfig.js 则读取配置文件给浏览器写
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @Configuration
-@WebFilter(urlPatterns = "/*",filterName = "systemConfigFilter")
+@WebFilter(urlPatterns = "/*", filterName = "systemConfigFilter")
 @Component
-public class SystemConfigFilter implements Filter, InitializingBean
-{
-    public  static String projectName = EConfig.projectName;
+public class SystemConfigFilter implements Filter, InitializingBean {
+    public static String projectName = EConfig.projectName;
 
     private static String fileName = "systemConfig.js";
 
@@ -38,7 +37,7 @@ public class SystemConfigFilter implements Filter, InitializingBean
      * systemconfig js内容
      */
     private static String jsContent;
-    
+
     public static String basePath;
 
     @ApolloConfig("jsConfig")
@@ -48,19 +47,16 @@ public class SystemConfigFilter implements Filter, InitializingBean
     private boolean isDisableApollo;
 
     @Override
-    public void destroy()
-    {
-        
+    public void destroy() {
+
     }
-    
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException
-    {
-        HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
-        if (httpServletRequest.getRequestURI().contains(fileName))
-        {
+            throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        if (httpServletRequest.getRequestURI().contains(fileName)) {
             httpServletResponse.getWriter().println(jsContent);
             httpServletResponse.getWriter().flush();
             httpServletResponse.getWriter().close();
@@ -70,53 +66,43 @@ public class SystemConfigFilter implements Filter, InitializingBean
     }
 
     @Override
-    
+
     public void init(FilterConfig FilterConfig)
-        throws ServletException
-    {
+            throws ServletException {
 
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Map<String,String> systemConfigMap = new HashMap<>();
-        if(isDisableApollo)
-        {
+        Map<String, String> systemConfigMap = new HashMap<>();
+        if (isDisableApollo) {
             Properties jsConfig = new Properties();
             InputStream in = null;
             File jsFile = new File(EConfig.getPath() + "/js.properties");
-            if(jsFile.exists())
-            {
+            if (jsFile.exists()) {
                 in = new FileInputStream(jsFile);
-            }
-            else{
+            } else {
                 in = SystemConfigFilter.class.getClassLoader().getResourceAsStream("js.properties");
             }
 
             jsConfig.load(in);
-            for(Object key : jsConfig.keySet())
-            {
-                systemConfigMap.put(ConverterUtils.toString(key),ConverterUtils.toString(jsConfig.get(key)));
+            for (Object key : jsConfig.keySet()) {
+                systemConfigMap.put(ConverterUtils.toString(key), ConverterUtils.toString(jsConfig.get(key)));
             }
-        }
-        else
-        {
-            for(String key : systemConfig.getPropertyNames())
-            {
-                systemConfigMap.put(key,systemConfig.getProperty(key,""));
+        } else {
+            for (String key : systemConfig.getPropertyNames()) {
+                systemConfigMap.put(key, systemConfig.getProperty(key, ""));
             }
         }
         final StringBuilder jsBuilder = new StringBuilder();
-        jsBuilder.append("var basePath" + " = '" +  EConfig.getPathPropertiesValue("basePath") + "';");
-        systemConfigMap.keySet().forEach(name->{
-            if(name.endsWith("_REG"))
-            {
-                jsBuilder.append("var " + name + " = " +  systemConfigMap.get(name)+";");
-            }
-            else {
-                jsBuilder.append("var " + name + " = '" +  systemConfigMap.get(name)+"';");
+        jsBuilder.append("var basePath" + " = '" + EConfig.getPathPropertiesValue("basePath") + "';");
+        systemConfigMap.keySet().forEach(name -> {
+            if (name.endsWith("_REG")) {
+                jsBuilder.append("var " + name + " = " + systemConfigMap.get(name) + ";");
+            } else {
+                jsBuilder.append("var " + name + " = '" + systemConfigMap.get(name) + "';");
             }
         });
-        jsContent =jsBuilder.toString();
+        jsContent = jsBuilder.toString();
     }
 }

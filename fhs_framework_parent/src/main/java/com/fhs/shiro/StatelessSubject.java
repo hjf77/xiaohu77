@@ -4,6 +4,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
 import org.apache.shiro.mgt.SecurityManager;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 /**
  * 自定义subject
  */
-public class StatelessSubject  extends WebDelegatingSubject implements Serializable {
+public class StatelessSubject extends WebDelegatingSubject implements Serializable {
     public StatelessSubject(PrincipalCollection principals, boolean authenticated, String host, Session session,
                             ServletRequest request, ServletResponse response, SecurityManager securityManager) {
         super(principals, authenticated, host, session, request, response, securityManager);

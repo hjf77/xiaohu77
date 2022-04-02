@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("ucenterMpSettService")
 @DataSource("base_business")
-public class UcenterMpSettServiceImpl extends BaseServiceImpl<UcenterMpSett>   implements UcenterMpSettService {
-    
+public class UcenterMpSettServiceImpl extends BaseServiceImpl<UcenterMpSett> implements UcenterMpSettService {
+
 }

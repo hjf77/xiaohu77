@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 企业service
- * @author  zhangqiang
+ * @author zhangqiang
  * @version [版本号, 2018-08-13]
+ * @Description: 企业service
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
 public interface SysEnterpriseService extends BaseService<SysEnterprise> {
@@ -26,28 +26,28 @@ public interface SysEnterpriseService extends BaseService<SysEnterprise> {
     String SYS_ENTERPRISE_NAME = "sysEnterpriseInfo:enterpriseName";
 
     /**
-     * @desc 企业新增修改 企业名称同名校验
      * @param sysEnterprise 企业对象
      * @return
+     * @desc 企业新增修改 企业名称同名校验
      */
     int findSysEntByIdAndName(SysEnterprise sysEnterprise);
 
     /**
-     * @desc 刷新所有企业缓存
      * @return httpResult
+     * @desc 刷新所有企业缓存
      */
     HttpResult<Map> refreshRedisCache();
 
     /**
-     * @desc 搜索获取企业
      * @return 企业列表信息
+     * @desc 搜索获取企业
      */
     List<SysEnterprise> getSysEnterpriseList(SysEnterprise sysEnterprise);
 
     /**
-     * @desc 修改企业信息
      * @param sysEnterprise 企业对象
      * @return 受影响行数
+     * @desc 修改企业信息
      */
     Integer updateSysEnterprise(SysEnterprise sysEnterprise);
 }

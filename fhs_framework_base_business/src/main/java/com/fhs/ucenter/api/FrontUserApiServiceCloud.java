@@ -115,7 +115,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
     @Override
     public HttpResult<Boolean> mergeUser(String fromUserId, String targetUserId) {
         List<UcenterFrontUserBind> binds = frontUserBindService.findForList(UcenterFrontUserBind.builder().userId(fromUserId).build());
-        binds.forEach(bind->{
+        binds.forEach(bind -> {
             bind.setUserId(targetUserId);
             frontUserBindService.updateJpa(bind);
         });

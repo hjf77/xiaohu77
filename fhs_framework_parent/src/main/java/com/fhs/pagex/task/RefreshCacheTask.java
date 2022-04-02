@@ -22,6 +22,7 @@ import java.io.IOException;
 
 /**
  * 自动读取js内容，刷新到缓存中定时任务
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.task
  * @ClassName: RefreshCacheTask
@@ -33,9 +34,8 @@ import java.io.IOException;
  */
 @Component
 @DependsOn("persistentEnhancerScaner")
-public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationContextAware {
+public class RefreshCacheTask implements InitializingBean, Runnable, ApplicationContextAware {
     private ApplicationContext applicationContext;
-
 
 
     private static final Logger LOG = Logger.getLogger(RefreshCacheTask.class);
@@ -48,7 +48,6 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
      */
     @Autowired
     private JoinService joinService;
-
 
 
     /**
@@ -72,8 +71,7 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
             LOG.error("刷新文件出错:", e);
         }
         //正式环境不需要配置
-        if(CheckUtils.isNotEmpty(EConfig.getOtherConfigPropertiesValue("isDevModel")))
-        {
+        if (CheckUtils.isNotEmpty(EConfig.getOtherConfigPropertiesValue("isDevModel"))) {
             new Thread(this).start();
         }
 
@@ -83,17 +81,14 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     /**
      * 刷新js->page的任务
      */
-    public void run(){
-        while(true)
-        {
+    public void run() {
+        while (true) {
 
             try {
-                try
-                {
+                try {
                     refresh();
-                }catch (Exception e)
-                {
-                    LOG.error("刷新文件出错:",e);
+                } catch (Exception e) {
+                    LOG.error("刷新文件出错:", e);
                 }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -105,21 +100,19 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     /**
      * 遍历所有的js文件刷新到内存中
      */
-    public void refresh(){
+    public void refresh() {
         try {
             Resource[] resources = resolver.getResources("classpath*:META-INF/resources/pagex/**/*.js");
             String fileName = null;
-            for(Resource resource : resources)
-            {
+            for (Resource resource : resources) {
                 //刷新缓存中的js文件
-                PagexDataService.SIGNEL.refreshJsFile( resource.getFilename(),FileUtils.readTxtFile(resource.getInputStream()));
+                PagexDataService.SIGNEL.refreshJsFile(resource.getFilename(), FileUtils.readTxtFile(resource.getInputStream()));
             }
             resources = resolver.getResources("classpath*:META-INF/resources/pagex/**/*.html");
-            for(Resource resource : resources)
-            {
+            for (Resource resource : resources) {
                 String path = resource.getURL().getPath();
                 path = path.substring(path.indexOf("/pagex/"));
-                PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().put(resource.getFilename().replace(".html",""),path);
+                PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().put(resource.getFilename().replace(".html", ""), path);
             }
 
         } catch (IOException e) {

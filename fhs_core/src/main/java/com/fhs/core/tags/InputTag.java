@@ -12,19 +12,16 @@ import javax.servlet.jsp.JspException;
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class InputTag extends BaseFormTag
-{
+public class InputTag extends BaseFormTag {
     /**
      * 类型 默认的text
      */
     private String type = "text";
 
     /**
-     *如果要做唯一的话
+     * 如果要做唯一的话
      */
     private String ajaxCheckUrl;
 
@@ -33,8 +30,7 @@ public class InputTag extends BaseFormTag
      *
      * @return bean的 类型 默认的text
      */
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
@@ -43,22 +39,20 @@ public class InputTag extends BaseFormTag
      *
      * @param type 一个新的 类型 默认的text
      */
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
         super.setClassName(super.getClassName() + " easyui-validatebox");
         write(" <div class=\"fitemDiv\">");
         write("<label>" + super.getTitle() + ":</label>");
         //密码框禁止黏贴 右键 拷贝  自制
-        if(type.equals("password")) {
+        if (type.equals("password")) {
             write("<input type=\"" + this.type + "\" oncopy=\"return false\" onpaste=\"return false\" oncut=\"return false\" oncontextmenu=\"return false\" autocomplete=\"off\" ");
-        }else {
+        } else {
             write("<input type=\"" + this.type + "\" autocomplete=\"off\" ");
         }
 
@@ -71,8 +65,7 @@ public class InputTag extends BaseFormTag
      *
      * @return bean的 如果要做唯一的话
      */
-    public String getAjaxCheckUrl()
-    {
+    public String getAjaxCheckUrl() {
         return ajaxCheckUrl;
     }
 
@@ -81,8 +74,7 @@ public class InputTag extends BaseFormTag
      *
      * @param ajaxCheckUrl 一个新的 如果要做唯一的话
      */
-    public void setAjaxCheckUrl(String ajaxCheckUrl)
-    {
+    public void setAjaxCheckUrl(String ajaxCheckUrl) {
         this.ajaxCheckUrl = ajaxCheckUrl;
     }
 

@@ -30,7 +30,7 @@ public class ClassInfo implements Serializable {
     /**
      * 获取翻译字段 key 翻译的类型比如字典的类型为wordbook
      */
-    private Map<String,List<Field>> transFieldMap = new HashMap<String,List<Field>>();
+    private Map<String, List<Field>> transFieldMap = new HashMap<String, List<Field>>();
 
     public ClassInfo() {
         super();
@@ -68,28 +68,28 @@ public class ClassInfo implements Serializable {
 
     /**
      * 获取需要翻译的类型
+     *
      * @return 需要翻译的类型
      */
-    public String[] getTransTypes()
-    {
+    public String[] getTransTypes() {
         return transTypes;
     }
 
     /**
      * 获取需要翻译的字段
+     *
      * @param type 翻译类型
      * @return 字段集合
      */
-    public List<Field> getTransField(String type){
-        return  transFieldMap.get(type);
+    public List<Field> getTransField(String type) {
+        return transFieldMap.get(type);
     }
 
     private void getClazzFieldMap() throws InstantiationException, IllegalAccessException {
         // PO 类和其祖先类声明的字段名称集合
         List<Field> declaredFields = ReflectUtils.getAllField(clazz.newInstance());
         TransTypes transTypes = clazz.getAnnotation(TransTypes.class);
-        if(transTypes!=null)
-        {
+        if (transTypes != null) {
             this.transTypes = transTypes.types();
         }
         int mod = 0;
@@ -103,18 +103,14 @@ public class ClassInfo implements Serializable {
 
 
             Trans trans = field.getAnnotation(Trans.class) != null ? field.getAnnotation(Trans.class) : null;
-            if(trans!=null)
-            {
-                if(trans.type() == null || trans.key() == null)
-                {
+            if (trans != null) {
+                if (trans.type() == null || trans.key() == null) {
                     LOGGER.warn("类 {} 属性 [{}]  key 或者type为空。", clazz.getName(), field.getName());
-                }
-                else
-                {
+                } else {
                     List<Field> fieldList = transFieldMap.get(trans.type());
                     fieldList = fieldList != null ? fieldList : new ArrayList<Field>();
                     fieldList.add(field);
-                    transFieldMap.put(trans.type(),fieldList);
+                    transFieldMap.put(trans.type(), fieldList);
                 }
             }
         }

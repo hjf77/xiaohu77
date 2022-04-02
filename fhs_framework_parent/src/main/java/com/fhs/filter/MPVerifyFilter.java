@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @ServletComponentScan
-@WebFilter(urlPatterns = {"*"},filterName = "mpVerifyFilter" ,asyncSupported = true)
+@WebFilter(urlPatterns = {"*"}, filterName = "mpVerifyFilter", asyncSupported = true)
 public class MPVerifyFilter implements Filter {
 
 
@@ -25,15 +25,12 @@ public class MPVerifyFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         String uri = ConverterUtils.toString(request.getRequestURI());
-        if(uri.contains("MP_verify"))
-        {
+        if (uri.contains("MP_verify")) {
             String fileName = uri.substring(uri.indexOf("MP_verify"));
-            FileUtils.download( EConfig.getPathPropertiesValue("mp_verify_file_path") + "/" + fileName,(HttpServletResponse) res,"verify.txt");
+            FileUtils.download(EConfig.getPathPropertiesValue("mp_verify_file_path") + "/" + fileName, (HttpServletResponse) res, "verify.txt");
             return;
-        }
-        else
-        {
-            chain.doFilter(req,res);
+        } else {
+            chain.doFilter(req, res);
         }
     }
 
@@ -41,7 +38,6 @@ public class MPVerifyFilter implements Filter {
     public void destroy() {
 
     }
-
 
 
 }

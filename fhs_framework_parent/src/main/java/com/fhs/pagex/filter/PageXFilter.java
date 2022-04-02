@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *  pagex结尾的jsp拦截
- *  本filter Z开头主要是为了让自己在shiroFilter 后面
+ * pagex结尾的jsp拦截
+ * 本filter Z开头主要是为了让自己在shiroFilter 后面
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.filter
  * @ClassName: PageXFilter
@@ -32,22 +33,19 @@ public class PageXFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest)request;
-        HttpServletResponse rep = (HttpServletResponse)response;
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse rep = (HttpServletResponse) response;
         //受shiro的影响，虽然request不是以/ms/pagex/开头也走了这里
-        if(req.getServletPath().startsWith("/ms/pagex/"))
-        {
-            PagexServletContext.init(req,rep);
-            try
-            {
-                HandelPageXService.SIGEL.service(req,rep);
+        if (req.getServletPath().startsWith("/ms/pagex/")) {
+            PagexServletContext.init(req, rep);
+            try {
+                HandelPageXService.SIGEL.service(req, rep);
                 return;
-            }catch(Exception e)
-            {
-                LOG.error("渲染pagex页面错误:",e);
+            } catch (Exception e) {
+                LOG.error("渲染pagex页面错误:", e);
             }
         }
-        chain.doFilter(request,response);
+        chain.doFilter(request, response);
     }
 
     @Override

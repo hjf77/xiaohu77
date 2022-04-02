@@ -19,8 +19,8 @@ import java.io.IOException;
  * 后台用户登录filter
  */
 @ServletComponentScan
-@WebFilter(urlPatterns = {"*"},filterName = "zLoginFilter" ,asyncSupported = true)
-public class LoginFilter implements Filter{
+@WebFilter(urlPatterns = {"*"}, filterName = "zLoginFilter", asyncSupported = true)
+public class LoginFilter implements Filter {
 
     private static final Logger LOGGER = Logger.getLogger(LoginFilter.class);
 
@@ -31,36 +31,29 @@ public class LoginFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse)res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
         String basePath = EConfig.getPathPropertiesValue("basePath");
         String uri = request.getRequestURI();
         MultiTenancyContext.setProviderId(null);
         //访问根目录跳转到首页
-        if(CheckUtils.isNullOrEmpty(uri) || "/".equals(uri)   )
-        {
+        if (CheckUtils.isNullOrEmpty(uri) || "/".equals(uri)) {
             response.sendRedirect(basePath + "ms/index");
             return;
         }
         //如果当前用户为空并且访问受保护的资源
-        else if(((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") ||  uri.contains("/ms/")) && (!uri.contains("/ms/index"))))
-        {
-            if(request.getSession().getAttribute(Constant.SESSION_USER) == null)
-            {
+        else if (((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") || uri.contains("/ms/")) && (!uri.contains("/ms/index")))) {
+            if (request.getSession().getAttribute(Constant.SESSION_USER) == null) {
                 String extendsParam = CheckUtils.isNullOrEmpty(request.getQueryString()) ? "" : "?" + request.getQueryString();
                 request.getSession().setAttribute("serviceURL", request.getRequestURL().toString() + extendsParam);
                 response.sendRedirect(basePath + "ms/index");
-            }
-            else
-            {
-                SysUserVo user = (SysUserVo)request.getSession().getAttribute(Constant.SESSION_USER);
+            } else {
+                SysUserVo user = (SysUserVo) request.getSession().getAttribute(Constant.SESSION_USER);
                 MultiTenancyContext.setProviderId(user.getGroupCode());
-                chain.doFilter (req, res);
+                chain.doFilter(req, res);
             }
-        }
-        else
-        {
-            chain.doFilter (req, res);
+        } else {
+            chain.doFilter(req, res);
         }
 
     }
@@ -69,7 +62,6 @@ public class LoginFilter implements Filter{
     public void destroy() {
 
     }
-
 
 
 }

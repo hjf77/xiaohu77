@@ -159,10 +159,10 @@ public class MsLoginAction {
         if (user == null) {
             throw new ParamException("token失效");
         }
-        resultMap.put("user","user");
+        resultMap.put("user", "user");
         SysUser sysUser = new SysUser();
-        BeanUtils.copyProperties(user,sysUser);
-        resultMap.put("menu",sysUserService.getMenu(sysUser,"2"));
+        BeanUtils.copyProperties(user, sysUser);
+        resultMap.put("menu", sysUserService.getMenu(sysUser, "2"));
         return HttpResult.success(resultMap);
     }
 

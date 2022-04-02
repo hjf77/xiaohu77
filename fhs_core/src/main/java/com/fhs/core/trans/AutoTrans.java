@@ -11,24 +11,26 @@ import java.lang.annotation.Target;
  * @Date: Created in 10:14 2019/10/15
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE})
-public @interface AutoTrans
-{
+@Target({ElementType.TYPE})
+public @interface AutoTrans {
     /**
-     *  命名空间
+     * 命名空间
+     *
      * @return
      */
     String namespace();
 
     /**
      * 字段集合
+     *
      * @return
      */
     String[] fields();
 
     /**
      * 是否使用缓存翻译
-     * @return  默认为true 如果是false的话
+     *
+     * @return 默认为true 如果是false的话
      */
     boolean useCache() default true;
 }

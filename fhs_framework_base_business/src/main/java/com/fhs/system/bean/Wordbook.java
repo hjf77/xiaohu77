@@ -23,8 +23,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Data
 @Table(name = "t_service_wordbook")
-public class Wordbook extends BaseDO<Wordbook>
-{
+public class Wordbook extends BaseDO<Wordbook> {
     /**
      * serialVersionUID
      */
@@ -36,14 +35,16 @@ public class Wordbook extends BaseDO<Wordbook>
     @Id
     private Integer wordbookId;
 
-    /** 加密id */
+    /**
+     * 加密id
+     */
     @Transient
     private String wordbookIdE;
 
     /**
      * 字典code
      */
-    @NotNull(message="wordbookCode字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "wordbookCode字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_code")
     private String wordbookCode;
@@ -51,7 +52,7 @@ public class Wordbook extends BaseDO<Wordbook>
     /**
      * 字典解释/描述
      */
-    @NotNull(message="wordbookDesc字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "wordbookDesc字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookDesc字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_desc")
     private String wordbookDesc;
@@ -74,7 +75,7 @@ public class Wordbook extends BaseDO<Wordbook>
     /**
      * 字典分组code
      */
-    @NotNull(message="wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_group_code")
     private String wordbookGroupCode;

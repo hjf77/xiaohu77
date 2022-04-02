@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @Description:
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-08-11]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Service
@@ -27,7 +27,7 @@ public class LogAdminOperatorLogServiceImpl extends BaseServiceImpl<LogAdminOper
         LogAdminOperatorLog logAdminOperatorLog = super.selectById(primaryValue);
         transService.transOne(logAdminOperatorLog);
         String operatorIdUserName = logAdminOperatorLog.getTransMap().get("operatorIdUserName");
-        if (CheckUtils.isNotEmpty(operatorIdUserName)){
+        if (CheckUtils.isNotEmpty(operatorIdUserName)) {
             logAdminOperatorLog.setOperatorId(operatorIdUserName);
         }
         return logAdminOperatorLog;

@@ -21,6 +21,7 @@ public class XMLUtils {
     /**
      * JavaBean转换成xml
      * 默认编码UTF-8
+     *
      * @param obj
      * @return
      */
@@ -30,6 +31,7 @@ public class XMLUtils {
 
     /**
      * JavaBean转换成xml
+     *
      * @param obj
      * @param encoding
      * @return
@@ -54,6 +56,7 @@ public class XMLUtils {
 
     /**
      * xml转换成JavaBean
+     *
      * @param xml
      * @param c
      * @return
@@ -73,25 +76,28 @@ public class XMLUtils {
 
     /**
      * XML转map
-     * @author by jackwong
+     *
      * @param xmlStr xml字符串
      * @return Map
      * @throws Exception
+     * @author by jackwong
      */
-    public static Map<String, String> toMap(String xmlStr) throws Exception{
+    public static Map<String, String> toMap(String xmlStr) throws Exception {
         Document doc = DocumentHelper.parseText(xmlStr);
         return toMap(doc.getRootElement());
     }
 
-    /** 转MAP
-     * @author
+    /**
+     * 转MAP
+     *
      * @param element
      * @return
-             */
-    public static Map<String, String> toMap(Element element){
+     * @author
+     */
+    public static Map<String, String> toMap(Element element) {
         Map<String, String> rest = new HashMap<String, String>();
         List<Element> els = element.elements();
-        for(Element el : els){
+        for (Element el : els) {
             rest.put(el.getName().toLowerCase(), el.getTextTrim());
         }
         return rest;

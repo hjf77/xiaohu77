@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * @Description:
- * @author  jianbo.qin
+ * @author jianbo.qin
  * @version [版本号, 2018-06-01]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @RestController
@@ -25,11 +25,11 @@ public class MsMenuServerAction extends ModelSuperAction<SysMenuServer> {
 
     /**
      * 查询服务列表
+     *
      * @return
      */
     @RequestMapping("/getData")
-    public List<SysMenuServer> getData()
-    {
+    public List<SysMenuServer> getData() {
         List<SysMenuServer> list = sysMenuServerService.findForList(new SysMenuServer());
         return list;
     }

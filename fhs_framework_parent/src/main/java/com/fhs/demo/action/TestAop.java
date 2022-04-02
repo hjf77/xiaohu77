@@ -20,21 +20,21 @@ public class TestAop {
     @Autowired
     private RedisCacheService<String> redisCacheService;
 
-    @RequestMapping(value = "/t",  method = {RequestMethod.POST})
+    @RequestMapping(value = "/t", method = {RequestMethod.POST})
     @ResponseBody
-    public HttpResult<TestAopBean> testAop(@RequestBody @ParamVaild TestAopBean testAop){
+    public HttpResult<TestAopBean> testAop(@RequestBody @ParamVaild TestAopBean testAop) {
         HttpResult<TestAopBean> httpResult = new HttpResult<TestAopBean>();
-        httpResult.setCode (200);
-        httpResult.setMessage ("ok!");
-        httpResult.setResult (true);
-        httpResult.setData (testAop);
+        httpResult.setCode(200);
+        httpResult.setMessage("ok!");
+        httpResult.setResult(true);
+        httpResult.setData(testAop);
 
         return httpResult;
     }
 
-    @RequestMapping(value = "/goIndexJsp",  method = {RequestMethod.GET})
-    public String goIndexJsp(){
-        redisCacheService.addStr ( "sssss", "helloworld" );
+    @RequestMapping(value = "/goIndexJsp", method = {RequestMethod.GET})
+    public String goIndexJsp() {
+        redisCacheService.addStr("sssss", "helloworld");
         System.out.println(SecurityUtils.getSubject().isPermitted("frontMembershipCard:add"));
         return "index";
     }

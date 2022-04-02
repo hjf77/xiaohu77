@@ -13,13 +13,14 @@ public interface IPageXService {
 
     /**
      * 给js 内容 ，namespace，request ，response，返回根据模板渲染后的html
-     * @param request  request
-     * @param response response
-     * @param js namespace对应的js内容
+     *
+     * @param request   request
+     * @param response  response
+     * @param js        namespace对应的js内容
      * @param namespace namespace
      * @return html代码
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
-     String service(HttpServletRequest request, HttpServletResponse response, String js, String namespace) throws NoSuchMethodException, ScriptException;
+    String service(HttpServletRequest request, HttpServletResponse response, String js, String namespace) throws NoSuchMethodException, ScriptException;
 }

@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  此DAO没什么用
+ * 此DAO没什么用
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.dao
  * @ClassName: DefaultPageXDAO
@@ -22,12 +23,13 @@ import java.util.Map;
  */
 @MapperDefinition(domainClass = DefaultPageXBean.class)
 @Repository
-public interface DefaultPageXDAO extends BaseDao<DefaultPageXBean>{
+public interface DefaultPageXDAO extends BaseDao<DefaultPageXBean> {
     /**
      * 查询数据给join用
      * 本方法就是执行一个sql 返回结果的集合
+     *
      * @param sql sql
      * @return 结果集合
      */
-    List<Map<String,Object>> selectListForJoin(@Param("sql") String sql);
+    List<Map<String, Object>> selectListForJoin(@Param("sql") String sql);
 }

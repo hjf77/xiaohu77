@@ -6,7 +6,7 @@ import com.fhs.core.result.HttpResult;
 /**
  * 由service层直接返回一个httpresult到前段
  */
-public class ResultException extends YZBNotLogException{
+public class ResultException extends YZBNotLogException {
 
     /**
      * 给前段返回的结果
@@ -17,7 +17,7 @@ public class ResultException extends YZBNotLogException{
         this.httpResult = httpResult;
     }
 
-    public HttpResult<?> getHttpResult(){
+    public HttpResult<?> getHttpResult() {
         return httpResult;
     }
 }

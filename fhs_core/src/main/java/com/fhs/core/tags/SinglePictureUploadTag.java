@@ -13,22 +13,26 @@ import java.io.IOException;
  * @Version: 1.0
  * @Author: Lins
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class SinglePictureUploadTag extends BaseFormTag
-{
+public class SinglePictureUploadTag extends BaseFormTag {
 
     // 默认class
     private final String defaultClassName = "singlePictureUpload";
 
-    /** 宽度. */
+    /**
+     * 宽度.
+     */
     private Integer width;
 
-    /** 高度. */
+    /**
+     * 高度.
+     */
     private Integer height;
 
-    /** 描述. */
+    /**
+     * 描述.
+     */
     private String uploadDesc;
 
 
@@ -36,21 +40,20 @@ public class SinglePictureUploadTag extends BaseFormTag
     //id=super.getName() + "InputLabel"
     @Override
     public void doTag()
-            throws JspException, IOException
-    {
+            throws JspException, IOException {
         defaultClassName(defaultClassName);
         String required = "";
         String requiredSpan = "";
-        if(this.isRequired ()){
+        if (this.isRequired()) {
             required = "datatype = '*' nullmsg = '请先上传图片' ";
             requiredSpan = "<span class=\"form-field-required\">*</span>";
         }
-        write("	<div class=\"fitem\" tag=\"singlePicture\" inputImg=\""+ super.getName() + "\"> \r\n"
+        write("	<div class=\"fitem\" tag=\"singlePicture\" inputImg=\"" + super.getName() + "\"> \r\n"
                 + "		<div class=\"fitemDiv\">						\r\n"
                 + "			<label>&nbsp;</label>						\r\n"
-                + "         <img id=\"" + super.getName()+ "InputImg\" class=\"headerImg\" src=\"" + EConfig.getPathPropertiesValue("staticPath") + "/images/upload_default_show.png\"/>\r\n"
-                +  requiredSpan
-                + "         <input type=\"hidden\" id=\"" + super.getName() + "InputVal\" " +required+ "/>\r\n"
+                + "         <img id=\"" + super.getName() + "InputImg\" class=\"headerImg\" src=\"" + EConfig.getPathPropertiesValue("staticPath") + "/images/upload_default_show.png\"/>\r\n"
+                + requiredSpan
+                + "         <input type=\"hidden\" id=\"" + super.getName() + "InputVal\" " + required + "/>\r\n"
                 + "     </div>											\r\n"
                 + " </div>\r\n"
                 + "														\r\n"
@@ -70,12 +73,10 @@ public class SinglePictureUploadTag extends BaseFormTag
                 + " 	<div class=\"bigLabelDiv\">						\r\n"
                 + " 		<label>&nbsp;</label>						\r\n"
                 + " 	</div>\r\n");
-        if (this.height != null && this.width != null)
-        {
+        if (this.height != null && this.width != null) {
             write(" &nbsp;&nbsp;&nbsp;&nbsp;请上传尺寸为" + width + "px*" + height + "px的图片\r\n");
         }
-        if (this.uploadDesc != null)
-        {
+        if (this.uploadDesc != null) {
             write(uploadDesc + "\r\n");
         }
         write(" </div>");
@@ -89,8 +90,7 @@ public class SinglePictureUploadTag extends BaseFormTag
      *
      * @return bean的 宽度
      */
-    public Integer getWidth()
-    {
+    public Integer getWidth() {
         return width;
     }
 
@@ -99,8 +99,7 @@ public class SinglePictureUploadTag extends BaseFormTag
      *
      * @param width 一个新的 宽度
      */
-    public void setWidth(Integer width)
-    {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
@@ -109,8 +108,7 @@ public class SinglePictureUploadTag extends BaseFormTag
      *
      * @return bean的 高度
      */
-    public Integer getHeight()
-    {
+    public Integer getHeight() {
         return height;
     }
 
@@ -119,8 +117,7 @@ public class SinglePictureUploadTag extends BaseFormTag
      *
      * @param height 一个新的 高度
      */
-    public void setHeight(Integer height)
-    {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 

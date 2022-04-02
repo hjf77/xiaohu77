@@ -13,22 +13,25 @@ import com.fhs.common.utils.Logger;
 
 
 /**
- *
  * 自定义datasource，来支持datasource路由功能
  *
  * @author wanglei/jackwong
- *
  */
-public class ReadWriteDataSource extends AbstractDataSource
-{
+public class ReadWriteDataSource extends AbstractDataSource {
 
-    /** The Constant log. */
+    /**
+     * The Constant log.
+     */
     private static final Logger log = Logger.getLogger(ReadWriteDataSource.class);
 
-    /** 默认的datasource. */
+    /**
+     * 默认的datasource.
+     */
     private DataSource defaultDataSource;
 
-    /** dataSourceMap key是datasourcename value是datasource对象. */
+    /**
+     * dataSourceMap key是datasourcename value是datasource对象.
+     */
     private Map<String, DataSource> dataSourceMap;
 
 
@@ -37,20 +40,17 @@ public class ReadWriteDataSource extends AbstractDataSource
      *
      * @return DataSource
      */
-    private DataSource determineDataSource()
-    {
+    private DataSource determineDataSource() {
 
-        if (ReadWriteDataSourceDecision.getDataSource() == null)
-        {
-            return  defaultDataSource;
+        if (ReadWriteDataSourceDecision.getDataSource() == null) {
+            return defaultDataSource;
         }
         DataSource result = dataSourceMap.get(ReadWriteDataSourceDecision.getDataSource());
-        if (result == null)
-        {
+        if (result == null) {
             throw new BusinessException("根据datasourcename拿不到 datasource:" + ReadWriteDataSourceDecision.getDataSource());
         }
         log.debug(
-            "current determine other datasource datasource name is:" + ReadWriteDataSourceDecision.getDataSource());
+                "current determine other datasource datasource name is:" + ReadWriteDataSourceDecision.getDataSource());
         return result;
 
     }
@@ -59,15 +59,14 @@ public class ReadWriteDataSource extends AbstractDataSource
      * @return
      * @throws SQLException
      * @see javax.sql.DataSource#getConnection()
-     *<pre>
-     *<li>Author: jackwang</li>
-     *<li>Date: 2018年5月15日</li>
-     *</pre>
+     * <pre>
+     * <li>Author: jackwang</li>
+     * <li>Date: 2018年5月15日</li>
+     * </pre>
      */
     @Override
     public Connection getConnection()
-        throws SQLException
-    {
+            throws SQLException {
         return determineDataSource().getConnection();
     }
 
@@ -77,15 +76,14 @@ public class ReadWriteDataSource extends AbstractDataSource
      * @return
      * @throws SQLException
      * @see javax.sql.DataSource#getConnection(java.lang.String, java.lang.String)
-     *<pre>
-     *<li>Author: jackwang</li>
-     *<li>Date: 2018年5月15日</li>
-     *</pre>
+     * <pre>
+     * <li>Author: jackwang</li>
+     * <li>Date: 2018年5月15日</li>
+     * </pre>
      */
     @Override
     public Connection getConnection(String username, String password)
-        throws SQLException
-    {
+            throws SQLException {
         return determineDataSource().getConnection(username, password);
     }
 
@@ -94,8 +92,7 @@ public class ReadWriteDataSource extends AbstractDataSource
      *
      * @return bean的 dataSourceMap key是datasourcename value是datasource对象
      */
-    public Map<String, DataSource> getDataSourceMap()
-    {
+    public Map<String, DataSource> getDataSourceMap() {
         return dataSourceMap;
     }
 
@@ -104,8 +101,7 @@ public class ReadWriteDataSource extends AbstractDataSource
      *
      * @param dataSourceMap 一个新的 dataSourceMap key是datasourcename value是datasource对象
      */
-    public void setDataSourceMap(Map<String, DataSource> dataSourceMap)
-    {
+    public void setDataSourceMap(Map<String, DataSource> dataSourceMap) {
         this.dataSourceMap = dataSourceMap;
     }
 
@@ -114,8 +110,7 @@ public class ReadWriteDataSource extends AbstractDataSource
      *
      * @return bean的 默认的datasource
      */
-    public DataSource getDefaultDataSource()
-    {
+    public DataSource getDefaultDataSource() {
         return defaultDataSource;
     }
 
@@ -124,8 +119,7 @@ public class ReadWriteDataSource extends AbstractDataSource
      *
      * @param defaultDataSource 一个新的 默认的datasource
      */
-    public void setDefaultDataSource(DataSource defaultDataSource)
-    {
+    public void setDefaultDataSource(DataSource defaultDataSource) {
         this.defaultDataSource = defaultDataSource;
     }
 

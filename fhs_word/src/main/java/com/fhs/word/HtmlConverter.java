@@ -15,6 +15,7 @@ import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
 import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
@@ -30,54 +31,47 @@ public class HtmlConverter {
 
     /**
      * 生成文件
-     * @param content html文件内容 模板文件
+     *
+     * @param content    html文件内容 模板文件
      * @param outputFile doc文件路径   输出文件路径名称
      */
-    public static void generate(String content, File outputFile)
-    {
+    public static void generate(String content, File outputFile) {
         InputStream templateStream = null;
-        try
-        {
+        try {
             Document doc = Jsoup.parse(content);
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
             XHTMLImporterImpl XHTMLImporter = new XHTMLImporterImpl(wordMLPackage);
             String htmlContent = doc.toString();
-            htmlContent = htmlContent.replace("<head>","<head> <meta charset='UTF-8'/>");
-            htmlContent = htmlContent.replaceAll("&nbsp;"," ");
+            htmlContent = htmlContent.replace("<head>", "<head> <meta charset='UTF-8'/>");
+            htmlContent = htmlContent.replaceAll("&nbsp;", " ");
             System.out.println(htmlContent);
             // Load the XHTML document.
-            wordMLPackage.getMainDocumentPart().getContent().addAll(XHTMLImporter.convert(htmlContent,""));
+            wordMLPackage.getMainDocumentPart().getContent().addAll(XHTMLImporter.convert(htmlContent, ""));
 
             // Save it as a DOCX document on disc.
             wordMLPackage.save(outputFile);
             // Desktop.getDesktop().open(outputFile);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //throw new RuntimeException("Error converting file " + content, e);
             e.printStackTrace();
-        }
-        finally
-        {
-            if (templateStream != null)
-            {
-                try
-                {
+        } finally {
+            if (templateStream != null) {
+                try {
                     templateStream.close();
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     log.error("Can not close the input stream.", ex);
 
                 }
             }
         }
     }
+
     /**
      * 指定位置添加书签
-     * @param imgMap  图片map  key名称   value 路径
-     * @param tempFilePath  插入图片文本路径
+     *
+     * @param imgMap       图片map  key名称   value 路径
+     * @param tempFilePath 插入图片文本路径
      */
 
     public static void addBookmark(Map<String, String> imgMap, String tempFilePath) {
@@ -117,9 +111,10 @@ public class HtmlConverter {
 
     /**
      * 指定位置插入图片
-     * @param tempFilePath   插入图片文本路径
-     * @param imgMap  图片map  key名称   value 路径
-     * @param outFilePath   最终输出文件路径
+     *
+     * @param tempFilePath 插入图片文本路径
+     * @param imgMap       图片map  key名称   value 路径
+     * @param outFilePath  最终输出文件路径
      */
     public static void InsertPicture(String tempFilePath, Map<String, String> imgMap, String outFilePath) {
         //加载包含书签的文档

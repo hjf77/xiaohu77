@@ -47,12 +47,12 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
             StringJoiner bookDesc = new StringJoiner(",");
             String key = tempTrans.key().contains("KEY_") ? StringUtil.toString(ReflectUtils.getValue(obj, tempTrans.key().replace("KEY_", ""))) : tempTrans.key();
             for (String bookCode : bookCodes) {
-                if(!StringUtil.isEmpty(bookCode)){
+                if (!StringUtil.isEmpty(bookCode)) {
                     bookDesc.add((wordBookTransMap.get(key + "_" + bookCode)));
                 }
             }
             //sex_0/1  男 女
-            obj.getTransMap().put(tempField.getName() + "Name",bookDesc.toString());
+            obj.getTransMap().put(tempField.getName() + "Name", bookDesc.toString());
 
         }
     }

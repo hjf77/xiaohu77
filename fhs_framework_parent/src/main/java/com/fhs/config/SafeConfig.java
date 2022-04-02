@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 /**
  * 安全配置
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.config
  * @ClassName: SafeConfig
@@ -22,10 +23,10 @@ public class SafeConfig {
 
     @Value("${fhs.safe.enable-xss}")
     private boolean enableXSS;
+
     @Autowired
     public void setWebBindingInitializer(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        if(enableXSS)
-        {
+        if (enableXSS) {
             requestMappingHandlerAdapter.setWebBindingInitializer(new XSSStringEditor());
         }
     }

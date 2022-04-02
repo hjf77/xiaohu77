@@ -15,6 +15,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class FhsMiniAdminApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run( FhsMiniAdminApplication.class, args);
+        SpringApplication.run(FhsMiniAdminApplication.class, args);
     }
 }

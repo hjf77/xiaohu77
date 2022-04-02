@@ -10,6 +10,7 @@ public interface UserReportDao {
 
     /**
      * 获取当天注册了多少用户
+     *
      * @return 用户个数
      */
     int getTodayFrontUserRegNum();

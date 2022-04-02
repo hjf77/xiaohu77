@@ -24,10 +24,8 @@ import java.util.regex.Pattern;
  * @Version: 1.0
  * @Author: jackwong
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 public class ExtendedRedisCacheManager extends RedisCacheManager implements InitializingBean {
 
@@ -51,8 +49,7 @@ public class ExtendedRedisCacheManager extends RedisCacheManager implements Init
 
 
     @Override
-    public void afterPropertiesSet()
-    {
+    public void afterPropertiesSet() {
         logger.debug("ExtendedRedisCacheManager init");
         super.afterPropertiesSet();
     }
@@ -63,7 +60,7 @@ public class ExtendedRedisCacheManager extends RedisCacheManager implements Init
         // there's no cache which has given name
         // find separator in cache name
         int index = name.lastIndexOf(getSeparator());
-        RedisCache cache =  null;
+        RedisCache cache = null;
         if (index < 0) {
             // try to get cache by name
             cache = (RedisCache) super.getCache(name);
@@ -75,7 +72,7 @@ public class ExtendedRedisCacheManager extends RedisCacheManager implements Init
 
         // split name by the separator
         String cacheName = name.substring(0, index);
-        if(StringUtils.isBlank(cacheName)){
+        if (StringUtils.isBlank(cacheName)) {
             cacheName = defaultCacheName;
         }
         cache = (RedisCache) super.getCache(cacheName);
@@ -112,9 +109,9 @@ public class ExtendedRedisCacheManager extends RedisCacheManager implements Init
         String expirationAsString = name.substring(separatorIndex + 1);
         try {
             // calculate expiration, support arithmetic expressions.
-            if(pattern.matcher(expirationAsString).find()){
+            if (pattern.matcher(expirationAsString).find()) {
                 expiration = (long) Double.parseDouble(scriptEngine.eval(expirationAsString).toString());
-            }else{
+            } else {
                 expiration = Long.parseLong(expirationAsString);
             }
         } catch (NumberFormatException ex) {

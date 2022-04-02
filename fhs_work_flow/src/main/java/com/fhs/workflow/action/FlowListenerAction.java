@@ -3,7 +3,9 @@ package com.fhs.workflow.action;
 import com.fhs.workflow.bean.FlowListener;
 import com.fhs.workflow.service.FlowListenerService;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
+
 import com.fhs.base.action.ModelSuperAction;
 
 /**
@@ -15,6 +17,6 @@ import com.fhs.base.action.ModelSuperAction;
 @RestController
 @RequestMapping("/ms/flowListener")
 public class FlowListenerAction extends ModelSuperAction<FlowListener> {
-   
+
 
 }

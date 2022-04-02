@@ -6,9 +6,9 @@ import java.util.Map;
 public class TreeModel implements Serializable {
 
     private static final long serialVersionUID = -2847892870633694735L;
-    
+
     /*节点ID*/
-    private String id; 
+    private String id;
     /*父节点ID*/
     private String pid;
     /*EasyUI父节点ID*/
@@ -42,23 +42,19 @@ public class TreeModel implements Serializable {
     private String menuType;
 
 
-    public String getMenuurl()
-    {
+    public String getMenuurl() {
         return menuurl;
     }
 
-    public void setMenuurl(String menuurl)
-    {
+    public void setMenuurl(String menuurl) {
         this.menuurl = menuurl;
     }
 
-    public String getMenuType()
-    {
+    public String getMenuType() {
         return menuType;
     }
 
-    public void setMenuType(String menuType)
-    {
+    public void setMenuType(String menuType) {
         this.menuType = menuType;
     }
 
@@ -183,9 +179,8 @@ public class TreeModel implements Serializable {
                 + noselect + ", isparent=" + isparent
                 + ", attributes=" + attributes + ", font="
                 + font + ", nodeType=" + nodeType
-                + ", chkDisabled=" + chkDisabled + ", menuurl="+menuurl+"]";
+                + ", chkDisabled=" + chkDisabled + ", menuurl=" + menuurl + "]";
     }
 
 
-   
 }

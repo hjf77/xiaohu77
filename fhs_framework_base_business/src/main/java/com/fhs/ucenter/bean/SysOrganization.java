@@ -18,14 +18,14 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Description:机构管理表
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-04]
+ * @Description:机构管理表
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,13 +42,13 @@ public class SysOrganization extends BaseDO<SysOrganization> {
 
     @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @Id
-    @GeneratedValue(generator= GeneratedType.UUID)
+    @GeneratedValue(generator = GeneratedType.UUID)
     private String id;
     /**
      * 机构名称
      */
     @NotEmpty
-    @NotNull(message="机构名称字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "机构名称字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "机构名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "name")
     private String name;
@@ -56,7 +56,7 @@ public class SysOrganization extends BaseDO<SysOrganization> {
      * 父类编号
      */
     @NotEmpty
-    @NotNull(message="父类编号字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "父类编号字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "父类编号字段的长度最大为32", groups = {Add.class, Update.class}, max = 255)
     @Column(name = "parent_id")
     private String parentId;
@@ -64,7 +64,7 @@ public class SysOrganization extends BaseDO<SysOrganization> {
      * 同级菜单排行第几
      */
     @NotEmpty
-    @NotNull(message="同级菜单排行第几字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "同级菜单排行第几字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "同级菜单排行第几字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "ranking")
     private String ranking;
@@ -80,7 +80,7 @@ public class SysOrganization extends BaseDO<SysOrganization> {
      * 小区id
      */
     @NotEmpty
-    @NotNull(message="小区id字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "小区id字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "小区id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "project_id")
     private String projectId;

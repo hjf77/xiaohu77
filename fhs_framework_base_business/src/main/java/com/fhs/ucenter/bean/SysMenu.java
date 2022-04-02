@@ -41,13 +41,12 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "t_ucenter_ms_menu")
-@TransTypes(types={"wordbook"})
-public class SysMenu extends BaseDO<SysMenu>
-{
+@TransTypes(types = {"wordbook"})
+public class SysMenu extends BaseDO<SysMenu> {
 
     /**
-	 *
-	 */
+     *
+     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -78,7 +77,7 @@ public class SysMenu extends BaseDO<SysMenu>
     /**
      * 服务器地址
      */
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String serverUrl;
 
     /**
@@ -94,7 +93,7 @@ public class SysMenu extends BaseDO<SysMenu>
     /**
      * 菜单等级-1根0一级1二级2三级....
      */
-    @TableField(exist=false)
+    @TableField(exist = false)
     private Integer menuLevel;
 
     /**
@@ -106,45 +105,38 @@ public class SysMenu extends BaseDO<SysMenu>
     /**
      * 菜单类型0 物业公司菜单1 物业集团菜单2 平台菜单
      */
-    @Trans(type="wordbook",key="menu_type")
+    @Trans(type = "wordbook", key = "menu_type")
     private String menuType;
 
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String[] menuTypes;
 
     /**
      * 适配的主页菜单
      */
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String configurationHomeMenu;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String[] configurationHomeMenus;
 
 
-
-
-    public String[] getConfigurationHomeMenus()
-    {
+    public String[] getConfigurationHomeMenus() {
         return configurationHomeMenus;
     }
 
-    public void setConfigurationHomeMenus(String[] configurationHomeMenus)
-    {
+    public void setConfigurationHomeMenus(String[] configurationHomeMenus) {
         this.configurationHomeMenus = configurationHomeMenus;
     }
 
-    public String getConfigurationHomeMenu()
-    {
+    public String getConfigurationHomeMenu() {
         return configurationHomeMenu;
     }
 
-    public void setConfigurationHomeMenu(String configurationHomeMenu)
-    {
+    public void setConfigurationHomeMenu(String configurationHomeMenu) {
         this.configurationHomeMenu = configurationHomeMenu;
-        if (CheckUtils.isNullOrEmpty(configurationHomeMenu))
-        {
+        if (CheckUtils.isNullOrEmpty(configurationHomeMenu)) {
             configurationHomeMenus = new String[0];
             return;
         }
@@ -165,15 +157,13 @@ public class SysMenu extends BaseDO<SysMenu>
     /**
      * 子菜单
      */
-    @TableField(exist=false)
+    @TableField(exist = false)
     private List<SysMenu> sonMenu;
 
     private Integer menuState;
 
-    public List<SysMenu> getSonMenu()
-    {
-        if (sonMenu == null)
-        {
+    public List<SysMenu> getSonMenu() {
+        if (sonMenu == null) {
             sonMenu = new ArrayList<>();
         }
         return sonMenu;
@@ -189,20 +179,18 @@ public class SysMenu extends BaseDO<SysMenu>
     private Integer serverNameId = 1;
 
     private Integer orderIndex;
+
     /**
      * 给菜单类型0 运营菜单 1 园区菜单
      */
-    public void setMenuType(String menuType)
-    {
+    public void setMenuType(String menuType) {
         this.menuType = menuType;
-        if (CheckUtils.isNullOrEmpty(menuType))
-        {
+        if (CheckUtils.isNullOrEmpty(menuType)) {
             menuTypes = new String[0];
             return;
         }
         this.menuTypes = menuType.split(",");
     }
-
 
 
 }

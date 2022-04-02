@@ -13,47 +13,55 @@ import java.util.List;
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 public class LeftMenu extends BaseObject<LeftMenu> {
 
- 	/**
-     *serialVersionUID
+    /**
+     * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
 
-    /** id. */
-	private Integer id;
+    /**
+     * id.
+     */
+    private Integer id;
 
- 	/** 菜单名称. */
-	private String name;
+    /**
+     * 菜单名称.
+     */
+    private String name;
 
- 	/** url. */
-	private String url;
+    /**
+     * url.
+     */
+    private String url;
 
- 	/** 排序. */
-	private int orderIndex;
+    /**
+     * 排序.
+     */
+    private int orderIndex;
 
- 	/** 子菜单. */
-	private List<LeftMenu> sonMenu = new ArrayList<>();
+    /**
+     * 子菜单.
+     */
+    private List<LeftMenu> sonMenu = new ArrayList<>();
 
-	/**
-	 *菜单服务器id
-	 */
-	private  int menuServer;
+    /**
+     * 菜单服务器id
+     */
+    private int menuServer;
 
-	private String image;
+    private String image;
 
-	private  String serverUrl;
+    private String serverUrl;
 
     /**
      * 获取 id.
      *
      * @return bean的 id
      */
-    public Integer getId()
-    {
+    public Integer getId() {
         return id;
     }
 
@@ -62,8 +70,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @param id 一个新的 id
      */
-    public void setId(Integer id)
-    {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -72,8 +79,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @return bean的 菜单名称
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -82,8 +88,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @param name 一个新的 菜单名称
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -92,8 +97,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @return bean的 url
      */
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
@@ -102,8 +106,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @param url 一个新的 url
      */
-    public void setUrl(String url)
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -112,8 +115,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @return bean的 排序
      */
-    public int getOrderIndex()
-    {
+    public int getOrderIndex() {
         return orderIndex;
     }
 
@@ -122,8 +124,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @param orderIndex 一个新的 排序
      */
-    public void setOrderIndex(int orderIndex)
-    {
+    public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
     }
 
@@ -132,8 +133,7 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @return bean的 子菜单
      */
-    public List<LeftMenu> getSonMenu()
-    {
+    public List<LeftMenu> getSonMenu() {
         return sonMenu;
     }
 
@@ -142,28 +142,25 @@ public class LeftMenu extends BaseObject<LeftMenu> {
      *
      * @param sonMenu 一个新的 子菜单
      */
-    public void setSonMenu(List<LeftMenu> sonMenu)
-    {
+    public void setSonMenu(List<LeftMenu> sonMenu) {
         this.sonMenu = sonMenu;
     }
 
-    public int getMenuServer()
-    {
+    public int getMenuServer() {
         return menuServer;
     }
 
-    public void setMenuServer(int menuServer)
-    {
+    public void setMenuServer(int menuServer) {
         this.menuServer = menuServer;
     }
 
-	public String getImage() {
-		return image;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getServerUrl() {
         return serverUrl;

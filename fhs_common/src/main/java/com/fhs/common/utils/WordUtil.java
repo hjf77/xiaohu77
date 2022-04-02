@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import com.fhs.common.bean.CustomXWPFDocument;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -25,7 +26,7 @@ public class WordUtil {
      *
      * @param param 需要替换的变量
      */
-    public static CustomXWPFDocument generateWord(int ind,String picId,Map<String, Object> param, OPCPackage pack) {
+    public static CustomXWPFDocument generateWord(int ind, String picId, Map<String, Object> param, OPCPackage pack) {
         CustomXWPFDocument doc = null;
         try {
             doc = new CustomXWPFDocument(pack);
@@ -33,7 +34,7 @@ public class WordUtil {
 
                 //处理段落
                 List<XWPFParagraph> paragraphList = doc.getParagraphs();
-                processParagraphs(ind,picId,paragraphList, param, doc);
+                processParagraphs(ind, picId, paragraphList, param, doc);
 
                 //处理表格
                 Iterator<XWPFTable> it = doc.getTablesIterator();
@@ -44,7 +45,7 @@ public class WordUtil {
                         List<XWPFTableCell> cells = row.getTableCells();
                         for (XWPFTableCell cell : cells) {
                             List<XWPFParagraph> paragraphListTable = cell.getParagraphs();
-                            processParagraphs(ind,picId,paragraphListTable, param, doc);
+                            processParagraphs(ind, picId, paragraphListTable, param, doc);
                         }
                     }
                 }
@@ -60,7 +61,7 @@ public class WordUtil {
      *
      * @param paragraphList
      */
-    public static void processParagraphs(int ind,String picId,List<XWPFParagraph> paragraphList, Map<String, Object> param, CustomXWPFDocument doc) {
+    public static void processParagraphs(int ind, String picId, List<XWPFParagraph> paragraphList, Map<String, Object> param, CustomXWPFDocument doc) {
         if (paragraphList != null && paragraphList.size() > 0) {
             for (XWPFParagraph paragraph : paragraphList) {
                 List<XWPFRun> runs = paragraph.getRuns();

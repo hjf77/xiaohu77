@@ -21,9 +21,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Description:
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-08-11]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Data
@@ -37,16 +37,16 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
     /**
      * id,主键自增
      */
-    @NotNull(message="log的id字段 不可为null ", groups = {Update.class, Delete.class})
-    @Max(message="log的id超过int最大值", value=2147483647, groups = {Delete.class, Update.class})
-    @Min(message="log的id小于int最大值", value=-2147483648, groups = {Delete.class, Update.class})
+    @NotNull(message = "log的id字段 不可为null ", groups = {Update.class, Delete.class})
+    @Max(message = "log的id超过int最大值", value = 2147483647, groups = {Delete.class, Update.class})
+    @Min(message = "log的id小于int最大值", value = -2147483648, groups = {Delete.class, Update.class})
     @Id
     @Column(name = "id", nullable = false, length = 10)
     private String id;
     /**
      * 操作用户id
      */
-    @NotNull(message="操作用户id字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "操作用户id字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "操作用户id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "operator_id")
     @Trans(type = Constant.USER_INFO, key = Constant.USER_NAME)
@@ -55,7 +55,7 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
     /**
      * 创建时间
      */
-    @NotNull(message="创建时间字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "创建时间字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "创建时间字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "create_time")
     private String createTime;
@@ -72,7 +72,7 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
      * 请求的url
      */
     @NotEmpty
-    @NotNull(message="请求的url字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "请求的url字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "请求的url字段的长度最大为200", groups = {Add.class, Update.class}, max = 200)
     @Column(name = "url")
     private String url;
@@ -80,7 +80,7 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
      * 操作描述
      */
     @NotEmpty
-    @NotNull(message="操作描述字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "操作描述字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "操作描述字段的长度最大为500", groups = {Add.class, Update.class}, max = 500)
     @Column(name = "operat_desc")
     @Like
@@ -103,7 +103,7 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
      * ip地址
      */
     @NotEmpty
-    @NotNull(message="ip地址字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "ip地址字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "ip地址字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "network_ip")
     @Like
@@ -115,7 +115,7 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
     @Column(name = "group_code")
     private String groupCode;
 
-    public LogAdminOperatorLog(){
+    public LogAdminOperatorLog() {
     }
 
     public LogAdminOperatorLog(String id, String operatorId, String createTime, Integer logType, String url, String operatDesc, String reqParam, Integer menuId, String networkIp, String groupCode) {

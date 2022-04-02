@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InfoGroupFormTag extends EmptyFormTag {
-    static{
+    static {
         FormTagFactory.regTag("group", InfoGroupFormTag.class);
     }
+
     @Override
     public boolean isNewRow() {
         return true;

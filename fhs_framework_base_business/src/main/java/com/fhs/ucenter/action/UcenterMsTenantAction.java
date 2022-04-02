@@ -40,19 +40,19 @@ public class UcenterMsTenantAction extends ModelSuperAction<UcenterMsTenant> {
 
     /**
      * 重置某个停车场密码
+     *
      * @param groupCode 租户集团编码
      * @return 重置后的密码
      */
     @RequestMapping("resetAdminPass")
-    public HttpResult<String> resetAdminPass(String groupCode)
-    {
-        ParamChecker.isNotNull(groupCode,"groupCode不能为空");
+    public HttpResult<String> resetAdminPass(String groupCode) {
+        ParamChecker.isNotNull(groupCode, "groupCode不能为空");
         String newPass = StringUtil.getUUID();
         SysUser user = new SysUser();
         user.setUserLoginName(groupCode + "_admin");
         MultiTenancyContext.setProviderId(null);
         user = userService.selectBean(user);
-        ParamChecker.isNotNull(user,"用户信息为空，请联系运维");
+        ParamChecker.isNotNull(user, "用户信息为空，请联系运维");
         user.setIsDisable(Constant.INT_FALSE);
         user.setPassword(Md5Util.MD5(newPass).toLowerCase());
         userService.updateJpa(user);
@@ -64,9 +64,8 @@ public class UcenterMsTenantAction extends ModelSuperAction<UcenterMsTenant> {
      */
     @RequestMapping("updateTenant")
     @LogDesc(value = "更新", type = LogDesc.UPDATE)
-    public HttpResult<Boolean> update( UcenterMsTenant ucenterMsTenant)
-    {
+    public HttpResult<Boolean> update(UcenterMsTenant ucenterMsTenant) {
         int i = ucenterMsTenantService.updateById(ucenterMsTenant);
-        return HttpResult.success(i!=0);
+        return HttpResult.success(i != 0);
     }
 }

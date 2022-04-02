@@ -8,13 +8,12 @@ import java.util.Map;
 /**
  * 字典类型
  *
- * @author  nanshouxiao
- * @version  [版本号, 2015/12/22 15:13:20]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ * @author nanshouxiao
+ * @version [版本号, 2015/12/22 15:13:20]
+ * @see [相关类/方法]
+ * @since [产品/模块版本]
  */
-public interface ServiceWordbookGroupService
-{
+public interface ServiceWordbookGroupService {
     /**
      * 将一个obj插入到数据库
      *

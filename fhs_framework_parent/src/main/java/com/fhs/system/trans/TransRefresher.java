@@ -9,7 +9,8 @@ import java.util.Map;
 public interface TransRefresher {
     /**
      * 给一个消息去刷新transservice中的缓存数据
-     * @param message  消息对象
+     *
+     * @param message 消息对象
      */
-    void refreshCache(Map<String,Object> message);
+    void refreshCache(Map<String, Object> message);
 }

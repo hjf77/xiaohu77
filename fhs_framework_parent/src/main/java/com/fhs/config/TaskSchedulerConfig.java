@@ -32,7 +32,7 @@ import java.util.Set;
  **/
 @Configuration
 @EnableScheduling
-public class TaskSchedulerConfig{
+public class TaskSchedulerConfig {
 
     @Bean
     public LockProvider lockProvider(RedisConnectionFactory connectionFactory) {

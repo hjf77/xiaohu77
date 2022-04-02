@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 
 /**
  * 工作流核心服务，工作流程流转控制服务
+ *
  * @author Jackwong
  * @date 2019 -11-12 11:48:02
  */
@@ -132,12 +133,12 @@ public class FlowCoreServiceImpl implements FlowCoreService {
          */
         // 根据排序字段获取所有的历史记录
         List<FlowTaskHistory> taskHistories = taskHistoryService.selectPageForOrder(FlowTaskHistory.builder().instanceId(task.getProcessInstanceId())
-                .build(),0,Integer.MAX_VALUE," order_num ASC ");
+                .build(), 0, Integer.MAX_VALUE, " order_num ASC ");
         List<BackAvtivityVO> result = new ArrayList<>();
         // 获取当天task的 code 比如是 0012910 那么他的爸爸应该是001 0012 00129
-        String taskCode = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(),task.getProcessInstanceId()).getCode();
-        taskHistories.forEach(item->{
-            if(taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode()))){
+        String taskCode = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId()).getCode();
+        taskHistories.forEach(item -> {
+            if (taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode()))) {
                 result.add(BackAvtivityVO.builder().id(item.getDefinitionKey()).title(item.getTitle()).build());
             }
         });
@@ -146,7 +147,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
 
     @Override
     public void updatePassProcess(String taskId, Map<String, Object> variables) throws Exception {
-        variables.put("result",FlowTaskHistoryService.RESULT_PASS);
+        variables.put("result", FlowTaskHistoryService.RESULT_PASS);
         List<Task> tasks = getChildTask(taskId);
         for (Task task : tasks) {// 级联结束本节点发起的会签任务
             commitProcess(task.getId(), null, null);
@@ -191,6 +192,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
 
     /**
      * 撤回的时候，使用
+     *
      * @param taskId
      * @param activityId
      * @param variables
@@ -210,22 +212,20 @@ public class FlowCoreServiceImpl implements FlowCoreService {
     }
 
 
-
     @Override
-    public void updateEndSuccessProcess(String taskId,Map<String, Object> variables,boolean isRevoke,String userId) throws Exception {
+    public void updateEndSuccessProcess(String taskId, Map<String, Object> variables, boolean isRevoke, String userId) throws Exception {
         ActivityImpl endActivity = findActivitiImpl(taskId, "end");
-        if(isRevoke){
-            variables.put("result",FlowTaskHistoryService.RESULT_REVOKE);
+        if (isRevoke) {
+            variables.put("result", FlowTaskHistoryService.RESULT_REVOKE);
             Task task = this.findTaskById(taskId);
             FlowInstance flowInstance = this.flowInstanceService.selectBean(FlowInstance.builder().activitiProcessInstanceId(task.getProcessInstanceId()).build());
-            ParamChecker.isNotNullOrEmpty(flowInstance,"task对应的 flowInstance 丢失,activitiProcessInstanceId:" + task.getProcessInstanceId());
-            if(!userId.equals(flowInstance.getCreateUser())){
+            ParamChecker.isNotNullOrEmpty(flowInstance, "task对应的 flowInstance 丢失,activitiProcessInstanceId:" + task.getProcessInstanceId());
+            if (!userId.equals(flowInstance.getCreateUser())) {
                 throw new ParamException("您不是工单创建人，无法撤销");
             }
-            variables.put("result",FlowTaskHistoryService.RESULT_REVOKE);
-        }
-        else{
-            variables.put("result",FlowTaskHistoryService.RESULT_END);
+            variables.put("result", FlowTaskHistoryService.RESULT_REVOKE);
+        } else {
+            variables.put("result", FlowTaskHistoryService.RESULT_END);
         }
         commitProcess(taskId, variables, endActivity.getId());
     }
@@ -252,11 +252,11 @@ public class FlowCoreServiceImpl implements FlowCoreService {
     }
 
     @Override
-    public void updateTransferAssignee(String taskId, String sourceUserId,String targetUserId) {
-        Task task  = this.findTaskById(taskId);
-        ParamChecker.isNotNullOrEmpty(task,"task不存在");
-        if(!sourceUserId.equals(task.getAssignee())){
-            throw  new ParamException("此任务处理人不是您");
+    public void updateTransferAssignee(String taskId, String sourceUserId, String targetUserId) {
+        Task task = this.findTaskById(taskId);
+        ParamChecker.isNotNullOrEmpty(task, "task不存在");
+        if (!sourceUserId.equals(task.getAssignee())) {
+            throw new ParamException("此任务处理人不是您");
         }
         taskService.setAssignee(taskId, targetUserId);
     }
@@ -264,21 +264,21 @@ public class FlowCoreServiceImpl implements FlowCoreService {
     @Override
     public void updateWithdraw(String taskId, String userId, Map<String, Object> variables) throws Exception {
         HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
-        if(!userId.equals(currTask.getAssignee())){
+        if (!userId.equals(currTask.getAssignee())) {
             throw new ParamException("您无法撤回别人审批的任务");
         }
         //根据流程id查询代办任务中流程信息
         Task task = taskService.createTaskQuery().processInstanceId(currTask.getProcessInstanceId()).singleResult();
-        if(task==null){
+        if (task == null) {
             throw new ParamException("流程已经结束，撤回失败");
         }
         //取回流程接点 当前任务id 取回任务id
-       callBackProcess(task.getId(),currTask.getTaskDefinitionKey(),variables);
+        callBackProcess(task.getId(), currTask.getTaskDefinitionKey(), variables);
     }
 
     @Override
     public List<Task> findTaskListByInstanceId(String instanceId) {
-        return  taskService.createTaskQuery().processInstanceId(instanceId).list();
+        return taskService.createTaskQuery().processInstanceId(instanceId).list();
     }
 
     /**
@@ -326,7 +326,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
             taskHistoryService.updateById(history);
             //创建一个扔进去
         } else {
-            history = this.taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(),task.getProcessInstanceId());
+            history = this.taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId());
             history.setTaskId(taskId);
             history.setTaskFinishTime((DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)));
             history.setTitle(task.getName());
@@ -446,14 +446,14 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         if (processInstance == null) {
             FlowInstance instance = this.flowInstanceService.selectBean(FlowInstance.builder().activitiProcessInstanceId(processInstanceId).build());
             if (instance != null) {
-                List<FlowTaskHistory> histories = this.taskHistoryService.selectPageForOrder(FlowTaskHistory.builder().instanceId(processInstanceId).build(),0,1,"create_time DESC");
-                if(!histories.isEmpty()){
+                List<FlowTaskHistory> histories = this.taskHistoryService.selectPageForOrder(FlowTaskHistory.builder().instanceId(processInstanceId).build(), 0, 1, "create_time DESC");
+                if (!histories.isEmpty()) {
                     //看最后一个任务的结果，如果是撤回的话，那么实例状态就为撤回
-                   Integer finalTaskResult =  histories.get(0).getResult();
-                   if(FlowTaskHistoryService.RESULT_REVOKE == finalTaskResult){
-                       this.flowInstanceService.updateSelectiveById(FlowInstance.builder().id(instance.getId()).status(FlowInstanceService.STATUS_REVOKE).build());
-                       return;
-                   }
+                    Integer finalTaskResult = histories.get(0).getResult();
+                    if (FlowTaskHistoryService.RESULT_REVOKE == finalTaskResult) {
+                        this.flowInstanceService.updateSelectiveById(FlowInstance.builder().id(instance.getId()).status(FlowInstanceService.STATUS_REVOKE).build());
+                        return;
+                    }
                 }
                 this.flowInstanceService.updateSelectiveById(FlowInstance.builder().id(instance.getId()).status(FlowInstanceService.STATUS_END).build());
             }

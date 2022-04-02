@@ -2,10 +2,8 @@ package com.fhs.core.validation;
 
 import java.util.regex.Matcher;
 
-public class PatternTest
-{
-    public static void main(String[] args)
-    {
+public class PatternTest {
+    public static void main(String[] args) {
         // 邮箱测试
         String str = "d@6e.gg";
         String regEx = "[a-zA-Z_]{1,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";
@@ -16,9 +14,9 @@ public class PatternTest
         // 字符串是否与正则表达式相匹配
         boolean rs = matcher.matches();
         System.out.println("手机验证:" + rs);
-        
+
         // 正整数测试
-        
+
         String str1 = "1111";
         String regEx1 = "^[1-9]\\d*$";
         java.util.regex.Pattern pattern1 = java.util.regex.Pattern.compile(regEx1);

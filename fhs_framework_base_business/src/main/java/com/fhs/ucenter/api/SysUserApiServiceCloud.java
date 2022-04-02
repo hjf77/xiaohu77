@@ -34,10 +34,8 @@ import java.util.Map;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @RestController
 @RequestMapping("api/sysUser")
@@ -55,6 +53,7 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
 
     /**
      * 根据用户登录名查询用户
+     *
      * @param userLoginName 用户登录名m
      * @return 用户信息
      */
@@ -62,9 +61,9 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     @Override
     public HttpResult<SysUserVo> getSysUserByName(@RequestParam("userLoginName") String userLoginName) {
         SysUser sysUser = sysUserService.selectBean(new SysUser().mk("userLoginName", userLoginName));
-        if (CheckUtils.isNotEmpty(sysUser)){
+        if (CheckUtils.isNotEmpty(sysUser)) {
             SysUserVo result = new SysUserVo();
-            BeanUtils.copyProperties(sysUser,result);
+            BeanUtils.copyProperties(sysUser, result);
             return HttpResult.success(result);
         }
         throw new ParameterException("用户名不存在:" + userLoginName);
@@ -73,6 +72,7 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
 
     /**
      * 根据用户登录名查询用户权限列表
+     *
      * @param userLoginName 用户登录名
      * @return 权限列表
      */
@@ -80,39 +80,40 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     @Override
     public HttpResult<List<String>> selectMenuByUname(@RequestParam("userLoginName") String userLoginName) {
         List<String> list = new ArrayList<>();
-        list = sysUserService.selectMenuByUname( sysUserService.selectBean(new SysUser().mk("userLoginName",userLoginName)));
+        list = sysUserService.selectMenuByUname(sysUserService.selectBean(new SysUser().mk("userLoginName", userLoginName)));
         return HttpResult.success(list);
     }
 
     /**
-     * @desc 获取后端用户信息
      * @param sysUserForm 后端用户的form对象
      * @return 处理结果
+     * @desc 获取后端用户信息
      */
     @PostMapping("/getSysUserList")
     @Override
     public HttpResult<Pager<SysUserVo>> getSysUserList(@RequestBody SysUserForm sysUserForm) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserForm, sysUser);
-        List<SysUser> sysUsersList = this.sysUserService.findForList(sysUser, sysUserForm.getPageStart()-1, sysUserForm.getPageSize());
-        if(sysUsersList.size() > 0) {
+        List<SysUser> sysUsersList = this.sysUserService.findForList(sysUser, sysUserForm.getPageStart() - 1, sysUserForm.getPageSize());
+        if (sysUsersList.size() > 0) {
             List<SysUserVo> sysUserVoList = new ArrayList<>();
             sysUsersList.forEach(sysUserForEach -> {
                 SysUserVo sysUserVo = new SysUserVo();
                 //正则表达式，替换手机号中间4位
-                sysUserForEach.setMobile(sysUserForEach.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+                sysUserForEach.setMobile(sysUserForEach.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
                 BeanUtils.copyProperties(sysUserForEach, sysUserVo);
                 sysUserVoList.add(sysUserVo);
             });
             int count = this.sysUserService.findCount(sysUser);
-            return count > 0 ? HttpResult.success(new Pager<>(count,sysUserVoList)) : HttpResult.success(new Pager<SysUserVo>(0, null));
-        }else {
+            return count > 0 ? HttpResult.success(new Pager<>(count, sysUserVoList)) : HttpResult.success(new Pager<SysUserVo>(0, null));
+        } else {
             return HttpResult.success(new Pager<SysUserVo>(0, null));
         }
     }
 
     /**
      * 根据用户ID获取用户权限URL
+     *
      * @param userId 用户ID
      * @return 用户权限URL列表
      */
@@ -120,8 +121,7 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     @GetMapping("/getPermissionUrlByUserId")
     public HttpResult<List<String>> getPermissionUrlByUserId(@RequestParam("userId") String userId) {
         SysUser sysUser = sysUserService.findBeanById(userId);
-        if(sysUser == null)
-        {
+        if (sysUser == null) {
             return HttpResult.error(null, "没有此用户");
         } else {
             return HttpResult.success(sysUserService.getPermissionUrl(sysUser));
@@ -130,28 +130,28 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
 
     /**
      * 获取用户的数据权限
-     * @param userId  用户id
+     *
+     * @param userId 用户id
      * @return 数据权限配置
      */
     @Override
     @GetMapping("/getDataUserPermisstion")
-    public HttpResult<Map<String,String>> getDataUserPermisstion(@RequestParam("userId")String userId)
-    {
-        ParamChecker.isNotNullOrEmpty(userId,"userId不能为空");
+    public HttpResult<Map<String, String>> getDataUserPermisstion(@RequestParam("userId") String userId) {
+        ParamChecker.isNotNullOrEmpty(userId, "userId不能为空");
         return HttpResult.success(sysUserService.findUserDataPermissions(userId));
     }
 
 
     /**
-     * @desc 根据userId获取用户信息
      * @param sysUserForm 后端用户form
      * @return 后端用户信息
+     * @desc 根据userId获取用户信息
      */
     @PostMapping("/getSysUserByUserId")
     @Override
     public HttpResult<SysUserVo> getSysUserByUserId(@RequestBody SysUserForm sysUserForm) {
         SysUserVo vo = new SysUserVo();
-        if(!CheckUtils.isNullOrEmpty(sysUserForm) && !CheckUtils.isNullOrEmpty(sysUserForm.getUserId())) {
+        if (!CheckUtils.isNullOrEmpty(sysUserForm) && !CheckUtils.isNullOrEmpty(sysUserForm.getUserId())) {
             SysUser sysUser = sysUserService.findSysUserById(sysUserForm.getUserId());
             BeanUtils.copyProperties(sysUser, vo);
         }
@@ -160,16 +160,16 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
 
     /**
      * 获取用户的数据权限
-     * @param organizationId  组织id
+     *
+     * @param organizationId 组织id
      * @return 用户列表
      */
     @GetMapping("/getSysUserByOrganizationId")
     @Override
-    public HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@RequestParam("organizationId")String organizationId)
-    {
-        ParamChecker.isNotNullOrEmpty(organizationId,"userId不能为空");
+    public HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@RequestParam("organizationId") String organizationId) {
+        ParamChecker.isNotNullOrEmpty(organizationId, "userId不能为空");
         List<SysUserVo> voList = new ArrayList<>();
-        List<SysUser> sysUserList=sysUserService.findForList(SysUser.builder().organizationId(organizationId).build());
+        List<SysUser> sysUserList = sysUserService.findForList(SysUser.builder().organizationId(organizationId).build());
         BeanUtils.copyProperties(sysUserList, voList);
         return HttpResult.success(voList);
     }
@@ -181,17 +181,17 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     @Override
     public HttpResult addUser(@RequestBody SysUserVo sysUserVo) {
         SysUser sysUser = new SysUser();
-        BeanUtils.copyProperties(sysUserVo,sysUser);
+        BeanUtils.copyProperties(sysUserVo, sysUser);
         //是修改但不存在该用户
-        if(CheckUtils.isNotEmpty(sysUser.getUserId())){
-            if(sysUserService.validataLoginName(SysUser.builder().userLoginName(sysUserVo.getUserLoginName()).build())){
+        if (CheckUtils.isNotEmpty(sysUser.getUserId())) {
+            if (sysUserService.validataLoginName(SysUser.builder().userLoginName(sysUserVo.getUserLoginName()).build())) {
                 sysUser.setUserId(null);
-            }else{
+            } else {
                 sysUser.setUserId(sysUserService.selectBean(SysUser.builder().userLoginName(sysUserVo.getUserLoginName()).build()).getUserId());
             }
         }
         // 需要添加进行设置
-        if(StringUtil.isEmpty(sysUser.getUserId())){
+        if (StringUtil.isEmpty(sysUser.getUserId())) {
             sysUser.setCreateTime(DateUtils.formartDate(new Date(), DateUtils.DATETIME_PATTERN));
             sysUser.setCreateUser(sysUserVo.getLoginUserId());
             sysUser.setGroupCode(sysUserVo.getLoginUserGroupCode());
@@ -210,9 +210,9 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     @PostMapping("/delUser")
     @Override
     public HttpResult delUser(@RequestParam("loginName") String loginName) {
-        ParamChecker.isNotNullOrEmpty(loginName,"登录用户名不能为空");
+        ParamChecker.isNotNullOrEmpty(loginName, "登录用户名不能为空");
         SysUser sysUser = sysUserService.findBean(SysUser.builder().userLoginName(loginName).build());
-        if(CheckUtils.isNotEmpty(sysUser)){
+        if (CheckUtils.isNotEmpty(sysUser)) {
             // 删除用户同时删除用户角色配置
             sysUserService.deleteSysUserById(sysUser.getUserId());
         }
@@ -220,21 +220,21 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     }
 
     /**
-     *@Description:  根据用户名修改密码
+     * @Description: 根据用户名修改密码
      * @Param: [loginName, password]
      * @Return: com.fhs.core.result.HttpResult
      */
 
     @GetMapping("updatePassWord")
     @Override
-    public HttpResult updatePassWord(@RequestParam("loginName") String loginName,@RequestParam("password") String password) {
-        ParamChecker.isNotNullOrEmpty(loginName,"用户名不能为空");
-        ParamChecker.isNotNullOrEmpty(password,"密码不能为空");
+    public HttpResult updatePassWord(@RequestParam("loginName") String loginName, @RequestParam("password") String password) {
+        ParamChecker.isNotNullOrEmpty(loginName, "用户名不能为空");
+        ParamChecker.isNotNullOrEmpty(password, "密码不能为空");
         SysUser sysUser = sysUserService.selectBean(new SysUser().mk("userLoginName", loginName));
-        if(CheckUtils.isNotEmpty(sysUser)){
+        if (CheckUtils.isNotEmpty(sysUser)) {
             sysUserService.updateSelectiveById(SysUser.builder().userId(sysUser.getUserId()).password(password).build());
             return HttpResult.success("");
         }
-        return HttpResult.error("","用户名不存在:" + loginName);
+        return HttpResult.error("", "用户名不存在:" + loginName);
     }
 }

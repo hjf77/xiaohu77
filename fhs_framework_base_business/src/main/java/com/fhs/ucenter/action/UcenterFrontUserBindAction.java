@@ -3,7 +3,9 @@ package com.fhs.ucenter.action;
 import com.fhs.ucenter.bean.UcenterFrontUserBind;
 import com.fhs.ucenter.service.UcenterFrontUserBindService;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
+
 import com.fhs.base.action.ModelSuperAction;
 
 /**
@@ -15,6 +17,6 @@ import com.fhs.base.action.ModelSuperAction;
 @RestController
 @RequestMapping("/ms/ucenterFrontUserBind")
 public class UcenterFrontUserBindAction extends ModelSuperAction<UcenterFrontUserBind> {
-   
+
 
 }

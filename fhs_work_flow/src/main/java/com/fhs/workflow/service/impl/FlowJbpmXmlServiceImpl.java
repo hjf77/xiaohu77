@@ -51,7 +51,7 @@ public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXml> impleme
             // 创建发布配置对象
             DeploymentBuilder builder = repositoryService.createDeployment();
             //xml 版本号升级 默认版本是0 发布的时候版本号变成1
-            String xml = workFlowJbpmXml.getXml().replace(workFlowJbpmXml.getProcessKey() + workFlowJbpmXml.getVersion() ,
+            String xml = workFlowJbpmXml.getXml().replace(workFlowJbpmXml.getProcessKey() + workFlowJbpmXml.getVersion(),
                     workFlowJbpmXml.getProcessKey() + (workFlowJbpmXml.getVersion() + 1));
             FileUtils.write(new File(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName), xml, "utf-8");
             // pngName = catImg(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName,EConfig.getPathPropertiesValue("jbpmFilePath") + pngName);

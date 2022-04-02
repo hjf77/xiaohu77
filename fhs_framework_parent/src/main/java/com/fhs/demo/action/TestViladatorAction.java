@@ -19,14 +19,14 @@ public class TestViladatorAction {
 
     @RequestMapping(value = "/checkParam")
     @ResponseBody
-    public HttpResult<Map> checkParam( @Valid TestViladator testAop) {
-       System.out.println("");
-       return HttpResult.success(new HashMap());
+    public HttpResult<Map> checkParam(@Valid TestViladator testAop) {
+        System.out.println("");
+        return HttpResult.success(new HashMap());
     }
 
     @RequestMapping(value = "/checkAddParam")
     @ResponseBody
-    public HttpResult<Map> checkAddParam( @Validated(Add.class) TestViladator testAop) {
+    public HttpResult<Map> checkAddParam(@Validated(Add.class) TestViladator testAop) {
         System.out.println("");
         return HttpResult.success(new HashMap());
     }

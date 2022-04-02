@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class SelectFormTag extends BaseEasyuiCombo  implements IOne2XTag{
+public class SelectFormTag extends BaseEasyuiCombo implements IOne2XTag {
     static {
         FormTagFactory.regTag("select", SelectFormTag.class);
-        FormTagFactory.regOne2XTag("select",SelectFormTag.class);
+        FormTagFactory.regOne2XTag("select", SelectFormTag.class);
     }
 
     @Override

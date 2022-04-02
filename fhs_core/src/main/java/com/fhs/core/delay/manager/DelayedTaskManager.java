@@ -42,12 +42,10 @@ public class DelayedTaskManager implements Runnable {
                     handle.getTask().doTask(handle.getParamMap());
                 }
             } catch (Exception e) {
-                if(handle!=null)
-                {
-                    LOG.error("执行任务出错:" + handle.getTask() + ",param:" + handle.getParamMap(),e);
-                }
-                else{
-                    LOG.error("执行任务出错",e);
+                if (handle != null) {
+                    LOG.error("执行任务出错:" + handle.getTask() + ",param:" + handle.getParamMap(), e);
+                } else {
+                    LOG.error("执行任务出错", e);
                 }
             }
         }
@@ -60,9 +58,9 @@ public class DelayedTaskManager implements Runnable {
      * task 任务
      * 用户为问题设置延迟时间
      */
-    public void addTask(DelayedTask task, long delayTime, Map<String,Object> paramMap) {
+    public void addTask(DelayedTask task, long delayTime, Map<String, Object> paramMap) {
         //创建一个任务
-        DelayedTaskHandle handle = new DelayedTaskHandle(task, delayTime,paramMap);
+        DelayedTaskHandle handle = new DelayedTaskHandle(task, delayTime, paramMap);
         //将任务放在延迟的队列中
         queue.put(handle);
     }
@@ -77,8 +75,9 @@ class DelayedTaskHandle implements Delayed {
 
     private DelayedTask task; // 消息内容
     private long trigger;// 延迟时长，这个是必须的属性因为要按照这个判断延时时长。
-    private Map<String,Object> paramMap;//任务执行的时候需要的参数
-    public DelayedTaskHandle(DelayedTask task, long delayTime, Map<String,Object> paramMap) {
+    private Map<String, Object> paramMap;//任务执行的时候需要的参数
+
+    public DelayedTaskHandle(DelayedTask task, long delayTime, Map<String, Object> paramMap) {
         this.task = task;
         this.trigger = TimeUnit.NANOSECONDS.convert(delayTime, TimeUnit.MILLISECONDS) + System.nanoTime();
         this.paramMap = paramMap;

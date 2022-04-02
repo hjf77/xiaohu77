@@ -9,16 +9,16 @@ import java.util.Map;
 @Component
 public class DataDelManager {
 
-     Map<String, List<DataDelListener>> namespaceListenerMap = new HashMap<>();
+    Map<String, List<DataDelListener>> namespaceListenerMap = new HashMap<>();
 
 
-     public void registerListener(DataDelListener listener){
-         //listener  namespaces
+    public void registerListener(DataDelListener listener) {
+        //listener  namespaces
 
-     }
+    }
 
-     public void onDel(String namespace,Object pkey){
-         // 如果namespace是空的话，不理他
-            //从map中get出list调用list的onDel
-     }
+    public void onDel(String namespace, Object pkey) {
+        // 如果namespace是空的话，不理他
+        //从map中get出list调用list的onDel
+    }
 }

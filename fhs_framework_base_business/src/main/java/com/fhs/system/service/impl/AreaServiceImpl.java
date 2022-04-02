@@ -23,38 +23,31 @@ import java.util.Map;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @Service
 @DataSource("base_business")
-public class AreaServiceImpl extends BaseServiceImpl<Area> implements AreaService
-{
+public class AreaServiceImpl extends BaseServiceImpl<Area> implements AreaService {
     /**
-     *redis缓存服务
+     * redis缓存服务
      */
     @Autowired
     private RedisCacheService<String> redisCacheService;
 
     @Override
-    public String findAddressById(Map<String, Object> map)
-    {
+    public String findAddressById(Map<String, Object> map) {
         String address = null;
-        String provinceId = (String)map.get("provinceId");
-        if (!CheckUtils.isNullOrEmpty(provinceId))
-        {
+        String provinceId = (String) map.get("provinceId");
+        if (!CheckUtils.isNullOrEmpty(provinceId)) {
             address = super.findBeanById(provinceId).getAreaName();
         }
-        String cityId = (String)map.get("cityId");
-        if (!CheckUtils.isNullOrEmpty(cityId))
-        {
+        String cityId = (String) map.get("cityId");
+        if (!CheckUtils.isNullOrEmpty(cityId)) {
             address = address + super.findBeanById(cityId).getAreaName();
         }
-        String areaId = (String)map.get("areaId");
-        if (!CheckUtils.isNullOrEmpty(areaId))
-        {
+        String areaId = (String) map.get("areaId");
+        if (!CheckUtils.isNullOrEmpty(areaId)) {
             address = address + super.findBeanById(areaId).getAreaName();
         }
         return address;
@@ -64,11 +57,11 @@ public class AreaServiceImpl extends BaseServiceImpl<Area> implements AreaServic
     public void refreshRedisCache() {
         List<Area> areaList = this.select();
         areaList.forEach(area -> {
-            if(!StringUtil.isEmpty(area.getAreaName())){
+            if (!StringUtil.isEmpty(area.getAreaName())) {
                 try {
                     redisCacheService.remove(Constant.AREA_NAME + area.getId());
                     redisCacheService.addStr(Constant.AREA_NAME + area.getId(), area.getAreaName());
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

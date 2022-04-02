@@ -17,10 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+
 /**
  * @author qiuhang
  * @des 文件上传action
- *
  */
 @Controller
 @RequestMapping("upload")
@@ -36,24 +36,23 @@ public class UploadAction extends BaseAction<ServiceFile> {
 
     /**
      * 文件
+     *
      * @param Filedata
      * @return
      */
     @RequestMapping(value = "file", method = RequestMethod.POST)
-    public void uploadFile(@RequestParam MultipartFile[] Filedata,String filedId,  HttpServletRequest request,
-                                           HttpServletResponse response) {
+    public void uploadFile(@RequestParam MultipartFile[] Filedata, String filedId, HttpServletRequest request,
+                           HttpServletResponse response) {
         if (Filedata == null || Filedata.length == 0) {
             super.outToClient(false, response);
         }
-        LOG.infoMsg ( "开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
-        ServiceFile file = fileServerBusiness.uploadFileForList (Arrays.asList (Filedata),filedId).get (0);
-        LOG.infoMsg ( "结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr ( DateUtils.DATETIME_PATTERN) );
+        LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
+        ServiceFile file = fileServerBusiness.uploadFileForList(Arrays.asList(Filedata), filedId).get(0);
+        LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
 
         super.outWriteJson(JsonUtils.bean2json(file), response);
 
     }
-
-
 
 
 }

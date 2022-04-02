@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 下拉标签 easyui combobox
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -15,18 +16,17 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class WordBookGridTag extends  SelectGridTag {
+public class WordBookGridTag extends SelectGridTag {
 
-    static
-    {
+    static {
         GridTagFactory.regTag("book", WordBookGridTag.class);
     }
 
     @Override
     public String getHtmlForToolsBar() {
-        tagSett.put("valueField","wordbookCode");
-        tagSett.put("textField","wordbookDesc");
-        tagSett.put("url", EConfig.getPathPropertiesValue("systemServiceUrl") + "/webApi/wordbook/getData?wordbookGroupCode="+
+        tagSett.put("valueField", "wordbookCode");
+        tagSett.put("textField", "wordbookDesc");
+        tagSett.put("url", EConfig.getPathPropertiesValue("systemServiceUrl") + "/webApi/wordbook/getData?wordbookGroupCode=" +
                 tagSett.get("code") + "&jsonpCallback=?");
         return super.getHtmlForToolsBar();
     }

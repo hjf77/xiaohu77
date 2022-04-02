@@ -475,10 +475,11 @@ public interface BaseService<T> {
 
     /**
      * 根据id集合查询
+     *
      * @param ids ids
      * @return 对应的PO
      */
-    List<T>  findByIds(List<? extends Object> ids);
+    List<T> findByIds(List<? extends Object> ids);
 
 
 }

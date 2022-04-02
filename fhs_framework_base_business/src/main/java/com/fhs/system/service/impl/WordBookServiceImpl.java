@@ -25,8 +25,7 @@ import java.util.Map.Entry;
  */
 @Service
 @DataSource("base_business")
-public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements WordBookService
-{
+public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements WordBookService {
     /**
      * redis获取下拉的key
      */
@@ -46,16 +45,13 @@ public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements Wo
     @Autowired
     private WordbookDAO dao;
 
-   @Override
-    public List<Wordbook> getWordBookList(String wordbookGroupCode)
-    {
-    	if(CheckUtils.isNullOrEmpty(wordbookGroupCode))
-    	{
-    		return new ArrayList<>();
-    	}
+    @Override
+    public List<Wordbook> getWordBookList(String wordbookGroupCode) {
+        if (CheckUtils.isNullOrEmpty(wordbookGroupCode)) {
+            return new ArrayList<>();
+        }
         Set<Wordbook> set = redisService.getSet(BASE_KEY + wordbookGroupCode);
-        if (CheckUtils.checkCollectionIsNullOrEmpty(set))
-        {
+        if (CheckUtils.checkCollectionIsNullOrEmpty(set)) {
             Wordbook bean = new Wordbook();
             bean.setWordbookGroupCode(wordbookGroupCode);
             this.initWordBookDataCache(bean);
@@ -67,33 +63,26 @@ public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements Wo
     }
 
 
-
     @Override
-	public Map<String, String> getWordBookMap(String wordbookGroupCode) {
-    	Map<String,String> result = new HashMap<>();
-    	List<Wordbook> list = redisService.getList(BASE_KEY + wordbookGroupCode);
-    	for(Wordbook temp : list)
-    	{
-    		result.put(temp.getWordbookCode(), temp.getWordbookDesc());
-    	}
-		return result;
-	}
-
-
-
+    public Map<String, String> getWordBookMap(String wordbookGroupCode) {
+        Map<String, String> result = new HashMap<>();
+        List<Wordbook> list = redisService.getList(BASE_KEY + wordbookGroupCode);
+        for (Wordbook temp : list) {
+            result.put(temp.getWordbookCode(), temp.getWordbookDesc());
+        }
+        return result;
+    }
 
 
     @Override
-    public void initWordBookDataCache(Wordbook bean)
-    {
-        List<Wordbook> list = dao.selectPageJpa(bean,-1,-1);
+    public void initWordBookDataCache(Wordbook bean) {
+        List<Wordbook> list = dao.selectPageJpa(bean, -1, -1);
         Map<String, Set<Wordbook>> groupWordbookSetMap = new HashMap<>();
         Set<Wordbook> tempSet = null;
         Wordbook tempWordbook = null;
         int listSize = list.size();
         // 按照group类型分组
-        for (int i = 0; i < listSize; i++)
-        {
+        for (int i = 0; i < listSize; i++) {
             tempWordbook = list.get(i);
             tempSet = groupWordbookSetMap.get(tempWordbook.getWordbookGroupCode());
             tempSet = tempSet == null ? new HashSet<Wordbook>() : tempSet;
@@ -107,22 +96,19 @@ public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements Wo
         String tempKey = null;
         String tempTranskey = null;
         // 然后遍历所有的entry添加到缓存中
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             tempGroupWrodbookEntry = iterator.next();
             tempKey = BASE_KEY + tempGroupWrodbookEntry.getKey();
-            tempTranskey = BASE_TRANS_KEY +tempGroupWrodbookEntry.getKey();
+            tempTranskey = BASE_TRANS_KEY + tempGroupWrodbookEntry.getKey();
             Set<Wordbook> value = tempGroupWrodbookEntry.getValue();
-            for (Wordbook wordbook : value)
-            {
-                if(redisService.exists(tempTranskey + wordbook.getWordbookCode()))
-                {
+            for (Wordbook wordbook : value) {
+                if (redisService.exists(tempTranskey + wordbook.getWordbookCode())) {
                     redisService.remove(tempTranskey + wordbook.getWordbookCode());
                 }
                 redisService.addStr(tempTranskey + wordbook.getWordbookCode(), wordbook.getWordbookDesc());
                 redisService.addStr(tempTranskey + wordbook.getWordbookCode() + "_TW", ConverterUtils.toString(wordbook.getWordbookDescTW()));
                 redisService.addStr(tempTranskey + wordbook.getWordbookCode() + "_EN", ConverterUtils.toString(wordbook.getWordbookDescEN()));
-                if(redisService.exists(tempKey)){
+                if (redisService.exists(tempKey)) {
                     redisService.remove(tempKey);
                 }
                 redisService.addSet(tempKey, tempGroupWrodbookEntry.getValue());
@@ -131,53 +117,44 @@ public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements Wo
     }
 
 
-
     @Override
-    public List<Wordbook> findForList(Wordbook bean)
-    {
+    public List<Wordbook> findForList(Wordbook bean) {
         List<Wordbook> list = dao.findForList(bean);
         return list;
     }
 
     @Override
-    public int add(Wordbook bean)
-    {
+    public int add(Wordbook bean) {
         return dao.add(bean);
     }
 
     @Override
-    public boolean update(Wordbook bean)
-    {
+    public boolean update(Wordbook bean) {
         return dao.update(bean) > Constant.ZREO;
     }
 
     @Override
-    public boolean delete(Wordbook bean)
-    {
+    public boolean delete(Wordbook bean) {
         return dao.delete(bean) > Constant.ZREO;
     }
 
     @Override
-    public int findCount(Wordbook bean)
-    {
+    public int findCount(Wordbook bean) {
         return dao.findCount(bean);
     }
 
     @Override
-    public List<Wordbook> findForListFromMap(Map<String, Object> map)
-    {
+    public List<Wordbook> findForListFromMap(Map<String, Object> map) {
         return dao.findForListFromMap(map);
     }
 
     @Override
-    public Wordbook findBean(Wordbook bean)
-    {
+    public Wordbook findBean(Wordbook bean) {
         return dao.findBean(bean);
     }
 
     @Override
-    public List<Map<String, Object>> findMapListFromMap(Map<String, Object> map)
-    {
+    public List<Map<String, Object>> findMapListFromMap(Map<String, Object> map) {
         return dao.findMapList(map);
     }
 

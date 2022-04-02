@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class TestViladator {
 
-    @NotNull(message = "name不能为null",groups = Add.class)
+    @NotNull(message = "name不能为null", groups = Add.class)
     @NotEmpty(message = "name不能为空")
     private String name;
 

@@ -18,7 +18,7 @@ import java.io.IOException;
  * api鉴权
  */
 @ServletComponentScan
-@WebFilter(urlPatterns = {"/api/*"},filterName = "apiAuthFilter" ,asyncSupported = true)
+@WebFilter(urlPatterns = {"/api/*"}, filterName = "apiAuthFilter", asyncSupported = true)
 public class ApiAuthFilter implements Filter {
 
     String apiToken = null;
@@ -30,17 +30,15 @@ public class ApiAuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        if(apiToken==null)
-        {
+        if (apiToken == null) {
             apiToken = SpringContextUtil.getBeanByName(FeignConfiguration.class).getApiToken();
         }
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
         String reqApiToken = request.getHeader("apiToken");
-        if(CheckUtils.isNullOrEmpty(reqApiToken) || !reqApiToken.equals(apiToken))
-        {
-            JsonUtils.outJson((HttpServletResponse)servletResponse, PubResult.NO_PERMISSION.asResult().asJson());
+        if (CheckUtils.isNullOrEmpty(reqApiToken) || !reqApiToken.equals(apiToken)) {
+            JsonUtils.outJson((HttpServletResponse) servletResponse, PubResult.NO_PERMISSION.asResult().asJson());
         }
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

@@ -12,13 +12,12 @@ import java.util.Map;
 
 /**
  * 菜单DAO
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @MapperDefinition(domainClass = SysMenu.class)
 
-public interface SysMenuDAO extends BaseDao<SysMenu>
-{
+public interface SysMenuDAO extends BaseDao<SysMenu> {
     /**
      * 根据父Id获取树集合
      *
@@ -36,10 +35,11 @@ public interface SysMenuDAO extends BaseDao<SysMenu>
 
     /**
      * 根据MenuType查询菜单集合
+     *
      * @param paramMap
      * @return
      */
-    List<TreeData> findMenuTreesByMenuType(Map<String,Object> paramMap);
+    List<TreeData> findMenuTreesByMenuType(Map<String, Object> paramMap);
 
     /**
      * 更加父id获取子节点数据

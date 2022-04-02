@@ -66,8 +66,7 @@ public class ServiceFileServiceImpl extends BaseServiceImpl<ServiceFile> impleme
      * @return
      */
     public String getAllPath(ServiceFile serviceFile) {
-        if(serviceFile==null)
-        {
+        if (serviceFile == null) {
             throw new ParamException("文件不存在");
         }
         String downFilePath = EConfig.getPathPropertiesValue("downFilePath");

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @since 2019-05-15 14:21:04
  */
 @Service("ucenterMsTenantService")
-public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>   implements UcenterMsTenantService {
+public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant> implements UcenterMsTenantService {
 
     @Autowired
     private SysUserService sysUserService;
@@ -32,11 +32,11 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>
     public int insert(UcenterMsTenant tenant) {
         SysUser adminUser = new SysUser();
         adminUser.setGroupCode(tenant.getGroupCode());
-        adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode()+"123456").toLowerCase());
+        adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode() + "123456").toLowerCase());
         adminUser.setUserId(StringUtil.getUUID());
         adminUser.setIsAdmin(Constant.INT_TRUE);
         adminUser.setUserName(tenant.getTenantName());
-        adminUser.setUserLoginName(tenant.getGroupCode()+ "_admin");
+        adminUser.setUserLoginName(tenant.getGroupCode() + "_admin");
         adminUser.setMobile(tenant.getMobile());
         adminUser.setOrganizationId(tenant.getGroupCode() + "_001");
         adminUser.setIsDisable(Constant.INT_FALSE);

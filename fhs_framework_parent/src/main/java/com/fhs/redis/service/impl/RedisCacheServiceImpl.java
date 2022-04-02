@@ -26,8 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @since [产品/模块版本]
  */
 @Service("redisCacheServiceImpl")
-public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
-{
+public class RedisCacheServiceImpl<E> implements RedisCacheService<E> {
     /**
      * redisTemplate
      */

@@ -21,13 +21,10 @@ public class ClassManager implements Serializable {
         ClassInfo temp = CACHE.get(clazz.getName());
         ClassInfo info = null;
         if (null == temp) {
-            try
-            {
+            try {
                 temp = new ClassInfo(clazz);
-            }
-            catch (InstantiationException | IllegalAccessException e)
-            {
-                LOGGER.error(clazz.getName() + "生成classinfo错误",e);
+            } catch (InstantiationException | IllegalAccessException e) {
+                LOGGER.error(clazz.getName() + "生成classinfo错误", e);
                 throw new ParamException(clazz.getName() + "生成classinfo错误");
             }
             setClassInfoByName(clazz.getName(), temp);

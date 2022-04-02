@@ -24,7 +24,7 @@ public class FhsBeetlResource extends Resource {
 
     @Override
     public Reader openReader() {
-        FhsBeetlClasspathResourceLoader loader = (FhsBeetlClasspathResourceLoader)this.resourceLoader;
+        FhsBeetlClasspathResourceLoader loader = (FhsBeetlClasspathResourceLoader) this.resourceLoader;
         ClassLoader cs = loader.getClassLoader();
         URL url = cs.getResource(this.path);
         if (url == null) {
@@ -72,6 +72,7 @@ public class FhsBeetlResource extends Resource {
             }
         }
     }
+
     @Override
     public boolean isModified() {
         if (this.file != null) {
@@ -80,6 +81,7 @@ public class FhsBeetlResource extends Resource {
             return false;
         }
     }
+
     @Override
     public String getId() {
         return this.id;

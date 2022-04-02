@@ -21,8 +21,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "t_service_wordbook_group")
-public class ServiceWordbookGroup extends SuperBean<ServiceWordbookGroup>
-{
+public class ServiceWordbookGroup extends SuperBean<ServiceWordbookGroup> {
     /**
      * serialVersionUID
      */
@@ -37,7 +36,9 @@ public class ServiceWordbookGroup extends SuperBean<ServiceWordbookGroup>
     @Id
     private Integer groupId;
 
-    /** 加密ID */
+    /**
+     * 加密ID
+     */
     @NotNull(message = "{wordbook.groupIdE.null}")
     @Transient
     private String groupIdE;
@@ -45,7 +46,7 @@ public class ServiceWordbookGroup extends SuperBean<ServiceWordbookGroup>
     /**
      * 分组编码
      */
-    @NotNull(message="groupName字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "groupName字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "groupName字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "group_name")
     private String groupName;
@@ -53,65 +54,57 @@ public class ServiceWordbookGroup extends SuperBean<ServiceWordbookGroup>
     /**
      * 分组编码
      */
-    @NotNull(message="wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "wordbookGroupCode字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "wordbookGroupCode字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "wordbook_group_code")
     private String wordbookGroupCode;
 
 
-
-    /** 获取加密ID */
-    public String getGroupIdE()
-    {
+    /**
+     * 获取加密ID
+     */
+    public String getGroupIdE() {
         return groupIdE;
     }
-
 
 
     /**
      * 获取ID
      */
-    public Integer getGroupId()
-    {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId)
-    {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
-
 
 
     /**
      * 给分组名称赋值
      */
-    public void setGroupName(String groupName)
-    {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 
     /**
      * 获取分组名称
      */
-    public String getGroupName()
-    {
+    public String getGroupName() {
         return groupName;
     }
 
     /**
      * 给分组编码赋值
      */
-    public void setWordbookGroupCode(String wordbookGroupCode)
-    {
+    public void setWordbookGroupCode(String wordbookGroupCode) {
         this.wordbookGroupCode = wordbookGroupCode;
     }
 
     /**
      * 获取分组编码
      */
-    public String getWordbookGroupCode()
-    {
+    public String getWordbookGroupCode() {
         return wordbookGroupCode;
     }
 

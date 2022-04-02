@@ -57,7 +57,7 @@ public class ListExtendsHanleService implements InitializingBean {
                     return stringObjectMap.containsKey("handle");
                 }
             }).collect(Collectors.toList());
-            notNeedHandleNamespaceSettMap.put(namespace,needHandleFieldList);
+            notNeedHandleNamespaceSettMap.put(namespace, needHandleFieldList);
         }
         if (needHandleFieldList == null || needHandleFieldList.isEmpty()) {
             notNeedHandleNamespace.add(namespace);
@@ -66,7 +66,7 @@ public class ListExtendsHanleService implements InitializingBean {
         needHandleFieldList.forEach(field -> {
             String handleType = ConverterUtils.toString(field.get("handle"));
             if (handleMap.containsKey(handleType)) {
-                handleMap.get(handleType).handleData(field,rows);
+                handleMap.get(handleType).handleData(field, rows);
             } else {
                 LOG.error("namespace:" + namespace + "的列：" + field + "缺少对应的数据处理handle");
             }

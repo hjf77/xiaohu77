@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 代表此类对应的service需要自动缓存
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE})
+@Target({ElementType.TYPE})
 public @interface Cacheable {
     String value();
 }

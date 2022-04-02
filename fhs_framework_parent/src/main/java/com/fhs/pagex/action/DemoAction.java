@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoAction {
 
     @RequestMapping("tree")
-    public JSONArray tree(){
+    public JSONArray tree() {
 
         return JSON.parseArray("[{\n" +
                 "\t\"id\":1,\n" +
@@ -65,7 +65,7 @@ public class DemoAction {
     }
 
     @RequestMapping("grid")
-    public JSONObject grid(){
+    public JSONObject grid() {
         return JSON.parseObject("{\"total\":28,\"rows\":[\n" +
                 "\t{\"productid\":\"FI-SW-01\",\"productname\":\"Koi\",\"unitcost\":10.00,\"status\":\"P\",\"listprice\":36.50,\"attr1\":\"Large\",\"itemid\":\"EST-1\"},\n" +
                 "\t{\"productid\":\"K9-DL-01\",\"productname\":\"Dalmation\",\"unitcost\":12.00,\"status\":\"P\",\"listprice\":18.50,\"attr1\":\"Spotted Adult Female\",\"itemid\":\"EST-10\"},\n" +

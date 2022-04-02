@@ -18,10 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class MessageConverterConfig extends  WebMvcConfigurerAdapter
-{
+public class MessageConverterConfig extends WebMvcConfigurerAdapter {
     @Bean
-    public HttpMessageConverter<?> fastJsonHttpMessageConverters(){
+    public HttpMessageConverter<?> fastJsonHttpMessageConverters() {
         JsonFilterHttpMessageConverter fastJsonHttpMessageConverter = new JsonFilterHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setCharset(Charset.forName("UTF-8"));

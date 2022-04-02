@@ -11,25 +11,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * @author zhangqiang
+ * @version [版本号, 2018/08/09 9:26:11]
  * @Description: 用户权限service
- * @author  zhangqiang
- * @version  [版本号, 2018/08/09 9:26:11]
- * @versio  1.0
+ * @versio 1.0
  * Copyright (c) 2017 All Rights Reserved.
  **/
-@FeignClient(value = "system", configuration= FeignConfiguration.class)
+@FeignClient(value = "system", configuration = FeignConfiguration.class)
 public interface FeignFrontUserApiService {
 
-       /**
-     * @desc 获取单个前端用户信息
+    /**
      * @param getSingleFrontUserForm 用户accessToken的form对象
      * @return 用户信息
+     * @desc 获取单个前端用户信息
      */
     @RequestLine("POST /api/frontUser/getSingleFrontUser")
     HttpResult<FrontUserVo> getSingleFrontUser(@RequestBody GetSingleFrontUserForm getSingleFrontUserForm);
 
     /**
      * 修改用户信息
+     *
      * @param frontUserVo 用户vo
      * @return 是否修改成功
      */
@@ -38,6 +39,7 @@ public interface FeignFrontUserApiService {
 
     /**
      * 添加用户信息
+     *
      * @param frontUserVo 用户vo
      * @return 是否添加成功
      */
@@ -46,6 +48,7 @@ public interface FeignFrontUserApiService {
 
     /**
      * 使用给定的参数当做参数过滤用户
+     *
      * @param frontUserVo 用户vo
      * @return 用户vo
      */
@@ -54,11 +57,12 @@ public interface FeignFrontUserApiService {
 
     /**
      * 合并用户
-     * @param fromUserId 原来用户id
+     *
+     * @param fromUserId   原来用户id
      * @param targetUserId 目标用户id
      * @return 用户vo
      */
     @RequestLine("POST /api/frontUser/find")
-    HttpResult<Boolean> mergeUser(@Param("fromUserId")String fromUserId, @Param("targetUserId")String targetUserId);
+    HttpResult<Boolean> mergeUser(@Param("fromUserId") String fromUserId, @Param("targetUserId") String targetUserId);
 
 }

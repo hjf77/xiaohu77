@@ -58,7 +58,6 @@ public abstract class BaseAction<T> {
     }
 
 
-
     /**
      * 获取分页参数
      *
@@ -91,7 +90,7 @@ public abstract class BaseAction<T> {
      *
      * @return 参数map
      */
-    public  EMap<String, Object> getParameterMap(HttpServletRequest request) {
+    public EMap<String, Object> getParameterMap(HttpServletRequest request) {
         EMap<String, Object> resultMap = new EMap<String, Object>();
         Map<String, String[]> tempMap = request.getParameterMap();
         Set<String> keys = tempMap.keySet();

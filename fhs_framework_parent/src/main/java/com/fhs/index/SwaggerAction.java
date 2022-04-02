@@ -25,6 +25,7 @@ public class SwaggerAction {
 
     /**
      * 302到swagger页面
+     *
      * @param response
      */
     @RequestMapping("/docs")

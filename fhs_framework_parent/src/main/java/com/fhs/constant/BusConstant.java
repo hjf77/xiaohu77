@@ -8,12 +8,9 @@ package com.fhs.constant;
  * @Version: 1.0
  * @Author: jackwong
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public interface BusConstant
-{
+public interface BusConstant {
     /**
      * 状态0
      */
@@ -77,8 +74,7 @@ public interface BusConstant
     /**
      * 用户事件类型
      */
-    interface UserEventType
-    {
+    interface UserEventType {
         /**
          * 打电话
          */
@@ -103,8 +99,7 @@ public interface BusConstant
     /**
      * 用户事件模块类型
      */
-    interface UserEventModelType
-    {
+    interface UserEventModelType {
         /**
          * 分类服务模块
          */
@@ -118,11 +113,11 @@ public interface BusConstant
         String MERCHANTNAME = "merchant";
     }
 
-    interface TemplateMsgType{
+    interface TemplateMsgType {
         String ACTIVITY = "1";
     }
 
-    interface SignType{
+    interface SignType {
         //未签到
         Integer NO = 0;
         //已签到

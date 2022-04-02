@@ -75,7 +75,7 @@ public class PageXAutoCodeAction implements ApplicationRunner {
                 autoCode(null);
                 pageXTransService.refreshPageXCache(new HashMap<>());
             } catch (Exception e) {
-                LOGGER.error("生成代码或者刷新pagex缓存错误:",e);
+                LOGGER.error("生成代码或者刷新pagex缓存错误:", e);
             }
         }).start();
     }

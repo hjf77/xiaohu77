@@ -9,8 +9,7 @@ import com.fhs.core.result.HttpResult;
  * @Author: duanwei
  * @Email: duanwei@sxpartner.com 陕西小伙伴网络科技有限公司  Copyright (c) 2017 All Rights Reserved.
  */
-public class BaseVo<T extends  BaseVo> extends BaseObject<T>
-{
+public class BaseVo<T extends BaseVo> extends BaseObject<T> {
 
     /**
      * serialVersionUID
@@ -19,6 +18,7 @@ public class BaseVo<T extends  BaseVo> extends BaseObject<T>
 
     /**
      * 返回成功的result
+     *
      * @return HttpResult
      */
     public HttpResult success() {

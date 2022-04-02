@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("ucenterFrontUserBindService")
 @DataSource("base_business")
-public class UcenterFrontUserBindServiceImpl extends BaseServiceImpl<UcenterFrontUserBind>   implements UcenterFrontUserBindService {
-    
+public class UcenterFrontUserBindServiceImpl extends BaseServiceImpl<UcenterFrontUserBind> implements UcenterFrontUserBindService {
+
 }

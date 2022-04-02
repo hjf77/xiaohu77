@@ -21,30 +21,30 @@ public class TestCache {
 
     @RequestMapping(value = "/hello")
     @ResponseBody
-    public HttpResult<String> hello(String name){
+    public HttpResult<String> hello(String name) {
         HttpResult<String> httpResult = new HttpResult<>();
-        httpResult.setCode (200);
-        httpResult.setResult (true);
-        httpResult.setData (cacheTestService.getHello(name));
+        httpResult.setCode(200);
+        httpResult.setResult(true);
+        httpResult.setData(cacheTestService.getHello(name));
         return httpResult;
     }
 
     @RequestMapping(value = "/hello2")
     @ResponseBody
-    public HttpResult<String> hello2(String name){
+    public HttpResult<String> hello2(String name) {
         HttpResult<String> httpResult = new HttpResult<>();
-        httpResult.setCode (200);
-        httpResult.setResult (true);
+        httpResult.setCode(200);
+        httpResult.setResult(true);
         Map map = new HashMap();
         map.put("name", name);
         map.put("id", "123456");
-        httpResult.setData (cacheTestService.getHello2(map));
+        httpResult.setData(cacheTestService.getHello2(map));
         return httpResult;
     }
 
     @RequestMapping(value = "/testSession")
     @ResponseBody
-    public HttpResult<String> testSession(HttpServletRequest request){
+    public HttpResult<String> testSession(HttpServletRequest request) {
         System.out.println(request.getSession());
         return HttpResult.success("11");
     }

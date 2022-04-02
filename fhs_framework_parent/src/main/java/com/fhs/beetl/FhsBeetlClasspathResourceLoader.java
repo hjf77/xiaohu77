@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 解决beetl偶尔404问题
  */
-public class FhsBeetlClasspathResourceLoader  implements ResourceLoader {
+public class FhsBeetlClasspathResourceLoader implements ResourceLoader {
     private String root;
     boolean autoCheck;
     protected String charset;
@@ -98,6 +98,7 @@ public class FhsBeetlClasspathResourceLoader  implements ResourceLoader {
     public String getRoot() {
         return this.root;
     }
+
     @Override
     public void init(GroupTemplate gt) {
         Map<String, String> resourceMap = gt.getConf().getResourceMap();

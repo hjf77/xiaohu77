@@ -14,7 +14,7 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop {
      * com.xhb.tour.action
      */
     @Pointcut("execution(* com.*.*.action..*.*(..) )")
-    public void checkParam(){
+    public void checkParam() {
 
     }
 
@@ -24,6 +24,7 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop {
 
     /**
      * 参数校验
+     *
      * @param joinPoint
      * @return
      * @throws Throwable
@@ -33,6 +34,7 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop {
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         return super.doAround(joinPoint);
     }
+
     /**
      * 在切入点return内容之后切入内容（可以用来对处理返回值做一些加工处理）
      *

@@ -13,41 +13,51 @@ import java.util.List;
  * @Email: qixiaobo@sxpartner.com
  * @History: 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class ComboboxNode
-{
+public class ComboboxNode {
 
-    /** id. */
+    /**
+     * id.
+     */
     private String id;
 
-    /** 显示. */
+    /**
+     * 显示.
+     */
     private String text;
 
-    /** 微信orgid. */
+    /**
+     * 微信orgid.
+     */
     private String wxOrgId;
 
-    /** 父id. */
+    /**
+     * 父id.
+     */
     private String parentId;
 
     private String classifyName;
-    /** 状态. */
+    /**
+     * 状态.
+     */
     private String state = "closed";
 
-    /** The children. */
+    /**
+     * The children.
+     */
     private List<ComboboxNode> children = new ArrayList<>();
 
     /**
      * Instantiates a new combobox node.
      *
-     * @param id the id
+     * @param id   the id
      * @param text the text
      */
-    public ComboboxNode(String id, String text)
-    {
+    public ComboboxNode(String id, String text) {
         super();
         this.id = id;
         this.text = text;
-        
-        
+
+
     }
 
     /**
@@ -62,8 +72,7 @@ public class ComboboxNode
      *
      * @return bean的 id
      */
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
@@ -72,8 +81,7 @@ public class ComboboxNode
      *
      * @param id 一个新的 id
      */
-    public void setId(String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -82,8 +90,7 @@ public class ComboboxNode
      *
      * @return bean的 显示
      */
-    public String getText()
-    {
+    public String getText() {
         return text;
     }
 
@@ -92,36 +99,34 @@ public class ComboboxNode
      *
      * @param text 一个新的 显示
      */
-    public void setText(String text)
-    {
+    public void setText(String text) {
         this.text = text;
     }
 
-	/**
+    /**
      * 获取 children.
      *
      * @return children
      */
-	public List<ComboboxNode> getChildren() {
-		return children;
-	}
+    public List<ComboboxNode> getChildren() {
+        return children;
+    }
 
-	/**
+    /**
      * 设置 children.
      *
      * @param children 新的 children
      */
-	public void setChildren(List<ComboboxNode> children) {
-		this.children = children;
-	}
+    public void setChildren(List<ComboboxNode> children) {
+        this.children = children;
+    }
 
     /**
      * 获取 父id.
      *
      * @return bean的 父id
      */
-    public String getParentId()
-    {
+    public String getParentId() {
         return parentId;
     }
 
@@ -130,8 +135,7 @@ public class ComboboxNode
      *
      * @param parentId 一个新的 父id
      */
-    public void setParentId(String parentId)
-    {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 
@@ -140,8 +144,7 @@ public class ComboboxNode
      *
      * @return bean的 微信orgid
      */
-    public String getWxOrgId()
-    {
+    public String getWxOrgId() {
         return wxOrgId;
     }
 
@@ -150,8 +153,7 @@ public class ComboboxNode
      *
      * @param wxOrgId 一个新的 微信orgid
      */
-    public void setWxOrgId(String wxOrgId)
-    {
+    public void setWxOrgId(String wxOrgId) {
         this.wxOrgId = wxOrgId;
     }
 
@@ -160,8 +162,7 @@ public class ComboboxNode
      *
      * @return bean的 状态
      */
-    public String getState()
-    {
+    public String getState() {
         return state;
     }
 
@@ -170,8 +171,7 @@ public class ComboboxNode
      *
      * @param state 一个新的 状态
      */
-    public void setState(String state)
-    {
+    public void setState(String state) {
         this.state = state;
     }
 

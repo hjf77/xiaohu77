@@ -13,31 +13,26 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 跨域的请求攻击 过滤器
  * CSRF 详见 https://baike.baidu.com/item/CSRF/2735433?fr=aladdin
+ *
  * @Filename: CsfrFileter.java
  * @Description:
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *   陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class CSRFFileter implements Filter
-{
-
+public class CSRFFileter implements Filter {
 
 
     @Override
-    public void destroy()
-    {
+    public void destroy() {
 
     }
 
     @Override
     public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
-        throws IOException, ServletException
-    {
-        HttpServletRequest request = (HttpServletRequest)arg0;
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) arg0;
         String requestURI = request.getRequestURI();
 /*
         //如果是高危操作，则需要判断是否存在CSFR跨域攻击
@@ -80,8 +75,7 @@ public class CSRFFileter implements Filter
 
     @Override
     public void init(FilterConfig arg0)
-        throws ServletException
-    {
+            throws ServletException {
 
     }
 }

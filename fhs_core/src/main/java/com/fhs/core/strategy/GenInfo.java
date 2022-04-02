@@ -6,13 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 生成注解 
- * @author jianbo.qin
+ * 生成注解
  *
+ * @author jianbo.qin
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GenInfo
-{
+public @interface GenInfo {
 
 }

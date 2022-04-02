@@ -28,7 +28,7 @@ public class MyTaskListener implements TaskListener {
         }
     }
 
-    private TaskForm structureForm(DelegateTask delegateTask){
+    private TaskForm structureForm(DelegateTask delegateTask) {
         TaskForm taskForm = new TaskForm();
         taskForm.setId(delegateTask.getId());
         taskForm.setName(delegateTask.getName());
@@ -50,7 +50,6 @@ public class MyTaskListener implements TaskListener {
         taskForm.setCandidates(delegateTask.getCandidates());
         return taskForm;
     }
-
 
 
 }

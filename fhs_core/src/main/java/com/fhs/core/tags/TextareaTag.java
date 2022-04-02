@@ -12,12 +12,9 @@ import javax.servlet.jsp.JspException;
  * @Version: 1.0
  * @Author: Lins
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class TextareaTag extends InputTag
-{
+public class TextareaTag extends InputTag {
     private final String defaultClassName = "big_text";
 
     private String rows;
@@ -27,8 +24,7 @@ public class TextareaTag extends InputTag
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
         super.setHtmlType("textarea");
         defaultClassName(defaultClassName);
         write(" <div class=\"bigLabelDiv\">");
@@ -36,24 +32,24 @@ public class TextareaTag extends InputTag
         write(" </div> ");
         write(" <div class=\"bigContent\">");
         write(" <textarea style=\"margin-top:10px\"  rows=\"" + this.getRows() + "\" cols=\"" + this.getCols() + "\""
-            + super.getHtml());
+                + super.getHtml());
         write(" </div> ");
     }
 
-	public String getRows() {
-		return rows;
-	}
+    public String getRows() {
+        return rows;
+    }
 
-	public void setRows(String rows) {
-		this.rows = rows;
-	}
+    public void setRows(String rows) {
+        this.rows = rows;
+    }
 
-	public String getCols() {
-		return cols;
-	}
+    public String getCols() {
+        return cols;
+    }
 
-	public void setCols(String cols) {
-		this.cols = cols;
-	}
+    public void setCols(String cols) {
+        this.cols = cols;
+    }
 
 }

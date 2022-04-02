@@ -30,13 +30,12 @@ public class PageXBaseAction extends BaseAction {
 
     /**
      * 根据modelconfig中的db配置，来设置本操作连接的数据库
-     * @param pagexBaseDTO  pagexBaseDTO
+     *
+     * @param pagexBaseDTO pagexBaseDTO
      */
-    protected void setDB(PagexBaseDTO pagexBaseDTO){
-        if(pagexBaseDTO!=null)
-        {
-            if(pagexBaseDTO.getModelConfig().containsKey("db"))
-            {
+    protected void setDB(PagexBaseDTO pagexBaseDTO) {
+        if (pagexBaseDTO != null) {
+            if (pagexBaseDTO.getModelConfig().containsKey("db")) {
                 ReadWriteDataSourceDecision.markParam();
                 ReadWriteDataSourceDecision.setDataSource(ConverterUtils.toString(pagexBaseDTO.getModelConfig().get("db")));
             }
@@ -45,17 +44,18 @@ public class PageXBaseAction extends BaseAction {
 
     /**
      * 查询列表数据并且调用joinservice 填充
-     * @param namespace  namespace
-     * @param paramMap 参数
+     *
+     * @param namespace namespace
+     * @param paramMap  参数
      * @return 填充好的JSONArray
      */
-    protected JSONArray findListDataAndInitJoin(String namespace, Map<String,Object> paramMap){
+    protected JSONArray findListDataAndInitJoin(String namespace, Map<String, Object> paramMap) {
         this.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         String resultJson = service.findListPage(paramMap, namespace);
         JSONArray rows = JSONObject.parseArray(resultJson);
         this.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         rows = joinService.initJoinData(rows, namespace);
-        listExtendsHanleService.processingData(namespace,rows);
+        listExtendsHanleService.processingData(namespace, rows);
         return rows;
     }
 }

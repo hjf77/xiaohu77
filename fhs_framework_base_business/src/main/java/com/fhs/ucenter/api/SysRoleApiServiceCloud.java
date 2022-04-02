@@ -25,10 +25,8 @@ import java.util.*;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @RestController
 @RequestMapping("api/sysRole")
@@ -49,29 +47,28 @@ public class SysRoleApiServiceCloud implements FeignSysRoleApiService {
     private SysRoleService roleService;
 
 
-
     /**
      * 根据用户ID获取角色数据权限
+     *
      * @param userId 用户ID
      * @return HttpResult 角色数据权限
      */
     @Override
     @GetMapping("/getRoleListPermissions")
     public HttpResult<String> getRoleListPermissions(@RequestParam("userId") String userId) {
-        if(CheckUtils.isNullOrEmpty(userId))
-        {
+        if (CheckUtils.isNullOrEmpty(userId)) {
             return HttpResult.error(null, "用户ID不可为空");
         }
         List<SysRole> roles = roleService.findRolesByUserId(userId);
         SysUser sysUser = userService.selectById(userId);
-        List<Map<String,Object>> mapList=new ArrayList<>();
-        for (SysRole sysRole:roles) {
-            Map<String,Object> map=new HashMap<>();
-            map.put("roleId",sysRole.getRoleId());
-            map.put("userId",sysUser.getUserId());
-            map.put("fullname",sysUser.getUserName());
-            map.put("roleName",sysRole.getRoleName());
-            map.put("alias",sysRole.getRoleId());
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for (SysRole sysRole : roles) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("roleId", sysRole.getRoleId());
+            map.put("userId", sysUser.getUserId());
+            map.put("fullname", sysUser.getUserName());
+            map.put("roleName", sysRole.getRoleName());
+            map.put("alias", sysRole.getRoleId());
             mapList.add(map);
         }
         return HttpResult.success(JsonUtils.list2json(mapList));
@@ -80,16 +77,15 @@ public class SysRoleApiServiceCloud implements FeignSysRoleApiService {
     @Override
     @GetMapping("/getRoleById")
     public HttpResult<String> getRoleById(@RequestParam("id") String id) {
-        if(CheckUtils.isNullOrEmpty(id))
-        {
+        if (CheckUtils.isNullOrEmpty(id)) {
             return HttpResult.error(null, "角色ID不可为空");
         }
         SysRole sysRole = roleService.findBeanById(id);
-        Map<String,Object> map=new HashMap<>();
-        map.put("roleId",sysRole.getRoleId());
-        map.put("roleName",sysRole.getRoleName());
-        map.put("isDisable",sysRole.getRoleName());
-        map.put("alias",sysRole.getRoleId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("roleId", sysRole.getRoleId());
+        map.put("roleName", sysRole.getRoleName());
+        map.put("isDisable", sysRole.getRoleName());
+        map.put("alias", sysRole.getRoleId());
         return HttpResult.success(JsonUtils.object2json(map));
     }
 }

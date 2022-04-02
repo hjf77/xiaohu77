@@ -38,9 +38,10 @@ public class PagexAddDTO extends PagexBaseDTO {
 
     /**
      * 解析js 返回对象
+     *
      * @param js js
      * @throws NoSuchMethodException 如果调用某些方法找不到
-     * @throws ScriptException 脚本本身有问题
+     * @throws ScriptException       脚本本身有问题
      */
     public PagexAddDTO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
@@ -52,17 +53,16 @@ public class PagexAddDTO extends PagexBaseDTO {
 
     /**
      * 初始化列表字段设置
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initFormFieldSett() throws NoSuchMethodException, ScriptException {
-        formFieldSett = getListM("formFields",addPageObject);
-        for(Map<String,Object> field:formFieldSett)
-        {
+        formFieldSett = getListM("formFields", addPageObject);
+        for (Map<String, Object> field : formFieldSett) {
             field.put("camelName", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(field.get("name"))));
         }
     }
-
 
 
     @Override

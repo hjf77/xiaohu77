@@ -7,8 +7,7 @@ import com.fhs.ucenter.bean.SysMenuPermissionUrlRela;
 import java.util.List;
 import java.util.Map;
 
-public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
-{
+public interface SysMenuPermissionService extends BaseService<SysMenuPermission> {
     /**
      * 根据按钮类型获取按钮集合
      *
@@ -18,7 +17,6 @@ public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
     List<Map<String, Object>> findMapListByType(Map<String, Object> map);
 
     /**
-     *
      * 一键添加增删改查菜单
      *
      * @param map
@@ -28,6 +26,7 @@ public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
 
     /**
      * 根据权限ID查询权限URL关联信息
+     *
      * @param sysMenuPermission 权限信息
      * @return SysMenuPermissionUrlRela列表
      */
@@ -35,6 +34,7 @@ public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
 
     /**
      * 根据权限ID查询URL总数
+     *
      * @param sysMenuPermission 权限信息
      * @return URL总数
      */
@@ -42,6 +42,7 @@ public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
 
     /**
      * 添加权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL关联信息
      * @return
      */
@@ -49,6 +50,7 @@ public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
 
     /**
      * 修改权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL信息
      * @return
      */
@@ -56,6 +58,7 @@ public interface SysMenuPermissionService extends BaseService<SysMenuPermission>
 
     /**
      * 删除权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL信息
      * @return
      */

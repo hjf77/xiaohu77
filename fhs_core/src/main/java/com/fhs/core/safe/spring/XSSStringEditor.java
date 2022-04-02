@@ -11,6 +11,7 @@ import java.beans.PropertyEditorSupport;
 
 /**
  * 解决XSS漏洞
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.core.safe.spring
  * @ClassName: XSSStringEditor
@@ -27,7 +28,7 @@ public class XSSStringEditor extends PropertyEditorSupport implements WebBinding
      */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        String formBody= Jsoup.clean(text, Whitelist.relaxed().addAttributes(":all", "style","controls","src","data-setup")
+        String formBody = Jsoup.clean(text, Whitelist.relaxed().addAttributes(":all", "style", "controls", "src", "data-setup")
                 .addTags("video"));
         setValue(formBody);
     }
@@ -37,7 +38,7 @@ public class XSSStringEditor extends PropertyEditorSupport implements WebBinding
      */
     @Override
     public String getAsText() {
-        return  getValue()==null?null : ConverterUtils.toString(getValue());
+        return getValue() == null ? null : ConverterUtils.toString(getValue());
     }
 
     @Override

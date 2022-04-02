@@ -13,7 +13,7 @@ import java.util.Map;
  * @author jackwong
  * @since 2019-11-12 14:40:34
  */
-public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
+public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory> {
 
     /**
      * 未完成
@@ -23,7 +23,7 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
     /**
      * 已完成
      */
-    int STATUS_FINISH =1;
+    int STATUS_FINISH = 1;
 
 
     /**
@@ -59,14 +59,16 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
     /**
      * 根据当前需要记录节点的usertaskkey和instanceId来构建一个FlowTaskHistory
      * 处理好code字段，和排序字段
+     *
      * @param definitionKey usertaskId
-     * @param instanceId 流程实例id
+     * @param instanceId    流程实例id
      * @return 构建好的对象
      */
-    FlowTaskHistory buildFlowTaskHistory(String definitionKey,String instanceId);
+    FlowTaskHistory buildFlowTaskHistory(String definitionKey, String instanceId);
 
     /**
      * 查询已办纪录
+     *
      * @param paramMap
      * @return
      */
@@ -74,6 +76,7 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
 
     /**
      * 查询已办纪录总数
+     *
      * @param paramMap
      * @return
      */

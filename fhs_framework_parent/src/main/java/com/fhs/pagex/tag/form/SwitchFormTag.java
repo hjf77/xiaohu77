@@ -4,7 +4,8 @@ import com.fhs.pagex.common.BeetlUtil;
 import org.springframework.stereotype.Component;
 
 /**
- *  开关标签
+ * 开关标签
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: SelectFormTag
@@ -15,9 +16,8 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class SwitchFormTag extends  InputFormTag {
-    static
-    {
+public class SwitchFormTag extends InputFormTag {
+    static {
         FormTagFactory.regTag("switch", SwitchFormTag.class);
     }
 
@@ -29,13 +29,13 @@ public class SwitchFormTag extends  InputFormTag {
         resultHtmlBuilder.append("<div class=\"fitem\">");
         resultHtmlBuilder.append(getTitleHtml());
         resultHtmlBuilder.append(" <input type='hidden' " + super.formartDataType());
-        resultHtmlBuilder.append(formartIdNameHtml()+ " />");
-        resultHtmlBuilder.append(" <input type='checkbox'class='lcs_check' id='" +  super.tagSett.get("name") + "_switch'/>" );
+        resultHtmlBuilder.append(formartIdNameHtml() + " />");
+        resultHtmlBuilder.append(" <input type='checkbox'class='lcs_check' id='" + super.tagSett.get("name") + "_switch'/>");
         resultHtmlBuilder.append(formartRequiredHtml());
         resultHtmlBuilder.append("</div></div>");
-        request.setAttribute("tagSett",super.tagSett);
+        request.setAttribute("tagSett", super.tagSett);
         try {
-            resultHtmlBuilder.append(BeetlUtil.renderBeelt("/pagex/tags/switch_tag.html",super.getBeetlParamMap()));
+            resultHtmlBuilder.append(BeetlUtil.renderBeelt("/pagex/tags/switch_tag.html", super.getBeetlParamMap()));
         } catch (Exception e) {
             e.printStackTrace();
         }

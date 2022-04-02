@@ -14,47 +14,46 @@ import java.io.IOException;
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class ProvinceTag extends BaseFormTag
-{
+public class ProvinceTag extends BaseFormTag {
 
-    /** 市那个字段的名称. */
+    /**
+     * 市那个字段的名称.
+     */
     private String cityName;
 
-    /** 区县字段的名称. */
+    /**
+     * 区县字段的名称.
+     */
     private String areaName;
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
         super.setClassName(super.getClassName() + " easyui-combobox");
         write(" <div class=\"fitemDiv\">");
         write("<label>" + super.getTitle() + ":</label>");
-        write("<input id="+super.getName()+" editable=\"true\"  data-options=\"\r\n" + "                            url: '"
-            + EConfig.getPathPropertiesValue("systemServiceUrl") + "webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',\r\n"
-            + "                            valueField: 'id',\r\n"
-            + "                            textField:'areaName',\r\n"
-            + "                            onSelect: function(rec){\r\n"
-            + "                                if('undefined' != typeof provinceName){ provinceName = rec.areaName;}\r\n");
-        if (cityName != null)
-        {
+        write("<input id=" + super.getName() + " editable=\"true\"  data-options=\"\r\n" + "                            url: '"
+                + EConfig.getPathPropertiesValue("systemServiceUrl") + "webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',\r\n"
+                + "                            valueField: 'id',\r\n"
+                + "                            textField:'areaName',\r\n"
+                + "                            onSelect: function(rec){\r\n"
+                + "                                if('undefined' != typeof provinceName){ provinceName = rec.areaName;}\r\n");
+        if (cityName != null) {
             write("                                $('#cityId').combobox('loadData', {});\r\n"
-                + "                                var cityUrl = '" + EConfig.getPathPropertiesValue("systemServiceUrl")
-                + "webApi/area/getProvinceData?areaParentId=' + rec.id + '&jsonpCallback=?';\r\n" + "                                $('#"
-                + cityName + "').combobox('reload', cityUrl);\r\n" + "                                $('#" + cityName
-                + "').combobox('clear');\r\n");
+                    + "                                var cityUrl = '" + EConfig.getPathPropertiesValue("systemServiceUrl")
+                    + "webApi/area/getProvinceData?areaParentId=' + rec.id + '&jsonpCallback=?';\r\n" + "                                $('#"
+                    + cityName + "').combobox('reload', cityUrl);\r\n" + "                                $('#" + cityName
+                    + "').combobox('clear');\r\n");
         }
-        if (areaName != null)
-        {
+        if (areaName != null) {
             write("$('#" + cityName + "').combobox('loadData', {});\r\n" +
-                "$('#" + areaName + "').combobox('loadData', {});\r\n" +
-                "$('#" + areaName + "').combobox('clear');\r\n"
-                + "},onLoadSuccess:function(v){" +
+                    "$('#" + areaName + "').combobox('loadData', {});\r\n" +
+                    "$('#" + areaName + "').combobox('clear');\r\n"
+                    + "},onLoadSuccess:function(v){" +
                     " if(!isInitProvinceId){" +
-                    "  $('#"+super.getName()+"').combobox('select', '440000');isInitProvinceId = true;}}\r\n" + "\" ");
+                    "  $('#" + super.getName() + "').combobox('select', '440000');isInitProvinceId = true;}}\r\n" + "\" ");
         }
         write(super.getHtml().toString());
         write(" </div>");
@@ -65,8 +64,7 @@ public class ProvinceTag extends BaseFormTag
      *
      * @return bean的 市那个字段的名称
      */
-    public String getCityName()
-    {
+    public String getCityName() {
         return cityName;
     }
 
@@ -75,8 +73,7 @@ public class ProvinceTag extends BaseFormTag
      *
      * @param cityName 一个新的 市那个字段的名称
      */
-    public void setCityName(String cityName)
-    {
+    public void setCityName(String cityName) {
         this.cityName = cityName;
     }
 
@@ -85,8 +82,7 @@ public class ProvinceTag extends BaseFormTag
      *
      * @return bean的 区县字段的名称
      */
-    public String getAreaName()
-    {
+    public String getAreaName() {
         return areaName;
     }
 
@@ -95,8 +91,7 @@ public class ProvinceTag extends BaseFormTag
      *
      * @param areaName 一个新的 区县字段的名称
      */
-    public void setAreaName(String areaName)
-    {
+    public void setAreaName(String areaName) {
         this.areaName = areaName;
     }
 

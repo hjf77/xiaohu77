@@ -67,7 +67,6 @@ public enum PagexDataService {
     private Map<String, PageXTreeDTO> pageXTreeDTOCache = new ConcurrentHashMap<>();
 
 
-
     /**
      * 添加页面html缓存
      */
@@ -112,7 +111,7 @@ public enum PagexDataService {
             if (isOldNamespace) {
                 LOG.info("正在刷新:" + namespace);
                 try {
-                    if (pageXAutoJavaService == null && SpringContextUtil.getApplicationContext()!=null) {
+                    if (pageXAutoJavaService == null && SpringContextUtil.getApplicationContext() != null) {
                         pageXAutoJavaService = SpringContextUtil.getBeanByName(PageXAutoJavaService.class);
                         pageXAutoSqlService = SpringContextUtil.getBeanByName(PageXAutoSqlService.class);
                     }
@@ -120,7 +119,7 @@ public enum PagexDataService {
                     pageXAutoSqlService.autoSql(fileContent);
                     LOG.info("刷新完成:" + namespace);
                 } catch (Exception e) {
-                    LOG.error("刷新js文件错误,js:" + fileContent,e);
+                    LOG.error("刷新js文件错误,js:" + fileContent, e);
                 }
             }
         }

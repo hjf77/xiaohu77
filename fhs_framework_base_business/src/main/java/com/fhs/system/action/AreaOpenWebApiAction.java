@@ -25,33 +25,35 @@ public class AreaOpenWebApiAction extends BaseAction<Area> {
 
     /**
      * 省市区接口,传递areaParentId即可,顶级传递0
+     *
      * @param request
      * @param response
      * @param area
      */
     @RequestMapping("getProvinceData")
     @ResponseBody
-    public void getProvinceData(HttpServletRequest request, HttpServletResponse response, Area area)
-    {
+    public void getProvinceData(HttpServletRequest request, HttpServletResponse response, Area area) {
         Map<String, Object> map = new HashMap<String, Object>();
         int areaParentId = area.getAreaParentId();
         map.put("areaParentId", areaParentId);
         List<Area> areaList = areaService.findForListFromMap(map);
         super.outJsonp(JsonUtils.list2json(areaList), response, request);
     }
+
     /**
      * 前端浏览器获取省市区的接口
-     * @param area 省市区过滤条件
+     *
+     * @param area     省市区过滤条件
      * @param response response
-     * @param request request
+     * @param request  request
      */
     @RequestMapping("getProvinceList")
-    public void getProvinceList(Area area, HttpServletResponse response, HttpServletRequest request){
+    public void getProvinceList(Area area, HttpServletResponse response, HttpServletRequest request) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         int areaParentId = area.getAreaParentId();
         map.put("areaParentId", areaParentId);
         List<Area> areaList = areaService.findForListFromMap(map);
-        super.outJsonp(JSONUtils.toJSONString(areaList),response,request);
+        super.outJsonp(JSONUtils.toJSONString(areaList), response, request);
     }
 }

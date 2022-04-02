@@ -7,21 +7,20 @@ import java.lang.annotation.Target;
 
 /**
  * 权限认证
+ *
  * @Filename: PermissionCode.java
  * @Description:
  * @Version: 1.0
  * @Author: jackwong
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- * Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> Copyright (c) 2017 All Rights Reserved.
  */
-@Target(value={ElementType.METHOD})
+@Target(value = {ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PermissionCode
-{
+public @interface PermissionCode {
     /**
      * 获取值
+     *
      * @return
      */
     public String value() default "";

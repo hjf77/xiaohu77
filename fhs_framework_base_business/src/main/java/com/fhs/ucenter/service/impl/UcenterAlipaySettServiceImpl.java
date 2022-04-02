@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("ucenterAlipaySettService")
 @DataSource("base_business")
-public class UcenterAlipaySettServiceImpl extends BaseServiceImpl<UcenterAlipaySett>   implements UcenterAlipaySettService {
-    
+public class UcenterAlipaySettServiceImpl extends BaseServiceImpl<UcenterAlipaySett> implements UcenterAlipaySettService {
+
 }

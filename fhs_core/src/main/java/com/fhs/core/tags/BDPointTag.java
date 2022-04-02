@@ -6,31 +6,32 @@ import javax.servlet.jsp.JspException;
 
 
 /**
- *  百度地图标点
+ * 百度地图标点
+ *
  * @Filename: BDPointTag.java
  * @Description:
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
-public class BDPointTag extends BaseFormTag
-{
+public class BDPointTag extends BaseFormTag {
 
-    /** 经度名称. */
+    /**
+     * 经度名称.
+     */
     private String loName;
 
-    /** 纬度名称. */
+    /**
+     * 纬度名称.
+     */
     private String laName;
 
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
         write(" <div class=\"fitem\">");
         write(" <div class=\"bigLabelDiv\">");
         write("   <label>选取坐标</label>");
@@ -44,8 +45,7 @@ public class BDPointTag extends BaseFormTag
      *
      * @return bean的 经度名称
      */
-    public String getLoName()
-    {
+    public String getLoName() {
         return loName;
     }
 
@@ -54,8 +54,7 @@ public class BDPointTag extends BaseFormTag
      *
      * @param loName 一个新的 经度名称
      */
-    public void setLoName(String loName)
-    {
+    public void setLoName(String loName) {
         this.loName = loName;
     }
 
@@ -64,8 +63,7 @@ public class BDPointTag extends BaseFormTag
      *
      * @return bean的 纬度名称
      */
-    public String getLaName()
-    {
+    public String getLaName() {
         return laName;
     }
 
@@ -74,8 +72,7 @@ public class BDPointTag extends BaseFormTag
      *
      * @param laName 一个新的 纬度名称
      */
-    public void setLaName(String laName)
-    {
+    public void setLaName(String laName) {
         this.laName = laName;
     }
 

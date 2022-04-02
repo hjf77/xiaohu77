@@ -16,7 +16,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 /**
- *  级联insert 和级联删除 工具类
+ * 级联insert 和级联删除 工具类
+ *
  * @author xiaoh
  * @version [版本号, 2018/5/11 16:42]
  * @Description:
@@ -30,43 +31,43 @@ public class NestedServiceImpl<T> {
     /**
      * 一对多cache
      */
-    private Map<Class<?>,List<OnetoXSett>> oneToXFieldCache = new HashMap<>();
+    private Map<Class<?>, List<OnetoXSett>> oneToXFieldCache = new HashMap<>();
 
     /**
      * 类 主键 缓存
      */
-    private Map<Class<?>,Field> pkMap = new HashMap<>();
+    private Map<Class<?>, Field> pkMap = new HashMap<>();
 
     /**
      * 插入一个对象，自动处理其子集
+     *
      * @param obj 对象
      * @throws IllegalAccessException
      */
     public void insertOnetoX(T obj) throws IllegalAccessException {
         List<OnetoXSett> oneToXFieldList = getSett(obj.getClass());
-        if(oneToXFieldList.isEmpty())
-        {
+        if (oneToXFieldList.isEmpty()) {
             return;
         }
         Field pkField = pkMap.get(obj.getClass());
         pkField.setAccessible(true);
-        Object  pKey = pkField.get(obj);
-        oneToXFieldList.forEach(onetoXSett->{
+        Object pKey = pkField.get(obj);
+        oneToXFieldList.forEach(onetoXSett -> {
             Object fieldValue = null;
             try {
                 Field field = onetoXSett.getField();
                 field.setAccessible(true);
                 fieldValue = field.get(obj);
-                if(fieldValue==null){
+                if (fieldValue == null) {
                     return;
                 }
                 Field mappedField = onetoXSett.getMappedByField();
                 mappedField.setAccessible(true);
-                if(onetoXSett.isOnetoOne()){
-                    mappedField.set(fieldValue,pKey);
-                }else{
+                if (onetoXSett.isOnetoOne()) {
+                    mappedField.set(fieldValue, pKey);
+                } else {
                     for (Object xSett : (List) fieldValue) {
-                        mappedField.set(xSett,pKey);
+                        mappedField.set(xSett, pKey);
                     }
                 }
 
@@ -76,35 +77,35 @@ public class NestedServiceImpl<T> {
             }
             BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class,
                     new String[]{onetoXSett.getItemClass().getName()});
-            if(onetoXSett.isOnetoOne()){
+            if (onetoXSett.isOnetoOne()) {
                 baseService.insert(fieldValue);
-            }else{
+            } else {
                 baseService.batchInsert((List) fieldValue);
             }
         });
     }
 
     /**
-     *  级联删除一个对象
+     * 级联删除一个对象
+     *
      * @param obj obj
      * @throws IllegalAccessException 如果参数错误则抛出
      */
     public void deleteOneToX(T obj) throws IllegalAccessException {
         List<OnetoXSett> oneToXFieldList = getSett(obj.getClass());
-        if(oneToXFieldList.isEmpty())
-        {
+        if (oneToXFieldList.isEmpty()) {
             return;
         }
         Field field = pkMap.get(obj.getClass());
         field.setAccessible(true);
-        Object  pKey = field.get(obj);
-        oneToXFieldList.forEach(onetoXSett->{
+        Object pKey = field.get(obj);
+        oneToXFieldList.forEach(onetoXSett -> {
             Object item = null;
             try {
                 item = onetoXSett.getItemClass().newInstance();
                 Field mappedByField = onetoXSett.getMappedByField();
                 mappedByField.setAccessible(true);
-                onetoXSett.getMappedByField().set(item,pKey);
+                onetoXSett.getMappedByField().set(item, pKey);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -112,23 +113,22 @@ public class NestedServiceImpl<T> {
                     new String[]{onetoXSett.getItemClass().getName()});
             baseService.deleteBean(item);
         });
-       // keng 没有删除主表内容
+        // keng 没有删除主表内容
     }
 
     /**
      * 根据当前对象构造参数
+     *
      * @param clzss
      * @return
      */
-    private List<OnetoXSett> getSett(Class<?> clzss)
-    {
-        if(oneToXFieldCache.containsKey(clzss))
-        {
+    private List<OnetoXSett> getSett(Class<?> clzss) {
+        if (oneToXFieldCache.containsKey(clzss)) {
             return oneToXFieldCache.get(clzss);
-        }else{
+        } else {
             //获取当前类的主键
-            Field pkField =  AssociationUtil.getPkFields(clzss);
-            pkMap.put(clzss,pkField);
+            Field pkField = AssociationUtil.getPkFields(clzss);
+            pkMap.put(clzss, pkField);
 
             List<Field> associationFields = AssociationUtil.getAssociationFields(clzss);
             if (!associationFields.isEmpty()) {
@@ -141,7 +141,7 @@ public class NestedServiceImpl<T> {
                         onetoXSett.setField(field);
                         onetoXSett.setItemClass(javaType);
                         onetoXSett.setOnetoOne(true);
-                        onetoXSett.setMappedByField(getMappedByField(javaType,AssociationUtil.getMappedName(field)));
+                        onetoXSett.setMappedByField(getMappedByField(javaType, AssociationUtil.getMappedName(field)));
                         list.add(onetoXSett);
                     }
                     if (field.isAnnotationPresent(OneToMany.class)) {
@@ -154,12 +154,12 @@ public class NestedServiceImpl<T> {
                             onetoXSett.setField(field);
                             onetoXSett.setItemClass(actualType);
                             onetoXSett.setOnetoOne(false);
-                            onetoXSett.setMappedByField(getMappedByField(actualType,AssociationUtil.getMappedName(field)));
+                            onetoXSett.setMappedByField(getMappedByField(actualType, AssociationUtil.getMappedName(field)));
                             list.add(onetoXSett);
                         }
                     }
                 }
-                oneToXFieldCache.put(clzss,list);
+                oneToXFieldCache.put(clzss, list);
             }
         }
         return oneToXFieldCache.get(clzss);
@@ -167,28 +167,28 @@ public class NestedServiceImpl<T> {
 
     /**
      * 根据class和外键字段获取级联对象的属性名
+     *
      * @param clazz
      * @param mappedByStr
      * @return
      */
-    private Field getMappedByField(Class<?> clazz,String mappedByStr){
+    private Field getMappedByField(Class<?> clazz, String mappedByStr) {
         Field[] fields = clazz.getDeclaredFields();
         System.out.println(fields.length);
 
         for (Field field : fields) {
             Column column = field.getAnnotation(Column.class);
-            if(column==null){
+            if (column == null) {
                 continue;
             }
-            if(StringUtils.equals(column.name(),mappedByStr)){
+            if (StringUtils.equals(column.name(), mappedByStr)) {
                 return field;
             }
         }
         return null;
     }
 
-    private static class OnetoXSett
-    {
+    private static class OnetoXSett {
         //主表的
         private Field field;
         private boolean isOnetoOne;

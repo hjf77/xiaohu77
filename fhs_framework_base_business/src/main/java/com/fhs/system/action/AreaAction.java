@@ -25,29 +25,26 @@ import java.util.Map;
  * @Version: 1.0
  * @Author: qixiaobo
  * @Email: qxb@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @Controller
 @RequestMapping("ms/area")
-public class AreaAction extends ModelSuperAction<Area>
-{
+public class AreaAction extends ModelSuperAction<Area> {
     @Autowired
     private AreaService areaService;
 
 
     /**
      * 省市区接口,传递areaParentId即可,顶级传递0
+     *
      * @param request
      * @param response
      * @param area
      */
     @RequestMapping("getProvinceData")
 
-    public void getProvinceData(HttpServletRequest request, HttpServletResponse response, Area area)
-    {
+    public void getProvinceData(HttpServletRequest request, HttpServletResponse response, Area area) {
         Map<String, Object> map = new HashMap<String, Object>();
         int areaParentId = area.getAreaParentId();
         map.put("areaParentId", areaParentId);
@@ -61,7 +58,7 @@ public class AreaAction extends ModelSuperAction<Area>
     @RequiresPermissions("area:refreshRedisCache")
     @RequestMapping("/refreshRedisCache")
     @ResponseBody
-    public HttpResult<Boolean> refreshRedisCache(){
+    public HttpResult<Boolean> refreshRedisCache() {
         areaService.refreshRedisCache();
         return HttpResult.success(true);
     }

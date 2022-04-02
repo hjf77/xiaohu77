@@ -1,4 +1,5 @@
 package com.fhs.system.trans;
+
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.Logger;
 import org.springframework.stereotype.Component;
@@ -19,33 +20,29 @@ public class TransMessageListener {
     /**
      * key trans Type value是transtype对应 的 缓存刷新方法
      */
-    private static Map<String,TransRefresher> transRefresherMap = new HashMap<>();
+    private static Map<String, TransRefresher> transRefresherMap = new HashMap<>();
 
     /**
-     *
      * @param message
      */
-    public void handelMsg(String message){
+    public void handelMsg(String message) {
         System.out.println("收到了消息:" + message);
-        Map<String,Object> messageMap = JsonUtils.parseJSON2Map(message);
-        if(transRefresherMap.containsKey(messageMap.get("transType")))
-        {
+        Map<String, Object> messageMap = JsonUtils.parseJSON2Map(message);
+        if (transRefresherMap.containsKey(messageMap.get("transType"))) {
             transRefresherMap.get(messageMap.get("transType")).refreshCache(messageMap);
-        }
-        else
-        {
+        } else {
             LOGGER.error(messageMap.get("transType") + "没有实现对应的缓存刷新器");
         }
     }
 
     /**
      * 注册消息刷新器
-     * @param transType transtype
+     *
+     * @param transType      transtype
      * @param transRefresher 对应的消息刷新器(functioninterface)
      */
-    public static void regTransRefresher(String transType,TransRefresher transRefresher)
-    {
-        transRefresherMap.put(transType,transRefresher);
+    public static void regTransRefresher(String transType, TransRefresher transRefresher) {
+        transRefresherMap.put(transType, transRefresher);
     }
 
 }

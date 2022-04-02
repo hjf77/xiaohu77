@@ -16,12 +16,12 @@ import com.fhs.file.bean.ServiceFile;
 
 /**
  * 文件 beancrud dao
- * @author  王磊
- * @version  [版本号, 2015/08/14 11:34:23]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ *
+ * @author 王磊
+ * @version [版本号, 2015/08/14 11:34:23]
+ * @see [相关类/方法]
+ * @since [产品/模块版本]
  */
 @MapperDefinition(domainClass = ServiceFile.class)
-public interface ServiceFileDAO extends BaseDao<ServiceFile>
-{
+public interface ServiceFileDAO extends BaseDao<ServiceFile> {
 }

@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * c端用户登录过滤器
  */
 @ServletComponentScan
-@WebFilter(urlPatterns = {"/front/*", "/page/h5/*", "/page/pc/*","/b/*"}, filterName = "userFilter", asyncSupported = true)
+@WebFilter(urlPatterns = {"/front/*", "/page/h5/*", "/page/pc/*", "/b/*"}, filterName = "userFilter", asyncSupported = true)
 public class UserFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFilter.class);
     private static final String JSESSIONID_CODE = "JSESSIONID";

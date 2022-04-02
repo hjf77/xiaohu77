@@ -19,8 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * tomcat配置
  */
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter implements EnvironmentAware
-{
+public class WebConfig extends WebMvcConfigurerAdapter implements EnvironmentAware {
 
     /*
      *日志
@@ -39,22 +38,23 @@ public class WebConfig extends WebMvcConfigurerAdapter implements EnvironmentAwa
     }
 
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, (String)null);
+        this.propertyResolver = new RelaxedPropertyResolver(environment, (String) null);
     }
 
     /**
      * 修改session过期时间
+     *
      * @return
      */
-     @Bean
-     public EmbeddedServletContainerCustomizer containerCustomizer(){
-          return new EmbeddedServletContainerCustomizer() {
-                  @Override
-                  public void customize(ConfigurableEmbeddedServletContainer container) {
-                  container.setSessionTimeout(sessionTimeout);//单位为S 半个小时过期
-                  }
-            };
-       }
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+        return new EmbeddedServletContainerCustomizer() {
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer container) {
+                container.setSessionTimeout(sessionTimeout);//单位为S 半个小时过期
+            }
+        };
+    }
 
 
     @Override
@@ -68,14 +68,14 @@ public class WebConfig extends WebMvcConfigurerAdapter implements EnvironmentAwa
     }
 
     /**
-     *csrf漏洞修复过滤器
+     * csrf漏洞修复过滤器
      */
     @Bean
-    public FilterRegistrationBean csrfFileter(){
+    public FilterRegistrationBean csrfFileter() {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setName("csrfFileter");
         bean.setFilter(new CSRFFileter());
-        bean.addUrlPatterns("/ms/*","/page/ms/*");
+        bean.addUrlPatterns("/ms/*", "/page/ms/*");
         bean.setEnabled(true);
         return bean;
     }

@@ -30,11 +30,11 @@ public class WordBookgApiServiceCloud implements FeignWordBookApiService {
     public HttpResult<List<WordbookVO>> getWordBookList(String wordBookGroupCode) {
         Wordbook param = new Wordbook();
         param.setWordbookGroupCode(wordBookGroupCode);
-        List<Wordbook> wordbookList  = wordBookService.selectPage(param, Constant.PAGE_ALL,Constant.PAGE_ALL);
+        List<Wordbook> wordbookList = wordBookService.selectPage(param, Constant.PAGE_ALL, Constant.PAGE_ALL);
         List<WordbookVO> result = new ArrayList<>();
         wordbookList.forEach(wordbook -> {
-            WordbookVO temp =  new WordbookVO();
-            BeanUtils.copyProperties(wordbook,temp);
+            WordbookVO temp = new WordbookVO();
+            BeanUtils.copyProperties(wordbook, temp);
             result.add(temp);
         });
         return HttpResult.success(result);

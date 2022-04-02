@@ -10,10 +10,10 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 
 /**
+ * @author zhangqiang
+ * @version [版本号, 2018/08/23 10:29:28]
  * @Description: 获取后端用户form
- * @author  zhangqiang
- * @version  [版本号, 2018/08/23 10:29:28]
- * @versio  1.0
+ * @versio 1.0
  * 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  **/
@@ -28,13 +28,13 @@ public class SysUserForm extends BaseForm {
      */
     @NotNull(message = "用户ID不能为空")
     @Length(min = 1)
-    @ApiModelProperty(value="用户ID", required = true)
+    @ApiModelProperty(value = "用户ID", required = true)
     private String userId;
 
     /**
      * @desc 用户姓名
      */
-    @ApiModelProperty(value="用户姓名")
+    @ApiModelProperty(value = "用户姓名")
     private String userName;
 
     /**

@@ -12,9 +12,9 @@ public class AutowareYLMConfig {
     private String basePackge;
 
     @Bean
-    public AutowareYLMSetBeanEvent getAutowareYLMSetBeanEvent(){
+    public AutowareYLMSetBeanEvent getAutowareYLMSetBeanEvent() {
         AutowareYLMSetBeanEvent autowareYLMSetBeanEvent = new AutowareYLMSetBeanEvent();
-        autowareYLMSetBeanEvent.setPackageNames (basePackge.split(";"));
-        return  autowareYLMSetBeanEvent;
+        autowareYLMSetBeanEvent.setPackageNames(basePackge.split(";"));
+        return autowareYLMSetBeanEvent;
     }
 }

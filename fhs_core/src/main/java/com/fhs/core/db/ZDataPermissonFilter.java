@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Component
 @ServletComponentScan
-@WebFilter(urlPatterns = {"/ms/*"},filterName = "zDataPermissonFilter" ,asyncSupported = true)
+@WebFilter(urlPatterns = {"/ms/*"}, filterName = "zDataPermissonFilter", asyncSupported = true)
 public class ZDataPermissonFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -27,17 +27,16 @@ public class ZDataPermissonFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
-        HttpServletResponse response = (HttpServletResponse)servletResponse;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         //没用户的话直接放行
-        if(request.getSession().getAttribute(Constant.SESSION_USER) == null || (!request.getServletPath().startsWith("/ms/")))
-        {
-            filterChain.doFilter(servletRequest,servletResponse);
+        if (request.getSession().getAttribute(Constant.SESSION_USER) == null || (!request.getServletPath().startsWith("/ms/"))) {
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        Map<String,String> dataPermissonMap = (Map<String, String>) request.getSession().getAttribute(Constant.SESSION_USER_DATA_PERMISSION);
+        Map<String, String> dataPermissonMap = (Map<String, String>) request.getSession().getAttribute(Constant.SESSION_USER_DATA_PERMISSION);
         DataPermissonContext.setDataPermissonMap(dataPermissonMap);
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description:后台组织机构表
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-04]
+ * @Description:后台组织机构表
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Controller
@@ -57,15 +57,14 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
      */
     @RequiresPermissions("sysOrganization:see")
     @RequestMapping("getTreesData")
-    public void getTreesData(HttpServletRequest request, HttpServletResponse response)
-    {
+    public void getTreesData(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = super.getPageTurnNum(request);
         SysUserVo sysUser = super.getSessionuser(request);
         map.put("organizationId", sysUser.getOrganizationId());
         List<TreeModel> treesData = sysOrganizationService.getTreesData(map);
         String jsonTree = JsonUtils.list2json(treesData);
         request.setAttribute("datas", jsonTree);
-        super.outJsonp(jsonTree, response,request);
+        super.outJsonp(jsonTree, response, request);
     }
 
     /**
@@ -78,19 +77,19 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
     @RequiresPermissions("sysOrganization:see")
     @RequestMapping("getPageListData")
     @ResponseBody
-    public Pager<SysOrganization> getPageListData(HttpServletRequest request, HttpServletResponse response, String id)
-    {
+    public Pager<SysOrganization> getPageListData(HttpServletRequest request, HttpServletResponse response, String id) {
         Map<String, Object> map = super.getPageTurnNum(request);
         map.put("parentId", id);
         int count = sysOrganizationService.findCountFromMap(map);
         List<SysOrganization> dataList = sysOrganizationService.findForListFromMap(map);
-        return new Pager<SysOrganization>(count , dataList);
+        return new Pager<SysOrganization>(count, dataList);
     }
 
     /**
      * 更新
-     * @param e bean
-     * @param check 检查结果
+     *
+     * @param e        bean
+     * @param check    检查结果
      * @param request
      * @param response
      * @return
@@ -101,7 +100,7 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
         try {
             SysOrganization oldOrg = sysOrganizationService.findBeanById(e.getId());
             // 如果是启用改为禁用
-            if(Constant.ENABLED == oldOrg.getIsDisable() && Constant.DISABLE == e.getIsDisable()) {
+            if (Constant.ENABLED == oldOrg.getIsDisable() && Constant.DISABLE == e.getIsDisable()) {
                 Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("organizationId", e.getId());
                 paramMap.put("isDisable", Constant.ENABLED);
@@ -117,15 +116,15 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
                 }
             }
             return super.update(e, check, request, response);
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return HttpResult.error();
         }
     }
 
     /**
      * 删除
-     * @param id id
+     *
+     * @param id      id
      * @param request
      * @return
      */
@@ -166,27 +165,22 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
     @ResponseBody
     @LogDesc(type = LogDesc.ADD, value = "添加")
     public HttpResult insertOrganization(HttpServletRequest request, HttpServletResponse response,
-                                         SysOrganization sysOrganization)
-    {
+                                         SysOrganization sysOrganization) {
         // 效验机构是否存在
         boolean notExist = sysOrganizationService.validataOrgName(sysOrganization);
-        if(notExist)
-        {
-            if(!CheckUtils.isNullOrEmpty(sysOrganization.getParentId())) {
+        if (notExist) {
+            if (!CheckUtils.isNullOrEmpty(sysOrganization.getParentId())) {
                 SysOrganization sysOrganizationQuery = sysOrganizationService.findBeanById(sysOrganization.getParentId());
-                if(!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsDisable()) {
+                if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsDisable()) {
                     return HttpResult.error(sysOrganizationQuery, "父机构处于禁用状态，不能添加子机构");
                 }
             }
 
-            try
-            {
+            try {
                 sysOrganization.setGroupCode(super.getSessionuser(request).getGroupCode());
                 sysOrganization.preInsert(super.getSessionuser(request).getUserId());
                 sysOrganizationService.insertOrganization(sysOrganization);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 return HttpResult.error(e);
             }
             return HttpResult.success();
@@ -197,29 +191,28 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
 
     /**
      * 获取机构ID combotree格式
+     *
      * @param request 请求
      * @return combotree数据格式
      */
-    @RequestMapping(value="/getOrgIdComBoxData",produces = "application/json;charset=utf-8")
-    public void getOrgIdComBoxData(HttpServletRequest request, HttpServletResponse response)
-    {
+    @RequestMapping(value = "/getOrgIdComBoxData", produces = "application/json;charset=utf-8")
+    public void getOrgIdComBoxData(HttpServletRequest request, HttpServletResponse response) {
         // 查询根级组织 为当前系统的登录用户组织
         SysUserVo sysUser = super.getSessionuser(request);
-        super.outJsonp(JsonUtils.list2json(sysOrganizationService.getSubNode(sysUser.getOrganizationId(),request.getParameter("parentId")))
-        ,response,request);
+        super.outJsonp(JsonUtils.list2json(sysOrganizationService.getSubNode(sysUser.getOrganizationId(), request.getParameter("parentId")))
+                , response, request);
     }
 
     /**
-     * @desc 刷新所有机构缓存
      * @return 刷新缓存结果
+     * @desc 刷新所有机构缓存
      */
     @RequiresPermissions("sysOrganization:refreshRedisCache")
     @RequestMapping("/refreshRedisCache")
     @ResponseBody
-    public HttpResult<Map> refreshRedisCache(){
+    public HttpResult<Map> refreshRedisCache() {
         return sysOrganizationService.refreshRedisCache();
     }
-
 
 
 }

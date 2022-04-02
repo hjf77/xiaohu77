@@ -28,12 +28,10 @@ import java.util.Map;
  * 角色控制器类
  *
  * @author Administrator
- *
  */
 @Controller
 @RequestMapping("ms/sysRole")
-public class MsRoleAction extends ModelSuperAction<SysRole>
-{
+public class MsRoleAction extends ModelSuperAction<SysRole> {
 
     Logger LOG = Logger.getLogger(MsRoleAction.class);
 
@@ -45,20 +43,19 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
 
     /**
      * 获取角色集合
+     *
      * @param organizationId 机构id
      * @param request
      * @param response
      */
     @RequiresPermissions("sysRole:see")
     @RequestMapping("/listData/{organizationId}")
-    public void listData(@PathVariable(value="organizationId") String organizationId, HttpServletRequest request, HttpServletResponse response)
-    {
+    public void listData(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, HttpServletResponse response) {
         SysUserVo sysUser = super.getSessionuser(request);
         Map<String, Object> map = super.getPageTurnNum(request);
-        if(CheckUtils.isNotEmpty(organizationId))
-        {
+        if (CheckUtils.isNotEmpty(organizationId)) {
             map.put("organizationId", organizationId);
-        }else {
+        } else {
             map.put("organizationId", sysUser.getOrganizationId());
         }
         List<SysRole> dataList = sysRoleService.findForListFromMap(map);
@@ -77,8 +74,7 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
      */
     @RequiresPermissions("sysRole:see")
     @RequestMapping("toUpdate")
-    public void getBeanData(HttpServletRequest request, HttpServletResponse reponse, SysRole sysRole)
-    {
+    public void getBeanData(HttpServletRequest request, HttpServletResponse reponse, SysRole sysRole) {
         SysRole bean = sysRoleService.findBean(sysRole);
         String dataPermissions = bean.getDataPermissions();
         String data = JsonUtils.bean2json(bean);
@@ -87,24 +83,21 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
 
     /**
      * 验证角色名称是否存在
+     *
      * @param request
      * @param reponse
      * @param sysRole
      */
     @RequiresPermissions("sysRole:see")
     @RequestMapping("validataName")
-    public void validataName(HttpServletRequest request, HttpServletResponse reponse, SysRole sysRole)
-    {
+    public void validataName(HttpServletRequest request, HttpServletResponse reponse, SysRole sysRole) {
         Map<String, Object> map = super.getParameterMap(request);
-        String param = (String)map.get("param");
+        String param = (String) map.get("param");
         map.put("roleName", param);
         sysRole = sysRoleService.findBeanFromMap(map);
-        if (sysRole != null && !ConverterUtils.toBoolean(map.get("isEdit")))
-        {
+        if (sysRole != null && !ConverterUtils.toBoolean(map.get("isEdit"))) {
             super.outWrite("角色名称重复", reponse);
-        }
-        else
-        {
+        } else {
             super.outWrite("y", reponse);
         }
     }
@@ -117,8 +110,7 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
      * @param sysRole
      */
     @RequestMapping("searchButtons")
-    public void searchButtons(HttpServletRequest request, HttpServletResponse response, SysRole sysRole)
-    {
+    public void searchButtons(HttpServletRequest request, HttpServletResponse response, SysRole sysRole) {
         List<Map<String, Object>> dataList = sysRoleService.searchButtons(sysRole);
         String result = JsonUtils.list2json(dataList);
         super.outWrite(result, response);
@@ -131,7 +123,7 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
     @RequestMapping("/getCurrentOrganizationSysRoles")
     public void getCurrentOrganizationSysRoles(HttpServletRequest request, HttpServletResponse response) {
         //获取当前登录用户
-        SysUser sysUser = (SysUser)request.getSession().getAttribute(Constant.SESSION_USER);
+        SysUser sysUser = (SysUser) request.getSession().getAttribute(Constant.SESSION_USER);
         SysRole sysRole = new SysRole();
         List<SysRole> sysRoleList = sysRoleService.findForList(sysRole);
         String result = JsonUtils.list2json(sysRoleList);
@@ -147,8 +139,7 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
      * @return
      */
     @RequestMapping("realRoleComBoxData")
-    public void realRoleComBoxData(HttpServletRequest request, HttpServletResponse response, SysRole sysRole)
-    {
+    public void realRoleComBoxData(HttpServletRequest request, HttpServletResponse response, SysRole sysRole) {
         Map<String, Object> map = super.getPageTurnNum(request);
         map.put("organizationId", super.getSessionuser(request).getOrganizationId());
         List<SysRole> dataList = sysRoleService.findForListFromMap(map);
@@ -157,15 +148,15 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
     }
 
     /**
-     * @desc 根据机构id获取角色下拉框数据
      * @param response
      * @return
+     * @desc 根据机构id获取角色下拉框数据
      */
     @RequestMapping("/getSelectOrganSysRoles/{organizationId}")
-    public void getSelectOrganSysRoles(@PathVariable("organizationId") String organizationId,HttpServletRequest request, HttpServletResponse response) {
-        if(StringUtil.isEmpty(organizationId)) {
-           throw new ParamException("organizationId 为必传");
-        }else {
+    public void getSelectOrganSysRoles(@PathVariable("organizationId") String organizationId, HttpServletRequest request, HttpServletResponse response) {
+        if (StringUtil.isEmpty(organizationId)) {
+            throw new ParamException("organizationId 为必传");
+        } else {
             Map<String, Object> map = super.getParameterMap(request);
             map.put("organizationId", organizationId);
             List<SysRole> dataList = sysRoleService.findForListFromMap(map);
@@ -185,20 +176,16 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
     @LogDesc(value = "更新", type = LogDesc.UPDATE)
     @RequestMapping("updateSysRole")
     @RequiresPermissions("sysRole:update")
-    public HttpResult updateSysRole(HttpServletRequest request, HttpServletResponse response, SysRole sysRole)
-    {
+    public HttpResult updateSysRole(HttpServletRequest request, HttpServletResponse response, SysRole sysRole) {
 
-        try
-        {
+        try {
             SysRole oldRole = sysRoleService.findBeanById(sysRole.getRoleId());
-            if(Constant.ENABLED == oldRole.getIsDisable() && Constant.DISABLE == sysRole.getIsDisable())
-            {
+            if (Constant.ENABLED == oldRole.getIsDisable() && Constant.DISABLE == sysRole.getIsDisable()) {
                 // 根据roleid查询用户关联表用户数
                 Map<String, Object> paramMap = new HashMap<>();
                 paramMap.put("roleId", sysRole.getRoleId());
                 Integer count = sysRoleService.findUserCountByRoleId(paramMap);
-                if(count > Constant.ENABLED)
-                {
+                if (count > Constant.ENABLED) {
                     return HttpResult.error(count > Constant.ENABLED, "该角色拥有关联用户,不可禁用!");
                 }
             }
@@ -206,10 +193,8 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
             sysRole.setUpdateUser(sysUser.getUserId());
             sysRole.setUpdateTime(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
             sysRoleService.updateRole(sysRole);
-        }
-        catch (Exception e)
-        {
-            LOG.error(this,e);
+        } catch (Exception e) {
+            LOG.error(this, e);
             return HttpResult.error(false);
         }
         return HttpResult.success();
@@ -226,18 +211,14 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
     @RequestMapping("addSysRole")
     @ResponseBody
     @LogDesc(type = LogDesc.ADD, value = "添加角色")
-    public HttpResult add(HttpServletRequest request, HttpServletResponse response, SysRole sysRole)
-    {
-        try
-        {
+    public HttpResult add(HttpServletRequest request, HttpServletResponse response, SysRole sysRole) {
+        try {
             SysUserVo sysUser = super.getSessionuser(request);
             sysRole.setCreateUser(sysUser.getUserId());
             sysRole.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
             sysRole.setGroupCode(sysUser.getGroupCode());
             sysRoleService.addRole(sysRole);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();
@@ -253,14 +234,10 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
     @RequiresPermissions("sysRole:del")
     @RequestMapping("delSysRole")
     @ResponseBody
-    public HttpResult del(HttpServletRequest request, HttpServletResponse response, SysRole sysRole)
-    {
-        try
-        {
+    public HttpResult del(HttpServletRequest request, HttpServletResponse response, SysRole sysRole) {
+        try {
             sysRoleService.deleteRole(sysRole);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success();

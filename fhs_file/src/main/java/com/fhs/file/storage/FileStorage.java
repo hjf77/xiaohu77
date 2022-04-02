@@ -11,6 +11,7 @@ public interface FileStorage {
 
     /**
      * 根据ServiceFile和MultipartFile做文件上传
+     *
      * @param serviceFile
      * @param fileData
      */
@@ -19,15 +20,17 @@ public interface FileStorage {
 
     /**
      * 根据文件字节数组,serviceFile和文件名做文件上传
+     *
      * @param bytes
      * @param token
      * @param serviceFile
      */
 
-    void uploadFileByToken(byte[] bytes,String token,ServiceFile  serviceFile);
+    void uploadFileByToken(byte[] bytes, String token, ServiceFile serviceFile);
 
     /**
      * 根据serviceFile下载文件
+     *
      * @param serviceFile
      * @param response
      */
@@ -36,24 +39,27 @@ public interface FileStorage {
 
     /**
      * 根据文件名和serviceFile下载文件
+     *
      * @param token
      * @param response
-     * @param  serviceFile
+     * @param serviceFile
      */
 
-    void downloadFileByToken(String token,ServiceFile serviceFile,HttpServletResponse response);
+    void downloadFileByToken(String token, ServiceFile serviceFile, HttpServletResponse response);
 
     /**
      * 判断一个文件是否存在
-     * @param token  token
+     *
+     * @param token       token
      * @param serviceFile file
      * @return true 存在 false不存在
      */
-    boolean checkFileIsExist(String token,ServiceFile serviceFile);
+    boolean checkFileIsExist(String token, ServiceFile serviceFile);
 
     /**
      * 获取一个inputstreqam
-     * @param serviceFile  文件
+     *
+     * @param serviceFile 文件
      * @return inputstream
      */
     InputStream getFileInputStream(ServiceFile serviceFile) throws FileNotFoundException;

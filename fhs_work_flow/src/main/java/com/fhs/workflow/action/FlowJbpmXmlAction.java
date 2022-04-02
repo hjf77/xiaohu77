@@ -7,6 +7,7 @@ import com.fhs.workflow.service.FlowJbpmXmlService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,13 +29,13 @@ public class FlowJbpmXmlAction extends ModelSuperAction<FlowJbpmXml> {
 
     /**
      * 部署工作流到引擎里面
+     *
      * @param xmlId 里面包含id即可
      */
     @RequestMapping("releaseWorkFlow")
     @RequiresPermissions("flow_jbpm_xml:releaseWorkFlow")
-    public HttpResult<Boolean> releaseWorkFlow(String  xmlId)
-    {
-        ParamChecker.isNotNull(xmlId,"id不能为空");
+    public HttpResult<Boolean> releaseWorkFlow(String xmlId) {
+        ParamChecker.isNotNull(xmlId, "id不能为空");
         flowJbpmXmlService.releaseWorkFlow(xmlId);
         return HttpResult.success(true);
     }

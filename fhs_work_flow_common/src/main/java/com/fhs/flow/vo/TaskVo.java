@@ -14,7 +14,7 @@ import java.util.Map;
  * @date 2019 -11-13 15:12:17
  */
 @Data
-public class TaskVo{
+public class TaskVo {
 
     private String name;
     private String description;
@@ -25,12 +25,18 @@ public class TaskVo{
     private Date dueDate;
     private String category;
 
-    /** 添加候选人 */
+    /**
+     * 添加候选人
+     */
     private Collection<String> candidateUsers;
 
-    /** 添加候选组 */
+    /**
+     * 添加候选组
+     */
     private String groupId;
 
-    /** 流程变量 */
+    /**
+     * 流程变量
+     */
     private Map<String, Object> variableMap;
 }

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 /**
  * 只用来存sql用此类没实际用途
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.bean
  * @ClassName: DefaultPageXBean
@@ -19,7 +20,7 @@ import javax.persistence.Table;
  * @Version: 1.0
  */
 @Entity
-@Table(name="t_default")
+@Table(name = "t_default")
 @Data
 public class DefaultPageXBean extends BaseDO<DefaultPageXBean> {
     @Id

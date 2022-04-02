@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @DataSource("base_business")
-public class SysModelServiceImpl extends BaseServiceImpl<SysModel> implements SysModelService
-{
-    
+public class SysModelServiceImpl extends BaseServiceImpl<SysModel> implements SysModelService {
+
 }

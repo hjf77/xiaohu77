@@ -43,7 +43,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @param fileName 显示的文件名
      */
     public static void download(String path, HttpServletResponse response, String fileName) {
-        download( new File(path),  response,  fileName);
+        download(new File(path), response, fileName);
     }
 
     public static void jsDownload(String path, HttpServletResponse response) {
@@ -140,7 +140,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @param response response
      * @param fileName 文件名称
      */
-    public static void initResponseHeader(HttpServletResponse response, String fileName, long length){
+    public static void initResponseHeader(HttpServletResponse response, String fileName, long length) {
         //fileName = formartFileName(fileName);
         // 清空response
         response.reset();

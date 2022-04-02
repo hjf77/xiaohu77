@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 public class SaasMybatisConfig implements InitializingBean {
 
-    private static Logger LOG =  Logger.getLogger(SaasMybatisConfig.class);
+    private static Logger LOG = Logger.getLogger(SaasMybatisConfig.class);
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;

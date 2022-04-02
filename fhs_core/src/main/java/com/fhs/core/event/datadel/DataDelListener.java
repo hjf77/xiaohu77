@@ -8,7 +8,7 @@ import java.util.Set;
  */
 public interface DataDelListener {
 
-     void onDel(String namespace, Map<String,Object> paramMap);
+    void onDel(String namespace, Map<String, Object> paramMap);
 
-     Set<String> namespaces();
+    Set<String> namespaces();
 }

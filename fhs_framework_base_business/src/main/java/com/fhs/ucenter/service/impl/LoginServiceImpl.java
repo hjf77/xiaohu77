@@ -31,15 +31,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Service
 @DataSource("base_business")
-public class LoginServiceImpl implements LoginService
-{
+public class LoginServiceImpl implements LoginService {
 
     private static final Logger LOGGER = Logger.getLogger(LoginServiceImpl.class);
 
     /**
      * 缓存 默认时间：半个小时
      */
-    @CreateCache(expire = 1800, name = "frontuser:token",cacheType = CacheType.BOTH)
+    @CreateCache(expire = 1800, name = "frontuser:token", cacheType = CacheType.BOTH)
     private Cache<String, String> frontUserTokenMap;
 
     /**
@@ -79,32 +78,27 @@ public class LoginServiceImpl implements LoginService
      * @param userId 用户id
      * @return accesstoken
      */
-    public String login(String userId)
-    {
+    public String login(String userId) {
         UcenterFrontUser user = userService.findBeanById(userId);
-        if (CheckUtils.isNullOrEmpty(userId))
-        {
+        if (CheckUtils.isNullOrEmpty(userId)) {
             throw new ParamException("用户id不能为空");
         }
-        if (user == null)
-        {
+        if (user == null) {
             throw new ParamException("用户id无效:" + userId);
         }
-        if(timeOutSecond == null)
-        {
+        if (timeOutSecond == null) {
             timeOutSecond = ConverterUtils.toInt(EConfig.getOtherConfigPropertiesValue("access_token_time_out_second"));
             LOGGER.info("读取access_token_time_out_second:" + timeOutSecond);
         }
         String accessToken = StringUtil.getUUID();
         redisCacheService.addStr(ACCESS_TOKEN_USER_KEY + accessToken, userId);
-        frontUserTokenMap.put(accessToken,userId);
+        frontUserTokenMap.put(accessToken, userId);
         LOGGER.info("添加accessToken:" + accessToken);
         redisCacheService.expire(ACCESS_TOKEN_USER_KEY + accessToken,
                 timeOutSecond);
         HttpServletRequest request =
-            ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        if (request != null)
-        {
+                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        if (request != null) {
             request.getSession().setAttribute("accessToken", accessToken);
         }
         LOGGER.info("用户登录成功:" + accessToken);
@@ -124,10 +118,8 @@ public class LoginServiceImpl implements LoginService
     }
 
     @Override
-    public String getUserIdByAccessToken(String accessToken)
-    {
-        if(CheckUtils.isNotEmpty(frontUserTokenMap.get(accessToken)))
-        {
+    public String getUserIdByAccessToken(String accessToken) {
+        if (CheckUtils.isNotEmpty(frontUserTokenMap.get(accessToken))) {
             return frontUserTokenMap.get(accessToken);
         }
         return redisCacheService.getStr(ACCESS_TOKEN_USER_KEY + accessToken);

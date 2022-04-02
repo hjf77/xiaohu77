@@ -13,7 +13,7 @@ import lombok.Data;
  * @date 2019 -11-15 09:47:12
  */
 @Data
-@TransTypes(types = {Constant.USER_INFO,"wordbook"})
+@TransTypes(types = {Constant.USER_INFO, "wordbook"})
 public class TaskHistoryVO extends SuperBean<TaskHistoryVO> {
 
     private String taskId;

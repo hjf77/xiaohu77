@@ -128,7 +128,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
     }
 
     @Override
-    public void transMore(List<? extends  SuperBean<?>>  objList, List<Field> toTransList) {
+    public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
         threadLocalCache.set(new HashMap<>());
         // 由于一些表数据比较多，所以部分数据不是从缓存取的，是从db先放入缓存的，翻译完了释放掉本次缓存的数据
         for (Field tempField : toTransList) {
@@ -288,7 +288,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
             return cacheMap.get(namespace + "_" + pkey);
         }
         if (this.threadLocalCache.get() == null) {
-            BaseDO vo = (BaseDO)this.baseServiceMap.get(namespace).selectById(pkey);
+            BaseDO vo = (BaseDO) this.baseServiceMap.get(namespace).selectById(pkey);
             return createTempTransCacheMap((BaseDO) vo, autoTrans);
         }
         return this.threadLocalCache.get().get(namespace + "_" + pkey);
@@ -313,13 +313,15 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
         }
         return null;
     }
+
     /**
      * 类扫描器
+     *
      * @param annotationClass 注解
-     * @param packageNames 包
+     * @param packageNames    包
      * @return 符合条件的类
      */
-    public static Set<Class<?>> scan(Class<? extends Annotation> annotationClass, String[] packageNames){
+    public static Set<Class<?>> scan(Class<? extends Annotation> annotationClass, String[] packageNames) {
         TypeFilter entityFilter = AnnotationTypeFilterBuilder.build(annotationClass);
         SpringClassScanner entityScanner = new SpringClassScanner.Builder().typeFilter(entityFilter).build();
         for (String packageName : packageNames) {
@@ -329,7 +331,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
         try {
             entitySet = entityScanner.scan();
         } catch (ClassNotFoundException | IOException e) {
-            LOGGER.error("包扫描错误" ,e);
+            LOGGER.error("包扫描错误", e);
             // log or throw runTimeExp
             throw new RuntimeException(e);
         }

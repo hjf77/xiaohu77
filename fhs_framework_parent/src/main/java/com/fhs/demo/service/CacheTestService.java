@@ -16,5 +16,6 @@ import java.util.Map;
  */
 public interface CacheTestService {
     String getHello(String name);
+
     String getHello2(Map paramter);
 }

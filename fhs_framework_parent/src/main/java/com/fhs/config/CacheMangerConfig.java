@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 缓存管理器配置
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.config
  * @ClassName: CacheConfig
@@ -26,26 +27,28 @@ public class CacheMangerConfig {
 
     /**
      * redis 的cache
+     *
      * @param redisTemplate
      * @return
      */
     @Bean("extendedRedisCacheManager")
     @Primary
-    public ExtendedRedisCacheManager initRedisCache(RedisTemplate redisTemplate){
+    public ExtendedRedisCacheManager initRedisCache(RedisTemplate redisTemplate) {
         ExtendedRedisCacheManager redisCacheManager = new ExtendedRedisCacheManager(redisTemplate);
         // 默认5分钟过期
         redisCacheManager.setDefaultExpiration(300);
-        return  redisCacheManager;
+        return redisCacheManager;
     }
 
     /**
      * 自定义cache管理器
+     *
      * @param redisTemplate
      * @return
      */
     @Bean("mixCacheManager")
     @DependsOn("extendedRedisCacheManager")
-    public MixCacheManager initMixCacheManager(RedisTemplate redisTemplate){
+    public MixCacheManager initMixCacheManager(RedisTemplate redisTemplate) {
         MixCacheManager mixCacheManager = new MixCacheManager();
         mixCacheManager.setRedisCacheManager(initRedisCache(redisTemplate));
         return mixCacheManager;

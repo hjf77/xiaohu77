@@ -9,7 +9,7 @@ import com.fhs.ucenter.bean.UcenterFrontUser;
  * @author jackwong
  * @since 2019-03-11 14:14:58
  */
-public interface UcenterFrontUserService extends BaseService<UcenterFrontUser>{
+public interface UcenterFrontUserService extends BaseService<UcenterFrontUser> {
 
     /**
      * 未知

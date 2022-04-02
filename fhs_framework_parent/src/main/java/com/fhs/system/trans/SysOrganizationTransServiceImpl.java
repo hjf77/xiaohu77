@@ -14,13 +14,13 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 /**
- * @Description: 后管机构翻译服务
- * @author  zhangqiang
+ * @author zhangqiang
  * @version [版本号, 2018-09-05]
+ * @Description: 后管机构翻译服务
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Service
-public class SysOrganizationTransServiceImpl implements ITransTypeService,InitializingBean {
+public class SysOrganizationTransServiceImpl implements ITransTypeService, InitializingBean {
 
     /**
      * redis 缓存服务
@@ -30,6 +30,7 @@ public class SysOrganizationTransServiceImpl implements ITransTypeService,Initia
 
     /**
      * 将自身注册为一个服务
+     *
      * @throws Exception
      */
     @Override
@@ -39,22 +40,19 @@ public class SysOrganizationTransServiceImpl implements ITransTypeService,Initia
 
     /**
      * 翻译单条数据
-     * @param obj 需要翻译的对象
+     *
+     * @param obj         需要翻译的对象
      * @param toTransList 需要翻译的字段
      */
     @Override
     public void transOne(SuperBean<?> obj, List<Field> toTransList) {
 
-        for (Field tempField : toTransList)
-        {
+        for (Field tempField : toTransList) {
             tempField.setAccessible(true);
             String entId = null;
-            try
-            {
+            try {
                 entId = StringUtil.toString(tempField.get(obj));
-            }
-            catch (IllegalArgumentException | IllegalAccessException e)
-            {
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
             obj.getTransMap().put(tempField.getName() + "OrganizationName", redisCacheService.getStr(Constant.SYS_ORGANIZATION_NAME + entId));
@@ -64,14 +62,14 @@ public class SysOrganizationTransServiceImpl implements ITransTypeService,Initia
 
     /**
      * 翻译多条数据
-     * @param objList 需要翻译的对象集合
+     *
+     * @param objList     需要翻译的对象集合
      * @param toTransList 需要翻译的字段集合
      */
     @Override
     public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
 
-        for(SuperBean<?> obj : objList)
-        {
+        for (SuperBean<?> obj : objList) {
             transOne(obj, toTransList);
         }
     }

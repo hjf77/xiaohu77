@@ -31,12 +31,11 @@ import javax.validation.constraints.NotNull;
  * @since [产品/模块版本]
  */
 @Data
-public class SysMenuVo extends BaseVo
-{
+public class SysMenuVo extends BaseVo {
 
     /**
-	 *
-	 */
+     *
+     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -89,10 +88,6 @@ public class SysMenuVo extends BaseVo
      * 所属系统
      */
     private String systemId;
-
-
-
-
 
 
     /**

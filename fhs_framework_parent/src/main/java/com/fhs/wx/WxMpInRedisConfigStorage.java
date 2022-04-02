@@ -62,8 +62,10 @@ public class WxMpInRedisConfigStorage implements WxMpConfigStorage {
 
     private RedisSerializer<String> redisSerializer;
     private RedisConnection redisConnection;
+
     public WxMpInRedisConfigStorage() {
     }
+
     public WxMpInRedisConfigStorage(String host, int port) {
     }
 
@@ -154,7 +156,7 @@ public class WxMpInRedisConfigStorage implements WxMpConfigStorage {
     @Override
     public void expireAccessToken() {
         Throwable var2 = null;
-        LOG.info("设置accessToken立刻过期" );
+        LOG.info("设置accessToken立刻过期");
         try {
             setString(ACCESS_TOKEN_EXPIRES_TIME_KEY, "0");
         } catch (Throwable var11) {

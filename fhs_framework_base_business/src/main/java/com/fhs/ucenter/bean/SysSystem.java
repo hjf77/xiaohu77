@@ -21,13 +21,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Description:
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-26]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @Table(name = "t_ucenter_ms_system")
 @TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO})
@@ -41,13 +41,13 @@ public class SysSystem extends BaseDO<SysSystem> {
      */
     @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @Id
-    @GeneratedValue(generator= GeneratedType.UUID)
+    @GeneratedValue(generator = GeneratedType.UUID)
     private String id;
     /**
      * 子系统名称
      */
     @NotEmpty
-    @NotNull(message="子系统名称字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "子系统名称字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "子系统名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "name")
     @Like
@@ -63,7 +63,7 @@ public class SysSystem extends BaseDO<SysSystem> {
      * 子系统logo
      */
     @NotEmpty
-    @NotNull(message="子系统logo字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "子系统logo字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "子系统logo字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "logo")
     private String logo;
@@ -87,7 +87,7 @@ public class SysSystem extends BaseDO<SysSystem> {
      * 如果是集成第三方，则写第三方url
      */
     @NotEmpty
-    @NotNull(message="如果是集成第三方，则写第三方url字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "如果是集成第三方，则写第三方url字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "如果是集成第三方，则写第三方url字段的长度最大为255", groups = {Add.class, Update.class}, max = 255)
     @Column(name = "url")
     private String url;
@@ -96,15 +96,15 @@ public class SysSystem extends BaseDO<SysSystem> {
      * 子系统首页url
      */
     @NotEmpty
-    @NotNull(message="子系统首页url字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "子系统首页url字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "子系统首页url字段的长度最大为255", groups = {Add.class, Update.class}, max = 255)
     @Column(name = "index_url")
     private String indexUrl;
 
-    public SysSystem(){
+    public SysSystem() {
     }
 
-    public SysSystem(String id,String name,Integer sort,String logo,Integer isDisable,Integer type,String url,String indexUrl){
+    public SysSystem(String id, String name, Integer sort, String logo, Integer isDisable, Integer type, String url, String indexUrl) {
         super();
         this.id = id;
         this.name = name;

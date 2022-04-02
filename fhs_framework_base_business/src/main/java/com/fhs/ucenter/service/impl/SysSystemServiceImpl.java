@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description:
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-26]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Service
@@ -28,8 +28,7 @@ public class SysSystemServiceImpl extends BaseServiceImpl<SysSystem> implements 
 
     @Override
     public List<SysSystem> getSystemList(SysUser sysUser) {
-        if(ADMIN == sysUser.getIsAdmin())
-        {
+        if (ADMIN == sysUser.getIsAdmin()) {
             return this.select();
         } else {
             return dao.getSystemList(sysUser);
@@ -42,8 +41,7 @@ public class SysSystemServiceImpl extends BaseServiceImpl<SysSystem> implements 
         List<SysSystem> sysSystems = this.select();
         List<ComboboxNode> nodeList = new ArrayList<>();
         ComboboxNode node = null;
-        for(SysSystem sysSystem : sysSystems)
-        {
+        for (SysSystem sysSystem : sysSystems) {
             node = new ComboboxNode(sysSystem.getId(), sysSystem.getName());
             nodeList.add(node);
         }

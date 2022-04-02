@@ -4,16 +4,16 @@ import org.activiti.engine.history.HistoricTaskInstance;
 
 /**
  * 历史任务
- * @author wanglei
  *
+ * @author wanglei
  */
 public class HistoryTask {
-    
+
     /**
      * 历史任务对象
      */
     private HistoricTaskInstance historicTaskInstance;
-    
+
     /**
      * 历史任务变量
      */
@@ -34,6 +34,6 @@ public class HistoryTask {
     public void setVariable(StringBuilder variable) {
         this.variable = variable;
     }
-    
-    
+
+
 }

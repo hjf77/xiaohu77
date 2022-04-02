@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description:后台组织机构表
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-04]
+ * @Description:后台组织机构表
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Service
@@ -44,7 +44,7 @@ public class SysOrganizationServiceImpl extends BaseServiceImpl<SysOrganization>
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("parentId", parentId);
         Integer ranking = dao.findRank(parentId);
-        ranking = ranking == null ? 0: ranking;
+        ranking = ranking == null ? 0 : ranking;
         ranking = ranking + 1;
         String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
         adminOrganization.setRanking(ranking + "");
@@ -88,14 +88,14 @@ public class SysOrganizationServiceImpl extends BaseServiceImpl<SysOrganization>
     }
 
     /**
-     * @desc 刷新所有机构缓存
      * @return httpResult
+     * @desc 刷新所有机构缓存
      */
     @Override
     public HttpResult<Map> refreshRedisCache() {
         List<SysOrganization> sysOrganizationList = this.select();
         sysOrganizationList.forEach(sysOrganization -> {
-            if(!StringUtil.isEmpty(sysOrganization.getName())) {
+            if (!StringUtil.isEmpty(sysOrganization.getName())) {
                 //删除redis的当前数据
                 redisCacheService.remove(Constant.SYS_ORGANIZATION_NAME + sysOrganization.getId());
                 //重新放入redis中

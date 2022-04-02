@@ -10,10 +10,11 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
+
 /**
- * @Description:后台组织机构表 Mapper 接口
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-04]
+ * @Description:后台组织机构表 Mapper 接口
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
 @MultiTenancyCheck
@@ -22,14 +23,16 @@ public interface SysOrganizationDAO extends BaseDao<SysOrganization> {
 
     /**
      * 获取机构ID combobox格式
+     *
      * @param userOrgId 当前用户机构id
-     * @param parentId 父机构id
+     * @param parentId  父机构id
      * @return combotree 数据
      */
-    List<ComboboxNode> getSubNodeDatas(@Param("userOrgId") String userOrgId, @Param("parentId")String parentId);
+    List<ComboboxNode> getSubNodeDatas(@Param("userOrgId") String userOrgId, @Param("parentId") String parentId);
 
     /**
      * 根据父id获取树集合
+     *
      * @param map 条件列表
      * @return
      */
@@ -37,6 +40,7 @@ public interface SysOrganizationDAO extends BaseDao<SysOrganization> {
 
     /**
      * 根据名称和父编号查询机构数量
+     *
      * @param sysOrganization 机构
      * @return
      */
@@ -44,6 +48,7 @@ public interface SysOrganizationDAO extends BaseDao<SysOrganization> {
 
     /**
      * 根据条件查询机构数
+     *
      * @param paramMap 查询条件
      * @return 机构数
      */
@@ -52,6 +57,7 @@ public interface SysOrganizationDAO extends BaseDao<SysOrganization> {
 
     /**
      * 查询当前最大的同爸爸排行是第几
+     *
      * @param parentId 父亲id
      * @return 当前最大的排行
      */

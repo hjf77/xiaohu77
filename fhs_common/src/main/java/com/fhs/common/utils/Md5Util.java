@@ -28,16 +28,13 @@ import java.util.*;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class Md5Util
-{
+public class Md5Util {
     private static final Logger LOG = Logger.getLogger(Md5Util.class);
 
-    public final static String MD5(String s)
-    {
+    public final static String MD5(String s) {
         char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-        try
-        {
+        try {
             byte[] btInput = s.getBytes();
             // 获得MD5摘要算法的 MessageDigest 对象
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
@@ -49,27 +46,22 @@ public class Md5Util
             int j = md.length;
             char str[] = new char[j * 2];
             int k = 0;
-            for (int i = 0; i < j; i++)
-            {
+            for (int i = 0; i < j; i++) {
                 byte byte0 = md[i];
                 str[k++] = hexDigits[byte0 >>> 4 & 0xf];
                 str[k++] = hexDigits[byte0 & 0xf];
             }
             return new String(str);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public final static String md5(String s)
-    {
+    public final static String md5(String s) {
         char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-        try
-        {
+        try {
             byte[] btInput = s.getBytes();
             // 获得MD5摘要算法的 MessageDigest 对象
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
@@ -81,23 +73,19 @@ public class Md5Util
             int j = md.length;
             char str[] = new char[j * 2];
             int k = 0;
-            for (int i = 0; i < j; i++)
-            {
+            for (int i = 0; i < j; i++) {
                 byte byte0 = md[i];
                 str[k++] = hexDigits[byte0 >>> 4 & 0xf];
                 str[k++] = hexDigits[byte0 & 0xf];
             }
             return new String(str);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public final static String sxpartnerMD5(String s)
-    {
+    public final static String sxpartnerMD5(String s) {
         String oldMd5String = MD5(s);
         return MD5(oldMd5String + "sxpartner");
     }
@@ -108,10 +96,8 @@ public class Md5Util
      * @param file
      * @return
      */
-    public static String getFileMD5(File file)
-    {
-        if (!file.isFile())
-        {
+    public static String getFileMD5(File file) {
+        if (!file.isFile()) {
             return null;
         }
 
@@ -119,27 +105,19 @@ public class Md5Util
         FileInputStream in = null;
         byte buffer[] = new byte[1024];
         int len;
-        try
-        {
+        try {
             digest = MessageDigest.getInstance("MD5");
             in = new FileInputStream(file);
-            while ((len = in.read(buffer, 0, 1024)) != -1)
-            {
+            while ((len = in.read(buffer, 0, 1024)) != -1) {
                 digest.update(buffer, 0, len);
             }
             in.close();
 
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         BigInteger bigInt = new BigInteger(1, digest.digest());
@@ -150,42 +128,35 @@ public class Md5Util
 
     /**
      * md5 签名 最后转换为大写
-     * @param map 需要签名的参数
+     *
+     * @param map          需要签名的参数
      * @param extendsParam secret 拼接参数
      * @return
      */
-    public static String getSign(Map<String, String> map, String extendsParam)
-    {
+    public static String getSign(Map<String, String> map, String extendsParam) {
 
         String result = "";
-        try
-        {
+        try {
             List<Map.Entry<String, String>> infoIds = new ArrayList<Map.Entry<String, String>>(map.entrySet());
             // 对所有传入参数按照字段名的 ASCII 码从小到大排序（字典序）
-            Collections.sort(infoIds, new Comparator<Map.Entry<String, String>>()
-            {
-                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2)
-                {
+            Collections.sort(infoIds, new Comparator<Map.Entry<String, String>>() {
+                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
                     return (o1.getKey()).toString().compareTo(o2.getKey());
                 }
             });
 
             // 构造签名键值对的格式
             StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, String> item : infoIds)
-            {
-                if (item.getKey() != null || item.getKey() != "")
-                {
+            for (Map.Entry<String, String> item : infoIds) {
+                if (item.getKey() != null || item.getKey() != "") {
                     String key = item.getKey();
                     String val = item.getValue();
-                    if (!(val == "" || val == null))
-                    {
+                    if (!(val == "" || val == null)) {
                         sb.append(key + "=" + val + "&");
                     }
                 }
             }
-            if (sb.length() > 0)
-            {
+            if (sb.length() > 0) {
                 sb = sb.deleteCharAt(sb.length() - 1);
             }
             sb.append(extendsParam);
@@ -194,9 +165,7 @@ public class Md5Util
             // 进行MD5加密
             result = DigestUtils.md5Hex(result).toUpperCase();
             LOG.info("签名后字符串:" + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
         return result;
@@ -208,38 +177,30 @@ public class Md5Util
      * @param map
      * @return
      */
-    public static String getSign(Map<String, String> map)
-    {
+    public static String getSign(Map<String, String> map) {
 
         String result = "";
-        try
-        {
+        try {
             List<Map.Entry<String, String>> infoIds = new ArrayList<Map.Entry<String, String>>(map.entrySet());
             // 对所有传入参数按照字段名的 ASCII 码从小到大排序（字典序）
-            Collections.sort(infoIds, new Comparator<Map.Entry<String, String>>()
-            {
-                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2)
-                {
+            Collections.sort(infoIds, new Comparator<Map.Entry<String, String>>() {
+                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
                     return (o1.getKey()).toString().compareTo(o2.getKey());
                 }
             });
 
             // 构造签名键值对的格式
             StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, String> item : infoIds)
-            {
-                if (item.getKey() != null || item.getKey() != "")
-                {
+            for (Map.Entry<String, String> item : infoIds) {
+                if (item.getKey() != null || item.getKey() != "") {
                     String key = item.getKey();
                     String val = item.getValue();
-                    if (!(val == "" || val == null))
-                    {
+                    if (!(val == "" || val == null)) {
                         sb.append(key + "=" + val + "&");
                     }
                 }
             }
-            if (sb.length() > 0)
-            {
+            if (sb.length() > 0) {
                 sb = sb.deleteCharAt(sb.length() - 1);
             }
             result = sb.toString();
@@ -247,14 +208,11 @@ public class Md5Util
             // 进行MD5加密
             result = DigestUtils.md5Hex(result).toUpperCase();
             LOG.info("签名后字符串:" + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
         return result;
     }
-
 
 
 }

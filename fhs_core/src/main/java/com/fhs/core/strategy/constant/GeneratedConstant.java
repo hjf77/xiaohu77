@@ -1,7 +1,6 @@
 package com.fhs.core.strategy.constant;
 
-public class GeneratedConstant
-{
+public class GeneratedConstant {
     /**
      * 订单一次生成个数
      */

@@ -83,7 +83,7 @@ public class ActionInterceptAndCreateLogAop {
             }
         }
 
-        if(CheckUtils.isNullOrEmpty(request)) {
+        if (CheckUtils.isNullOrEmpty(request)) {
             return joinPoint.proceed();
         }
 
@@ -116,13 +116,13 @@ public class ActionInterceptAndCreateLogAop {
             String paramsJson = "";
             if (parameterMap.containsKey("password")) {
                 Map<String, String[]> parameterUnLockMap = new HashMap<>();
-                for(Map.Entry<String, String[]> entry : parameterMap.entrySet()){
-                    if(!entry.getKey().equals("password")) {
+                for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+                    if (!entry.getKey().equals("password")) {
                         parameterUnLockMap.put(entry.getKey(), entry.getValue());
                     }
                 }
                 paramsJson = JsonUtils.map2json(parameterUnLockMap);
-            }else {
+            } else {
                 paramsJson = JsonUtils.map2json(parameterMap);
             }
             //获取用户ip

@@ -3,10 +3,10 @@ package com.fhs.pagex.tag.form;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PasswordFormTag extends  EmptyFormTag{
+public class PasswordFormTag extends EmptyFormTag {
 
-    static{
-        FormTagFactory.regTag("password",PasswordFormTag.class);
+    static {
+        FormTagFactory.regTag("password", PasswordFormTag.class);
     }
 
     @Override

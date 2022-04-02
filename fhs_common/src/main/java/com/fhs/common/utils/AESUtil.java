@@ -16,7 +16,7 @@ import java.security.SecureRandom;
  */
 public class AESUtil {
 
-    private  static Logger LOG = Logger.getLogger(AESUtil.class);
+    private static Logger LOG = Logger.getLogger(AESUtil.class);
 
     /**
      * 加密
@@ -46,7 +46,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(byteContent);
             return Base64.encodeBase64String(result);
         } catch (Exception e) {
-            LOG.error("解密错误:"  + content + ",pass:" + password,e);
+            LOG.error("解密错误:" + content + ",pass:" + password, e);
         }
         return null;
     }
@@ -60,7 +60,7 @@ public class AESUtil {
      * @return
      * @throws BadPaddingException 解析失败,秘钥和验证码不匹配
      */
-    public static String decrypt(String content, String password)  {
+    public static String decrypt(String content, String password) {
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
             //解决linux 系统下面出错问题
@@ -73,9 +73,9 @@ public class AESUtil {
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
             cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
-            return new String(result,"utf-8"); // 加密
+            return new String(result, "utf-8"); // 加密
         } catch (Exception e) {
-            LOG.error("加密错误:"  + content + ",pass:" + password,e);
+            LOG.error("加密错误:" + content + ",pass:" + password, e);
         }
         return null;
     }

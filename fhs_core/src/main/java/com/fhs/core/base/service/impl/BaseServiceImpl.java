@@ -84,8 +84,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
-        if(isCacheable) {
-            this.namespace =this.getClass().getAnnotation(Cacheable.class).value();
+        if (isCacheable) {
+            this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
         }
 
     }

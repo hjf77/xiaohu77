@@ -30,7 +30,7 @@ public class DiskFileStorage<mian> implements FileStorage {
 
     @Override
     public void uploadFile(ServiceFile serviceFile, MultipartFile fileData) {
-        File file = getFile( serviceFile, null);
+        File file = getFile(serviceFile, null);
         try {
             FileUtils.copyInputStreamToFile(fileData.getInputStream(), file);
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public class DiskFileStorage<mian> implements FileStorage {
 
     @Override
     public void uploadFileByToken(byte[] bytes, String token, ServiceFile serviceFile) {
-        File file = getFile( serviceFile, token);
+        File file = getFile(serviceFile, token);
         try (FileOutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class DiskFileStorage<mian> implements FileStorage {
 
     @Override
     public void downloadFile(ServiceFile serviceFile, HttpServletResponse response) {
-        File file = getFile( serviceFile, null);
+        File file = getFile(serviceFile, null);
         if (file.exists()) {
             FileUtils.download(file, response, serviceFile.getFileName());
             return;
@@ -72,7 +72,7 @@ public class DiskFileStorage<mian> implements FileStorage {
 
     @Override
     public void downloadFileByToken(String token, ServiceFile serviceFile, HttpServletResponse response) {
-        File file = getFile( serviceFile, token);
+        File file = getFile(serviceFile, token);
         if (file.exists()) {
             FileUtils.download(file, response, file.getName());
         }
@@ -80,12 +80,12 @@ public class DiskFileStorage<mian> implements FileStorage {
 
     @Override
     public boolean checkFileIsExist(String token, ServiceFile serviceFile) {
-        return getFile( serviceFile,  token).exists();
+        return getFile(serviceFile, token).exists();
     }
 
     @Override
     public InputStream getFileInputStream(ServiceFile serviceFile) throws FileNotFoundException {
-        return new FileInputStream(getFile( serviceFile,  null));
+        return new FileInputStream(getFile(serviceFile, null));
     }
 
 

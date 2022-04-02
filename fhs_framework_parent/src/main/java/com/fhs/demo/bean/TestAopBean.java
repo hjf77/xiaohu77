@@ -9,17 +9,17 @@ import java.io.Serializable;
 
 public class TestAopBean implements Serializable {
 
-    @NotNull(message="TestAop的id字段 不可为null ")
-    @Max(message="TestAop的id超过int最大值", value=2147483647)
-    @Min(message="TestAop的id小于int最大值", value=-2147483648)
+    @NotNull(message = "TestAop的id字段 不可为null ")
+    @Max(message = "TestAop的id超过int最大值", value = 2147483647)
+    @Min(message = "TestAop的id小于int最大值", value = -2147483648)
     private Integer id;
 
-    @NotNull(message="TestAop的name字段不能为空")
-    @Length(message="TestAop的name字段的长度最大为50")
+    @NotNull(message = "TestAop的name字段不能为空")
+    @Length(message = "TestAop的name字段的长度最大为50")
     private String name;
 
-    @NotNull(message="TestAop的addr字段不能为空")
-    @Length(message="TestAop的addr字段的长度最大为50")
+    @NotNull(message = "TestAop的addr字段不能为空")
+    @Length(message = "TestAop的addr字段的长度最大为50")
     private String addr;
 
     public Integer getId() {

@@ -12,6 +12,7 @@ import java.util.*;
 /**
  * pagex 列表页面DTO
  * 本DTO是一个DOMAIN 里面包含部分业务逻辑
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.dto
  * @ClassName: PagexListSettDTO
@@ -22,8 +23,7 @@ import java.util.*;
  * @Version: 1.0
  */
 @Data
-public class PagexListSettDTO extends  PagexBaseDTO{
-
+public class PagexListSettDTO extends PagexBaseDTO {
 
 
     /**
@@ -69,8 +69,7 @@ public class PagexListSettDTO extends  PagexBaseDTO{
      */
     private static Set<String> DEFAULT_KEY = new HashSet<>();
 
-    static
-    {
+    static {
         DEFAULT_KEY.add("showField");
         DEFAULT_KEY.add("formart");
         DEFAULT_KEY.add("title");
@@ -88,9 +87,10 @@ public class PagexListSettDTO extends  PagexBaseDTO{
 
     /**
      * 解析js 返回对象
+     *
      * @param js js
      * @throws NoSuchMethodException 如果调用某些方法找不到
-     * @throws ScriptException 脚本本身有问题
+     * @throws ScriptException       脚本本身有问题
      */
     public PagexListSettDTO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
@@ -106,16 +106,16 @@ public class PagexListSettDTO extends  PagexBaseDTO{
         this.initExJS();
     }
 
-    public void initExCSS(){
+    public void initExCSS() {
         Object excssStr = modelConfig.get("excss");
-        if(!CheckUtils.isNullOrEmpty(excssStr)){
+        if (!CheckUtils.isNullOrEmpty(excssStr)) {
             excss = Arrays.asList(excssStr.toString().split(","));
         }
     }
 
-    public void initExJS(){
+    public void initExJS() {
         Object exjsStr = modelConfig.get("exjs");
-        if(!CheckUtils.isNullOrEmpty(exjsStr)){
+        if (!CheckUtils.isNullOrEmpty(exjsStr)) {
             exjs = Arrays.asList(exjsStr.toString().split(","));
         }
     }
@@ -123,28 +123,25 @@ public class PagexListSettDTO extends  PagexBaseDTO{
 
     /**
      * 初始化列表字段设置
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initListSett() throws NoSuchMethodException, ScriptException {
-        listSett = getListM("listFieldSett",listPageObject);
+        listSett = getListM("listFieldSett", listPageObject);
         String showField = null;
-        for(Map<String,Object> field:listSett)
-        {
+        for (Map<String, Object> field : listSett) {
             StringBuilder otherAttr = new StringBuilder();
-            for(String key:field.keySet())
-            {
-                if(!DEFAULT_KEY.contains(key))
-                {
-                    otherAttr.append( key+ ":'"+field.get(key) + "',");
+            for (String key : field.keySet()) {
+                if (!DEFAULT_KEY.contains(key)) {
+                    otherAttr.append(key + ":'" + field.get(key) + "',");
                 }
             }
-            field.put("otherAttr",otherAttr.toString());
+            field.put("otherAttr", otherAttr.toString());
             field.put("camelName", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(field.get("name"))));
-            if(field.containsKey("showField"))
-            {
+            if (field.containsKey("showField")) {
                 showField = ConverterUtils.toString(field.get("showField"));
-                showField = "transMap." + ColumnNameUtil.underlineToCamel(showField.replace("transMap.",""));
+                showField = "transMap." + ColumnNameUtil.underlineToCamel(showField.replace("transMap.", ""));
                 field.put("showField", showField);
             }
 
@@ -154,43 +151,47 @@ public class PagexListSettDTO extends  PagexBaseDTO{
 
     /**
      * 初始化过滤字段设置
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initFilter() throws NoSuchMethodException, ScriptException {
-        this.filters = getListM("filters",listPageObject);
+        this.filters = getListM("filters", listPageObject);
     }
 
     /**
      * 初始化按钮设置
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initButtons() throws NoSuchMethodException, ScriptException {
 
-        buttons = getListM("buttons",listPageObject);;
-        for(Map<String,Object> field:buttons)
-        {
+        buttons = getListM("buttons", listPageObject);
+        ;
+        for (Map<String, Object> field : buttons) {
             field.put("camelName", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(field.get("name"))));
         }
     }
 
     /**
      * 初始化哪些默认按钮禁用设置
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initDisableButton() throws NoSuchMethodException, ScriptException {
-        this.disableButtons = getListS("disableButtons",listPageObject);
+        this.disableButtons = getListS("disableButtons", listPageObject);
     }
 
     /**
      * 是否在列中添加操作按钮
+     *
      * @throws NoSuchMethodException
      * @throws ScriptException
      */
     public void initIsColumnButton() throws NoSuchMethodException, ScriptException {
-        this.isColumnButton =  (Boolean)invocable.invokeMethod(listPageObject, "isColumnButton");
+        this.isColumnButton = (Boolean) invocable.invokeMethod(listPageObject, "isColumnButton");
     }
 
     @Override
@@ -200,9 +201,10 @@ public class PagexListSettDTO extends  PagexBaseDTO{
 
     /**
      * 将自己变成一个Java PO 的代码
+     *
      * @return Java PO代码
      */
-    public String formartJavaStr(){
+    public String formartJavaStr() {
 
         return "";
     }

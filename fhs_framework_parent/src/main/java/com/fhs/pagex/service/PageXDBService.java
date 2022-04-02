@@ -103,7 +103,7 @@ public class PageXDBService {
 
                 if ("one2x".equals(field.get("type"))) {
                     Object allowEdit = field.get("allowEdit");
-                    if(allowEdit == null || (boolean)allowEdit){
+                    if (allowEdit == null || (boolean) allowEdit) {
                         namespaces.add(ConverterUtils.toString(field.get("namespace")));
                     }
                 }
@@ -220,8 +220,8 @@ public class PageXDBService {
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + pkey);
         int result = sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
         //执行
-        dataDelManager.onDel(namespace,pkey);
-        return  result;
+        dataDelManager.onDel(namespace, pkey);
+        return result;
     }
 
     /**

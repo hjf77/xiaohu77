@@ -22,15 +22,14 @@ import java.util.Set;
 
 /**
  * ip 白名单拦截器
+ *
  * @Filename: IpWhiteInterceptor.java
  * @Description:
  * @Version: 1.0
  * @Author: jackwong
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- * 陕西小伙伴网络科技有限公司
+ * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
- *
  */
 @Component
 public class IpWhiteInterceptor extends HandlerInterceptorAdapter implements InitializingBean {
@@ -41,7 +40,7 @@ public class IpWhiteInterceptor extends HandlerInterceptorAdapter implements Ini
     private final static Logger LOGGER = Logger.getLogger(IpWhiteInterceptor.class);
 
     /**
-     *ip白名单集合
+     * ip白名单集合
      */
     private static Set<String> whiteIpSet = new HashSet<>();
 
@@ -50,42 +49,40 @@ public class IpWhiteInterceptor extends HandlerInterceptorAdapter implements Ini
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-        throws Exception {
+            throws Exception {
 
         boolean isCheckWhiteIp = Constant.STR_TRUE.equals(EConfig.getOtherConfigPropertiesValue("isCheckIp"));
         //有关fegin接口的ip白名单过滤 end
 
         // 如果不check白名单直接通过
-        if(!isCheckWhiteIp)
-        {
+        if (!isCheckWhiteIp) {
             return true;
         }
         //有关feign接口的ip白名单过滤 start
         Class<?> returnType = null;
-        if(handler instanceof HandlerMethod){
-            HandlerMethod handlerMethod = (HandlerMethod)handler;
-            returnType = handlerMethod.getMethod ( ).getReturnType ( );//问题：无法获取返回httpresult的泛型,暂时此法不通
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            returnType = handlerMethod.getMethod().getReturnType();//问题：无法获取返回httpresult的泛型,暂时此法不通
         }
         //如果check白名单，并且当前ip符合规则配置
-        if (whiteIpSet.contains( NetworkUtil.getIpAddress(request))){
-           return true;
+        if (whiteIpSet.contains(NetworkUtil.getIpAddress(request))) {
+            return true;
         }
-        String errorJson = HttpResult.error (new Object(), "ip无权调用接口，请联系接口人配置ip白名单" ).asJson ();
-        JsonUtils.outJson (response, errorJson);
+        String errorJson = HttpResult.error(new Object(), "ip无权调用接口，请联系接口人配置ip白名单").asJson();
+        JsonUtils.outJson(response, errorJson);
         return false;
     }
 
 
-
     /**
-     * @desc 获取当前IP白名单的set集合
      * @return
+     * @desc 获取当前IP白名单的set集合
      */
     private void refreshWhiteIpSet() {
         Set<String> whiteIpSets = new HashSet<>();
-        String ipWhiteRuleStr = ConverterUtils.toString ( EConfig.getOtherConfigPropertiesValue ( "ip_white_list_rule" ) );
-        String[] ipWhiteRules = ipWhiteRuleStr.split ( ";" );
-        whiteIpSets.addAll ( Arrays.asList (ipWhiteRules) );
+        String ipWhiteRuleStr = ConverterUtils.toString(EConfig.getOtherConfigPropertiesValue("ip_white_list_rule"));
+        String[] ipWhiteRules = ipWhiteRuleStr.split(";");
+        whiteIpSets.addAll(Arrays.asList(ipWhiteRules));
         whiteIpSets.add("0:0:0:0:0:0:0:1");
         whiteIpSets.add("127.0.0.1");
         whiteIpSet = whiteIpSets;
@@ -102,13 +99,11 @@ public class IpWhiteInterceptor extends HandlerInterceptorAdapter implements Ini
         refreshWhiteIpSet();
     }
 
-    public void setWhiteIpSet(Set<String> whiteIpSet)
-    {
+    public void setWhiteIpSet(Set<String> whiteIpSet) {
         IpWhiteInterceptor.whiteIpSet = whiteIpSet;
     }
 
-    public static Set<String> getWhiteIpSet()
-    {
+    public static Set<String> getWhiteIpSet() {
         return whiteIpSet;
     }
 

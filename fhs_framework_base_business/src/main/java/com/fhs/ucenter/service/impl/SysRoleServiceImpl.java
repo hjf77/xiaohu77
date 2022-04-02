@@ -23,8 +23,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysRoleService
-{
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysRoleService {
 
     private static final Logger LOG = Logger.getLogger(SysRoleServiceImpl.class);
 
@@ -37,12 +36,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
     @GenInfo
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean addRole(SysRole adminRole)
-    {
+    public boolean addRole(SysRole adminRole) {
         // 插入角色信息
         int count = dao.insertJpa(adminRole);
-        if (count > 0)
-        {
+        if (count > 0) {
             return saveButtons(adminRole);
         }
         return false;
@@ -55,10 +52,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean saveButtons(SysRole adminRole)
-    {
-        if (adminRole.getMethods().length > 0)
-        {
+    public boolean saveButtons(SysRole adminRole) {
+        if (adminRole.getMethods().length > 0) {
             // 构建按钮列表
             adminRole.setMethods(buildButtonArray(adminRole.getMethods()));
 
@@ -74,20 +69,15 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      * @param buttons
      * @return
      */
-    private String[] buildButtonArray(String[] buttons)
-    {
+    private String[] buildButtonArray(String[] buttons) {
         List<String> list = new ArrayList<String>();
-        for (String item : buttons)
-        {
+        for (String item : buttons) {
 
             String[] itemarr = item.split("_");
-            if ("t".equalsIgnoreCase(itemarr[0]))
-            {
+            if ("t".equalsIgnoreCase(itemarr[0])) {
                 String buttonId = itemarr[1].split(":")[1];
                 list.add(buttonId);
-            }
-            else
-            {
+            } else {
                 String buttonType = itemarr[1].split(":")[1];
                 String menuId = itemarr[1].split(":")[0];
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -97,7 +87,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
                 list.addAll(itemlist);
             }
         }
-        return list.toArray(new String[] {});
+        return list.toArray(new String[]{});
     }
 
     /***
@@ -105,8 +95,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean addButtons(SysRole adminRole)
-    {
+    public boolean addButtons(SysRole adminRole) {
         int count = dao.addButtons(adminRole);
         return (count > 0);
     }
@@ -116,16 +105,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean deleteButtons(SysRole adminRole)
-    {
-        try
-        {
+    public boolean deleteButtons(SysRole adminRole) {
+        try {
             dao.deleteButtons(adminRole);
             return true;
-        }
-        catch (Exception e)
-        {
-            LOG.error("删除关联按钮数据错误",e);
+        } catch (Exception e) {
+            LOG.error("删除关联按钮数据错误", e);
             return false;
         }
     }
@@ -135,16 +120,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean deleteRole(SysRole adminRole)
-    {
+    public boolean deleteRole(SysRole adminRole) {
         // 删除按钮信息
         boolean count = deleteButtons(adminRole);
-        if (count)
-        {
+        if (count) {
             // 删除角色用户关联
             dao.deleteUserRela(adminRole);
             // 删除角色信息
-            return  dao.delete(adminRole) > 0;
+            return dao.delete(adminRole) > 0;
         }
         return false;
     }
@@ -154,18 +137,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean updateRole(SysRole adminRole)
-    {
+    public boolean updateRole(SysRole adminRole) {
         // 删除当前角色的按钮信息
         boolean count = deleteButtons(adminRole);
-        if (count)
-        {
+        if (count) {
             // 修改当前角色信息
             int result = dao.updateSelectiveById(adminRole);
-            if (result > 0)
-            {
-                if (adminRole.getMethods().length > 0)
-                {
+            if (result > 0) {
+                if (adminRole.getMethods().length > 0) {
                     // 构建按钮列表
                     adminRole.setMethods(buildButtonArray(adminRole.getMethods()));
                     // 插入按钮信息
@@ -182,8 +161,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      * 查询角色的按钮信息
      */
     @Override
-    public List<Map<String, Object>> searchButtons(SysRole adminRole)
-    {
+    public List<Map<String, Object>> searchButtons(SysRole adminRole) {
         return dao.searchButtons(adminRole);
     }
 
@@ -191,8 +169,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      * 查询按钮id列表
      */
     @Override
-    public List<String> searchButtonId(Map<String, Object> map)
-    {
+    public List<String> searchButtonId(Map<String, Object> map) {
         return dao.searchButtonId(map);
     }
 
@@ -200,8 +177,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      * 通过角色名称获取角色
      */
     @Override
-    public List<SysRole> findRoleByGroupCode(Map<String, Object> map)
-    {
+    public List<SysRole> findRoleByGroupCode(Map<String, Object> map) {
         return this.dao.findRoleByGroupCode(map);
     }
 
@@ -209,8 +185,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
      * 根据用户获取角色
      */
     @Override
-    public List<SysRole> findRolesByUserId(String userId)
-    {
+    public List<SysRole> findRolesByUserId(String userId) {
         return dao.findRolesByUserId(userId);
     }
 

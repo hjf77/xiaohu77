@@ -7,9 +7,9 @@ import com.fhs.core.strategy.enume.GeneratedType;
 import javax.persistence.*;
 
 /**
- * @Description:
- * @author  jianbo.qin
+ * @author jianbo.qin
  * @version [版本号, 2018-06-01]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @Entity
@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class SysModel extends BaseDO<SysModel> {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * 模块编号
      */
@@ -36,13 +36,11 @@ public class SysModel extends BaseDO<SysModel> {
     private String modelServerId;
 
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId(String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -63,17 +61,16 @@ public class SysModel extends BaseDO<SysModel> {
     }
 
 
-
     @Override
     public String toString() {
         return "SysModel{" +
-        "id=" + id +
-        ", modelName=" + modelName +
-        ", modelServerId=" + modelServerId +
-        ", createUser=" + createUser +
-        ", createTime=" + createTime +
-        ", updateUser=" + updateUser +
-        ", updateTime=" + updateTime +
-        "}";
+                "id=" + id +
+                ", modelName=" + modelName +
+                ", modelServerId=" + modelServerId +
+                ", createUser=" + createUser +
+                ", createTime=" + createTime +
+                ", updateUser=" + updateUser +
+                ", updateTime=" + updateTime +
+                "}";
     }
 }

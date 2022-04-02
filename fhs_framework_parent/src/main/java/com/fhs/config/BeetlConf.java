@@ -31,7 +31,7 @@ import java.util.Map;
 @Configuration
 @Controller
 @Component
-public class BeetlConf  extends BaseAction {
+public class BeetlConf extends BaseAction {
 
     /**
      * 自身
@@ -54,7 +54,7 @@ public class BeetlConf  extends BaseAction {
 
     @Bean(name = "beetlViewResolver")
     public BeetlSpringViewResolver getBeetlSpringViewResolver(
-            @Qualifier("beetlConfig") BeetlGroupUtilConfiguration beetlGroupUtilConfiguration,ContentNegotiatingViewResolver
+            @Qualifier("beetlConfig") BeetlGroupUtilConfiguration beetlGroupUtilConfiguration, ContentNegotiatingViewResolver
             contentNegotiatingViewResolver) {
         BeetlSpringViewResolver beetlSpringViewResolver = new BeetlSpringViewResolver();
         beetlSpringViewResolver.setPrefix("/");
@@ -69,47 +69,47 @@ public class BeetlConf  extends BaseAction {
 
     /**
      * 渲染beetls 模板
-     * @param dir 路径
+     *
+     * @param dir      路径
      * @param fileName 文件名称
      * @return ModelAndView 对象
      */
     @RequestMapping("/b/{dir}/{fileName}")
-    public ModelAndView renderBeelts(@PathVariable("dir") String dir,@PathVariable("fileName")String fileName){
+    public ModelAndView renderBeelts(@PathVariable("dir") String dir, @PathVariable("fileName") String fileName) {
         ModelAndView view = new ModelAndView();
-        view.setViewName(dir.replace("-","/") + "/" + fileName);
+        view.setViewName(dir.replace("-", "/") + "/" + fileName);
         return view;
     }
 
 
     /**
      * 渲染一个模板
+     *
      * @param viewPath 模板路径
      * @param request  request
      * @return 渲染好的模板内容
      */
-    public String renderBeelt(String viewPath, HttpServletRequest request)
-    {
+    public String renderBeelt(String viewPath, HttpServletRequest request) {
         Template template = beetlGroupUtilConfiguration.getGroupTemplate().getTemplate(viewPath);
-        Map<String,String> parameterMap = super.getParameterMap(request);
-        template.binding("parameter",parameterMap);
+        Map<String, String> parameterMap = super.getParameterMap(request);
+        template.binding("parameter", parameterMap);
         return template.render();
     }
 
     /**
      * 渲染一个模板
+     *
      * @param viewPath 模板路径
      * @return 渲染好的模板内容
      */
-    public String renderBeelt(String viewPath,  Map<String,Object> parameterMap)
-    {
+    public String renderBeelt(String viewPath, Map<String, Object> parameterMap) {
         Template template = beetlGroupUtilConfiguration.getGroupTemplate().getTemplate(viewPath);
-        for(String key : parameterMap.keySet())
-        {
-            template.binding(key,parameterMap.get(key));
+        for (String key : parameterMap.keySet()) {
+            template.binding(key, parameterMap.get(key));
         }
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
-        template.binding("parameter",super.getParameterMap(request));
+        template.binding("parameter", super.getParameterMap(request));
         return template.render();
     }
 }

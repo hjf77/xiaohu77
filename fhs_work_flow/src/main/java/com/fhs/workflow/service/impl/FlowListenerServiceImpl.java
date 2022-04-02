@@ -5,6 +5,7 @@ import com.fhs.workflow.dao.FlowListenerDao;
 import com.fhs.workflow.service.FlowListenerService;
 import org.springframework.stereotype.Service;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -15,6 +16,6 @@ import java.util.List;
  * @since 2019-11-11 14:28:44
  */
 @Service("flowListenerService")
-public class FlowListenerServiceImpl extends BaseServiceImpl<FlowListener>   implements FlowListenerService {
-    
+public class FlowListenerServiceImpl extends BaseServiceImpl<FlowListener> implements FlowListenerService {
+
 }

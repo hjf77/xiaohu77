@@ -18,10 +18,8 @@ import java.util.Map;
  * 用户service
  *
  * @author jianbo.qin
- *
  */
-public interface SysUserService extends BaseService<SysUser>
-{
+public interface SysUserService extends BaseService<SysUser> {
 
     /**
      * 超管用户标识
@@ -128,16 +126,16 @@ public interface SysUserService extends BaseService<SysUser>
     /**
      * 监测原始密码是否正确
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     public boolean validataPass(SysUser adminUser);
 
     /**
      * 修改用户密码
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     public boolean updatePass(SysUser adminUser);
 
@@ -168,8 +166,8 @@ public interface SysUserService extends BaseService<SysUser>
     /**
      * 校验登录名是否存在
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     boolean validataLoginName(SysUser adminUser);
 
@@ -193,12 +191,14 @@ public interface SysUserService extends BaseService<SysUser>
 
     /**
      * 刷新所有用户缓存
+     *
      * @return
      */
     HttpResult refreshRedisCache();
 
     /**
      * 刷新指定用户缓存
+     *
      * @Param: [userList]
      * @Return: com.fhs.core.result.HttpResult
      */
@@ -207,16 +207,17 @@ public interface SysUserService extends BaseService<SysUser>
 
     /**
      * 获取当前用户的 左侧菜单
-     * @param user 当前登录用户
+     *
+     * @param user     当前登录用户
      * @param menuType 菜单类型
      * @return 他有权限的左侧菜单
      */
     List<LeftMenu> getMenu(SysUser user, String menuType);
 
     /**
-     * @desc 根据用户id获取用户信息
      * @param userId 用户id
      * @return 用户信息
+     * @desc 根据用户id获取用户信息
      */
     SysUser findSysUserById(String userId);
 
@@ -227,6 +228,7 @@ public interface SysUserService extends BaseService<SysUser>
 
     /**
      * 根据条件查询用户数
+     *
      * @param paramMap 查询条件
      * @return 用户数
      */
@@ -234,33 +236,36 @@ public interface SysUserService extends BaseService<SysUser>
 
     /**
      * 获取用户权限URL
+     *
      * @param sysUser 后台用户
      * @return 用户权限URL列表
      */
-    List<String>  getPermissionUrl(SysUser sysUser);
+    List<String> getPermissionUrl(SysUser sysUser);
 
     /**
      * 根据用户id获取用户的数据权限
      * map - key -> 数据权限的类型，value是数据权限的id集合
-     *    比如 parkIds->'1','2' 已经处理好了逗号，直接使用 IN 过滤 就可以
+     * 比如 parkIds->'1','2' 已经处理好了逗号，直接使用 IN 过滤 就可以
+     *
      * @param userId 用户id
      * @return 用户数据权限信息
      */
-    Map<String,String> findUserDataPermissions(String userId);
+    Map<String, String> findUserDataPermissions(String userId);
 
     /**
      * 根据集团编码获取集团下所有的用户tree
+     *
      * @param groupCode 集团编码
      * @return 集团下所有的用户tree
      */
     List<SysUserOrgDTO> getUserOrgTreeList(String groupCode);
 
     /**
-     *@Description:  updateWrapper支持
+     * @Description: updateWrapper支持
      * @Param: [sysUser, updateWrapper]
      * @Return: int
      */
 
-    int update(SysUser sysUser,Wrapper<SysUser> updateWrapper);
+    int update(SysUser sysUser, Wrapper<SysUser> updateWrapper);
 
 }

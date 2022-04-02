@@ -3,7 +3,8 @@ package com.fhs.pagex.tag.form;
 import org.springframework.stereotype.Component;
 
 /**
- *  多行文本框 小
+ * 多行文本框 小
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class TextFormTag extends  EmptyFormTag{
+public class TextFormTag extends EmptyFormTag {
 
-    static{
-        FormTagFactory.regTag("text",TextFormTag.class);
+    static {
+        FormTagFactory.regTag("text", TextFormTag.class);
     }
 
     @Override

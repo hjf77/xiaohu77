@@ -17,10 +17,11 @@ public class JWTUtils {
 
     /**
      * 签发JWT
+     *
      * @param claims
      * @param secret
      * @param ttlMillis
-     * @return  String
+     * @return String
      */
     public static String createJWT(Map claims, String secretKey, long ttlMillis) {
         long nowMillis = System.currentTimeMillis();
@@ -40,12 +41,12 @@ public class JWTUtils {
 
 
     /**
-     *
      * 解析JWT字符串
+     *
      * @param jwt
      * @return
      */
-    public static Claims parseJWT(String jwt,String secretKey){
+    public static Claims parseJWT(String jwt, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
     }
 

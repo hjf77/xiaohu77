@@ -12,12 +12,9 @@ import javax.servlet.jsp.JspException;
  * @Version: 1.0
  * @Author: Lins
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public class DateInputTag extends BaseFormTag
-{
+public class DateInputTag extends BaseFormTag {
     /**
      * 类型 默认的text
      */
@@ -32,21 +29,16 @@ public class DateInputTag extends BaseFormTag
 
     @Override
     public void doTag()
-        throws JspException, IOException
-    {
+            throws JspException, IOException {
 //        defaultClassName(defaultClassName);
 
         write(" <div class=\"fitemDiv\">");
         write("     <label>" + super.getTitle() + ":</label>");
-        if(this.onClick == null)
-        {
-            if(this.getName().contains("date"))
-            {
+        if (this.onClick == null) {
+            if (this.getName().contains("date")) {
                 this.onClick = "WdatePicker()";
-            }
-            else
-            {
-                 this.onClick = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})";
+            } else {
+                this.onClick = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})";
             }
         }
         this.onClick = this.onClick.replace("/", "\\");
@@ -55,25 +47,25 @@ public class DateInputTag extends BaseFormTag
         write(" </div>");
     }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getOnClick() {
-		return onClick;
-	}
+    public String getOnClick() {
+        return onClick;
+    }
 
-	public void setOnClick(String onClick) {
-		this.onClick = onClick;
-	}
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
 
-	public String getDefaultClassName() {
-		return defaultClassName;
-	}
+    public String getDefaultClassName() {
+        return defaultClassName;
+    }
 
 
 }

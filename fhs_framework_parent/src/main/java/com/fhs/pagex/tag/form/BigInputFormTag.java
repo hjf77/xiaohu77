@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * input 一行只有一个的大input
+ *
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class BigInputFormTag extends  EmptyFormTag{
+public class BigInputFormTag extends EmptyFormTag {
 
-    static{
-        FormTagFactory.regTag("bigInput",BigInputFormTag.class);
+    static {
+        FormTagFactory.regTag("bigInput", BigInputFormTag.class);
     }
 
     @Override

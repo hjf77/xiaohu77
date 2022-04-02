@@ -11,27 +11,23 @@ import org.springframework.stereotype.Component;
 
 /**
  * UUID生成实现
- * 
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @Component
-public class UUIDStrategy implements IStrategy,InitializingBean
-{
-    
+public class UUIDStrategy implements IStrategy, InitializingBean {
+
     private static Logger LOG = LoggerFactory.getLogger(UUIDStrategy.class);
-    
+
     /**
      * order key
      */
     private static final String key = GeneratedType.UUID;
-    
 
-    
+
     @Override
     public void afterPropertiesSet()
-        throws Exception
-    {
+            throws Exception {
         GeneratedValueAspect.registerIStrategy(key, this);
     }
 

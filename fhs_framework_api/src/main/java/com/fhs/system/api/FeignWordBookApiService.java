@@ -20,9 +20,10 @@ public interface FeignWordBookApiService {
 
     /**
      * 根据字典编码获取字典信息
+     *
      * @param wordBookGroupCode 字典编码
      * @return HttpResult 角色数据权限
      */
     @RequestLine("GET /api/wordbook/getWordBookList?wordBookGroupCode={wordBookGroupCode}")
-    HttpResult<List<WordbookVO>>  getWordBookList(@Param("wordBookGroupCode") String wordBookGroupCode);
+    HttpResult<List<WordbookVO>> getWordBookList(@Param("wordBookGroupCode") String wordBookGroupCode);
 }

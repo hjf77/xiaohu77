@@ -15,13 +15,13 @@ import com.fhs.core.base.bean.BaseDO;
  * @UpdateDate: 2018/12/29 0029 12:33
  * @Version: 1.0
  */
-public class BasePagexBean<T extends BasePagexBean>  extends BaseDO<T> {
+public class BasePagexBean<T extends BasePagexBean> extends BaseDO<T> {
 
     private static final String ID_FIELD_NAME = "id";
 
     @Override
     public Object getId() {
-        if(ReflectUtils.getDeclaredField(this.getClass(), ID_FIELD_NAME) != null){
+        if (ReflectUtils.getDeclaredField(this.getClass(), ID_FIELD_NAME) != null) {
             return ReflectUtils.getValue(this, ID_FIELD_NAME);
         }
         return super.getId();

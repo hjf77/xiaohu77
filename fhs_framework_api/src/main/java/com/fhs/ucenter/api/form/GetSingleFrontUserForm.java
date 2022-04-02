@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * 获取单个用户form
- *
  */
 @Data
 @AllArgsConstructor

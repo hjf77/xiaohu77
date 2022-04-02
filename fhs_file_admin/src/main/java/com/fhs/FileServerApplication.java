@@ -10,6 +10,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 /**
  * 文件服务
+ *
  * @author wanglei
  */
 @SpringBootApplication
@@ -20,7 +21,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableCaching
 public class FileServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FileServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FileServerApplication.class, args);
+    }
 }

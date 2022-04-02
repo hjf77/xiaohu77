@@ -9,10 +9,10 @@ import lombok.Data;
 public class VoConverterObject {
 
     //转换配置
-    private String[]  settings;
+    private String[] settings;
 
     //不需要转换但是需要包含的字段
-    private String[]  include;
+    private String[] include;
 
     //实际对象
     private Object JsonObject;

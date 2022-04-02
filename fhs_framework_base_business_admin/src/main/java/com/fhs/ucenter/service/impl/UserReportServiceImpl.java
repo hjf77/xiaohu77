@@ -26,8 +26,8 @@ public class UserReportServiceImpl implements UserReportService {
     @Override
     public Map<String, Object> getFrontUserRegReport() {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("todayFrontUserTotal",userReportDao.getTodayFrontUserRegNum());
-        resultMap.put("frontUserTotal",frontUserService.selectCount(UcenterFrontUser.builder().build()));
+        resultMap.put("todayFrontUserTotal", userReportDao.getTodayFrontUserRegNum());
+        resultMap.put("frontUserTotal", frontUserService.selectCount(UcenterFrontUser.builder().build()));
         return resultMap;
     }
 }

@@ -8,37 +8,35 @@ import java.util.*;
 
 
 /**
- *
  * 实现sha1签名算法
- *
+ * <p>
  * jackwong
  * 2017年9月28日 下午2:53:41
  *
  * @version 1.0.0
- *
  */
-public class SHA1Utils
-{
+public class SHA1Utils {
     /**
      * SHA1 安全加密算法
      * c) 将排序后的所有参数字符串拼接成一个字符串进行 SHA1 编码
      * d) SHA1 编码后的 40 位字符串作为 sign
+     *
      * @param maps 参数key-value map集合
      * @return
      * @throws DigestException
      * @throws UnsupportedEncodingException
      */
-    public static String SHA1(Map<String,Object> maps) throws DigestException, UnsupportedEncodingException {
+    public static String SHA1(Map<String, Object> maps) throws DigestException, UnsupportedEncodingException {
 
         List<String> values = getValues(maps);
         StringBuilder sb = new StringBuilder();
         for (String s : values) {
-           sb.append(s);
+            sb.append(s);
         }
         try {
             //指定sha1算法
             MessageDigest md = MessageDigest.getInstance("sha1");
-            System.out.println(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)+"  "+sb);
+            System.out.println(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN) + "  " + sb);
             md.update(sb.toString().getBytes("UTF-8"));
             //获取字节数组
             byte messageDigest[] = md.digest();
@@ -60,24 +58,20 @@ public class SHA1Utils
         }
     }
 
-    public static void main(String [] args) throws DigestException, UnsupportedEncodingException {
+    public static void main(String[] args) throws DigestException, UnsupportedEncodingException {
 
     }
 
 
-
-
-
-
-
     /**
      * 获取参数名称 key
+     *
      * @param maps 参数key-value map集合
      * @return
      */
-    private static List<String> getValues(Map<String,Object> maps){
+    private static List<String> getValues(Map<String, Object> maps) {
         List<String> values = new ArrayList<>();
-        for(Map.Entry<String,Object> entry : maps.entrySet()){
+        for (Map.Entry<String, Object> entry : maps.entrySet()) {
             values.add(StringUtil.toString(entry.getValue()));
         }
         Collections.sort(values);
@@ -85,14 +79,9 @@ public class SHA1Utils
     }
 
 
-
-
-
-
-
-
     /**
      * 对MAP进行排序
+     *
      * @param map
      * @return
      */
@@ -119,10 +108,10 @@ public class SHA1Utils
                     }
                 }
             }
-            if(sb.length()>0){
-                sb = sb.deleteCharAt(sb.length()-1);
+            if (sb.length() > 0) {
+                sb = sb.deleteCharAt(sb.length() - 1);
             }
-            result=sb.toString();
+            result = sb.toString();
         } catch (Exception e) {
             return null;
         }
@@ -130,12 +119,11 @@ public class SHA1Utils
     }
 
 
-
-
     /**
      * SHA1 安全加密算法
      * c) 将排序后的所有参数字符串拼接成一个字符串进行 SHA1 编码
      * d) SHA1 编码后的 40 位字符串作为 sign
+     *
      * @param maps 参数key-value map集合
      * @return
      * @throws DigestException
@@ -145,7 +133,7 @@ public class SHA1Utils
         try {
             //指定sha1算法
             MessageDigest md = MessageDigest.getInstance("sha1");
-            System.out.println(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)+"  "+sb);
+            System.out.println(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN) + "  " + sb);
             md.update(sb.toString().getBytes("UTF-8"));
             //获取字节数组
             byte messageDigest[] = md.digest();
@@ -165,9 +153,6 @@ public class SHA1Utils
             throw new DigestException("签名错误！");
         }
     }
-
-
-
 
 
 }

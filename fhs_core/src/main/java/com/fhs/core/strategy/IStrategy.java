@@ -7,9 +7,9 @@ package com.fhs.core.strategy;
 public interface IStrategy {
 
 
-
     /**
      * 生成一个主键
+     *
      * @param className 类名字
      * @return 主键内容
      */

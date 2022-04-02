@@ -15,7 +15,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 @SpringBootApplication()
 @MapperScan(basePackages = {"com.fhs.*.dao", "com.fhs.*.*.dao"})
-@EnableMethodCache(basePackages = {"com.xhb","com.fhs"})
+@EnableMethodCache(basePackages = {"com.xhb", "com.fhs"})
 @EnableCreateCacheAnnotation
 @EnableConfigurationProperties
 @PropertySource("classpath:config.properties")
@@ -28,6 +28,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class FhsFrameworkBaseBusinessApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run( FhsFrameworkBaseBusinessApplication.class, args);
+        SpringApplication.run(FhsFrameworkBaseBusinessApplication.class, args);
     }
 }
