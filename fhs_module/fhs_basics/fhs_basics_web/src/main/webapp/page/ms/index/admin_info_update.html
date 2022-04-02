@@ -1,4 +1,3 @@
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <%
@@ -6,51 +5,82 @@
     include("/page/tags/js_css_include.html"){}
     %>
 </head>
-<body style="background-color: white">
+<body style="background-color: white;display: none;">
 
 
-	<!--修改个人信息-->
-	<div id="updateUserInfoDiv">
-        <div class="fitem">
-            <#HideFormTag id='userId' name='userId'/>
-            <#InputFormTag  name='userName' title='用户名' dataType='s2-10' required='true' />
-            <#InputFormTag  name='userLoginName' title='登录名' dataType='/^[a-zA-Z0-9_]{1,}$/' required='true' /></div>
-        <div class="fitem">
-            <#InputFormTag  name='mobile' title='手机号' dataType='*,m' required='true' />
-            <#InputFormTag  name='sex' title='性别'/>
-        </div>
-        <div class="fitem">
-            <#InputFormTag  name='email' title='邮箱' dataType='e|empty' />
-        </div>
-        <div class="fitem">
-            <#InputFormTag  name='organizationId' title='所属机构' required='true' />
-        </div>
-	</div>
-	<div id="dlg-buttons">
-		<center>
-			 <a href="javascript:void(0)"
-				class="easyui-linkbutton btn btn-can l-btn l-btn-small" onclick="top.closeDialog();">关闭</a>
-		</center>
-	</div>
+<!--修改个人信息-->
+<div id="updateUserInfoDiv">
+    <div class="fitem">
+        <#HideFormTag id='userId' name='userId'/>
+        <#InputFormTag name='userName' title='姓名' dataType='s2-10' required='true' />
+        <#InputFormTag name='userLoginName' title='登录名' dataType='/^[a-zA-Z0-9_]{1,}$/' required='true' />
+    </div>
+    <div id="birthdayD" class="fitem">
+        <#InputFormTag name='birthday' title='生日' required='true' />
+    </div>
+    <div id="classesIdD" class="fitem">
+        <#SelectFormTag name='classesId' multiple="true" title='班级' url='${basePath}/ms/x/school_classes/findListData'
+        valueField='id' textField='name'/>
+    </div>
+    <div id="numD" class="fitem">
+        <#InputFormTag name='num' title='编号' />
+    </div>
+    <div class="fitem" id="electiveCoursesD">
+        <#InputFormTag name='electiveCourses' title='选修课' />
+    </div>
+    <div id="titleD" class="fitem">
+        <#InputFormTag name='title' title='职称' />
+    </div>
+    <div id="curriculumIdD" class="fitem">
+        <#SelectFormTag name='curriculumId' title='课程' url='${basePath}/ms/x/school_curriculum/findListData'
+        valueField='id' textField='name'/>
+    </div>
+</div>
+
 
 <script type="text/javascript">
     var isInitProvinceId = false;
-	$(document).ready(function() {
+    $(document).ready(function () {
         renderView("updateUserInfoDiv");
+        $('.combo-clear').hide();
         getOwnUserInfo();
-	})
+    })
 
     function getOwnUserInfo() {
         $.ajax({
             type: 'get',
             url: "${basePath}ms/sysUser/getOwnUserInfo",
             dataType: 'json',
-            async:false,
-            success: function(res){
+            async: false,
+            success: function (res) {
+                if (res.type == 'teacher') {
+                    $('#birthdayD').hide();
+                    $('#electiveCoursesD').hide();
+                } else if (res.type == 'student') {
+                    $('#curriculumIdD').hide();
+                    $('#titleD').hide();
+                } else {
+                    $('#curriculumIdD').hide();
+                    $('#titleD').hide();
+                    $('#birthdayD').hide();
+                    $('#electiveCoursesD').hide();
+                    $('#classesIdD').hide();
+                    $('#numD').hide();
+                }
+                let info = res;
+                loadSuccessFuns.forEach(function(_function,index,array){
+                    _function(info);
+                });
+                $('body').show();
+                $('#curriculumId').combobox('setValue',res.curriculumId);
                 $("#userId").val(res.userId);
                 $("input[name='userName']").val(res.userName);
                 $("input[name='userLoginName']").val(res.userLoginName);
-                $("input[name='mobile']").val(res.mobile)
+                $("input[name='mobile']").val(res.mobile);
+                $("input[name='num']").val(res.num);
+                $("input[name='title']").val(res.title);
+                $("input[name='birthday']").val(res.birthday);
+                $("input[name='electiveCourses']").val(res.electiveCourses);
                 $("input[name='sex']").val(res.transMap.sexName);
                 $("input[name='email']").val(res.email);
                 $("input[name='organizationId']").val(res.transMap.orgName);

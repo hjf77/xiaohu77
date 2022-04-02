@@ -201,6 +201,12 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
     @ApiModelProperty("编号")
     private String num;
 
+    /**
+     * 职称
+     */
+    @TableField("title")
+    @ApiModelProperty("职称")
+    private String title;
 
 
 
