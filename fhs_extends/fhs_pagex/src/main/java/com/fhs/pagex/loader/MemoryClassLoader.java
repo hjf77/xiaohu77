@@ -178,7 +178,7 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     private static final Object lock = new Object();
 
-    private boolean isInit = false;
+    private static boolean isInit = false;
 
 
     public void init() {
