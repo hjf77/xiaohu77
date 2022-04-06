@@ -54,6 +54,10 @@ public class PageXDBService {
     @Autowired
     private DataDelManager dataDelManager;
 
+
+    @Autowired
+    private IdHelper idHelper;
+
     private static final String DO_CACHE_KEY = "docache:";
 
 
@@ -95,7 +99,17 @@ public class PageXDBService {
         if (ConverterUtils.toBoolean(addDTO.getModelConfig().get("isOne2X"))) {
             String createUser = isAdd ? paramMap.getStr("createUser") : paramMap.getStr("updateUser");
             String groupCode = paramMap.getStr("groupCode");
-            String pkey = isAdd ? paramMap.getStr("pkey") : paramMap.getStr(modelConfig.get("pkey"));
+            String pkey = null;
+            if(!isAdd){
+                pkey = paramMap.getStr(modelConfig.get("pkey"));
+            }else{
+                if ("uuid".equals(modelConfig.get("type"))) {
+                    pkey =  StringUtil.getUUID();
+                } else if ("snow".equals(modelConfig.get("type"))) {
+                    pkey = ConverterUtils.toString(idHelper.nextId());
+                }
+
+            }
             List<String> namespaces = new ArrayList<>();
             List<Map<String, Object>> fields = addDTO.getFormFieldSett();
             //把所有的namespace拿到
@@ -120,11 +134,17 @@ public class PageXDBService {
                 String fkeyField = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("fkey")));
                 String pkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("pkey"));
                 tempJsonArray = JSON.parseArray(ConverterUtils.toString(paramMap.get(xNamespace)));
+                Map<String,Object> xModelConfig = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig();
                 for (int i = 0; i < tempJsonArray.size(); i++) {
                     JSONObject extendsChild = tempJsonArray.getJSONObject(i);
+
                     //没有id就生成一个
                     if (!extendsChild.containsKey("pkey")) {
-                        extendsChild.put("pkey", StringUtil.getUUID());
+                        if ("uuid".equals(xModelConfig.get("type"))) {
+                            extendsChild.put("uuid", StringUtil.getUUID());
+                        } else if ("snow".equals(xModelConfig.get("type"))) {
+                            extendsChild.put("snow", idHelper.nextId());
+                        }
                     }
                     redisCacheService.remove(DO_CACHE_KEY + xNamespace + ":" + extendsChild.get("pkey"));
                     extendsChild.put(fkeyField, pkey);
