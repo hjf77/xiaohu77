@@ -1,6 +1,7 @@
 package com.fhs.pagex.task;
 
 import com.fhs.common.utils.CheckUtils;
+import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.FileUtils;
 import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
@@ -61,20 +62,20 @@ public class RefreshCacheTask implements InitializingBean, Runnable, Application
         //先去刷新一遍，然后判断是否是开发者模式如果是，则继续刷新
         try {
             new Thread(() -> {
-                this.refresh();
-                //正式环境不需要配置
-                if (CheckUtils.isNotEmpty(EConfig.getOtherConfigPropertiesValue("isDevModel"))) {
-                    new Thread(this).start();
+                try{
+                    this.refresh();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }finally {
+                    //正式环境不需要配置
+                    if (ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel"))) {
+                        new Thread(this).start();
+                    }
                 }
             }).start();
         } catch (Exception e) {
             LOG.error("刷新文件出错:", e);
         }
-        //正式环境不需要配置
-        if (CheckUtils.isNotEmpty(EConfig.getOtherConfigPropertiesValue("isDevModel"))) {
-            new Thread(this).start();
-        }
-
     }
 
 

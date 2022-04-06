@@ -46,8 +46,7 @@ import java.util.Set;
 @Service
 public class PageXAutoSqlService {
 
-    @Autowired
-    private IdHelper idHelper;
+
 
     /**
      *
@@ -190,9 +189,9 @@ public class PageXAutoSqlService {
         }
         String pkeyValue = "null";
         if ("uuid".equals(modelConfig.get("type"))) {
-            pkeyValue = "#{pkey}";
+            pkeyValue = "#{uuid}";
         } else if ("snow".equals(modelConfig.get("type"))) {
-            pkeyValue = idHelper.nextId() + "";
+            pkeyValue =  "#{snow}";
         }
         sqlBuilder.append(",`create_time`,`create_user`,`update_time`,`update_user`  " + groupCodeSql + ")  VALUES ("
                 + pkeyValue);

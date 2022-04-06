@@ -70,6 +70,9 @@ public class PageXMsPubAction extends PageXBaseAction {
     @Autowired
     private RedisCacheService<String> redisCacheService;
 
+    @Autowired
+    private IdHelper idHelper;
+
     /**
      * 添加-后台只做重复校验，不做参数格式校验
      *
@@ -84,7 +87,9 @@ public class PageXMsPubAction extends PageXBaseAction {
         paramMap.put("createUser", user.getUserId());
         paramMap.put("groupCode", user.getGroupCode());
         paramMap.put("updateUser", user.getUserId());
-        paramMap.put("pkey", StringUtil.getUUID());
+        paramMap.put("uuid", StringUtil.getUUID());
+        paramMap.put("snow", idHelper.nextId());
+
         addLog(namespace, "添加", paramMap, request, LogDesc.ADD);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         service.insert(paramMap, namespace);
