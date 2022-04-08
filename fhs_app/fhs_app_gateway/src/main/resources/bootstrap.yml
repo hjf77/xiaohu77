@@ -4,13 +4,48 @@ spring:
   application:
     name: fhs-gateway
   cloud:
-    nacos:
+    gateway:
+      routes:
+        - id: basic ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://basic
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/basic/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: business ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://business
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/business/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: alarm ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://alarm
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/alarm/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: monitor ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://monitor
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/monitor/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
       discovery:
-        server-addr: 192.168.0.213:8848
-      config:
-        server-addr: ${spring.cloud.nacos.discovery.server-addr}
-        file-extension: yaml # 配置文件格式
-        enabled: false #如果不用nacos 请放开此配置并且将 application-dev-config-template.yml 改名字为application-dev.yml 如果使用使用nacos 则删除此配置 并且在nacos上新建 data id ： basic-dev.yaml的配置文件 还要删除改名字为application-dev.yml
+        locator:
+          enabled: true  #表明gateway开启服务注册和发现的功能，并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，这个router将以服务名开头的请求路径转发到对应的服务
+          lower-case-service-id: true  #是将请求路径上的服务名配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了
 
 ###################  项目启动端口  ###################
 server:
