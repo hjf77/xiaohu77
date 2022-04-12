@@ -19,11 +19,11 @@ String.prototype.replaceAll = function(reallyDo, replaceWith, ignoreCase) {
   }
 }
 //从url获取参数
-function getQueryString(name) { 
-var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-var r = window.location.search.substr(1).match(reg); 
-if (r != null) return unescape(r[2]); return null; 
-} 
+function getQueryString(name) {
+var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+var r = window.location.search.substr(1).match(reg);
+if (r != null) return unescape(r[2]); return null;
+}
 
 // 判断是否为空
 function isNullOrEnpty(str) {
@@ -564,7 +564,7 @@ function pubDel(gridId, url, id, callback, messager) {
 						  timer:1500,
 					  });
 				  },300);
-				 
+
 				} else {
 				   swal("失败提示", "您的数据删除操作没有成功", "error");
 				}
@@ -2366,7 +2366,7 @@ function openMainFrame(_baseUrl,_url,_title)
 			+ '&encode=true&url=' + encodeURIComponent(_baseUrl+_url));
 	},1000);
 }
-//分钟计算 
+//分钟计算
  function minutesAdd(_sourceTime,_addMinutes){
             var _tempDate = new Date();
             var _sourceMinutes = new Number(_sourceTime.split(":")[1]);
