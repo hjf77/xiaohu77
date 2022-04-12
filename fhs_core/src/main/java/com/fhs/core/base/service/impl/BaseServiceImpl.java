@@ -281,7 +281,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public int batchUpdate(List<T> entity) {
-        return baseDao.batchUpdate(entity);
+        return baseDao.batchUpdateById(entity);
     }
 
     @Override

@@ -40,7 +40,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @TableName("t_flow_listener")
 public class FlowListener extends BaseDO<FlowListener> {
     private static final long serialVersionUID = -34427919221391088L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     //标题

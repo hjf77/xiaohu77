@@ -103,12 +103,7 @@ public class PageXDBService {
             if(!isAdd){
                 pkey = paramMap.getStr(modelConfig.get("pkey"));
             }else{
-                if ("uuid".equals(modelConfig.get("type"))) {
-                    pkey =  StringUtil.getUUID();
-                } else if ("snow".equals(modelConfig.get("type"))) {
-                    pkey = ConverterUtils.toString(idHelper.nextId());
-                }
-
+                pkey =  paramMap.getStr(modelConfig.get("type"));
             }
             List<String> namespaces = new ArrayList<>();
             List<Map<String, Object>> fields = addDTO.getFormFieldSett();
@@ -137,13 +132,18 @@ public class PageXDBService {
                 Map<String,Object> xModelConfig = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig();
                 for (int i = 0; i < tempJsonArray.size(); i++) {
                     JSONObject extendsChild = tempJsonArray.getJSONObject(i);
-
                     //没有id就生成一个
                     if (!extendsChild.containsKey("pkey")) {
                         if ("uuid".equals(xModelConfig.get("type"))) {
                             extendsChild.put("uuid", StringUtil.getUUID());
                         } else if ("snow".equals(xModelConfig.get("type"))) {
                             extendsChild.put("snow", idHelper.nextId());
+                        }
+                    }else{
+                        if ("uuid".equals(xModelConfig.get("type"))) {
+                            extendsChild.put("uuid", extendsChild.get("pkey"));
+                        } else if ("snow".equals(xModelConfig.get("type"))) {
+                            extendsChild.put("snow", extendsChild.get("pkey"));
                         }
                     }
                     redisCacheService.remove(DO_CACHE_KEY + xNamespace + ":" + extendsChild.get("pkey"));
@@ -238,9 +238,9 @@ public class PageXDBService {
      */
     public int del(String pkey, String namespace) {
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + pkey);
-        int result = sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
         //执行
         dataDelManager.onDel(namespace, pkey);
+        int result = sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
         return result;
     }
 

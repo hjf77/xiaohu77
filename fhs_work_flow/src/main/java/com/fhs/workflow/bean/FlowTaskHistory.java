@@ -43,7 +43,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @TransTypes(types = {Constant.USER_NAME})
 public class FlowTaskHistory extends BaseDO<FlowTaskHistory> {
     private static final long serialVersionUID = -88447633213612521L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     /**

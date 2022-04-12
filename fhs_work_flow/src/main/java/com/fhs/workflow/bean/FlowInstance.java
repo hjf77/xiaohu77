@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 @TableName("t_flow_instance")
 public class FlowInstance extends BaseDO<FlowInstance> {
     private static final long serialVersionUID = -80075792071824152L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     /**

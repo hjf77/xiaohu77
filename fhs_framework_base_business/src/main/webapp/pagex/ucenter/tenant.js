@@ -1,5 +1,5 @@
 var modelConfig = {
-    title: '租户管理', pkey: 'id', type: 'uuid',
+    title: '租户管理', pkey: 'id', type: 'snow',
     orderBy: 'update_time Desc',
     namespace: "tenant", table: 't_ucenter_ms_tenant', trans: false,
     saveUrl:'${path.basePath}/ms/tenant/add',

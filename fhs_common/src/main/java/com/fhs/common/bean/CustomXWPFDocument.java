@@ -1,3 +1,4 @@
+/*
 package com.fhs.common.bean;
 
 
@@ -13,11 +14,13 @@ import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline
 import java.io.IOException;
 import java.io.InputStream;
 
+*/
 /**
  * @author zhaoliang
  * @version 1.0
  * @date 2019/9/23 16:58
- */
+ *//*
+
 public class CustomXWPFDocument extends XWPFDocument {
     public CustomXWPFDocument(InputStream in) throws IOException {
         super(in);
@@ -31,12 +34,14 @@ public class CustomXWPFDocument extends XWPFDocument {
         super(pkg);
     }
 
-    /**
+    */
+/**
      * @param ind
      * @param width     宽
      * @param height    高
      * @param paragraph 段落
-     */
+     *//*
+
     public void createPicture(String blipId, int ind, int width, int height, XWPFParagraph paragraph) {
         final int EMU = 9525;
         width *= EMU;
@@ -101,3 +106,4 @@ public class CustomXWPFDocument extends XWPFDocument {
 
 
 }
+*/

@@ -21,4 +21,6 @@ public class DataDelManager {
         // 如果namespace是空的话，不理他
         //从map中get出list调用list的onDel
     }
+
+
 }

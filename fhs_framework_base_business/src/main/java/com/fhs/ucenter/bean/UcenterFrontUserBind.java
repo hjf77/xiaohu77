@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 public class UcenterFrontUserBind extends BaseDO<UcenterFrontUserBind> {
     private static final long serialVersionUID = 920530665191970437L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     //用户id

@@ -33,7 +33,13 @@ include("/page/tags/form_include.html"){}
         // 如果是编辑页面，就初始化一些数据
         if (isEdit) {
             // student/update?id=1  || student/update/1
-            url_save = '${modelConfig.updateUrl}${parameter.id!}';
+            url_save = '${modelConfig.updateUrl}';
+            //
+            if(url_save.charAt(url_save.length-1) == '/'){
+                url_save += '${parameter.id!}';
+            }else{
+                $('#addUpdateForm').append('<input type="hidden" name="id" value="${parameter.id!}"/>');
+            }
             loadForm();
             return;
         }

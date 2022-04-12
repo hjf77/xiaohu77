@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 @TableName("t_ucenter_alipay_sett")
 public class UcenterAlipaySett extends BaseDO<UcenterAlipaySett> {
     private static final long serialVersionUID = -22527353735624120L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     //服务号名称

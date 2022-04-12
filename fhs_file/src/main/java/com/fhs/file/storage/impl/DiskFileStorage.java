@@ -4,6 +4,7 @@ import com.fhs.common.utils.FileUtils;
 import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.DataSource;
+import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
 import com.fhs.file.bean.ServiceFile;
 import com.fhs.file.storage.FileStorage;
@@ -56,6 +57,7 @@ public class DiskFileStorage<mian> implements FileStorage {
      * @return serviceFile+token定位到的文件对象
      */
     private File getFile(ServiceFile serviceFile, String token) {
+        ParamChecker.isNotNull(serviceFile,"匹配不到文件");
         String fileName = (null == token ? serviceFile.getFileId() : token) + serviceFile.getFileSuffix();
         return new File(EConfig.getPathPropertiesValue("saveFilePath") + SEPARATOR + serviceFile.getUploadDate() + SEPARATOR + serviceFile.getFileSuffix().replace(".", "") + SEPARATOR + fileName);
     }

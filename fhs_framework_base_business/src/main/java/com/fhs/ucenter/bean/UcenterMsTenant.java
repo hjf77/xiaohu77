@@ -35,7 +35,7 @@ public class UcenterMsTenant extends BaseDO<UcenterMsTenant> {
     @NotNull(message = "租户集团编码字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "租户集团编码字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
 
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     //租户名称

@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 public class UcenterMpSett extends BaseDO<UcenterMpSett> {
     private static final long serialVersionUID = 296286961263761719L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     //公众号名称

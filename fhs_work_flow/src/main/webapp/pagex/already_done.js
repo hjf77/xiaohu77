@@ -1,5 +1,5 @@
 var modelConfig = {
-    title: '代办事项', pkey: 'id', type: 'uuid',
+    title: '代办事项', pkey: 'id', type: 'snow',
     orderBy: 'update_time Desc',
     namespace: "already_done", table: 't_flow_task_history', trans: true, db: "park",
     dataGridUrl: '${path.basePath}/ms/flowTaskHistory/getTaskHistoryList',

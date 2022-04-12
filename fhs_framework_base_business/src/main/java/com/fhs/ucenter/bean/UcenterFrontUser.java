@@ -23,7 +23,7 @@ import org.hibernate.validator.constraints.Length;
 @TableName("t_ucenter_front_user")
 public class UcenterFrontUser extends BaseDO<UcenterFrontUser> {
     private static final long serialVersionUID = 545604903343287075L;
-    @TableId(value = "user_id", type = IdType.UUID)
+    @TableId(value = "user_id", type = IdType.INPUT)
     private String userId;
 
     @Length(message = "${column.comment}字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)

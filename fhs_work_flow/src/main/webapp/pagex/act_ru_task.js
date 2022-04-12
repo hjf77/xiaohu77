@@ -1,5 +1,5 @@
 var modelConfig = {
-    title: '代办事项', pkey: 'id', type: 'uuid',
+    title: '代办事项', pkey: 'id', type: 'snow',
     orderBy: 'update_time Desc',
     namespace: "act_ru_task", table: 'act_ru_task', trans: true, db: "park",
     dataGridUrl: '${path.basePath}/ms/myWorks/getNeedComplateTask',

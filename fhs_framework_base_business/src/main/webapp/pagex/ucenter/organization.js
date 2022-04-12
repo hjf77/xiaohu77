@@ -1,7 +1,7 @@
 var modelConfig = {
     title: '机构管理表',
     pkey: 'id',
-    type: 'uuid',
+    type: 'snow',
     orderBy: 'update_time Desc',
     namespace: "organization",
     table: 't_ucenter_ms_organization',

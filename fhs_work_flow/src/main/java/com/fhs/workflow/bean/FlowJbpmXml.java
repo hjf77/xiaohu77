@@ -40,7 +40,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @TableName("t_flow_jbpm_xml")
 public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
     private static final long serialVersionUID = -26479945401118903L;
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     //流程名称
