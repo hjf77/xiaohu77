@@ -116,7 +116,7 @@
     <% } %>
     <!--扩展js和css引入 end-->
 </head>
-<body>
+<body >
 <table id="listGrid"
        fit="true" style="width: 90%;"
        <% if(isNotEmpty(modelConfig.title)){ %>
@@ -249,8 +249,6 @@
 
     //显示列设置
     function showColumnSett(e){
-        debugger;
-
         var items = [
             <% for(field in listFields){ %>
 
@@ -397,12 +395,13 @@
 </script>
 </html>
 <script type="text/javascript">
+
     var loading = window.setTimeout(hideMask,100);
     var preloader = null;
     var ue = null;
     //隐藏遮罩层
     function hideMask(){
-        $("#loading").hide(100);
+        $("#loading").hide();
         preloader = window.setTimeout(hidePreloader,1000);
         window.clearTimeout(loading);
     }
