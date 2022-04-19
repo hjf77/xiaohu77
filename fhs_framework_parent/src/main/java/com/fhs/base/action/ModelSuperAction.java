@@ -46,7 +46,7 @@ public class ModelSuperAction<T> extends BaseAction<T> {
     private static final Logger LOG = Logger.getLogger(ModelSuperAction.class);
 
     @Autowired
-    private BaseService<T> baseService;
+    protected BaseService<T> baseService;
 
     public BaseService<T> getBaseService() {
         return baseService;

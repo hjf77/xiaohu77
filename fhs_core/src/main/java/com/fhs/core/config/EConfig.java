@@ -76,7 +76,7 @@ public class EConfig implements InitializingBean, CommandLineRunner {
     /**
      * 在本地properties文件初始化apollo配置
      */
-    private void initConfigFromProperties() {
+    public void initConfigFromProperties() {
         InputStream pathInputStream = null;
         InputStream otherInputStream = null;
         String jarPath = getPath();

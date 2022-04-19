@@ -168,6 +168,7 @@ public class PageXMsPubAction extends PageXBaseAction {
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         addLog(namespace, "查看", paramMap, request, LogDesc.SEE);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
+        System.out.println(service.findBean(paramMap, namespace));
         return JSONObject.parseObject(service.findBean(paramMap, namespace));
     }
 

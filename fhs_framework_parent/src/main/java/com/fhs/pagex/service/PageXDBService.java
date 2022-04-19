@@ -80,14 +80,23 @@ public class PageXDBService {
      * @return
      */
     public int insert(EMap<String, Object> paramMap, String namespace) {
-        Map<String,Object> temp = new HashMap<>(paramMap);
-        for (String key : temp.keySet()) {
-            if(temp.get(key)  == null ||  StringUtil.isEmpty(temp.get(key).toString())){
-                paramMap.put(key,null);
-            }
-        }
+        setEmptyValue2Null(paramMap);
         insertAndUpdateX(paramMap, namespace, true);
         return sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX", paramMap);
+    }
+
+    /**
+     * 设置空value为null
+     *
+     * @param paramMap map
+     */
+    private void setEmptyValue2Null(Map<String, Object> paramMap) {
+        Map<String, Object> temp = new HashMap<>(paramMap);
+        for (String key : temp.keySet()) {
+            if (temp.get(key) == null || StringUtil.isEmpty(temp.get(key).toString())) {
+                paramMap.put(key, null);
+            }
+        }
     }
 
     /**
@@ -106,10 +115,10 @@ public class PageXDBService {
             String createUser = isAdd ? paramMap.getStr("createUser") : paramMap.getStr("updateUser");
             String groupCode = paramMap.getStr("groupCode");
             String pkey = null;
-            if(!isAdd){
+            if (!isAdd) {
                 pkey = paramMap.getStr(modelConfig.get("pkey"));
-            }else{
-                pkey =  paramMap.getStr(modelConfig.get("type"));
+            } else {
+                pkey = paramMap.getStr(modelConfig.get("type"));
             }
             List<String> namespaces = new ArrayList<>();
             List<Map<String, Object>> fields = addDTO.getFormFieldSett();
@@ -135,7 +144,7 @@ public class PageXDBService {
                 String fkeyField = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("fkey")));
                 String pkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("pkey"));
                 tempJsonArray = JSON.parseArray(ConverterUtils.toString(paramMap.get(xNamespace)));
-                Map<String,Object> xModelConfig = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig();
+                Map<String, Object> xModelConfig = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig();
                 for (int i = 0; i < tempJsonArray.size(); i++) {
                     JSONObject extendsChild = tempJsonArray.getJSONObject(i);
                     //没有id就生成一个
@@ -145,7 +154,7 @@ public class PageXDBService {
                         } else if ("snow".equals(xModelConfig.get("type"))) {
                             extendsChild.put("snow", idHelper.nextId());
                         }
-                    }else{
+                    } else {
                         if ("uuid".equals(xModelConfig.get("type"))) {
                             extendsChild.put("uuid", extendsChild.get("pkey"));
                         } else if ("snow".equals(xModelConfig.get("type"))) {
@@ -157,6 +166,7 @@ public class PageXDBService {
                     extendsChild.put("updateUser", createUser);
                     extendsChild.put("createUser", createUser);
                     extendsChild.put("groupCode", groupCode);
+                    setEmptyValue2Null(extendsChild);
                     sqlsession.insert(getSqlNamespace() + xNamespace + "_insertPageX", extendsChild);
                 }
             }
@@ -230,6 +240,7 @@ public class PageXDBService {
      * @return 更新了几行默认是1
      */
     public int update(EMap<String, Object> paramMap, String namespace) {
+        setEmptyValue2Null(paramMap);
         insertAndUpdateX(paramMap, namespace, false);
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + paramMap.get("id"));
         return sqlsession.update(getSqlNamespace() + namespace + "_updatePageX", paramMap);
