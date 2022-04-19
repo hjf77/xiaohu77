@@ -80,6 +80,12 @@ public class PageXDBService {
      * @return
      */
     public int insert(EMap<String, Object> paramMap, String namespace) {
+        Map<String,Object> temp = new HashMap<>(paramMap);
+        for (String key : temp.keySet()) {
+            if(temp.get(key)  == null ||  StringUtil.isEmpty(temp.get(key).toString())){
+                paramMap.put(key,null);
+            }
+        }
         insertAndUpdateX(paramMap, namespace, true);
         return sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX", paramMap);
     }
