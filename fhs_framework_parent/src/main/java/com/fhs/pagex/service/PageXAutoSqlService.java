@@ -268,12 +268,17 @@ public class PageXAutoSqlService {
                 "update_user updateUser," + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
         List<Map<String, Object>> fields = pagexListSettDTO.getListSett();
         String name = null;
+        String colName;
         for (Map<String, Object> field : fields) {
             if (PageXAutoJavaService.DEFAULT_FIELD_SET.contains(field.get("name"))) {
                 continue;
             }
             name = ConverterUtils.toString(field.get("name"));
-            sqlBuilder.append("," + name + " AS " + ColumnNameUtil.underlineToCamel(name));
+            colName = name;
+            if(field.containsKey("tinyint") && ConverterUtils.toBoolean(field.get("tinyint"))){
+                colName = colName + "*1";
+            }
+            sqlBuilder.append("," + colName + " AS " + ColumnNameUtil.underlineToCamel(name));
         }
         sqlBuilder.append(" FROM " + modelConfig.get("table") + autoPagerWhere(pagexListSettDTO));
         String orderBy = " <if test=\"sortTzwName != null and sortTzwName !='' \" >  " +
