@@ -239,11 +239,16 @@ public class PageXAutoSqlService {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder(" SELECT " + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
         List<Map<String, Object>> fields = pagexAddDTO.getFormFieldSett();
+        String colName;
         for (Map<String, Object> field : fields) {
             if (CheckUtils.isNotEmpty(field.get("name"))) {
                 String[] names = ConverterUtils.toString(field.get("name")).split(",");
                 for (String name : names) {
-                    sqlBuilder.append("," + name + " AS " + ColumnNameUtil.underlineToCamel(name));
+                    colName = name;
+                    if(field.containsKey("tinyint") && ConverterUtils.toBoolean(field.get("tinyint"))){
+                        colName = colName + "*1";
+                    }
+                    sqlBuilder.append("," + colName + " AS " + ColumnNameUtil.underlineToCamel(name));
                 }
             }
         }
