@@ -5,6 +5,7 @@ import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
+import com.fhs.core.result.HttpResult;
 import com.fhs.easycloud.util.ParamChecker;
 import com.fhs.basics.service.FileStorage;
 import com.fhs.basics.service.PubFileService;
@@ -54,7 +55,7 @@ public class DownLoadController extends BaseController {
      */
     @RequestMapping(value = "file", method = RequestMethod.GET)
     @ApiOperation("根据id下载文件")
-    public void download(String fileId, HttpServletResponse response) {
+    public HttpResult download(String fileId, HttpServletResponse response) {
         try {
             // 文件下载路径
             PubFileVO serviceFile = pubFileService.selectById(fileId);
@@ -63,8 +64,10 @@ public class DownLoadController extends BaseController {
             if (!(e instanceof ParamException)) {
                 LOG.error(this, e);
             }
-            throw new ParamException("下载文件异常,可能是文件不存在");
+            return HttpResult.error("","文件异常,可能是文件不存在");
+            //throw new ParamException("下载文件异常,可能是文件不存在");
         }
+        return HttpResult.OK("文件获取成功");
     }
 
 
