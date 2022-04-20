@@ -89,4 +89,10 @@ public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, S
     public List<ServiceAreaVO> findListAdvance(QueryFilter<ServiceAreaPO> filter, HttpServletRequest request) {
         return areaService.selectListMP(filter.asWrapper(getDOClass()));
     }
+
+    @ApiOperation("测试")
+    @GetMapping("selectAllParentId/{id}")
+    public List<String> selectAllParentId(String id) {
+        return areaService.selectAllParentId(id);
+    }
 }

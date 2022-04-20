@@ -164,14 +164,14 @@ public class MsLoginController extends BaseController {
         if (isVerification) {
             String identifyCode = loginVO.getIdentifyCode();
             Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + loginVO.getUuid());
-            if (null == sessionIdentify) {
-                logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
-                throw new ParamException("验证码失效，请刷新验证码后重新输入");
-            }
-            if (!sessionIdentify.toString().equals(identifyCode)) {
-                logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
-                throw new ParamException("验证码错误，请重新输入");
-            }
+//            if (null == sessionIdentify) {
+//                logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
+//                throw new ParamException("验证码失效，请刷新验证码后重新输入");
+//            }
+//            if (!sessionIdentify.toString().equals(identifyCode)) {
+//                logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
+//                throw new ParamException("验证码错误，请重新输入");
+//            }
         }
         String userName = loginVO.getUserLoginName();
         UcenterMsUserPO sysUser = sysUserService.login(loginVO);

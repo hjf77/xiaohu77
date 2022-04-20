@@ -1,6 +1,9 @@
 package com.fhs.basics.vo;
 
 import com.fhs.core.base.pojo.BaseObject;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -80,4 +83,8 @@ public class LeftMenuVO extends BaseObject<LeftMenuVO> {
      */
     private String namespace;
 
+    /**
+     * 菜单是否显示
+     */
+    private Integer isShow;
 }
