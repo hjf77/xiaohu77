@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
@@ -86,6 +87,14 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
                 throw new ParamException("该角色拥有关联用户,不可禁用");
             }
         }
+        //跟据角色名称、角色id 查询不包含要修改的角色总数 0为名称没有重复 大于0为角色名称有重复
+        Long roleCount = sysRoleService.selectCountMP(new LambdaQueryWrapper<UcenterMsRolePO>()
+                .eq(UcenterMsRolePO::getRoleName, sysRole.getRoleName())
+                .ne(UcenterMsRolePO::getRoleId, sysRole.getRoleId()));
+        //角色名称不能重复
+        if(roleCount > 0){
+            throw new ParamException("该角色名称重复,不能修改");
+        }
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setUpdateUser(sysUser.getUserId());
         sysRole.setUpdateTime(new Date());
@@ -104,6 +113,13 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole, HttpServletRequest request,
                                    HttpServletResponse response) {
+        //跟据角色名称 查询角色名称是否有重复名称 0为名称没有重复 大于0为角色名称有重复
+        Long roleCount = sysRoleService.selectCountMP(new LambdaQueryWrapper<UcenterMsRolePO>()
+                .eq(UcenterMsRolePO::getRoleName, sysRole.getRoleName()));
+        //角色名称不能重复
+        if(roleCount > 0){
+            throw new ParamException("该角色名称重复,不能新增");
+        }
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
