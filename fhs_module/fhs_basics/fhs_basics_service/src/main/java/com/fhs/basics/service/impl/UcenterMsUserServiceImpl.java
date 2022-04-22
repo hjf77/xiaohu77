@@ -1,14 +1,11 @@
 package com.fhs.basics.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
-import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.po.UcenterMsTenantPO;
 import com.fhs.basics.mapper.SettMsMenuMapper;
@@ -26,8 +23,6 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.google.common.collect.HashMultimap;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -311,23 +306,21 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = LeftMenuVO.builder().id(adminMenu.getMenuId()).name(adminMenu.getMenuName())
                     .icon(adminMenu.getIcon())
-                    .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).sonMenu(new ArrayList<>()).build();
+                    .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).isShow(adminMenu.getIsShow()).sonMenu(new ArrayList<>()).build();
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
         List<LeftMenuVO> result = new ArrayList<>();
         menuList.forEach(adminMenu -> {
-            if (ConverterUtils.toInt(adminMenu.getIsShow()) != SettMsMenuService.NOT_SHOW) {
-                // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null && (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
-                    if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
-                        leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
-                                leftMenuMap.get(adminMenu.getMenuId()));
-                    }
+            // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
+            if (adminMenu.getFatherMenuId() != null && (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
+                if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
+                    leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
+                            leftMenuMap.get(adminMenu.getMenuId()));
                 }
-                // 如果是一级菜单则挂写到result去
-                else if (adminMenu.getFatherMenuId() != null && BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId())) {
-                    result.add(leftMenuMap.get(adminMenu.getMenuId()));
-                }
+            }
+            // 如果是一级菜单则挂写到result去
+            else if (adminMenu.getFatherMenuId() != null && BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId())) {
+                result.add(leftMenuMap.get(adminMenu.getMenuId()));
             }
         });
         return result;
@@ -369,6 +362,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 converterMenu2Router(sonMenu, sunRouter, false);
                 vueRouterVO.getChildren().add(sunRouter);
             }
+        }
+        if(menu.getIsShow() == SettMsMenuService.NOT_SHOW){
+            vueRouterVO.setHidden(true);
+        } else {
+            vueRouterVO.setHidden(false);
         }
     }
 

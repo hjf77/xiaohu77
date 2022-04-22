@@ -61,4 +61,9 @@ public class VueRouterVO extends BaseObject<VueRouterVO> {
      */
     private List<VueRouterVO> children = new ArrayList<>();
 
+    /**
+     * 跟据is_show判断是否隐藏
+     */
+    private Boolean hidden;
+
 }
