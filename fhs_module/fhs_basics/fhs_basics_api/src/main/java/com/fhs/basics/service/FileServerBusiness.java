@@ -5,6 +5,8 @@ import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+
 /**
  * 文件服务器业务
  *
@@ -22,6 +24,16 @@ public interface FileServerBusiness {
      */
     @CloudMethod
     PubFileVO uploadFile(MultipartFile fileData,String fileId);
+
+    /**
+     * 上传文件
+     *
+     * @param inputStream
+     * @return
+     */
+    @CloudMethod
+    PubFileVO uploadInputStream(InputStream inputStream);
+
 
 
 }

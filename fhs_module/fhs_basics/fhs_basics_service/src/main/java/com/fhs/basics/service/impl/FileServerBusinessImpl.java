@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+
 
 @Service
 @DataSource("basic")
@@ -40,6 +42,21 @@ public class FileServerBusinessImpl implements FileServerBusiness {
         sf.setFileSuffix(suffix);
         sf.setUploadDate(currentDate);
         fileStorage.uploadFile(sf, fileData);
+        this.insertDataToDB(sf);
+        return sf;
+    }
+
+    @Override
+    public PubFileVO uploadInputStream(InputStream inputStream) {
+        PubFileVO sf = new PubFileVO();
+        String fileName = StringUtils.getUUID();
+        String suffix = ".jpg";
+        String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
+        sf.setFileId(StringUtils.getUUID());
+        sf.setFileName(fileName);
+        sf.setFileSuffix(suffix);
+        sf.setUploadDate(currentDate);
+        fileStorage.uploadInputStream(sf, inputStream);
         this.insertDataToDB(sf);
         return sf;
     }

@@ -25,6 +25,13 @@ public interface FileStorage {
 
     void uploadFile(PubFilePO serviceFile, MultipartFile fileData);
 
+    /**
+     * 根据ServiceFile和inputStream做文件上传
+     * @param serviceFile
+     * @param inputStream
+     */
+    void uploadInputStream(PubFilePO serviceFile, InputStream inputStream);
+
 
     /**
      * 根据ServiceFile和MultipartFile做文件上传

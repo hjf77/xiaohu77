@@ -46,6 +46,12 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
+    public void uploadInputStream(PubFilePO serviceFile, InputStream inputStream) {
+        // 上传文件
+        this.upload(inputStream, serviceFile.getFileId());
+    }
+
+    @Override
     public void uploadFile(PubFilePO serviceFile, File fileData) {
         // 上传文件
         try {

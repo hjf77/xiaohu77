@@ -48,6 +48,17 @@ public class DiskFileStorage implements FileStorage {
     }
 
     @Override
+    public void uploadInputStream(PubFilePO serviceFile, InputStream inputStream) {
+        File file = getFile(serviceFile);
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, file);
+            serviceFile.setFileSize(file.length());
+        } catch (IOException e) {
+            LOG.error("文件上传失败", e);
+        }
+    }
+
+    @Override
     public void uploadFile(PubFilePO serviceFile, File fileData) {
         File file = getFile(serviceFile);
         try {
