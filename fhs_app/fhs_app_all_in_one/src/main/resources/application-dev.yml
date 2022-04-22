@@ -10,3 +10,4 @@ spring:
     host: 10.157.62.164
     password: wanglei1992
     port: 16379
+#JDK17 用户请设置application.yaml的 easy-trans.is-enable-tile 为false 不然会报一个cglib的错误
