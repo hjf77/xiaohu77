@@ -1,5 +1,7 @@
 package com.fhs.core.trans;
 
+import com.fhs.core.base.bean.SuperBean;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,4 +29,65 @@ public @interface Trans {
      * @return
      */
     String key() default "";
+
+    /**
+     * 设置到的target value  比如我有一个sex字段，有一个sexName 字段  sex是0 设置ref翻译服务可以自动把sexname设置为男
+     * 目标类字段配置了多个 有teacherName,teacherage 两个字段   我想要teacherName  可以写 teacherName#name
+     *
+     * @return
+     */
+    String ref() default "";
+
+    /**
+     * ref 支持多个，为了保持兼容新加了一个字段
+     * 作用同ref 只是支持多个
+     *
+     * @return
+     */
+    String[] refs() default {};
+
+    /**
+     * 目标class
+     *
+     * @return
+     */
+    Class<? extends SuperBean> target() default SuperBean.class;
+
+    /**
+     * 需要目标class哪些字段
+     *
+     * @return
+     */
+    String[] fields() default {};
+
+    /**
+     * 别名
+     *
+     * @return
+     */
+    String alias() default "";
+
+    /**
+     * 远程服务名称
+     *
+     * @return
+     */
+    String serviceName() default "";
+
+    /**
+     * @return
+     */
+    String targetClassName() default "";
+
+    /**
+     * 自定义的函数名(此名称需要被spring托管 并实现FuncGetter)
+     * @return
+     */
+    String customeBeanFuncName() default "";
+
+    /**
+     * 数据源
+     * @return
+     */
+    String dataSource() default "";
 }

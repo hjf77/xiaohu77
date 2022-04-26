@@ -1,9 +1,15 @@
 package com.fhs.core.base.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtil;
 import lombok.Data;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +22,14 @@ import java.util.Map;
 @SuppressWarnings({"serial", "rawtypes"})
 @Data
 public class SuperBean<T extends SuperBean> extends BaseObject<T> {
+
+    /**
+     * 子类id字段缓存
+     */
+    @TableField(exist = false)
+    @JsonIgnore
+    Map<Class<?>, Field> ID_FIELD_CACHE_MAP = new HashMap<>();
+
 
     /**
      * 翻译map 给transervice用的
@@ -49,5 +63,52 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     public void add2In(String field, List<String> inParam) {
         inFilter.put(field, StringUtil.getStrToIn(inParam));
+    }
+
+    /**
+     * 获取主键
+     *
+     * @return 主键
+     */
+    @JsonIgnore
+    @JSONField(serialize = false)
+    public Object getPkey() {
+        Field idField = getIdField(true);
+        try {
+            return idField.get(this);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+
+    /**
+     * 获取子类id字段
+     *
+     * @return 子类id字段
+     */
+    @JsonIgnore
+    @JSONField(serialize = false)
+    protected Field getIdField(boolean isThrowError) {
+        if (ID_FIELD_CACHE_MAP.containsKey(this.getClass())) {
+            return ID_FIELD_CACHE_MAP.get(this.getClass());
+        }
+        List<Field> fieldList = ReflectUtils.getAnnotationField(this.getClass(), javax.persistence.Id.class);
+        if (fieldList.size() == 0) {
+            fieldList = ReflectUtils.getAnnotationField(this.getClass(), TableId.class);
+            if (fieldList.size() == 0) {
+                Field idField = ReflectUtils.getDeclaredField(this.getClass(), "id");
+                fieldList = Arrays.asList(idField);
+                if (idField ==null && isThrowError) {
+                    throw new RuntimeException("找不到" + this.getClass() + "的id注解");
+                }
+            }
+        }
+        if(fieldList.get(0) == null){
+            return null;
+        }
+        fieldList.get(0).setAccessible(true);
+        ID_FIELD_CACHE_MAP.put(this.getClass(), fieldList.get(0));
+        return fieldList.get(0);
     }
 }

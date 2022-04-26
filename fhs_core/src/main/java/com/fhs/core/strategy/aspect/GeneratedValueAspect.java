@@ -36,6 +36,7 @@ public class GeneratedValueAspect {
 
     static {
         MP_2_MJ.put(IdType.UUID, GeneratedType.UUID);
+        MP_2_MJ.put(IdType.ID_WORKER, GeneratedType.ID_WORKER);
     }
 
     /**

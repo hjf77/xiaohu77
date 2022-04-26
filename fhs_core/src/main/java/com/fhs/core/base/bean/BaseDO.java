@@ -185,25 +185,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
         return getBaseService().selectPage(this, Constant.PAGE_ALL, Constant.PAGE_ALL);
     }
 
-    /**
-     * 获取子类id字段
-     *
-     * @return 子类id字段
-     */
-    private Field getIdField(boolean isThrowError) {
-        if (ID_FIELD_CACHE_MAP.containsKey(this.getClass())) {
-            return ID_FIELD_CACHE_MAP.get(this.getClass());
-        }
-        List<Field> fieldList = ReflectUtils.getAnnotationField(this.getClass(), javax.persistence.Id.class);
-        if (fieldList.size() == 0) {
-            if (isThrowError) {
-                throw new BusinessException("找不到" + this.getClass() + "的id注解");
-            }
-            return null;
-        }
-        ID_FIELD_CACHE_MAP.put(this.getClass(), fieldList.get(0));
-        return fieldList.get(0);
-    }
+
 
 
     public boolean insert() {
