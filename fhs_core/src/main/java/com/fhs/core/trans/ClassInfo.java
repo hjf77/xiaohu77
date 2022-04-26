@@ -1,18 +1,20 @@
 package com.fhs.core.trans;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fhs.common.utils.ReflectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fhs.common.utils.ReflectUtils;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
+/**
+ * 类缓存
+ *
+ * @author user
+ * @date 2020-05-19 11:14:15
+ */
 public class ClassInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,10 +90,7 @@ public class ClassInfo implements Serializable {
     private void getClazzFieldMap() throws InstantiationException, IllegalAccessException {
         // PO 类和其祖先类声明的字段名称集合
         List<Field> declaredFields = ReflectUtils.getAllField(clazz.newInstance());
-        TransTypes transTypes = clazz.getAnnotation(TransTypes.class);
-        if (transTypes != null) {
-            this.transTypes = transTypes.types();
-        }
+        Set<String> transTypeSet = new HashSet<>();
         int mod = 0;
         // 循环遍历所有的属性进行判断
         for (Field field : declaredFields) {
@@ -100,13 +99,12 @@ public class ClassInfo implements Serializable {
             if (Modifier.isStatic(mod) || Modifier.isFinal(mod) || Modifier.isVolatile(mod)) {
                 continue;
             }
-
-
             Trans trans = field.getAnnotation(Trans.class) != null ? field.getAnnotation(Trans.class) : null;
             if (trans != null) {
-                if (trans.type() == null || trans.key() == null) {
-                    LOGGER.warn("类 {} 属性 [{}]  key 或者type为空。", clazz.getName(), field.getName());
+                if (trans.type() == null) {
+                    LOGGER.warn("类 {} 属性 [{}] type为空。", clazz.getName(), field.getName());
                 } else {
+                    transTypeSet.add(trans.type());
                     List<Field> fieldList = transFieldMap.get(trans.type());
                     fieldList = fieldList != null ? fieldList : new ArrayList<Field>();
                     fieldList.add(field);
@@ -114,6 +112,8 @@ public class ClassInfo implements Serializable {
                 }
             }
         }
+        this.transTypes = new String[transTypeSet.size()];
+        transTypeSet.toArray(transTypes);
     }
 
     public Map<String, List<Field>> getTransFieldMap() {
