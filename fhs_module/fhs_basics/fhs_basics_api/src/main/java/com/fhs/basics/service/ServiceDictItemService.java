@@ -1,6 +1,5 @@
 package com.fhs.basics.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.vo.ServiceDictItemVO;
 import com.fhs.core.base.service.BaseService;
@@ -27,8 +26,5 @@ public interface ServiceDictItemService extends BaseService<ServiceDictItemVO, S
      * @return 查询出来的数据集合
      */
     @CloudMethod
-    List<ServiceDictItemVO> findForList(ServiceDictItemPO bean);
-
-    @CloudMethod
-    List<ServiceDictItemVO> selectListMP(Wrapper<ServiceDictItemPO> queryWrapper);
+    List<ServiceDictItemVO> findItemForList(ServiceDictItemPO bean);
 }

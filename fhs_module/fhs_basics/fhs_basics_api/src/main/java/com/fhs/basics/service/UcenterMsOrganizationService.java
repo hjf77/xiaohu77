@@ -1,6 +1,5 @@
 package com.fhs.basics.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.common.tree.TreeNode;
@@ -35,8 +34,15 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     List<UcenterMsOrganizationPO> selectOrg(String orgLevel);
 
     @CloudMethod
-    List<UcenterMsOrganizationVO> selectListMP(Wrapper<UcenterMsOrganizationPO> wrapper);
+    List<UcenterMsOrganizationVO> findOrgForList(UcenterMsOrganizationPO ucenterMsOrganizationPO);
 
     @CloudMethod
-    Long selectCountMP(Wrapper<UcenterMsOrganizationPO> wrapper);
+    Long findOrgCount(UcenterMsOrganizationPO ucenterMsOrganizationPO);
+
+    /**
+     * 查询所有采油厂组织机构数据
+     * @return
+     */
+    @CloudMethod
+    List<UcenterMsOrganizationVO> findOrgList();
 }

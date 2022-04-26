@@ -1,6 +1,6 @@
 package com.fhs.basics.trans;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.service.ServiceDictItemService;
 import com.fhs.basics.vo.ServiceDictItemVO;
 import com.fhs.core.trans.constant.TransType;
@@ -45,7 +45,7 @@ public class DictRefresh implements  ApplicationRunner {
      * @param message
      */
     public void refreshCache(Map<String, Object> message){
-        List<ServiceDictItemVO> dictItemVOList = serviceDictItemService.selectListMP(new LambdaQueryWrapper<>());
+        List<ServiceDictItemVO> dictItemVOList = serviceDictItemService.findItemForList(ServiceDictItemPO.builder().build());
         Map<String,List<ServiceDictItemVO>> dictGroupMap = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
         for (String dictGroupCode : dictGroupMap.keySet()) {
             dictionaryTransService.refreshCache(dictGroupCode,dictGroupMap.get(dictGroupCode).stream().collect(Collectors

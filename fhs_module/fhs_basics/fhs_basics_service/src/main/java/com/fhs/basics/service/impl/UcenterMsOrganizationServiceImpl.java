@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.context.UserContext;
@@ -22,6 +23,7 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -35,6 +37,7 @@ import java.util.stream.Collectors;
  * @Description:后台组织机构表
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
+@Primary
 @Service
 @DataSource("basic")
 @AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", defaultAlias = "org")
@@ -168,6 +171,24 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     @Override
     public List<UcenterMsOrganizationPO> selectOrg(String orgLevel) {
         return this.mapper.selectOrg(orgLevel);
+    }
+
+    @Override
+    public Long findOrgCount(UcenterMsOrganizationPO bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
+        return baseMapper.selectCount(bean.asWrapper());
+    }
+
+    @Override
+    public List<UcenterMsOrganizationVO> findOrgForList(UcenterMsOrganizationPO bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
+        List<UcenterMsOrganizationPO> dos = baseMapper.selectList(bean.asWrapper());
+        return pos2vos(dos);
+    }
+
+    @Override
+    public List<UcenterMsOrganizationVO> findOrgList() {
+        return this.selectListMP(new LambdaQueryWrapper<UcenterMsOrganizationPO>().in(UcenterMsOrganizationPO::getParentId,"001001","001002","001003"));
     }
 
     @Override

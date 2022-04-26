@@ -3,10 +3,13 @@ package com.fhs.basics.service.impl;
 import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.service.ServiceDictItemService;
 import com.fhs.basics.vo.ServiceDictItemVO;
+import com.fhs.common.constant.Constant;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -23,5 +26,10 @@ import org.springframework.stereotype.Service;
 public class ServiceWordBookServiceImpl extends BaseServiceImpl<ServiceDictItemVO, ServiceDictItemPO> implements ServiceDictItemService {
 
 
-
+    @Override
+    public List<ServiceDictItemVO> findItemForList(ServiceDictItemPO bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
+        List<ServiceDictItemPO> dos = baseMapper.selectList(bean.asWrapper());
+        return pos2vos(dos);
+    }
 }
