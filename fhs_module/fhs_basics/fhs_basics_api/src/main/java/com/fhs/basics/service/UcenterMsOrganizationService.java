@@ -1,5 +1,6 @@
 package com.fhs.basics.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.common.tree.TreeNode;
@@ -32,4 +33,10 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     List<TreeNode<Treeable>> selectOrgTree(String needCompany, String orgLevel);
 
     List<UcenterMsOrganizationPO> selectOrg(String orgLevel);
+
+    @CloudMethod
+    List<UcenterMsOrganizationVO> selectListMP(Wrapper<UcenterMsOrganizationPO> wrapper);
+
+    @CloudMethod
+    Long selectCountMP(Wrapper<UcenterMsOrganizationPO> wrapper);
 }
