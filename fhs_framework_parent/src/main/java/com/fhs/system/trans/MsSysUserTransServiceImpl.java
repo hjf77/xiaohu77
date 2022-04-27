@@ -6,6 +6,7 @@ import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.trans.ITransTypeService;
 import com.fhs.core.trans.TransService;
 import com.fhs.redis.service.RedisCacheService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,9 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
                 e.printStackTrace();
             }
             if (!userId.contains(",")) {
+                if (StringUtils.isEmpty(userId)) {
+                    return;
+                }
                 obj.getTransMap().put(tempField.getName() + "UserName", redisCacheService.getStr("ucenter:sysuser:username:" + userId));
                 obj.getTransMap().put(tempField.getName() + "UserHeader", redisCacheService.getStr("ucenter:sysuser:userheader:" + userId));
             } else {
