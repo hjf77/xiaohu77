@@ -49,7 +49,7 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     @Override
     public PubFileVO uploadInputStream(InputStream inputStream) {
         PubFileVO sf = new PubFileVO();
-        String fileName = StringUtils.getUUID();
+        String fileName = StringUtils.getUUID()+".jpg";
         String suffix = ".jpg";
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(StringUtils.getUUID());
