@@ -71,6 +71,9 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
                 String[] userIds = userId.split(",");
                 StringBuilder nameBuilder = new StringBuilder();
                 for (String tempUserId : userIds) {
+                    if (StringUtils.isEmpty(tempUserId)) {
+                        continue;
+                    }
                     if (redisCacheService.exists("ucenter:sysuser:username:" + tempUserId)) {
                         nameBuilder.append(redisCacheService.getStr("ucenter:sysuser:username:" + tempUserId) + ",");
                     }
