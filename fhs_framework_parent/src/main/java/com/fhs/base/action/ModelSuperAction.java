@@ -67,7 +67,7 @@ public class ModelSuperAction<T> extends BaseAction<T> {
             List<T> dataList = baseService.selectPageForOrder(e, pgeSizeInfo.getPageStart(),
                     pgeSizeInfo.getPageSize(), this.formartOrderBy(request));
             Integer count = null;
-            if(request.getParameter("notCount") != null && request.getParameter("notCount").equals("true")){
+            if(request.getParameter("notCount") == null || (!request.getParameter("notCount").equals("true"))){
                  count = baseService.findCountJpa(e);
             }
             request.getSession().setAttribute(this.getClass() + "preLoadParam", e);
