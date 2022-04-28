@@ -74,6 +74,9 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
     @JSONField(serialize = false)
     public Object getPkey() {
         Field idField = getIdField(true);
+        if (idField == null) {
+            return null;
+        }
         try {
             return idField.get(this);
         } catch (IllegalAccessException e) {
@@ -94,17 +97,17 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
             return ID_FIELD_CACHE_MAP.get(this.getClass());
         }
         List<Field> fieldList = ReflectUtils.getAnnotationField(this.getClass(), javax.persistence.Id.class);
-        if (fieldList.size() == 0) {
+        if (fieldList != null && fieldList.size() == 0) {
             fieldList = ReflectUtils.getAnnotationField(this.getClass(), TableId.class);
-            if (fieldList.size() == 0) {
+            if (fieldList != null && fieldList.size() == 0) {
                 Field idField = ReflectUtils.getDeclaredField(this.getClass(), "id");
                 fieldList = Arrays.asList(idField);
-                if (idField ==null && isThrowError) {
+                if (idField == null && isThrowError) {
                     throw new RuntimeException("找不到" + this.getClass() + "的id注解");
                 }
             }
         }
-        if(fieldList.get(0) == null){
+        if (fieldList == null || fieldList.get(0) == null) {
             return null;
         }
         fieldList.get(0).setAccessible(true);
