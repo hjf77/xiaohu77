@@ -66,7 +66,10 @@ public class ModelSuperAction<T> extends BaseAction<T> {
             PageSizeInfo pgeSizeInfo = getPageSizeInfo(request);
             List<T> dataList = baseService.selectPageForOrder(e, pgeSizeInfo.getPageStart(),
                     pgeSizeInfo.getPageSize(), this.formartOrderBy(request));
-            int count = baseService.findCountJpa(e);
+            Integer count = null;
+            if(request.getParameter("notCount") != null && request.getParameter("notCount").equals("true")){
+                 count = baseService.findCountJpa(e);
+            }
             request.getSession().setAttribute(this.getClass() + "preLoadParam", e);
             return new Pager<T>(count, dataList);
         } else {
