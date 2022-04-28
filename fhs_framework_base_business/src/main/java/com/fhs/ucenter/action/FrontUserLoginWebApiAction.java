@@ -21,9 +21,11 @@ import com.fhs.ucenter.service.UcenterFrontUserBindService;
 import com.fhs.ucenter.service.UcenterFrontUserService;
 import com.fhs.ucenter.tools.WxTools;
 import io.swagger.annotations.ApiOperation;
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,7 +196,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         // 存在openId
         if (request.getSession().getAttribute("openId") != null) {
             try {
-                handelWXLoginWidthOpenId(request, response, (String) request.getSession().getAttribute("openId"));
+                handelWXLoginWidthOpenId(request, response, (String) request.getSession().getAttribute("openId"),null);
             } catch (IOException e) {
                 LOGGER.error("使用微信openid登录失败:", e);
             }
@@ -202,9 +204,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         } else {
             // 不存在的时候 构建地址 让用户去请求openId
             String url = EConfig.getPathPropertiesValue("basePath") + "/webApi/front/getOpenIdLogin";
-            String wxUrl = wxTools.getWxMpService(code).oauth2buildAuthorizationUrl(url,
-                    "snsapi_base",
-                    null);
+            String wxUrl = wxTools.getWxMpService(code).getOAuth2Service().buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
             try {
                 response.sendRedirect(wxUrl);
             } catch (IOException e) {
@@ -228,10 +228,10 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         HttpSession session = request.getSession();
         String businessCode = (String) session.getAttribute("code");
         WxMpService wxMpService = wxTools.getWxMpService(businessCode);
-        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
-        String openId = wxMpOAuth2AccessToken.getOpenId();
+        WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
+        String openId = wxOAuth2AccessToken.getOpenId();
         session.setAttribute("openId", openId);
-        handelWXLoginWidthOpenId(request, response, openId);
+        handelWXLoginWidthOpenId(request, response, openId,wxOAuth2AccessToken);
     }
 
     /**
@@ -240,7 +240,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
      * @param request  请求
      * @param response 响应
      */
-    private void handelWXLoginWidthOpenId(HttpServletRequest request, HttpServletResponse response, String openId)
+    private void handelWXLoginWidthOpenId(HttpServletRequest request, HttpServletResponse response, String openId,WxOAuth2AccessToken wxOAuth2AccessToken)
             throws IOException {
         HttpSession session = request.getSession();
         UcenterFrontUserBind bind = userBindService.selectBean(UcenterFrontUserBind.builder().authOpenid(openId).authOpenidType(UcenterFrontUserBindService.OPENID_TYPE_WXMP)
@@ -249,10 +249,9 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         if (bind == null) {
             String businessCode = (String) session.getAttribute("code");
             try {
-                WxMpUser mpUser = wxTools.getWxMpService(businessCode).getUserService().userInfo(openId);
-                UcenterFrontUser user = UcenterFrontUser.builder().userId(StringUtil.getUUID())
-                        .nickName(mpUser.getNickname()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity())
-                        .sex(ConverterUtils.toString(mpUser.getSex())).language(mpUser.getLanguage()).imagePath(mpUser.getHeadImgUrl()).build();
+                WxOAuth2UserInfo mpUser = wxTools.getWxMpService(businessCode).getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
+                UcenterFrontUser user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity())
+                        .nickName(mpUser.getNickname()).imagePath(mpUser.getHeadImgUrl()).build();
                 userId = loginService.addBindAndUser(user, openId, UcenterFrontUserBindService.OPENID_TYPE_WXMP);
             } catch (WxErrorException e) {
                 LOGGER.error("根据openid获取用户信息错误:", e);

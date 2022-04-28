@@ -122,8 +122,8 @@
        <% if(isNotEmpty(modelConfig.title)){ %>
             title="${modelConfig.title}列表"
         <% } %>
+        class="easyui-datagrid"
         <% if(isEmpty(parameter.loadDft)){ %>
-         class="easyui-datagrid"
          url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
         <% } %>
         <% if(isEmpty(parameter.disablePager)){ %>

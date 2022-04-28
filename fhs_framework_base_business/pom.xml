@@ -60,17 +60,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.binarywang</groupId>
-			<artifactId>weixin-java-common</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.binarywang</groupId>
-			<artifactId>weixin-java-mp</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.alipay.sdk</groupId>
 			<artifactId>alipay-sdk-java</artifactId>
 			<version>3.4.27.ALL</version>
