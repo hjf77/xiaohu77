@@ -71,4 +71,18 @@
         </if>
 		ORDER BY order_num ASC
 	 </select>
+
+    <select id="findWordbook" resultType="com.fhs.system.bean.Wordbook">
+		SELECT
+		`wordbook_id` AS `wordbookId`,
+		`wordbook_code` AS  `wordbookCode`,
+		`wordbook_desc` AS `wordbookDesc`,
+		`wordbook_group_code` AS `wordbookGroupCode`,
+		order_num AS orderNum
+		FROM `t_service_wordbook`
+		WHERE 1 = 1
+		<if test="wordbookGroupCode != null and wordbookGroupCode != ''">
+			AND wordbook_group_code=#{wordbookGroupCode}
+		</if>
+	</select>
 </mapper>
