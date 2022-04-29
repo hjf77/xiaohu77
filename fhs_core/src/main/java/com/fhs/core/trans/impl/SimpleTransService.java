@@ -157,7 +157,7 @@ public class SimpleTransService implements ITransTypeService, InitializingBean {
             if (!ids.isEmpty()) {
                 List<? extends SuperBean> dbDatas = findByIds(new ArrayList<Object>(ids), tempTrans);
                 for (SuperBean vo : dbDatas) {
-                    threadLocalCache.get().put(getTargetClassName(tempTrans) + "_" + vo.getPkey(),
+                    threadLocalCache.get().put(getTargetClassName(tempTrans) + "_" + vo.getPubPkey(),
                             createTempTransCacheMap(vo, tempTrans));
                 }
             }

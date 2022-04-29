@@ -65,6 +65,8 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
         inFilter.put(field, StringUtil.getStrToIn(inParam));
     }
 
+
+
     /**
      * 获取主键
      *
@@ -72,7 +74,7 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @JsonIgnore
     @JSONField(serialize = false)
-    public Object getPkey() {
+    public Object getPubPkey() {
         Field idField = getIdField(true);
         if (idField == null) {
             return null;
