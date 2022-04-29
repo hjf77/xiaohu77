@@ -5,6 +5,7 @@ import com.fhs.common.utils.Logger;
 import com.fhs.core.exception.ParamException;
 import com.fhs.ucenter.bean.UcenterMpSett;
 import com.fhs.ucenter.service.UcenterMpSettService;
+import com.fhs.wx.FhsRedisTemplateWxRedisOps;
 import me.chanjar.weixin.common.redis.RedisTemplateWxRedisOps;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -79,7 +80,7 @@ public class WxTools {
         if (mpSett == null) {
             throw new ParamException("找不到对应的配置:" + code);
         }
-        RedisTemplateWxRedisOps redisTemplateWxRedisOps = new RedisTemplateWxRedisOps(redisTemplate);
+        RedisTemplateWxRedisOps redisTemplateWxRedisOps = new FhsRedisTemplateWxRedisOps(redisTemplate);
         WxMpRedisConfigImpl config = new WxMpRedisConfigImpl(redisTemplateWxRedisOps,"mp:");
         config.setAppId(mpSett.getAppId()); // 设置微信公众号的appid
         config.setSecret(mpSett.getAppSecret()); // 设置微信公众号的app corpSecret
