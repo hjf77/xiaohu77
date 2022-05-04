@@ -5,6 +5,8 @@ import com.fhs.system.bean.Wordbook;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 字典表dao
  *
@@ -23,4 +25,11 @@ public interface WordbookDAO extends BaseDao<Wordbook> {
      */
     void batchDelete(@Param("wordbookGroupCode") String wordbookGroupCode);
 
+
+    /**
+     * 根据字典类型查询
+     *
+     * @param wordbookGroupCode
+     */
+    List<Wordbook> findWordbook(@Param("wordbookGroupCode") String wordbookGroupCode);
 }

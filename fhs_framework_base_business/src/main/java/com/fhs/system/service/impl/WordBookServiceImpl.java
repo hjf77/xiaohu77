@@ -1,5 +1,6 @@
 package com.fhs.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
@@ -50,13 +51,15 @@ public class WordBookServiceImpl extends BaseServiceImpl<Wordbook> implements Wo
         if (CheckUtils.isNullOrEmpty(wordbookGroupCode)) {
             return new ArrayList<>();
         }
-        Set<Wordbook> set = redisService.getSet(BASE_KEY + wordbookGroupCode);
+/*        Set<Wordbook> set = redisService.getSet(BASE_KEY + wordbookGroupCode);
         if (CheckUtils.checkCollectionIsNullOrEmpty(set)) {
             Wordbook bean = new Wordbook();
             bean.setWordbookGroupCode(wordbookGroupCode);
             this.initWordBookDataCache(bean);
             set = redisService.getSet(BASE_KEY + wordbookGroupCode);
-        }
+        }*/
+        //查询数据库
+        List<Wordbook> set = dao.findWordbook(wordbookGroupCode);
         List<Wordbook> list = new ArrayList(set);
         Collections.sort(list, Comparator.comparingInt(Wordbook::getOrderNum));
         return list;
