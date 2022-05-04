@@ -81,7 +81,12 @@ public class UserFilter implements Filter {
             send2Login(response, request);
             return;
         }
-        chain.doFilter(req, res);
+        try {
+            chain.doFilter(req, res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 
