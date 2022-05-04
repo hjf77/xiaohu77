@@ -75,9 +75,11 @@ public class ControllerExceptionAdvice {
             JsonUtils.outJson(response, ((CheckException) ex).getResult().asJson());
             return null;
         } else if (ex instanceof DuplicateKeyException) {
+            LOG.error("主键冲突" + ThreadKey.BUS_KEY.get(), ex);
             JsonUtils.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
             return null;
         } else if (ex instanceof MySQLIntegrityConstraintViolationException) {
+            LOG.error("主键冲突" + ThreadKey.BUS_KEY.get(), ex);
             JsonUtils.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
             return null;
         } else if (ex instanceof NotPremissionException) {
