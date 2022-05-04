@@ -8,7 +8,7 @@ public class ${po.className} extends BasePagexBean<${po.className}>
 <% for(field in po.fieldList){%>
     //拼接注解
     <%if(isNotEmpty(field.trans)){%>
-        @Trans(type = "${field.trans.type}", key = "${field.trans.key}")
+        @Trans(type = "${field.trans.type}", key = "${field.trans.key!}",targetClassName="${field.trans.targetClassName!}",fields="${field.trans.field!}",alias="${field.trans.alias!}")
     <%}%>
     public String ${field.camelName};
 <%}%>

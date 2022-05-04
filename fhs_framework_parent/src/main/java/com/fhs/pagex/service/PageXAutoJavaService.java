@@ -104,6 +104,9 @@ public class PageXAutoJavaService {
                 }
                 tempTransMap = new HashMap<>();
                 tempTransMap.put("type", trans);
+                tempTransMap.put("targetClassName", ConverterUtils.toString(row.get("target")));
+                tempTransMap.put("alias", ConverterUtils.toString(row.get("alias")));
+                tempTransMap.put("field", ConverterUtils.toString(row.get("field")));
                 tempTransMap.put("key", ConverterUtils.toString(row.get("key")));
                 tempField.put("trans", tempTransMap);
             }
