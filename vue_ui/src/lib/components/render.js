@@ -14,6 +14,7 @@ import radio from "./radio.vue";
 import checkbox from "./checkbox.vue";
 import switchs from "./switchs.vue";
 import inputNumber from "./inputNumber.vue";
+import input from "./input.vue";
 import slider from "./slider.vue";
 import pagination from "./pagination.vue";
 import uploadFileAsync from "./uploadFileAsync.vue";
@@ -29,6 +30,7 @@ import transfer from "./transfer.vue";
 import treeSelect from "./treeSelect.vue"
 import previewPicture from "./previewPicture.vue";
 import crudForm from "./crudForm.vue";
+import one2x from "./one2x.vue";
 
 import Vue from "vue";
 import getProps from "../utils/getProps";
@@ -56,6 +58,7 @@ const comList = {
   checkbox,
   switchs,
   inputNumber,
+  input,
   slider,
   pagination,
   uploadFileAsync,
@@ -71,6 +74,7 @@ const comList = {
   treeSelect,
   previewPicture,
   crudForm,
+  one2x,
   render: renderCom
 };
 Object.entries(comList).forEach(([key, val]) => {

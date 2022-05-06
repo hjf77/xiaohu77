@@ -339,9 +339,6 @@ export default {
       type: String,
       default: "auto",
     },
-    selectOn:{
-      type: Function
-    },
     eventBusName: {
       type: Array,
       default: () => [],
