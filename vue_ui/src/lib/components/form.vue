@@ -266,6 +266,7 @@ export default {
       type: Boolean,
       default: true,
     },
+    //是否使用formdata提交
     isFormDataSub: {
       type: Boolean,
       default: false,
@@ -298,7 +299,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    //查询 详情 id
+    //如果是编辑的话，通过此属性传入后台请求回来的数据
     init: {
       type: Object,
     },
@@ -307,39 +308,38 @@ export default {
       type: Object,
       default: () => {},
     },
-    uid: {
-      type: [String, Number],
-      default: "default",
-    },
+    // 表单字段和插件
     controls: {
       type: Array,
       default: () => [],
     },
+    //自定义按钮，比如审批等等
     buttons: {
       type: Array,
       default: () => [],
     },
-    success: {
-      type: Function,
-      default: () => {},
-    },
+    //新增的时候设置默认值用的
     data: {
       type: Object,
       default: () => {},
     },
+    //新增接口的methodType
     addMethodType: {
       type: String,
       default: "POST",
     },
+    //修改接口的methodType
     updateMethodType: {
       type: String,
       default: "PUT",
     },
+    //表单高度，超过高度有滚动条
     dialogHeight: {
       type: String,
       default: "auto",
     },
-    eventBusName: {
+    //触发一些事件，用来关闭dialog，刷新列表等
+    eventBusNames: {
       type: Array,
       default: () => [],
     },
@@ -348,10 +348,12 @@ export default {
       type: Boolean,
       default: true,
     },
+    //提交之前去执行 一些自定义业务逻辑，返回true代表可以给后台提交返回false 不可以给后台提交
     onSubmit: {
         type: Function,
         default: null,
     },
+    //用来关闭dialog，刷新列表
     namespace: {
       type: String,
       default: "",
@@ -616,8 +618,8 @@ export default {
               this.cancel()
               this.reload();
               // 通过 $EventBus 刷新指定页面的列表
-              if (this.eventBusName.length > 0) {
-                this.eventBusName.forEach((item) => {
+              if (this.eventBusNames.length > 0) {
+                this.eventBusNames.forEach((item) => {
                   this.$EventBus.$emit(item,this.model)
                 })
               }
