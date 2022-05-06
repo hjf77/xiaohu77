@@ -249,9 +249,14 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         if (bind == null) {
             String businessCode = (String) session.getAttribute("code");
             try {
-                WxOAuth2UserInfo mpUser = wxTools.getWxMpService(businessCode).getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
-                UcenterFrontUser user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity())
-                        .nickName(mpUser.getNickname()).imagePath(mpUser.getHeadImgUrl()).build();
+                UcenterFrontUser user = null;
+                if(wxOAuth2AccessToken!=null){
+                    WxOAuth2UserInfo mpUser = wxTools.getWxMpService(businessCode).getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
+                    user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity())
+                            .nickName(mpUser.getNickname()).imagePath(mpUser.getHeadImgUrl()).build();
+                }else{
+                    user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).build();
+                }
                 userId = loginService.addBindAndUser(user, openId, UcenterFrontUserBindService.OPENID_TYPE_WXMP);
             } catch (WxErrorException e) {
                 LOGGER.error("根据openid获取用户信息错误:", e);
