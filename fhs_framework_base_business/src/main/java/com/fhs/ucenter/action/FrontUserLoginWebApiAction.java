@@ -1,5 +1,6 @@
 package com.fhs.ucenter.action;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -26,11 +27,11 @@ import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -196,7 +197,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         // 存在openId
         if (request.getSession().getAttribute("openId") != null) {
             try {
-                handelWXLoginWidthOpenId(request, response, (String) request.getSession().getAttribute("openId"),null);
+                handelWXLoginWidthOpenId(request, response, (String) request.getSession().getAttribute("openId"), null);
             } catch (IOException e) {
                 LOGGER.error("使用微信openid登录失败:", e);
             }
@@ -218,20 +219,30 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
      *
      * @param request  请求
      * @param response 响应
-     * @param code     微信code
+     * @param wxCode     微信code
      * @return openId
      */
     @RequestMapping(value = "/getOpenIdLogin", method = RequestMethod.GET)
     @ApiOperation(value = "微信的回调地址 ,带回code")
-    public void getOpenIdLogin(HttpServletRequest request, HttpServletResponse response, String code)
+    public void getOpenIdLogin(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String wxCode)
             throws WxErrorException, IOException {
         HttpSession session = request.getSession();
         String businessCode = (String) session.getAttribute("code");
         WxMpService wxMpService = wxTools.getWxMpService(businessCode);
-        WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
+        WxOAuth2AccessToken wxOAuth2AccessToken = null;
+        try {
+            wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(wxCode);
+            LOGGER.info("根据code获取用户信息 info:" + JSON.toJSONString(wxOAuth2AccessToken));
+            if (null == wxOAuth2AccessToken) {
+                this.wxMPHandleLogin(request, response, businessCode);
+            }
+        } catch (WxErrorException e) {
+            this.wxMPHandleLogin(request, response, businessCode);
+            return;
+        }
         String openId = wxOAuth2AccessToken.getOpenId();
         session.setAttribute("openId", openId);
-        handelWXLoginWidthOpenId(request, response, openId,wxOAuth2AccessToken);
+        handelWXLoginWidthOpenId(request, response, openId, wxOAuth2AccessToken);
     }
 
     /**
@@ -240,7 +251,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
      * @param request  请求
      * @param response 响应
      */
-    private void handelWXLoginWidthOpenId(HttpServletRequest request, HttpServletResponse response, String openId,WxOAuth2AccessToken wxOAuth2AccessToken)
+    private void handelWXLoginWidthOpenId(HttpServletRequest request, HttpServletResponse response, String openId, WxOAuth2AccessToken wxOAuth2AccessToken)
             throws IOException {
         HttpSession session = request.getSession();
         UcenterFrontUserBind bind = userBindService.selectBean(UcenterFrontUserBind.builder().authOpenid(openId).authOpenidType(UcenterFrontUserBindService.OPENID_TYPE_WXMP)
@@ -250,11 +261,11 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
             String businessCode = (String) session.getAttribute("code");
             try {
                 UcenterFrontUser user = null;
-                if(wxOAuth2AccessToken!=null){
+                if (wxOAuth2AccessToken != null) {
                     WxOAuth2UserInfo mpUser = wxTools.getWxMpService(businessCode).getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
                     user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity())
                             .nickName(mpUser.getNickname()).imagePath(mpUser.getHeadImgUrl()).build();
-                }else{
+                } else {
                     user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).build();
                 }
                 userId = loginService.addBindAndUser(user, openId, UcenterFrontUserBindService.OPENID_TYPE_WXMP);
@@ -384,7 +395,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
                 }
                 UcenterFrontUser user = UcenterFrontUser.builder().userId(StringUtil.getUUID())
                         .nickName(userinfoShareResponse.getNickName()).provinceId(userinfoShareResponse.getProvince()).
-                        cityId(userinfoShareResponse.getCity())
+                                cityId(userinfoShareResponse.getCity())
                         .sex(sex).imagePath(userinfoShareResponse.getAvatar()).build();
                 userId = loginService.addBindAndUser(user, alipayUserId, UcenterFrontUserBindService.OPENID_TYPE_ALIPAY);
             } catch (AlipayApiException e) {
