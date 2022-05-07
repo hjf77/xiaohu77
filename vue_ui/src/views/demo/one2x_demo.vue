@@ -13,6 +13,7 @@
 
 export default {
   name: "buyGoods",
+
   data() {
     return {
       model:{
@@ -38,7 +39,6 @@ export default {
           label: '商品编码',
           rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
           one2xBlur: (newValue, _datas, index) => {
-            //ajax
             _datas[index].goodName = '可口可乐500ML';
             this.optionsSetts[index].goodspecifications = [{
               id: '1',
@@ -47,14 +47,6 @@ export default {
               id: '2',
               title: '1*12'
             }];
-
-            /*options.goodspecifications = [{
-              id: '1',
-              title: '1*9'
-            }, {
-              id: '2',
-              title: '1*12'
-            }];*/
           },
           import: true,
           export: true,
@@ -87,6 +79,7 @@ export default {
       ],
     }
   },
+
   methods: {
     addRow() {
       this.$refs['goods'].addRow();

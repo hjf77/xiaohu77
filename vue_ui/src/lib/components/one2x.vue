@@ -1,7 +1,7 @@
 <!--一对多组件-->
 <template>
   <div>
-    <el-table :data="datas" style="width: 100%" border>
+    <el-table :data="datas" style="width: 100%;" border>
       <template v-for="(item, index) in realControls">
         <el-table-column type="selection" width="55" align="center" v-if="item.type === 'selection'">
         </el-table-column>
@@ -28,7 +28,8 @@
                 :clearable="item.clearable?item.clearable:true"
                 show-word-limit
                 v-bind="item"
-                :style="{ width: item.width ? item.width + 'px' : '305px' }"
+                :one2xOptionsSetts.sync="optionsSetts"
+                :style="{ width: item.width ? item.width + 'px' : '150px' }"
               ></pagex-input>
               <pagex-select
                 v-bind="item"
@@ -41,7 +42,7 @@
                 :labelField="item.labelField"
                 :valueField="item.valueField"
                 :isValueNum="item.isValueNum"
-                :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
+                :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '200px' : '150px') }"
                 @change="item.change?item.change.call(this,item, scope.row[item.name]):''"
               ></pagex-select>
               <el-date-picker
@@ -113,12 +114,6 @@ export default {
       type: String,
       default: 'datas',
     },
-
-    //用来级联刷新
-    optionsSetts: {
-      type: Array,
-      default: () => [],
-    },
   },
   watch: {
     datas: {
@@ -131,21 +126,20 @@ export default {
   data() {
     return {
       realControls: [],
-      datas: []
+      datas: [],
+      optionsSetts: [],
     };
   },
   created() {
     this.$set(this, 'datas', deepClone(this.value));
-    let _optionsSetts = deepClone(this.optionsSetts);
     this.datas.forEach((_item, _index) => {
-      _optionsSetts[_index] = {};
+      this.optionsSetts[_index] = {};
       this.controls.forEach((_item) => {
         if (_item.options) {
-          _optionsSetts[_index][_item.name] = deepClone(_item.options);
+          this.optionsSetts[_index][_item.name] = deepClone(_item.options);
         }
       });
     });
-    this.$emit("update:optionsSetts", _optionsSetts);
     this.controls.forEach((_item) => {
       if (!_item.placeholder) {
         _item.placeholder = (_item.type == 'text' || _item.type == 'textarea') ? '请输入' : '请选择';
@@ -168,20 +162,16 @@ export default {
     },
     //添加一行
     addRow() {
-      let _optionsSetts = deepClone(this.optionsSetts);
       let rowOptions = {};
-      _optionsSetts.push(rowOptions);
+      this.optionsSetts.push(rowOptions);
       this.controls.forEach((_item) => {
         rowOptions[_item.name] = _item.options;
       });
-      this.$emit("update:optionsSetts", _optionsSetts);
       this.datas.push(deepClone(this.defaultValue));
     },
     //删除一行
     delRow(_index, _row) {
-      let _optionsSetts = deepClone(this.optionsSetts);
-      _optionsSetts.splice(_index, 1);
-      this.$emit("update:optionsSetts", _optionsSetts);
+      this.optionsSetts.splice(_index, 1);
       this.datas.splice(_index, 1);
     },
     //判断规则是否是必填
