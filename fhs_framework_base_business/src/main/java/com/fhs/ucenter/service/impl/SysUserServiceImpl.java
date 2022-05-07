@@ -67,7 +67,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * jetcache
      */
     @CreateCache(cacheType = CacheType.BOTH,localExpire = 300,name = "ucenter:sysuser:")
-    Cache<String,String> cacheUserName;
+    Cache<String,String> userNameCache;
 
     @Lazy
     @Autowired
@@ -491,8 +491,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     public HttpResult refreshUserCache(List<SysUser> userList) {
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
-                cacheUserName.remove(sysUser.getUserId());
-                cacheUserName.put(sysUser.getUserId(), sysUser.getUserName());
+                userNameCache.remove(sysUser.getUserId());
+                userNameCache.put(sysUser.getUserId(), sysUser.getUserName());
             }
         });
         return HttpResult.success();

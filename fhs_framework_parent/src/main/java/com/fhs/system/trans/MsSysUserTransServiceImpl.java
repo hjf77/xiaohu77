@@ -41,7 +41,7 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
      * jetcache
      */
     @CreateCache(cacheType = CacheType.BOTH,localExpire = 300,name = "ucenter:sysuser:")
-    Cache<String,String> cacheUserName;
+    Cache<String,String> userNameCache;
 
 
     /**
@@ -74,7 +74,7 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
                 if (StringUtils.isEmpty(userId)) {
                     return;
                 }
-                obj.getTransMap().put(tempField.getName() + "UserName", cacheUserName.get(userId));
+                obj.getTransMap().put(tempField.getName() + "UserName", userNameCache.get(userId));
             } else {
                 String[] userIds = userId.split(",");
                 StringBuilder nameBuilder = new StringBuilder();
@@ -82,8 +82,8 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
                     if (StringUtils.isEmpty(tempUserId)) {
                         continue;
                     }
-                    if (redisCacheService.exists("ucenter:sysuser:" + tempUserId)) {
-                        nameBuilder.append(cacheUserName.get(tempUserId) + ",");
+                    if (userNameCache.GET("tempUserId").isSuccess()) {
+                        nameBuilder.append(userNameCache.get(tempUserId) + ",");
                     }
                 }
                 obj.getTransMap().put(tempField.getName() + "UserName", nameBuilder.toString());
