@@ -1,5 +1,8 @@
 package com.fhs.system.trans;
 
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.bean.SuperBean;
@@ -34,6 +37,12 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
     @Autowired
     private RedisCacheService<String> redisCacheService;
 
+    /**
+     * jetcache
+     */
+    @CreateCache(cacheType = CacheType.BOTH,localExpire = 300,name = "ucenter:sysuser:")
+    Cache<String,String> cacheUserName;
+
 
     /**
      * 注册自身为一个服务
@@ -65,8 +74,7 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
                 if (StringUtils.isEmpty(userId)) {
                     return;
                 }
-                obj.getTransMap().put(tempField.getName() + "UserName", redisCacheService.getStr("ucenter:sysuser:username:" + userId));
-                obj.getTransMap().put(tempField.getName() + "UserHeader", redisCacheService.getStr("ucenter:sysuser:userheader:" + userId));
+                obj.getTransMap().put(tempField.getName() + "UserName", cacheUserName.get(userId));
             } else {
                 String[] userIds = userId.split(",");
                 StringBuilder nameBuilder = new StringBuilder();
@@ -74,8 +82,8 @@ public class MsSysUserTransServiceImpl implements ITransTypeService, Initializin
                     if (StringUtils.isEmpty(tempUserId)) {
                         continue;
                     }
-                    if (redisCacheService.exists("ucenter:sysuser:username:" + tempUserId)) {
-                        nameBuilder.append(redisCacheService.getStr("ucenter:sysuser:username:" + tempUserId) + ",");
+                    if (redisCacheService.exists("ucenter:sysuser:" + tempUserId)) {
+                        nameBuilder.append(cacheUserName.get(tempUserId) + ",");
                     }
                 }
                 obj.getTransMap().put(tempField.getName() + "UserName", nameBuilder.toString());

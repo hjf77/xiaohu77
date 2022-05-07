@@ -3,6 +3,9 @@ package com.fhs.ucenter.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
@@ -60,6 +63,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Autowired
     private SysRoleService roleService;
 
+    /**
+     * jetcache
+     */
+    @CreateCache(cacheType = CacheType.BOTH,localExpire = 300,name = "ucenter:sysuser:")
+    Cache<String,String> cacheUserName;
 
     @Lazy
     @Autowired
@@ -483,10 +491,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     public HttpResult refreshUserCache(List<SysUser> userList) {
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
-                redisCacheService.remove("ucenter:sysuser:username:" + sysUser.getUserId());
-                redisCacheService.remove("ucenter:sysuser:userheader:" + sysUser.getUserId());
-                redisCacheService.addStr("ucenter:sysuser:username:" + sysUser.getUserId(), sysUser.getUserName());
-                redisCacheService.addStr("ucenter:sysuser:userheader:" + sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
+                cacheUserName.remove(sysUser.getUserId());
+                cacheUserName.put(sysUser.getUserId(), sysUser.getUserName());
             }
         });
         return HttpResult.success();
