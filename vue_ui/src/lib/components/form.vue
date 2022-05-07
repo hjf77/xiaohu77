@@ -16,7 +16,7 @@
           :disabled="proxyIf(item.visibleOn, true)"
           v-for="item in realControls"
           v-if="item.type !='ext_slot'&&!item.isHide"
-          :label="item.label ? item.label + ':' : ''"
+          :label="item.label ? item.label + ':' : ' '"
           :prop="item.name"
           :key="item.name"
           :class="{'labelLeft': item.isAndClass}"
@@ -158,13 +158,25 @@
             :name="item.name"
           ></slot>
 
+          <div v-if="item.type === 'buttons'" :style="'width:' + item.width">
+            <el-button
+              v-for="(itemBtn, index) in item.buttons"
+              :key="index"
+              v-bind="itemBtn"
+              @click="formButtonsClick(itemBtn)"
+            >{{ itemBtn.name }}</el-button
+            >
+          </div>
+
+          <pagex-one2x  v-if="item.type === 'one2x'" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
+
           <pagex-uploadFileAsync
             v-bind="item"
             v-model="model[item.name]"
             v-if="item.type === 'uploadFileAsync'"
           ></pagex-uploadFileAsync>
           <!-- @success="upLoadSuccess" -->
-
+          <label v-if="item.type === 'label'">{{model[item.name]}}</label>
           <pagex-uploadFile
             v-bind="item"
             v-model="model[item.name]"
@@ -201,6 +213,7 @@
             v-if="item.type === 'dateTimePicker'"
           >
           </el-date-picker>
+
         </el-form-item>
         <template v-for="item in realControls">
           <slot
@@ -220,13 +233,12 @@
           >保存</el-button
         >
         <el-button
-          class="save-btn form-btn-item"
           v-for="(itemBtn, index) in buttons"
           :key="index"
           @click="btnClick(itemBtn)"
           >{{ itemBtn.name }}</el-button
         >
-        <el-button @click="cancel" class="form-btn-item">取消</el-button>
+        <el-button @click="cancel"  v-if="isHaveCancelBtn" class="form-btn-item">取消</el-button>
       </div>
     </div>
   </el-scrollbar>
@@ -263,6 +275,11 @@ export default {
     },
     isHaveAddBtn: {
       //是否有保存按钮
+      type: Boolean,
+      default: true,
+    },
+    isHaveCancelBtn: {
+      //是否有取消按钮
       type: Boolean,
       default: true,
     },
@@ -510,6 +527,12 @@ export default {
           return false;
         }
       });
+    },
+    //表单上的按钮点击代理
+    formButtonsClick(itemBtn) {
+      if(itemBtn.click) {
+        itemBtn.click(this, this.model);
+      }
     },
     submit(_extParam) {
       if (this.isFormDataSub) {

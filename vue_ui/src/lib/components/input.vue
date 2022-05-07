@@ -34,6 +34,10 @@ export default {
     one2xBlur:{
       type: Function,
       default: null
+    },
+    one2xOptionsSetts:{
+      type:Array,
+      default: () => ([])
     }
   },
   data() {
@@ -56,8 +60,10 @@ export default {
       this.$emit("blur", this.newValue);
       if(this.one2xBlur){
         let _datas = deepClone(this.datas);
-        this.one2xBlur(this.newValue,_datas,this.index);
+        let _one2xOptionsSetts = deepClone(this.one2xOptionsSetts);
+        this.one2xBlur(this.newValue,_datas,this.index,_one2xOptionsSetts);
         this.$emit("update:datas", _datas);
+        this.$emit("update:one2xOptionsSetts", _one2xOptionsSetts);
       }
     }
   },

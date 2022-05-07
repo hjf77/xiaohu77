@@ -61,6 +61,11 @@ export const constantRoutes = [
     component: () => import('@/views/demo/one2x_demo.vue'),
     hidden: true
   },
+  {
+    path: '/form_one2x_demo',
+    component: () => import('@/views/demo/form_one2x_demo.vue'),
+    hidden: true
+  },
 
   {
     path: '/dict',
