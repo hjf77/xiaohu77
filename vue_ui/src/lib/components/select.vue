@@ -6,9 +6,12 @@
     clearable
     :disabled="disabled"
     filterable
+    :remote="remote"
     :allow-create="isAllowCreate"
     :default-first-option="isDefaultFirstOption"
     @change="_change"
+    :remote-method="remoteMethod"
+    :placeholder="placeholder"
   >
     <template v-if="isHaveFatherOption">
       <el-option
@@ -97,6 +100,15 @@ export default {
     isAllowCreate: {
       type: Boolean,
       default: false,
+    },
+    // 是否为远程搜索
+    remote: {
+      type: Boolean,
+      default: false,
+    },
+    placeholder: {
+      type: String,
+      default: '请选择',
     }
   },
   data() {
@@ -119,13 +131,13 @@ export default {
       this.newValueField = "dictCode";
       this.newLabelField = "dictDesc";
     }
-    if (this.newURL) {
+    if (this.newURL && !this.remote) {
       this.loadData();
     }
     this._change();
   },
   methods: {
-    async loadData() {
+    async loadData(query) {
       let data = null;
       if (this.querys) {
         data = await this.$pagexRequest({
@@ -135,7 +147,7 @@ export default {
         });
       } else {
         data = await this.$pagexRequest.get(
-          handleStrParam(this.newURL, this.param)
+          handleStrParam(query ? this.newURL + query : this.newURL, this.param)
         );
       }
       let _options = data || [];
@@ -168,6 +180,17 @@ export default {
     _change() {
       this.$emit("change", this.radioValue);
     },
+
+    // 远程搜索
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.loadData(query)
+        this.loading = false;
+      } else {
+        this.options = [];
+      }
+    }
   },
 };
 </script>
