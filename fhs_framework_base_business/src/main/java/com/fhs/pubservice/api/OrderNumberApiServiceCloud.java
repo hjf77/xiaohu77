@@ -67,7 +67,7 @@ public class OrderNumberApiServiceCloud implements FeignOrderNumberApiService {
             serviceOrderLog.setId(StringUtil.getUUID());
             serviceOrderLog.setType(type);
             serviceOrderLog.setTime(date);
-            serviceOrderLog.setNumber(1);
+            serviceOrderLog.setNumber(2000);
             serviceOrderLogService.insertJpa(serviceOrderLog);
         }
         Integer orderIndex = serviceOrderLog.getNumber();
