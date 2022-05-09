@@ -656,7 +656,6 @@ export default {
         tempApi = tempApi + '?notTotal=1'
       }
       if (tempApi) {
-
         this.loading = true
         const res = await this.$pagexRequest({
           url: tempApi,
@@ -685,7 +684,7 @@ export default {
         }
         setTimeout(() => {
           this.loading = false
-        }, 1000)
+        }, 10)
       } else {
         this.$set(this, "data", this.tableList)
         this.data.forEach((item, key) => {
