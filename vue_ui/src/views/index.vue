@@ -1,23 +1,105 @@
 <template>
   <base-container>
      我是首页，你们爱放啥放啥把！
+    <div style="margin: 20px 0">
+      <pagex-crud
+        ref="crud"
+        :filters="filters"
+        :columns="columns"
+        :api="api"
+        :sortSett="sortSett"
+        :buttons="buttons"
+        :querys="querys">
+      </pagex-crud>
+    </div>
   </base-container>
 </template>
 
 <script>
-
+import crudMixins from "@/mixins/crudMixins";
 export default {
   name: 'Index',
-  components: {
-
-  },
+  mixins: [crudMixins],
   data() {
     return {
+      api: "/basic/ms/logLogin/pagerAdvance",
+      isEdit: false,
+      open: false,
+      isDetail:false,
+      // 列表排列顺序（更新时间）
+      sortSett: [
+        {
+          direction: "DESC",
+          property: "createTime",
+        },
+      ],
+      //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
+      buttons: [],
+      columns: [
+        {label: '用户', name: 'loginUserName', type: 'popover', width: 150, fixed: 'left' },
+        {label: '用户名', name: 'loginName', type: 'popover', width: 150, fixed: 'left' },
 
+        {label: '时间', name: 'loginName', type: 'popover', width: 150, fixed: 'left' },
+        {label: '地址', name: 'loginName', type: 'popover', width: 150},
+        {label: '性别', name: 'loginName', type: 'popover', width: 150},
+
+        {label: '时间', name: 'createTime', type: 'popover'},
+        {label: 'ip', name: 'ipAddress', type: 'popover', width: 150},
+        {label: 'ip信息', name: 'ipInfo', type: 'popover', width: 200},
+        {label: '浏览器', name: 'browser', type: 'popover', width: 150},
+        {label: '操作系统', name: 'os', type: 'popover', width: 150},
+        {label: '状态', name: 'stateName', type: 'popover', width: 150},
+        {label: '类型', name: 'typeName', type: 'popover', width: 150},
+        {
+          label: "操作",
+          name: "operation",
+          type: "textBtn",
+          width: "240",
+          fixed: 'right',
+          textBtn: [
+            {
+              title: "编辑",
+              type: "primary",
+              size: "mini",
+
+            },
+            {
+              title: "详情",
+              type: "success",
+              size: "mini",
+
+            },
+            {
+              title: "删除",
+              type: "danger",
+              api: "/ms/trainStudent/",
+              size: "mini"
+            }
+          ]
+        }
+
+      ],
+      filters:[
+        {"name":"ipAddress","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+        {"name":"loginName","label":"用户名","type":"text","operation":"like"},
+      ],
+      querys: [],
     }
   },
   methods:{
-
+    handleClick(row) {
+      console.log(row);
+    }
   }
 
 }

@@ -9,80 +9,81 @@ by wanglei
   <div class="crud-container">
     <div class="clear"></div>
     <div class="search" v-if="filters && filters.length > 0">
-      <el-form size="small" :inline="true" :model="query" v-if="filters">
-        <div class="q">
-          <div class="w">
-            <el-form-item
-              :label="item.formname ? item.formname:item.label"
-              v-for="item in filters"
-              :key="item.name"
-            >
-              <el-input
-                v-model="query.params[item.name]"
-                v-if="item.type === 'text'"
-                prefix-icon="el-icon-search"
-                :placeholder="item.placeholder"
-                clearable
-              ></el-input>
+      <el-form id="searchForm" size="small" :inline="true" :model="query" v-if="filters">
+        <el-form-item v-for="(item,index) in filters" :key="item.name" :label="item.formname ? item.formname:item.label" :class="{'displayNone':(index + 1 > filterDefaultShow) && isMoreSearch}" >
+          <el-input
+            v-model="query.params[item.name]"
+            v-if="item.type === 'text'"
+            prefix-icon="el-icon-search"
+            :placeholder="item.placeholder"
+            clearable
+          ></el-input>
 
-              <pagex-select
-                v-bind="item"
-                v-model="query.params[item.name]"
-                v-if="item.type === 'select'"
-                placeholder="请选择"
-              ></pagex-select>
+          <pagex-select
+            v-bind="item"
+            v-model="query.params[item.name]"
+            v-if="item.type === 'select'"
+            placeholder="请选择"
+          ></pagex-select>
 
-                <pagex-formTreeSelect
-                    v-bind="item"
-                    v-model="query.params[item.name]"
-                    v-if="item.type === 'treeSelect'"
-                    :api="item.api"
-                ></pagex-formTreeSelect>
+          <pagex-formTreeSelect
+            v-bind="item"
+            v-model="query.params[item.name]"
+            v-if="item.type === 'treeSelect'"
+            :api="item.api"
+          ></pagex-formTreeSelect>
 
-              <el-date-picker
-                v-model="query.params[item.name]"
-                v-if="item.type === 'date-picker'"
-                type="daterange"
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="['00:00:00', '23:59:59']"
-              >
-              </el-date-picker>
-              <el-date-picker
-                v-model="query.params[item.name]"
-                v-if="item.type === 'datetimerange'"
-                type="datetimerange"
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              >
-              </el-date-picker>
+          <el-date-picker
+            v-model="query.params[item.name]"
+            v-if="item.type === 'date-picker'"
+            type="daterange"
+            range-separator="~"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-time="['00:00:00', '23:59:59']"
+          >
+          </el-date-picker>
+          <el-date-picker
+            v-model="query.params[item.name]"
+            v-if="item.type === 'datetimerange'"
+            type="datetimerange"
+            range-separator="~"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
 
-              <pagex-checkbox
-                v-bind="item"
-                v-model="query.params[item.name]"
-                v-if="item.type === 'checkbox'"
-                :dictCode="item.dictCode"
-              ></pagex-checkbox>
-            </el-form-item>
-            <el-form-item v-if="filters.length">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="search"
-              >搜索
-              </el-button>
-              <el-button
-                size="mini"
-                type="primary"
-                plain
-                @click="reset"
-              >重置
-              </el-button>
-            </el-form-item>
-          </div>
-        </div>
+          <pagex-checkbox
+            v-bind="item"
+            v-model="query.params[item.name]"
+            v-if="item.type === 'checkbox'"
+            :dictCode="item.dictCode"
+          ></pagex-checkbox>
+        </el-form-item>
+        <el-form-item v-if="filters.length">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="search"
+          >搜索
+          </el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            @click="reset"
+          >重置
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            @click="moreSearch"
+            v-show="(filters.length) > filterDefaultShow"
+          >{{ isMoreSearch ? '展开' : '收起' }}
+            <i v-if="isMoreSearch" class="el-icon-arrow-down el-icon--right"></i>
+            <i v-else class="el-icon-arrow-up el-icon--right"></i>
+          </el-button>
+        </el-form-item>
       </el-form>
     </div>
     <!-- 留的自定义插槽 -->
@@ -150,7 +151,7 @@ by wanglei
             align="center"
           >
             <template slot-scope="scope">
-              <span>{{scope.row.index}}</span>
+              <span>{{ scope.row.index }}</span>
             </template>
           </el-table-column>
           <!--默认列-->
@@ -309,19 +310,24 @@ export default {
       type: Boolean,
       default: false,
     },
-    tableList:{
-      type:Array,
-      default:() => {
+    tableList: {
+      type: Array,
+      default: () => {
         return []
       }
     },
     methodType: {
       type: String,
       default: 'POST'
+    },
+    filterDefaultShow:{
+      type:Number,
+      default:()=> 4
     }
   },
   data() {
     return {
+      isMoreSearch: true,
       switchValue: {}, //列表开关上的状态
       data: [],
       multipleSelection: [],
@@ -332,8 +338,8 @@ export default {
         pageNumber: 1,
         params: {},
       },
-      realColumns:[],
-      realButtons:[],
+      realColumns: [],
+      realButtons: [],
       rowPermissions: {},
     };
   },
@@ -342,13 +348,13 @@ export default {
       reloadable: this,
     };
   },
-  watch:{
-      tableList:{
-          handler(){
-              this.reset()
-          },
-          deep:true
-      }
+  watch: {
+    tableList: {
+      handler() {
+        this.reset()
+      },
+      deep: true
+    }
   },
   created() {
     if (this.minPageSize) {
@@ -357,29 +363,29 @@ export default {
     }
 
     this.filters.forEach((item, index) => {
-      if(item.defaultValue){
+      if (item.defaultValue) {
         this.query.params[item.name] = item.defaultValue
       }
-      if(!item.placeholder){
-        let title = item.formname ? item.formname:item.label;
-        item.placeholder = (item.type=='text' ? '请输入' : '请选择') + title;
+      if (!item.placeholder) {
+        let title = item.formname ? item.formname : item.label;
+        item.placeholder = (item.type == 'text' ? '请输入' : '请选择') + title;
       }
     });
-    this.columns.forEach((column)=>{
-      if(column.ifFun){
-        if(column.ifFun.call()){
-           this.realColumns.push(column);
+    this.columns.forEach((column) => {
+      if (column.ifFun) {
+        if (column.ifFun.call()) {
+          this.realColumns.push(column);
         }
-      }else{
+      } else {
         this.realColumns.push(column);
       }
     });
     this.buttons.forEach((button) => {
-      if(button.ifFun){
-        if(button.ifFun.call()){
+      if (button.ifFun) {
+        if (button.ifFun.call()) {
           this.realButtons.push(button);
         }
-      }else{
+      } else {
         this.realButtons.push(button);
       }
     })
@@ -398,9 +404,9 @@ export default {
     this.getList();
   },
   mounted() {
-    this.$nextTick(()=>{
-      if(this.namespace){
-        this.$EventBus.$on(this.namespace + '_reload',() => {
+    this.$nextTick(() => {
+      if (this.namespace) {
+        this.$EventBus.$on(this.namespace + '_reload', () => {
           console.log(this.query);
           this.getList()
         })
@@ -412,17 +418,17 @@ export default {
   },
   methods: {
     // 已选择数据，禁用按钮
-    proxyBtnDisabled(_row, _btnIndex, _btn){
-        if(_btn.disabledFun){
-           return _btn.disabledFun(_row);
-        }
-        return false
+    proxyBtnDisabled(_row, _btnIndex, _btn) {
+      if (_btn.disabledFun) {
+        return _btn.disabledFun(_row);
+      }
+      return false
     },
     proxyBtnIf(_row, _btnIndex, _btn) {
       if (!this.rowPermissions[_btnIndex]) {
         return false;
       }
-      if(_btn.ifFun){
+      if (_btn.ifFun) {
         return _btn.ifFun(_row);
       }
       if (_btn.ifAttr && _btn.ifValue) {
@@ -504,7 +510,7 @@ export default {
                     message: "删除成功!",
                   });
                   //  删除成功的回调
-                  if(val.clickCallBack){
+                  if (val.clickCallBack) {
                     val.clickCallBack.call(this, row, val);
                   }
                 } else {
@@ -586,17 +592,17 @@ export default {
       } else {
         if (val.click) {
           let ids = [];
-          this.multipleSelection.forEach((item)=>{
+          this.multipleSelection.forEach((item) => {
             ids.push(item.id);
           })
-          val.click.call(this, this.multipleSelection,ids.join(','));
+          val.click.call(this, this.multipleSelection, ids.join(','));
         }
       }
     },
     //多选框
     handleSelectionChange(val) {
       this.multipleSelection = val;
-       this.$emit("handleSelectionChange", val);
+      this.$emit("handleSelectionChange", val);
     },
     // 点击某一行
     rowClick(row) {
@@ -633,7 +639,7 @@ export default {
           data: this.formartReqFilter(),
           method: this.methodType,
         });
-        if(this.isNeedPager){
+        if (this.isNeedPager) {
           if (res.records) {
             this.data = res.records;
           } else {
@@ -643,18 +649,18 @@ export default {
           if (res.total) {
             this.total = parseInt(res.total);
           }
-        //  this.setTableIndex(this.data)
-        }else{
+          //  this.setTableIndex(this.data)
+        } else {
           this.data = res;
-          if(addData){
+          if (addData) {
             this.data.push(addData)
           }
           this.data.forEach((item, key) => {
             item.index = key + 1;
           })
         }
-      }else{
-        this.$set(this,"data",this.tableList)
+      } else {
+        this.$set(this, "data", this.tableList)
         this.data.forEach((item, key) => {
           item.index = key + 1;
         })
@@ -679,12 +685,19 @@ export default {
           this.setTableIndex(item.children, item.index);
         }
       })
+    },
+
+    moreSearch() {
+      this.isMoreSearch = !this.isMoreSearch;
+      let clientHeight = document.getElementById('searchForm').clientHeight
+      console.log(clientHeight)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
 .el-pagination {
   float: right;
   margin: 20px 20px 20px 0;
@@ -715,7 +728,7 @@ export default {
 
 .search {
   background: #ffffff;
-  padding: 20px 20px 0 20px;
+  padding: 20px;
   margin-bottom: 20px;
   border-radius: 4px;
 }
@@ -741,18 +754,18 @@ export default {
   float: left;
 }
 
-.centerTitle{
-    font-size: 16px;
-    font-family: Microsoft YaHei;
-    font-weight: 400;
-    color: #333333;
+.centerTitle {
+  font-size: 16px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #333333;
 }
 
-.lr{
+.lr {
   float: right;
 }
 
-.lr.count{
+.lr.count {
   line-height: 40px;
 }
 
@@ -762,6 +775,7 @@ export default {
   display: -ms-flexbox;
   display: -webkit-flex;
 }
+
 .w {
   width: 100%;
 }
@@ -770,4 +784,16 @@ export default {
   width: 260px;
 }
 
+::v-deep .el-table th {
+  color: #606266;
+  background-color: #F3F3F3;
+}
+
+::v-deep .search .el-form-item {
+  margin: 10px 0;
+  padding: 0 10px;
+}
+.displayNone {
+  display: none;
+}
 </style>
