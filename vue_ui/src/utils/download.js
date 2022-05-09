@@ -28,10 +28,10 @@ export function downLoad(_url, _method, _data,_newFileName) {
   if (_method == 'post') {
     formData = {};
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-    for (let key in _data) {
+    /*for (let key in _data) {
       formData[key] = _data[key];
-    }
-    formData = JSON.stringify(formData);
+    }*/
+    formData = JSON.stringify(_data);
   }
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
