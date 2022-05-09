@@ -39,46 +39,57 @@ import { handleStrParam } from "@/lib/utils/param";
 export default {
   name: "pagexSelect",
   props: {
+    //选项
     options: {
       type: Array,
       default: () => undefined,
     },
+    //api地址 如果去后台请求数据的话
     url: {
       type: String,
       default: () => "",
     },
+    //显示的字段
     labelField: {
       type: String,
       default: () => "title",
     },
+    //赋值的 字段
     valueField: {
       type: String | Number,
       default: () => "id",
     },
+    //请求后台接口附带参数
     param: {
       type: Object,
       default: () => {},
     },
+    //如果是字典的话字典分组编码是多少
     dictCode: {
       type: String,
       default: () => "",
     },
+    //请求后台的参数 ?后面拼接
     querys: {
       type: Object,
       default: () => null,
     },
+    //是否禁用
     disabled: {
       type: Boolean,
       default: false,
     },
+    //后台接口类型
     methodType: {
       type: String,
       default: 'GET',
     },
+    //value是否强制转换为number
     isValueNum:{
       type: Boolean,
       default: false,
     },
+    //通过自定义方法格式化显示的数据 配合 customLabelQuerys使用
     isCustomLabel: {
       type: Boolean,
       default: false,
@@ -93,10 +104,12 @@ export default {
         }
       },
     },
+    //是否默认选中第一个
     isDefaultFirstOption: {
       type: Boolean,
       default: false,
     },
+    //是否允许创建新的选项
     isAllowCreate: {
       type: Boolean,
       default: false,
