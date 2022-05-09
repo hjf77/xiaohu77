@@ -20,7 +20,7 @@
 </template>
 <script>
 import {mapGetters} from "vuex";
-
+import {postFile} from "../../utils/download";
 export default {
   name: "one2xform",
   computed: {
@@ -36,7 +36,8 @@ export default {
       formData: {
         isEnable: 1,
         agreementNo: "202205070001",
-        goods:[{  goodCode:'111'}]
+        goods:[{  goodCode:'111'}],
+        total : 1,
       },
       controls: [
         {
@@ -48,15 +49,19 @@ export default {
           type: "select",
           name: "isEnable",
           label: "状态",
-          visibleOn: "disabled",
+          disabledOn: "disabled",
           dictCode: "isEnable",
           isValueNum: true,
         },
         {
-          type: "text",
+          type: "select",
           name: "contractNo",
+          url:"/basic/ms/dictItem/findList?dictGroupCode=",
+          labelField: "dictDesc",
+          valueField: "dictGroupCode",
+          remote:true,
           label: "合同编号",
-          rule: [{required: true, message: '请输入合同编号', trigger: 'blur'}]
+          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
         },
         {
           type: "buttons",
@@ -77,9 +82,9 @@ export default {
               }
             },
             {
-              name: "导出",
-              click: function (_v,_model) {
-
+              name: "导出模板",
+              click:  (_v,_model) =>{
+                postFile('/basic/excel_template/exportTemplate?name=商品导入模板',this.controls[4].controls);
               }
             }
           ]
@@ -91,6 +96,10 @@ export default {
           optionsSetts:[],
           defaultValue:{
             goodCode:'12345'
+          },
+          //当数据发生改变的时候触发
+          onDataChange:(_newDatas)=>{
+              this.$refs.testForm.setModelProp('total',_newDatas.length);
           },
           controls: [
             {
@@ -110,6 +119,7 @@ export default {
               },
               import: true,
               export: true,
+              cellWidth: '10',
               notRepeat: true,
               with: 100,
             },
@@ -132,18 +142,33 @@ export default {
               name: 'taxRadio',
               dictCode: 'taxRadio',
               label: '税率',
+              import: true,
+              cellWidth: '10',
               one2xSelectOn: (newValue, _row, index, options) => {
 
               }
             },
           ],
-        }
+        },
+        {
+          type: "labels",
+          name: "labelsxx",
+          width:'1500px',
+          labels: [
+            {
+              title: "商品品项数",
+              name: "total",
+            }
+          ]
+        },
       ]
     }
   },
   created() {
 
   },
-  methods: {}
+  methods: {
+
+  }
 };
 </script>
