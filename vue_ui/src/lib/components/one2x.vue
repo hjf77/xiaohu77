@@ -114,11 +114,18 @@ export default {
       type: String,
       default: 'datas',
     },
+    //当数据变动的时候触发
+    onDataChange :{
+      type: Function
+    },
   },
   watch: {
     datas: {
       handler: function (value) {
         this.$emit("input", value);
+        if(this.onDataChange){
+          this.onDataChange(value);
+        }
       },
       deep: true,
     },

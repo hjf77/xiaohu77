@@ -168,6 +168,10 @@
             >
           </div>
 
+         <div v-if="item.type === 'labels'" title="xzx" :style="'width:' + item.width">
+              <label  v-for="(itemLabel, index) in item.labels" :key="index" >{{itemLabel.title + ':' + model[itemLabel.name]}}</label>
+          </div>
+
           <pagex-one2x  v-if="item.type === 'one2x'" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
 
           <pagex-uploadFileAsync
@@ -681,6 +685,14 @@ export default {
     // 手动触发校验
     checkForm(propertyName) {
       this.$refs['form'].validateField(propertyName)
+    },
+    // 获取数据
+    getModel() {
+      return this.model;
+    },
+    // 设置model的一些数据
+    setModelProp(_prop, _value) {
+      this.$set(this.model, _prop, _value);
     }
   },
 };
