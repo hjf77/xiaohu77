@@ -181,6 +181,15 @@ export default {
       this.optionsSetts.splice(_index, 1);
       this.datas.splice(_index, 1);
     },
+    //添加数据
+    appendRows(_rows,_optionsSetts){
+      _rows.forEach((_item) => {
+        this.datas.push(deepClone(_item));
+      });
+      _optionsSetts.forEach((_item) => {
+        this.optionsSetts.push(deepClone(_item));
+      });
+    },
     //判断规则是否是必填
     isRequired(rules) {
       if(!rules){

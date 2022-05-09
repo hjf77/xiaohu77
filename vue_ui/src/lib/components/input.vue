@@ -61,7 +61,7 @@ export default {
       if(this.one2xBlur){
         let _datas = deepClone(this.datas);
         let _one2xOptionsSetts = deepClone(this.one2xOptionsSetts);
-        this.one2xBlur(this.newValue,_datas,this.index,_one2xOptionsSetts);
+        this.one2xBlur(this.newValue,_datas,this.index,_one2xOptionsSetts,this);
         this.$emit("update:datas", _datas);
         this.$emit("update:one2xOptionsSetts", _one2xOptionsSetts);
       }
