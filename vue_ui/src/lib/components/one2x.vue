@@ -115,7 +115,7 @@ export default {
       default: 'datas',
     },
     //当数据变动的时候触发
-    onDataChange :{
+    onDataChange: {
       type: Function
     },
   },
@@ -123,7 +123,7 @@ export default {
     datas: {
       handler: function (value) {
         this.$emit("input", value);
-        if(this.onDataChange){
+        if (this.onDataChange) {
           this.onDataChange(value);
         }
       },
@@ -139,14 +139,16 @@ export default {
   },
   created() {
     this.$set(this, 'datas', deepClone(this.value));
-    this.datas.forEach((_item, _index) => {
-      this.optionsSetts[_index] = {};
-      this.controls.forEach((_item) => {
-        if (_item.options) {
-          this.optionsSetts[_index][_item.name] = deepClone(_item.options);
-        }
+    if (!this.isEdit) {
+      this.datas.forEach((_item, _index) => {
+        this.optionsSetts[_index] = {};
+        this.controls.forEach((_item) => {
+          if (_item.options) {
+            this.optionsSetts[_index][_item.name] = deepClone(_item.options);
+          }
+        });
       });
-    });
+    }
     this.controls.forEach((_item) => {
       if (!_item.placeholder) {
         _item.placeholder = (_item.type == 'text' || _item.type == 'textarea') ? '请输入' : '请选择';
@@ -182,7 +184,7 @@ export default {
       this.datas.splice(_index, 1);
     },
     //添加数据
-    appendRows(_rows,_optionsSetts){
+    appendRows(_rows, _optionsSetts) {
       _rows.forEach((_item) => {
         this.datas.push(deepClone(_item));
       });
@@ -192,7 +194,7 @@ export default {
     },
     //判断规则是否是必填
     isRequired(rules) {
-      if(!rules){
+      if (!rules) {
         return false;
       }
       //element验证
