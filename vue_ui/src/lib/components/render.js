@@ -31,6 +31,7 @@ import treeSelect from "./treeSelect.vue"
 import previewPicture from "./previewPicture.vue";
 import crudForm from "./crudForm.vue";
 import one2x from "./one2x.vue";
+import advancePagination from "./advancePagination.vue";
 
 import Vue from "vue";
 import getProps from "../utils/getProps";
@@ -75,6 +76,7 @@ const comList = {
   previewPicture,
   crudForm,
   one2x,
+  advancePagination,
   render: renderCom
 };
 Object.entries(comList).forEach(([key, val]) => {

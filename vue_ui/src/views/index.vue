@@ -11,7 +11,9 @@
           :api="api"
           :sortSett="sortSett"
           :buttons="buttons"
-          :querys="querys">
+          :querys="querys"
+          :isAdvancePager="true"
+        >
         </pagex-crud>
       </div>
       <div style="width:100%;margin-top: 100px;">
@@ -47,6 +49,7 @@ export default {
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [],
       columns: [
+        {label: "序号", name: "", type: "index",width:'60', fixed: 'left'},
         {label: '用户', name: 'loginUserName', type: 'popover', width: 150, fixed: 'left'},
         {label: '用户名', name: 'loginName', type: 'popover', width: 150, fixed: 'left'},
 

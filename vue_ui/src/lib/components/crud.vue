@@ -130,6 +130,7 @@ by wanglei
         stripe
         row-key="id"
         :tree-props="{children: 'children'}"
+        v-loading="loading"
       >
         <template v-for="(item, index) in realColumns">
           <!--多选框-->
@@ -228,19 +229,26 @@ by wanglei
           </el-table-column>
         </template>
       </el-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handlepageNumberChange"
-        :pageNumber-page="query.pageNumber"
-        :page-size="query.pageSizeNumber"
-        :page-sizes="page_sizes"
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-        v-show="data.length"
-        :total="total"
-        v-if="isNeedPager"
-      >
-      </el-pagination>
+
+      <div style="display: flex;justify-content: right;align-items: center;line-height: 60px;margin-right: 20px">
+        <el-checkbox v-if="isAdvancePager" v-model="checked" style="margin-right: 20px" @change="checkBoxChange">显示总数</el-checkbox>
+        <el-pagination
+          calss="pagination"
+          @size-change="handleSizeChange"
+          @current-change="handlepageNumberChange"
+          :pageNumber-page="query.pageNumber"
+          :page-size="query.pageSizeNumber"
+          :page-sizes="page_sizes"
+          layout="total, sizes, prev, pager, next, jumper"
+          background
+          v-show="data.length && checked"
+          :total="total"
+          v-if="isNeedPager"
+        >
+        </el-pagination>
+        <pagex-advancePagination v-if="!checked" v-model="query.pageSizeNumber" :page-sizes.sync="page_sizes" :page-query.sync="query" />
+      </div>
+
 
       <slot name="form"></slot>
     </div>
@@ -320,13 +328,23 @@ export default {
       type: String,
       default: 'POST'
     },
+
+    // 每行搜索条件个数
     filterDefaultShow:{
       type:Number,
       default:()=> 4
+    },
+
+    // 分页参数默认显示总数
+    isAdvancePager: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
+      loading: false,
+      checked: true,
       isMoreSearch: true,
       switchValue: {}, //列表开关上的状态
       data: [],
@@ -632,10 +650,16 @@ export default {
       this.search();
     },
     async getList(addData) {
+      let tempApi = this.api
+      // 判断是否显示总数
+      if (!this.checked) {
+        tempApi = tempApi + '?notTotal=1'
+      }
+      if (tempApi) {
 
-      if (this.api) {
+        this.loading = true
         const res = await this.$pagexRequest({
-          url: this.api,
+          url: tempApi,
           data: this.formartReqFilter(),
           method: this.methodType,
         });
@@ -659,6 +683,9 @@ export default {
             item.index = key + 1;
           })
         }
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
       } else {
         this.$set(this, "data", this.tableList)
         this.data.forEach((item, key) => {
@@ -687,10 +714,23 @@ export default {
       })
     },
 
+    /**
+     * 搜索条件展开收起
+     */
     moreSearch() {
       this.isMoreSearch = !this.isMoreSearch;
-      let clientHeight = document.getElementById('searchForm').clientHeight
-      console.log(clientHeight)
+      // let clientHeight = document.getElementById('searchForm').clientHeight
+      // console.log(clientHeight)
+    },
+
+    /**
+     * 显示总数
+     * @param val
+     */
+    checkBoxChange(val) {
+      if (!val) {
+        this.getList()
+      }
     }
   }
 }
@@ -713,7 +753,7 @@ export default {
 
 .el-pagination {
   float: right;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 .crud-container {
@@ -795,5 +835,12 @@ export default {
 }
 .displayNone {
   display: none;
+}
+::v-deep .list .el-pagination {
+  display: flex;
+  align-items: center;
+  .el-pager {
+    height: 30px;
+  }
 }
 </style>
