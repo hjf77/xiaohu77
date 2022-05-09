@@ -60,7 +60,11 @@ public interface FileStorage {
 
     void downloadFile(PubFilePO serviceFile, HttpServletResponse response);
 
-
+    /**
+     * 删除文件
+     * @param serviceFile
+     */
+    void deleteFile(PubFilePO serviceFile);
 
     /**
      * 判断一个文件是否存在

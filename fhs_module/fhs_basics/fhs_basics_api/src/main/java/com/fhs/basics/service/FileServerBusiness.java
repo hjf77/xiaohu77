@@ -34,6 +34,11 @@ public interface FileServerBusiness {
     @CloudMethod
     PubFileVO uploadInputStream(InputStream inputStream);
 
-
+    /**
+     * 删除文件
+     * @param fileId
+     */
+    @CloudMethod
+    void deleteFile(String fileId);
 
 }

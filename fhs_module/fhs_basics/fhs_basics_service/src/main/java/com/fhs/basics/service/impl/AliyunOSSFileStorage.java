@@ -111,6 +111,10 @@ public class AliyunOSSFileStorage implements FileStorage {
         }
     }
 
+    @Override
+    public void deleteFile(PubFilePO serviceFile) {
+
+    }
 
     @Override
     public boolean checkFileIsExist(PubFilePO serviceFile) {

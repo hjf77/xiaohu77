@@ -89,6 +89,20 @@ public class DiskFileStorage implements FileStorage {
         throw new ParamException("文件不存在：" + serviceFile.getFileId());
     }
 
+    /**
+     * 删除文件
+     * @param serviceFile
+     */
+    @Override
+    public void deleteFile(PubFilePO serviceFile) {
+        File file = getFile(serviceFile);
+        if (file.exists()) {
+            file.delete();
+            return;
+        }
+        throw new ParamException("文件不存在：" + serviceFile.getFileId());
+    }
+
     @Override
     public boolean checkFileIsExist( PubFilePO serviceFile) {
         return getFile(serviceFile).exists();

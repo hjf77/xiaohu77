@@ -9,6 +9,7 @@ import com.fhs.basics.po.PubFilePO;
 import com.fhs.basics.service.FileStorage;
 import com.fhs.basics.service.PubFileService;
 import com.fhs.basics.vo.PubFileVO;
+import com.fhs.core.exception.ParamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,5 +70,17 @@ public class FileServerBusinessImpl implements FileServerBusiness {
         return (fileService.insertSelective(sf) > 0);
     }
 
+    /**
+     * 删除文件
+     * @param fileId
+     */
+    @Override
+    public void deleteFile(String fileId) {
+        if (StringUtils.isEmpty(fileId)) {
+            throw new ParamException("文件为空");
+        }
+        PubFileVO pubFileVO = fileService.selectById(fileId);
+        fileStorage.deleteFile(pubFileVO);
+    }
 
 }

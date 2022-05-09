@@ -3,6 +3,7 @@ package com.fhs.basics.controller;
 import com.fhs.basics.service.FileServerBusiness;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
 import com.fhs.basics.service.PubFileService;
@@ -54,5 +55,18 @@ public class UploadController {
         return pubFileVO;
     }
 
-
+    /**
+     * 删除文件
+     *
+     * @param fileId
+     * @return
+     */
+    @RequestMapping(value = "deleteFile")
+    @ApiOperation("删除文件")
+    public void deleteFile(String fileId) {
+        if (StringUtils.isEmpty(fileId)) {
+            throw new ParamException("文件为空");
+        }
+        fileServerBusiness.deleteFile(fileId);
+    }
 }
