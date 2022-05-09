@@ -76,9 +76,15 @@ export default {
               }
             },
             {
-              name: "导入",
+              name: "模拟导入(append后台解析数据)",
               click: function (_v,_model) {
-
+                _v.$refs.goods[0].appendRows([{goodCode:'1314111',goodName:'白象方便面',goodspecifications:'1',taxRadio:1}] ,[{goodspecifications:[{
+                    id: '1',
+                    title: '24袋一箱'
+                  }, {
+                    id: '2',
+                    title: '12袋一箱'
+                  }]}]);
               }
             },
             {
@@ -107,7 +113,7 @@ export default {
               name: 'goodCode',
               label: '商品编码',
               rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
-              one2xBlur: (newValue, _datas, index,optionsSetts) => {
+              one2xBlur: (newValue, _datas, index,optionsSetts,_inputThis) => {
                 _datas[index].goodName = '可口可乐500ML';
                 optionsSetts[index].goodspecifications = [{
                   id: '1',
@@ -132,15 +138,13 @@ export default {
               type: 'select',
               name: 'goodspecifications',
               label: '规格',
-              options:[{
-                id: '1',
-                title: '1*12'
-              }]
+              options:[]
             },
             {
               type: 'select',
               name: 'taxRadio',
               dictCode: 'taxRadio',
+              isValueNum: true,
               label: '税率',
               import: true,
               cellWidth: '10',
