@@ -49,7 +49,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
 
 
     @Override
-    public int insertSelective(UcenterMsOrganizationPO organization) {
+    public int insert(UcenterMsOrganizationPO organization) {
         if (!CheckUtils.isNullOrEmpty(organization.getParentId())) {
             UcenterMsOrganizationVO sysOrganizationQuery = this.selectById(organization.getParentId());
             if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsEnable()) {
@@ -73,7 +73,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         if (organization.getIsCompany() != null && organization.getIsCompany() == Constant.INT_TRUE) {
             organization.setCompanyId(organization.getId());
         }
-        return super.insertSelective(organization);
+        return super.insert(organization);
     }
 
 

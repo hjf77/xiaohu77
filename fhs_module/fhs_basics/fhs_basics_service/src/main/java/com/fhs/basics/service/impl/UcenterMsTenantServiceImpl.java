@@ -35,7 +35,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
     private UcenterMsOrganizationService organizationService;
 
     @Override
-    public int insertSelective(UcenterMsTenantPO tenant) {
+    public int insert(UcenterMsTenantPO tenant) {
         UcenterMsUserPO adminUser = new UcenterMsUserPO();
         adminUser.setGroupCode(tenant.getGroupCode());
         adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode() + "123456").toLowerCase());
@@ -47,7 +47,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         adminUser.setOrganizationId(tenant.getGroupCode() + "_001");
         adminUser.setIsEnable(Constant.INT_TRUE);
         adminUser.preInsert(null);
-        sysUserService.insertSelective(adminUser);
+        sysUserService.insert(adminUser);
         UcenterMsOrganizationPO organization = new UcenterMsOrganizationPO();
         organization.setId(tenant.getGroupCode() + "_001");
         organization.setName(tenant.getTenantName());
@@ -56,8 +56,8 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         organization.preInsert(tenant.getCreateUser());
         organization.setParentId("");
         organization.setGroupCode(tenant.getGroupCode());
-        organizationService.insertSelective(organization);
+        organizationService.insert(organization);
         tenant.setId(StringUtils.getUUID());
-        return super.insertSelective(tenant);
+        return super.insert(tenant);
     }
 }

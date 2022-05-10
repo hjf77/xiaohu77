@@ -80,8 +80,8 @@ public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsM
 
 
     @Override
-    public int insertSelective(SettMsMenuPO adminMenu) {
-        return super.insertSelective(parseUrl(adminMenu));
+    public int insert(SettMsMenuPO adminMenu) {
+        return super.insert(parseUrl(adminMenu));
     }
 
     private SettMsMenuPO parseUrl(SettMsMenuPO adminMenu){

@@ -51,7 +51,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     @Override
     public boolean addRole(UcenterMsRolePO adminRole) {
         // 插入角色信息
-        int count = super.insertSelective(adminRole);
+        int count = super.insert(adminRole);
         if (count > 0) {
             return saveButtons(adminRole);
         }

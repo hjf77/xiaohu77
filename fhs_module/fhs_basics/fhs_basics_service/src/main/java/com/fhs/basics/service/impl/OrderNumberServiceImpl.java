@@ -52,7 +52,7 @@ public class OrderNumberServiceImpl extends BaseServiceImpl<OrderNumberVO, Order
             serviceOrderLog.setType(type);
             serviceOrderLog.setTime(date);
             serviceOrderLog.setNumber(1);
-            this.insertSelective(serviceOrderLog);
+            this.insert(serviceOrderLog);
         }
         Integer orderIndex = serviceOrderLog.getNumber();
         int minOrderIndex = orderIndex;

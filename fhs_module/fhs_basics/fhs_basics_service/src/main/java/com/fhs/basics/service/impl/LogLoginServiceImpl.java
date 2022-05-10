@@ -44,6 +44,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
     @Override
     public void addLoginUserInfo(HttpServletRequest request, String userName, boolean isLogin, Integer errorType, Long userId, boolean typeOut) {
         LogLoginVO logLoginVO = new LogLoginVO();
+        logLoginVO.setLoginName(userName);
         Long count = this.findCount(logLoginVO);
         GetLoginUserMsgUtil getLoginUserMsgUtil = new GetLoginUserMsgUtil();
         String ip = null;
@@ -74,7 +75,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
         logLoginVO.setLoginName(userName);
         logLoginVO.setCreateTime(new Date());
         logLoginVO.setState(LoggerConstant.LOG_LOGIN_TRUE);
-        logLoginVO.setVisitNumber(count + 1);
+       /* logLoginVO.setVisitNumber(count + 1);*/
         if (isLogin) {
             logLoginVO.setState(LoggerConstant.LOG_LOGIN_ERROR);
             logLoginVO.setErrorInfo(errorType);
@@ -83,7 +84,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
         if (typeOut) {
             logLoginVO.setType(LoggerConstant.LOG_LOGIN_OUT);
         }
-        this.insertSelective(logLoginVO);
+        this.insert(logLoginVO);
     }
 
     @Override

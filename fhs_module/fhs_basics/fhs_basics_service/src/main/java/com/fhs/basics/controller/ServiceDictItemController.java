@@ -29,12 +29,11 @@ public class ServiceDictItemController extends ModelSuperController<ServiceDictI
      * 重写去掉权限校验
      * @param e
      * @param request  response
-     * @param response
      * @return
      * @throws Exception
      */
     @Override
-    public List<ServiceDictItemVO> findList(ServiceDictItemVO e, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public List<ServiceDictItemVO> findList(ServiceDictItemVO e, HttpServletRequest request) throws Exception {
         List<ServiceDictItemVO> dataList = baseService.findForList( e);
         return dataList;
     }

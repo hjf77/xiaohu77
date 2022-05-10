@@ -143,7 +143,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         int count = 0;
         if (null == adminUser.getUserId()) { //新增
             adminUser.setUserId(idHelper.nextId());
-            count = this.insertSelective(adminUser);
+            count = this.insert(adminUser);
         } else {//修改
             count = super.updateSelectiveById(adminUser);
         }

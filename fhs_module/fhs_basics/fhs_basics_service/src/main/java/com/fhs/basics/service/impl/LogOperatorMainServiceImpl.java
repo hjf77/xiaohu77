@@ -57,7 +57,7 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
         if (logAddOperatorLogVO.getOperatorMainVO().getRespBody() != null && logAddOperatorLogVO.getOperatorMainVO().getRespBody().length() > 6000) {
             logAddOperatorLogVO.getOperatorMainVO().setRespBody(logAddOperatorLogVO.getOperatorMainVO().getRespBody().substring(0, 6000));
         }
-        super.insertSelective(logAddOperatorLogVO.getOperatorMainVO());
+        super.insert(logAddOperatorLogVO.getOperatorMainVO());
         Map<String, LogHistoryDataVO> hisMap = new HashMap<>();
         for (LogOperatorExtParamVO extParamVO : logAddOperatorLogVO.getOperatorExtParamVOList()) {
             if (extParamVO.getOperatorType() != null) {

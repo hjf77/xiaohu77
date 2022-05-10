@@ -129,7 +129,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @ResponseBody
     @GetMapping("findList")
     @ApiOperation("后台-不分页查询集合-一般用于下拉")
-    public List<V> findList(V e, HttpServletRequest request, HttpServletResponse response)
+    public List<V> findList(V e, HttpServletRequest request)
             throws Exception {
         if (isPermitted(request, "see")) {
             List<V> dataList = baseService.findForList((D) e);
@@ -219,7 +219,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
                 baseDo.preInsert(getSessionuser().getUserId());
             }
             beforSave(e, true);
-            baseService.insertSelective((D) e);
+            baseService.insert((D) e);
             return HttpResult.success(true);
 
         }
