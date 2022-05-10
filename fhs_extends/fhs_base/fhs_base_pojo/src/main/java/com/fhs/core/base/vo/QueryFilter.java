@@ -4,7 +4,11 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
+import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
@@ -21,6 +25,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -56,6 +61,14 @@ public class QueryFilter<T> {
             example = "AND"
     )
     private String groupRelation;
+
+    /**
+     * 安全字段，就算前端输入了这些字段后端也不拼接相关条件
+     */
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private Set<String> safeFieldsSet = new HashSet<>();
+
 
     public QueryFilter() {
         this.groupRelation = AND;
@@ -113,14 +126,21 @@ public class QueryFilter<T> {
         return map;
     }
 
-    public QueryWrapper<T> asWrapper(Class currentModelClass) {
+    public QueryWrapper<T> asWrapper(Class currentModelClass, String... safeFields) {
+        if (safeFields != null) {
+            safeFieldsSet = new HashSet<>(Arrays.asList(safeFields));
+        }
         QueryWrapper<T> queryWrapper = new QueryWrapper();
         Map<String, List<QueryField>> groupQueryField = this.groupQueryField();
         String groupRelation = this.getGroupRelation();
         groupQueryField.forEach((group, list) -> {
+            List<QueryField> newListFields = list.stream().filter(queryField -> !safeFieldsSet.contains(queryField.getProperty())).collect(Collectors.toList());
+            if(newListFields.isEmpty()){
+                return;
+            }
             if (AND.equals(groupRelation)) {
                 queryWrapper.and((x) -> {
-                    list.forEach((l) -> {
+                    newListFields.forEach((l) -> {
                         this.convertQueryField(x, l, currentModelClass);
                     });
                 });
@@ -129,7 +149,7 @@ public class QueryFilter<T> {
                     throw new ParamsInValidException("关联条件只能传AND 或者OR");
                 }
                 queryWrapper.or((x) -> {
-                    list.forEach((l) -> {
+                    newListFields.forEach((l) -> {
                         this.convertQueryField(x, l, currentModelClass);
                     });
                 });
@@ -175,17 +195,17 @@ public class QueryFilter<T> {
     @JSONField(serialize = false)
     public  String getField(String fieldName, Class<T> currentModelClass) {
         if (currentModelClass == null) {
-            return fieldName;
+            throw new ParamsInValidException("currentModelClass不能为null");
         }
-        Field classField = ReflectionUtils.findField(currentModelClass, fieldName);
-        if (classField != null) {
-            if (classField.isAnnotationPresent(TableField.class)) {
-                fieldName = classField.getAnnotation(TableField.class).value();
-            } else if (classField.isAnnotationPresent(TableId.class)) {
-                fieldName = classField.getAnnotation(TableId.class).value();
-            }
+        Map<String, ColumnCache> cacheMap = LambdaUtils.getColumnMap(currentModelClass);
+        if (cacheMap == null) {
+            throw new ParamsInValidException(currentModelClass + "找不到表字段对应关系，请检查mapper.xml是否已经存在并且目录正确");
         }
-        return fieldName;
+        if (!cacheMap.containsKey(fieldName.toUpperCase())) {
+            throw new ParamsInValidException(fieldName + "不正确");
+        }
+        return cacheMap.get(fieldName.toUpperCase()).getColumn();
+
     }
 
     /**
@@ -200,13 +220,12 @@ public class QueryFilter<T> {
         if (OR.equals(r)) {
             queryWrapper.or();
         }
-        String field = getField(queryField.getProperty(), currentModelClass);
-
-        String operation = queryField.getOperation();
         //如果是空或者null 字符串则不加此过滤条件
         if (CheckUtils.isNullOrEmpty(queryField.getValue()) || "null".equals(ConverterUtils.toString(queryField.getValue()))) {
             return;
         }
+        String field = getField(queryField.getProperty(), currentModelClass);
+        String operation = queryField.getOperation();
         switch (operation) {
             case "=":
                 queryWrapper.eq(field, queryField.getValue());
@@ -235,9 +254,6 @@ public class QueryFilter<T> {
             case "like_r":
                 queryWrapper.likeRight(field, queryField.getValue());
                 break;
-            case "not_like_r":
-                queryWrapper.apply(field + " not like '" + queryField.getValue() + "%'");
-                break;
             case "is_null":
                 queryWrapper.isNull(field);
                 break;
@@ -249,28 +265,6 @@ public class QueryFilter<T> {
                 if (values != null && values.length > 0) {
                     queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
                 }
-                break;
-            case "find_in_set":
-                queryWrapper.apply("FIND_IN_SET('" + queryField.getValue() + "'," + field + ")");
-                break;
-            case "find_in_set_in":
-                if (queryField.getValue() != null) {
-                    Object[] params = convert2ObjectArray(queryField.getValue());
-                    if (params.length > 0) {
-                        StringBuilder whereBulder = new StringBuilder("(");
-                        for (int i = 0; i < params.length; i++) {
-                            if (i != 0) {
-                                whereBulder.append(" OR ");
-                            }
-                            whereBulder.append(" FIND_IN_SET('" + params[i] + "'," + field + ") ");
-                        }
-                        whereBulder.append(" ) ");
-                        queryWrapper.apply(whereBulder.toString());
-                    }
-                }
-                break;
-            case "ext":
-                queryWrapper.apply(ConverterUtils.toString(queryField.getValue()));
                 break;
             case "between"://前端经常用的是 时间过滤，比如查询 2020-01-01 到2020-01-02 如果用between会是 >   2020-01-01 and 2020-01-02<
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());

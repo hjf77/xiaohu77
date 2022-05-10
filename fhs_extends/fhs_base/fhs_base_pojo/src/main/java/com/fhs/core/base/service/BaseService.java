@@ -29,7 +29,7 @@ public interface BaseService<V extends VO, P extends BasePO> {
      * @param entity do
      * @return 受影响的行数
      */
-    int insertSelective(P entity);
+    int insert(P entity);
 
     /**
      * 批量插入 -- jpa方法
@@ -114,13 +114,7 @@ public interface BaseService<V extends VO, P extends BasePO> {
      */
     List<V> findForList(P bean);
 
-    /**
-     * 查询数据 参数为object
-     *
-     * @param bean bean
-     * @return 查询出来的数据集合
-     */
-    FhsPager<V> findForPager(P bean, FhsPager fhsPager);
+
 
 
     /**
@@ -211,7 +205,7 @@ public interface BaseService<V extends VO, P extends BasePO> {
 
 
     /**
-     * vo转do
+     * vo转po
      *
      * @param vo vo
      * @return po
@@ -219,6 +213,10 @@ public interface BaseService<V extends VO, P extends BasePO> {
     P v2p(V vo);
 
 
+    /**
+     * 获取PO的class
+     * @return
+     */
     Class<P> getPoClass();
 
     /**

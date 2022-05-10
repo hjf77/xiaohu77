@@ -138,24 +138,10 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         return pos2vos(dos);
     }
 
-    /**
-     * 查询数据 参数为object
-     *
-     * @param bean bean
-     * @return 查询出来的数据集合
-     */
+
 
     @Override
-    @SuppressWarnings({"unchecked"})
-    public FhsPager<V> findForPager(P bean,FhsPager fhsPager) {
-        bean.setIsDelete(Constant.INT_FALSE);
-        FhsPager result = baseMapper.selectPage(fhsPager,bean.asWrapper());
-        result.setRecords(pos2vos(result.getRecords()));
-        return result;
-    }
-
-    @Override
-    public int insertSelective(P entity) {
+    public int insert(P entity) {
         initPkeyAndIsDel(entity);
         addCache(entity);
         checkIsExist(entity, false);
