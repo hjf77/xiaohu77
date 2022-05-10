@@ -30,40 +30,17 @@
             </exclusions>
         </dependency>
 
-
-        <!--在线定时任务模块,不需要的话可以去掉-->
-       <!-- <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_task_web</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>-->
-        <!--操作日志-->
-
-
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
-      <!--  <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_web_log_view</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>-->
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
-       <!-- <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_front_web</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_front_wx</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>-->
+
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_generate</artifactId>
@@ -79,6 +56,23 @@
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
             <version>3.9.1</version>
+        </dependency>
+
+        <!--demo使用-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.2.6</version>
         </dependency>
     </dependencies>
 
