@@ -10,7 +10,7 @@
     </el-select>
     <el-button :disabled="pageQuery.pageNumber === 1" @click="homePage" style="margin-left: 10px"> 首页</el-button>
     <el-button :disabled="pageQuery.pageNumber === 1" @click="prevPage"> 上一页</el-button>
-    <el-button @click="nextPage"> 下一页</el-button>
+    <el-button :disabled="isEndPage" @click="nextPage"> 下一页</el-button>
   </div>
 </template>
 
@@ -33,6 +33,10 @@ export default {
           pageSizeNumber: 10
         }
       }
+    },
+    isEndPage: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -61,6 +65,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 首页
+     */
     homePage() {
       this.$emit('update:pageQuery', {
         pageSizeNumber: this.newValue,
@@ -69,6 +76,9 @@ export default {
       })
       this.$parent.getList()
     },
+    /**
+     * 上一页
+     */
     prevPage() {
       this.$emit('update:pageQuery', {
         pageSizeNumber: this.newValue,
@@ -77,6 +87,9 @@ export default {
       })
       this.$parent.getList()
     },
+    /**
+     * 下一页
+     */
     nextPage() {
       this.$emit('update:pageQuery', {
         pageSizeNumber: this.newValue,

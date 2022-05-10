@@ -246,7 +246,7 @@ by wanglei
           v-if="isNeedPager"
         >
         </el-pagination>
-        <pagex-advancePagination v-if="!checked" v-model="query.pageSizeNumber" :page-sizes.sync="page_sizes" :page-query.sync="query" />
+        <pagex-advancePagination v-if="!checked" v-model="query.pageSizeNumber" :isEndPage="isEndPage" :page-sizes.sync="page_sizes" :page-query.sync="query" />
       </div>
 
 
@@ -343,6 +343,10 @@ export default {
   },
   data() {
     return {
+      // 显示总数组件使用参数，判断是否禁用下一页，默认不禁用
+      isEndPage: false,
+      searchFormWidth: 0,
+      searchFormItemWidth: 280,
       loading: false,
       checked: true,
       isMoreSearch: true,
@@ -372,6 +376,15 @@ export default {
         this.reset()
       },
       deep: true
+    },
+
+    // 计算显示几个搜索条件
+    searchFormWidth: {
+      handler(val) {
+        if (val && this.searchFormItemWidth) {
+          this.filterDefaultShow = Math.floor((val / this.searchFormItemWidth)) - 1
+        }
+      }
     }
   },
   created() {
@@ -423,6 +436,13 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      const that = this;
+      window.onresize = () => {
+        window.screenWidth = document.getElementById('searchForm').clientWidth;
+        that.searchFormWidth = window.screenWidth;
+      }
+      let searchFormDom = document.getElementById('searchForm')
+      this.searchFormItemWidth = searchFormDom.getElementsByClassName('el-form-item')[0].clientWidth
       if (this.namespace) {
         this.$EventBus.$on(this.namespace + '_reload', () => {
           console.log(this.query);
@@ -657,13 +677,27 @@ export default {
       }
       if (tempApi) {
         this.loading = true
+        let startTime = new Date().getTime()
         const res = await this.$pagexRequest({
           url: tempApi,
           data: this.formartReqFilter(),
           method: this.methodType,
         });
+        // 计算loading时长
+        const endTime = new Date().getTime()
+        let loadTime = 500
+        if (endTime - startTime > loadTime) {
+          loadTime = endTime - startTime
+        }
         if (this.isNeedPager) {
           if (res.records) {
+            if (this.isAdvancePager && !this.checked && res.records.length === 0) {
+              this.$message.warning('已经到最后一页了')
+              this.isEndPage = true
+              this.loading = false
+              return
+            }
+            this.isEndPage = false
             this.data = res.records;
           } else {
             this.data = [];
@@ -684,7 +718,7 @@ export default {
         }
         setTimeout(() => {
           this.loading = false
-        }, 10)
+        }, loadTime)
       } else {
         this.$set(this, "data", this.tableList)
         this.data.forEach((item, key) => {
