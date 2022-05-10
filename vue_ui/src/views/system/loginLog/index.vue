@@ -29,11 +29,7 @@
         mixins: [crudMixins],
         data() {
             return {
-                rightContent: false,//右侧内容区域
                 api: "/basic/ms/logLogin/pagerAdvance",
-                isEdit: false,
-                open: false,
-                isDetail:false,
                 // 列表排列顺序（更新时间）
                 sortSett: [
                     {

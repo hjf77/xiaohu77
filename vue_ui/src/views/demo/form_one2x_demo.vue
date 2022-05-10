@@ -127,7 +127,6 @@ export default {
               export: true,
               cellWidth: '10',
               notRepeat: true,
-              with: 100,
             },
             {
               type: 'label',
