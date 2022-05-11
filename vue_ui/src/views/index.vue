@@ -16,6 +16,10 @@
         >
         </pagex-crud>
       </div>
+
+      <div style="margin: 20px 0">
+        <el-button @click="testMock">点我测试V-Mock链接</el-button>
+      </div>
       <div style="width:100%;margin-top: 100px;">
         <h1>2、表单一对多能力演示</h1>
         <one2xForm></one2xForm>
@@ -49,7 +53,7 @@ export default {
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [],
       columns: [
-        {label: "序号", name: "", type: "index",width:'60', fixed: 'left'},
+        {label: "序号", name: "index", type: "index", width:'60', fixed: 'left'},
         {label: '用户', name: 'loginUserName', type: 'popover', width: 150, fixed: 'left'},
         {label: '用户名', name: 'loginName', type: 'popover', width: 150, fixed: 'left'},
 
@@ -95,17 +99,17 @@ export default {
       ],
       filters: [
         {"name": "ipAddress", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
-        {"name": "loginName", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "dddddd", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "ssssss", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "aaaaaa", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "cccccc", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "nnnnnn", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "vvvvvv", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "mmmmmm", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "llllll", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "oooooo", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "pppppp", "label": "用户名", "type": "text", "operation": "like"},
+        {"name": "yyyyyy", "label": "用户名", "type": "text", "operation": "like"},
       ],
       querys: [],
     }
@@ -113,6 +117,18 @@ export default {
   methods: {
     handleClick(row) {
       console.log(row);
+    },
+    testMock() {
+      this.$pagexRequest({
+        method: "get",
+        url: "/vmock/order/list"
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((res) => {
+        console.log(res);
+      });
     }
   }
 

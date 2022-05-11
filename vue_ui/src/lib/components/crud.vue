@@ -152,7 +152,7 @@ by wanglei
             align="center"
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.index }}</span>
+              {{ scope.$index + (query.pageNumber - 1) * query.pageSizeNumber + 1 }}
             </template>
           </el-table-column>
           <!--默认列-->

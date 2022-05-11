@@ -58,7 +58,7 @@ export default {
           name: "contractNo",
           url:"/basic/ms/dictItem/findList?dictGroupCode=",
           labelField: "dictDesc",
-          valueField: "dictGroupCode",
+          valueField: "dictCode",
           remote:true,
           label: "合同编号",
           rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
@@ -148,6 +148,8 @@ export default {
               import: true,
               cellWidth: '10',
               one2xSelectOn: (newValue, _row, index, options) => {
+
+                debugger
 
               }
             },

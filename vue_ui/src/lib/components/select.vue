@@ -196,7 +196,7 @@ export default {
 
     // 远程搜索
     remoteMethod(query) {
-      if (query !== '') {
+      if (query.trim() !== '') {
         this.loading = true;
         this.loadData(query)
         this.loading = false;
