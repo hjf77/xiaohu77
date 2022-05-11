@@ -15,30 +15,66 @@ spring:
           #必须加上StripPrefix=1，否则访问服务时会带上provider
           filters:
             - StripPrefix=1
-        - id: business ##路由 ID（不是网关ID），保持唯一
+        - id: msalarm ##路由 ID（不是网关ID），保持唯一
           #目标服务地址 （加 lb 根据注册中心服务名匹配）
-          uri: lb://business
+          uri: lb://msalarm
           predicates:
             #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
-            - Path=/business/**
+            - Path=/msalarm/**
           #必须加上StripPrefix=1，否则访问服务时会带上provider
           filters:
             - StripPrefix=1
-        - id: alarm ##路由 ID（不是网关ID），保持唯一
+        - id: msmonitor ##路由 ID（不是网关ID），保持唯一
           #目标服务地址 （加 lb 根据注册中心服务名匹配）
-          uri: lb://alarm
+          uri: lb://msmonitor
           predicates:
             #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
-            - Path=/alarm/**
+            - Path=/msmonitor/**
           #必须加上StripPrefix=1，否则访问服务时会带上provider
           filters:
             - StripPrefix=1
-        - id: monitor ##路由 ID（不是网关ID），保持唯一
+        - id: mspipeline ##路由 ID（不是网关ID），保持唯一
           #目标服务地址 （加 lb 根据注册中心服务名匹配）
-          uri: lb://monitor
+          uri: lb://mspipeline
           predicates:
             #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
-            - Path=/monitor/**
+            - Path=/mspipeline/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: msvideo ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://msvideo
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/msvideo/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: openpipeline ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://openpipeline
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/openpipeline/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: openalarm ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://openalarm
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/openalarm/**
+          #必须加上StripPrefix=1，否则访问服务时会带上provider
+          filters:
+            - StripPrefix=1
+        - id: openmonitor ##路由 ID（不是网关ID），保持唯一
+          #目标服务地址 （加 lb 根据注册中心服务名匹配）
+          uri: lb://openmonitor
+          predicates:
+            #   #路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）
+            - Path=/openmonitor/**
           #必须加上StripPrefix=1，否则访问服务时会带上provider
           filters:
             - StripPrefix=1
