@@ -302,11 +302,6 @@ export default {
       type: String,
       default: "",
     },
-    // 复制 接口
-    copyApi: {
-      type: String,
-      default: "",
-    },
     other: {
       type: Object,
     },

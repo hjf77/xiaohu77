@@ -265,68 +265,80 @@ import PagexCheckBox from "./checkbox.vue";
 export default {
   components: {PagexCheckBox, Dialog},
   props: {
+    //列表上面的按钮
     buttons: {
       type: Array,
       default: () => [],
     },
+    //行点击是否触发事件
     lineClick: {
       type: Boolean,
       default: false,
     },
+    // 内容的命名空间
     namespace: {
       type: String,
       default: "",
     },
+    //列表后台接口
     api: {
       type: String,
       default: "",
     },
+    //请求后台的话用的methodtype
+    methodType: {
+      type: String,
+      default: 'POST'
+    },
+    //给后端的附加参数
     paramsQuery: Object,
-    columns: {
-      type: Array,
-      default: () => [],
-    },
-    filters: {
-      type: Array,
-      default: () => [],
-    },
-    sortSett: {
-      type: Array,
-      default: () => [],
-    },
+    //自带条件
     querys: {
       type: Array,
       default: () => [],
     },
+    //列表列配置
+    columns: {
+      type: Array,
+      default: () => [],
+    },
+    //过滤条件
+    filters: {
+      type: Array,
+      default: () => [],
+    },
+    //默认排序
+    sortSett: {
+      type: Array,
+      default: () => [],
+    },
+
+    // 高亮显示
     highlight: {
       type: Boolean,
       default: false,
     },
+    //高度
     height: {
       type: String,
       default: null,
     },
+    //最少一页的数量，默认10条
     minPageSize: {
       type: Number,
       default: null,
     },
+    //是否需要分页
     isNeedPager: {
       type: Boolean,
       default: true,
     },
-    centerShow: {
-      type: Boolean,
-      default: false,
-    },
+    //列表数据--不自动请求后台
     tableList: {
       type: Array,
       default: () => {
         return []
       }
-    },
-    methodType: {
-      type: String,
-      default: 'POST'
     },
 
     // 每行搜索条件个数
@@ -665,8 +677,8 @@ export default {
       this.query.params = {};
       this.search();
     },
-    // 刷新缓存
-    reload(_groupName) {
+    // 重新加载数据
+    reload() {
       this.search();
     },
     async getList(addData) {

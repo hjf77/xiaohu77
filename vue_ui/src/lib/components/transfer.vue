@@ -29,7 +29,7 @@ export default {
     titles: {
       type: Array,
       default: () => {
-        return ['所有老师', '选中老师']
+        return ['所有', '已选中']
       }
     },
     isFilterable: {

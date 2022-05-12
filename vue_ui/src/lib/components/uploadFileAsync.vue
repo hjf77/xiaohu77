@@ -88,10 +88,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    async: {
-      type: String,
-      default: "",
-    },
     url: {
       type: String,
     },
