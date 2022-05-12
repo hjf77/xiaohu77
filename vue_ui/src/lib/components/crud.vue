@@ -773,7 +773,7 @@ export default {
      * @param val
      */
     checkBoxChange(val) {
-      if (!val) {
+      if (val) {
         this.getList()
       }
     }
