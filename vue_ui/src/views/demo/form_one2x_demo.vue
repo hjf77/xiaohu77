@@ -11,7 +11,7 @@
       :data="formData"
       :isVee="false"
       :controls.sync="controls"
-      :isHaveAddBtn="false"
+      :isHaveSaveBtn="false"
       :isHaveCancelBtn="false"
       ref="testForm"
     >

@@ -15,7 +15,7 @@
       :data="formData"
       :init="init"
       :controls="controls"
-      :isHaveAddBtn="true"
+      :isHaveSaveBtn="true"
       :onSubmit="onSubmit"
     >
       <template slot="methods" slot-scope="slot">

@@ -15,7 +15,7 @@
       :data="formData"
       :init="init"
       :controls="controls"
-      :isHaveAddBtn="true"
+      :isHaveSaveBtn="true"
       :onSubmit="onSubmit"
     >
     </pagex-form>

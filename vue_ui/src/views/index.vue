@@ -56,11 +56,6 @@ export default {
         {label: "序号", name: "index", type: "index", width:'60', fixed: 'left'},
         {label: '用户', name: 'loginUserName', type: 'popover', width: 150, fixed: 'left'},
         {label: '用户名', name: 'loginName', type: 'popover', width: 150, fixed: 'left'},
-
-        {label: '时间', name: 'loginName', type: 'popover', width: 150, fixed: 'left'},
-        {label: '地址', name: 'loginName', type: 'popover', width: 150},
-        {label: '性别', name: 'loginName', type: 'popover', width: 150},
-
         {label: '时间', name: 'createTime', type: 'popover'},
         {label: 'ip', name: 'ipAddress', type: 'popover', width: 150},
         {label: 'ip信息', name: 'ipInfo', type: 'popover', width: 200},
