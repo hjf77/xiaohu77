@@ -14,9 +14,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import com.fhs.core.valid.group.Add;
-import com.fhs.core.valid.group.Delete;
-import com.fhs.core.valid.group.Update;
+import com.fhs.core.base.valid.group.Add;
+import com.fhs.core.base.valid.group.Delete;
+import com.fhs.core.base.valid.group.Update;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

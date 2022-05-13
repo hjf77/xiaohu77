@@ -124,7 +124,7 @@ public class OperatorLogAop {
         if (vo != null) {
             //创建代理对象平铺数据
             try {
-                vo = (VO)TransUtil.transOne(vo,transService,true);
+                vo = (VO)TransUtil.transOne(vo,transService,false);
             } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
             } catch (InstantiationException ex) {

@@ -3,7 +3,7 @@ package com.fhs.basics.po;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.valid.group.*;
+import com.fhs.core.base.valid.group.*;
 
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
