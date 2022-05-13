@@ -673,7 +673,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         });
         dataPermissionTempMap.keySet().forEach(key -> {
             Set<String> dataPermissionsSet = dataPermissionTempMap.get(key);
-            resultMap.put(key, StringUtil.getStrForIn(dataPermissionsSet, true));
+            resultMap.put(key, StringUtil.getStrForIn(dataPermissionsSet, false));
         });
         SysUser user = selectById(userId);
         // 如果不是不是管理员，哪些数据权限他没有设置为-1
