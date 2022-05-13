@@ -5,13 +5,11 @@
         style="text-align: left; display: inline-block;width: 100%"
         v-bind="$attrs"
         v-on="$listeners"
-        v-model="text"
         :filterable="isFilterable"
         :data="ownerOption"
-        :render-content="renderFunc"
-        @change="handleChange"
         :titles="titles"
         :button-texts="buttonTexts"
+        @change="_change"
         :format="{
         noChecked: '${total}',
         hasChecked: '${checked}/${total}'
@@ -42,7 +40,6 @@ export default {
         return ['','']
       }
     },
-    value: {},
     url: {
       type: String,
       default: ''
@@ -62,29 +59,12 @@ export default {
           label:"name",
           key:"id",
         }
-      },
+      }
     }
   },
   data() {
     return {
-      ownerOption: [],
-      text: [],
-      renderFunc(h, option) {
-        return "<span>${option.label}</span>";
-      }
-    }
-  },
-  watch: {
-    value: {
-      handler() {
-        this.init()
-      }
-    },
-
-    text:{
-      handler(){
-        this.updateValue()
-      }
+      ownerOption: []
     }
   },
   created() {
@@ -93,20 +73,11 @@ export default {
     }
   },
   methods: {
-    handleChange(value, direction, movedKeys) {
-      this.$nextTick(() => {
-        this.$emit("change", this.text, this.querys)
-      });
-    },
-    init() {
-      this.text = this.value
+    _change() {
+      this.$emit('change')
     },
 
-    updateValue(){
-      this.$emit("change", this.text, this.querys)
-    },
-
-    // 左侧全量数据
+    // 加载数据
     async getData() {
       if (this.querys) {
         this.$pagexRequest({
@@ -118,13 +89,10 @@ export default {
           res.forEach((item) => {
             allData.push({
               key: item[this.propsField.key],
-              label: `${item[this.propsField.label]}`,
+              label: item[this.propsField.label],
             })
           })
           this.ownerOption = allData
-          if (this.value) {
-            this.text = this.value
-          }
         })
       }
     }
