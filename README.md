@@ -174,7 +174,7 @@ export default {
 
 # 使用说明
 
- &#8194;&#8194;&#8194;&#8194;1  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages?sort_id=2052774&doc_id=333929
+ &#8194;&#8194;&#8194;&#8194;1  新出炉的文档 http://fhs-opensource.top/components/readme.html
  
  &#8194;&#8194;&#8194;&#8194;2  word格式的文档 在sql&docs目录
  
