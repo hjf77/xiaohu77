@@ -36,7 +36,6 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      * 翻译map 给transervice用的
      */
     @TableField(exist = false)
-    @JSONField(serialize = false,deserialize = false)
     private Map<String, String> transMap = new HashMap<>();
 
     /**
