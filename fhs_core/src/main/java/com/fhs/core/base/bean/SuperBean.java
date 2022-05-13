@@ -28,7 +28,8 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      */
     @TableField(exist = false)
     @JsonIgnore
-    Map<Class<?>, Field> ID_FIELD_CACHE_MAP = new HashMap<>();
+    @JSONField(serialize = false,deserialize = false)
+    private static final Map<Class<?>, Field> ID_FIELD_CACHE_MAP = new HashMap<>();
 
 
     /**
@@ -41,12 +42,14 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
      * 数据权限
      */
     @TableField(exist = false)
+    @JSONField(serialize = false,deserialize = false)
     private Map<String, String> dataPermissin = new HashMap<>();
 
     /**
      * 配合mybatis jpa between注解过滤条件使用
      */
     @TableField(exist = false)
+    @JSONField(serialize = false,deserialize = false)
     private Map<String, String> between = new HashMap<>();
 
     /**
