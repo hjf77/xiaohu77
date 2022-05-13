@@ -1,4 +1,4 @@
-package com.fhs.core.valid.group;
+package com.fhs.core.base.valid.group;
 
 /**
  * 用于hibernate vlidator 添加分组
