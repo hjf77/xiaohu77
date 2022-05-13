@@ -147,7 +147,7 @@ export default {
         delete node.children;
       }
       return {
-        id: node.id,
+        id: this.idField == 'id' ? node.id : node.data[this.idField],
         label: node.name,
         isDisabled: this.disableOn && (typeof node =='object')  ? this.disableOn(node) : false,
         children: node.children,

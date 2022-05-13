@@ -31,6 +31,7 @@ by wanglei
             v-model="query.params[item.name]"
             v-if="item.type === 'treeSelect'"
             :api="item.api"
+            :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
           ></pagex-formTreeSelect>
 
           <el-date-picker

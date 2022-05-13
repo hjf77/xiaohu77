@@ -18,6 +18,7 @@
         <module>fhs_api</module>
         <module>fhs_excel</module>
         <module>fhs_core</module>
+        <module>fhs_log</module>
     </modules>
 
     <dependencies>

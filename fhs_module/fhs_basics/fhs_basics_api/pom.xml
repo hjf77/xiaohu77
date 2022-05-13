@@ -24,6 +24,11 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_log</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>easy_trans_service</artifactId>
             <version>${fhs.easytrans.version}</version>
         </dependency>

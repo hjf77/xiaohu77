@@ -67,7 +67,7 @@ fhs:
       description: 项目api
       developer: fhs developers
       name: 公共接口文档
-  operator-log:
+  operator-log: # 操作日志记录，打开会慢
     enable: true
 
   path: "{

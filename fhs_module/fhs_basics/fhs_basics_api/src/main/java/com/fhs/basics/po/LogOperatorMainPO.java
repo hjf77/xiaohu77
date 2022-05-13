@@ -31,13 +31,6 @@ public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
     @ApiModelProperty(value = "主键id")
     private String logId;
 
-    /**
-     * 模块
-     */
-    @Length(message = "模块字段的长度最大为255", groups = {Add.class, Update.class}, max = 255)
-    @TableField("model")
-    @ApiModelProperty(value = "模块")
-    private String model;
 
     /**
      * url
@@ -99,6 +92,13 @@ public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
      */
     @TableField("namespace")
     @ApiModelProperty(value = "命名空间")
+    @Trans(type=TransType.SIMPLE,target = SettMsMenuPO.class,fields = "menuName",uniqueField = "namespace")
     private String namespace;
+
+    /**
+     * 本次操作数据主键
+     */
+    @TableField("pkey")
+    private String pkeyStr;
 
 }

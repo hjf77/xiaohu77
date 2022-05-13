@@ -12,6 +12,7 @@ import com.fhs.basics.vo.LogOperatorMainVO;
 import com.fhs.basics.context.UserContext;
 import com.fhs.common.utils.*;
 import com.fhs.core.trans.vo.VO;
+import com.fhs.log.LoggerContext;
 import com.fhs.trans.service.impl.TransService;
 import com.fhs.trans.utils.TransUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +21,16 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +49,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 @Aspect
-public class OperatorLogAop {
+public class OperatorLogAop implements InitializingBean {
 
 
     @Autowired
@@ -52,6 +57,9 @@ public class OperatorLogAop {
 
     @Autowired
     private LogOperatorMainService bisLoggerApiService;
+
+    @Value("${easy-trans.is-enable-tile:false}")
+    private Boolean isEnableTile;
 
     private Map<Method, Integer> VO_INDEX_MAP = new HashMap<>();
 
@@ -90,7 +98,7 @@ public class OperatorLogAop {
             throw e;
         } finally {
             final Object finalResult = result;
-            final  Exception finalError = error;
+            final Exception finalError = error;
             addLog(joinPoint, method, classTarget, finalResult, finalError);
             BisLoggerContext.clear();
         }
@@ -116,15 +124,17 @@ public class OperatorLogAop {
         try {
             mainVO.setIp(NetworkUtil.getIpAddress(request));
         } catch (IOException ex) {
-            log.error("",ex);
+            log.error("", ex);
         }
         mainVO.setReqMethod(request.getMethod());
         VO vo = getReqParamVO(joinPoint, method, logMethod);
         Object[] args = joinPoint.getArgs();
+        String pkey = null;
         if (vo != null) {
             //创建代理对象平铺数据
             try {
-                vo = (VO)TransUtil.transOne(vo,transService,false);
+                vo = (VO) TransUtil.transOne(vo, transService, isEnableTile,new ArrayList<>());
+                pkey = ConverterUtils.toString(vo.getPkey());
             } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
             } catch (InstantiationException ex) {
@@ -136,13 +146,17 @@ public class OperatorLogAop {
         } else {
             mainVO.setReqParam(JsonUtil.map2json(getParameterMap()));
         }
+        //记录主键
+        if (!StringUtils.isEmpty(pkey) && logMethod.pkeyParamIndex() != LoggerConstant.INDEX_NOT) {
+            pkey = ConverterUtils.toString(args[logMethod.pkeyParamIndex()]);
+        }
         mainVO.setRespBody(e == null ? JSONObject.toJSONString(result) : e.getMessage());
         UcenterMsUserVO user = getSessionuser();
+        mainVO.setPkeyStr(pkey);
         mainVO.preInsert(user.getUserId());
         mainVO.setType(logMethod.type());
         mainVO.setState(e == null ? LoggerConstant.LOG_STATE_SUCCESS : LoggerConstant.LOG_STATE_ERROR);
         LogNamespace logNamespace = classTarget.getAnnotation(LogNamespace.class);
-        mainVO.setModel(logNamespace.module());
         mainVO.setNamespace(logNamespace.namespace());
         LogAddOperatorLogVO operatorLogVO = new LogAddOperatorLogVO();
         operatorLogVO.setOperatorMainVO(mainVO);
@@ -151,7 +165,6 @@ public class OperatorLogAop {
         CompletableFuture.runAsync(() -> {
             this.addLog(operatorLogVO);
         });
-
     }
 
 
@@ -231,5 +244,8 @@ public class OperatorLogAop {
     }
 
 
-
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        LoggerContext.setProxyMehtod(BisLoggerContext.class.getMethod("addHistoryData", VO.class, String.class));
+    }
 }

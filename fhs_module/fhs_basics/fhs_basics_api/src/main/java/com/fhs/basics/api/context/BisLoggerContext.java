@@ -83,7 +83,11 @@ public class BisLoggerContext {
 
 
     public static void addHistoryData(VO vo, String namespace) {
-        if (namespace == null || vo.getPkey() == null || !isNeedLogger()) {
+        if (vo == null || namespace == null || vo.getPkey() == null || !isNeedLogger()) {
+            return;
+        }
+        //日志开头的就不在记录日志了
+        if(vo.getClass().getName().startsWith("Log")){
             return;
         }
         String pkey = vo.getPkey().toString();
@@ -126,7 +130,6 @@ public class BisLoggerContext {
         BisLoggerContext.logOperatorExtParamList.set(null);
         BisLoggerContext.logHistoryDataVOList.set(null);
         BisLoggerContext.traceId.set(null);
-
     }
 
     public static boolean isNeedLogger() {

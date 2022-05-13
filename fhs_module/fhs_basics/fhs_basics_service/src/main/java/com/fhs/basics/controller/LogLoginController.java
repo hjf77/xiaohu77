@@ -24,19 +24,6 @@ import java.util.List;
 @RequestMapping("/ms/logLogin")
 public class LogLoginController extends ModelSuperController<LogLoginVO, LogLoginPO> {
 
-    @Autowired
-    private LogLoginService logLoginService;
-
-    /**
-     * 获取前20名用户登录汇总
-     * @param statTime
-     * @param endTime
-     * @return
-     */
-    @RequestMapping("/getloginIogSummary")
-    public List<LogLoginVO> getloginIogSummary(Date statTime, Date endTime) {
-        List<LogLoginVO> loginIogSummary = logLoginService.getLoginIogSummary(statTime, endTime);
-        return loginIogSummary;
-    }
+   
 
 }

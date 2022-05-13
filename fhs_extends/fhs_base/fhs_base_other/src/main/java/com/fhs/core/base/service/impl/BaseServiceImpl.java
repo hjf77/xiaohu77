@@ -30,6 +30,7 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.logger.Logger;
+import com.fhs.log.LoggerContext;
 import com.fhs.trans.service.AutoTransAble;
 import com.fhs.trans.service.impl.TransService;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
@@ -120,10 +121,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
 
-
-
-
-
     @Override
     public Long findCount(P bean) {
         bean.setIsDelete(Constant.INT_FALSE);
@@ -139,7 +136,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
 
-
     @Override
     public int insert(P entity) {
         initPkeyAndIsDel(entity);
@@ -147,6 +143,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         checkIsExist(entity, false);
         int result = baseMapper.insert(entity);
         this.refreshCache();
+        addHistory(entity);
         return result;
     }
 
@@ -178,7 +175,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @param entity 实体类
      */
     protected void addCache(P entity) {
-        if (this.isCacheable ) {
+        if (this.isCacheable) {
             String pkey = getPkeyVal(entity);
             this.poCache.put(namespace + ":" + pkey, entity);
         }
@@ -242,6 +239,9 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
         boolean result = executeBatch(list, DEFAULT_BATCH_SIZE, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
         this.refreshCache();
+        for (P d : list) {
+            addHistory(d);
+        }
         return result;
     }
 
@@ -256,14 +256,25 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
 
-
     @Override
     public int updateSelectiveById(P entity) {
         checkIsExist(entity, true);
         updateCache(entity);
         this.refreshCache();
         int reuslt = baseMapper.updateById(entity);
+        this.addHistory(entity);
         return reuslt;
+    }
+
+    /**
+     * 添加历史
+     *
+     * @param entity 数据
+     */
+    protected void addHistory(P entity) {
+        if (this.namespace != null) {
+            LoggerContext.addHistoryData(entity,namespace);
+        }
     }
 
     /**
@@ -292,6 +303,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         });
         for (P entity : entitys) {
             updateCache(entity);
+            addHistory(entity);
         }
         this.refreshCache();
         return result;
@@ -324,10 +336,9 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
 
-
     @Override
     public V selectBean(P param) {
-        return p2v(baseMapper.selectOne((QueryWrapper<P>)param.asWrapper()));
+        return p2v(baseMapper.selectOne((QueryWrapper<P>) param.asWrapper()));
     }
 
 
@@ -344,8 +355,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         //批量修改为已删除
         return baseMapper.delete(entity.asWrapper());
     }
-
-
 
 
     @Override
@@ -399,10 +408,11 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     /**
      * 分页数据转换-由po转换为vo
-     * @param page  分页数据
+     *
+     * @param page 分页数据
      * @return 转换后的结果
      */
-    protected FhsPager<V> pagerConverter(IPage<P> page){
+    protected FhsPager<V> pagerConverter(IPage<P> page) {
         FhsPager<V> result = new FhsPager<V>();
         result.setTotal(page.getTotal());
         result.setPageSize(page.getSize());
@@ -418,7 +428,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public List<V> findByIds(List ids) {
-        return pos2vos(baseMapper.selectBatchIds(ids),false);
+        return pos2vos(baseMapper.selectBatchIds(ids), false);
     }
 
 
@@ -513,12 +523,12 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @return
      */
     public List<V> pos2vos(List<P> pos) {
-        return pos2vos(pos,true);
+        return pos2vos(pos, true);
     }
 
-    public List<V> pos2vos(List<P> pos,boolean isTrans) {
+    public List<V> pos2vos(List<P> pos, boolean isTrans) {
         List<V> vos = ListUtils.copyListToList(pos, this.getVOClass());
-        if(isTrans){
+        if (isTrans) {
             transService.transMore(vos);
         }
         return vos;

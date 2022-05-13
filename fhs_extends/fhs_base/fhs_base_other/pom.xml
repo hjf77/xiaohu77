@@ -21,6 +21,16 @@
             <artifactId>fhs_core</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_log</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_log</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.fhs-opensource</groupId>
