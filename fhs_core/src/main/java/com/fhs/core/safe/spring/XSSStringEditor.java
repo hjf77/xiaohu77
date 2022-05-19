@@ -2,7 +2,7 @@ package com.fhs.core.safe.spring;
 
 import com.fhs.common.utils.ConverterUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebBindingInitializer;
 import org.springframework.web.context.request.WebRequest;
@@ -28,7 +28,7 @@ public class XSSStringEditor extends PropertyEditorSupport implements WebBinding
      */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        String formBody = Jsoup.clean(text, Whitelist.relaxed().addAttributes(":all", "style", "controls", "src", "data-setup")
+        String formBody = Jsoup.clean(text, Safelist.relaxed().addAttributes(":all", "style", "controls", "src", "data-setup")
                 .addTags("video"));
         setValue(formBody);
     }
