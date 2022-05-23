@@ -240,7 +240,6 @@ public class PageXDBService {
      * @return 更新了几行默认是1
      */
     public int update(EMap<String, Object> paramMap, String namespace) {
-        setEmptyValue2Null(paramMap);
         insertAndUpdateX(paramMap, namespace, false);
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + paramMap.get("id"));
         return sqlsession.update(getSqlNamespace() + namespace + "_updatePageX", paramMap);

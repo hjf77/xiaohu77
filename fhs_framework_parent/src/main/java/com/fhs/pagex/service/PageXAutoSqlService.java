@@ -438,8 +438,11 @@ public class PageXAutoSqlService {
                     String[] names = ConverterUtils.toString(field.get("name")).split(",");
                     for (String fieldName : names) {
                         camelName = ColumnNameUtil.underlineToCamel(fieldName);
-                        sets.append("<if test='" + camelName + "!= null'> ");
-                        // columnName = #{ }
+                        sets.append("<if test=\"" + camelName + "=='' \" > ");
+                        sets.append(fieldName).append(" = ").append("null")
+                                .append(" , ");
+                        sets.append("</if> ");
+                        sets.append("<if test=\"" + camelName + "!= null and " + camelName + "!='' \" > ");
                         sets.append(fieldName).append(" = ").append("#{" + camelName + "}")
                                 .append(" , ");
                         sets.append("</if> ");
