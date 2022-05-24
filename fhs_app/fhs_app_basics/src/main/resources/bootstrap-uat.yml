@@ -1,6 +1,6 @@
 fhs:
   path: "{
-        'fileSavePath': 'c:/flies'
+        'fileSavePath': '/ofpl/flies'
         }"
   #isDevModel 是开发者模式(才开启xml刷新) apiToken 是服务之间互相调用(不走网关)的时候互相认证的token，网关会拦截所有 /api/* /easyTrans/proxy/* /easyCloud/proxy/* 不对外开放
   other: "{
@@ -23,7 +23,7 @@ spring:
         max-idle: 10
         max-wait: -1
         min-idle: 10
-    host: 192.168.0.213
+    host: 12.0.1.42
     password: 123456
     port: 6379
     timeout: 6000
@@ -39,18 +39,19 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       connection-test-query: SELECT 1
-    url: jdbc:mysql://192.168.0.213:3306/ofpl?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://12.0.1.42:3306/ofpl?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
     validationQuery: select 'x'
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.0.213:8848
+        server-addr: nacos.ofpl-project.svc:8848
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml # 配置文件格式
         enabled: false #如果用nacos 请放开此配置并且将   并且在nacos上新建 data id ： basic-dev.yaml的配置文件  并且将application-dev.yml 内从coyp进去后删除application-dev.yml文件
+
 logging:
   config: classpath:logback-fhs.xml
   level:
@@ -61,7 +62,7 @@ logback:
     level: INFO
   file:
     #日志存放路径
-    dir: c:/logs/basic/
+    dir: /ofpl/log
 
 jetcache:
   statIntervalMinutes: 15
@@ -81,6 +82,4 @@ jetcache:
       valueDecoder: java
       asyncResultTimeoutInMillis: 3000
       uri:
-        - redis://123456@192.168.0.213:6379/11  #redis://密码@IP:端口/库
-
-
+        - redis://123456@12.0.1.42:6379/11  #redis://密码@IP:端口/库

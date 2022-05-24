@@ -33,7 +33,7 @@
         <spring-boot.version>2.5.12</spring-boot.version>
         <spring-cloud.version>2020.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
-        <alibaba.nacos.version>2.0.3</alibaba.nacos.version>
+        <alibaba.nacos.version>2.1.0</alibaba.nacos.version>
         <cglib.version>3.3.0</cglib.version>
         <guava.version>20.0</guava.version>
         <knife4j.version>3.0.3</knife4j.version>

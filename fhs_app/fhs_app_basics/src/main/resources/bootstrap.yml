@@ -7,15 +7,6 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   application:
     name: basic
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 192.168.0.213:8848
-      config:
-        server-addr: ${spring.cloud.nacos.discovery.server-addr}
-        file-extension: yaml # 配置文件格式
-        enabled: false #如果用nacos 请放开此配置并且将   并且在nacos上新建 data id ： basic-dev.yaml的配置文件  并且将application-dev.yml 内从coyp进去后删除application-dev.yml文件
-
 ###################  项目启动端口  ###################
 server:
   port: 8081
