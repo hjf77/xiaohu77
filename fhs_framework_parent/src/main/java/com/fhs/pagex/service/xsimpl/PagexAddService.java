@@ -199,6 +199,7 @@ public class PagexAddService implements IPageXService, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         HandelPageXService.SIGEL.registerPageXService("add_update.jsp", this);
+        HandelPageXService.SIGEL.registerPageXService("add_update.html", this);
     }
 
     private String handelOne2X(List<String> readyJsListList, List<String> loadSuccessList, List<String> onSaveList, List<String> overallJsList,

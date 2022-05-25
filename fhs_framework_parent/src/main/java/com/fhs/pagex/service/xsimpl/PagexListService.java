@@ -150,5 +150,6 @@ public class PagexListService implements IPageXService, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         HandelPageXService.SIGEL.registerPageXService("list.jsp", this);
+        HandelPageXService.SIGEL.registerPageXService("list.html", this);
     }
 }

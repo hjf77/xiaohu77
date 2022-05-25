@@ -300,21 +300,21 @@
      * 添加
      */
     function add() {
-        openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isAdd=true&${modelConfig.extendsParam}', '添加');
+        openDialog('${basePath}/ms/pagex/${namespace}_add_update.html?isAdd=true&${modelConfig.extendsParam}', '添加');
     }
 
     /**
      * 处理
      */
     function update(row) {
-        openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isEdit=true&id=' + row.${modelConfig.pkeyCamel}, '修改');
+        openDialog('${basePath}/ms/pagex/${namespace}_add_update.html?isEdit=true&id=' + row.${modelConfig.pkeyCamel}, '修改');
     }
 
     /**
      * 查看
      */
     function view(row) {
-        openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isView=true&id=' + row.${modelConfig.pkeyCamel}, '查看');
+        openDialog('${basePath}/ms/pagex/${namespace}_add_update.html?isView=true&id=' + row.${modelConfig.pkeyCamel}, '查看');
     }
 
     //获取参数

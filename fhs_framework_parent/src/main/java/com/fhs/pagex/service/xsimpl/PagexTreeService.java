@@ -54,6 +54,7 @@ public class PagexTreeService implements IPageXService, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         HandelPageXService.SIGEL.registerPageXService("tree.jsp", this);
+        HandelPageXService.SIGEL.registerPageXService("tree.html", this);
     }
 
 }

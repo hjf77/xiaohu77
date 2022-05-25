@@ -141,6 +141,7 @@ public enum HandelPageXService {
     private String getNamespace(String uri) {
         uri = uri.substring(uri.lastIndexOf("/") + 1);
         uri = uri.replace(".jsp", "")
+                .replace(".html", "")
                 .replace("_add_update", "")
                 .replace("_list", "")
                 .replace("_tree", "");
