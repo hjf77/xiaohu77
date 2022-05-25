@@ -43,7 +43,7 @@
 
 http://82.157.62.164/login   admin  123456
 
-官网：http://fhs-opensource.top/ (备案中)
+官网：http://fhs-opensource.top/ 
 
 # 预览图
 
