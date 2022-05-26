@@ -10,6 +10,7 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.vo.FhsPager;
 import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -228,4 +229,11 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     @CloudMethod
     IPage<UcenterMsUserVO> advancedPaging(FhsPager<UcenterMsUserVO> page, QueryWrapper<UcenterMsUserVO> wrapper);
+
+    /**
+     * 查询角色下用户数量
+     * @param roleId
+     * @return
+     */
+    int findUserRoleCount(@Param("roleId") int roleId);
 }

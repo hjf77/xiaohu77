@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.service.UcenterMsRoleService;
+import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.api.anno.LogMethod;
@@ -47,6 +48,8 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      */
     @Autowired
     private UcenterMsRoleService sysRoleService;
+    @Autowired
+    private UcenterMsUserService ucenterMsUserService;
 
 
     /**
@@ -136,7 +139,11 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @ApiOperation(value = "删除-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
-
+        //判断用户下有没有该角色
+        int userRoleCount = ucenterMsUserService.findUserRoleCount(Integer.parseInt(id));
+        if (userRoleCount > 0) {
+            return HttpResult.error(false,"该角色下有用户，不能删除！");
+        }
         sysRoleService.deleteById(id);
         return HttpResult.success(true);
     }

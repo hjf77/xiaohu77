@@ -522,6 +522,16 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return result;
     }
 
+    /**
+     * 查询角色下用户数量
+     * @param roleId
+     * @return
+     */
+    @Override
+    public int findUserRoleCount(int roleId) {
+        return sysUserMapper.findUserRoleCount(roleId);
+    }
+
     @Override
     public List<UcenterMsUserPO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         List<UcenterMsUserPO> result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);

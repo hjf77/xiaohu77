@@ -244,6 +244,13 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
     List<String> getPermissionUrlByUserId(@Param("userId") Long userId);
 
     /**
+     * 查询角色下用户数量
+     * @param roleId
+     * @return
+     */
+    int findUserRoleCount(@Param("roleId") int roleId);
+
+    /**
      * 查询所有权限URL
      *
      * @return 用户权限URL列表

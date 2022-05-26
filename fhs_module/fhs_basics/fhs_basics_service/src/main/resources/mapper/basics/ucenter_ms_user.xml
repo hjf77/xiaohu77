@@ -76,7 +76,9 @@
 
     </insert>
 
-
+    <select id="findUserRoleCount" resultType="int">
+        select count(1) from t_ucenter_ms_role_user_rela where role_id = #{roleId}
+    </select>
 
 
     <!-- 通过用户编号查询菜单 -->
@@ -691,10 +693,9 @@
             WHERE tumu.organization_id = id ))) AS oilpro,
             (SELECT `name` FROM t_ucenter_ms_organization WHERE id =( SELECT `parent_id` FROM t_ucenter_ms_organization WHERE id =(SELECT `parent_id` FROM t_ucenter_ms_organization WHERE id =( SELECT `parent_id` FROM t_ucenter_ms_organization
             WHERE tumu.organization_id = id ))) ) as company
-        FROM
-            t_ucenter_ms_role AS tumr
-                LEFT JOIN t_ucenter_ms_role_user_rela AS tumrur ON tumr.role_id = tumrur.role_id
-                LEFT JOIN t_ucenter_ms_user AS tumu ON tumu.user_id = tumrur.user_id
+        FROM t_ucenter_ms_user tumu
+                 left join t_ucenter_ms_role_user_rela tumrur on tumrur.user_id = tumu.user_id
+                 left join t_ucenter_ms_role tumr on tumr.role_id = tumrur.role_id and tumr.is_delete = '0'
             ${ew.customSqlSegment}
     </select>
 
