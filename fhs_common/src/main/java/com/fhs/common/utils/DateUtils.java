@@ -884,14 +884,14 @@ public class DateUtils {
     /**
      * 格式化 = 时间 + 分钟
      *
-     * @param enterTime
-     * @param parkingTime
+     * @param dataStr
+     * @param minTime
      * @return
      */
-    public static String getDateAddMin(String enterTime, Integer parkingTime) {
+    public static String getDateAddMin(String dataStr, Integer minTime) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(enterTime, df);
-        LocalDateTime endTime = dateTime.plusMinutes(parkingTime);
+        LocalDateTime dateTime = LocalDateTime.parse(dataStr, df);
+        LocalDateTime endTime = dateTime.plusMinutes(minTime);
         DateTimeFormatter newTimeFormatter = DateTimeFormatter.ofPattern(DateUtils.DATETIME_PATTERN);
         String endTimeStr = newTimeFormatter.format(endTime);
         return endTimeStr;
