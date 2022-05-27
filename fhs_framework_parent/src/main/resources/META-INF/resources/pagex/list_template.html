@@ -285,8 +285,10 @@
         _btn.onclick = showColumnSett;
         //代表后端没有返回总数
         <% if(isNotEmpty(modelConfig.isNotTotal)){ %>
-            var pager = $('#listGrid').datagrid().datagrid('getPager');
-            pager.pagination({layout:['list','sep','first','prev','next','refresh']});
+            setTimeout(function(){
+                var pager = $('#listGrid').datagrid('getPager');
+                pager.pagination({layout:['list','sep','first','prev','next','refresh']});
+            },300);
         <% } %>
     });
 
