@@ -881,4 +881,20 @@ public class DateUtils {
         return age;
     }
 
+    /**
+     * 格式化 = 时间 + 分钟
+     *
+     * @param enterTime
+     * @param parkingTime
+     * @return
+     */
+    public static String getDateAddMin(String enterTime, Integer parkingTime) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(enterTime, df);
+        LocalDateTime endTime = dateTime.plusMinutes(parkingTime);
+        DateTimeFormatter newTimeFormatter = DateTimeFormatter.ofPattern(DateUtils.DATETIME_PATTERN);
+        String endTimeStr = newTimeFormatter.format(endTime);
+        return endTimeStr;
+    }
+
 }
