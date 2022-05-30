@@ -118,6 +118,10 @@ export default {
     onDataChange: {
       type: Function
     },
+    optionsInitSetts: {
+      type: Array,
+      default: () =>[]
+    }
   },
   watch: {
     datas: {
@@ -148,6 +152,8 @@ export default {
           }
         });
       });
+    } else {
+      this.optionsSetts = deepClone(this.optionsInitSetts)
     }
     this.controls.forEach((_item) => {
       if (!_item.placeholder) {

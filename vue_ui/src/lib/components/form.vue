@@ -172,7 +172,7 @@
               <label  v-for="(itemLabel, index) in item.labels" :key="index" >{{itemLabel.title + ':' + model[itemLabel.name]}}</label>
           </div>
 
-          <pagex-one2x  v-if="item.type === 'one2x'" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
+          <pagex-one2x  v-if="item.type === 'one2x'" :isEdit="isEdit" :optionsInitSetts="optionsInitSetts" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
 
           <pagex-uploadFileAsync
             v-bind="item"
@@ -374,6 +374,10 @@ export default {
       type: String,
       default: "",
     },
+    optionsInitSetts: {
+      type: Array,
+      default: () =>[]
+    }
   },
   computed: {
     styleName() {
