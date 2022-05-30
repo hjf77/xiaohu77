@@ -231,7 +231,7 @@
       <div class="form-btn">
         <el-button
           class="save-btn form-btn-item"
-          v-if="isHaveSaveBtn"
+          v-if="isHaveAddBtn"
           :disabled="saveButtonDisable"
           @click="submit()"
           >保存</el-button
