@@ -298,7 +298,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         if (falg){
             wrapper.apply("( tumu.organization_id like '"+ UserContext.getSessionuser().getOrganizationId() +"%')");
         }
-        wrapper.apply("tumu.is_detele = '0'");
+        wrapper.apply(" tumu.is_delete = '0' ");
         this.setExportCache(wrapper);
         return sysUserService.advancedPaging(filter.getPagerInfo(), wrapper);
     }
