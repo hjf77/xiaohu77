@@ -100,7 +100,7 @@
     </el-row>
 
     <!-- 添加或修改菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="open"  class="pagex-dialog-theme">
+    <el-dialog v-if="open" :title="title" :visible.sync="open"  class="pagex-dialog-theme">
       <div class="pagex-from-theme">
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
           <el-row>
