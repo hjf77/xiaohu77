@@ -1,6 +1,7 @@
 package com.fhs.core.trans;
 
 import com.fhs.core.base.bean.SuperBean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -14,6 +15,7 @@ import java.util.Map;
  *
  * @author wanglei
  */
+@Slf4j
 @Service("transService")
 public class TransService {
     /**
@@ -77,7 +79,11 @@ public class TransService {
             if (transFieldList == null || transFieldList.size() == 0) {
                 continue;
             }
-            transTypeServiceMap.get(type).transMore(objList, transFieldList);
+            if(transTypeServiceMap.containsKey(type)){
+                transTypeServiceMap.get(type).transMore(objList, transFieldList);
+            }else{
+                log.error("trans type未注册:" + type);
+            }
         }
     }
 
