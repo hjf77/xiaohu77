@@ -122,6 +122,10 @@ export default {
     placeholder: {
       type: String,
       default: '请选择',
+    },
+    //选中事件
+    selectOn:{
+      type: Function
     }
   },
   data() {
@@ -191,6 +195,7 @@ export default {
       }
     },
     _change() {
+      this.selectOn && this.selectOn(this.radioValue);
       this.$emit("change", this.radioValue);
     },
 
