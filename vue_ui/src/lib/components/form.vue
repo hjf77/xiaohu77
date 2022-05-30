@@ -19,8 +19,11 @@
           :label="item.label ? item.label + ':' : ' '"
           :prop="item.name"
           :key="item.name"
-          :class="{'labelLeft': item.isAndClass}"
+          :class="{'labelLeft': item.isAndClass, 'labelHeight': item.type === 'label'}"
         >
+
+          <div v-if="item.type === 'label'" :style="{ width: item.width ? item.width + 'px' : '305px' }"></div>
+
           <el-input
             :disabled="proxyIf(item.disabledOn, false)"
             v-model="model[item.name]"
@@ -769,5 +772,10 @@ export default {
   line-height: 20px;
   padding-top: 10px;
 
+}
+::v-deep .labelHeight {
+  .el-form-item__content {
+    line-height: 40px !important;
+  }
 }
 </style>
