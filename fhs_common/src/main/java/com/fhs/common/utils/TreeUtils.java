@@ -3,6 +3,7 @@ package com.fhs.common.utils;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,19 +24,19 @@ public class TreeUtils {
         }
 
         List<TreeNode<Treeable>> result = new ArrayList<>();
-        Map<String, TreeNode<Treeable>> nodeMap = new LinkedHashMap<>();
+        Map<Serializable, TreeNode<Treeable>> nodeMap = new LinkedHashMap<>();
         TreeNode<Treeable> tempNode = null;
         List tempDatas = datas;
         List<Treeable> treeDatas = tempDatas;
         for (Treeable tree : treeDatas) {
             tempNode = new TreeNode();
-            tempNode.setId(tree.getId());
+            tempNode.setId(tree.getTreeNodeId());
             tempNode.setName(tree.getName());
-            tempNode.setParentId(tree.getParentId());
+            tempNode.setParentId(tree.getTreeNodeParentId());
             tempNode.setData(tree);
             nodeMap.put(tempNode.getId(), tempNode);
         }
-        for (String id : nodeMap.keySet()) {
+        for (Serializable id : nodeMap.keySet()) {
             tempNode = nodeMap.get(id);
             if (nodeMap.containsKey(tempNode.getParentId())) {
                 nodeMap.get(tempNode.getParentId()).getChildren().add(tempNode);

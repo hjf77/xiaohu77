@@ -1,5 +1,7 @@
 package com.fhs.common.tree;
 
+import java.io.Serializable;
+
 /**
  * <pre>
  * 描述：标识tree
@@ -11,12 +13,13 @@ package com.fhs.common.tree;
  * </pre>
  */
 public interface Treeable {
+
     /**
      * 获取parentid
      *
      * @return
      */
-    String getParentId();
+    Serializable getTreeNodeParentId();
 
     /**
      * 获取名称
@@ -27,8 +30,7 @@ public interface Treeable {
 
     /**
      * 获取主键
-     *
      * @return
      */
-    String getId();
+    Serializable getTreeNodeId();
 }

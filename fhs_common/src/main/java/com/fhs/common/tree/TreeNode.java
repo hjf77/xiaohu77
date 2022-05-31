@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class TreeNode<T> {
      * 节点id
      */
     @ApiModelProperty(value = "id")
-    private String id;
+    private Serializable id;
     /**
      * 节点标题/名称
      */
@@ -38,7 +39,7 @@ public class TreeNode<T> {
      * 父节点id
      */
     @ApiModelProperty(value = "父节点id")
-    private String parentId;
+    private Serializable parentId;
     /**
      * 节点数据
      */
