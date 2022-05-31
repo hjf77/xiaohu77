@@ -155,6 +155,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 组织机构扩展字段
      */
+    @TableField(exist = false)
     @ApiModelProperty("组织机构扩展字段")
     private String orgExtJson;
 
