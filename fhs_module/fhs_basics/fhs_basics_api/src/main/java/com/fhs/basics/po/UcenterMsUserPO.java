@@ -153,6 +153,12 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private String organizationId;
 
     /**
+     * 组织机构扩展字段
+     */
+    @ApiModelProperty("组织机构扩展字段")
+    private String extJson;
+
+    /**
      * 头像
      */
     @TableField("header")
