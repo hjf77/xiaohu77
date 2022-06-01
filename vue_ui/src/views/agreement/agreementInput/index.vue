@@ -2,7 +2,7 @@
   <base-container>
     <pagex-form
       v-if="initFinsh"
-      :isEdit="false"
+      :isEdit="true"
       :data="formData"
       :isVee="false"
       :controls.sync="controls"
@@ -19,9 +19,8 @@
 
 <script>
 import {mapGetters} from "vuex";
-import {postFile} from "@/utils/download";
 import crudMixins from "@/mixins/crudMixins";
-import {deepClone} from "../../../utils";
+import {deepClone} from "@/utils";
 
 export default {
   name: "AgreementInput",
@@ -68,10 +67,10 @@ export default {
         {
           type: "select",
           name: "orderPartyId",
-          url:"/basic/ms/dictItem/findList?dictGroupCode=",
-          labelField: "dictDesc",
-          valueField: "dictCode",
-          remote:true,
+          url:"/basic/ms/supplierSupplier/findList?supplierCode=",
+          labelField: "name",
+          valueField: "id",
+          remote: true,
           label: "订单方",
           rule: [{required: true, message: '请输入订单方', trigger: 'change'}]
         },
@@ -172,24 +171,24 @@ export default {
                 _v.$refs.goods[0].addRow();
               }
             },
-            {
-              name: "模拟导入(append后台解析数据)",
-              click: function (_v,_model) {
-                _v.$refs.goods[0].appendRows([{goodCode:'1314111',goodName:'白象方便面',goodspecifications:'1',taxRadio:1}] ,[{goodspecifications:[{
-                    id: '1',
-                    title: '24袋一箱'
-                  }, {
-                    id: '2',
-                    title: '12袋一箱'
-                  }]}]);
-              }
-            },
-            {
-              name: "导出模板",
-              click:  (_v,_model) =>{
-                postFile('/basic/excel_template/exportTemplate?name=商品导入模板',this.controls[4].controls);
-              }
-            }
+            // {
+            //   name: "模拟导入(append后台解析数据)",
+            //   click: function (_v,_model) {
+            //     _v.$refs.goods[0].appendRows([{goodCode:'1314111',goodName:'白象方便面',goodspecifications:'1',taxRadio:1}] ,[{goodspecifications:[{
+            //         id: '1',
+            //         title: '24袋一箱'
+            //       }, {
+            //         id: '2',
+            //         title: '12袋一箱'
+            //       }]}]);
+            //   }
+            // },
+            // {
+            //   name: "导出模板",
+            //   click:  (_v,_model) =>{
+            //     postFile('/basic/excel_template/exportTemplate?name=商品导入模板',this.controls[4].controls);
+            //   }
+            // }
           ]
         },
         {
@@ -210,6 +209,7 @@ export default {
               type: 'text',
               name: 'goodCode',
               label: '商品编码',
+              fixed: true,
               rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
               one2xBlur: (newValue, _datas, index,optionsSetts,_inputThis) => {
                 _datas[index].goodName = '可口可乐500ML';
@@ -228,26 +228,66 @@ export default {
             },
             {
               type: 'label',
+              name: 'goodBarCode',
+              label: '商品条码'
+            },
+            {
+              type: 'label',
               name: 'goodName',
               label: '商品名称'
             },
             {
               type: 'select',
               name: 'goodspecifications',
-              label: '规格',
-              options:[]
+              label: '包装规格',
+              options:[],
+            },
+            {
+              type: 'label',
+              name: 'orgName',
+              label: '单位',
+              options:[],
             },
             {
               type: 'select',
-              name: 'taxRadio',
+              name: 'rate',
               label: '税率',
               options:[],
               change: (newValue, _row, index, options) => {
 
-                // debugger
-
               }
             },
+            {
+              name: 'taxUnitPrice',
+              label: '含税单价',
+            },
+            {
+              name: 'excludeTaxUnitPrice',
+              label: '去税单价',
+            },
+            {
+              name: 'purchasePrice',
+              label: '采购价',
+            },
+            {
+              type: 'dates',
+              name: 'startTime',
+              label: '开始时间'
+            },
+            {
+              type: 'dates',
+              name: 'endTime',
+              label: '结束时间'
+            },
+            {
+              type: 'select',
+              name: 'isReturn',
+              label: '是否可退',
+            },
+            {
+              name: 'minOrderNum',
+              label: '最小订货数量',
+            }
           ],
         },
         {
@@ -291,6 +331,15 @@ export default {
 <style lang="scss" scoped>
 .base-container {
   background-color: #FFFFFF;
+
+}
+::v-deep .el-table__row {
+  .el-form-item--small.el-form-item {
+    margin-bottom: 0 !important;
+  }
+  .el-date-editor {
+    width: auto !important;
+  }
 }
 ::v-deep label {
   font-weight: normal;
