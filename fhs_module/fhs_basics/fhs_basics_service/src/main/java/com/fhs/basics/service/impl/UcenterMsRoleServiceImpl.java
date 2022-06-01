@@ -159,7 +159,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
         boolean count = deleteButtons(adminRole);
         if (count) {
             // 修改当前角色信息
-            int result = super.updateSelectiveById(adminRole);
+            int result = super.updateById(adminRole);
             if (result > 0) {
                 if (adminRole.getMethods() != null && adminRole.getMethods().length > 0) {
                     // 构建按钮列表

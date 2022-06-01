@@ -55,7 +55,7 @@ public class UploadController {
         //如果给了扩展字段则更新扩展字段
         if (CheckUtils.isNotEmpty(ext)) {
             pubFileVO.setExt(ext);
-            fileService.updateSelectiveById(pubFileVO);
+            fileService.updateById(pubFileVO);
         }
         LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         return pubFileVO;

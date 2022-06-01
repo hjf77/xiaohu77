@@ -32,7 +32,7 @@ public class UcenterMsTenantController extends ModelSuperController<UcenterMsTen
     private UcenterMsUserService userService;
 
     /**
-     * 重置某个停车场密码
+     * 重置某个租户密码
      *
      * @param groupCode 租户集团编码
      * @return 重置后的密码

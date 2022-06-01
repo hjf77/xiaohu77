@@ -258,6 +258,14 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public int updateSelectiveById(P entity) {
+        P oldEntity = baseMapper.selectById(entity.getPkey());
+        BeanUtils.copyProperties(entity, oldEntity, ReflectUtils.getNullPropertyNames(entity));
+        return updateById(oldEntity);
+    }
+
+
+    @Override
+    public int updateById(P entity) {
         checkIsExist(entity, true);
         updateCache(entity);
         this.refreshCache();

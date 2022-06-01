@@ -264,7 +264,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
                 baseDo.preUpdate(getSessionuser().getUserId());
             }
             beforSave(e, false);
-            baseService.updateSelectiveById((D) e);
+            baseService.updateById((D) e);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
@@ -326,7 +326,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
     @PutMapping("/updateField")
-    @ApiOperation("批量修改某个字段")
+    @ApiOperation("批量修改某个字段---暂时不要用此方法")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
     public HttpResult<Boolean> updateField(@RequestBody @Validated UpdateFieldVO<D> vo) throws InstantiationException, IllegalAccessException {
         String[] ids = vo.getIds().split(",");
