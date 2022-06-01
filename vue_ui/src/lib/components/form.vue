@@ -490,11 +490,14 @@ export default {
          _that.$set(_that.model, _item.name, _that.model[_item.name]
           ? _that.model[_item.name]
           :'');
-      }
+        }
       }
     });
     this.edit(); //获取到 详情信息
     this.formCreate = true;
+    this.$nextTick(() => {
+      this.clearValidate()
+    })
   },
   methods: {
     proxyIf(_ifFun, _default) {
@@ -540,6 +543,16 @@ export default {
         itemBtn.click(this, this.model);
       }
     },
+
+    // 校验
+    validate(_callback) {
+      this.$refs.form.validate((valid, errors) => {
+        if(valid){
+          _callback(this.model);
+        }
+      });
+    },
+
     submit(_extParam) {
       if (this.isFormDataSub) {
           this.subFormData(_extParam);
@@ -695,6 +708,10 @@ export default {
     // 设置model的一些数据
     setModelProp(_prop, _value) {
       this.$set(this.model, _prop, _value);
+    },
+    // 新增时 clear 校验
+    clearValidate() {
+      this.$refs['form'].clearValidate()
     }
   },
 };
