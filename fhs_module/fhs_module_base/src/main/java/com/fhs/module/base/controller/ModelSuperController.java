@@ -203,7 +203,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @NotRepeat
     @ResponseBody
     @PostMapping
-    @ApiOperation(value = "新增-vue专用")
+    @ApiOperation(value = "新增")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e, HttpServletRequest request,
                                     HttpServletResponse response) {
@@ -236,7 +236,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      */
     @ResponseBody
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "删除-vue专用")
+    @ApiOperation(value = "删除")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
@@ -254,7 +254,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      */
     @ResponseBody
     @PutMapping
-    @ApiOperation(value = "修改-vue专用")
+    @ApiOperation(value = "修改")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
                                             HttpServletResponse response) {
@@ -326,9 +326,12 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
     @PutMapping("/updateField")
-    @ApiOperation("批量修改某个字段")
+    @ApiOperation("只修改某些字段")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
     public HttpResult<Boolean> updateField(@RequestBody @Validated V e,HttpServletRequest request)  {
+        if(e.getPkey() == null){
+            throw new ParamException("主键为必填");
+        }
         if (isPermitted(request, "update")) {
             if (e instanceof BasePO) {
                 BasePO<?> baseDo = (BasePO<?>) e;
