@@ -36,6 +36,7 @@
 
 <script>
 import { handleStrParam } from "@/lib/utils/param";
+import { debounce } from "@/utils";
 export default {
   name: "pagexSelect",
   props: {
@@ -203,7 +204,7 @@ export default {
     remoteMethod(query) {
       if (query.trim() !== '') {
         this.loading = true;
-        this.loadData(query)
+        debounce(this.loadData(query))
         this.loading = false;
       } else {
         this.options = [];
