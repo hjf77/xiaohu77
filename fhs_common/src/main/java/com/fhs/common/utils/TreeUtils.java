@@ -31,7 +31,8 @@ public class TreeUtils {
         for (Treeable tree : treeDatas) {
             tempNode = new TreeNode();
             tempNode.setId(tree.getTreeNodeId());
-            tempNode.setName(tree.getName());
+            //兼容老代码
+            tempNode.setName(tree.getTreeNodeName() != null ? tree.getTreeNodeName() : tree.getName());
             tempNode.setParentId(tree.getTreeNodeParentId());
             tempNode.setData(tree);
             nodeMap.put(tempNode.getId(), tempNode);

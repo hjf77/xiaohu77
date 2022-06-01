@@ -33,4 +33,12 @@ public interface Treeable {
      * @return
      */
     Serializable getTreeNodeId();
+
+    /**
+     * 获取格式化的名称
+     * @return
+     */
+    default String getTreeNodeName(){
+        return null;
+    }
 }
