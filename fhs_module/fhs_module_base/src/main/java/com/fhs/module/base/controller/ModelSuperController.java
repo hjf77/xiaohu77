@@ -328,7 +328,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @PutMapping("/updateField")
     @ApiOperation("批量修改某个字段")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> updateField(@RequestBody @Validated V e,HttpServletRequest request) throws InstantiationException, IllegalAccessException {
+    public HttpResult<Boolean> updateField(@RequestBody @Validated V e,HttpServletRequest request)  {
         if (isPermitted(request, "update")) {
             if (e instanceof BasePO) {
                 BasePO<?> baseDo = (BasePO<?>) e;
