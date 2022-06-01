@@ -6,6 +6,9 @@ import com.fhs.common.tree.Treeable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -44,13 +47,6 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     private String name;
 
     /**
-     * 费用类别
-     */
-    @TableField("type")
-    @ApiModelProperty(value = "费用类别")
-    private Integer type;
-
-    /**
      * 费用项目编码
      */
     @Length(message = "费用项目编码字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
@@ -61,6 +57,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 费用主体类型
      */
+    @Trans(type = TransType.DICTIONARY, key = "costMainType")
     @TableField("main_type")
     @ApiModelProperty(value = "费用主体类型")
     private Integer mainType;
@@ -68,6 +65,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 税率
      */
+    @Trans(type = TransType.DICTIONARY, key = "rate")
     @TableField("rate")
     @ApiModelProperty(value = "税率")
     private Integer rate;
@@ -75,6 +73,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 收付款类型（收付方向）
      */
+    @Trans(type = TransType.DICTIONARY, key = "receiptsDirection")
     @TableField("proceeds_pay_type")
     @ApiModelProperty(value = "收付款类型（收付方向）")
     private Integer proceedsPayType;
@@ -82,6 +81,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 票扣
      */
+    @Trans(type = TransType.DICTIONARY, key = "yesOrNo")
     @TableField("ticket_deduct")
     @ApiModelProperty(value = "票扣")
     private Integer ticketDeduct;
@@ -89,6 +89,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 收款方式
      */
+    @Trans(type = TransType.DICTIONARY, key = "paymentMethods")
     @TableField("proceeds_method")
     @ApiModelProperty(value = "收款方式")
     private Integer proceedsMethod;
@@ -96,6 +97,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 状态
      */
+    @Trans(type = TransType.DICTIONARY, key = "is_enable")
     @TableField("status")
     @ApiModelProperty(value = "状态")
     private Integer status;
@@ -125,6 +127,7 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     /**
      * 结案方式
      */
+    @Trans(type = TransType.DICTIONARY, key = "settlementWay")
     @TableField("settlement_way")
     @ApiModelProperty(value = "结案方式")
     private Integer settlementWay;
@@ -143,13 +146,6 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     @TableField("level")
     @ApiModelProperty(value = "等级")
     private Integer level;
-
-    /**
-     * 是否启用 1启用 0禁用
-     */
-    @TableField("is_enable")
-    @ApiModelProperty(value = "是否启用 1启用 0禁用")
-    private Integer isEnable;
 
     /**
      * 类别（父id）

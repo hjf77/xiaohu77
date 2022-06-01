@@ -2,6 +2,7 @@
 
 本项目是一个基于vite2.0 + vue2.x + elementUI2.x 的后台管理系统模板。
 
+v 13版本node js
 
 ### 安装依赖
 
