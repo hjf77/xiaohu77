@@ -110,4 +110,20 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     @ApiModelProperty(value = "是否是管道（0:否，1:是）")
     private Integer isPipeline;
 
+    @TableField("map_layer")
+    @ApiModelProperty(value = "地图图层")
+    private String mapLayer;
+
+    @TableField("xmin")
+    private String xmin;
+
+    @TableField("ymin")
+    private String ymin;
+
+    @TableField("xmax")
+    private String xmax;
+
+    @TableField("ymax")
+    private String ymax;
+
 }

@@ -92,7 +92,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             ParamChecker.isNotNull(organization, "用户所在部门被删除，禁止登陆");
             result.setCompanyId(organization.getCompanyId());
             result.setOrgName(organization.getName());
-            result.setOrgExtJson(organization.getExtJson());
+            result.setMapLayer(organization.getMapLayer());
+            result.setXmin(organization.getXmin());
+            result.setYmin(organization.getYmin());
+            result.setXmax(organization.getXmax());
+            result.setYmax(organization.getYmax());
             if (organization.getCompanyId() != null) {
                 organization = organizationService.selectById(organization.getCompanyId());
                 ParamChecker.isNotNull(organization, "用户所在企业被删除，禁止登陆");

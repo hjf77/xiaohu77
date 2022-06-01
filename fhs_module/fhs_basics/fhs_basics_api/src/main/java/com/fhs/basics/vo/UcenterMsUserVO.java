@@ -46,5 +46,14 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
     @ApiModelProperty("四级单位")
     private String centralStat;
 
+    @ApiModelProperty(value = "地图图层")
+    private String mapLayer;
 
+    private String xmin;
+
+    private String ymin;
+
+    private String xmax;
+
+    private String ymax;
 }
