@@ -194,12 +194,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
         }
     }
 
-
-    /**
-     * groupcode字段
-     */
-    private Field groupCodeField;
-
     @NotRepeat
     @ResponseBody
     @PostMapping
