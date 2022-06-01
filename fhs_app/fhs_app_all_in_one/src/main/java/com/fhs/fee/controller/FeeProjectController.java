@@ -48,7 +48,7 @@ public class FeeProjectController extends ModelSuperController<FeeProjectVO,FeeP
         wrapper.eq(FeeProjectPO::getParentId, id);
         List<FeeProjectVO> feeProjectVOS = feeProjectService.selectListMP(wrapper);
         //项目费用代码 = 爸爸code + 自己排第几 = 0101
-        String code = feeProjectVO.getCode() + String.format("%02d", feeProjectVOS.size() + 1);
+        String code = feeProjectVO.getProjectCode() + String.format("%02d", feeProjectVOS.size() + 1);
         return HttpResult.success(code);
     }
 

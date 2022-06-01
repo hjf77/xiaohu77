@@ -50,9 +50,9 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
      * 费用项目编码
      */
     @Length(message = "费用项目编码字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @TableField("code")
+    @TableField("project_code")
     @ApiModelProperty(value = "费用项目编码")
-    private String code;
+    private String projectCode;
 
     /**
      * 费用主体类型
@@ -167,6 +167,6 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
 
     @Override
     public String getTreeNodeName() {
-        return this.code + this.name;
+        return this.projectCode + this.name;
     }
 }
