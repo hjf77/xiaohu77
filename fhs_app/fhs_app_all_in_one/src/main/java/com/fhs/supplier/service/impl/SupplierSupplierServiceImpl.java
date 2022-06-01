@@ -10,6 +10,7 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class SupplierSupplierServiceImpl extends BaseServiceImpl<SupplierSupplie
         int insert = super.insert(entity);
         Integer id = entity.getId();
         String code = StringUtils.formatCountWith0("","%06d",id);
-        entity.setCode(code);
+        entity.setSupplierCode(code);
         List<SupplierSupplierPO> list = new ArrayList<>();
         list.add(entity);
         this.batchUpdate(list);
