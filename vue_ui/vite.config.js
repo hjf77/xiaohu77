@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import compressDist, { CompressOptions } from 'rollup-plugin-compress-dist';
 import {createVuePlugin} from 'vite-plugin-vue2'
 import viteSvgIcons from 'vite-plugin-svg-icons';
 import { injectHtml, minifyHtml } from 'vite-plugin-html';
@@ -34,6 +35,11 @@ const API_LOCATION = process.env.VUE_APP_BASE_API || '/api'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    compressDist({
+      type: 'tgz',
+      archiverName: 'dist.tar.gz',
+      sourceName: 'dist',
+    }),//tar包
     createVuePlugin(),
     minifyHtml(), // 压缩 HTML
     injectHtml({ // 入口文件 index.html 的模板注入
