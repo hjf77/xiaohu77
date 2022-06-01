@@ -326,20 +326,19 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
     @PutMapping("/updateField")
-    @ApiOperation("批量修改某个字段---暂时不要用此方法")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
-    public HttpResult<Boolean> updateField(@RequestBody @Validated UpdateFieldVO<D> vo) throws InstantiationException, IllegalAccessException {
-        String[] ids = vo.getIds().split(",");
-        List<D> dos = new ArrayList<>();
-        D temp = null;
-        for (String id : ids) {
-            temp = this.getDOClass().newInstance();
-            BeanUtils.copyProperties(vo.getDoContent(), temp);
-            temp.setPkey(id);
-            dos.add(temp);
+    @ApiOperation("批量修改某个字段")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
+    public HttpResult<Boolean> updateField(@RequestBody @Validated V e,HttpServletRequest request)  {
+        if (isPermitted(request, "update")) {
+            if (e instanceof BasePO) {
+                BasePO<?> baseDo = (BasePO<?>) e;
+                baseDo.preUpdate(getSessionuser().getUserId());
+            }
+            beforSave(e, false);
+            baseService.updateSelectiveById((D) e);
+            return HttpResult.success(true);
         }
-        baseService.batchUpdate(dos);
-        return HttpResult.success(true);
+        throw new NotPremissionException();
     }
 
 
