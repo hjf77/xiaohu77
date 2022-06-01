@@ -66,6 +66,19 @@ export const constantRoutes = [
     component: () => import('@/views/demo/form_one2x_demo.vue'),
     hidden: true
   },
+  {
+    path: '/supplier',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/editForm',
+        component: () => import('@/views/supplier/components/editForm.vue'),
+        name: 'Data',
+        meta: { title: '供应商资料管理详情', icon: '' }
+      }
+    ]
+  },
 
   {
     path: '/dict',
@@ -80,6 +93,7 @@ export const constantRoutes = [
       }
     ]
   },
+  
   {
     path: '',
     component: Layout,
