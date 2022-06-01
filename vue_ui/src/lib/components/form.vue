@@ -166,6 +166,7 @@
               v-for="(itemBtn, index) in item.buttons"
               :key="index"
               v-bind="itemBtn"
+              :type="itemBtn.type || 'primary'"
               @click="formButtonsClick(itemBtn)"
             >{{ itemBtn.name }}</el-button
             >
