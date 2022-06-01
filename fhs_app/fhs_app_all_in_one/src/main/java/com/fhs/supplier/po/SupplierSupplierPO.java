@@ -48,9 +48,9 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      * 供应商编码
      */
     @Length(message = "供应商编码字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @TableField("code")
+    @TableField("supplier_code")
     @ApiModelProperty(value = "供应商编码")
-    private String code;
+    private String supplierCode;
 
     /**
      * 简称
