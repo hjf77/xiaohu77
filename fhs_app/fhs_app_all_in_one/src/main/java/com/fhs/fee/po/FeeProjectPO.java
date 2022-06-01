@@ -164,4 +164,9 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     public Serializable getTreeNodeId() {
         return this.id;
     }
+
+    @Override
+    public String getTreeNodeName() {
+        return this.code + this.name;
+    }
 }
