@@ -10,9 +10,9 @@
     >
       <template v-slot:form="prop">
         <!-- 新增 修改 弹框-->
-        <el-dialog slot="form" :title="title"  v-if="open" :visible.sync="open"  class="pagex-dialog-theme">
+        <pagex-dialog slot="form" :title="title"  v-if="open" :visible.sync="open"  class="pagex-dialog-theme">
           <addDictio :dictGroupCode="groupCode"  :init="init" :isEdit="isEdit"></addDictio>
-        </el-dialog>
+        </pagex-dialog>
       </template>
     </pagex-crud>
   </div>
@@ -68,7 +68,7 @@ export default {
               title: "编辑",
               type: "bottom",
               size: 'mini',
-              click: (_row, name) => {
+              click: (_row) => {
                 this.$set(this, 'init', _row)
                 this.title = '编辑';
                 this.open = true;
