@@ -4,6 +4,9 @@ import java.io.Serializable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -62,6 +65,7 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      */
     @TableField("status")
     @ApiModelProperty(value = "供应商状态")
+    @Trans(type = TransType.DICTIONARY,key = "supplierState")
     private Integer status;
 
     /**
@@ -69,6 +73,7 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      */
     @TableField("rate")
     @ApiModelProperty(value = "进项税率")
+    @Trans(type = TransType.DICTIONARY,key = "InputTaxRate")
     private Integer rate;
 
     /**
@@ -76,6 +81,7 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      */
     @TableField("level")
     @ApiModelProperty(value = "供应商等级")
+    @Trans(type = TransType.DICTIONARY,key = "supplierLevel")
     private Integer level;
 
     /**
@@ -83,6 +89,7 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      */
     @TableField("supplier_type")
     @ApiModelProperty(value = "供应商类型")
+    @Trans(type = TransType.DICTIONARY,key = "supplierType")
     private Integer supplierType;
 
     /**
@@ -129,6 +136,7 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      */
     @TableField("company_type")
     @ApiModelProperty(value = "企业类型")
+    @Trans(type = TransType.DICTIONARY,key = "enterpriseType")
     private Integer companyType;
 
     /**
