@@ -145,7 +145,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             adminUser.setUserId(idHelper.nextId());
             count = this.insert(adminUser);
         } else {//修改
-            count = super.updateSelectiveById(adminUser);
+            count = super.updateById(adminUser);
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
         if (count > 0) {
@@ -168,11 +168,14 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateUser(UcenterMsUserPO adminUser) {
+        if(adminUser.getPassword() == null){
+            adminUser.setPassword(selectById(adminUser.getUserId()).getPassword());
+        }
         // 删除原有的角色
         boolean count = deleteUserRole(adminUser);
         if (count) {
             // 修改用户信息
-            super.updateSelectiveById(adminUser);
+            super.updateById(adminUser);
             if (adminUser.getRoleList().length > 0) {
                 // 插入新的用户角色
                 int count1 = addUserRole(adminUser);

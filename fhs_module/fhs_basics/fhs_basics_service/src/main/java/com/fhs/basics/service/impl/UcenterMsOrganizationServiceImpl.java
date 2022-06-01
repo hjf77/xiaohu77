@@ -108,7 +108,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     }
 
     @Override
-    public int updateSelectiveById(UcenterMsOrganizationPO org) {
+    public int updateById(UcenterMsOrganizationPO org) {
         UcenterMsOrganizationVO oldOrg = this.selectById(org.getId());
         // 如果是启用改为禁用
         if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == org.getIsEnable()) {
@@ -126,7 +126,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         if (CheckUtils.isNullOrEmpty(org.getExtJson())) {
             org.setExtJson(null);
         }
-        return super.updateSelectiveById(org);
+        return super.updateById(org);
     }
 
     @Override
