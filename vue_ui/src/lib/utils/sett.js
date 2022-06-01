@@ -8,9 +8,9 @@ let pagerSett={
 }
 
 let fileSett={
-   asyncUploadUrl:'/upload/file',//Filedata
+   asyncUploadUrl:'/basic/upload/file',//file
    downloadUrlFile:function(fileId){
-     return '/downLoad/file?fileId=' + fileId;
+     return '/basic/downLoad/file?fileId=' + fileId;
    },
    fileListInfo:function(_fileIds){
      //后台请求，根据文件id获取到文件详情
