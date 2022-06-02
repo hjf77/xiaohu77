@@ -121,14 +121,13 @@ export default {
       if (this.activeName === 'basic') {
         const _that = this;
         this.$refs.bacisEditForm.validate(function (_model) {
-          console.log(3343);
           // _that.basicTabCanter = _model;
           _that.btnSubmit = true;
           _that.activeName = 'certificate';
           _that.SaveInterface(_model);
         });
       } else if (this.activeName === 'certificate') {
-        console.log('========>')
+        // console.log('========>')
         this.SaveInterface(this.businessLicense)
         this.activeName = 'finance';
         this.btnSubmit = false;
