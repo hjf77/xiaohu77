@@ -78,6 +78,7 @@
             v-model="model[item.name]"
             v-if="item.type === 'select'"
             :url="item.url"
+            :title="model[item.title]"
             :methodType="item.methodType"
             :querys="item.querys"
             :labelField="item.labelField"

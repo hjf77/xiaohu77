@@ -127,6 +127,10 @@ export default {
     //选中事件
     selectOn:{
       type: Function
+    },
+    title: {
+      type: String,
+      default: '',
     }
   },
   data() {
@@ -153,6 +157,14 @@ export default {
       this.loadData();
     }
     this._change();
+    // 回显的时候构造出一条数据
+    if (this.title) {
+      const obj = {
+        labelField: this.title,
+        valueField: this.$attrs.value
+      }
+      this.ownerOption.push(obj)
+    }
   },
   methods: {
     async loadData(query) {
