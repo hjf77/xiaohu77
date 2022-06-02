@@ -39,9 +39,12 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
         entity.setStatus(0);
         int insert = super.insert(entity);
         Integer id = entity.getId();
-        saveGoods(entity.getGoodsVOs(), entity.getId(),true);
+        StringBuilder goosId = new StringBuilder();
+        goosId.append(",");
+        saveGoods(entity.getGoodsVOs(), entity.getId(),true,goosId);
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         String no = fmt.format(new Date()) + StringUtils.formatCountWith0("","%06d",id);
+        entity.setGoodsId(goosId.toString());
         entity.setNo(no);
         List<AgreementAgreementPO> list = new ArrayList<>();
         list.add(entity);
@@ -52,7 +55,13 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
     @Override
     public int updateById(AgreementAgreementPO entity) {
         int insert = super.updateById(entity);
-        saveGoods(entity.getGoodsVOs(), entity.getId(),false);
+        StringBuilder goosId = new StringBuilder();
+        goosId.append(",");
+        saveGoods(entity.getGoodsVOs(), entity.getId(),false,goosId);
+        entity.setGoodsId(goosId.toString());
+        List<AgreementAgreementPO> list = new ArrayList<>();
+        list.add(entity);
+        this.batchUpdate(list);
         return insert;
     }
 
@@ -64,7 +73,7 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
         return super.deleteById(primaryValue);
     }
 
-    public void saveGoods(AgreementGoodsSettVO[] goodsVOs, int agreemenetId, boolean isAdd){
+    public void saveGoods(AgreementGoodsSettVO[] goodsVOs, int agreemenetId, boolean isAdd,StringBuilder goosId){
         if(goodsVOs == null || UserContext.getSessionuser() == null){
             return;
         }
@@ -73,12 +82,16 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
             for (AgreementGoodsSettVO data: goodsVOs) {
                 data.preUpdate(UserContext.getSessionuser().getUserId());
                 data.setAgreementId(agreemenetId);
+                goosId.append(data.getGoodsId());
+                goosId.append(",");
             }
 
         }else{
             for (AgreementGoodsSettVO data: goodsVOs) {
                 data.preInsert(UserContext.getSessionuser().getUserId());
                 data.setAgreementId(agreemenetId);
+                goosId.append(data.getGoodsId());
+                goosId.append(",");
             }
         }
         agreementGoodsSettService.batchInsert(Arrays.asList(goodsVOs));

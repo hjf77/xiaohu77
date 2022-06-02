@@ -5,11 +5,13 @@ import com.fhs.agreement.mapper.AgreementGoodsSettMapper;
 import com.fhs.agreement.po.AgreementGoodsSettPO;
 import com.fhs.agreement.service.AgreementGoodsSettService;
 import com.fhs.agreement.vo.AgreementGoodsSettVO;
+import com.fhs.agreement.vo.AgreementSelectData;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.annotation.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +35,22 @@ public class AgreementGoodsSettServiceImpl extends BaseServiceImpl<AgreementGood
     @Override
     public List<AgreementGoodsSettVO> goosByaAreementId(int agreemenetId) {
         List<AgreementGoodsSettVO> poList = agreementGoodsSettMapper.goosByaAreementId(agreemenetId);
+        List<AgreementSelectData> selectDataList = new ArrayList<>();
+        AgreementSelectData selectData = new AgreementSelectData();
+        List<AgreementSelectData.Goodspecification> cations = new ArrayList<>();
+        AgreementSelectData.Goodspecification  cation = new AgreementSelectData.Goodspecification();
+        cation.setId(0);
+        cation.setTitle("1*10");
+        cations.add(cation);
+        cation = new AgreementSelectData.Goodspecification();
+        cation.setId(1);
+        cation.setTitle("1*20");
+        cations.add(cation);
+        selectData.setGoodspecifications(cations);
+        selectDataList.add(selectData);
+        for (AgreementGoodsSettVO data: poList) {
+            data.setSelectDataList(selectDataList);
+        }
         return poList;
     }
 
