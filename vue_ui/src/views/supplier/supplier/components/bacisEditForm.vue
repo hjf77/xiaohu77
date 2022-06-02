@@ -17,7 +17,7 @@
 </template>
 <script>
 import cityList from '@/assets/city/pca-code.json';
-import { isEmail, mobileOrTelReg, phoneNumReg, ID18Reg } from "@/utils/validate.js";
+import { isEmail, mobileOrTelReg, phoneNumReg, ID18Reg, wholeNumReg } from "@/utils/validate.js";
 export default {
   name: 'bacisEditForm',
   props: {
@@ -65,14 +65,7 @@ export default {
           type: 'text',
           name: 'shortName',
           label: '简称',
-          rule: [
-            { required: true, message: '简称不能为空', trigger: 'blur' },
-            {
-              min: 1,
-              max: 32,
-              message: '简称字符长度1-32位之间',
-            },
-          ],
+          
         },
         {
           type: 'select',
@@ -105,13 +98,7 @@ export default {
           label: '供应商等级',
           dictCode: 'supplierLevel',
           isValueNum: true,
-          rule: [
-            {
-              required: true,
-              message: '供应商等级不能为空',
-              trigger: 'change',
-            },
-          ],
+          
         },
         {
           type: 'select',
@@ -211,6 +198,7 @@ export default {
           afterTextContent:'万元',
           rule: [
             { required: true, message: '注册资金不能为空', trigger: 'blur' },
+            { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数注册资金' }
           ],
         },
         {
@@ -236,7 +224,7 @@ export default {
             value: 'code',
           },
           rule: [
-            { required: true, message: '所在城市不能为空', trigger: 'change' },
+            { required: true, message: '所在城市不能为空', trigger: 'blur' },
           ],
         },
         {
@@ -258,6 +246,11 @@ export default {
           label: '公司地址',
           rule: [
             { required: true, message: '公司地址不能为空', trigger: 'blur' },
+            {
+              min: 1,
+              max: 256,
+              message: '公司地址字符长度1-256位之间',
+            },
           ],
         },
       ],
@@ -265,10 +258,18 @@ export default {
   },
   created() {
     console.log(this.detailsInfo);
+    this.processData()
   },
   methods: {
     validate(_callback){
        this.$refs.pageForm.validate(_callback);
+    },
+    processData() {
+    // 处理城市字段 编辑 接口返回[0,0,0] 不处罚校验问题
+     const isTrue =  this.detailsInfo.geographicalPosition.includes('0')
+     if(isTrue) {
+       this.detailsInfo.geographicalPosition = []
+     }
     }
   },
 };
