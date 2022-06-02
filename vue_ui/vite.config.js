@@ -64,6 +64,14 @@ export default defineConfig({
       '/api/basic': {
         target: 'http://127.0.0.1:8089/',
         rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
+      },
+      '/api/purchase': {
+        target: 'http://127.0.0.1:8089/',
+        rewrite: (path) => path.replace('/api/purchase', '') // 采购业务
+      },
+      '/api/vmock': {
+        target: 'http://192.168.0.213:8098/vmock/',
+        rewrite: (path) => path.replace('/api/vmock', '') // vmock
       }
     }
   //   hmr: {

@@ -17,7 +17,7 @@
         </div>
       </div>
       <!-- 中间审核按钮 拒绝 按钮 -->
-      <div class="card m-t-20">  
+      <div class="card m-t-20">
         <el-button size="small">审核</el-button>
         <!-- @click="check(i)" v-hasPermi="i.permission ? i.permission : 'none'" -->
         <el-button size="small">拒绝</el-button>
@@ -91,7 +91,7 @@ export default {
   methods: {
     supplierList(id) {
       this.$pagexRequest({
-        url: '/basic/ms/supplierSupplier/' + id,
+        url: '/purchase/ms/supplierSupplier/' + id,
         method: 'GET',
       })
         .then((res) => {
@@ -138,7 +138,7 @@ export default {
         id: this.id,
       });
       this.$pagexRequest({
-        url: '/basic/ms/supplierSupplier/updateField',
+        url: '/purchase/ms/supplierSupplier/updateField',
         method: 'PUT',
         data: Canter,
       })

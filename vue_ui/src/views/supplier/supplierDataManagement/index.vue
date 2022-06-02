@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       // api: '/basic/ms/logLogin/pagerAdvance',
-      api: '/basic/ms/supplierSupplier/pagerAdvance',
+      api: '/purchase/ms/supplierSupplier/pagerAdvance',
       // 列表排列顺序（更新时间）
       sortSett: [
         {
@@ -62,7 +62,7 @@ export default {
       ],
       title: '新增',
       // addApi: '/basic/ms/sysUser/',
-      addApi:'/basic/ms/supplierSupplier',
+      addApi:'/purchase/ms/supplierSupplier',
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [
         {
@@ -96,7 +96,7 @@ export default {
           name: 'name',
           label: '供应商名称',
           rule: [{
-            required: true, message: '供应商名称不能为空', trigger: 'blur',  
+            required: true, message: '供应商名称不能为空', trigger: 'blur',
           }, {
             min: 1,
             max: 128,
@@ -108,7 +108,7 @@ export default {
           name: 'status',
           label: '状态',
           rule: [{
-            required: true, message: '状态不能为空', trigger: 'change',  
+            required: true, message: '状态不能为空', trigger: 'change',
           }],
           dictCode: 'supplierState',
           isValueNum: true,
@@ -152,7 +152,7 @@ export default {
               size: "mini",
               permission: ['supplierSupplierDataManagement:del'],
               idFieldName:'id',
-              api:'/basic/ms/supplierSupplier/'
+              api:'/purchase/ms/supplierSupplier/'
             }
           ],
         },
