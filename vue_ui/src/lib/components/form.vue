@@ -40,20 +40,13 @@
             show-word-limit
             v-bind="item"
             :style="{ width: item.width ? item.width + 'px' : '305px' }"
-          ></el-input>
-          <el-input
-            :disabled="proxyIf(item.disabledOn, false)"
-            v-model="model[item.name]"
-            v-if="item.type === 'prefixText'"
-            :clearable = "item.clearable?item.clearable:true"
-            show-word-limit
-            v-bind="item"
-            style="width: 305px"
           >
-            <template slot="prepend">{{ item.prefixTextContent }}</template>
+            <template v-if="item.prefixTextContent" slot="prepend">{{ item.prefixTextContent }}</template>
+            <template v-if="item.afterTextContent" slot="append">{{ item.afterTextContent }}</template>
           </el-input>
+
           <el-input
-            :disabled="proxyIf(item.disabledOn, false)"
+            :disabled="proxyIf(item.disabledOn, false)"afterText
             v-model="model[item.name]"
             v-if="item.type === 'textarea'"
             :clearable = "item.clearable?item.clearable:true"
@@ -167,6 +160,7 @@
               :key="index"
               v-bind="itemBtn"
               :type="itemBtn.type || 'primary'"
+              v-if="proxyBtnIf(itemBtn)"
               @click="formButtonsClick(itemBtn)"
             >{{ itemBtn.name }}</el-button
             >
@@ -243,6 +237,7 @@
         <el-button
           v-for="(itemBtn, index) in buttons"
           :key="index"
+          v-if="proxyBtnIf(itemBtn)"
           @click="btnClick(itemBtn)"
           >{{ itemBtn.name }}</el-button
         >
@@ -506,6 +501,25 @@ export default {
         return true;
       }
       return _ifFun ? _ifFun.call(this.model) : _default;
+    },
+    //按钮是否显示
+    proxyBtnIf(_btn) {
+      if (_btn.ifFun) {
+        return _btn.ifFun(this.model);
+      }
+      if (_btn.ifAttr && _btn.ifValue) {
+        if (this.model[_btn.ifAttr] == _btn.ifValue) {
+          return true;
+        }
+        return false;
+      }
+      if(_btn.ifAttr){
+        if(this.model[_btn.ifAttr]){
+          return true;
+        }
+        return false;
+      }
+      return true;
     },
     cancel() {
       if(this.isColseParent){

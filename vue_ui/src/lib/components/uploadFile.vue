@@ -106,7 +106,7 @@ export default {
       //调用后台接口，并且初始化组件的文件列表
       this.$pagexRequest({
         method: "get",
-        url: "/downLoad/listData?fileIds=" + this.fileIds,
+        url: "/basic/downLoad/listData?fileIds=" + this.fileIds,
       })
         .then((res) => {
           let _that = this;

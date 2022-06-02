@@ -189,7 +189,7 @@ export default {
       //调用后台接口，并且初始化组件的文件列表
       this.$pagexRequest({
         method: "get",
-        url: "/downLoad/listData?fileIds=" + this.text,
+        url: "/basic/downLoad/listData?fileIds=" + this.text,
       })
         .then(async (res) => {
           let _that = this;
@@ -218,10 +218,10 @@ export default {
     //上传文件
     uploadFile(file,fn) {
       let fd = new FormData();
-      fd.append("Filedata", file.file || file.raw); //传文件
+      fd.append("file", file.file || file.raw); //传文件
       this.$pagexRequest({
         method: "post",
-        url: "/upload/file?ext=" + this.$store.state.user.user.companyId,
+        url: "/basic/upload/file?ext=" + this.$store.state.user.user.companyId,
         data: fd,
         headers: {
           "Content-Type": "multipart/form-data",

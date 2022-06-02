@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import compressDist, { CompressOptions } from 'rollup-plugin-compress-dist';
 import {createVuePlugin} from 'vite-plugin-vue2'
 import viteSvgIcons from 'vite-plugin-svg-icons';
 import { injectHtml, minifyHtml } from 'vite-plugin-html';
@@ -35,11 +34,6 @@ const API_LOCATION = process.env.VUE_APP_BASE_API || '/api'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    compressDist({
-      type: 'tgz',
-      archiverName: 'dist.tar.gz',
-      sourceName: 'dist',
-    }),//tar包
     createVuePlugin(),
     minifyHtml(), // 压缩 HTML
     injectHtml({ // 入口文件 index.html 的模板注入
@@ -66,18 +60,27 @@ export default defineConfig({
     //host:'',
     port:3001,
     cors:true,
-    proxy: {
-      '/api/basic': {
-        target: 'http://127.0.0.1:8089/',
-        rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
+      proxy: {
+        '/api/basic': {
+          target: 'http://192.168.0.213:8089/',
+          rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
+        },
+        '/api/purchase': {
+          target: 'http://192.168.0.213:8089/',
+          rewrite: (path) => path.replace('/api/purchase', '') // 采购业务
+        },
+        '/api/vmock': {
+          target: 'http://192.168.0.213:8089/vmock',
+          rewrite: (path) => path.replace('/api/vmock', '') // 根据环境变量配置代理
+        }
       }
-    }
   //   hmr: {
   //     port: 443,
   //   }
   },
-  build:{
-    outDir:'dist',
-    assetsDir:'static'
+  build: {
+    outDir: 'dist',
+    assetsDir: 'static',
+    chunkSizeWarningLimit: 2000
   }
 })
