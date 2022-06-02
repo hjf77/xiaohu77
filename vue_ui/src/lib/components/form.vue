@@ -160,6 +160,7 @@
               :key="index"
               v-bind="itemBtn"
               :type="itemBtn.type || 'primary'"
+              v-if="proxyBtnIf(itemBtn)"
               @click="formButtonsClick(itemBtn)"
             >{{ itemBtn.name }}</el-button
             >
@@ -236,6 +237,7 @@
         <el-button
           v-for="(itemBtn, index) in buttons"
           :key="index"
+          v-if="proxyBtnIf(itemBtn)"
           @click="btnClick(itemBtn)"
           >{{ itemBtn.name }}</el-button
         >
@@ -499,6 +501,25 @@ export default {
         return true;
       }
       return _ifFun ? _ifFun.call(this.model) : _default;
+    },
+    //按钮是否显示
+    proxyBtnIf(_btn) {
+      if (_btn.ifFun) {
+        return _btn.ifFun(this.model);
+      }
+      if (_btn.ifAttr && _btn.ifValue) {
+        if (this.model[_btn.ifAttr] == _btn.ifValue) {
+          return true;
+        }
+        return false;
+      }
+      if(_btn.ifAttr){
+        if(this.model[_btn.ifAttr]){
+          return true;
+        }
+        return false;
+      }
+      return true;
     },
     cancel() {
       if(this.isColseParent){
