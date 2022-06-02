@@ -7,11 +7,15 @@
   <div>
     <!-- 编辑参数配置对话框 -->
     <pagex-form
+      v-if="initFinsh"
       :isEdit="false"
       :data="formData"
       :isVee="false"
       :controls.sync="controls"
+      :isHaveSaveBtn="false"
       :isHaveAddBtn="false"
+      :init="init"
+      :optionsInitSetts="optionsInitSetts"
       :isHaveCancelBtn="false"
       ref="testForm"
     >
@@ -21,8 +25,12 @@
 <script>
 import {mapGetters} from "vuex";
 import {postFile} from "../../utils/download";
+import {deepClone} from "../../utils";
 export default {
   name: "one2xform",
+  props: {
+    init: Object,
+  },
   computed: {
     ...mapGetters(["user"])
   },
@@ -33,11 +41,14 @@ export default {
   },
   data() {
     return {
+      optionsInitSetts: [],
+      initFinsh: false,
       formData: {
         isEnable: 1,
         agreementNo: "202205070001",
-        goods:[{  goodCode:'111'}],
-        total : 1,
+        // goods:[{  goodCode:'111'}],
+        goods: [],
+        total : 1
       },
       controls: [
         {
@@ -101,7 +112,7 @@ export default {
           width:'1500px',
           optionsSetts:[],
           defaultValue:{
-            goodCode:'12345'
+            goodCode:''
           },
           //当数据发生改变的时候触发
           onDataChange:(_newDatas)=>{
@@ -142,14 +153,11 @@ export default {
             {
               type: 'select',
               name: 'taxRadio',
-              dictCode: 'taxRadio',
-              isValueNum: true,
               label: '税率',
-              import: true,
-              cellWidth: '10',
-              one2xSelectOn: (newValue, _row, index, options) => {
+              options:[],
+              change: (newValue, _row, index, options) => {
 
-                debugger
+                // debugger
 
               }
             },
@@ -169,11 +177,26 @@ export default {
       ]
     }
   },
-  created() {
-
+  mounted() {
+    this.testMock()
   },
   methods: {
-
+    testMock() {
+      this.$pagexRequest({
+        method: "get",
+        url: "/vmock/order/list"
+      })
+        .then((res) => {
+          this.$set(this.formData, 'goods', res.rows)
+          this.optionsInitSetts = deepClone(res.option)
+          console.log(res.option)
+          console.log('---------------------------------')
+          this.initFinsh = true
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
   }
 };
 </script>

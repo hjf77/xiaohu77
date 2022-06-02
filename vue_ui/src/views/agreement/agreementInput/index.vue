@@ -2,7 +2,7 @@
   <base-container>
     <pagex-form
       v-if="initFinsh"
-      :isEdit="true"
+      :isEdit="isEdit"
       :data="formData"
       :isVee="false"
       :controls.sync="controls"
@@ -21,6 +21,7 @@
 import {mapGetters} from "vuex";
 import crudMixins from "@/mixins/crudMixins";
 import {deepClone} from "@/utils";
+import {parseTime} from "../../../lib/utils";
 
 export default {
   name: "AgreementInput",
@@ -29,7 +30,10 @@ export default {
     init: Object,
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user"]),
+    isEdit() {
+      return !!this.$route.query.id
+    }
   },
   provide() {
     return {
@@ -43,12 +47,12 @@ export default {
       formData: {
         status: '未审核',
         agreementNo: "202205070001",
-        createTime: '',
-        createUser: '',
-        updateTime: '',
-        updateUser:'',
-        orgId: '',
-        orgName: '',
+        createTime: this.isEdit ? this.init.createTime : parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}'),
+        createUser: this.isEdit ? this.init.createUser : this.$store.state.user.user.userName,
+        updateTime: this.isEdit ? this.init.updateTime : parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}'),
+        updateUser: this.isEdit ? this.init.updateUser : this.$store.state.user.user.userName,
+        orgId: this.isEdit ? this.init.organizationId : this.$store.state.user.user.organizationId,
+        orgName: this.isEdit ? this.init.orgName : this.$store.state.user.user.orgName,
         // goods:[{  goodCode:'111'}],
         goods: [],
         total : 1
@@ -74,14 +78,20 @@ export default {
           label: "订单方",
           rule: [{required: true, message: '请输入订单方', trigger: 'change'}]
         },
+        // {
+        //   type: "select",
+        //   name: "contractNo",
+        //   url:"/basic/ms/dictItem/findList?dictGroupCode=",
+        //   labelField: "dictDesc",
+        //   valueField: "dictCode",
+        //   remote:true,
+        //   label: "合同编号",
+        //   rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
+        // },
         {
-          type: "select",
-          name: "contractNo",
-          url:"/basic/ms/dictItem/findList?dictGroupCode=",
-          labelField: "dictDesc",
-          valueField: "dictCode",
-          remote:true,
+          type: "text",
           label: "合同编号",
+          name: "contractNo",
           rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
         },
         {
@@ -211,8 +221,13 @@ export default {
               label: '商品编码',
               fixed: true,
               rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
-              one2xBlur: (newValue, _datas, index,optionsSetts,_inputThis) => {
+              one2xBlur: async (newValue, _datas, index, optionsSetts, _inputThis) => {
                 _datas[index].goodName = '可口可乐500ML';
+                const res = await this.$pagexRequest({
+                  methods: "GET",
+                  url: "/vmock/ms/agreementInput/getGoodInfo?goodCode=" + newValue,
+                })
+                console.log(res)
                 optionsSetts[index].goodspecifications = [{
                   id: '1',
                   title: '1*9'
@@ -241,6 +256,7 @@ export default {
               name: 'goodspecifications',
               label: '包装规格',
               options:[],
+              rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
             },
             {
               type: 'label',
@@ -253,6 +269,7 @@ export default {
               name: 'rate',
               label: '税率',
               options:[],
+              rule: [{  required: true, message: '请输入税率', trigger: 'blur' }],
               change: (newValue, _row, index, options) => {
 
               }
@@ -272,17 +289,20 @@ export default {
             {
               type: 'dates',
               name: 'startTime',
-              label: '开始时间'
+              label: '开始时间',
+              rule: [{  required: true, message: '请选择开始时间', trigger: 'blur' }],
             },
             {
               type: 'dates',
               name: 'endTime',
-              label: '结束时间'
+              label: '结束时间',
+              rule: [{  required: true, message: '请选择结束时间', trigger: 'blur' }],
             },
             {
               type: 'select',
               name: 'isReturn',
               label: '是否可退',
+              rule: [{  required: true, message: '请选择是否可退', trigger: 'blur' }],
             },
             {
               name: 'minOrderNum',
@@ -305,10 +325,14 @@ export default {
     }
   },
   mounted() {
-    this.testMock()
+    if (this.$route.query.id) {
+      this.initData()
+    } else {
+      this.initFinsh = true
+    }
   },
   methods: {
-    testMock() {
+    initData() {
       this.$pagexRequest({
         method: "get",
         url: "/vmock/order/list"
@@ -323,7 +347,56 @@ export default {
         .catch((res) => {
           console.log(res);
         });
+    },
+    getGoodInfo() {
+      this.$pagexRequest({
+        method: "GET",
+        url: "/vmock/ms/agreementInput/getGoodInfo"
+      })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((e) => {
+          console.log(e.message);
+        })
+    },
+
+    // 保存
+    save(form) {
+      this.$pagexRequest({
+        method: "GET",
+        url: "/vmock/ms/agreementInput/getGoodInfo"
+      }).then((res) => {
+        this.$message.success('保存成功')
+      }).catch((e) => {
+        console.log(e.message);
+      })
+    },
+
+    // 审核
+    audit(form) {
+      this.$pagexRequest({
+        method: "GET",
+        url: "/vmock/ms/agreementInput/getGoodInfo"
+      }).then((res) => {
+        this.$message.success('保存成功')
+      }).catch((e) => {
+        console.log(e.message);
+      })
+    },
+
+    // 审核
+    del(form) {
+      this.$pagexRequest({
+        method: "GET",
+        url: "/vmock/ms/agreementInput/getGoodInfo"
+      }).then((res) => {
+        this.$message.success('保存成功')
+      }).catch((e) => {
+        console.log(e.message);
+      })
     }
+
   }
 };
 </script>

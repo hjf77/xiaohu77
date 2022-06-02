@@ -10,19 +10,39 @@
           :columns="columns"
           :api="api"
           :sortSett="sortSett"
-          :buttons="buttons"
           :querys="querys"
           :isAdvancePager="true"
         >
         </pagex-crud>
       </div>
-
-      <div style="margin: 20px 0">
-        <el-button @click="testMock">点我测试V-Mock链接</el-button>
-      </div>
       <div style="width:100%;margin-top: 100px;">
         <h1>2、表单一对多能力演示</h1>
         <one2xForm></one2xForm>
+      </div>
+
+
+      <div>
+        <pagex-transfer v-model="defaultTranVal" :url="'/vmock/order/transferList'" :querys="{ }" class="transfer" />
+
+        <div style="margin-bottom: 20px"></div>
+
+        <pagex-select v-model="defaultSelectVal" :url="'/vmock/order/transferList'" :querys="{ }" :methodType="'POST'" :labelField="'name'">
+
+        </pagex-select>
+      </div>
+
+      <div style="margin-top: 20px">
+        <pagex-form
+          addApi="/vmock/sysUser/addForm"
+          updateApi="/vmock/sysUser/addForm"
+          :data="formData"
+          :init="init"
+          :isEdit="isEdit"
+          :controls="controls"
+          :buttons="buttons"
+          :isHaveAddBtn="false"
+          :isHaveCancelBtn="false"
+        />
       </div>
     </div>
   </base-container>
@@ -39,6 +59,62 @@ export default {
   mixins: [crudMixins],
   data() {
     return {
+      buttons:[
+        {
+          name:'保存',
+          type: 'plan',
+          click: (data) => {
+            // 业务代码......
+            this.$pagexRequest({
+              methods: "POST",
+              url: "/vmock/ms/sysUser/addForm"
+            }).then((res) => {
+              //......
+            })
+          }
+        },
+        {
+          name:'发布'
+        }
+      ],
+      controls: [
+        {
+          type: 'label',
+          name: 'companyCode',
+          label: '公司编号',
+        },
+        {
+          type: 'text',
+          name: 'dictCode',
+          label: '公司名称',
+          rule:'required',
+          placeholder: '请输入公司名称'
+        },
+        {
+          type: 'text',
+          name: 'dictDesc',
+          label: '公司地址',
+          rule:'required',
+          placeholder: '请输入公司地址'
+        },
+        {
+          type: 'textarea',
+          name: 'ext',
+          label: '业务范围',
+          rule:'required',
+          placeholder: '请输入业务范围'
+        }
+      ],
+      formData: {
+        companyCode: 1111111111,
+      },
+
+      init: {
+        companyCode: 1111111111,
+      },
+
+      defaultTranVal: [1,2],
+      defaultSelectVal: 1,
       api: "/basic/ms/logLogin/pagerAdvance",
       isEdit: false,
       open: false,
@@ -51,7 +127,6 @@ export default {
         },
       ],
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
-      buttons: [],
       columns: [
         {label: "序号", name: "index", type: "index", width:'60', fixed: 'left'},
         {label: '用户', name: 'loginUserName', type: 'popover', width: 150, fixed: 'left'},
@@ -112,18 +187,6 @@ export default {
   methods: {
     handleClick(row) {
       console.log(row);
-    },
-    testMock() {
-      this.$pagexRequest({
-        method: "get",
-        url: "/vmock/order/list"
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((res) => {
-        console.log(res);
-      });
     }
   }
 
@@ -196,5 +259,10 @@ export default {
 
 ::v-deep .el-table__header-wrapper th {
   height: 50px !important;
+}
+::v-deep .transfer {
+  .el-input {
+    width: auto;
+  }
 }
 </style>
