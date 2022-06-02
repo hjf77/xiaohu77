@@ -40,29 +40,11 @@
             show-word-limit
             v-bind="item"
             :style="{ width: item.width ? item.width + 'px' : '305px' }"
-          ></el-input>
-          <el-input
-            :disabled="proxyIf(item.disabledOn, false)"
-            v-model="model[item.name]"
-            v-if="item.type === 'prefixText'"
-            :clearable = "item.clearable?item.clearable:true"
-            show-word-limit
-            v-bind="item"
-            style="width: 305px"
           >
-            <template slot="prepend">{{ item.prefixTextContent }}</template>
+            <template v-if="item.prefixTextContent" slot="prepend">{{ item.prefixTextContent }}</template>
+            <template v-if="item.afterTextContent" slot="append">{{ item.afterTextContent }}</template>
           </el-input>
-          <el-input
-            :disabled="proxyIf(item.disabledOn, false)"
-            v-model="model[item.name]"
-            v-if="item.type === ''"
-            :clearable = "item.clearable?item.clearable:true"
-            show-word-limit
-            v-bind="item"
-            style="width: 305px"
-          >
-            <template slot="append">{{ item.afterTextContent }}</template>
-          </el-input>
+
           <el-input
             :disabled="proxyIf(item.disabledOn, false)"afterText
             v-model="model[item.name]"
