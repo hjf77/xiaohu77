@@ -50,11 +50,11 @@
 </template>
 
 <script>
-import bacisEditForm from '@/views/supplier/supplierDataManagement/components/bacisEditForm.vue';
+import bacisEditForm from '@/views/supplier/supplier/components/bacisEditForm.vue';
 
-import financialEditForm from '@/views/supplier/supplierDataManagement/components/financialEditForm.vue';
+import financialEditForm from '@/views/supplier/supplier/components/financialEditForm.vue';
 
-import licenseEditForm from '@/views/supplier/supplierDataManagement/components/licenseEditForm.vue';
+import licenseEditForm from '@/views/supplier/supplier/components/licenseEditForm.vue';
 export default {
   name: 'editForm',
   components: {

@@ -69,7 +69,7 @@ export default {
           title: '新增',
           type: 'primary',
           size: 'mini',
-          permission: ['supplierSupplierDataManagement:add'],
+          permission: ['supplierSupplier:add'],
           click: (_row) => {
             this.title = '新增';
             // this.$set(this, "init", {organizationId:this.org.id})
@@ -140,7 +140,7 @@ export default {
               title: '编辑',
               type: 'bottom',
               size: 'mini',
-              permission: ['supplierSupplierDataManagement:update'],
+              permission: ['supplierSupplier:update'],
               click: (_row) => {
                 this.$router.push({path: '/supplier/type/editForm',query:{id: _row.id}});
                 this.isEdit = true;
@@ -150,7 +150,7 @@ export default {
               title: "删除",
               type: "danger",
               size: "mini",
-              permission: ['supplierSupplierDataManagement:del'],
+              permission: ['supplierSupplier:del'],
               idFieldName:'id',
               api:'/purchase/ms/supplierSupplier/'
             }
