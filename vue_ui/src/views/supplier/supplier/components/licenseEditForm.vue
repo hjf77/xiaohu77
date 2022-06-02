@@ -4,7 +4,8 @@
     <div class="title-style">上传营业执照</div>
     <pagex-uploadPicture
       :limit="1"
-      namespace="supplierSupplier">
+      namespace="supplierSupplier"
+      @getFile="getFile">
     </pagex-uploadPicture>
   </base-container>
 </template>
@@ -12,10 +13,14 @@
 export default {
   name: 'licenseEditForm',
   data() {
-    return {};
+    return {
+    };
   },
   created() {},
   methods: {
+    getFile(file) {
+      this.$emit('file',file)
+    }
   },
 };
 </script>

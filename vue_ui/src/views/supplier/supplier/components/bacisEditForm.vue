@@ -17,6 +17,7 @@
 </template>
 <script>
 import cityList from '@/assets/city/pca-code.json';
+import { isEmail, mobileOrTelReg, phoneNumReg, ID18Reg } from "@/utils/validate.js";
 export default {
   name: 'bacisEditForm',
   props: {
@@ -26,11 +27,6 @@ export default {
     },
   },
   data() {
-    // let emailRegTest = (value) => {
-    //   let reg =
-    //     /^[A-Za-z\d]+([-_.][A-Za-z\d_\-]+)*@([A-Za-z\d_\-]+[-.])+[A-Za-z]{2,4}$/;
-    //   return reg.test(value);
-    // };
     return {
       buttons: [],
       controls: [
@@ -149,11 +145,7 @@ export default {
           label: '联系人电话',
           rule: [
             { required: true, message: '联系人电话不能为空', trigger: 'blur' },
-            {
-              min: 8,
-              max: 20,
-              message: '联系人电话字符长度8-20位之间',
-            },
+            { pattern: phoneNumReg, trigger: 'blur', message: '请输入正确的联系人电话' }
           ],
         },
         {
@@ -168,7 +160,7 @@ export default {
         },
         {
           type: 'text',
-          name: 'legal_person',
+          name: 'legalPerson',
           label: '企业法人',
           rule: [
             { required: true, message: '企业法人不能为空', trigger: 'blur' },
@@ -189,11 +181,7 @@ export default {
               message: '法人身份证号不能为空',
               trigger: 'blur',
             },
-            {
-              min: 20,
-              max: 20,
-              message: '法人身份证号字符长度1-20位之间',
-            },
+            { pattern: ID18Reg, trigger: 'blur', message: '请输入正确的身份证号' }
           ],
         },
         {
@@ -212,11 +200,7 @@ export default {
           label: '公司电话',
           rule: [
             { required: true, message: '公司电话不能为空', trigger: 'blur' },
-            {
-              min: 8,
-              max: 20,
-              message: '公司电话字符长度8-20位之间',
-            },
+            { pattern: mobileOrTelReg, trigger: 'blur', message: '请输入正确的公司电话' }
           ],
         },
         {
@@ -233,12 +217,7 @@ export default {
           label: '供应商邮箱',
           rule: [
             { required: true, message: '供应商邮箱不能为空', trigger: 'blur' },
-            {
-              min: 2,
-              max: 256,
-              message: '字符长度2-256位之间',
-              trigger: 'blur',
-            },
+            { validator: isEmail, trigger: 'blur' }
             
           ],
         },
