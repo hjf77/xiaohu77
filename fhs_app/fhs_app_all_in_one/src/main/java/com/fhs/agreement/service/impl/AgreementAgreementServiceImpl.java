@@ -45,7 +45,7 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
         List<AgreementAgreementPO> list = new ArrayList<>();
         list.add(entity);
         this.batchUpdate(list);
-        saveGoods(entity.getGoodsVOs(), entity.getId(),false);
+        saveGoods(entity.getGoodsVOs(), entity.getId(),true);
         return insert;
     }
 
