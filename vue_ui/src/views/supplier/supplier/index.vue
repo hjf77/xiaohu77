@@ -27,7 +27,6 @@
           <!-- 新增 -->
           <pagex-form
             :addApi="addApi"
-            :init="init"
             :controls="controls"
             :onSubmit="onSubmit"
             :isHaveAddBtn="true"
