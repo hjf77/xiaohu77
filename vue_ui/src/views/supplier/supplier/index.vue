@@ -16,7 +16,7 @@
       :querys="querys"
       namespace="supplierSupplier"
     >
-      <template v-slot:form="">
+      <template v-slot:form>
         <!-- 新增 弹框-->
         <pagex-dialog
           v-if="open"
@@ -62,7 +62,7 @@ export default {
       ],
       title: '新增',
       // addApi: '/basic/ms/sysUser/',
-      addApi:'/purchase/ms/supplierSupplier',
+      addApi: '/purchase/ms/supplierSupplier',
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [
         {
@@ -95,21 +95,30 @@ export default {
           type: 'text',
           name: 'name',
           label: '供应商名称',
-          rule: [{
-            required: true, message: '供应商名称不能为空', trigger: 'blur',
-          }, {
-            min: 1,
-            max: 128,
-            message: '供应商名称字符长度1-128位之间',
-          }],
+          rule: [
+            {
+              required: true,
+              message: '供应商名称不能为空',
+              trigger: 'blur',
+            },
+            {
+              min: 1,
+              max: 128,
+              message: '供应商名称字符长度1-128位之间',
+            },
+          ],
         },
         {
           type: 'select',
           name: 'status',
           label: '状态',
-          rule: [{
-            required: true, message: '状态不能为空', trigger: 'change',
-          }],
+          rule: [
+            {
+              required: true,
+              message: '状态不能为空',
+              trigger: 'change',
+            },
+          ],
           dictCode: 'supplierState',
           isValueNum: true,
         },
@@ -118,8 +127,22 @@ export default {
         return true;
       },
       columns: [
-        { label: '序号', type: 'index',fixed: 'left' },
-        { label: '供应商代码', name: 'supplierCode', width: 150, fixed: 'left' },
+        { label: '序号', type: 'index', fixed: 'left' },
+        {
+          label: '供应商代码',
+          name: 'supplierCode',
+          width: 150,
+          fixed: 'left',
+          type: 'formart',
+          formart: "<label style='cursor:pointer'>${supplierCode}</label>",
+          click: function (_row) {
+            this.$router.push({
+              path: '/supplier/type/editForm',
+              query: { id: _row.id },
+            });
+            this.isEdit = true;
+          },
+        },
         { label: '供应商名称', name: 'name', width: 150, fixed: 'left' },
         { label: '简称', name: 'shortName' },
         { label: '状态', name: 'transMap.statusName', width: 80 },
@@ -142,18 +165,21 @@ export default {
               size: 'mini',
               permission: ['supplierSupplier:update'],
               click: (_row) => {
-                this.$router.push({path: '/supplier/type/editForm',query:{id: _row.id}});
+                this.$router.push({
+                  path: '/supplier/type/editForm',
+                  query: { id: _row.id },
+                });
                 this.isEdit = true;
               },
             },
             {
-              title: "删除",
-              type: "danger",
-              size: "mini",
+              title: '删除',
+              type: 'danger',
+              size: 'mini',
               permission: ['supplierSupplier:del'],
-              idFieldName:'id',
-              api:'/purchase/ms/supplierSupplier/'
-            }
+              idFieldName: 'id',
+              api: '/purchase/ms/supplierSupplier/',
+            },
           ],
         },
       ],
