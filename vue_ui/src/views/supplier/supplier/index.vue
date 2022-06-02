@@ -188,19 +188,21 @@ export default {
           name: 'supplierCode',
           label: '供应商代码：',
           placeholder: '供应商代码',
+          operation: 'like',
           type: 'text',
         },
         {
           name: 'name',
           label: '供应商名称：',
           placeholder: '供应商名称',
+          operation: 'like',
           type: 'text',
         },
         {
           name: 'status',
           label: '状态：',
           type: 'select',
-          operation: 'like',
+          
           dictCode: 'supplierState',
         },
       ],
