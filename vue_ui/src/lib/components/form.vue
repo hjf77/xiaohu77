@@ -55,6 +55,17 @@
           <el-input
             :disabled="proxyIf(item.disabledOn, false)"
             v-model="model[item.name]"
+            v-if="item.type === ''"
+            :clearable = "item.clearable?item.clearable:true"
+            show-word-limit
+            v-bind="item"
+            style="width: 305px"
+          >
+            <template slot="append">{{ item.afterTextContent }}</template>
+          </el-input>
+          <el-input
+            :disabled="proxyIf(item.disabledOn, false)"afterText
+            v-model="model[item.name]"
             v-if="item.type === 'textarea'"
             :clearable = "item.clearable?item.clearable:true"
             maxlength="200"
