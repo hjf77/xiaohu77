@@ -97,6 +97,8 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             result.setYmin(organization.getYmin());
             result.setXmax(organization.getXmax());
             result.setYmax(organization.getYmax());
+            result.setCenter(organization.getCenter());
+            result.setZoom(organization.getZoom());
             if (organization.getCompanyId() != null) {
                 organization = organizationService.selectById(organization.getCompanyId());
                 ParamChecker.isNotNull(organization, "用户所在企业被删除，禁止登陆");

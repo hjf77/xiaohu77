@@ -126,4 +126,12 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     @TableField("ymax")
     private String ymax;
 
+    @TableField("center")
+    @ApiModelProperty(value = "地图中心点")
+    private String center;
+
+    @TableField("zoom")
+    @ApiModelProperty(value = "地图放大级别")
+    private String zoom;
+
 }

@@ -56,4 +56,10 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
     private String xmax;
 
     private String ymax;
+
+    @ApiModelProperty(value = "地图中心点")
+    private String center;
+
+    @ApiModelProperty(value = "地图放大级别")
+    private String zoom;
 }
