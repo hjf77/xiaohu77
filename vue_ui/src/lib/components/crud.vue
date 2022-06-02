@@ -162,6 +162,7 @@ by wanglei
             v-else-if="!item.type"
             :label="item.label"
             :key="item.name"
+            :fixed="item.fixed"
             :width="item.width"
             :min-width="item.minWidth"
             align="center"

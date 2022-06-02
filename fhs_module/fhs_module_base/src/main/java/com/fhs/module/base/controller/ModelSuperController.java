@@ -194,16 +194,10 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
         }
     }
 
-
-    /**
-     * groupcode字段
-     */
-    private Field groupCodeField;
-
     @NotRepeat
     @ResponseBody
     @PostMapping
-    @ApiOperation(value = "新增-vue专用")
+    @ApiOperation(value = "新增")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e, HttpServletRequest request,
                                     HttpServletResponse response) {
@@ -236,7 +230,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      */
     @ResponseBody
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "删除-vue专用")
+    @ApiOperation(value = "删除")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
     public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
@@ -254,7 +248,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      */
     @ResponseBody
     @PutMapping
-    @ApiOperation(value = "修改-vue专用")
+    @ApiOperation(value = "修改")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
                                             HttpServletResponse response) {
@@ -264,7 +258,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
                 baseDo.preUpdate(getSessionuser().getUserId());
             }
             beforSave(e, false);
-            baseService.updateSelectiveById((D) e);
+            baseService.updateById((D) e);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
@@ -326,20 +320,22 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
     @PutMapping("/updateField")
-    @ApiOperation("批量修改某个字段")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE)
-    public HttpResult<Boolean> updateField(@RequestBody @Validated UpdateFieldVO<D> vo) throws InstantiationException, IllegalAccessException {
-        String[] ids = vo.getIds().split(",");
-        List<D> dos = new ArrayList<>();
-        D temp = null;
-        for (String id : ids) {
-            temp = this.getDOClass().newInstance();
-            BeanUtils.copyProperties(vo.getDoContent(), temp);
-            temp.setPkey(id);
-            dos.add(temp);
+    @ApiOperation("只修改某些字段")
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
+    public HttpResult<Boolean> updateField(@RequestBody @Validated V e,HttpServletRequest request)  {
+        if(e.getPkey() == null){
+            throw new ParamException("主键为必填");
         }
-        baseService.batchUpdate(dos);
-        return HttpResult.success(true);
+        if (isPermitted(request, "update")) {
+            if (e instanceof BasePO) {
+                BasePO<?> baseDo = (BasePO<?>) e;
+                baseDo.preUpdate(getSessionuser().getUserId());
+            }
+            beforSave(e, false);
+            baseService.updateSelectiveById((D) e);
+            return HttpResult.success(true);
+        }
+        throw new NotPremissionException();
     }
 
 

@@ -2,6 +2,8 @@ package com.fhs.common.utils;
 
 import com.fhs.common.constant.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -303,5 +305,23 @@ public class ReflectUtils {
             return name.equals(method.getName());
         }).collect(Collectors.toList());
         return methods.isEmpty() ? null : methods.get(0);
+    }
+
+    /**
+     * 获取哪些属性为null
+     * @param source  对象
+     * @return 属性为null的属性名称
+     */
+    public static String[] getNullPropertyNames (Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for(java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
     }
 }

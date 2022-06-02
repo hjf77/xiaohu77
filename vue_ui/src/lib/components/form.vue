@@ -19,8 +19,11 @@
           :label="item.label ? item.label + ':' : ' '"
           :prop="item.name"
           :key="item.name"
-          :class="{'labelLeft': item.isAndClass}"
+          :class="{'labelLeft': item.isAndClass, 'labelHeight': item.type === 'label'}"
         >
+
+          <div v-if="item.type === 'label'" :style="{ width: item.width ? item.width + 'px' : '305px' }"></div>
+
           <el-input
             :disabled="proxyIf(item.disabledOn, false)"
             v-model="model[item.name]"
@@ -37,20 +40,13 @@
             show-word-limit
             v-bind="item"
             :style="{ width: item.width ? item.width + 'px' : '305px' }"
-          ></el-input>
-          <el-input
-            :disabled="proxyIf(item.disabledOn, false)"
-            v-model="model[item.name]"
-            v-if="item.type === 'prefixText'"
-            :clearable = "item.clearable?item.clearable:true"
-            show-word-limit
-            v-bind="item"
-            style="width: 305px"
           >
-            <template slot="prepend">{{ item.prefixTextContent }}</template>
+            <template v-if="item.prefixTextContent" slot="prepend">{{ item.prefixTextContent }}</template>
+            <template v-if="item.afterTextContent" slot="append">{{ item.afterTextContent }}</template>
           </el-input>
+
           <el-input
-            :disabled="proxyIf(item.disabledOn, false)"
+            :disabled="proxyIf(item.disabledOn, false)"afterText
             v-model="model[item.name]"
             v-if="item.type === 'textarea'"
             :clearable = "item.clearable?item.clearable:true"
@@ -163,6 +159,7 @@
               v-for="(itemBtn, index) in item.buttons"
               :key="index"
               v-bind="itemBtn"
+              :type="itemBtn.type || 'primary'"
               @click="formButtonsClick(itemBtn)"
             >{{ itemBtn.name }}</el-button
             >
@@ -172,7 +169,7 @@
               <label  v-for="(itemLabel, index) in item.labels" :key="index" >{{itemLabel.title + ':' + model[itemLabel.name]}}</label>
           </div>
 
-          <pagex-one2x  v-if="item.type === 'one2x'" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
+          <pagex-one2x  v-if="item.type === 'one2x'" :isEdit="isEdit" :optionsInitSetts="optionsInitSetts" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
 
           <pagex-uploadFileAsync
             v-bind="item"
@@ -374,6 +371,10 @@ export default {
       type: String,
       default: "",
     },
+    optionsInitSetts: {
+      type: Array,
+      default: () =>[]
+    }
   },
   computed: {
     styleName() {
@@ -483,11 +484,14 @@ export default {
          _that.$set(_that.model, _item.name, _that.model[_item.name]
           ? _that.model[_item.name]
           :'');
-      }
+        }
       }
     });
     this.edit(); //获取到 详情信息
     this.formCreate = true;
+    this.$nextTick(() => {
+      this.clearValidate()
+    })
   },
   methods: {
     proxyIf(_ifFun, _default) {
@@ -533,6 +537,16 @@ export default {
         itemBtn.click(this, this.model);
       }
     },
+
+    // 校验
+    validate(_callback) {
+      this.$refs.form.validate((valid, errors) => {
+        if(valid){
+          _callback(this.model);
+        }
+      });
+    },
+
     submit(_extParam) {
       if (this.isFormDataSub) {
           this.subFormData(_extParam);
@@ -688,6 +702,10 @@ export default {
     // 设置model的一些数据
     setModelProp(_prop, _value) {
       this.$set(this.model, _prop, _value);
+    },
+    // 新增时 clear 校验
+    clearValidate() {
+      this.$refs['form'].clearValidate()
     }
   },
 };
@@ -765,5 +783,10 @@ export default {
   line-height: 20px;
   padding-top: 10px;
 
+}
+::v-deep .labelHeight {
+  .el-form-item__content {
+    line-height: 40px !important;
+  }
 }
 </style>

@@ -5,7 +5,7 @@
       <template v-for="(item, index) in realControls">
         <el-table-column type="selection" width="55" align="center" v-if="item.type === 'selection'">
         </el-table-column>
-        <el-table-column align="center">
+        <el-table-column align="center" :width="item.width || '170px'" :fixed="item.fixed">
           <template slot="header" slot-scope="scope">
             <span style="color:#2d65dc;">{{ item.label }}</span>
             <i style="color:#F56C6C;" v-if="isRequired(item.rule)">*</i>
@@ -29,7 +29,6 @@
                 show-word-limit
                 v-bind="item"
                 :one2xOptionsSetts.sync="optionsSetts"
-                :style="{ width: item.width ? item.width + 'px' : '150px' }"
               ></pagex-input>
               <pagex-select
                 v-bind="item"
@@ -42,7 +41,6 @@
                 :labelField="item.labelField"
                 :valueField="item.valueField"
                 :isValueNum="item.isValueNum"
-                :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '200px' : '150px') }"
                 @change="item.change?item.change.call(this,item, scope.row[item.name]):''"
               ></pagex-select>
               <el-date-picker
@@ -53,8 +51,6 @@
                 v-if="item.type === 'dates'"
                 :picker-options="item.pickerOptions"
                 @change="(value) => changeFn(value,item.changeFn)"
-                :class="{'surplus' : item.name === 'effectiveDate'}"
-                :style="{ width: item.width ? item.width + 'px' : '305px' }"
               ></el-date-picker>
             </el-form-item>
           </template>
@@ -63,7 +59,8 @@
       <!--按钮-->
       <el-table-column
         label="操作"
-        :width="210"
+        :width="120"
+        fixed="right"
         align="center"
       >
         <template slot-scope="scope">
@@ -118,6 +115,10 @@ export default {
     onDataChange: {
       type: Function
     },
+    optionsInitSetts: {
+      type: Array,
+      default: () =>[]
+    }
   },
   watch: {
     datas: {
@@ -148,6 +149,8 @@ export default {
           }
         });
       });
+    } else {
+      this.optionsSetts = deepClone(this.optionsInitSetts)
     }
     this.controls.forEach((_item) => {
       if (!_item.placeholder) {

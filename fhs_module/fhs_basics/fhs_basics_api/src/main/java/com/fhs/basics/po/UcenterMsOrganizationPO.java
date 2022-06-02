@@ -19,6 +19,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @author wanglei
@@ -105,4 +106,13 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     @ApiModelProperty(value = "所属单位id")
     private String companyId;
 
+    @Override
+    public Serializable getTreeNodeParentId() {
+        return this.parentId;
+    }
+
+    @Override
+    public Serializable getTreeNodeId() {
+        return this.id;
+    }
 }

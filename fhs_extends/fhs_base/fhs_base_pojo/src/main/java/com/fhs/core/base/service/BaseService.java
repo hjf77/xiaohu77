@@ -70,13 +70,22 @@ public interface BaseService<V extends VO, P extends BasePO> {
 
 
     /**
-     * 根据id跟新 -- 判空  -- jpa方法
+     * 根据id更新 -- 判空
      *
      * @param entity 待更新数据
      * @return 受影响行数
      * @since 1.0.0
      */
     int updateSelectiveById(P entity);
+
+    /**
+     * 根据id更新
+     *
+     * @param entity 待更新数据
+     * @return 受影响行数
+     * @since 1.0.0
+     */
+    int updateById(P entity);
 
 
     /**

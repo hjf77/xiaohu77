@@ -29,6 +29,7 @@ import net.sf.jsqlparser.statement.update.Update;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,8 +163,8 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
 
 
     @Override
-    public String getParentId() {
-        return this.fatherMenuId ;
+    public Serializable getTreeNodeParentId() {
+        return this.fatherMenuId;
     }
 
     @Override
@@ -172,7 +173,9 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     }
 
     @Override
-    public String getId() {
+    public Serializable getTreeNodeId() {
         return this.menuId;
     }
+
+
 }
