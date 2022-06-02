@@ -18,9 +18,8 @@
       </div>
       <!-- 中间审核按钮 拒绝 按钮 -->
       <div class="card m-t-20">
-        <el-button size="small">审核</el-button>
-        <!-- @click="check(i)" v-hasPermi="i.permission ? i.permission : 'none'" -->
-        <el-button size="small">拒绝</el-button>
+        <el-button v-hasPermi="['supplierSupplier:apply']" size="small">审核</el-button>
+        <el-button v-hasPermi="['supplierSupplier:apply']" size="small">拒绝</el-button>
       </div>
       <!-- tabs切换 -->
       <div class="card m-t-20">

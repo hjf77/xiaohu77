@@ -1,9 +1,11 @@
 package com.fhs.agreement.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
@@ -94,6 +96,7 @@ public class AgreementGoodsSettPO extends BasePO<AgreementGoodsSettPO> {
      */
     @TableField("start_time")
     @ApiModelProperty(value = "开始时间")
+    @JSONField(format = DateUtils.DATETIME_PATTERN_DATE)
     private Date startTime;
 
     /**
@@ -101,6 +104,7 @@ public class AgreementGoodsSettPO extends BasePO<AgreementGoodsSettPO> {
      */
     @TableField("end_time")
     @ApiModelProperty(value = "结束时间")
+    @JSONField(format = DateUtils.DATETIME_PATTERN_DATE)
     private Date endTime;
 
     /**
