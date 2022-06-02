@@ -5,12 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.agreement.vo.AgreementGoodsSettVO;
+import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
+import com.fhs.supplier.po.SupplierOrderPartyPO;
+import com.fhs.supplier.po.SupplierSupplierPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -63,6 +68,7 @@ public class AgreementAgreementPO extends BasePO<AgreementAgreementPO> {
      */
     @TableField("order_party_id")
     @ApiModelProperty(value = "订单方id")
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.supplier.po.SupplierOrderPartyPO", alias = "orderPartyId", fields = {"name", "orderPartyCode"}, serviceName = "basic", dataSource = "basic")
     private Integer orderPartyId;
 
     /**
@@ -70,6 +76,7 @@ public class AgreementAgreementPO extends BasePO<AgreementAgreementPO> {
      */
     @TableField("supplier_id")
     @ApiModelProperty(value = "供应商id")
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.supplier.po.SupplierSupplierPO", alias = "supplierId", fields = {"name", "supplierCode"}, serviceName = "basic", dataSource = "basic")
     private Integer supplierId;
 
     /**
@@ -92,7 +99,8 @@ public class AgreementAgreementPO extends BasePO<AgreementAgreementPO> {
      */
     @TableField("org_id")
     @ApiModelProperty(value = "所属组织")
-    private Long orgId;
+    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
+    private String orgId;
 
     /**
      * 开始时间
@@ -115,6 +123,14 @@ public class AgreementAgreementPO extends BasePO<AgreementAgreementPO> {
     @TableField("remark")
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    /**
+     * 商品所有id
+     */
+    @Length(message = "商品ids", groups = {Add.class, Update.class}, max = 200)
+    @TableField("goods_id")
+    @ApiModelProperty(value = "商品ids")
+    private String goodsId;
 
     /**
      * 商品

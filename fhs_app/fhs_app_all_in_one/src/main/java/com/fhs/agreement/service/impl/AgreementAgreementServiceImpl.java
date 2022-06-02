@@ -39,13 +39,13 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
         entity.setStatus(0);
         int insert = super.insert(entity);
         Integer id = entity.getId();
+        saveGoods(entity.getGoodsVOs(), entity.getId(),true);
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         String no = fmt.format(new Date()) + StringUtils.formatCountWith0("","%06d",id);
         entity.setNo(no);
         List<AgreementAgreementPO> list = new ArrayList<>();
         list.add(entity);
         this.batchUpdate(list);
-        saveGoods(entity.getGoodsVOs(), entity.getId(),true);
         return insert;
     }
 
