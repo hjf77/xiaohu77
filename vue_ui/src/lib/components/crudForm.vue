@@ -38,7 +38,7 @@ export default {
     },
     idFieldName: {
       type: String,
-      default: null,
+      default: 'id',
     },
     title: {
       type: String,
