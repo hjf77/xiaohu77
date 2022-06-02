@@ -95,6 +95,20 @@ export const constantRoutes = [
   },
 
   {
+    path: '/agreementInput',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'agreementDetail',
+        component: () => import('@/views/agreement/components/agreementForm.vue'),
+        name: 'Data',
+        meta: { title: '协议录入-详情', icon: '' }
+      }
+    ]
+  },
+
+  {
     path: '',
     component: Layout,
     redirect: 'index',

@@ -2,11 +2,14 @@ package com.fhs.fee.po;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fhs.common.tree.Treeable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
 
+import com.fhs.core.jsonfilter.anno.AutoArray;
+import com.fhs.core.jsonfilter.serializer.Str2ArrayValueSerializer;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
@@ -98,9 +101,9 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
      * 状态
      */
     @Trans(type = TransType.DICTIONARY, key = "is_enable")
-    @TableField("status")
+    @TableField("is_enable")
     @ApiModelProperty(value = "状态")
-    private Integer status;
+    private Integer isEnable;
 
     /**
      * 备注
@@ -138,6 +141,8 @@ public class FeeProjectPO extends BasePO<FeeProjectPO> implements Treeable {
     @Length(message = "结案数据来源 多个逗号分隔字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("settlement_datasource")
     @ApiModelProperty(value = "结案数据来源 多个逗号分隔")
+    @AutoArray
+    @JSONField(serializeUsing = Str2ArrayValueSerializer.class)
     private String settlementDatasource;
 
     /**
