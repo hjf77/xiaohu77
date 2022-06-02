@@ -17,9 +17,10 @@
         </div>
       </div>
       <!-- 中间审核按钮 拒绝 按钮 -->
-      <div class="card m-t-20">
+      <div class="card m-t-20">  
         <el-button size="small">审核</el-button>
-        <el-button size="small">按钮</el-button>
+        <!-- @click="check(i)" v-hasPermi="i.permission ? i.permission : 'none'" -->
+        <el-button size="small">拒绝</el-button>
       </div>
       <!-- tabs切换 -->
       <div class="card m-t-20">
@@ -49,11 +50,11 @@
 </template>
 
 <script>
-import bacisEditForm from '@/views/supplier/components/bacisEditForm.vue';
+import bacisEditForm from '@/views/supplier/supplierDataManagement/components/bacisEditForm.vue';
 
-import financialEditForm from '@/views/supplier/components/financialEditForm.vue';
+import financialEditForm from '@/views/supplier/supplierDataManagement/components/financialEditForm.vue';
 
-import licenseEditForm from '@/views/supplier/components/licenseEditForm.vue';
+import licenseEditForm from '@/views/supplier/supplierDataManagement/components/licenseEditForm.vue';
 export default {
   name: 'editForm',
   components: {
@@ -67,7 +68,7 @@ export default {
       btnSubmit: true,
       count: 0,
       id: null,
-      showForm:false,
+      showForm: false,
       detailsInfo: {
         supplierCode: '- -',
         name: '- -',
@@ -110,50 +111,39 @@ export default {
         this.btnSubmit = true;
       }
     },
-    // submitClickFn(val) {
-    //   if (val === 'bacisEditForm') {
-    //     this.btnSubmit = true;
-    //     this.activeName = 'certificate';
-    //   } else if (val === 'financialEditForm') {
-    //     this.btnSubmit = false;
-    //     this.SaveInterface();
-    //   }
-    // },
     btnSubmitFn() {
       if (this.activeName === 'basic') {
-        const _that = this
-        this.$refs.bacisEditForm.validate(function(_model){
-          console.log(3343)
-          _that.basicTabCanter = _model
+        const _that = this;
+        this.$refs.bacisEditForm.validate(function (_model) {
+          console.log(3343);
+          _that.basicTabCanter = _model;
           _that.btnSubmit = true;
           _that.activeName = 'certificate';
-          
         });
-        
       } else if (this.activeName === 'certificate') {
         this.activeName = 'finance';
         this.btnSubmit = false;
       } else if (this.activeName === 'finance') {
-        const _that = this
-        this.$refs.financialEditForm.validate(function(_model){
-          console.log(_model)
-          _that.financeTabCanter = _model
+        const _that = this;
+        this.$refs.financialEditForm.validate(function (_model) {
+          console.log(_model);
+          _that.financeTabCanter = _model;
           _that.btnSubmit = false;
           _that.SaveInterface();
         });
       }
     },
     SaveInterface() {
-      const Canter = Object.assign(this.basicTabCanter,this.financeTabCanter,{id: this.id})
+      const Canter = Object.assign(this.basicTabCanter, this.financeTabCanter, {
+        id: this.id,
+      });
       this.$pagexRequest({
         url: '/basic/ms/supplierSupplier/updateField',
         method: 'PUT',
-        data: Canter
+        data: Canter,
       })
         .then((res) => {
-          this.msgSuccess(
-            res.message || '修改成功'
-          );
+          this.msgSuccess(res.message || '修改成功');
           this.$router.push({ path: '/supplier/supplierSupplier' });
           console.log(res);
         })

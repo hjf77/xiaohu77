@@ -73,7 +73,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'type/editForm',
-        component: () => import('@/views/supplier/components/editForm.vue'),
+        component: () => import('@/views/supplier/supplierDataManagement/components/editForm.vue'),
         name: 'Data',
         meta: { title: '供应商资料管理详情', icon: '' }
       }

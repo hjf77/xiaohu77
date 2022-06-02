@@ -12,6 +12,7 @@
       :isVee="false"
       :isHaveAddBtn="false"
       :isHaveCancelBtn="false"
+      namespace="supplierSupplier"
     >
     </pagex-form>
   </base-container>
@@ -29,15 +30,7 @@ export default {
     return {
       buttons: [],
       onSubmit: function () {
-        this.$refs.pageForm.$refs.form.validate((valid, errors) => {
-          if (valid) {
-            this.$emit('submitClick', 'financialEditForm')
-            return true
-          } else {
-            this.$emit('submitClick', false)
-            return false
-          }
-        })
+        return true;
       },
       controls: [
         {

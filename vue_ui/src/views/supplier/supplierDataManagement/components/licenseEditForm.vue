@@ -3,7 +3,8 @@
   <base-container>
     <div class="title-style">上传营业执照</div>
     <pagex-uploadPicture
-      :limit="1">
+      :limit="1"
+      namespace="supplierSupplier">
     </pagex-uploadPicture>
   </base-container>
 </template>

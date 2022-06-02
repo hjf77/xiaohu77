@@ -10,10 +10,8 @@
       :isVee="false"
       :isHaveAddBtn="false"
       :isHaveCancelBtn="false"
+      namespace="supplierSupplier"
     >
-      <!-- <template #city="scoped">
-        <el-cascader v-model="city" :options="cityList" @change="handleChange"></el-cascader>
-      </template>-->
     </pagex-form>
   </base-container>
 </template>
@@ -35,17 +33,6 @@ export default {
     // };
     return {
       buttons: [],
-      // onSubmit: function () {
-      //   this.$refs.pageForm.$refs.form.validate((valid, errors) => {
-      //     if (valid) {
-      //       this.$emit('submitClick', 'bacisEditForm')
-      //       return true
-      //     } else {
-      //       this.$emit('submitClick', false)
-      //       return false
-      //     }
-      //   })
-      // },
       controls: [
         {
           type: 'text',

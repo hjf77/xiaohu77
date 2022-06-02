@@ -14,8 +14,9 @@
       :sortSett="sortSett"
       :buttons="buttons"
       :querys="querys"
+      namespace="supplierSupplier"
     >
-      <template v-slot:form="prop">
+      <template v-slot:form="">
         <!-- 新增 弹框-->
         <pagex-dialog
           v-if="open"
@@ -23,6 +24,7 @@
           slot="form"
           :title="title"
           :visible.sync="open"
+          namespace="supplierSupplier"
         >
           <!-- 新增 -->
           <pagex-form
@@ -32,6 +34,7 @@
             :isHaveAddBtn="true"
             :isVee="false"
             :isEdit="isEdit"
+            namespace="supplierSupplier"
           ></pagex-form>
         </pagex-dialog>
       </template>
@@ -66,7 +69,7 @@ export default {
           title: '新增',
           type: 'primary',
           size: 'mini',
-          permission: ['sysUser:add'],
+          permission: ['supplierSupplierDataManagement:add'],
           click: (_row) => {
             this.title = '新增';
             // this.$set(this, "init", {organizationId:this.org.id})
@@ -87,22 +90,6 @@ export default {
           },
         },
       ],
-      // formButtons:[
-      //   {
-      //     name: '保存',
-      //     type: 'primary',
-      //     size: 'mini',
-      //     click: (_row) => {
-      //       debugger
-      //       this.$pagexRequest({
-      //           url: "/vmock/supplier/log",
-      //           method: "GET"
-      //       }).then((res) => {
-      //           console.log(res)
-      //       })
-      //     },
-      //   }
-      // ],
       controls: [
         {
           type: 'text',
@@ -147,11 +134,13 @@ export default {
           label: '操作',
           name: 'operation',
           type: 'textBtn',
+          fixed: 'right',
           textBtn: [
             {
               title: '编辑',
               type: 'bottom',
               size: 'mini',
+              permission: ['supplierSupplierDataManagement:update'],
               click: (_row) => {
                 this.$router.push({path: '/supplier/type/editForm',query:{id: _row.id}});
                 this.isEdit = true;
@@ -161,7 +150,7 @@ export default {
               title: "删除",
               type: "danger",
               size: "mini",
-              permission: ['sysUser:del'],
+              permission: ['supplierSupplierDataManagement:del'],
               idFieldName:'id',
               api:'/basic/ms/supplierSupplier/'
             }
