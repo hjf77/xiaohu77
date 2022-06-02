@@ -60,20 +60,20 @@ export default defineConfig({
     //host:'',
     port:3001,
     cors:true,
-    proxy: {
-      '/api/basic': {
-        target: 'http://127.0.0.1:8089/',
-        rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
-      },
-      '/api/purchase': {
-        target: 'http://127.0.0.1:8089/',
-        rewrite: (path) => path.replace('/api/purchase', '') // 采购业务
-      },
-      '/api/vmock': {
-        target: 'http://192.168.0.213:8098/vmock/',
-        rewrite: (path) => path.replace('/api/vmock', '') // vmock
+      proxy: {
+        '/api/basic': {
+          target: 'http://192.168.0.213:8089/',
+          rewrite: (path) => path.replace('/api/basic', '') // 根据环境变量配置代理
+        },
+        '/api/purchase': {
+          target: 'http://192.168.0.213:8089/',
+          rewrite: (path) => path.replace('/api/purchase', '') // 采购业务
+        },
+        '/api/vmock': {
+          target: 'http://192.168.0.213:8089/vmock',
+          rewrite: (path) => path.replace('/api/vmock', '') // 根据环境变量配置代理
+        }
       }
-    }
   //   hmr: {
   //     port: 443,
   //   }

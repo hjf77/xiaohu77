@@ -30,7 +30,7 @@
             <bacisEditForm v-if="showForm" ref="bacisEditForm" :detailsInfo="detailsInfo"></bacisEditForm>
           </el-tab-pane>
           <el-tab-pane label="证件信息" name="certificate">
-            <licenseEditForm></licenseEditForm>
+            <licenseEditForm @file="fileFn"></licenseEditForm>
           </el-tab-pane>
           <el-tab-pane label="财务信息" name="finance">
             <financialEditForm v-if="showForm" ref="financialEditForm" :detailsInfo="detailsInfo"></financialEditForm>
@@ -79,8 +79,9 @@ export default {
           updateUserUserName: '- -',
         },
       }, // 详情信息
-      basicTabCanter: {},
-      financeTabCanter: {},
+      // basicTabCanter: {},
+      // financeTabCanter: {},
+      businessLicense: {},
     };
   },
   created() {
@@ -111,30 +112,41 @@ export default {
         this.btnSubmit = true;
       }
     },
+    fileFn(file) {
+      console.log(file)
+      this.businessLicense = {businessLicense :file[0].uid}
+      
+    },
     btnSubmitFn() {
       if (this.activeName === 'basic') {
         const _that = this;
         this.$refs.bacisEditForm.validate(function (_model) {
           console.log(3343);
-          _that.basicTabCanter = _model;
+          // _that.basicTabCanter = _model;
           _that.btnSubmit = true;
           _that.activeName = 'certificate';
+          _that.SaveInterface(_model);
         });
       } else if (this.activeName === 'certificate') {
+        console.log('========>')
+        this.SaveInterface(this.businessLicense)
         this.activeName = 'finance';
         this.btnSubmit = false;
       } else if (this.activeName === 'finance') {
         const _that = this;
         this.$refs.financialEditForm.validate(function (_model) {
           console.log(_model);
-          _that.financeTabCanter = _model;
+          // _that.financeTabCanter = _model;
           _that.btnSubmit = false;
-          _that.SaveInterface();
+          _that.SaveInterface(_model,()=> {
+            _that.$router.push({ path: '/supplier/supplierSupplier' });
+          });
+          
         });
       }
     },
-    SaveInterface() {
-      const Canter = Object.assign(this.basicTabCanter, this.financeTabCanter, {
+    SaveInterface(formData, _callback) {
+      const Canter = Object.assign(formData, {
         id: this.id,
       });
       this.$pagexRequest({
@@ -144,12 +156,13 @@ export default {
       })
         .then((res) => {
           this.msgSuccess(res.message || '修改成功');
-          this.$router.push({ path: '/supplier/supplierSupplier' });
+          _callback && _callback()
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
+        
     },
   },
 };

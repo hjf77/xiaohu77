@@ -5,8 +5,6 @@
       ref="pageForm"
       :isEdit="true"
       :init="detailsInfo"
-      :addApi="addApi"
-      :updateApi="updateApi"
       :controls="controls"
       :onSubmit="onSubmit"
       :isVee="false"
