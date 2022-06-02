@@ -4,10 +4,10 @@
       <div>
       <el-button class="addclick" size="small" @click="addClick">新增</el-button>
       </div>
-      <el-tree 
-      :data="treeData" 
+      <el-tree
+      :data="treeData"
       :props="defaultProps"
-      ref="tree"  
+      ref="tree"
       node-key = "id"
       @node-click="nodeClick"
       >
@@ -19,7 +19,7 @@
   <div v-else>
       <div>暂无数据</div>
   </div>
-    
+
   </base-container>
 </template>
 
@@ -49,7 +49,7 @@ export default {
       //   data: '0102',
       //   isEnable: '0'
       // },
-      
+
     };
   },
   provide() {
@@ -61,7 +61,7 @@ export default {
   },
   mounted() {
     this.getTree()
-    
+
   },
 
   methods: {
@@ -80,17 +80,18 @@ export default {
     },
 
     nodeClick(node){
-      console.log(node)
       if(node.children.length === 0) {
         this.isEdit = true;
         this.parentId = null;
         this.init = node.data;
+        this.isFormShow = false
         this.$nextTick(() => {
           this.isFormShow = true
         })
       } else {
         this.isFormShow = false
         this.parentId = node.id
+        this.init = {}
       }
     },
     // 新增事件
@@ -100,13 +101,13 @@ export default {
           return;
       }
       this.isEdit = false;
+      this.isFormShow = false
       this.$nextTick(() => {
           this.isFormShow = true
       })
-      // this.addIsShow = true
     },
-    
-    
+
+
   },
 };
 </script>

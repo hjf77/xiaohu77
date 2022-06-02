@@ -11,12 +11,12 @@
     :isHaveCancelBtn="false"
     :buttons="buttons"
     :isVee="false"
-    :addApi="addApi" 
-    :updateApi="updateApi" 
+    :addApi="addApi"
+    :updateApi="updateApi"
   >
   </pagex-form>
 </div>
-    
+
 </template>
 <script>
 import crudMixins from "@/mixins/crudMixins";
@@ -204,15 +204,19 @@ export default {
           ],
           multiple: true,
         },
-       
+
       ],
       buttons: [
         {
           name: "启用",
           type: "",
           size: "mini",
+          ifFun:(_model)=>{
+            console.log(_model.id);
+            return _model.id && _model.status == 0;
+          },
           click: (_row) => {
-            this.title = "启用"; 
+            this.title = "启用";
             this.isEdit = false;
             this.open = false;
           },
@@ -221,6 +225,9 @@ export default {
           name: "禁用",
           type: "",
           size: "mini",
+          ifFun:(_model)=>{
+            return _model.id && _model.status == 1;
+          },
           click: (_row) => {
             this.title = "禁用";
             this.$set(this, "init", { organizationId: this.org.id });
@@ -232,7 +239,8 @@ export default {
         {
           name: "删除",
           type: "",
-          size: "mini", 
+          size: "mini",
+          ifAttr:'id',
           click: (_row) => {
             this.title = "删除";
             this.isEdit = false;
@@ -242,7 +250,7 @@ export default {
       ],
     };
   },
-  
+
   created() {
     console.log(this.parentId);
     console.log(this.isEdit);
