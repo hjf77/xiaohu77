@@ -34,6 +34,7 @@ export default {
           type: 'text',
           name: 'supplierCode',
           label: '供应商代码',
+          disabledOn: 'disabled',
           rule: [
             { required: true, message: '供应商代码不能为空', trigger: 'blur' },
             {
@@ -207,6 +208,7 @@ export default {
           type: 'text',
           name: 'registeredCapital',
           label: '注册资金',
+          afterTextContent:'万元',
           rule: [
             { required: true, message: '注册资金不能为空', trigger: 'blur' },
           ],
