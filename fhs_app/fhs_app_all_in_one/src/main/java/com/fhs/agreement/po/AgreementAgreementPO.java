@@ -1,21 +1,20 @@
 package com.fhs.agreement.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fhs.agreement.vo.AgreementGoodsSettVO;
 import com.fhs.basics.constant.BaseTransConstant;
-import com.fhs.basics.po.UcenterMsOrganizationPO;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.trans.vo.TransPojo;
-import com.fhs.supplier.po.SupplierOrderPartyPO;
-import com.fhs.supplier.po.SupplierSupplierPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -107,6 +106,7 @@ public class AgreementAgreementPO extends BasePO<AgreementAgreementPO> {
      */
     @TableField("start_time")
     @ApiModelProperty(value = "开始时间")
+    @JSONField(format = DateUtils.DATETIME_PATTERN_DATE)
     private Date startTime;
 
     /**
@@ -114,6 +114,7 @@ public class AgreementAgreementPO extends BasePO<AgreementAgreementPO> {
      */
     @TableField("end_time")
     @ApiModelProperty(value = "结束时间")
+    @JSONField(format = DateUtils.DATETIME_PATTERN_DATE)
     private Date endTime;
 
     /**
