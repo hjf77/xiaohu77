@@ -71,7 +71,7 @@ export default defineConfig({
         },
         '/api/vmock': {
           target: 'http://192.168.0.213:8089/vmock',
-          rewrite: (path) => path.replace('/api/vmock', '') // 根据环境变量配置代理
+          rewrite: (path) => path.replace('/api/vmock', '') // 根据环境变量配置代理
         }
       }
   //   hmr: {
