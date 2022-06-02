@@ -21,24 +21,24 @@ import lombok.*;
 public class SupplierSupplierVO extends SupplierSupplierPO implements VO {
 
  @ApiModelProperty(value = "地址")
- private Integer[]geographicalPosition;
+ private String[]geographicalPosition;
 
- public Integer[] getGeographicalPosition() {
-  this.geographicalPosition = new Integer[3];
-  this.geographicalPosition[0] = this.getProvince();
-  this.geographicalPosition[1] = this.getCity();
-  this.geographicalPosition[2] = this.getArea();
+ public String[] getGeographicalPosition() {
+  this.geographicalPosition = new String[3];
+  this.geographicalPosition[0] = this.getProvince().toString();
+  this.geographicalPosition[1] = this.getCity().toString();
+  this.geographicalPosition[2] = this.getArea().toString();
   return geographicalPosition;
  }
 
- public void setGeographicalPosition(Integer[] geographicalPosition) {
+ public void setGeographicalPosition(String[] geographicalPosition) {
   if(geographicalPosition == null || geographicalPosition.length == 0){
    return;
   }
   this.geographicalPosition = geographicalPosition;
-  this.setProvince(this.geographicalPosition[0]);
-  this.setCity(this.geographicalPosition[1]);
-  this.setArea(this.geographicalPosition[2]);
+  this.setProvince(Integer.valueOf(this.geographicalPosition[0]));
+  this.setCity(Integer.valueOf(this.geographicalPosition[1]));
+  this.setArea(Integer.valueOf(this.geographicalPosition[2]));
  }
 }
     
