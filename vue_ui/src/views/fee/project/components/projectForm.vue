@@ -48,7 +48,7 @@ export default {
     codemsg: {
       type: Object,
       default: () => {}
-    }
+    },
   },
   data() {
     return {
@@ -56,6 +56,7 @@ export default {
       updateApi: "/purchase/ms/feeProject",
       formData:{
         id: this.init.id,
+        currentId:null,
         parentId: this.init.parentId ? this.init.parentId : this.parentId,
         projectCode:'',
         status:this.init.status ? this.init.status : 1
@@ -79,6 +80,7 @@ export default {
           type: "text",
           name: "projectCode",
           label: "费用项目代码",
+          disabledOn:'disabled',
           rule: [
             {
               required: true,
@@ -181,10 +183,12 @@ export default {
         },
         {
           type: "select",
-          name: "status",
+          name: "isEnable",
           label: "状态",
           disabledOn:'disabled',
           dictCode: "isEnable",
+          // labelField: "isEnable",
+          // url:'/purchase/ms/feeProject/findList?level=1',
           isValueNum: true,
         },
         {
@@ -198,7 +202,7 @@ export default {
           label: "结案数据来源",
           placeholder: "请选择",
           dictCode: "settlementSource",
-          isValueNum: true,
+          // isValueNum: true,
           rule: [
             { required: true, message: "结案数据来源不能为空", trigger: "change" },
           ],
@@ -213,12 +217,24 @@ export default {
           size: "mini",
           ifFun:(_model)=>{
             console.log(_model.id);
-            return _model.id && _model.status == 0;
+            return _model.id && _model.isEnable == 0;
           },
           click: (_row) => {
             this.title = "启用";
-            this.isEdit = false;
-            this.open = false;
+            this.currentId = _row.id;
+            // console.log(this.currentId)
+          this.$pagexRequest({
+            url:`purchase/ms/feeProject/updateField` ,
+            method: "PUT",
+            data:{
+              id:_row.id,
+              isEnable: 1
+            }
+            }).then(res=>{
+              console.log(res)
+              this.msgSuccess('启用成功')
+               this.$emit("enableFn")
+            })
           },
         },
         {
@@ -226,14 +242,24 @@ export default {
           type: "",
           size: "mini",
           ifFun:(_model)=>{
-            return _model.id && _model.status == 1;
+            return _model.id && _model.isEnable == 1;
           },
           click: (_row) => {
             this.title = "禁用";
-            this.$set(this, "init", { organizationId: this.org.id });
-            // api:
-            this.isEdit = false;
-            this.open = false;
+            this.currentId = _row.id;
+            this.$pagexRequest({
+            url:`purchase/ms/feeProject/updateField` ,
+            method: "PUT",
+            data:{
+              id:_row.id,
+              isEnable: 0
+            }
+            }).then(res=>{
+              console.log(res)
+              this.msgSuccess('禁用成功')
+              this.$emit("enableFn")
+            })
+            
           },
         },
         {
@@ -244,7 +270,16 @@ export default {
           click: (_row) => {
             this.title = "删除";
             this.isEdit = false;
-            // url:'/ms/feeProject/?id= + parentId'
+            console.log(_row)
+            this.$pagexRequest({
+            url:`purchase/ms/feeProject/${_row.id}` ,
+            method: "DELETE",
+            }).then(res=>{
+              console.log(res)
+              this.msgSuccess('删除成功')
+              this.isFormShow = false
+              this.$emit("enableFn")
+            })
           },
         },
       ],
@@ -252,8 +287,8 @@ export default {
   },
 
   created() {
-    console.log(this.parentId);
-    console.log(this.isEdit);
+    // console.log(this.parentId);
+    // console.log(this.isEdit);
   },
   mounted(){
     if(!this.isEdit){
@@ -268,7 +303,7 @@ export default {
       }).then(res=>{
           this.$refs.form.setModelProp('projectCode',res.data);
       })
-    }
+    },
   },
 };
 </script>
