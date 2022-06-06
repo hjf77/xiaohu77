@@ -293,6 +293,9 @@ public class QueryFilter<T> {
             if(!isSqlValid(queryField.getValue() + "")){
                 throw new ParamsInValidException("字段值校验出SQL注入风险:" + queryField.getValue());
             }
+
+            field = getField(queryField.getField(), currentModelClass);
+
             Object propValue = queryField.getValue();
             if("like".equals(queryField.getOperation())){
                 propValue = "%" + propValue + "%";
@@ -302,7 +305,7 @@ public class QueryFilter<T> {
                 propValue = "'" + propValue + "'";
             }
             //目标标字段
-            String targetField = getField(queryField.getField(), getTargetClass(queryField.getTarget()));
+            String targetField = getField(queryField.getProperty(), getTargetClass(queryField.getTarget()));
             String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from "  + getTargetTableName(queryField.getTarget()) + " where " + targetField
                      + " " + queryField.getOperation() + " " +  propValue + ")";
             queryWrapper.apply(sql);
