@@ -522,6 +522,8 @@ export default {
             group: item.group || "main",
             operation: item.operation,
             property: item.name,
+            target: item.target,
+            field: item.field,
             relation: "AND",
             value:
               item.type == "date-picker" || item.type == "datetimerange"
