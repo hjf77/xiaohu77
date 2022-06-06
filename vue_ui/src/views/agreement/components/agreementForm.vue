@@ -389,6 +389,7 @@ export default {
           this.formData.id = this.init.id;
           this.formData.no = this.init.no;
           this.formData.detailNum = this.init.detailNum
+          this.formData.supplierId = this.init.supplierId
           this.formData.status = this.init.status;
           this.formData.orgId = this.init.orgId;
           this.optionsInitSetts = res.selectDataList
