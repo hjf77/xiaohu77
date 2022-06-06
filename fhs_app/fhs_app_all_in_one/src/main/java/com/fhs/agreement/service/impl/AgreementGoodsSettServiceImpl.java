@@ -32,25 +32,10 @@ public class AgreementGoodsSettServiceImpl extends BaseServiceImpl<AgreementGood
         agreementGoodsSettMapper.physicsDelete(agreemenetId);
     }
 
+    //todo  caiyu 方法名问题
     @Override
     public List<AgreementGoodsSettVO> goosByaAreementId(int agreemenetId) {
         List<AgreementGoodsSettVO> poList = agreementGoodsSettMapper.goosByaAreementId(agreemenetId);
-        List<AgreementSelectData> selectDataList = new ArrayList<>();
-        AgreementSelectData selectData = new AgreementSelectData();
-        List<AgreementSelectData.Goodspecification> cations = new ArrayList<>();
-        AgreementSelectData.Goodspecification  cation = new AgreementSelectData.Goodspecification();
-        cation.setId(0);
-        cation.setTitle("1*10");
-        cations.add(cation);
-        cation = new AgreementSelectData.Goodspecification();
-        cation.setId(1);
-        cation.setTitle("1*20");
-        cations.add(cation);
-        selectData.setGoodspecifications(cations);
-        selectDataList.add(selectData);
-        for (AgreementGoodsSettVO data: poList) {
-            data.setSelectDataList(selectDataList);
-        }
         return poList;
     }
 

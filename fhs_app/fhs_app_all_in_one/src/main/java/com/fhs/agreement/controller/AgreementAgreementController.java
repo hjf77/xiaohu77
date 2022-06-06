@@ -8,6 +8,7 @@ import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,31 +31,15 @@ public class AgreementAgreementController extends ModelSuperController<Agreement
 
     /**
      * 获取单条数据协议信息+商品信息
-     *
-     * @param request
      * @return
      */
+    @LogMethod
+    @ApiOperation("详情-请使用此方法")
     @SaCheckRole("agreemenetAgreemenet:see")
     @GetMapping("getAgreementGoosInfo")
-    @LogMethod
     public AgreementAgreementVO getAgreementGoosInfo(@RequestParam("id") int id, HttpServletRequest request) {
         return agreementAgreementService.getAgreementGoosInfo(id);
     }
-
-
-    /**
-     * 审核
-     *
-     * @param request
-     * @return
-     */
-    @PostMapping("agreementAudit")
-    @LogMethod
-    public HttpResult<Boolean> agreementAudit(@RequestParam("id") int id, HttpServletRequest request) {
-        agreementAgreementService.agreementAudit(id);
-        return HttpResult.success(true);
-    }
-
 
 
 }

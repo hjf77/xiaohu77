@@ -266,6 +266,11 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public int updateById(P entity) {
+        if (entity.getCreateTime() == null || entity.getCreateUser() == null) {
+            P oldEntity = baseMapper.selectById(entity.getPkey());
+            entity.setCreateTime(oldEntity.getCreateTime());
+            entity.setCreateUser(oldEntity.getCreateUser());
+        }
         checkIsExist(entity, true);
         updateCache(entity);
         this.refreshCache();
@@ -281,7 +286,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      */
     protected void addHistory(P entity) {
         if (this.namespace != null) {
-            LoggerContext.addHistoryData(entity,namespace);
+            LoggerContext.addHistoryData(entity, namespace);
         }
     }
 

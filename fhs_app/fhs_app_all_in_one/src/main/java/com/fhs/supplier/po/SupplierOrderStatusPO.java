@@ -4,6 +4,9 @@ import java.io.Serializable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -54,6 +57,7 @@ public class SupplierOrderStatusPO extends BasePO<SupplierOrderStatusPO> {
      */
     @TableField("is_enable")
     @ApiModelProperty(value = "是否启用（0否1是）")
+    @Trans(type = TransType.DICTIONARY,key = "yesOrNo")
     private Integer isEnable;
 
     /**
@@ -62,6 +66,7 @@ public class SupplierOrderStatusPO extends BasePO<SupplierOrderStatusPO> {
     @Length(message = "业务控制（0允许采购订货1允许采购收货2允许采购退货3允许采购退货出货）字段的长度最大为20", groups = {Add.class, Update.class}, max = 20)
     @TableField("business_control")
     @ApiModelProperty(value = "业务控制（0允许采购订货1允许采购收货2允许采购退货3允许采购退货出货）")
+    @Trans(type = TransType.DICTIONARY,key = "businessControl")
     private String businessControl;
 
 

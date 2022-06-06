@@ -102,7 +102,7 @@ export const constantRoutes = [
       {
         path: 'agreementDetail',
         component: () => import('@/views/agreement/components/agreementForm.vue'),
-        name: 'Data',
+        name: 'agreementForm',
         meta: { title: '协议录入-详情', icon: '' }
       }
     ]

@@ -24,23 +24,16 @@ public class SupplierSupplierVO extends SupplierSupplierPO implements VO {
  private String[]geographicalPosition;
 
  public String[] getGeographicalPosition() {
-  this.geographicalPosition = new String[3];
-  if(this.getProvince() == null){
-   this.geographicalPosition[0] = "0";
+
+  if(this.getProvince() == null || this.getCity() == null || this.getArea() == null){
+   return new String[]{};
   }else{
+   this.geographicalPosition = new String[3];
    this.geographicalPosition[0] = this.getProvince().toString();
-  }
-  if(this.getCity() == null){
-   this.geographicalPosition[1] = "0";
-  }else{
    this.geographicalPosition[1] = this.getCity().toString();
-  }
-  if(this.getArea() == null){
-   this.geographicalPosition[2] = "0";
-  }else{
    this.geographicalPosition[2] = this.getArea().toString();
+   return geographicalPosition;
   }
-  return geographicalPosition;
  }
 
  public void setGeographicalPosition(String[] geographicalPosition) {

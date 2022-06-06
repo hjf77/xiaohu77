@@ -1,6 +1,8 @@
 package com.fhs.supplier.service.impl;
 
 
+import com.fhs.common.utils.StringUtils;
+import com.fhs.supplier.constant.SupplierConstant;
 import com.fhs.supplier.vo.SupplierReconciliationConditionsVO;
 import com.fhs.supplier.po.SupplierReconciliationConditionsPO;
 import com.fhs.supplier.service.SupplierReconciliationConditionsService;
@@ -17,6 +19,12 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
  */
 @Service
 @Namespace("supplier_reconciliation_conditions")
-public class SupplierReconciliationConditionsServiceImpl extends BaseServiceImpl<SupplierReconciliationConditionsVO,SupplierReconciliationConditionsPO> implements SupplierReconciliationConditionsService {
-
+public class SupplierReconciliationConditionsServiceImpl extends BaseServiceImpl<SupplierReconciliationConditionsVO, SupplierReconciliationConditionsPO> implements SupplierReconciliationConditionsService {
+    @Override
+    public int insert(SupplierReconciliationConditionsPO entity) {
+        int result = super.insert(entity);
+        entity.setConditionsCode(SupplierConstant.RECONCILIATIONC_PRE +  StringUtils.formatCountWith0("",
+                "%06d",entity.getId()));
+        return result;
+    }
 }

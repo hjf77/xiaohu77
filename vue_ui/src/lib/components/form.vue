@@ -95,13 +95,14 @@
             v-if="item.type === 'radio'"
             @change="item.click.call(this,item, model[item.name])"
             :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
+
           ></pagex-radio>
 
           <pagex-checkbox
             v-bind="item"
             v-model="model[item.name]"
             v-if="item.type === 'checkbox'"
-            style="width: 740px; line-height: 40px"
+            :style="{ width: item.width ? item.width + 'px' : '740px'}"
           ></pagex-checkbox>
           <pagex-switchs
             v-bind="item"

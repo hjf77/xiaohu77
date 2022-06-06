@@ -4,6 +4,9 @@ import java.io.Serializable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -28,7 +31,7 @@ public class SupplierReconciliationConditionsPO extends BasePO<SupplierReconcili
 
     private static final long serialVersionUID = 753876570499997481L;
 
-    @TableId(value = "id", type = IdType.NONE)
+    @TableId(value = "id", type = IdType.AUTO)
     @NotNull(message = "id字段不可为空", groups = {Update.class, Delete.class})
     @ApiModelProperty(value = "id")
     private Integer id;
@@ -53,9 +56,9 @@ public class SupplierReconciliationConditionsPO extends BasePO<SupplierReconcili
      * 说明
      */
     @Length(message = "说明字段的长度最大为256", groups = {Add.class, Update.class}, max = 256)
-    @TableField("explain")
+    @TableField("remark")
     @ApiModelProperty(value = "说明")
-    private String explain;
+    private String remark;
 
     /**
      * 对账天数
@@ -68,6 +71,7 @@ public class SupplierReconciliationConditionsPO extends BasePO<SupplierReconcili
      * 对账日期基数（0自然周1自然半月2自然月3无）
      */
     @TableField("date_base")
+    @Trans(type= TransType.DICTIONARY,key = "supplierReconciliationDateBase")
     @ApiModelProperty(value = "对账日期基数（0自然周1自然半月2自然月3无）")
     private Integer dateBase;
 
@@ -75,6 +79,7 @@ public class SupplierReconciliationConditionsPO extends BasePO<SupplierReconcili
      * 对账日期基数缺省值（0发生日期1创建日期2无）
      */
     @TableField("date_base_omit")
+    @Trans(type= TransType.DICTIONARY,key = "supplierReconciliationDateBaseOmit")
     @ApiModelProperty(value = "对账日期基数缺省值（0发生日期1创建日期2无）")
     private Integer dateBaseOmit;
 

@@ -9,13 +9,16 @@
       :props="defaultProps"
       ref="tree"
       node-key = "id"
+      :default-expanded-keys="idArr"
+      :default-checked-keys="[currentId]"
       @node-click="nodeClick"
+      @check-change="handleCheckChange"
       >
       </el-tree>
     </template>
-   <div v-if="isFormShow">
-      <feeProject :isFormShow.sync="isFormShow" :init="init" :isEdit="isEdit" :parentId="parentId"></feeProject>
-  </div>
+    <div v-if="isFormShow">
+      <feeProject  @enableFn="enableFn" :isFormShow.sync="isFormShow" :init="init" :isEdit="isEdit" :parentId="parentId"></feeProject>
+    </div>
   <div v-else>
       <div>暂无数据</div>
   </div>
@@ -36,6 +39,7 @@ export default {
       isFormShow: false,
       addIsShow: false,
       parentId: null,
+      idArr:[],
       isEdit: false,
       defaultProps:{
         label:'name',
@@ -61,7 +65,6 @@ export default {
   },
   mounted() {
     this.getTree()
-
   },
 
   methods: {
@@ -78,12 +81,17 @@ export default {
              this.treeData = res
           })
     },
+    handleCheckChange(data, checked, indeterminate) {
+        console.log(data, checked, indeterminate, 111111);
+      },
 
     nodeClick(node){
-      if(node.children.length === 0) {
+      if(node.data.level != 1) {
         this.isEdit = true;
         this.parentId = null;
         this.init = node.data;
+        this.idArr.push(node.id)
+        console.log(this.idArr)
         this.isFormShow = false
         this.$nextTick(() => {
           this.isFormShow = true
@@ -106,8 +114,11 @@ export default {
           this.isFormShow = true
       })
     },
+    
 
-
+    enableFn(){
+      this.reload()
+    }
   },
 };
 </script>

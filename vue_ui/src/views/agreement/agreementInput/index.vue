@@ -1,6 +1,6 @@
 <!--
-  模块名称：供应商资料管理
-  开发人员：何静静
+  模块名称：采购协议录入总汇
+  开发人员：马军伟
   创建时间: 2022-5-30
 -->
 <template>
@@ -46,33 +46,14 @@ export default {
               path: '/agreementInput/agreementDetail'
             })
           }
-        },
-        // {
-        //   title: '审核',
-        //   type: 'primary',
-        //   size: 'mini',
-        //   permission: ['agreementAgreement:audit'],
-        //   click: (_selects, _ids) => {
-        //     // 审核业务
-        //   }
-        // },
-        // {
-        //   title: '删除',
-        //   type: 'primary',
-        //   size: 'mini',
-        //   permission: ['agreementAgreement:del'],
-        //   click: (_selects, _ids) => {
-        //     // 删除业务
-        //   }
-        // }
+        }
       ],
       columns: [
-        { type: 'selection' },
         { label: '序号', type: 'index',fixed: 'left' },
         { label: '协议号', name: 'no', width: 150, type: 'formart',
           formart: "<a style='cursor:pointer;color: #1c84c6'>${no}</a>",
           click: function (_row) {
-            this.$router.push({path: '/dict/type/data/' + _row.no});
+            this.$router.push({path: '/agreementInput/agreementDetail',query:{id: _row.id}});
           }
         },
         { label: '状态', name: 'statusName', width: 150 },
@@ -128,37 +109,42 @@ export default {
           name:"no",
           label:"协议号",
           type:"select",
-          operation:"find_in_set",
+          operation:"=",
           url: '/purchase/ms/agreementAgreement/findList?no=',
           methodType: 'GET',
-          valueField: 'id',
+          valueField: 'no',
           labelField: 'no',
           remote: true,
+          placeholder: "请输入协议号"
         },
         {
           name: 'status',
           label: '状态：',
           type: 'select',
-          operation: 'like',
+          operation:"=",
           dictCode: 'agreementState',
+          placeholder: "请选择状态"
         },
         {
-          name:"teachersIds",
+          name:"orderPartyId",
           label:"订单方",
           type:"select",
-          operation:"find_in_set",
-          url: '/purchase/ms/supplierOrderParty/findList?orderPartyCode=',
+          operation:"=",
+          url: '/purchase/ms/supplierOrderParty/findList?orderPartyId=',
           methodType: 'GET',
           valueField: 'id',
           labelField: 'name',
           remote: true,
+          placeholder: "请输入订单方"
         },
         {
-          name: 'status',
+          name: 'goodsCode',
           label: '商品代码：',
-          type: 'select',
-          operation: 'like',
+          // type: 'select',
+          type: 'text',
+          operation:"=",
           dictCode: 'supplierState',
+          placeholder: "请输入商品代码"
         }
       ],
       querys: [],

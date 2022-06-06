@@ -7,10 +7,12 @@ import com.fhs.agreement.service.AgreementAgreementService;
 import com.fhs.agreement.service.AgreementGoodsSettService;
 import com.fhs.agreement.vo.AgreementAgreementVO;
 import com.fhs.agreement.vo.AgreementGoodsSettVO;
+import com.fhs.agreement.vo.AgreementSelectData;
 import com.fhs.basics.context.UserContext;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.annotation.Namespace;
+import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,20 +103,32 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
     @Override
     public AgreementAgreementVO getAgreementGoosInfo(int id) {
         AgreementAgreementVO data = super.selectById(id);
-        List<AgreementGoodsSettVO> goosList = agreementGoodsSettService.goosByaAreementId(id);
+        ParamChecker.isNotNullOrEmpty(data, "无效的id");
+        List<AgreementGoodsSettVO> goodsList = agreementGoodsSettService.goosByaAreementId(id);
+        for (AgreementGoodsSettVO sett: goodsList) {
+            AgreementSelectData selectData = new AgreementSelectData();
+            List<AgreementSelectData.Goodspecification> goodspecifications = new ArrayList<>();
+            AgreementSelectData.Goodspecification  goodspecification = new AgreementSelectData.Goodspecification();
+            goodspecification.setId(0);
+            goodspecification.setTitle("1*10");
+            goodspecifications.add(goodspecification);
+            goodspecification = new AgreementSelectData.Goodspecification();
+            goodspecification.setId(1);
+            goodspecification.setTitle("1*20");
+            goodspecifications.add(goodspecification);
+            selectData.setSpecificationId(goodspecifications);
+            data.getSelectDataList().add(selectData);
 
-        AgreementGoodsSettVO[] goosArr = new AgreementGoodsSettVO[goosList.size()];
-        goosArr = goosList.toArray(goosArr);
+            sett.setGoodsCode("CocaCola");
+            sett.setGoodsName("可口可乐");
+            sett.setUnit("瓶");
+            sett.setGoodsBarcode("101010101010101011");
+        }
+        AgreementGoodsSettVO[] goosArr = new AgreementGoodsSettVO[goodsList.size()];
+        goosArr = goodsList.toArray(goosArr);
         data.setGoodsVOs(goosArr);
         return data;
     }
 
-    @Override
-    public boolean agreementAudit(int id) {
-        AgreementAgreementPO info = super.selectById(id);
-        info.setStatus(1);
-        info.preUpdate(UserContext.getSessionuser().getUserId());
-        super.updateById(info);
-        return true;
-    }
+
 }
