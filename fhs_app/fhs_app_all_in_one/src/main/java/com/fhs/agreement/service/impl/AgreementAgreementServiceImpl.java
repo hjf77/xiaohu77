@@ -122,6 +122,7 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
             sett.setGoodsCode("CocaCola");
             sett.setGoodsName("可口可乐");
             sett.setUnit("瓶");
+            sett.setGoodsBarcode("101010101010101011");
         }
         AgreementGoodsSettVO[] goosArr = new AgreementGoodsSettVO[goodsList.size()];
         goosArr = goodsList.toArray(goosArr);
