@@ -22,7 +22,7 @@ import java.util.List;
 @ApiModel(value ="采购协议商品",description ="采购协议商品")
 public class AgreementGoodsSettVO extends AgreementGoodsSettPO {
 
-   private List<AgreementSelectData> selectDataList;
+
 
  }
     

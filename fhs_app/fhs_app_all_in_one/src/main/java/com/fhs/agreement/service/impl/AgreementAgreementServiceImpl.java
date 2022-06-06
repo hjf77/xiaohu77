@@ -7,6 +7,7 @@ import com.fhs.agreement.service.AgreementAgreementService;
 import com.fhs.agreement.service.AgreementGoodsSettService;
 import com.fhs.agreement.vo.AgreementAgreementVO;
 import com.fhs.agreement.vo.AgreementGoodsSettVO;
+import com.fhs.agreement.vo.AgreementSelectData;
 import com.fhs.basics.context.UserContext;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -101,10 +102,23 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
     @Override
     public AgreementAgreementVO getAgreementGoosInfo(int id) {
         AgreementAgreementVO data = super.selectById(id);
-        List<AgreementGoodsSettVO> goosList = agreementGoodsSettService.goosByaAreementId(id);
-
-        AgreementGoodsSettVO[] goosArr = new AgreementGoodsSettVO[goosList.size()];
-        goosArr = goosList.toArray(goosArr);
+        List<AgreementGoodsSettVO> goodsList = agreementGoodsSettService.goosByaAreementId(id);
+        for (AgreementGoodsSettVO sett: goodsList) {
+            AgreementSelectData selectData = new AgreementSelectData();
+            List<AgreementSelectData.Goodspecification> goodspecifications = new ArrayList<>();
+            AgreementSelectData.Goodspecification  goodspecification = new AgreementSelectData.Goodspecification();
+            goodspecification.setId(0);
+            goodspecification.setTitle("1*10");
+            goodspecifications.add(goodspecification);
+            goodspecification = new AgreementSelectData.Goodspecification();
+            goodspecification.setId(1);
+            goodspecification.setTitle("1*20");
+            goodspecifications.add(goodspecification);
+            selectData.setSpecificationId(goodspecifications);
+            data.getSelectDataList().add(selectData);
+        }
+        AgreementGoodsSettVO[] goosArr = new AgreementGoodsSettVO[goodsList.size()];
+        goosArr = goodsList.toArray(goosArr);
         data.setGoodsVOs(goosArr);
         return data;
     }
