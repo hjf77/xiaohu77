@@ -38,8 +38,6 @@ export default {
   },
   data() {
     return {
-      rateList:[],
-      isReturnList:[],
       init: {},
       optionsInitSetts: [],
       initFinsh: false,
@@ -62,7 +60,7 @@ export default {
         {
           type: "select",
           name: "orderPartyId",
-          url:"/purchase/ms/supplierSupplier/findList?supplierCode=",
+          url:"/purchase/ms/supplierOrderParty/findList?orderPartyCode=",
           labelField: "name",
           valueField: "id",
           title: 'supplierIdName',
@@ -145,6 +143,9 @@ export default {
           type: "buttons",
           name: "buttons",
           width:'1500px',
+          // ifFun: () => {
+          //   return this.$route
+          // },
           buttons: [
             {
               name: "保存",
@@ -163,8 +164,14 @@ export default {
             },
             {
               name: "删除",
-              click: function (_v,_model) {
-
+              click: (_v,_model) => {
+                this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  this.del()
+                })
               }
             },
             {
@@ -237,8 +244,6 @@ export default {
                     id: '2',
                     title: '1*12'
                   }];
-                  optionsSetts[index].rate = this.rateList;
-                  optionsSetts[index].isReturn = this.isReturnList;
                   _inputThis.$emit("update:datas", _datas);
                   _inputThis.$emit("update:one2xOptionsSetts", optionsSetts);
                 }catch (e) {
@@ -247,7 +252,6 @@ export default {
               },
               import: true,
               export: true,
-              cellWidth: '10',
               notRepeat: true,
             },
             {
@@ -277,7 +281,8 @@ export default {
               type: 'select',
               name: 'rate',
               label: '税率',
-              options:[],
+              dictCode: "rate",
+              isValueNum: true,
               rule: [{  required: true, message: '请输入税率', trigger: 'blur' }],
               change: (newValue, _row, index, options) => {
 
@@ -316,7 +321,8 @@ export default {
               type: 'select',
               name: 'isReturn',
               label: '是否可退',
-              options:[],
+              dictCode: "yesOrNo",
+              isValueNum: true,
               rule: [{  required: true, message: '请选择是否可退', trigger: 'blur' }],
             },
             {
@@ -340,16 +346,7 @@ export default {
       ]
     }
   },
-  created() {
-    this.getDictList('rate').then((value) => {
-      this.rateList = this.formatDictList(value)
-    })
-    this.getDictList('yesOrNo').then((value) => {
-      this.isReturnList = this.formatDictList(value)
-    })
-  },
   mounted() {
-
     if (this.$route.query.id) {
         this.initData()
     } else {
@@ -380,23 +377,9 @@ export default {
             res.goodsVOs.forEach((item) => {
               // 如果没有selectDataList，则给空[], 不然商品喝规格对应不上
               if (!item.selectDataList) item.selectDataList = []
-
-
-              item.selectDataList.push({
-                rate: this.rateList
-              })
-              item.selectDataList.push({
-                isReturn: this.isReturnList
-              })
-              this.optionsInitSetts.push(item.selectDataList)
+              this.optionsInitSetts.push(item.selectDataList[0])
             })
           }
-
-          console.log(this.rateList)
-          console.log(this.isReturnList)
-          console.log(this.optionsInitSetts)
-          console.log('--------------------------')
-
           this.initFinsh = true
         })
         .catch((res) => {
@@ -406,13 +389,16 @@ export default {
 
     // 保存
     save(form) {
+      let isEdit = !!this.$route.query.id
+      debugger
+      return
       // 删除公共字段信息,后端默认设置
       delete form.createTime;
       delete form.createUser;
       delete form.updateTime;
       delete form.updateUser;
       this.$pagexRequest({
-        method: "POST",
+        method: isEdit ? 'PUT' : 'POST',
         url: "/purchase/ms/agreementAgreement",
         data: form
       }).then((res) => {
@@ -431,46 +417,32 @@ export default {
         method: "GET",
         url: "/purchase/ms/agreementInput/getGoodInfo"
       }).then((res) => {
-        this.$message.success('保存成功')
+        this.$message.success('审核成功')
       }).catch((e) => {
         console.log(e.message);
       })
     },
 
     // 删除
-    del(id) {
+    del() {
+      if (!this.$route.query.id) return this.$message.warning('该数据有误,id不存在')
       this.$pagexRequest({
         method: "GET",
-        url: `/purchase/ms/agreementAgreement/${id}`,
+        url: `/purchase/ms/agreementAgreement/${this.$route.query.id}`,
       }).then((res) => {
-        this.$message.success('删除成功')
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+        this.$store.dispatch('tagsView/delView', this.$route).then(() => {
+          this.$router.push({path:"/agreement/agreementAgreement"});
+        })
       }).catch((e) => {
         console.log(e.message);
       })
-    },
-
-    // 获取字典数据
-    async getDictList(dictCode) {
-      const res = await this.$pagexRequest({
-        method: "GET",
-        url: `/basic/ms/dictItem/findList?dictGroupCode=${dictCode}`,
-      })
-      return res
-    },
-
-    // 格式化字典数据
-    formatDictList(list) {
-      let tempList = []
-      list.forEach((item) => {
-        tempList.push({
-          id: parseInt(item.dictCode),
-          title: item.dictDesc
-        })
-      })
-      return tempList
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
