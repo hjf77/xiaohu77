@@ -78,9 +78,7 @@ export default {
       formSett:{
         addApi: '/purchase/ms/supplierReconciliationConditions',
         updateApi: '',
-        data:{
-            
-        },
+        data:{},
         labelWidth:'125px',
         controls:[
           {
