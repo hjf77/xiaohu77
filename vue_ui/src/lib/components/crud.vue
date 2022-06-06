@@ -23,7 +23,7 @@ by wanglei
             v-bind="item"
             v-model="query.params[item.name]"
             v-if="item.type === 'select'"
-            placeholder="请选择"
+            :placeholder="item.placeholder"
           ></pagex-select>
 
           <pagex-formTreeSelect
