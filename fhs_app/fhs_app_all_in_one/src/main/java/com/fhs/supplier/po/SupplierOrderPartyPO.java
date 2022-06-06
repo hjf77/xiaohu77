@@ -112,6 +112,25 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
     @ApiModelProperty(value = "默认仓位（0常温仓1低温仓）")
     private Integer defaultLocation;
 
+    /**
+     * 结算模式（0按对账结算1按付款结算）
+     */
+    @TableField("settlement_pattern")
+    @ApiModelProperty(value = "结算模式（0按对账结算1按付款结算）")
+    private Integer settlementPattern;
 
+    /**
+     * 付款条件ID
+     */
+    @TableField("payment_conditions")
+    @ApiModelProperty(value = "付款条件ID")
+    private Integer paymentConditions;
+
+    /**
+     * 对账条件ID
+     */
+    @TableField("reconciliation_conditions")
+    @ApiModelProperty(value = "对账条件ID")
+    private Integer reconciliationConditions;
 
 }
