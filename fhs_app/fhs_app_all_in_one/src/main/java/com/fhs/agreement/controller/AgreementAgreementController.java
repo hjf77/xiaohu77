@@ -42,18 +42,4 @@ public class AgreementAgreementController extends ModelSuperController<Agreement
     }
 
 
-
-    /**
-     * 审核
-     *
-     * @return
-     */
-    @LogMethod
-    @ApiOperation("审批")
-    @PostMapping("agreementAudit")
-    public HttpResult<Boolean> agreementAudit(@RequestParam("id") int id) {
-        agreementAgreementService.agreementAudit(id);
-        return HttpResult.success(true);
-    }
-
 }

@@ -14,6 +14,5 @@ public interface AgreementAgreementService extends BaseService<AgreementAgreemen
 
     AgreementAgreementVO getAgreementGoosInfo(int id);
 
-    boolean agreementAudit(int id);
 
 }

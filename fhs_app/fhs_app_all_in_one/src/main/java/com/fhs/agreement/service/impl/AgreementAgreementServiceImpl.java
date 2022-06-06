@@ -130,12 +130,5 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
         return data;
     }
 
-    @Override
-    public boolean agreementAudit(int id) {
-        AgreementAgreementPO info = super.selectById(id);
-        info.setStatus(1);
-        info.preUpdate(UserContext.getSessionuser().getUserId());
-        super.updateById(info);
-        return true;
-    }
+
 }
