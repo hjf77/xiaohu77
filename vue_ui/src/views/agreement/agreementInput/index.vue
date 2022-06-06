@@ -49,7 +49,6 @@ export default {
         }
       ],
       columns: [
-        { type: 'selection' },
         { label: '序号', type: 'index',fixed: 'left' },
         { label: '协议号', name: 'no', width: 150, type: 'formart',
           formart: "<a style='cursor:pointer;color: #1c84c6'>${no}</a>",
