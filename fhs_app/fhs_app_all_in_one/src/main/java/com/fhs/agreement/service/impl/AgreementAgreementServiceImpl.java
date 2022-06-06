@@ -12,6 +12,7 @@ import com.fhs.basics.context.UserContext;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.annotation.Namespace;
+import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -102,6 +103,7 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
     @Override
     public AgreementAgreementVO getAgreementGoosInfo(int id) {
         AgreementAgreementVO data = super.selectById(id);
+        ParamChecker.isNotNullOrEmpty(data, "无效的id");
         List<AgreementGoodsSettVO> goodsList = agreementGoodsSettService.goosByaAreementId(id);
         for (AgreementGoodsSettVO sett: goodsList) {
             AgreementSelectData selectData = new AgreementSelectData();
@@ -116,6 +118,10 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
             goodspecifications.add(goodspecification);
             selectData.setSpecificationId(goodspecifications);
             data.getSelectDataList().add(selectData);
+
+            sett.setGoodsCode("CocaCola");
+            sett.setGoodsName("可口可乐");
+            sett.setUnit("瓶");
         }
         AgreementGoodsSettVO[] goosArr = new AgreementGoodsSettVO[goodsList.size()];
         goosArr = goodsList.toArray(goosArr);
