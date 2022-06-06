@@ -196,7 +196,7 @@ export default {
         {
           type: "one2x",
           name: "goodsVOs",
-          width:'1500px',
+          width:'1600px',
           label: "",
           optionsSetts:[],
           defaultValue:{
@@ -351,11 +351,7 @@ export default {
   mounted() {
 
     if (this.$route.query.id) {
-      setTimeout(()=>{
-        //这里就写你要执行的语句即可，先让数据库的数据加载进去数组中你在从数组中取值就好了
         this.initData()
-      },800)
-
     } else {
         this.formData.status = '1';
         this.formData.statusName = '未审核';
@@ -500,5 +496,10 @@ export default {
 }
 ::v-deep label {
   font-weight: normal;
+}
+::v-deep .el-form-item:nth-child(n+13) {
+  .el-form-item__label {
+    width: 30px !important;
+  }
 }
 </style>
