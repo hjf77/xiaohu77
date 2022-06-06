@@ -56,9 +56,9 @@ public class QueryField implements Serializable {
     private String target;
 
     @ApiModelProperty(
-            name = "target",
+            name = "field",
             notes = "字段名",
-            example = "main"
+            example = "name"
     )
     private String field;
 
