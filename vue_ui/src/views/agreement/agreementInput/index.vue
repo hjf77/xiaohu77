@@ -72,7 +72,7 @@ export default {
         { label: '协议号', name: 'no', width: 150, type: 'formart',
           formart: "<a style='cursor:pointer;color: #1c84c6'>${no}</a>",
           click: function (_row) {
-            this.$router.push({path: '/dict/type/data/' + _row.no});
+            this.$router.push({path: '/agreementInput/agreementDetail',query:{id: _row.id}});
           }
         },
         { label: '状态', name: 'statusName', width: 150 },
