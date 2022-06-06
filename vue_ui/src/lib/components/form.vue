@@ -94,6 +94,7 @@
             :valueData="model[item.name]"
             v-if="item.type === 'radio'"
             @change="item.click.call(this,item, model[item.name])"
+            :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
           ></pagex-radio>
 
           <pagex-checkbox
