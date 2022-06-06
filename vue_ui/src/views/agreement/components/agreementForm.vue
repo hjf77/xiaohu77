@@ -89,7 +89,10 @@ export default {
           type: "text",
           label: "合同编号",
           name: "contractNo",
-          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
+          rule: [{required: true, message: '请输入合同编号', trigger: 'change'},
+            {min: 1, max: 30, message: '合同编号长度1~30', trigger: 'change'},
+            {required: true, pattern: /^[0-9]*$/, message: '合同编码只能输入数字', trigger: 'change'},
+          ]
         },
         {
           type: "dates",
@@ -97,6 +100,11 @@ export default {
           label: "开始时间",
           formatVal: "yyyy-MM-dd",
           rule: [{required: true, message: '请输入合同编号', trigger: 'change'}],
+          pickerOptions: {},
+          changeFn: (val) => {
+            this.startTime = val;
+            this.rewriteEndPickerOptions("controls", 5);
+          },
         },
         {
           type: "dates",
@@ -104,6 +112,11 @@ export default {
           label: "结束时间",
           formatVal: "yyyy-MM-dd",
           rule: [{required: true, message: '请输入合同编号', trigger: 'change'}],
+          pickerOptions: {},
+          changeFn: (val) => {
+            this.endTime = val;
+            this.rewriteStartPickerOptions("controls", 4);
+          },
         },
         {
           type: "text",
@@ -171,6 +184,9 @@ export default {
             },
             {
               name: "删除",
+              ifFun: () => {
+                return this.$route.query.id
+              },
               click: (_v,_model) => {
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
                   confirmButtonText: '确定',
@@ -356,17 +372,10 @@ export default {
   mounted() {
     if (this.$route.query.id) {
         this.initData()
-        // 初始化时间校验
-        // this.startTime = this.init.startTime;
-        // this.endTime = this.init.endTime;
-        // this.rewriteStartPickerOptions("controls", 2);
-        // //this.rewriteEndPickerOptions("controls", 3, "dates");
-        // this.rewriteEndPickerOptions("controls", 3);
     } else {
         this.formData.no = '协议号自动生成'
         this.formData.status = '1';
         this.formData.statusName = '未审核';
-        // this.formData.no = "202205070001";
         this.formData.createTime = parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}');
         this.formData.createUserUserName = this.$store.state.user.user.userName;
         this.formData.updateTime = parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}');
@@ -388,9 +397,18 @@ export default {
           this.formData.orderPartyIdName = this.init.orderPartyIdName;
           this.formData.id = this.init.id;
           this.formData.no = this.init.no;
+          this.formData.detailNum = this.init.detailNum
+          this.formData.supplierId = this.init.supplierId
           this.formData.status = this.init.status;
           this.formData.orgId = this.init.orgId;
           this.optionsInitSetts = res.selectDataList
+
+          // 初始化时间校验
+          this.startTime = this.init.startTime;
+          this.endTime = this.init.endTime;
+          this.rewriteStartPickerOptions("controls", 4);
+          this.rewriteEndPickerOptions("controls", 5);
+
           this.initFinsh = true
         })
         .catch((res) => {
@@ -437,7 +455,7 @@ export default {
     del() {
       if (!this.$route.query.id) return this.$message.warning('该数据有误,id不存在')
       this.$pagexRequest({
-        method: "GET",
+        method: "DELETE",
         url: `/purchase/ms/agreementAgreement/${this.$route.query.id}`,
       }).then((res) => {
         this.$message({
