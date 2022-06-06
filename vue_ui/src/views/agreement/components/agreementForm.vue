@@ -402,7 +402,7 @@ export default {
     save(form) {
       let isEdit = !!this.$route.query.id
       // 删除公共字段信息,后端默认设置
-      form.no = '202206060001'
+      if (!isEdit) form.no = '20220602000011'
       delete form.createTime;
       delete form.createUser;
       delete form.updateTime;
@@ -424,8 +424,8 @@ export default {
     // 审核
     audit(form) {
       this.$pagexRequest({
-        method: "GET",
-        url: "/purchase/ms/agreementInput/getGoodInfo"
+        method: "PUT",
+        url: "/purchase/ms/agreementInput/updateField"
       }).then((res) => {
         this.$message.success('审核成功')
       }).catch((e) => {
