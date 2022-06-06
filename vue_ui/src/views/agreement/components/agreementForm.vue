@@ -388,6 +388,8 @@ export default {
           this.formData.orderPartyIdName = this.init.orderPartyIdName;
           this.formData.id = this.init.id;
           this.formData.no = this.init.no;
+          this.formData.detailNum = this.init.detailNum
+          this.formData.supplierId = this.init.supplierId
           this.formData.status = this.init.status;
           this.formData.orgId = this.init.orgId;
           this.optionsInitSetts = res.selectDataList
@@ -437,7 +439,7 @@ export default {
     del() {
       if (!this.$route.query.id) return this.$message.warning('该数据有误,id不存在')
       this.$pagexRequest({
-        method: "GET",
+        method: "DELETE",
         url: `/purchase/ms/agreementAgreement/${this.$route.query.id}`,
       }).then((res) => {
         this.$message({

@@ -110,10 +110,10 @@ export default {
           name:"no",
           label:"协议号",
           type:"select",
-          operation:"find_in_set",
+          operation:"=",
           url: '/purchase/ms/agreementAgreement/findList?no=',
           methodType: 'GET',
-          valueField: 'id',
+          valueField: 'no',
           labelField: 'no',
           remote: true,
           placeholder: "请输入协议号"
@@ -122,16 +122,16 @@ export default {
           name: 'status',
           label: '状态：',
           type: 'select',
-          operation: 'like',
+          operation:"=",
           dictCode: 'agreementState',
           placeholder: "请选择状态"
         },
         {
-          name:"teachersIds",
+          name:"orderPartyId",
           label:"订单方",
           type:"select",
-          operation:"find_in_set",
-          url: '/purchase/ms/supplierOrderParty/findList?orderPartyCode=',
+          operation:"=",
+          url: '/purchase/ms/supplierOrderParty/findList?orderPartyId=',
           methodType: 'GET',
           valueField: 'id',
           labelField: 'name',
@@ -139,10 +139,11 @@ export default {
           placeholder: "请输入订单方"
         },
         {
-          name: 'status',
+          name: 'goodsCode',
           label: '商品代码：',
-          type: 'select',
-          operation: 'like',
+          // type: 'select',
+          type: 'text',
+          operation:"=",
           dictCode: 'supplierState',
           placeholder: "请输入商品代码"
         }
