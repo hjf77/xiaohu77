@@ -1,6 +1,6 @@
 <!--
-  模块名称：供应商资料管理
-  开发人员：何静静
+  模块名称：采购协议录入总汇
+  开发人员：马军伟
   创建时间: 2022-5-30
 -->
 <template>
@@ -46,25 +46,7 @@ export default {
               path: '/agreementInput/agreementDetail'
             })
           }
-        },
-        // {
-        //   title: '审核',
-        //   type: 'primary',
-        //   size: 'mini',
-        //   permission: ['agreementAgreement:audit'],
-        //   click: (_selects, _ids) => {
-        //     // 审核业务
-        //   }
-        // },
-        // {
-        //   title: '删除',
-        //   type: 'primary',
-        //   size: 'mini',
-        //   permission: ['agreementAgreement:del'],
-        //   click: (_selects, _ids) => {
-        //     // 删除业务
-        //   }
-        // }
+        }
       ],
       columns: [
         { type: 'selection' },
@@ -134,6 +116,7 @@ export default {
           valueField: 'id',
           labelField: 'no',
           remote: true,
+          placeholder: "请输入协议号"
         },
         {
           name: 'status',
@@ -141,6 +124,7 @@ export default {
           type: 'select',
           operation: 'like',
           dictCode: 'agreementState',
+          placeholder: "请选择状态"
         },
         {
           name:"teachersIds",
@@ -152,6 +136,7 @@ export default {
           valueField: 'id',
           labelField: 'name',
           remote: true,
+          placeholder: "请输入订单方"
         },
         {
           name: 'status',
@@ -159,6 +144,7 @@ export default {
           type: 'select',
           operation: 'like',
           dictCode: 'supplierState',
+          placeholder: "请输入商品代码"
         }
       ],
       querys: [],
