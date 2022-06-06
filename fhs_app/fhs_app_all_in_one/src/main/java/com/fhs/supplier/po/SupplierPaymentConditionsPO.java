@@ -53,9 +53,9 @@ public class SupplierPaymentConditionsPO extends BasePO<SupplierPaymentCondition
      * 说明
      */
     @Length(message = "说明字段的长度最大为256", groups = {Add.class, Update.class}, max = 256)
-    @TableField("explain")
+    @TableField("remark")
     @ApiModelProperty(value = "说明")
-    private String explain;
+    private String remark;
 
     /**
      * 付款天数

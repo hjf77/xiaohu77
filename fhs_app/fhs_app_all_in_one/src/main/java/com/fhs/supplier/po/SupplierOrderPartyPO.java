@@ -4,6 +4,9 @@ import java.io.Serializable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -61,6 +64,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("supplier_id")
     @ApiModelProperty(value = "所属供应商")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.supplier.po.SupplierSupplierPO", alias = "supplierCode", fields = "supplierCode", serviceName = "basic", dataSource = "basic")
     private Integer supplierId;
 
     /**
@@ -68,6 +72,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("status")
     @ApiModelProperty(value = "订单方状态（0合作中1暂停合作2终止合作）")
+    @Trans(type = TransType.DICTIONARY,key = "status")
     private Integer status;
 
     /**
@@ -75,6 +80,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("cooperation_ways")
     @ApiModelProperty(value = "合作方式（0经销1代理2）")
+    @Trans(type = TransType.DICTIONARY,key = "cooperationWays")
     private Integer cooperationWays;
 
     /**
@@ -82,6 +88,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("category_id")
     @ApiModelProperty(value = "所属大类（0烟1酒2茶叶）")
+    @Trans(type = TransType.DICTIONARY,key = "categoryId")
     private Integer categoryId;
 
     /**
@@ -89,6 +96,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("principal_id")
     @ApiModelProperty(value = "负责人")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "principalId", fields = "userName", serviceName = "basic", dataSource = "basic")
     private Long principalId;
 
     /**
@@ -96,6 +104,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("org_id")
     @ApiModelProperty(value = "所属部门")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsOrganizationPO", alias = "orgId", fields = "name", serviceName = "basic", dataSource = "basic")
     private Long orgId;
 
     /**
@@ -103,6 +112,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("default_storage")
     @ApiModelProperty(value = "默认仓储（0唯客润1胖东来2华润）")
+    @Trans(type = TransType.DICTIONARY,key = "defaultStorage")
     private Integer defaultStorage;
 
     /**
@@ -110,6 +120,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("default_location")
     @ApiModelProperty(value = "默认仓位（0常温仓1低温仓）")
+    @Trans(type = TransType.DICTIONARY,key = "defaultLocation")
     private Integer defaultLocation;
 
     /**
@@ -117,6 +128,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("settlement_pattern")
     @ApiModelProperty(value = "结算模式（0按对账结算1按付款结算）")
+    @Trans(type = TransType.DICTIONARY,key = "settlementPattern")
     private Integer settlementPattern;
 
     /**
@@ -124,6 +136,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("payment_conditions")
     @ApiModelProperty(value = "付款条件ID")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.supplier.po.SupplierPaymentConditionsPO", alias = "paymentConditions", fields = "name", serviceName = "basic", dataSource = "basic")
     private Integer paymentConditions;
 
     /**
@@ -131,6 +144,7 @@ public class SupplierOrderPartyPO extends BasePO<SupplierOrderPartyPO> {
      */
     @TableField("reconciliation_conditions")
     @ApiModelProperty(value = "对账条件ID")
+    @Trans(type = TransType.RPC,targetClassName = "com.fhs.supplier.po.SupplierReconciliationConditionsPO", alias = "reconciliationConditions", fields = "name", serviceName = "basic", dataSource = "basic")
     private Integer reconciliationConditions;
 
 }
