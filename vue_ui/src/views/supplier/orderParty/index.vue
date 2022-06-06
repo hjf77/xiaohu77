@@ -1,7 +1,7 @@
 <!--
-  模块名称：供应商资料管理
+  模块名称：订单方资料管理
   开发人员：何静静
-  创建时间: 2022-5-30
+  创建时间: 2022-6-6
 -->
 <template>
   <base-container>
@@ -14,7 +14,7 @@
       :sortSett="sortSett"
       :buttons="buttons"
       :querys="querys"
-      namespace="supplierSupplier"
+      namespace="supplierOrderParty"
     >
       <template v-slot:form>
         <!-- 新增 弹框-->
@@ -24,7 +24,7 @@
           slot="form"
           :title="title"
           :visible.sync="open"
-          namespace="supplierSupplier"
+          namespace="supplierOrderParty"
         >
           <!-- 新增 -->
           <pagex-form
@@ -34,7 +34,7 @@
             :isHaveAddBtn="true"
             :isVee="false"
             :isEdit="isEdit"
-            namespace="supplierSupplier"
+            namespace="supplierOrderParty"
           ></pagex-form>
         </pagex-dialog>
       </template>
@@ -50,8 +50,7 @@ export default {
   mixins: [crudMixins],
   data() {
     return {
-      // api: '/basic/ms/logLogin/pagerAdvance',
-      api: '/purchase/ms/supplierSupplier/pagerAdvance',
+      api: '/purchase/ms/supplierOrderParty/pagerAdvance',
       // 列表排列顺序（更新时间）
       sortSett: [
         {
@@ -60,18 +59,16 @@ export default {
         },
       ],
       title: '新增',
-      // addApi: '/basic/ms/sysUser/',
-      addApi: '/purchase/ms/supplierSupplier',
+      addApi: '/purchase/ms/supplierOrderParty',
       //支持自定义按钮(颜色，图标 不设置有默认颜色有默认图标)，支持插槽形式的按钮，method扩展
       buttons: [
         {
           title: '新增',
           type: 'primary',
           size: 'mini',
-          permission: ['supplierSupplier:add'],
+          permission: ['supplierOrderParty:add'],
           click: (_row) => {
             this.title = '新增';
-            // this.$set(this, "init", {organizationId:this.org.id})
             this.isEdit = false;
             this.open = true;
           },
@@ -93,17 +90,17 @@ export default {
         {
           type: 'text',
           name: 'name',
-          label: '供应商名称',
+          label: '订单方名称',
           rule: [
             {
               required: true,
-              message: '供应商名称不能为空',
+              message: '订单方名称不能为空',
               trigger: 'blur',
             },
             {
               min: 1,
               max: 128,
-              message: '供应商名称字符长度1-128位之间',
+              message: '订单方名称字符长度1-128位之间',
             },
           ],
         },
@@ -118,7 +115,7 @@ export default {
               trigger: 'change',
             },
           ],
-          dictCode: 'supplierState',
+          dictCode: 'status',
           isValueNum: true,
         },
       ],
@@ -129,11 +126,13 @@ export default {
         { label: '序号', type: 'index', fixed: 'left' },
         {
           label: '供应商代码',
-          name: 'supplierCode',
+          name: 'supplierCodeSupplierCode',
           width: 150,
           fixed: 'left',
+        },
+        { label: '订单方代码', name: 'orderPartyCode', width: 150, fixed: 'left',
           type: 'formart',
-          formart: "<label style='cursor:pointer'>${supplierCode}</label>",
+          formart: "<label style='cursor:pointer'>${orderPartyCode}</label>",
           click: function (_row) {
             this.$router.push({
               path: '/supplier/type/editForm',
@@ -142,16 +141,13 @@ export default {
             this.isEdit = true;
           },
         },
-        { label: '供应商名称', name: 'name', width: 150, fixed: 'left' },
-        { label: '简称', name: 'shortName' },
-        { label: '状态', name: 'transMap.statusName', width: 80 },
-        { label: '公司地址', name: 'address', width: 150 },
-        { label: '供应商类型', name: 'transMap.supplierTypeName', width: 150 },
-        { label: '进项税率', name: 'transMap.rateName', width: 150 },
-        { label: '联系人', name: 'contact', width: 150 },
-        { label: '联系电话', name: 'contactMobile', width: 150 },
-        { label: '创建人', name: 'transMap.createUserUserName', width: 150 },
-        { label: '创建时间', name: 'createTime', width: 150 },
+        { label: '订单方名称', name: 'name' },
+        { label: '订单方状态', name: 'transMap.statusName', width: 80 },
+        { label: '结算模式', name: 'transMap.settlementPatternName', width: 150 },
+        { label: '对账条件', name: 'transMap.reconciliationConditionsName', width: 150 },
+        { label: '付款条件', name: 'transMap.paymentConditionsName', width: 150 },
+        { label: '所属大类', name: 'transMap.categoryIdName', width: 150 },
+        { label: '负责人', name: 'transMap.principalIdUserName', width: 150 },
         {
           label: '操作',
           name: 'operation',
@@ -162,10 +158,10 @@ export default {
               title: '编辑',
               type: 'bottom',
               size: 'mini',
-              permission: ['supplierSupplier:update'],
+              permission: ['supplierOrderParty:update'],
               click: (_row) => {
                 this.$router.push({
-                  path: '/supplier/type/editForm',
+                  path: '/orderParty/type/editOrderForm',
                   query: { id: _row.id },
                 });
                 this.isEdit = true;
@@ -175,42 +171,72 @@ export default {
               title: '删除',
               type: 'danger',
               size: 'mini',
-              permission: ['supplierSupplier:del'],
+              permission: ['supplierOrderParty:del'],
               idFieldName: 'id',
-              api: '/purchase/ms/supplierSupplier/',
+              api: '/purchase/ms/supplierOrderParty/',
             },
           ],
         },
       ],
       filters: [
         {
-          name: 'supplierCode',
-          label: '供应商代码：',
-          placeholder: '供应商代码',
+          name: 'orderPartyCode',
+          label: '订单方代码：',
+          placeholder: '订单方代码',
           operation: 'like',
           type: 'text',
         },
         {
           name: 'name',
-          label: '供应商名称：',
-          placeholder: '供应商名称',
+          label: '订单方名称：',
+          placeholder: '订单方名称',
           operation: 'like',
           type: 'text',
         },
         {
-          name: 'status',
-          label: '状态：',
-          type: 'select',
-          
-          dictCode: 'supplierState',
+          name: 'supplierId',
+          target:"com.fhs.supplier.po.SupplierSupplierPO",
+          field:"supplierCode",
+          label: '供应商代码：',
+          placeholder: '供应商代码',
+          operation: 'like',
+          type: 'text',
+        },
+       
+        {
+          name:"status",
+          label:"状态：",
+          type:"select",
+          url: '/purchase/ms/supplierOrderStatus/findList',
+          methodType: 'GET',
+          valueField: 'id',
+          labelField: 'name',
+          placeholder: "请选择状态"
         },
       ],
       querys: [],
     };
   },
-  created() {},
+  created() {
+    // this.statusList()
+  },
   computed: {},
-  methods: {},
+  methods: {
+    // statusList() {
+    //   this.$pagexRequest({
+    //     url: '/purchase/ms/supplierOrderStatus/findList',
+    //     method: 'GET',
+    //   })
+    //     .then((res) => {
+    //       console.log(res);
+    //       this.stateTable = res
+         
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
+  },
 };
 </script>
 <style lang="scss" scoped>
