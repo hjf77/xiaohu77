@@ -11,12 +11,15 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.StringUtils;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -28,14 +31,35 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 @Data
+@Slf4j
 @Builder
 @AllArgsConstructor
 @ApiModel("用于自定义条件过滤")
 public class QueryFilter<T> {
 
+    private static final String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|"
+
+            + "(\\b(select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
+
+    /**
+     * 表示忽略大小写
+     */
+    private static final Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+
+    private static final Set<String> OPEARTOR_SET = new HashSet<>();
+
     private static final String AND = "AND";
 
     private static final String OR = "OR";
+
+    static{
+        OPEARTOR_SET.add("=");
+        OPEARTOR_SET.add(">");
+        OPEARTOR_SET.add(">=");
+        OPEARTOR_SET.add("<");
+        OPEARTOR_SET.add("<=");
+        OPEARTOR_SET.add("like");
+    }
 
     @ApiModelProperty("分页信息")
     private FhsPager<T> pagerInfo;
@@ -135,7 +159,7 @@ public class QueryFilter<T> {
         String groupRelation = this.getGroupRelation();
         groupQueryField.forEach((group, list) -> {
             List<QueryField> newListFields = list.stream().filter(queryField -> !safeFieldsSet.contains(queryField.getProperty())).collect(Collectors.toList());
-            if(newListFields.isEmpty()){
+            if (newListFields.isEmpty()) {
                 return;
             }
             if (AND.equals(groupRelation)) {
@@ -173,7 +197,7 @@ public class QueryFilter<T> {
     private static final String WHERE_SQL_TAG = "whereSql";
     private static final String ORDER_SQL_TAG = "orderBySql";
 
-    private List<String>  convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
+    private List<String> convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
         if (list == null) {
             return null;
         } else {
@@ -193,7 +217,7 @@ public class QueryFilter<T> {
      * @return
      */
     @JSONField(serialize = false)
-    public  String getField(String fieldName, Class<T> currentModelClass) {
+    public String getField(String fieldName, Class<T> currentModelClass) {
         if (currentModelClass == null) {
             throw new ParamsInValidException("currentModelClass不能为null");
         }
@@ -205,7 +229,40 @@ public class QueryFilter<T> {
             throw new ParamsInValidException(fieldName + "不正确");
         }
         return cacheMap.get(fieldName.toUpperCase()).getColumn();
+    }
 
+    /**
+     * 获取目标表的id 数据库字段名
+     *
+     * @param targetClassName 对方类名
+     * @return id数据库字段名
+     */
+    public String getTargetKeyColumn(String targetClassName) {
+        return TableInfoHelper.getTableInfo(getTargetClass(targetClassName)).getKeyColumn();
+    }
+
+    /**
+     * 获取目标表的表名
+     *
+     * @param targetClassName 对方类名
+     * @return 表名
+     */
+    public String getTargetTableName(String targetClassName) {
+        return TableInfoHelper.getTableInfo(getTargetClass(targetClassName)).getTableName();
+    }
+
+    /**
+     * 获取目标类
+     * @param targetClassName 类全名
+     * @return 类对象
+     */
+    public Class getTargetClass(String targetClassName) {
+        try {
+            return Class.forName(targetClassName);
+        } catch (ClassNotFoundException e) {
+            log.error("类名错误", e);
+            throw new ParamsInValidException("类名错误");
+        }
     }
 
     /**
@@ -225,7 +282,34 @@ public class QueryFilter<T> {
             return;
         }
         String field = getField(queryField.getProperty(), currentModelClass);
+        if (!StringUtils.isEmpty(queryField.getTarget()) ) {
+            if(StringUtils.isEmpty(queryField.getField())){
+                throw new ParamsInValidException("当target不为空的时候field也一定不可以为空，字段:" + queryField.getProperty());
+            }
+
+            if(!OPEARTOR_SET.contains(queryField.getOperation())){
+                throw new ParamsInValidException("操作符不受支持:" + queryField.getOperation());
+            }
+            if(!isSqlValid(queryField.getValue() + "")){
+                throw new ParamsInValidException("字段值校验出SQL注入风险:" + queryField.getValue());
+            }
+            Object propValue = queryField.getValue();
+            if("like".equals(queryField.getOperation())){
+                propValue = "%" + propValue + "%";
+            }
+            //不是数字的时候加引号
+            if(!CheckUtils.isNumber(propValue)){
+                propValue = "'" + propValue + "'";
+            }
+            //目标标字段
+            String targetField = getField(queryField.getField(), getTargetClass(queryField.getTarget()));
+            String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from "  + getTargetTableName(queryField.getTarget()) + " where " + targetField
+                     + " " + queryField.getOperation() + " " +  propValue + ")";
+            queryWrapper.apply(sql);
+            return;
+        }
         String operation = queryField.getOperation();
+
         switch (operation) {
             case "=":
                 queryWrapper.eq(field, queryField.getValue());
@@ -315,4 +399,17 @@ public class QueryFilter<T> {
         return ResultString;
     }
 
+    /**
+     * 参数校验
+     * @param str ep: "or 1=1"
+     */
+    public static boolean isSqlValid(String str) {
+        Matcher matcher = sqlPattern.matcher(str);
+        if (matcher.find()) {
+            //获取非法字符：or
+            log.info("参数存在非法字符，请确认："+matcher.group());
+            return false;
+        }
+        return true;
+    }
 }
