@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_module</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0</version>
+        <version>3.0.0_rural</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0</version>
+    <version>3.0.0_rural</version>
     <artifactId>fhs_module_base</artifactId>
     <dependencies>
         <dependency>
