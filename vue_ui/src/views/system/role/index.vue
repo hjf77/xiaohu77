@@ -47,7 +47,7 @@ import roleForm from "@/views/system/role/components/roleForm.vue";
 import {mapGetters} from "vuex"
 
 export default {
-  name: "user",
+  name: "sysRole",
   components: {
       roleForm,
     Organization
