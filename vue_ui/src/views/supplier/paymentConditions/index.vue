@@ -115,6 +115,7 @@ export default {
             name: 'dateBaseDay',
             label: "固定日",
             url: '/purchase/ms/supplierPaymentConditions/dateBaseDayList',
+            rule: 'required',
             labelField: "dictDesc",
             valueField: "dictCode",
             ifFun: (_form) => {
