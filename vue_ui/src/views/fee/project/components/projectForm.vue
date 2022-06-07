@@ -78,9 +78,15 @@ export default {
               trigger: "change",
             },
           ],
-          // change:(e)=>{
-          //   console.log(e)
-          // }
+           change:(e,v)=>{
+            console.log(e,v)
+              this.$pagexRequest({
+                url: "/purchase/ms/feeProject/findCode?id=" + v,
+                method: "GET",
+              }).then(res=>{
+                  this.$refs.form.setModelProp('projectCode',res.data);
+              })
+          }
         },
         {
           type: "text",
