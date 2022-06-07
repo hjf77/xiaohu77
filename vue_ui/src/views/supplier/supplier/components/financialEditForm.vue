@@ -16,7 +16,6 @@
   </base-container>
 </template>
 <script>
-import { banknoReg } from "@/utils/validate.js";
 export default {
   name: "bacisEditForm",
   props: {
@@ -37,7 +36,7 @@ export default {
           name: "accountNum",
           label: "收款人账号",
           rule: [
-            { validator: banknoReg, trigger: 'blur' }
+            {required: true, message: '收款人账号不能为空', trigger: 'blur'},
           ],
         },
       ],

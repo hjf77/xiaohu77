@@ -1,34 +1,23 @@
 <template>
   <base-container :isOrg="true">
     <template slot="org">
-      <div class="label-btn">
-        <el-button type="text">全部展开</el-button>
-        <el-button type="text">全部折叠</el-button>
-        <el-button type="text">显示启用</el-button>
-        <el-button type="text">显示停用</el-button>
-      </div>
-      <div class="tree-box">
       <div>
       <el-button class="addclick" size="small" @click="addClick">新增</el-button>
       </div>
-      <el-tree class="tree-style"
+      <el-tree
       :data="treeData"
       :props="defaultProps"
       ref="tree"
       node-key = "id"
-      :default-expanded-keys="idArr"
-      :default-checked-keys="[]"
       @node-click="nodeClick"
-      @check-change="handleCheckChange"
       >
       </el-tree>
-      </div>
     </template>
-    <div v-if="isFormShow">
-      <feeProject  @enableFn="enableFn" :isFormShow.sync="isFormShow" :init="init" :isEdit="isEdit" :parentId="parentId"></feeProject>
-    </div>
-  <div v-else class="rightContent">
-      <div class="text-style">暂无数据</div>
+   <div v-if="isFormShow">
+      <feeProject :isFormShow.sync="isFormShow" :init="init" :isEdit="isEdit" :parentId="parentId"></feeProject>
+  </div>
+  <div v-else>
+      <div>暂无数据</div>
   </div>
 
   </base-container>
@@ -47,7 +36,6 @@ export default {
       isFormShow: false,
       addIsShow: false,
       parentId: null,
-      idArr:[],
       isEdit: false,
       defaultProps:{
         label:'name',
@@ -73,6 +61,7 @@ export default {
   },
   mounted() {
     this.getTree()
+
   },
 
   methods: {
@@ -91,11 +80,10 @@ export default {
     },
 
     nodeClick(node){
-      if(node.data.level != 1) {
+      if(node.children.length === 0) {
         this.isEdit = true;
         this.parentId = null;
         this.init = node.data;
-        this.idArr.push(node.id)
         this.isFormShow = false
         this.$nextTick(() => {
           this.isFormShow = true
@@ -118,46 +106,12 @@ export default {
           this.isFormShow = true
       })
     },
-    
 
-    enableFn(e){
-      console.log(e)
-      this.isFormShow = false
-      this.getTree()
-        this.$pagexRequest({
-        //   url:`purchase/ms/feeProject/findList/${e}`,
-        //   method: "get",
-        // }).then(res=>{
-        //   console.log(res)
-        //   this.init = res
-        //   this.isFormShow = true
 
-        url:`purchase/ms/feeProject/${e}` ,
-        method: "get",
-        }).then(res=>{
-          this.init = res
-          console.log(res)
-          this.isFormShow = true
-        })
-    }
   },
 };
 </script>
-<style lang="scss" scoped>
-.label-btn{
-  border-radius: 4px;
-  background-color: #ffffff;
-  // padding: 10px 0;
-  height: 50px;
-  display: flex;
-  justify-content: space-around;
-  font-size: 27px
-}
-.tree-box{
-  border-radius: 4px;
-  background-color: #ffffff;
-  margin-top: 20px;
-}
+<style lang="scss">
 .el-tree .el-tree-node__expand-icon.expanded {
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
@@ -169,23 +123,7 @@ export default {
   content: "\e722";
 }
 .addclick{
-  margin: 10px 0 30px 230px;
-}
-.tree-style{
-  margin-left:30px;
-  padding-bottom: 30px;
-}
-.rightContent{
-  position: relative;
-  // display: flex;
-  // justify-content: center;
-  // margin: auto;
-}
-.text-style{
-  position: absolute;
-  top:50%;
-  margin-top: 350px;
-  left: 50%;
-  margin-left: 20px;
+  margin-left: 240px;
+  margin-bottom: 30px;
 }
 </style>
