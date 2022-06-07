@@ -79,6 +79,32 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/storage',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/editApplyForm',
+        component: () => import('@/views/storage/purchaseApply/components/editApplyForm.vue'),
+        name: 'editApplyForm',
+        meta: { title: '采购申请详情', icon: '' }
+      }
+    ]
+  },
+  {
+    path: '/orderParty',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/editOrderForm',
+        component: () => import('@/views/supplier/orderParty/components/editOrderForm.vue'),
+        name: 'editOrderForm',
+        meta: { title: '订单方资料管理详情', icon: '' }
+      }
+    ]
+  },
 
   {
     path: '/dict',
