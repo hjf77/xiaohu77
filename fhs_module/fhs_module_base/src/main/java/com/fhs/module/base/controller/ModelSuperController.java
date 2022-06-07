@@ -210,7 +210,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
                         && ReflectUtils.getDeclaredField(e.getClass(), "groupCode") != null && ReflectUtils.getValue(e, "groupCode") == null) {
                     ReflectUtils.setValue(e, "groupCode", getSessionuser().getGroupCode());
                 }
-                baseDo.preInsert(getSessionuser().getUserId());
             }
             beforSave(e, true);
             baseService.insert((D) e);
@@ -253,10 +252,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
                                             HttpServletResponse response) {
         if (isPermitted(request, "update")) {
-            if (e instanceof BasePO) {
-                BasePO<?> baseDo = (BasePO<?>) e;
-                baseDo.preUpdate(getSessionuser().getUserId());
-            }
             beforSave(e, false);
             baseService.updateById((D) e);
             return HttpResult.success(true);
