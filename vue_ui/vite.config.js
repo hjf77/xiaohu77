@@ -70,8 +70,8 @@ export default defineConfig({
           rewrite: (path) => path.replace('/api/purchase', '') // 采购业务
         },
         '/api/vmock': {
-          target: 'http://192.168.0.213:8089/vmock',
-          rewrite: (path) => path.replace('/api/vmock', '') // 根据环境变量配置代理
+          target: 'http://192.168.0.213:8098/vmock/',
+          rewrite: (path) => path.replace('/api/vmock', '') // vmock
         }
       }
   //   hmr: {

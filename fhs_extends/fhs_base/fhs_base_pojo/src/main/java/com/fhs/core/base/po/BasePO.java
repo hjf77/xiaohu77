@@ -1,9 +1,7 @@
 package com.fhs.core.base.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
@@ -18,6 +16,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.excel.anno.IgnoreExport;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -53,15 +52,15 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     /**
      * 创建人
      */
-    @TableField("create_user")
+    @TableField(value = "create_user", fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NOT_NULL)
     @ApiModelProperty("创建人")
-    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "createUser",fields = "userName",serviceName = "basic",dataSource = "basic")
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "createUser", fields = "userName", serviceName = "basic", dataSource = "basic")
     protected Long createUser;
 
     /**
      * 创建时间
      */
-    @TableField("create_time")
+    @TableField(value = "create_time", fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NOT_NULL)
     @ApiModelProperty("创建时间")
     @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date createTime;
@@ -70,15 +69,15 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
      * 更新人
      */
     @ApiModelProperty("修改人")
-    @TableField("update_user")
-    @Trans(type = TransType.RPC,targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "updateUser",fields = "userName",serviceName = "basic",dataSource = "basic")
+    @TableField(value = "update_user", fill = FieldFill.INSERT_UPDATE)
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "updateUser", fields = "userName", serviceName = "basic", dataSource = "basic")
     protected Long updateUser;
 
     /**
      * 更新时间
      */
     @ApiModelProperty("修改时间")
-    @TableField("update_time")
+    @TableField(value ="update_time", fill = FieldFill.INSERT_UPDATE)
     @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date updateTime;
 
@@ -122,7 +121,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     public Serializable getPkey() {
         Field idField = getIdField(true);
         try {
-            return (Serializable)idField.get(this);
+            return (Serializable) idField.get(this);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             return null;
@@ -173,16 +172,17 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
 
     /**
      * 把本身不为null的属性转换为wrapper
+     *
      * @return
      */
-    public QueryWrapper<T> asWrapper(){
-        List<Field>  fields = ReflectUtils.getAnnotationField(this.getClass(),TableField.class);
+    public QueryWrapper<T> asWrapper() {
+        List<Field> fields = ReflectUtils.getAnnotationField(this.getClass(), TableField.class);
         //过滤掉忽略字段
         fields = fields.stream().filter(field -> {
             return field.getAnnotation(TableField.class).exist();
         }).collect(Collectors.toList());
-        List<Field>  idFields = ReflectUtils.getAnnotationField(this.getClass(),TableId.class);
-        if(!idFields.isEmpty()){
+        List<Field> idFields = ReflectUtils.getAnnotationField(this.getClass(), TableId.class);
+        if (!idFields.isEmpty()) {
             fields.addAll(idFields);
         }
         QueryFilter<T> filter = new QueryFilter<>();
@@ -192,7 +192,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
             try {
                 value = field.get(this);
                 //不等于null不等于空的时候加入到条件里去
-                if(value!=null && !"".equals(value)){
+                if (value != null && !"".equals(value)) {
                     filter.getQuerys().add(QueryField.builder().property(field.getName()).value(value).operation("=").group("main").relation("AND").build());
                 }
             } catch (IllegalAccessException e) {

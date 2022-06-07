@@ -261,10 +261,10 @@ export default {
                   this.$set(_datas[index],'minOrderNum',res.minOrderNum)
                   this.$set(_datas[index],'isReturn',res.isReturn)
                   optionsSetts[index].specificationId = [{
-                    id: '1',
+                    id: 0,
                     title: '1*9'
                   }, {
-                    id: '2',
+                    id: 1,
                     title: '1*12'
                   }];
                   _inputThis.$emit("update:datas", _datas);
@@ -331,14 +331,17 @@ export default {
               name: 'startTime',
               formatVal: "yyyy-MM-dd",
               label: '开始时间',
-              rule: [{  required: true, message: '请选择开始时间', trigger: 'blur' }],
+              rule: [{  required: true, message: '请选择开始时间', trigger: 'change' }]
             },
             {
               type: 'dates',
               name: 'endTime',
               formatVal: "yyyy-MM-dd",
               label: '结束时间',
-              rule: [{  required: true, message: '请选择结束时间', trigger: 'blur' }],
+              rule: [{  required: true, message: '请选择结束时间', trigger: 'change' }],
+              changeFn: (val, fff, fffff) => {
+                debugger
+              }
             },
             {
               type: 'select',
@@ -346,7 +349,7 @@ export default {
               label: '是否可退',
               dictCode: "yesOrNo",
               isValueNum: true,
-              rule: [{  required: true, message: '请选择是否可退', trigger: 'blur' }],
+              rule: [{  required: true, message: '请选择是否可退', trigger: 'change' }],
             },
             {
               type: 'label',
@@ -418,6 +421,20 @@ export default {
 
     // 保存
     save(form) {
+      // 商品时间校验
+      if (form.goodsVOs && form.goodsVOs.length > 0) {
+        let unqualifiedList = []
+        let indexList = []
+        form.goodsVOs.forEach((item, index) => {
+          if (new Date(item.startTime).getTime() > new Date(item.endTime).getTime()) {
+            unqualifiedList.push(item)
+            indexList.push(index + 1)
+          }
+        })
+        if (unqualifiedList.length > 0) {
+          this.$message.warning(`第${indexList.join('，')}条数据数据有误！，开始时间不能大于结束时间`)
+        }
+      }
       let isEdit = !!this.$route.query.id
       // 删除公共字段信息,后端默认设置
       if (!isEdit) form.no = '20220602000011'

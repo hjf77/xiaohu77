@@ -215,6 +215,30 @@ export function isDecimal(rule, value, callback) {
   }
 }
 
+/**
+ * 收款人账号正则验证
+ * @param {*} rule
+ * @param {*} value
+ * @param {*} callback
+ */
+
+export function banknoReg(rule, value, callback) {
+  const reg = /^\d*$/; //全数字
+  const strBin = "10,18,30,35,37,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,58,60,62,65,68,69,84,87,88,94,95,98,99";
+  if (value == '' || value == undefined || value == null) {
+    callback(new Error('收款人账号不能为空'));
+  } else if (value.length < 16 || value.length > 19) {
+    callback(new Error('收款人账号长度必须在16到19之间'));
+  } else if (!reg.test(value)) {
+    callback(new Error('收款人账号格式不正确'));
+  } else if(strBin.indexOf(value.substring(0, 2)) == -1) {
+    callback(new Error('收款人账号格式不正确'));
+  } else {
+    callback();
+  }
+}
+
+
 // 手机号正则验证
 export const phoneNumReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
 // 手机号或者座机，支持带区号和不带区号
@@ -223,3 +247,5 @@ export const mobileOrTelReg = /^(((\d{3,4})?[0-9]{7,8})|(-)|(1(3|4|5|6|7|8|9)\d{
 export const ID18Reg = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
 // 整整数正则
 export const wholeNumReg = /(^-?[1-9]([0-9]*)$|^-?[0-9]$)/
+// 只能是英文和数字
+export const englishNumbersReg = /^([A-Z]|[a-z]|[\d])*$/;

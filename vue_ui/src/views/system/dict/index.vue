@@ -8,7 +8,7 @@
 <script>
 
 export default {
-  name: "Dict",
+  name: "dictGroup",
   data() {
     return {
       namespace:'dictGroup',

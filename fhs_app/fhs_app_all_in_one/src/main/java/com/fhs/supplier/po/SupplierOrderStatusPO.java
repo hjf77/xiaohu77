@@ -1,10 +1,11 @@
 package com.fhs.supplier.po;
 
-import java.io.Serializable;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
-
+import com.fhs.core.jsonfilter.anno.AutoArray;
+import com.fhs.core.jsonfilter.serializer.Str2ArrayValueSerializer;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
@@ -67,8 +68,7 @@ public class SupplierOrderStatusPO extends BasePO<SupplierOrderStatusPO> {
     @TableField("business_control")
     @ApiModelProperty(value = "业务控制（0允许采购订货1允许采购收货2允许采购退货3允许采购退货出货）")
     @Trans(type = TransType.DICTIONARY,key = "businessControl")
+    @AutoArray
+    @JSONField(serializeUsing = Str2ArrayValueSerializer.class)
     private String businessControl;
-
-
-
 }

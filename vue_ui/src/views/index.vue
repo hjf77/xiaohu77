@@ -21,15 +21,6 @@
       </div>
 
 
-      <div>
-        <pagex-transfer v-model="defaultTranVal" :url="'/vmock/order/transferList'" :querys="{ }" class="transfer" />
-
-        <div style="margin-bottom: 20px"></div>
-
-        <pagex-select v-model="defaultSelectVal" :url="'/vmock/order/transferList'" :querys="{ }" :methodType="'POST'" :labelField="'name'">
-
-        </pagex-select>
-      </div>
 
       <div style="margin-top: 20px">
         <pagex-form
