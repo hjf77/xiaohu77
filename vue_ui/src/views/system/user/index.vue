@@ -47,7 +47,7 @@ import userForm from "@/views/system/user/components/userForm.vue";
 import {mapGetters} from "vuex"
 
 export default {
-  name: "user",
+  name: "sysUser",
   components: {
       userForm,
     Organization
