@@ -281,7 +281,7 @@ public class QueryFilter<T> {
         if (CheckUtils.isNullOrEmpty(queryField.getValue()) || "null".equals(ConverterUtils.toString(queryField.getValue()))) {
             return;
         }
-        String field = getField(queryField.getProperty(), currentModelClass);
+        String field = null;
         if (!StringUtils.isEmpty(queryField.getTarget()) ) {
             if(StringUtils.isEmpty(queryField.getField())){
                 throw new ParamsInValidException("当target不为空的时候field也一定不可以为空，字段:" + queryField.getProperty());
@@ -311,6 +311,7 @@ public class QueryFilter<T> {
             queryWrapper.apply(sql);
             return;
         }
+        field = getField(queryField.getProperty(), currentModelClass);
         String operation = queryField.getOperation();
 
         switch (operation) {
