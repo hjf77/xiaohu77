@@ -142,10 +142,10 @@ export default {
             this.isEdit = true;
           },
         },
-        { label: '供应商名称', name: 'name', width: 150, fixed: 'left' },
-        { label: '简称', name: 'shortName' },
-        { label: '状态', name: 'transMap.statusName', width: 80 },
-        { label: '公司地址', name: 'address', width: 150 },
+        { label: '供应商名称', name: 'name', width: 150, fixed: 'left', type: 'popover', },
+        { label: '简称', name: 'shortName', type: 'popover', },
+        { label: '状态', name: 'transMap.statusName', width: 80, type: 'popover', },
+        { label: '公司地址', name: 'address', width: 150, type: 'popover', },
         { label: '供应商类型', name: 'transMap.supplierTypeName', width: 150 },
         { label: '进项税率', name: 'transMap.rateName', width: 150 },
         { label: '联系人', name: 'contact', width: 150 },
@@ -201,7 +201,6 @@ export default {
           name: 'status',
           label: '状态：',
           type: 'select',
-          
           dictCode: 'supplierState',
         },
       ],
