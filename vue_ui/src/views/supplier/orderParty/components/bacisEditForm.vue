@@ -18,7 +18,7 @@
 </template>
 <script>
 // import cityList from '@/assets/city/pca-code.json';
-// import { isEmail, mobileOrTelReg, phoneNumReg, ID18Reg, wholeNumReg } from "@/utils/validate.js";
+import { englishNumbersReg } from "@/utils/validate.js";
 export default {
   name: 'bacisEditForm',
   props: {
@@ -56,6 +56,10 @@ export default {
           type: 'text',
           name: 'contractCode',
           label: '合同编号',
+          rule: [
+            { pattern: englishNumbersReg, trigger: 'blur', message: '合同编号格式有误' },
+            
+          ],
         },
         {
           type: 'select',

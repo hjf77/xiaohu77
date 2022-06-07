@@ -247,3 +247,5 @@ export const mobileOrTelReg = /^(((\d{3,4})?[0-9]{7,8})|(-)|(1(3|4|5|6|7|8|9)\d{
 export const ID18Reg = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
 // 整整数正则
 export const wholeNumReg = /(^-?[1-9]([0-9]*)$|^-?[0-9]$)/
+// 只能是英文和数字
+export const englishNumbersReg = /^([A-Z]|[a-z]|[\d])*$/;
