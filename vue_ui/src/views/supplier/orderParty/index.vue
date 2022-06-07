@@ -108,6 +108,10 @@ export default {
           type: 'select',
           name: 'status',
           label: '状态',
+          url: '/purchase/ms/supplierOrderStatus/findList',
+          methodType: 'GET',
+          valueField: 'id',
+          labelField: 'name',
           rule: [
             {
               required: true,
@@ -115,8 +119,6 @@ export default {
               trigger: 'change',
             },
           ],
-          dictCode: 'status',
-          isValueNum: true,
         },
       ],
       onSubmit: function (model) {
