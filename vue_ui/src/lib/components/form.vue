@@ -15,7 +15,7 @@
         <el-form-item
           :disabled="proxyIf(item.visibleOn, true)"
           v-for="item in realControls"
-          v-if="item.type !='ext_slot'&&!item.isHide"
+          v-if="item.type !='ext_slot'&&!item.isHide && proxyIf(item.ifFun, true)"
           :label="item.label ? item.label + ':' : ' '"
           :prop="item.name"
           :key="item.name"
