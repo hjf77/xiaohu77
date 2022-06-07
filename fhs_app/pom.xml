@@ -6,6 +6,7 @@
         <artifactId>fhs_framework</artifactId>
         <groupId>com.fhs-opensource</groupId>
         <version>3.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>3.0.0</version>
