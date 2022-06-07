@@ -235,8 +235,8 @@ export default {
             }
             }).then(res=>{
               console.log(res)
+              this.$emit("enableFn",_row.id)
               this.msgSuccess('启用成功')
-               this.$emit("enableFn")
             })
           },
         },
@@ -249,7 +249,6 @@ export default {
           },
           click: (_row) => {
             this.title = "禁用";
-            this.currentId = _row.id;
             this.$pagexRequest({
             url:`purchase/ms/feeProject/updateField` ,
             method: "PUT",
@@ -258,9 +257,8 @@ export default {
               isEnable: 0
             }
             }).then(res=>{
-              console.log(res)
+              this.$emit("enableFn",_row.id)
               this.msgSuccess('禁用成功')
-              this.$emit("enableFn")
             })
             
           },
@@ -280,7 +278,6 @@ export default {
             }).then(res=>{
               console.log(res)
               this.msgSuccess('删除成功')
-              this.isFormShow = false
               this.$emit("enableFn")
             })
           },
