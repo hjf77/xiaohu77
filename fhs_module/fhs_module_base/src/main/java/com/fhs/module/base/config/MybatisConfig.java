@@ -2,9 +2,12 @@ package com.fhs.module.base.config;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.fhs.basics.context.UserContext;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.config.EConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
@@ -20,13 +23,11 @@ import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
-import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
@@ -51,10 +52,8 @@ import java.util.concurrent.ScheduledExecutorService;
 @Slf4j
 @org.springframework.context.annotation.Configuration
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
-public class MybatisConfig {
+public class MybatisConfig implements MetaObjectHandler {
 
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
 
     @Bean("fhsXMLMapperLoader")
     public XMLMapperLoader getXMLMapperLoader(MybatisPlusProperties plusProperties) {
@@ -65,6 +64,33 @@ public class MybatisConfig {
         return loader;
     }
 
+    /**
+     * 插入元对象字段填充（用于插入时对公共字段的填充）
+     *
+     * @param metaObject 元对象
+     */
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
+        //字段填充
+        this.setFieldValByName("createTime",new Date(),metaObject);
+        this.setFieldValByName("updateTime",new Date(),metaObject);
+        this.setFieldValByName("createUser", userId,metaObject);
+        this.setFieldValByName("updateUser",userId,metaObject);
+    }
+
+    /**
+     * 更新元对象字段填充（用于更新时对公共字段的填充）
+     *
+     * @param metaObject 元对象
+     */
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
+        //字段填充
+        this.setFieldValByName("updateTime",new Date(),metaObject);
+        this.setFieldValByName("updateUser",userId,metaObject);
+    }
 }
 
 

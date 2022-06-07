@@ -24,7 +24,7 @@ import crudMixins from '@/mixins/crudMixins';
 //这个路径可能需要改下
 
 export default {
-  name: 'AgreementInput',
+  name: 'agreementAgreement',
   mixins: [crudMixins],
   data() {
     return {
