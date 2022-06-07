@@ -58,7 +58,7 @@ export default {
 
     //下载图片
     handleDownload(fileId) {
-      getFile("/downLoad/file?fileId=" + fileId)
+      getFile("/basic/downLoad/file?fileId=" + fileId)
     },
 
     //通过文件ids获取全部文件信息
@@ -87,7 +87,7 @@ export default {
     async getFileAddress(fileId) {
       const res = await this.$pagexRequest({
         methods: "get",
-        url: "/downLoad/file?fileId=" + fileId,
+        url: "/basic/downLoad/file?fileId=" + fileId,
         responseType: "arraybuffer"
       })
       return 'data:image/png;base64,' + btoa(

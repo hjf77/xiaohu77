@@ -182,20 +182,7 @@ export default {
   },
   methods: {
     testMock() {
-      this.$pagexRequest({
-        method: "get",
-        url: "/vmock/order/list"
-      })
-        .then((res) => {
-          this.$set(this.formData, 'goods', res.rows)
-          this.optionsInitSetts = deepClone(res.option)
-          console.log(res.option)
-          console.log('---------------------------------')
-          this.initFinsh = true
-        })
-        .catch((res) => {
-          console.log(res);
-        });
+
     }
   }
 };

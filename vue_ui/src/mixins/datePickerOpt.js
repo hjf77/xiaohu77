@@ -23,7 +23,7 @@ export default {
      */
     rewriteStartPickerOptions(arrName, index, isDefault) {
       let currentTime = Date.now() - 1000 * 60 * 60 * 24;
-      const selectTime = new Date(this.endTime).getTime()
+      const selectTime = new Date(this.endTime).getTime() - 1000 * 60 * 60 * 24;
       if (isDefault) {
         this[arrName][index]['pickerOptions'] = {
           disabledDate: (time) => {

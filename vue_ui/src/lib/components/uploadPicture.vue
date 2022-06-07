@@ -129,7 +129,7 @@ export default {
     //下载图片
     handleDownload({response}) {
       console.log(response);
-      getFile("/downLoad/file?fileId=" + response.uid)
+      getFile("/basic/downLoad/file?fileId=" + response.uid)
     },
 
     //上传成功
@@ -241,7 +241,7 @@ export default {
     async getFileAddress(fileId) {
       const res = await this.$pagexRequest({
         methods: "get",
-        url: "/downLoad/file?fileId=" + fileId,
+        url: "/basic/downLoad/file?fileId=" + fileId,
         responseType: "arraybuffer"
       })
       return 'data:image/png;base64,' + btoa(
