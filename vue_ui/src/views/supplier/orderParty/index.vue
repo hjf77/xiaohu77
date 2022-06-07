@@ -144,7 +144,7 @@ export default {
           },
         },
         { label: '订单方名称', name: 'name' },
-        { label: '订单方状态', name: 'transMap.statusName', width: 80 },
+        { label: '订单方状态', name: 'transMap.statusName', width: 150 },
         { label: '结算模式', name: 'transMap.settlementPatternName', width: 150 },
         { label: '对账条件', name: 'transMap.reconciliationConditionsName', width: 150 },
         { label: '付款条件', name: 'transMap.paymentConditionsName', width: 150 },
