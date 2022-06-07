@@ -34,14 +34,17 @@ export default {
     prop: "valueData",
   },
   props: {
+    // 数组对象
     options: {
       type: Array,
       default: () => undefined,
     },
+    // 字段名
     name: {
       type: String,
       default: "",
     },
+    // 字典值
     dictCode: {
       type: String,
       default: () => "",
@@ -50,22 +53,27 @@ export default {
       type: Object,
       default: () => null,
     },
+    // 禁用
     disabled: {
       type: Boolean,
       default: false,
     },
+    // 方法类型
     methodType: {
       type: String,
       default: 'GET',
     },
+    // 路径
     url: {
       type: String,
       default: () => "",
     },
+    // 数据名称
     labelField: {
       type: String,
       default: () => "title",
     },
+    // 数据值
     valueField: {
       type: String,
       default: () => "id",
@@ -74,6 +82,7 @@ export default {
       type: Object,
       default: () => {},
     },
+    // 字典汉子转化
     isValueNum:{
       type: Boolean,
       default: false,

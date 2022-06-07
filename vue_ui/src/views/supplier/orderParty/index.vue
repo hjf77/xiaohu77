@@ -196,15 +196,14 @@ export default {
           type: 'text',
         },
         {
-          name: 'supplierId',
+          name: 'supplierCode',
           target:"com.fhs.supplier.po.SupplierSupplierPO",
-          field:"supplierCode",
+          field:"supplierId",
           label: '供应商代码：',
           placeholder: '供应商代码',
           operation: 'like',
           type: 'text',
         },
-       
         {
           name:"status",
           label:"状态：",
@@ -232,7 +231,7 @@ export default {
     //     .then((res) => {
     //       console.log(res);
     //       this.stateTable = res
-         
+
     //     })
     //     .catch((err) => {
     //       console.log(err);

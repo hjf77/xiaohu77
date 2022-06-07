@@ -15,7 +15,7 @@
         <el-form-item
           :disabled="proxyIf(item.visibleOn, true)"
           v-for="item in realControls"
-          v-if="item.type !='ext_slot'&&!item.isHide"
+          v-if="item.type !='ext_slot'&&!item.isHide && proxyIf(item.ifFun, true)"
           :label="item.label ? item.label + ':' : ' '"
           :prop="item.name"
           :key="item.name"
@@ -35,7 +35,7 @@
           <el-input
             :disabled="proxyIf(item.disabledOn, false)"
             v-model="model[item.name]"
-            v-if="item.type === 'text'"
+            v-if="item.type === 'text' "
             :clearable = "item.clearable?item.clearable:true"
             show-word-limit
             v-bind="item"
@@ -499,11 +499,11 @@ export default {
     })
   },
   methods: {
-    proxyIf(_ifFun, _default) {
+    proxyIf(_ifFun, _default,_model) {
       if (_ifFun == "disabled") {
         return true;
       }
-      return _ifFun ? _ifFun.call(this.model) : _default;
+      return _ifFun ? _ifFun(_model ? _model : this.model) : _default;
     },
     //按钮是否显示
     proxyBtnIf(_btn) {
