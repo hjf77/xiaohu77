@@ -3,6 +3,8 @@ package com.fhs.agreement.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -10,7 +12,7 @@ import java.util.List;
 public class AgreementSelectData {
 
     @ApiModelProperty("商品规格")
-    private List<Goodspecification> specificationId;
+    private List<Goodspecification> specificationId = new ArrayList<>();
 
     @Data
     public static class Goodspecification{

@@ -135,23 +135,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-    /**
-     * @param id
-     * @param request
-     * @return
-     * @desc 根据id删除对象
-     */
-    @SaCheckRole("sysUser:del")
-    @DeleteMapping("/delSysUser")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> delSysUser(@RequestParam("id") Long id, HttpServletRequest request) {
-        UcenterMsUserVO sysUser = sysUserService.selectById(id);
-        if (sysUser.getIsAdmin() == sysUserService.SYS_USER_IS_ADMIN) {
-            throw new ParamException("超级用户不可删除");
-        }
-        sysUserService.deleteSysUserById(id);
-        return HttpResult.success(true);
-    }
 
     @Override
     @PutMapping("/")
@@ -167,18 +150,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-    /**
-     * 根据用户查询菜单
-     *
-     * @param request
-     * @param response
-     */
-    @RequestMapping("seachMenuByUser")
-    public List<LeftMenuVO> seachMenuByUser(@RequestParam("menuType") String menuType, HttpServletRequest request, HttpServletResponse response) {
-        UcenterMsUserVO user = super.getSessionuser();
-        ParamChecker.isNotNull(user, "用户没有登录");
-        return sysUserService.getMenu(user, menuType);
-    }
 
     /**
      * 修改密码

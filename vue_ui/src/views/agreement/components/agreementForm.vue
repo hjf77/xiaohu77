@@ -1,3 +1,9 @@
+<!--
+  模块名称：采购协议录入
+  开发人员：马军伟
+  创建时间: 2022-5-30
+-->
+
 <template>
   <base-container>
     <pagex-form
@@ -19,12 +25,13 @@
 
 <script>
 import {mapGetters} from "vuex";
-import crudMixins from "@/mixins/crudMixins";
 import {deepClone} from "@/utils";
-import {parseTime} from "../../../lib/utils";
+import {parseTime} from "@/lib/utils";
+import datePickerOpt from "@/mixins/datePickerOpt";
 
 export default {
   name: "AgreementForm",
+  mixins: [datePickerOpt],
   computed: {
     ...mapGetters(["user"]),
     isEdit() {
@@ -63,7 +70,7 @@ export default {
           url:"/purchase/ms/supplierOrderParty/findList?orderPartyCode=",
           labelField: "name",
           valueField: "id",
-          title: 'supplierIdName',
+          title: 'orderPartyIdName',
           remote: true,
           label: "订单方",
           rule: [{required: true, message: '请输入订单方', trigger: 'change'}]
@@ -82,21 +89,34 @@ export default {
           type: "text",
           label: "合同编号",
           name: "contractNo",
-          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
+          rule: [{required: true, message: '请输入合同编号', trigger: 'change'},
+            {min: 1, max: 30, message: '合同编号长度1~30', trigger: 'change'},
+            {required: true, pattern: /^[0-9]*$/, message: '合同编码只能输入数字', trigger: 'change'},
+          ]
         },
         {
           type: "dates",
           name: "startTime",
           label: "开始时间",
           formatVal: "yyyy-MM-dd",
-          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
+          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}],
+          pickerOptions: {},
+          changeFn: (val) => {
+            this.startTime = val;
+            this.rewriteEndPickerOptions("controls", 5);
+          },
         },
         {
           type: "dates",
           name: "endTime",
           label: "结束时间",
           formatVal: "yyyy-MM-dd",
-          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}]
+          rule: [{required: true, message: '请输入合同编号', trigger: 'change'}],
+          pickerOptions: {},
+          changeFn: (val) => {
+            this.endTime = val;
+            this.rewriteStartPickerOptions("controls", 4);
+          },
         },
         {
           type: "text",
@@ -164,6 +184,9 @@ export default {
             },
             {
               name: "删除",
+              ifFun: () => {
+                return this.$route.query.id
+              },
               click: (_v,_model) => {
                 this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
                   confirmButtonText: '确定',
@@ -216,7 +239,7 @@ export default {
           controls: [
             {
               type: 'text',
-              name: 'goodCode',
+              name: 'goodsCode',
               label: '商品编码',
               fixed: true,
               rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
@@ -227,10 +250,10 @@ export default {
                     url: "/vmock/ms/agreementInput/getGoodInfo?goodCode=" + newValue,
                   })
                   this.$set(_datas[index],'goodsId',res.goodsId)
-                  this.$set(_datas[index],'goosBarcode',res.goosBarcode)
+                  this.$set(_datas[index],'goodsBarcode',res.goosBarcode)
                   this.$set(_datas[index],'goodsName',res.goodsName)
                   this.$set(_datas[index],'specificationId',res.specificationId)
-                  this.$set(_datas[index],'orgName',res.orgName)
+                  this.$set(_datas[index],'unit',res.orgName)
                   this.$set(_datas[index],'rate',res.rate)
                   this.$set(_datas[index],'taxUnitPrice',res.taxUnitPrice)
                   this.$set(_datas[index],'excludeTaxUnitPrice',res.excludeTaxUnitPrice)
@@ -256,7 +279,7 @@ export default {
             },
             {
               type: 'label',
-              name: 'goosBarcode',
+              name: 'goodsBarcode',
               label: '商品条码'
             },
             {
@@ -273,7 +296,7 @@ export default {
             },
             {
               type: 'label',
-              name: 'orgName',
+              name: 'unit',
               label: '单位',
               options:[],
             },
@@ -350,9 +373,9 @@ export default {
     if (this.$route.query.id) {
         this.initData()
     } else {
+        this.formData.no = '协议号自动生成'
         this.formData.status = '1';
         this.formData.statusName = '未审核';
-        this.formData.no = "202205070001";
         this.formData.createTime = parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}');
         this.formData.createUserUserName = this.$store.state.user.user.userName;
         this.formData.updateTime = parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}');
@@ -370,16 +393,22 @@ export default {
       })
         .then((res) => {
           this.init = deepClone(res)
-          this.formData.supplierIdName = this.init.supplierIdName;
-          // 初始化 optionsInitSetts 为空数组
-          this.optionsInitSetts = []
-          if (res.goodsVOs && res.goodsVOs.length > 0) {
-            res.goodsVOs.forEach((item) => {
-              // 如果没有selectDataList，则给空[], 不然商品喝规格对应不上
-              if (!item.selectDataList) item.selectDataList = []
-              this.optionsInitSetts.push(item.selectDataList[0])
-            })
-          }
+          // 下拉搜素设置title
+          this.formData.orderPartyIdName = this.init.orderPartyIdName;
+          this.formData.id = this.init.id;
+          this.formData.no = this.init.no;
+          this.formData.detailNum = this.init.detailNum
+          this.formData.supplierId = this.init.supplierId
+          this.formData.status = this.init.status;
+          this.formData.orgId = this.init.orgId;
+          this.optionsInitSetts = res.selectDataList
+
+          // 初始化时间校验
+          this.startTime = this.init.startTime;
+          this.endTime = this.init.endTime;
+          this.rewriteStartPickerOptions("controls", 4);
+          this.rewriteEndPickerOptions("controls", 5);
+
           this.initFinsh = true
         })
         .catch((res) => {
@@ -390,9 +419,8 @@ export default {
     // 保存
     save(form) {
       let isEdit = !!this.$route.query.id
-      debugger
-      return
       // 删除公共字段信息,后端默认设置
+      if (!isEdit) form.no = '20220602000011'
       delete form.createTime;
       delete form.createUser;
       delete form.updateTime;
@@ -414,8 +442,8 @@ export default {
     // 审核
     audit(form) {
       this.$pagexRequest({
-        method: "GET",
-        url: "/purchase/ms/agreementInput/getGoodInfo"
+        method: "PUT",
+        url: "/purchase/ms/agreementInput/updateField"
       }).then((res) => {
         this.$message.success('审核成功')
       }).catch((e) => {
@@ -427,7 +455,7 @@ export default {
     del() {
       if (!this.$route.query.id) return this.$message.warning('该数据有误,id不存在')
       this.$pagexRequest({
-        method: "GET",
+        method: "DELETE",
         url: `/purchase/ms/agreementAgreement/${this.$route.query.id}`,
       }).then((res) => {
         this.$message({

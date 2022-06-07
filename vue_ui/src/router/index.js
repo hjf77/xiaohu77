@@ -74,12 +74,24 @@ export const constantRoutes = [
       {
         path: 'type/editForm',
         component: () => import('@/views/supplier/supplier/components/editForm.vue'),
-        name: 'Data',
+        name: 'supplier',
         meta: { title: '供应商资料管理详情', icon: '' }
       }
     ]
   },
-
+  {
+    path: '/orderParty',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/editOrderForm',
+        component: () => import('@/views/supplier/orderParty/components/editOrderForm.vue'),
+        name: 'editOrderForm',
+        meta: { title: '订单方资料管理详情', icon: '' }
+      }
+    ]
+  },
   {
     path: '/dict',
     component: Layout,
@@ -102,7 +114,7 @@ export const constantRoutes = [
       {
         path: 'agreementDetail',
         component: () => import('@/views/agreement/components/agreementForm.vue'),
-        name: 'Data',
+        name: 'agreementForm',
         meta: { title: '协议录入-详情', icon: '' }
       }
     ]

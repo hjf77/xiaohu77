@@ -48,6 +48,20 @@ public class QueryField implements Serializable {
     )
     private String group;
 
+    @ApiModelProperty(
+            name = "target",
+            notes = "关联过滤第二个表的类名",
+            example = "com.fhs.basics.po.UcenterMsOrganizationPO"
+    )
+    private String target;
+
+    @ApiModelProperty(
+            name = "field",
+            notes = "字段名",
+            example = "name"
+    )
+    private String field;
+
     public QueryField() {
         this.operation = "=";
         this.relation = "AND";
