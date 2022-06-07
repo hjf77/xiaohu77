@@ -12,7 +12,7 @@
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_framework</artifactId>
     <description>fhs framework开源版本3.0</description>
-    <version>3.4.2</version>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
     <properties>
