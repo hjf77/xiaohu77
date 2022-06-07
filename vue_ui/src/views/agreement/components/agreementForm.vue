@@ -339,10 +339,7 @@ export default {
               name: 'endTime',
               formatVal: "yyyy-MM-dd",
               label: '结束时间',
-              rule: [{  required: true, message: '请选择结束时间', trigger: 'change' }],
-              changeFn: (val, fff, fffff) => {
-                debugger
-              }
+              rule: [{  required: true, message: '请选择结束时间', trigger: 'change' }]
             },
             {
               type: 'select',
@@ -434,6 +431,7 @@ export default {
         })
         if (unqualifiedList.length > 0) {
           this.$message.warning(`第${indexList.join('，')}条数据数据有误！，开始时间不能大于结束时间`)
+          return;
         }
       } else {
         this.$message('商品数据不能为空！')
@@ -441,7 +439,6 @@ export default {
       }
       let isEdit = !!this.$route.query.id
       // 删除公共字段信息,后端默认设置
-      if (!isEdit) form.no = '20220602000011'
       delete form.createTime;
       delete form.createUser;
       delete form.updateTime;
