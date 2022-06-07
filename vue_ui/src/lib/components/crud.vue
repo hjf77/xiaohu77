@@ -173,7 +173,6 @@ by wanglei
             :prop="item.name"
             :show-overflow-tooltip="true"
             v-else-if="item.type === 'formart'"
-            :fixed="item.fixed"
             :label="item.label"
             :key="'operation' + index"
             align="center"
