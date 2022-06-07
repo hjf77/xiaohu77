@@ -244,6 +244,7 @@ export default {
               fixed: true,
               rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
               one2xChange: async (newValue, _datas, index, optionsSetts, _inputThis) => {
+                if (!newValue) return
                 try {
                   const res = await this.$pagexRequest({
                     methods: "GET",
