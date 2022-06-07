@@ -243,7 +243,7 @@ export default {
               label: '商品编码',
               fixed: true,
               rule: [{  required: true, message: '请输入商品编码', trigger: 'blur' }],
-              one2xBlur: async (newValue, _datas, index, optionsSetts, _inputThis) => {
+              one2xChange: async (newValue, _datas, index, optionsSetts, _inputThis) => {
                 try {
                   const res = await this.$pagexRequest({
                     methods: "GET",
@@ -434,6 +434,9 @@ export default {
         if (unqualifiedList.length > 0) {
           this.$message.warning(`第${indexList.join('，')}条数据数据有误！，开始时间不能大于结束时间`)
         }
+      } else {
+        this.$message('商品数据不能为空！')
+        return
       }
       let isEdit = !!this.$route.query.id
       // 删除公共字段信息,后端默认设置

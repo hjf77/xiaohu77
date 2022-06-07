@@ -50,18 +50,18 @@ export default {
       ],
       columns: [
         { label: '序号', type: 'index',fixed: 'left' },
-        { label: '协议号', name: 'no', width: 150, type: 'formart',
+        { label: '协议号', name: 'no', width: 150, type: 'formart',fixed: 'left',
           formart: "<a style='cursor:pointer;color: #1c84c6'>${no}</a>",
           click: function (_row) {
             this.$router.push({path: '/agreementInput/agreementDetail',query:{id: _row.id}});
           }
         },
         { label: '状态', name: 'statusName', width: 150 },
-        { label: '订单方', name: 'orderPartyIdName' },
-        { label: '供应商', name: 'supplierIdName', width: 80 },
-        { label: '合同编号', name: 'contractNo', width: 150 },
-        { label: '明细数', name: 'detailNum', width: 150 },
-        { label: '所属组织', name: 'orgName', width: 150 },
+        { label: '订单方', name: 'orderPartyIdName', type: 'popover' },
+        { label: '供应商', name: 'supplierIdName', width: 120, type: 'popover' },
+        { label: '合同编号', name: 'contractNo', width: 150, type: 'popover' },
+        { label: '明细数', name: 'detailNum', width: 120 },
+        { label: '所属组织', name: 'orgName', width: 150, type: 'popover' },
         { label: '创建人', name: 'createUserUserName', width: 150 },
         { label: '创建时间', name: 'createTime', width: 150 },
         { label: '最后修改人', name: 'updateUserUserName', width: 150 },
