@@ -68,6 +68,7 @@ export default {
           type: "select",
           name: 'parentId',
           label: "费用类别",
+          disabledOn:this.init.isUpdate?'disabled':null,
           url:'/purchase/ms/feeProject/findList?level=1',
           labelField: "name",
           rule: [
@@ -77,6 +78,9 @@ export default {
               trigger: "change",
             },
           ],
+          // change:(e)=>{
+          //   console.log(e)
+          // }
         },
         {
           type: "text",
@@ -166,6 +170,7 @@ export default {
           type: "text",
           name: "fixedAmount",
           label: "固定金额",
+          afterTextContent:'元',
           rule: [
             { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数固定金额' }
           ],
@@ -174,6 +179,7 @@ export default {
           type: "text",
           name: "fixedAmountGoTax",
           label: "固定去税金额",
+          afterTextContent:'元',
           rule: [
             { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数固定金额' }
           ],
@@ -285,7 +291,11 @@ export default {
       ],
     };
   },
-
+  // watch:{
+  //   'controls[0].labelField'(e){
+  //     console.log(e)
+  //   }
+  // },
   created() {
   
   },

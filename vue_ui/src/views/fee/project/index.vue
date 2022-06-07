@@ -2,9 +2,9 @@
   <base-container :isOrg="true">
     <template slot="org">
       <div class="label-btn">
-        <el-button type="text">全部展开</el-button>
-        <el-button type="text">全部折叠</el-button>
-        <el-button type="text">显示启用</el-button>
+        <el-button type="text" @click="expandTree">全部展开</el-button>
+        <el-button type="text" @click="collapseTree">全部折叠</el-button>
+        <el-button type="text" @click="displayEnable">显示启用</el-button>
         <el-button type="text">显示停用</el-button>
       </div>
       <div class="tree-box">
@@ -16,6 +16,7 @@
       :props="defaultProps"
       ref="tree"
       node-key = "id"
+      :default-expand-all = "isExpand"
       :default-expanded-keys="idArr"
       :default-checked-keys="[]"
       @node-click="nodeClick"
@@ -48,6 +49,7 @@ export default {
       addIsShow: false,
       parentId: null,
       idArr:[],
+      isExpand:false,
       isEdit: false,
       defaultProps:{
         label:'name',
@@ -95,6 +97,7 @@ export default {
         this.isEdit = true;
         this.parentId = null;
         this.init = node.data;
+        node.data.isUpdate=true
         this.idArr.push(node.id)
         this.isFormShow = false
         this.$nextTick(() => {
@@ -118,20 +121,12 @@ export default {
           this.isFormShow = true
       })
     },
-    
-
+    //页面刷新
     enableFn(e){
       console.log(e)
       this.isFormShow = false
       this.getTree()
         this.$pagexRequest({
-        //   url:`purchase/ms/feeProject/findList/${e}`,
-        //   method: "get",
-        // }).then(res=>{
-        //   console.log(res)
-        //   this.init = res
-        //   this.isFormShow = true
-
         url:`purchase/ms/feeProject/${e}` ,
         method: "get",
         }).then(res=>{
@@ -139,7 +134,44 @@ export default {
           console.log(res)
           this.isFormShow = true
         })
-    }
+    },
+
+    //展开树
+    expandTree(){
+      this.isExpand = true
+      this.expandFunc(this.treeData)
+    },
+    collapseTree(){
+      this.isExpand = false
+      this.expandFunc(this.treeData)
+    },
+        
+	// 遍历树形数据，通过设置每一项的expanded属性，实现展开与折叠
+    expandFunc(data) {
+        data.forEach(item=> {
+          this.$refs.tree.store.nodesMap[item.id].expanded = this.isExpand
+          if (item.children.length>0) {
+            this.expandFunc(item.children)
+          }
+        })
+    },
+    // displayEnable() {
+    //     this.treeData.forEach(item=> {
+    //       console.log(item)
+          // let enable = this.$refs.tree.store.nodesMap[item.id]
+          // console.log(enable)
+          // if(enable===1){
+          //   enable.expanded = this.isExpand
+          // }
+    //       if (item.children.length>0) {
+    //         this.expandFunc(item.children)
+    //         console.log(item.children)
+    //         let enable = item.children.data
+    //         console.log(enable)
+    //       }
+    //     })
+    // },
+
   },
 };
 </script>
