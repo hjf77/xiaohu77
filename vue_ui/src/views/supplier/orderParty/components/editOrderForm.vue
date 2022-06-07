@@ -84,17 +84,22 @@ export default {
     };
   },
   created() {
-    console.log(787878787)
-    this.id = this.$route.query && this.$route.query.id;
-      console.log(this.id, this.$route.query)
-      this.supplierList(this.id);
+    // console.log(787878787)
+    // this.id = this.$route.query && this.$route.query.id;
+    //   console.log(this.id, this.$route.query)
+    //   this.supplierList(this.id);
     
   },
   mounted() {
   },
+  activated() {
+    // 解决组件组件只加载一次问题
+    this.showForm = false,
+    this.id = this.$route.query && this.$route.query.id;
+    this.supplierList(this.id);
+  },
   methods: {
     supplierList(id) {
-      console.log(id, '=============>>>>>')
       this.$pagexRequest({
         url: '/purchase/ms/supplierOrderParty/' + id,
         method: 'GET',
