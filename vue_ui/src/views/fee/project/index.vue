@@ -89,9 +89,6 @@ export default {
              this.treeData = res
           })
     },
-    // handleCheckChange(data, checked, indeterminate) {
-    //     console.log(data, checked, indeterminate, 111111);
-    //   },
 
     nodeClick(node){
       if(node.data.level != 1) {
@@ -123,12 +120,25 @@ export default {
     },
     
 
-    enableFn(){
-      // this.isFormShow = false
-      this.getTree();
-          this.init={}
-          this.$forceUpdate()
+    enableFn(e){
+      console.log(e)
+      this.isFormShow = false
+      this.getTree()
+        this.$pagexRequest({
+        //   url:`purchase/ms/feeProject/findList/${e}`,
+        //   method: "get",
+        // }).then(res=>{
+        //   console.log(res)
+        //   this.init = res
+        //   this.isFormShow = true
+
+        url:`purchase/ms/feeProject/${e}` ,
+        method: "get",
+        }).then(res=>{
+          this.init = res
+          console.log(res)
           this.isFormShow = true
+        })
     }
   },
 };
