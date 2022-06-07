@@ -1,26 +1,34 @@
 <template>
   <base-container :isOrg="true">
     <template slot="org">
+      <div class="label-btn">
+        <el-button type="text">全部展开</el-button>
+        <el-button type="text">全部折叠</el-button>
+        <el-button type="text">显示启用</el-button>
+        <el-button type="text">显示停用</el-button>
+      </div>
+      <div class="tree-box">
       <div>
       <el-button class="addclick" size="small" @click="addClick">新增</el-button>
       </div>
-      <el-tree
+      <el-tree class="tree-style"
       :data="treeData"
       :props="defaultProps"
       ref="tree"
       node-key = "id"
       :default-expanded-keys="idArr"
-      :default-checked-keys="[currentId]"
+      :default-checked-keys="[]"
       @node-click="nodeClick"
       @check-change="handleCheckChange"
       >
       </el-tree>
+      </div>
     </template>
     <div v-if="isFormShow">
       <feeProject  @enableFn="enableFn" :isFormShow.sync="isFormShow" :init="init" :isEdit="isEdit" :parentId="parentId"></feeProject>
     </div>
-  <div v-else>
-      <div>暂无数据</div>
+  <div v-else class="rightContent">
+      <div class="text-style">暂无数据</div>
   </div>
 
   </base-container>
@@ -81,9 +89,9 @@ export default {
              this.treeData = res
           })
     },
-    handleCheckChange(data, checked, indeterminate) {
-        console.log(data, checked, indeterminate, 111111);
-      },
+    // handleCheckChange(data, checked, indeterminate) {
+    //     console.log(data, checked, indeterminate, 111111);
+    //   },
 
     nodeClick(node){
       if(node.data.level != 1) {
@@ -91,7 +99,6 @@ export default {
         this.parentId = null;
         this.init = node.data;
         this.idArr.push(node.id)
-        console.log(this.idArr)
         this.isFormShow = false
         this.$nextTick(() => {
           this.isFormShow = true
@@ -117,12 +124,30 @@ export default {
     
 
     enableFn(){
-      this.reload()
+      // this.isFormShow = false
+      this.getTree();
+          this.init={}
+          this.$forceUpdate()
+          this.isFormShow = true
     }
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.label-btn{
+  border-radius: 4px;
+  background-color: #ffffff;
+  // padding: 10px 0;
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 27px
+}
+.tree-box{
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-top: 20px;
+}
 .el-tree .el-tree-node__expand-icon.expanded {
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
@@ -134,7 +159,23 @@ export default {
   content: "\e722";
 }
 .addclick{
-  margin-left: 240px;
-  margin-bottom: 30px;
+  margin: 10px 0 30px 230px;
+}
+.tree-style{
+  margin-left:30px;
+  padding-bottom: 30px;
+}
+.rightContent{
+  position: relative;
+  // display: flex;
+  // justify-content: center;
+  // margin: auto;
+}
+.text-style{
+  position: absolute;
+  top:50%;
+  margin-top: 350px;
+  left: 50%;
+  margin-left: 20px;
 }
 </style>

@@ -5,7 +5,7 @@
 -->
 <template>
 
-    <pagex-crudForm namespace="supplierReconciliationConditions" class="changrow"  :label-width="labelWidth" :isVee="false" :controls.sync="formSett.controls"  :title="title" :crudSett="crudSett" :formSett="formSett" :idFieldName="idFieldName" >
+    <pagex-crudForm :namespace="'supplierReconciliationConditions'" class="changrow"  :label-width="labelWidth" :isVee="false" :controls.sync="formSett.controls"  :title="title" :crudSett="crudSett" :formSett="formSett" :idFieldName="idFieldName" >
     </pagex-crudForm>
 
 </template>
@@ -20,10 +20,9 @@ export default {
   data() {
     return {
         title:'对账条件配置',
-        idFieldName:'groupId',
+        idFieldName:'id',
         crudSett:{
-            api: '/purchase/ms/supplierReconciliationConditions/pagerAdvance',
-           
+        api: '/purchase/ms/supplierReconciliationConditions/pagerAdvance', 
         buttons: [
           {
             title: '新增',
@@ -32,9 +31,7 @@ export default {
             name:'add',
             icon: 'el-icon-plus',
             permission: ['supplierReconciliationConditions:add'],
-            click:()=>{
-              console.log(123)
-            }
+            
           },
         
         ],
@@ -57,15 +54,13 @@ export default {
                 title: "编辑",
                 type: "bottom",
                 size: 'mini',
-                click(){
-                    console.log(123)
-                }
+               
               },
               {
                 title: "删除",
                 type: "danger",
                 size: 'mini',
-                api: ''
+                api: '/purchase/ms/supplierReconciliationConditions/'
               }
             ],
           }
@@ -77,7 +72,7 @@ export default {
       },
       formSett:{
         addApi: '/purchase/ms/supplierReconciliationConditions',
-        updateApi: '',
+        updateApi: '/purchase/ms/supplierReconciliationConditions',
         data:{},
         labelWidth:'125px',
         controls:[
@@ -85,7 +80,6 @@ export default {
             type: 'text',
             name: 'conditionsCode',
             label: '对账条件代码',
-            rule: 'required',
             disabledOn:'disabled',
             placeholder: '对账条件代码自动生成'
           }, {

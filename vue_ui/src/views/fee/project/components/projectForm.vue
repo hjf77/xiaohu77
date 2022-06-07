@@ -1,6 +1,6 @@
 
 <template>
-<div>
+<div class="content-box">
   <pagex-form
     ref="form"
     :isEdit="isEdit"
@@ -19,6 +19,7 @@
 
 </template>
 <script>
+import {wholeNumReg } from "@/utils/validate.js";
 import crudMixins from "@/mixins/crudMixins";
 export default {
   name: "feeProject",
@@ -59,7 +60,8 @@ export default {
         currentId:null,
         parentId: this.init.parentId ? this.init.parentId : this.parentId,
         projectCode:'',
-        status:this.init.status ? this.init.status : 1
+        status:this.init.status ? this.init.status : 1,
+        isEnable:1
       },
       controls: [
         {
@@ -124,7 +126,6 @@ export default {
           type: "select",
           name: "rate",
           label: "税率",
-          placeholder: "请选择",
           dictCode: "rate",
           isValueNum: true,
           rule: [
@@ -165,11 +166,17 @@ export default {
           type: "text",
           name: "fixedAmount",
           label: "固定金额",
+          rule: [
+            { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数固定金额' }
+          ],
         },
         {
           type: "text",
           name: "fixedAmountGoTax",
           label: "固定去税金额",
+          rule: [
+            { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数固定金额' }
+          ],
         },
         {
           type: "select",
@@ -187,8 +194,6 @@ export default {
           label: "状态",
           disabledOn:'disabled',
           dictCode: "isEnable",
-          // labelField: "isEnable",
-          // url:'/purchase/ms/feeProject/findList?level=1',
           isValueNum: true,
         },
         {
@@ -200,7 +205,6 @@ export default {
           type: "select",
           name: "settlementDatasource",
           label: "结案数据来源",
-          placeholder: "请选择",
           dictCode: "settlementSource",
           // isValueNum: true,
           rule: [
@@ -216,7 +220,6 @@ export default {
           type: "",
           size: "mini",
           ifFun:(_model)=>{
-            console.log(_model.id);
             return _model.id && _model.isEnable == 0;
           },
           click: (_row) => {
@@ -287,8 +290,7 @@ export default {
   },
 
   created() {
-    // console.log(this.parentId);
-    // console.log(this.isEdit);
+  
   },
   mounted(){
     if(!this.isEdit){
@@ -309,4 +311,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.content-box{
+  margin-top: 50px;
+}
 </style>
