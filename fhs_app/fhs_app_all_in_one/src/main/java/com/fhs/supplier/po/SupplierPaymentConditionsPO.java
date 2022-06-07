@@ -1,9 +1,11 @@
 package com.fhs.supplier.po;
 
-import java.io.Serializable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -28,7 +30,7 @@ public class SupplierPaymentConditionsPO extends BasePO<SupplierPaymentCondition
     
     private static final long serialVersionUID = 866377902330210223L;
 
-    @TableId(value = "id", type = IdType.NONE)
+    @TableId(value = "id", type = IdType.AUTO)
     @NotNull(message = "id字段不可为空", groups = {Update.class, Delete.class})
     @ApiModelProperty(value = "id")
     private Integer id;
@@ -68,6 +70,7 @@ public class SupplierPaymentConditionsPO extends BasePO<SupplierPaymentCondition
      * 付款日期基数（0结转自然周1结转自然半月2结转自然月3固定日4无）
      */
     @TableField("date_base")
+    @Trans(type= TransType.DICTIONARY,key = "supplierPaymentDateBase")
     @ApiModelProperty(value = "付款日期基数（0结转自然周1结转自然半月2结转自然月3固定日4无）")
     private Integer dateBase;
 
@@ -82,6 +85,7 @@ public class SupplierPaymentConditionsPO extends BasePO<SupplierPaymentCondition
      * 付款日期基数缺省值（0发生日期1开票日期）
      */
     @TableField("date_base_omit")
+    @Trans(type= TransType.DICTIONARY,key = "supplierPaymentDateBaseOmit")
     @ApiModelProperty(value = "付款日期基数缺省值（0发生日期1开票日期）")
     private Integer dateBaseOmit;
 
