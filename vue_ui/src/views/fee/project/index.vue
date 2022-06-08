@@ -4,8 +4,8 @@
       <div class="label-btn">
         <el-button type="text" @click="expandTree">全部展开</el-button>
         <el-button type="text" @click="collapseTree">全部折叠</el-button>
-        <el-button type="text" @click="displayEnable">显示启用</el-button>
-        <el-button type="text">显示停用</el-button>
+        <el-button type="text" @click="getQi">显示启用</el-button>
+        <el-button type="text" @click="getTing">显示停用</el-button>
       </div>
       <div class="tree-box">
       <div>
@@ -19,9 +19,13 @@
       :default-expand-all = "isExpand"
       :default-expanded-keys="idArr"
       :default-checked-keys="[]"
+      :filter-node-method="filterNode"
       @node-click="nodeClick"
       @check-change="handleCheckChange"
       >
+      <span class="custom-tree-node" slot-scope="{ node }">  
+        <span :title="node.label" class="em-tree-text">{{ node.label }}</span>  
+      </span>
       </el-tree>
       </div>
     </template>
@@ -46,10 +50,8 @@ export default {
   data() {
     return {
       isFormShow: false,
-      addIsShow: false,
       parentId: null,
       idArr:[],
-      isExpand:false,
       isEdit: false,
       defaultProps:{
         label:'name',
@@ -57,13 +59,6 @@ export default {
       },
       codemsg: {},
       treeData: [],
-      // addApi: '/fee/ms/feeProject',
-      // param: {
-      //   parentId: '',
-      //   data: '0102',
-      //   isEnable: '0'
-      // },
-
     };
   },
   provide() {
@@ -93,12 +88,14 @@ export default {
     },
 
     nodeClick(node){
+      console.log(node)
       if(node.data.level != 1) {
         this.isEdit = true;
         this.parentId = null;
         this.init = node.data;
         node.data.isUpdate=true
         this.idArr.push(node.id)
+        console.log(node.id)
         this.isFormShow = false
         this.$nextTick(() => {
           this.isFormShow = true
@@ -123,21 +120,32 @@ export default {
     },
     //页面刷新
     enableFn(e){
-      console.log(e)
       this.isFormShow = false
-      this.getTree()
+      console.log(e)
+      if(e != undefined){
+        this.getTree()
         this.$pagexRequest({
         url:`purchase/ms/feeProject/${e}` ,
         method: "get",
         }).then(res=>{
-          this.init = res
-          console.log(res)
-          this.isFormShow = true
+            this.init = res
+            this.isFormShow = true
         })
+      }
     },
 
     //展开树
     expandTree(){
+      // this.$pagexRequest({
+      //     url: "/purchase/ms/feeProject/tree",
+      //     data: {},
+      //     method: "POST",
+      // }).then(res=>{
+      //     this.treeData = []
+      //     this.treeData = res
+      //      // console.log(this.treeData)
+      //     //  this.expandFunc(this.treeData)
+      // })
       this.isExpand = true
       this.expandFunc(this.treeData)
     },
@@ -155,22 +163,19 @@ export default {
           }
         })
     },
-    // displayEnable() {
-    //     this.treeData.forEach(item=> {
-    //       console.log(item)
-          // let enable = this.$refs.tree.store.nodesMap[item.id]
-          // console.log(enable)
-          // if(enable===1){
-          //   enable.expanded = this.isExpand
-          // }
-    //       if (item.children.length>0) {
-    //         this.expandFunc(item.children)
-    //         console.log(item.children)
-    //         let enable = item.children.data
-    //         console.log(enable)
-    //       }
-    //     })
-    // },
+    filterNode(value, treeData){
+      if (!value) return true;
+      return treeData.data.isEnable== value ;
+    },    //显示启用
+    getQi(){
+       // this.filterNode(,this.treeData)
+      this.$refs.tree.filter('1')
+    },
+    // 显示停用
+    getTing(){
+      this.$refs.tree.filter('0')
+    },
+    
 
   },
 };
@@ -199,6 +204,25 @@ export default {
 }
 .el-tree .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
   content: "\e722";
+}
+.custom-tree-node {
+  // flex: ;
+display: flex;//这里的display属性不用修改（使树节点末尾的按钮右对齐）
+align-items: center;
+justify-content: space-between;
+font-size: px;
+padding-right: px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+width: 100%;//宽度必须是这个，不能使用px或者min-width或者min-width等，因为外层使用了el-card包裹是可以拉动的，换言之树节点的宽度随时可变
+& span.em-tree-text{
+    display: inline-block;//block一样
+overflow: hidden;
+white-space: nowrap;
+width:100%;
+text-overflow: ellipsis;
+  }
 }
 .addclick{
   margin: 10px 0 30px 230px;

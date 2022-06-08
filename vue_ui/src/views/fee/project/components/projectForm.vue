@@ -32,10 +32,6 @@ export default {
       type: Boolean,
       default: false
     },
-    addIsShow: {
-      type: Boolean,
-      default: false
-    },
     init:{
       type: Object,
       default: ()=>{
@@ -79,13 +75,15 @@ export default {
             },
           ],
            change:(e,v)=>{
-            console.log(e,v)
+             if(!this.isEdit){
               this.$pagexRequest({
                 url: "/purchase/ms/feeProject/findCode?id=" + v,
                 method: "GET",
               }).then(res=>{
                   this.$refs.form.setModelProp('projectCode',res.data);
               })
+             }
+            
           }
         },
         {
@@ -283,12 +281,10 @@ export default {
           click: (_row) => {
             this.title = "删除";
             this.isEdit = false;
-            console.log(_row)
             this.$pagexRequest({
             url:`purchase/ms/feeProject/${_row.id}` ,
             method: "DELETE",
             }).then(res=>{
-              console.log(res)
               this.msgSuccess('删除成功')
               this.$emit("enableFn")
             })
@@ -297,11 +293,6 @@ export default {
       ],
     };
   },
-  // watch:{
-  //   'controls[0].labelField'(e){
-  //     console.log(e)
-  //   }
-  // },
   created() {
   
   },
@@ -317,6 +308,7 @@ export default {
         method: "GET",
       }).then(res=>{
           this.$refs.form.setModelProp('projectCode',res.data);
+          console.log(res.data)
       })
     },
   },
