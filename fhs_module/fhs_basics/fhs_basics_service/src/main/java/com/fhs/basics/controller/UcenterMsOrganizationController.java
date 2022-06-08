@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysOrganization")
 @LogNamespace(namespace = "sysOrganization", module = "机构管理")
-public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationPO> {
+public class UcenterMsOrganizationController extends ModelSuperController<UcenterMsOrganizationVO, UcenterMsOrganizationPO,String> {
 
     /**
      * 机构服务

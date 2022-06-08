@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 @Api(tags = {"字典分组"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = "dictGroup", module = "字典分组管理")
-public class ServiceDictGroupController extends ModelSuperController<ServiceDictGroupVO, ServiceDictGroupPO> {
+public class ServiceDictGroupController extends ModelSuperController<ServiceDictGroupVO, ServiceDictGroupPO,Integer> {
 
     private static final Logger LOG = Logger.getLogger(ServiceDictGroupController.class);
 
