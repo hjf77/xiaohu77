@@ -175,8 +175,6 @@ export default {
     getTing(){
       this.$refs.tree.filter('0')
     },
-    
-
   },
 };
 </script>
