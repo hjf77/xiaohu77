@@ -16,9 +16,10 @@
       :props="defaultProps"
       ref="tree"
       node-key = "id"
-      :default-expand-all = "isExpand"
+      :accordion="true"
       :default-expanded-keys="idArr"
-      :default-checked-keys="[]"
+      :default-expand-all = "isExpand"
+    
       :filter-node-method="filterNode"
       @node-click="nodeClick"
       @check-change="handleCheckChange"
@@ -88,22 +89,23 @@ export default {
     },
 
     nodeClick(node){
+      let arr=[]
+      arr.push(node.id)
       console.log(node)
       if(node.data.level != 1) {
         this.isEdit = true;
-        this.parentId = null;
+        // this.parentId = null;
         this.init = node.data;
         node.data.isUpdate=true
-        this.idArr.push(node.id)
-        console.log(node.id)
+        this.idArr=arr
         this.isFormShow = false
         this.$nextTick(() => {
           this.isFormShow = true
         })
       } else {
         this.isFormShow = false
-        this.parentId = node.id
-        this.init = {}
+        // this.parentId = node.id
+        // this.init = {}
       }
     },
     // 新增事件
@@ -136,16 +138,8 @@ export default {
 
     //展开树
     expandTree(){
-      // this.$pagexRequest({
-      //     url: "/purchase/ms/feeProject/tree",
-      //     data: {},
-      //     method: "POST",
-      // }).then(res=>{
-      //     this.treeData = []
-      //     this.treeData = res
-      //      // console.log(this.treeData)
-      //     //  this.expandFunc(this.treeData)
-      // })
+      
+      this.$refs.tree.filter()
       this.isExpand = true
       this.expandFunc(this.treeData)
     },
