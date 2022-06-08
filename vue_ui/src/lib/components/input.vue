@@ -31,7 +31,7 @@ export default {
       type:Array,
       default: () => ([])
     },
-    one2xBlur:{
+    one2xChange:{
       type: Function,
       default: null
     },
@@ -54,17 +54,17 @@ export default {
   methods: {
     handleChange(val){
       this.$emit("change", val);
+      if(this.one2xChange){
+        let _datas = deepClone(this.datas);
+        let _one2xOptionsSetts = deepClone(this.one2xOptionsSetts);
+        this.one2xChange(val,_datas,this.index,_one2xOptionsSetts,this);
+        this.$emit("update:datas", _datas);
+        this.$emit("update:one2xOptionsSetts", _one2xOptionsSetts);
+      }
     },
     //one2x适配
     handleBlur(){
       this.$emit("blur", this.newValue);
-      if(this.one2xBlur){
-        let _datas = deepClone(this.datas);
-        let _one2xOptionsSetts = deepClone(this.one2xOptionsSetts);
-        this.one2xBlur(this.newValue,_datas,this.index,_one2xOptionsSetts,this);
-        this.$emit("update:datas", _datas);
-        this.$emit("update:one2xOptionsSetts", _one2xOptionsSetts);
-      }
     }
   },
 };

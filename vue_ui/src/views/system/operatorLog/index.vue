@@ -25,7 +25,7 @@
 
     import {mapGetters} from "vuex"
     export default {
-        name: "logLogin",
+        name: "logOperatorMain",
         mixins: [crudMixins],
         data() {
             return {

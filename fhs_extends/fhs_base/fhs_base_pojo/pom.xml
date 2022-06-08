@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_base</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0_rural</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0_rural</version>
+    <version>3.0.0</version>
     <artifactId>fhs_base_pojo</artifactId>
     <dependencies>
         <dependency>
@@ -29,7 +29,10 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
-            <version>${fhs.mp-anno.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-advance</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
@@ -39,14 +42,8 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
-            <version>${fhs.mp-anno.version}</version>
         </dependency>
-        <!--mybatis plus扩展-->
-       <!-- <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>mp_ext</artifactId>
-            <version>1.0.2</version>
-        </dependency>-->
+
     </dependencies>
 
 

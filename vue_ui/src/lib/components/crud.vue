@@ -177,6 +177,7 @@ by wanglei
             :key="'operation' + index"
             align="center"
             :width="item.width"
+            :fixed="item.fixed"
           >
             <template slot-scope="scope">
               <div
