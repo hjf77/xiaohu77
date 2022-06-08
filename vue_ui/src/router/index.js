@@ -79,7 +79,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
+  /*{
     path: '/storage',
     component: Layout,
     hidden: true,
@@ -91,7 +91,7 @@ export const constantRoutes = [
         meta: { title: '采购申请详情', icon: '' }
       }
     ]
-  },
+  },*/
   {
     path: '/orderParty',
     component: Layout,
