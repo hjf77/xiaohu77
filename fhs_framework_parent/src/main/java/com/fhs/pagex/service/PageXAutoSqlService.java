@@ -264,8 +264,17 @@ public class PageXAutoSqlService {
      */
     public String autoFindPage(PagexListSettDTO pagexListSettDTO) {
         Map<String, Object> modelConfig = pagexListSettDTO.getModelConfig();
-        StringBuilder sqlBuilder = new StringBuilder("<script> SELECT create_time createTime,create_user createUser,update_time updateTime," +
-                "update_user updateUser," + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
+        StringBuilder sqlBuilder = null;
+        boolean isHasJoin = modelConfig.containsKey("join");
+        // 如果配置了join 则自动拼接join语句
+        if(!isHasJoin){
+            sqlBuilder = new StringBuilder("<script> SELECT create_time createTime,create_user createUser,update_time updateTime," +
+                    "update_user updateUser," + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
+        }else{
+            sqlBuilder = new StringBuilder("<script> SELECT m.create_time createTime,m.create_user createUser,m.update_time updateTime," +
+                    "m.update_user updateUser,m." + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
+        }
+
         List<Map<String, Object>> fields = pagexListSettDTO.getListSett();
         String name = null;
         String colName;
@@ -278,9 +287,12 @@ public class PageXAutoSqlService {
             if(field.containsKey("tinyint") && ConverterUtils.toBoolean(field.get("tinyint"))){
                 colName = colName + "*1";
             }
+            if(isHasJoin){
+                colName = "m." + colName;
+            }
             sqlBuilder.append("," + colName + " AS " + ColumnNameUtil.underlineToCamel(name));
         }
-        sqlBuilder.append(" FROM " + modelConfig.get("table") + autoPagerWhere(pagexListSettDTO));
+        sqlBuilder.append(" FROM " + modelConfig.get("table")  + " m " + (isHasJoin ? modelConfig.get("join") + " " : " " ) + autoPagerWhere(pagexListSettDTO,isHasJoin));
         String orderBy = " <if test=\"sortTzwName != null and sortTzwName !='' \" >  " +
                 "        ORDER BY  ${sortTzwName}  ${order}" +
                 "      </if> ";
@@ -318,6 +330,15 @@ public class PageXAutoSqlService {
      * @return 生成列表和查总数sql的过滤条件sql
      */
     private String autoPagerWhere(PagexListSettDTO pagexListSettDTO) {
+        return autoPagerWhere( pagexListSettDTO,false);
+    }
+    /**
+     * 自动生成列表和查总数sql的过滤条件sql
+     *
+     * @param pagexListSettDTO pagexListSettDTO
+     * @return 生成列表和查总数sql的过滤条件sql
+     */
+    private String autoPagerWhere(PagexListSettDTO pagexListSettDTO,boolean isJoin) {
         StringBuilder sqlBuilder = new StringBuilder("<where>");
         List<Map<String, Object>> fields = pagexListSettDTO.getFilters();
         String fieldName = null;
@@ -327,6 +348,9 @@ public class PageXAutoSqlService {
         for (Map<String, Object> field : fields) {
             fieldName = ConverterUtils.toString(field.get("name"));
             camelName = ColumnNameUtil.underlineToCamel(fieldName);
+            if(isJoin){
+                fieldName = "m." + fieldName;
+            }
             hasWhereFields.add(fieldName);
             //代表是between
             if (ConverterUtils.toBoolean(field.get("isBT"))) {
@@ -410,7 +434,7 @@ public class PageXAutoSqlService {
             sqlBuilder.append(" <if test=\"");
             sqlBuilder.append(" groupCode !='' and   ");
             sqlBuilder.append(" groupCode !=null \"> ");
-            sqlBuilder.append(" AND group_code <![CDATA[=]]> #{groupCode}");
+            sqlBuilder.append(isJoin ? " AND m.group_code <![CDATA[=]]> #{groupCode} " : " AND group_code <![CDATA[=]]> #{groupCode}");
             sqlBuilder.append("</if>");
 
         }
