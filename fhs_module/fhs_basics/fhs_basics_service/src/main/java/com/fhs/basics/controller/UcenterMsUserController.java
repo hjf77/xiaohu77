@@ -74,6 +74,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @Override
     @NotRepeat
     @PostMapping("/")
+    @SaCheckRole("sysUser:add")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser, HttpServletRequest request,
@@ -138,6 +139,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     @Override
     @PutMapping("/")
+    @SaCheckRole("sysUser:add")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) UcenterMsUserVO sysUser, HttpServletRequest request,
