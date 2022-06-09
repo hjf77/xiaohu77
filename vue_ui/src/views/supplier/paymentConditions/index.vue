@@ -117,7 +117,13 @@ export default {
             url: '/purchase/ms/supplierPaymentConditions/dateBaseDayList',
             rule: 'required',
             labelField: "dictDesc",
-            valueField: "dictCode"
+            valueField: "dictCode",
+            ifFun: (_form) => {
+              if (_form.dateBase === 0 || _form.dateBase === 1 || _form.dateBase === 2 || _form.dateBase === 4) {
+                return false
+              }
+                return true
+            }
           },{
             type: 'radio',
             width:'700',
