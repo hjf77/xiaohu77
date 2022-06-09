@@ -39,6 +39,7 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
     @Override
     public int insert(AgreementAgreementPO entity) {
         entity.setStatus(0);
+        entity.setDetailNum(entity.getGoodsVOs().length);
         int insert = super.insert(entity);
         Integer id = entity.getId();
         StringBuilder goosId = new StringBuilder();
@@ -56,6 +57,7 @@ public class AgreementAgreementServiceImpl extends BaseServiceImpl<AgreementAgre
 
     @Override
     public int updateById(AgreementAgreementPO entity) {
+        entity.setDetailNum(entity.getGoodsVOs().length);
         int insert = super.updateById(entity);
         StringBuilder goosId = new StringBuilder();
         goosId.append(",");
