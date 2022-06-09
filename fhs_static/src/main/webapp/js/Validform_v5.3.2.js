@@ -821,18 +821,23 @@
 					//失去焦点事件时触发吐司提示
 					if(msg){
 						console.log(msg);
-						$.toast({
-						    heading: '警告',
-						    text: msg,
-						    showHideTransition: 'fade',
-						    icon: 'error',
-						    hideAfter: 2000,
-						    // position: 'top-right'
-						    position: {
-						    	top:50,
-						    	right: 100
-						    }
-						});
+						if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+							//$.toast(msg);
+						}else{
+							$.toast({
+								heading: '警告',
+								text: msg,
+								showHideTransition: 'fade',
+								icon: 'error',
+								hideAfter: 2000,
+								// position: 'top-right'
+								position: {
+									top:50,
+									right: 100
+								}
+							});
+						}
+
 					}
 					// o.obj.next().html(msg);
 					// Validform.util.cssctl(o.obj.next(),o.type);

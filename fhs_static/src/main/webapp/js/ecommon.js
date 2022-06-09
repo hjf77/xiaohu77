@@ -2362,7 +2362,7 @@ function openMainFrame(_baseUrl,_url,_title)
 	}
 	$('#openFrameIframe').attr('src',_baseUrl + '/ms/index');
 	setTimeout(function(){
-		$('#openFrameIframe').attr('src',ucenterPath + '/page/ms/pc_gateway_index/open_frame.jsp?title=' + _title
+		$('#openFrameIframe').attr('src',ucenterPath + '/page/ms/pc_gateway_index/open_frame.html?title=' + _title
 			+ '&encode=true&url=' + encodeURIComponent(_baseUrl+_url));
 	},1000);
 }
