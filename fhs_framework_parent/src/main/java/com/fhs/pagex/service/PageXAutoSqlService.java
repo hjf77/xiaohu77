@@ -349,10 +349,10 @@ public class PageXAutoSqlService {
         for (Map<String, Object> field : fields) {
             fieldName = ConverterUtils.toString(field.get("name"));
             camelName = ColumnNameUtil.underlineToCamel(fieldName);
+            hasWhereFields.add(fieldName);
             if(isJoin){
                 fieldName = "m." + fieldName;
             }
-            hasWhereFields.add(fieldName);
             //代表是between
             if (ConverterUtils.toBoolean(field.get("isBT"))) {
                 //数据要小于等于max
