@@ -318,8 +318,9 @@ public class PageXAutoSqlService {
      */
     public String autoFindPageCount(PagexListSettDTO pagexListSettDTO) {
         Map<String, Object> modelConfig = pagexListSettDTO.getModelConfig();
+        boolean isHasJoin = modelConfig.containsKey("join");
         StringBuilder sqlBuilder = new StringBuilder("<script> SELECT COUNT(1) as countNum");
-        sqlBuilder.append(" FROM " + modelConfig.get("table") + autoPagerWhere(pagexListSettDTO) + "</script>");
+        sqlBuilder.append(" FROM " + modelConfig.get("table") + " m " + (isHasJoin ? modelConfig.get("join") + " " : " " ) +   autoPagerWhere(pagexListSettDTO,isHasJoin) + "</script>");
         return sqlBuilder.toString();
     }
 
