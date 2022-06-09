@@ -3,31 +3,30 @@ package com.fhs.module.base.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.constant.LoggerConstant;
+import com.fhs.basics.context.UserContext;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.po.BasePO;
-import com.fhs.core.base.pojo.vo.UpdateFieldVO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.valid.group.Add;
+import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.logger.Logger;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.fhs.core.base.valid.group.Add;
-import com.fhs.core.base.valid.group.Update;
 import com.fhs.excel.dto.ExcelImportSett;
-import com.fhs.core.logger.Logger;
-import com.fhs.basics.context.UserContext;
 import com.fhs.trans.service.impl.TransService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -36,7 +35,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -46,9 +44,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -60,7 +58,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: jianbo.qin
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public abstract class ModelSuperController<V extends VO, D extends BasePO> extends BaseController {
+public abstract class ModelSuperController<V extends VO, D extends BasePO, PT extends Serializable> extends BaseController {
     protected Logger log = Logger.getLogger(getClass());
 
     /**
@@ -84,14 +82,13 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     /**
      * 查询bean列表数据
      *
-     * @param request
      * @throws Exception
      */
     @ResponseBody
     @PostMapping("pagerAdvance")
     @ApiOperation("后台-高级分页查询")
-    public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
-        if (isPermitted(request, "see")) {
+    public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter) {
+        if (isPermitted("see")) {
             QueryWrapper wrapper = filter.asWrapper(getDOClass());
             this.setExportCache(wrapper);
             //这里的是1是DO的index
@@ -105,14 +102,13 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     /**
      * 查询bean列表数据-不分页
      *
-     * @param request
      * @throws Exception
      */
     @ResponseBody
     @PostMapping("findListAdvance")
     @ApiOperation("后台-高级查询不分页一般用于下拉")
-    public List<V> findListAdvance(@RequestBody QueryFilter<D> filter, HttpServletRequest request) {
-        if (isPermitted(request, "see")) {
+    public List<V> findListAdvance(@RequestBody QueryFilter<D> filter) {
+        if (isPermitted("see")) {
             //这里的是1是DO的index
             return baseService.selectListMP(filter.asWrapper(getDOClass()));
         } else {
@@ -123,15 +119,14 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     /**
      * 无分页查询bean列表数据
      *
-     * @param request response
      * @throws Exception
      */
     @ResponseBody
     @GetMapping("findList")
     @ApiOperation("后台-不分页查询集合-一般用于下拉")
-    public List<V> findList(V e, HttpServletRequest request)
+    public List<V> findList(V e)
             throws Exception {
-        if (isPermitted(request, "see")) {
+        if (isPermitted("see")) {
             List<V> dataList = baseService.findForList((D) e);
             return dataList;
         } else {
@@ -167,7 +162,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
 
-
     /**
      * 根据ID集合查询对象数据
      *
@@ -183,9 +177,9 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "path")}
     )
-    public V info(@PathVariable("id") String id, HttpServletRequest request)
+    public V info(@PathVariable("id") PT id, HttpServletRequest request)
             throws Exception {
-        if (isPermitted(request, "see")) {
+        if (isPermitted("see")) {
             V bean = baseService.selectById(id);
             transService.transOne(bean);
             return bean;
@@ -199,10 +193,8 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @PostMapping
     @ApiOperation(value = "新增")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e, HttpServletRequest request,
-                                    HttpServletResponse response) {
-        if (isPermitted(request, "add")) {
-
+    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e) {
+        if (isPermitted("add")) {
             if (e instanceof BasePO) {
                 BasePO<?> baseDo = (BasePO<?>) e;
                 //如果是saas模式，并且bean中包含groupcode字段，则给其设置值
@@ -224,15 +216,14 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
      * 根据id删除对象
      *
      * @param id
-     * @param request
      * @return
      */
     @ResponseBody
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable String id, HttpServletRequest request) {
-        if (isPermitted(request, "del")) {
+    public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable PT id) {
+        if (isPermitted("del")) {
             baseService.deleteById(id);
             return HttpResult.success(true);
         }
@@ -249,9 +240,8 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     @PutMapping
     @ApiOperation(value = "修改")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
-    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e, HttpServletRequest request,
-                                            HttpServletResponse response) {
-        if (isPermitted(request, "update")) {
+    public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e) {
+        if (isPermitted("update")) {
             beforSave(e, false);
             baseService.updateById((D) e);
             return HttpResult.success(true);
@@ -263,12 +253,11 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     /**
      * 判断登录人是否有权限
      *
-     * @param request    request
      * @param permitName 权限名称
      * @return true 有权限 false 没有权限
      */
-    public boolean isPermitted(HttpServletRequest request, String permitName) {
-        String path = request.getServletPath();
+    public boolean isPermitted(String permitName) {
+        String path = super.getRequest().getServletPath();
         String namespace = path.split("/")[2];
         boolean bool = StpUtil.hasPermission(namespace + ":" + permitName);
         return bool;
@@ -295,7 +284,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
     }
 
 
-
     /**
      * @param queryFilter
      * @return
@@ -314,14 +302,14 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
         return (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
-    @PutMapping("/updateField")
+    @PatchMapping("/")
     @ApiOperation("只修改某些字段")
-    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE,voParamIndex = 0)
-    public HttpResult<Boolean> updateField(@RequestBody @Validated V e,HttpServletRequest request)  {
-        if(e.getPkey() == null){
+    @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
+    public HttpResult<Boolean> updateField(@RequestBody @Validated V e) {
+        if (e.getPkey() == null) {
             throw new ParamException("主键为必填");
         }
-        if (isPermitted(request, "update")) {
+        if (isPermitted("update")) {
             if (e instanceof BasePO) {
                 BasePO<?> baseDo = (BasePO<?>) e;
                 baseDo.preUpdate(getSessionuser().getUserId());
@@ -332,7 +320,6 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO> exten
         }
         throw new NotPremissionException();
     }
-
 
 
     @Override

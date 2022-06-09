@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"租户"})
 @RequestMapping("/ms/tenant")
 @ApiGroup(group = "group_default")
-public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantPO> {
+public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantPO, String> {
 
     @Autowired
     private UcenterMsUserService userService;
