@@ -12,7 +12,7 @@
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_framework</artifactId>
     <description>fhs framework开源版本3.0</description>
-    <version>3.0.0</version>
+    <version>3.4.2</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
     <properties>
@@ -26,7 +26,7 @@
         <fhs.jetcache.version>2.5.16</fhs.jetcache.version>
         <fhs.spring-cloud-starter.version>3.0.4</fhs.spring-cloud-starter.version>
         <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
-        <fhs.mp-anno.version>4.0.0</fhs.mp-anno.version>
+        <fhs.mp-anno.version>3.4.2</fhs.mp-anno.version>
         <fhs.fastjson.version>1.2.83</fhs.fastjson.version>
         <fhs.sa-token.version>1.27.0</fhs.sa-token.version>
         <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
@@ -56,7 +56,11 @@
                 <version>${fhs.easytrans.version}</version>
             </dependency>
 
-
+           <!-- <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-advance</artifactId>
+                <version>4.0.0</version>
+            </dependency>-->
 
             <dependency>
                 <groupId>io.swagger</groupId>
@@ -75,11 +79,7 @@
                 <version>${fhs.mp-anno.version}</version>
                 <scope>compile</scope>
             </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-advance</artifactId>
-                <version>${fhs.mp-anno.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-core</artifactId>

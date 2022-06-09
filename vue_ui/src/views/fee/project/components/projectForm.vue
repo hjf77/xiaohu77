@@ -1,6 +1,6 @@
 
 <template>
-<div>
+<div class="content-box">
   <pagex-form
     ref="form"
     :isEdit="isEdit"
@@ -19,6 +19,7 @@
 
 </template>
 <script>
+import {wholeNumReg } from "@/utils/validate.js";
 import crudMixins from "@/mixins/crudMixins";
 export default {
   name: "feeProject",
@@ -28,10 +29,6 @@ export default {
       default: false
     },
     isEdit: {
-      type: Boolean,
-      default: false
-    },
-    addIsShow: {
       type: Boolean,
       default: false
     },
@@ -48,7 +45,7 @@ export default {
     codemsg: {
       type: Object,
       default: () => {}
-    }
+    },
   },
   data() {
     return {
@@ -56,15 +53,18 @@ export default {
       updateApi: "/purchase/ms/feeProject",
       formData:{
         id: this.init.id,
+        currentId:null,
         parentId: this.init.parentId ? this.init.parentId : this.parentId,
         projectCode:'',
-        status:this.init.status ? this.init.status : 1
+        status:this.init.status ? this.init.status : 1,
+        isEnable:1
       },
       controls: [
         {
           type: "select",
           name: 'parentId',
           label: "费用类别",
+          disabledOn:this.init.isUpdate?'disabled':null,
           url:'/purchase/ms/feeProject/findList?level=1',
           labelField: "name",
           rule: [
@@ -74,11 +74,23 @@ export default {
               trigger: "change",
             },
           ],
+           change:(e,v)=>{
+             if(!this.isEdit){
+              this.$pagexRequest({
+                url: "/purchase/ms/feeProject/findCode?id=" + v,
+                method: "GET",
+              }).then(res=>{
+                  this.$refs.form.setModelProp('projectCode',res.data);
+              })
+             }
+            
+          }
         },
         {
           type: "text",
           name: "projectCode",
           label: "费用项目代码",
+          disabledOn:'disabled',
           rule: [
             {
               required: true,
@@ -122,7 +134,6 @@ export default {
           type: "select",
           name: "rate",
           label: "税率",
-          placeholder: "请选择",
           dictCode: "rate",
           isValueNum: true,
           rule: [
@@ -163,11 +174,19 @@ export default {
           type: "text",
           name: "fixedAmount",
           label: "固定金额",
+          afterTextContent:'元',
+          rule: [
+            { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数固定金额' }
+          ],
         },
         {
           type: "text",
           name: "fixedAmountGoTax",
           label: "固定去税金额",
+          afterTextContent:'元',
+          rule: [
+            { pattern: wholeNumReg, trigger: 'blur', message: '请输入正整数固定金额' }
+          ],
         },
         {
           type: "select",
@@ -181,7 +200,7 @@ export default {
         },
         {
           type: "select",
-          name: "status",
+          name: "isEnable",
           label: "状态",
           disabledOn:'disabled',
           dictCode: "isEnable",
@@ -196,9 +215,8 @@ export default {
           type: "select",
           name: "settlementDatasource",
           label: "结案数据来源",
-          placeholder: "请选择",
           dictCode: "settlementSource",
-          isValueNum: true,
+          // isValueNum: true,
           rule: [
             { required: true, message: "结案数据来源不能为空", trigger: "change" },
           ],
@@ -212,13 +230,24 @@ export default {
           type: "",
           size: "mini",
           ifFun:(_model)=>{
-            console.log(_model.id);
-            return _model.id && _model.status == 0;
+            return _model.id && _model.isEnable == 0;
           },
           click: (_row) => {
             this.title = "启用";
-            this.isEdit = false;
-            this.open = false;
+            this.currentId = _row.id;
+            // console.log(this.currentId)
+          this.$pagexRequest({
+            url:`purchase/ms/feeProject/updateField` ,
+            method: "PUT",
+            data:{
+              id:_row.id,
+              isEnable: 1
+            }
+            }).then(res=>{
+              console.log(res)
+              this.$emit("enableFn",_row.id)
+              this.msgSuccess('启用成功')
+            })
           },
         },
         {
@@ -226,14 +255,22 @@ export default {
           type: "",
           size: "mini",
           ifFun:(_model)=>{
-            return _model.id && _model.status == 1;
+            return _model.id && _model.isEnable == 1;
           },
           click: (_row) => {
             this.title = "禁用";
-            this.$set(this, "init", { organizationId: this.org.id });
-            // api:
-            this.isEdit = false;
-            this.open = false;
+            this.$pagexRequest({
+            url:`purchase/ms/feeProject/updateField` ,
+            method: "PUT",
+            data:{
+              id:_row.id,
+              isEnable: 0
+            }
+            }).then(res=>{
+              this.$emit("enableFn",_row.id)
+              this.msgSuccess('禁用成功')
+            })
+            
           },
         },
         {
@@ -244,16 +281,20 @@ export default {
           click: (_row) => {
             this.title = "删除";
             this.isEdit = false;
-            // url:'/ms/feeProject/?id= + parentId'
+            this.$pagexRequest({
+            url:`purchase/ms/feeProject/${_row.id}` ,
+            method: "DELETE",
+            }).then(res=>{
+              this.msgSuccess('删除成功')
+              this.$emit("enableFn")
+            })
           },
         },
       ],
     };
   },
-
   created() {
-    console.log(this.parentId);
-    console.log(this.isEdit);
+  
   },
   mounted(){
     if(!this.isEdit){
@@ -267,11 +308,15 @@ export default {
         method: "GET",
       }).then(res=>{
           this.$refs.form.setModelProp('projectCode',res.data);
+          console.log(res.data)
       })
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.content-box{
+  margin-top: 50px;
+}
 </style>

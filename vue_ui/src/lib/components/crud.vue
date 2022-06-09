@@ -177,7 +177,6 @@ by wanglei
             :key="'operation' + index"
             align="center"
             :width="item.width"
-            :fixed="item.fixed"
           >
             <template slot-scope="scope">
               <div
@@ -559,7 +558,7 @@ export default {
             })
               .then((res) => {
                 if (res.code === 200) {
-                  this.reset();
+                  this.reload();
                   this.$message({
                     type: "success",
                     message: "删除成功!",
@@ -620,7 +619,7 @@ export default {
               })
                 .then((res) => {
                   if (res.state) {
-                    this.reset();
+                    this.reload();
                     this.$message({
                       type: "success",
                       message: "删除成功!",

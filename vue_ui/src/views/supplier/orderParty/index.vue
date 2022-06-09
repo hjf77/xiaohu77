@@ -126,6 +126,12 @@ export default {
       },
       columns: [
         { label: '序号', type: 'index', fixed: 'left' },
+        {
+          label: '供应商代码',
+          name: 'supplierCodeSupplierCode',
+          width: 150,
+          fixed: 'left',
+        },
         { label: '订单方代码', name: 'orderPartyCode', width: 150, fixed: 'left',
           type: 'formart',
           formart: "<label style='cursor:pointer'>${orderPartyCode}</label>",
@@ -137,15 +143,8 @@ export default {
             this.isEdit = true;
           },
         },
-        // {
-        //   label: '供应商代码',
-        //   name: 'supplierCodeSupplierCode',
-        //   width: 150,
-        //   fixed: 'left',
-        // },
-        { label: '订单方名称', name: 'name',  width: 150 },
-        { label: '订单方状态', name: 'transMap.statusName', width: 150 },
-        { label: '状态', name: 'transMap.status' },
+        { label: '订单方名称', name: 'name' },
+        { label: '订单方状态', name: 'transMap.statusName', width: 80 },
         { label: '结算模式', name: 'transMap.settlementPatternName', width: 150 },
         { label: '对账条件', name: 'transMap.reconciliationConditionsName', width: 150 },
         { label: '付款条件', name: 'transMap.paymentConditionsName', width: 150 },
@@ -197,14 +196,15 @@ export default {
           type: 'text',
         },
         {
-          name: 'supplierCode',
+          name: 'supplierId',
           target:"com.fhs.supplier.po.SupplierSupplierPO",
-          field:"supplierId",
+          field:"supplierCode",
           label: '供应商代码：',
           placeholder: '供应商代码',
           operation: 'like',
           type: 'text',
         },
+       
         {
           name:"status",
           label:"状态：",
@@ -232,7 +232,7 @@ export default {
     //     .then((res) => {
     //       console.log(res);
     //       this.stateTable = res
-
+         
     //     })
     //     .catch((err) => {
     //       console.log(err);

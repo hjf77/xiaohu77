@@ -93,6 +93,10 @@ Vue.component('Pagination', Pagination)
 Vue.use(permission)
 
 Vue.prototype.$EventBus = new Vue();
+
+import xhbEventBus from './utils/eventBusPlugin'
+
+Vue.use(xhbEventBus)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

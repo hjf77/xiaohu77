@@ -74,7 +74,7 @@ export const constantRoutes = [
       {
         path: 'type/editForm',
         component: () => import('@/views/supplier/supplier/components/editForm.vue'),
-        name: 'Data',
+        name: 'EditForm',
         meta: { title: '供应商资料管理详情', icon: '' }
       }
     ]
@@ -105,7 +105,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/dict',
     component: Layout,
@@ -128,7 +127,7 @@ export const constantRoutes = [
       {
         path: 'agreementDetail',
         component: () => import('@/views/agreement/components/agreementForm.vue'),
-        name: 'Data',
+        name: 'agreementForm',
         meta: { title: '协议录入-详情', icon: '' }
       }
     ]

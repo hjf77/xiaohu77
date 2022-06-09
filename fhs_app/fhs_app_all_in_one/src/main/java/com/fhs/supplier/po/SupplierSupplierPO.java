@@ -204,7 +204,7 @@ public class SupplierSupplierPO extends BasePO<SupplierSupplierPO> {
      */
     @TableField("business_license")
     @ApiModelProperty(value = "营业执照id")
-    private String businessLicense;
+    private Long businessLicense;
 
     /**
      * 收款账号

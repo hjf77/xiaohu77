@@ -1,11 +1,11 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.service.ServiceAreaService;
 import com.fhs.basics.vo.ServiceAreaVO;
-import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"省市区信息"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = BaseTransConstant.AREA, module = "地区管理")
-public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaPO> {
+public class ServiceAreaController extends ModelSuperController<ServiceAreaVO, ServiceAreaPO, Integer> {
     @Autowired
     private ServiceAreaService areaService;
 
