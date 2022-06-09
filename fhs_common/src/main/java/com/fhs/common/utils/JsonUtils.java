@@ -7,6 +7,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class JsonUtils {
     static {
         dateFormat = "yyyy-MM-dd HH:mm:ss";
         mapping.put(Date.class, new SimpleDateFormatSerializer(dateFormat));
+        mapping.put(Long.class, ToStringSerializer.instance);
     }
 
     /**
