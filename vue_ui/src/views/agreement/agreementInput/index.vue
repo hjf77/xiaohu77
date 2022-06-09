@@ -21,11 +21,17 @@
 
 <script>
 import crudMixins from '@/mixins/crudMixins';
-//这个路径可能需要改下
-
 export default {
   name: 'agreementAgreement',
   mixins: [crudMixins],
+  eventBusList:[
+    {
+      name:"Refresh",
+      callback:(vm)=>{
+        vm.refresh()
+      }
+    }
+  ],
   data() {
     return {
       api: '/purchase/ms/agreementAgreement/pagerAdvance',
@@ -130,7 +136,7 @@ export default {
           label:"订单方",
           type:"select",
           operation:"=",
-          url: '/purchase/ms/supplierOrderParty/findList?orderPartyId=',
+          url: '/purchase/ms/supplierOrderParty/findList?orderPartyCode=',
           methodType: 'GET',
           valueField: 'id',
           labelField: 'name',
@@ -152,8 +158,12 @@ export default {
   },
   created() {},
   computed: {},
-  methods: {},
-};
+  methods: {
+    refresh(){
+      this.$refs.crud.getList()
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .crud-class {

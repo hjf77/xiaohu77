@@ -29,6 +29,10 @@ import {deepClone} from "@/utils";
 import {parseTime} from "@/lib/utils";
 import datePickerOpt from "@/mixins/datePickerOpt";
 
+
+
+
+
 export default {
   name: "AgreementForm",
   mixins: [datePickerOpt],
@@ -178,8 +182,8 @@ export default {
             },
             {
               name: "审核",
-              click: function (_v,_model) {
-
+              click: (_v,_model)=> {
+                  this.$EventBus.$emit("agreementAgreementRefresh",'审核')
               }
             },
             {
@@ -448,6 +452,9 @@ export default {
         data: form
       }).then((res) => {
         this.$message.success('保存成功')
+        // 刷新列表
+        this.$EventBus.$emit("agreementAgreementRefresh",'审核')
+        // 关闭当前页签，并跳转
         this.$store.dispatch('tagsView/delView', this.$route).then(() => {
           this.$router.push({path:"/agreement/agreementAgreement"});
         })
