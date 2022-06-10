@@ -1,7 +1,4 @@
-package com.fhs.pub.filter;
-
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.stereotype.Component;
+package com.fhs.basics.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

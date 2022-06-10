@@ -2,11 +2,11 @@ spring:
   profiles:
     active: dev
   application:
-    name: fhs-gateway
+    name: rural-gateway
   cloud:
     nacos:
       discovery:
-        server-addr: 10.102.2.201:8848
+        server-addr: 192.168.0.213:8848
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml # 配置文件格式
@@ -14,4 +14,4 @@ spring:
 
 ###################  项目启动端口  ###################
 server:
-  port: 8083
+  port: 38080

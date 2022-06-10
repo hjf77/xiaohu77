@@ -10,7 +10,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 10.102.2.201:8848
+        server-addr: 192.168.0.213:8848
+        namespace: f8f091f0-c5b3-4cdb-85f2-3829bede365f
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml # 配置文件格式
@@ -18,7 +19,7 @@ spring:
 
 ###################  项目启动端口  ###################
 server:
-  port: 8081
+  port: 38081
   context-path: /
   tomcat:
     uri-encoding: UTF-8
