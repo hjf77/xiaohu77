@@ -117,22 +117,25 @@ include("/page/tags/form_include.html"){}
                         }
                     } else {
 
+                        var isAlert = false;
                         if(d.code == 300 || d.code==400 || d.code==500 )
                         {
                             EalertE(d.message);
+                            isAlert = true;
                         }
                         if(d.code == 409 )
                         {
                             if (isExitsFunction("getConflictMsg")) {
                                 EalertE(getConflictMsg());
+                                isAlert = true;
                             }
                             else
                             {
                                 EalertE('存在重复的数据，请检查');
+                                isAlert = true;
                             }
                         }
-
-                        else
+                        else if(!isAlert)
                         {
                             EalertE('操作失败');
                         }

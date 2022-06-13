@@ -330,12 +330,7 @@ public class ModelSuperAction<T> extends BaseAction<T> {
     @LogDesc(value = "删除", type = LogDesc.DEL)
     public HttpResult del(@RequestParam("id") String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
-            try {
-                baseService.deleteById(id);
-            } catch (Exception e1) {
-                LOG.error("数据删除错误:" + id, e1);
-                return HttpResult.error();
-            }
+            baseService.deleteById(id);
             return HttpResult.success();
         }
         throw new NotPremissionException();
@@ -353,16 +348,11 @@ public class ModelSuperAction<T> extends BaseAction<T> {
     public HttpResult update(@Validated(Update.class) T e, BindingResult check, HttpServletRequest request,
                              HttpServletResponse response) {
         if (isPermitted(request, "update")) {
-            try {
-                if (e instanceof BaseDO) {
-                    BaseDO<?> baseDo = (BaseDO<?>) e;
-                    baseDo.preUpdate(getSessionuser(request).getUserId());
-                }
-                baseService.updateSelectiveById(e);
-            } catch (Exception e1) {
-                LOG.error("数据更新错误:" + JsonUtils.bean2json(e), e1);
-                return HttpResult.error();
+            if (e instanceof BaseDO) {
+                BaseDO<?> baseDo = (BaseDO<?>) e;
+                baseDo.preUpdate(getSessionuser(request).getUserId());
             }
+            baseService.updateSelectiveById(e);
             return HttpResult.success();
         }
         throw new NotPremissionException();
