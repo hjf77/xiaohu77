@@ -98,11 +98,16 @@
     }
 
     function mysearch(e) {
-        provinceName = $("#provinceid").combobox('getText');
-        cityName = $("#cityid").combobox('getText');
-        areaNames = $("#areaid").combobox('getText');
+        var isOnly = '${nvl(tagSett.onlyAddress,false)}';
+        if(isOnly !='true'){
+            provinceName = $("#provinceid").combobox('getText');
+            cityName = $("#cityid").combobox('getText');
+            areaNames = $("#areaid").combobox('getText');
+            $('#address').val(provinceName + cityName + areaNames + $(e).val());
+        }else{
+            $('#address').val($(e).val());
+        }
         $(".tangram-suggestion-main").css("z-index", 9998);
-        $('#address').val(provinceName + cityName + areaNames + $(e).val());
     }
     //百度地图&#45;&#45;回显创建地图点
     function addMarker(addressStr) {
