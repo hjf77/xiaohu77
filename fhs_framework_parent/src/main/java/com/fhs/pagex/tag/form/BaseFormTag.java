@@ -2,6 +2,7 @@ package com.fhs.pagex.tag.form;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.StringUtil;
 import com.fhs.pagex.tag.PagexBaseTag;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 import org.springframework.beans.factory.InitializingBean;
@@ -64,9 +65,13 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
             lengErrorTips = "或者长度错误：长度必须在" + min + "和" + tagSett.get("max") + "之间";
             dataType = dataType + "&s" + min + "-" + tagSett.get("max");
         }
+        String errormsg = super.tagSett.get("title") + "输入了错误的格式" + lengErrorTips;
+        if(tagSett.get("errormsg") != null){
+            errormsg = ConverterUtils.toString(tagSett.get("errormsg"));
+        }
         // 如果只给了min不给最大不管他。
         return " dataType='" + dataType + "' nullmsg='" + super.tagSett.get("title") + "不能为空'  errormsg='"
-                + super.tagSett.get("title") + "输入了错误的格式" + lengErrorTips + "' ";
+                + errormsg + "' ";
     }
 
     /**
