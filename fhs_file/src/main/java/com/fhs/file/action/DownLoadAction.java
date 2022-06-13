@@ -151,7 +151,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
 
         // 文件名
         String showFileName = serviceFile.getFileName();
-        String minPath = downFilePath + filePath + fileIdWH;
+        String minPath = downFilePath + "/" +  filePath + fileIdWH;
         File file = new File(minPath);
         if (fileStorage.checkFileIsExist(minPath, serviceFile)) {
             fileStorage.downloadFileByToken(minPath, serviceFile, response);
@@ -176,7 +176,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
      *
      * @return
      */
-    @RequestMapping(value = "fileFofFileId", method = RequestMethod.GET)
+    @RequestMapping(value = "fileForFileId", method = RequestMethod.GET)
     public void downloadFofFileId(HttpServletRequest request, HttpServletResponse response) {
         try {
             String fileId = request.getParameter("fileId");
