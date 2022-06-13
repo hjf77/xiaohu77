@@ -127,20 +127,24 @@
 
     //表单加载成功的时候
     function addressFormLoadSuccess(info){
-        //加载市
-        var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.provinceid + '&jsonpCallback=?';
-        $('#cityid').combobox('reload', cityUrl);
+        <% if(!nvl(tagSett.onlyAddress,false)){ %>
+            //加载市
+            var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.provinceid + '&jsonpCallback=?';
+            $('#cityid').combobox('reload', cityUrl);
 
-        //加载区县
-        var areaUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.cityid + '&jsonpCallback=?';
-        $('#areaid').combobox('reload', areaUrl);
+            //加载区县
+            var areaUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.cityid + '&jsonpCallback=?';
+            $('#areaid').combobox('reload', areaUrl);
 
+
+        <% } %>
         $('#address2').val(info.address);
         // 将标注添加到地图中
         var longitude = parseFloat($('#longitude').val());
         var latitude = parseFloat($('#latitude').val());
         //在地图上标注点
         addMarker(longitude,latitude);
+
     }
 
     /*点击地图回填经纬度 start*/
@@ -155,80 +159,82 @@
     });
 
 </script>
-<!-- 省份 -->
-<div class="fitem">
-    <div class="fitemDiv">
-        <label>省份:</label>
-        <input type="text" id="provinceid" name="provinceid" editable="false" class="easyui-combobox"
-        <%  if(nvl(tagSett.required,false)){ %>
-            datatype = '*'
-        <%  } %>
-        nullmsg="请选择省"
-        data-options="
-        url: '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',
-        valueField: 'id',
-        textField:'areaName',
-        editable : false,
-        onSelect: function(rec){
-        provinceName = rec.areaName;
-        $('#cityid').combobox('loadData', {});
-        $('#areaid').combobox('loadData', {});
-        var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
-        $('#cityid').combobox('reload', cityUrl);
-        $('#cityid').combobox('clear');
-        $('#areaid').combobox('clear');
-        }"
-        />
-        <% if(nvl(tagSett.required,false)){ %>
-            <span class="form-field-required" >*</span>
-        <% } %>
-    </div>
-    <!-- 市 -->
-    <div class="fitemDiv">
-        <label>市:</label>
-        <input type="text" id="cityid" name="cityid" editable="false" class="easyui-combobox"
-        <% if(nvl(tagSett.required,false)){ %>
-               datatype = '*'
-        <% } %>
-        nullmsg="请选择市"
-        data-options="
-        valueField: 'id',
-        textField:'areaName',
-        editable : false,
-        onSelect: function(rec){
-        cityName = rec.areaName;
-        $('#areaid').combobox('loadData', {});
-        var url = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
-        $('#areaid').combobox('reload', url);
-        $('#areaid').combobox('clear');
-        }"/>
-        <% if(nvl(tagSett.required,false)){ %>
-            <span class="form-field-required" >*</span>
-        <% } %>
+<% if(!nvl(tagSett.onlyAddress,false)){ %>
+    <!-- 省份 -->
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>省份:</label>
+            <input type="text" id="provinceid" name="provinceid" editable="false" class="easyui-combobox"
+            <%  if(nvl(tagSett.required,false)){ %>
+                datatype = '*'
+            <%  } %>
+            nullmsg="请选择省"
+            data-options="
+            url: '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',
+            valueField: 'id',
+            textField:'areaName',
+            editable : false,
+            onSelect: function(rec){
+            provinceName = rec.areaName;
+            $('#cityid').combobox('loadData', {});
+            $('#areaid').combobox('loadData', {});
+            var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
+            $('#cityid').combobox('reload', cityUrl);
+            $('#cityid').combobox('clear');
+            $('#areaid').combobox('clear');
+            }"
+            />
+            <% if(nvl(tagSett.required,false)){ %>
+                <span class="form-field-required" >*</span>
+            <% } %>
+        </div>
+        <!-- 市 -->
+        <div class="fitemDiv">
+            <label>市:</label>
+            <input type="text" id="cityid" name="cityid" editable="false" class="easyui-combobox"
+            <% if(nvl(tagSett.required,false)){ %>
+                   datatype = '*'
+            <% } %>
+            nullmsg="请选择市"
+            data-options="
+            valueField: 'id',
+            textField:'areaName',
+            editable : false,
+            onSelect: function(rec){
+            cityName = rec.areaName;
+            $('#areaid').combobox('loadData', {});
+            var url = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
+            $('#areaid').combobox('reload', url);
+            $('#areaid').combobox('clear');
+            }"/>
+            <% if(nvl(tagSett.required,false)){ %>
+                <span class="form-field-required" >*</span>
+            <% } %>
 
+        </div>
     </div>
-</div>
-<!-- 县 -->
-<div class="fitem">
-    <div class="fitemDiv">
-        <label>区县:</label>
-        <input type="text" id="areaid" name="areaid" editable="false"
-        <% if(nvl(tagSett.required,false)){ %>
-               datatype = '*'
-        <% } %>
-        nullmsg="请选择区县"
-        class="easyui-combobox"
-        data-options="
-        valueField: 'id',
-        textField:'areaName',
-        onSelect: function(rec){
-        selShowMap(rec.areaName);
-        }"/>
-        <% if(nvl(tagSett.required,false)){ %>
-            <span class="form-field-required" >*</span>
-        <% } %>
+    <!-- 县 -->
+    <div class="fitem">
+        <div class="fitemDiv">
+            <label>区县:</label>
+            <input type="text" id="areaid" name="areaid" editable="false"
+            <% if(nvl(tagSett.required,false)){ %>
+                   datatype = '*'
+            <% } %>
+            nullmsg="请选择区县"
+            class="easyui-combobox"
+            data-options="
+            valueField: 'id',
+            textField:'areaName',
+            onSelect: function(rec){
+            selShowMap(rec.areaName);
+            }"/>
+            <% if(nvl(tagSett.required,false)){ %>
+                <span class="form-field-required" >*</span>
+            <% } %>
+        </div>
     </div>
-</div>
+<% } %>
 <!-- 详细地址 -->
 <div class="fitem">
     <div class="bigLabelDiv">

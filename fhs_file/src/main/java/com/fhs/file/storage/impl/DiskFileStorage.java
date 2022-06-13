@@ -41,7 +41,7 @@ public class DiskFileStorage<mian> implements FileStorage {
 
     @Override
     public void uploadFileByToken(byte[] bytes, String token, ServiceFile serviceFile) {
-        File file = getFile(serviceFile, token);
+        File file = new File(token);
         try (FileOutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
         } catch (IOException e) {

@@ -37,7 +37,7 @@ var listPage={
   otherFunctions:function(){
       return {
         userBindPlateView:function(row){
-            var _openFrameMsg = {url:'http://park.sxpartner.com//ms/pagex/park/ucenter_front_user_bind_plate_list.jsp?front_user_id=' + row.userId,title:row.nickName + '绑定的车牌'}
+            var _openFrameMsg = {url:'http://park.sxpartner.com//ms/pagex/park/ucenter_front_user_bind_plate_list.html?front_user_id=' + row.userId,title:row.nickName + '绑定的车牌'}
             top.postMessage(_openFrameMsg, '*');
         },
         userEnable:function(row){

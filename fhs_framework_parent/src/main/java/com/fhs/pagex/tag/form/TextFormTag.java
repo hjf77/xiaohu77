@@ -30,7 +30,7 @@ public class TextFormTag extends EmptyFormTag {
         resultHtmlBuilder.append(" <textarea  " + super.formartDataType());
         resultHtmlBuilder.append(formartClass("form_textarea"));
         resultHtmlBuilder.append(formartIdNameHtml());
-        resultHtmlBuilder.append(formartPlaceholderHtml() + " /></textarea>");
+        resultHtmlBuilder.append(formartPlaceholderHtml() + " style=\"resize:none\" /></textarea>");
         resultHtmlBuilder.append(formartRequiredHtml());
         resultHtmlBuilder.append("</div></div>");
         return resultHtmlBuilder.toString();
