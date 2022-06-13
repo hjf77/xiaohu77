@@ -822,7 +822,7 @@
 					if(msg){
 						console.log(msg);
 						if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
-							//$.toast(msg);
+							$.toast(msg);
 						}else{
 							$.toast({
 								heading: '警告',
