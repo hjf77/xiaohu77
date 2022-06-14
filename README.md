@@ -169,7 +169,10 @@ export default {
 </script>
 
 ```
+## - &#8194;&#8194;&#8194;&#8194;Mybatis Plus版本说明
 
+本项目使用到了未正式发布的Mp4.0。 fhs的作者也是MP开发团队一员，最近MP4.0 在调整模块，编译不过。可以暂时使用：https://gitee.com/fhs-opensource/mybatis-plus4 编译MP4 版本的包。    
+如果不想自己编译的，可以copy 项目lib 目录的mp 4.0的包到私服里。
 
 
 # 使用说明
