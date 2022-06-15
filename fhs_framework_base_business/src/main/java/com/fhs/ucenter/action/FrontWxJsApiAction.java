@@ -38,7 +38,7 @@ public class FrontWxJsApiAction extends BaseAction {
      */
     @RequestMapping("getSignature")
     public void getJsSdkSignature(HttpServletRequest request, HttpServletResponse response, String extendsCode) {
-        WxMpService wxMpService = wxTools.getWxMpService(extendsCode);
+        WxMpService wxMpService = wxTools.getWxMpService();
         String url = ConverterUtils.toString(request.getHeader("Referer"));
         url = CheckUtils.isNullOrEmpty(url) ? request.getHeader("referer") : url;
         ParamChecker.isNotNullOrEmpty(url, "header中referer不能为空");

@@ -205,7 +205,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         } else {
             // 不存在的时候 构建地址 让用户去请求openId
             String url = EConfig.getPathPropertiesValue("basePath") + "/webApi/front/getOpenIdLogin";
-            String wxUrl = wxTools.getWxMpService(code).getOAuth2Service().buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
+            String wxUrl = wxTools.getWxMpService().getOAuth2Service().buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
             try {
                 response.sendRedirect(wxUrl);
             } catch (IOException e) {
@@ -228,7 +228,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
             throws WxErrorException, IOException {
         HttpSession session = request.getSession();
         String businessCode = (String) session.getAttribute("code");
-        WxMpService wxMpService = wxTools.getWxMpService(businessCode);
+        WxMpService wxMpService = wxTools.getWxMpService();
         WxOAuth2AccessToken wxOAuth2AccessToken = null;
         try {
             wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(wxCode);
@@ -262,7 +262,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
             try {
                 UcenterFrontUser user = null;
                 if (wxOAuth2AccessToken != null) {
-                    WxOAuth2UserInfo mpUser = wxTools.getWxMpService(businessCode).getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
+                    WxOAuth2UserInfo mpUser = wxTools.getWxMpService().getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
                     user = UcenterFrontUser.builder().userId(StringUtil.getUUID()).provinceId(mpUser.getProvince()).cityId(mpUser.getCity())
                             .nickName(mpUser.getNickname()).imagePath(mpUser.getHeadImgUrl()).build();
                 } else {

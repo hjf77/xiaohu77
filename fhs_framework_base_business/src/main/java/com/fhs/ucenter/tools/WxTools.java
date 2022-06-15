@@ -12,7 +12,9 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.config.WxMpConfigStorage;
 import me.chanjar.weixin.mp.config.impl.WxMpRedisConfigImpl;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,7 @@ import java.util.Map;
  * 微信工具 by jackwong
  */
 @Component
-public class WxTools {
+public class WxTools implements InitializingBean {
 
     /**
      * 日志
@@ -37,7 +39,7 @@ public class WxTools {
     /**
      * key 编码 val 是对应的WxMpService
      */
-    private Map<String, WxMpService> wxMpServiceMap = new HashMap<>();
+    private WxMpService wxMpService;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -52,43 +54,33 @@ public class WxTools {
      */
     private Map<String, WxMpConfigStorage> wxMpConfigStorageMap = new HashMap<>();
 
-    public synchronized WxMpService getWxMpService(String parkCode) {
+    @Value("${mp.app-id}")
+    private String appId;
 
-        if (wxMpServiceMap.containsKey(parkCode)) {
-            return wxMpServiceMap.get(parkCode);
-        }
-        WxMpService wxService = new WxMpServiceImpl();
-        wxService.setWxMpConfigStorage(getWxConfig(parkCode));
-        wxMpServiceMap.put(parkCode, wxService);
-        return wxService;
+    @Value("${mp.app-secret}")
+    private String appSecret;
+
+    @Value("${mp.token}")
+    private String token;
+
+    @Value("${mp.aes-key}")
+    private String aesKey;
+
+    public WxMpService getWxMpService() {
+        return wxMpService;
     }
 
-    /**
-     * 创建微信调用config对象
-     *
-     * @param code 编码
-     * @return 微信调用config对象
-     */
-    public WxMpConfigStorage getWxConfig(String code) {
-        if (wxMpConfigStorageMap.containsKey(code)) {
-            return wxMpConfigStorageMap.get(code);
-        }
-        if (CheckUtils.isNullOrEmpty(code)) {
-            throw new ParamException("parkCode不能為空");
-        }
-        UcenterMpSett mpSett = mpSettService.selectBean(new UcenterMpSett().mk("extendsCode", code));
-        if (mpSett == null) {
-            throw new ParamException("找不到对应的配置:" + code);
-        }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        wxMpService = new WxMpServiceImpl();
         RedisTemplateWxRedisOps redisTemplateWxRedisOps = new FhsRedisTemplateWxRedisOps(redisTemplate);
-        WxMpRedisConfigImpl config = new WxMpRedisConfigImpl(redisTemplateWxRedisOps,"mp:");
-        config.setAppId(mpSett.getAppId()); // 设置微信公众号的appid
-        config.setSecret(mpSett.getAppSecret()); // 设置微信公众号的app corpSecret
-        config.setToken(mpSett.getToken()); // 设置微信公众号的token
-        config.setAesKey(mpSett.getAesKey()); // 设置微信公众号的EncodingAESKey
-        wxMpConfigStorageMap.put(code, config);
-        LOG.info("加载微信配置:" + mpSett.asJson());
-        return config;
-    }
+        WxMpRedisConfigImpl config = new WxMpRedisConfigImpl(redisTemplateWxRedisOps, "mp:");
+        config.setAppId(appId); // 设置微信公众号的appid
+        config.setSecret(appSecret); // 设置微信公众号的app corpSecret
+        config.setToken(token); // 设置微信公众号的token
+        config.setAesKey(aesKey); // 设置微信公众号的EncodingAESKey
+        wxMpService.setWxMpConfigStorage(config);
 
+    }
 }
