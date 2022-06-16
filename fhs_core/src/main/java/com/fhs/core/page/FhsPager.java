@@ -25,6 +25,8 @@ public class FhsPager<T> implements IPage<T> {
 
     private List<T> records;
 
+    private List<T> rows;
+
     private long total;
 
     private long size;
@@ -41,6 +43,10 @@ public class FhsPager<T> implements IPage<T> {
 
     @Override
     public List<T> getRecords() {
+        return records;
+    }
+
+    public List<T> getRows() {
         return records;
     }
 
