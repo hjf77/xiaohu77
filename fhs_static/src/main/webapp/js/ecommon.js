@@ -2241,9 +2241,34 @@ function formatRowColor(val,row,index){
 	{
 		_color='red';
 	}
-	return '<a href="javascript:void(0)" style="background-color: ' + _color + ';padding: 5px;border-radius: 2px;color: white;">' + val +'</a>';
+    return '<a href="javascript:void(0)" style="background-color: ' + _color + ';padding: 5px;border-radius: 2px;color: white;">' + val +'</a>';
 }
 
+// 格式化更多操作
+function formartOperatorColumnButtons(val,row,index){
+    var _result = '';
+    if(basicButtonsRule.isHasView){
+        _result = _result + ' <a href="javascript:void(0)" class="easyui-linkbutton viewBTN"\n' +
+            '               iconcls="icon-view" plain="true"\n' +
+            '               onclick="setTimeout(function(){addSelectRowFun(\'listGrid\',view);},100)">查看</a>';
+    }
+    if(basicButtonsRule.isHasUpdate){
+        _result = _result + '<a href="javascript:void(0)" class="easyui-linkbutton  updateBTN"\n' +
+            '               plain="true"\n' +
+            '               onclick="setTimeout(function(){addSelectRowFun(\'listGrid\',update);},100)">修改</a>';
+    }
+    if(basicButtonsRule.isHasDel){
+        _result = _result + ' <a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"\n' +
+            '               iconCls="icon-remove" plain="true"\n' +
+            '               onclick="setTimeout(function(){pubDel(\'listGrid\',delUrl,pkeyCamel);},100)">删除</a>';
+    }
+    if(columnButtons.length>0){
+        _result = _result + '<a href="javascript:;" class="toggle right" id="menu-toggle' + index + '">\n' +
+            '    <i class="material-icons">更多</i>\n' +
+            '  </a>';
+    }
+    return _result;
+}
 
 $(function(){
 
