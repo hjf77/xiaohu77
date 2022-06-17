@@ -22,7 +22,7 @@ input[type=checkbox]{
 			<tr>
 				<th align='center' field="roleName" width="20%">角色名称</th>
 				<th align='center' field="transMap.isDisableName" width="10%">状态</th>
-				<th align='center' field="transMap.organizationIdOrganizationName" width="29%">所属机构</th>
+				<th align='center' field="transMap.orgName" width="29%">所属机构</th>
 				<th align='center' field="remark" width="20%">备注</th>
 				<hfs:listOperator nameSpace="sysRole" updateFuncName="updateRole" showView="false" delReqUrl="ms/sysRole/delSysRole?roleId=" pkField="roleId" alignWay="center" thWidth="20%"></hfs:listOperator>
 			</tr>

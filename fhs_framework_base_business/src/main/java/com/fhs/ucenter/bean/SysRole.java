@@ -17,6 +17,7 @@ import com.fhs.core.group.Add;
 import com.fhs.core.group.Delete;
 import com.fhs.core.group.Update;
 import com.fhs.core.trans.Trans;
+import com.fhs.core.trans.TransType;
 import com.fhs.core.trans.TransTypes;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -38,7 +39,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "t_ucenter_ms_role")
-@TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO, Constant.SYS_ORGANIZATION_INFO})
+@TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO})
 public class SysRole extends BaseDO<SysRole> {
     /**
      *
@@ -92,7 +93,7 @@ public class SysRole extends BaseDO<SysRole> {
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "organization_id")
-    @Trans(type = Constant.SYS_ORGANIZATION_INFO, key = Constant.SYS_ORGANIZATION_NAME)
+    @Trans(type = TransType.SIMPLE, target = SysOrganization.class,fields = "name",alias = "org")
     private String organizationId;
 
     /**
