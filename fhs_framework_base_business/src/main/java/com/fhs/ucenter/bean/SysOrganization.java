@@ -1,5 +1,6 @@
 package com.fhs.ucenter.bean;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.constant.Constant;
 import com.fhs.core.base.bean.BaseDO;
 import com.fhs.core.group.Add;
@@ -29,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "t_ucenter_ms_organization")
+@TableName( "t_ucenter_ms_organization")
 @TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO})
 @Entity
 public class SysOrganization extends BaseDO<SysOrganization> {

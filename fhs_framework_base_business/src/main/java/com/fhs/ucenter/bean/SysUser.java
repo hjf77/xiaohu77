@@ -10,6 +10,7 @@
  */
 package com.fhs.ucenter.bean;
 
+import com.fhs.core.trans.TransType;
 import com.mybatis.jpa.annotation.Like;
 import com.mybatis.jpa.annotation.RLike;
 import com.fhs.common.constant.Constant;
@@ -41,7 +42,7 @@ import java.util.List;
 @Data
 @Builder
 @Table(name = "t_ucenter_ms_user")
-@TransTypes(types = {Constant.WORD_BOOK, Constant.SYS_ORGANIZATION_INFO})
+@TransTypes(types = {Constant.WORD_BOOK})
 public class SysUser extends BaseDO<SysUser> {
     /**
      *
@@ -164,7 +165,7 @@ public class SysUser extends BaseDO<SysUser> {
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
-    @Trans(type = Constant.SYS_ORGANIZATION_INFO, key = Constant.SYS_ORGANIZATION_NAME)
+    @Trans(type = TransType.SIMPLE, target = SysOrganization.class,fields = "name",alias = "org")
     private String organizationId;
 
     @Column(name = "header")
