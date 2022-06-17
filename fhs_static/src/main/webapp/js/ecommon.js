@@ -2237,7 +2237,7 @@ function formatRowColor(val,row,index){
 		return '';
 	}
 	var _color = '#1ab394';
-	if(val.indexOf('禁')!=-1||val.indexOf('未')!=-1||val.indexOf('异')!=-1)
+	if(val.indexOf('禁')!=-1||val.indexOf('未')!=-1||val.indexOf('异')!=-1||val.indexOf('否')!=-1)
 	{
 		_color='red';
 	}
