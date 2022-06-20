@@ -241,17 +241,17 @@
 	border-width: 1px;
 	border-style: solid;
 	background: #F4F4F4 !important;
-	/*border-radius:5px;*/
+	border-radius:8px;
 }
 
 .window .window-header {
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 	padding: 15px 0;
 	height:48px;
 }
 .window .window-body {
 	width: calc(100% - 40px) !important;
-	padding: 30px 0 !important;
+	padding: 20px 0 !important;
 	margin: 0 20px;
 }
 .window .panel-title {
@@ -267,7 +267,7 @@
 }
 
 .window .window-body {
-	border-width: 1px;
+	border-width: 0px;
 	border-style: solid;
 	border-top-width: 0px;
 	border-radius: 8px 8px 0 0;
@@ -389,10 +389,10 @@
 .dialog-button {
 	margin: 0 0 20px 20px;
 	border-radius: 0 0 8px 8px;
-	padding-bottom: 30px;
+	padding-bottom: 15px;
+	padding-top: 15px;
 }
 .dialog-button .easyui-linkbutton {
-	width: 24px;
 	height: 14px;
 	border: 1px solid #CCCCCC;
 	border-radius: 5px !important;
@@ -483,10 +483,9 @@ input{
 .combo {
     border-color: #e5e6e7;
     background-color: #fff;
-    padding: 0px 0px 0px 5px !important; 
+    padding: 0px 0px 0px 0px !important;
     height: 30px !important;
     min-height: 30px !important;
-    width: 201px !important;
 }
 /**
  * 
@@ -550,9 +549,9 @@ input{
 	border-color: #e5e6e7;
 	background-color: #fff;
 	padding: 0px 0 4px 5px;
-	height: 38px !important;
+	height: 30px !important;
  	margin-left: 13px;
-	/*margin-top: 10px;*/
+	border-radius: 5px;
 }
 
 .combo-arrow {
@@ -570,14 +569,13 @@ input{
 }
 
 .combobox-item-hover {
-	background-color: #E6E6E6;
+	background-color: #f5f7fa;
 	color: #444;
 	cursor:hand;
 }
 
 .combobox-item-selected {
-	background-color: #5FB878;
-    color: #fff;
+    color: #409eff;
 }
 
 .layout {
@@ -1141,6 +1139,7 @@ a.l-btn span span.l-btn-text {
 	height: 16px;
 	line-height: 16px;*/
 	padding: 0;
+	line-height: 1;
 	/* update-begin--Author:scott  Date:20170615 for闁挎稒鑹惧畷鐔兼焻婢跺鐦婚梺绛嬪枟鑶╃�殿喖楠忕槐婵嬪蓟閵夘煈鍤勯柡澶嗭拷鍙夘偨闁哄倸娲ら悺褏浠﹂崨顒冨幀------------------- */
 
 	/* update-end--Author:scott  Date:20170615 for闁挎稒鑹惧畷鐔兼焻婢跺鐦婚梺绛嬪枟鑶╃�殿喖楠忕槐婵嬪蓟閵夘煈鍤勯柡澶嗭拷鍙夘偨闁哄倸娲ら悺褏浠﹂崨顒冨幀------------------- */
@@ -3224,6 +3223,10 @@ a.s-btn-plain-active {
 /*}*/
 .border-right{
 	border-right: 1px #ddd solid;
+}
+
+form label{
+	color: #666666;
 }
 
 .dataTables_info {
