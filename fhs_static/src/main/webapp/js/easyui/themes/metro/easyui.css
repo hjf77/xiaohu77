@@ -287,7 +287,7 @@
 }
 
 .window .window-header .panel-tool {
-	right: 1px;
+	right: 20px;
 }
 
 .window .window-header .panel-with-icon {
@@ -393,15 +393,25 @@
 	padding-top: 15px;
 }
 .dialog-button .easyui-linkbutton {
-	height: 14px;
+	height: 18px;
 	border: 1px solid #CCCCCC;
 	border-radius: 5px !important;
 	background-color: #FFFFFF !important;
-	margin: 0 !important;
+	margin: 0 10px !important;
 }
-.window .dialog-button .l-btn {
-	margin: 0 !important;
+
+.window .dialog-button #subBtn {
+	background-color: #458FF5 !important;
+	padding: 9px 33px !important;
+	border: none;
 }
+.window .dialog-button #subBtn .l-btn-left .l-btn-text {
+	color: #FFFFFF !important;
+}
+
+/*.window .dialog-button .l-btn {*/
+/*	margin: 0 !important;*/
+/*}*/
 .window .dialog-button .easyui-linkbutton .l-btn-left {
 	color: #666666 !important;
 	line-height: 20px;
@@ -1115,8 +1125,8 @@ a.l-btn span.l-btn-left {
 	display: inline-block;
 	background-position: 0 -48px;
 	/*padding: 3px;*/
-	line-height: 16px;
-	height: 16px;
+	line-height: 12px;
+	height: 12px;
 }
 /*update-end--Author:xuelin  Date:20170328 for闁挎稒鐡�#1820]缂備胶鍠曢鎼佸箮閵夈劊锟斤拷->闁搞儲鍎抽懜浼村箮閵夈劊锟斤拷  闁圭顦甸幐鎶芥晬閸喓鍙�閻犲浂娼块埀顑跨窔閸ｅ摜绱旈鍡欑闁告劕鎳橀崕鎾炊閻愵剛鍨奸柛娆忥攻閺嬪啰锟芥稒銇炵粭澶屼沪閸涱剝鍘�----------------------*/
 a.l-btn-plain span.l-btn-left {
@@ -1427,6 +1437,31 @@ a:hover.l-btn {
 	filter: none;
 }
 
+.datagrid .datagrid-wrap .datagrid-toolbar div div .easyui-linkbutton {
+	background-color: #366DF0 !important;
+	padding: 10px 32px !important;
+}
+
+.datagrid .datagrid-wrap .datagrid-toolbar div div .searchBTN {
+	background-image:url(./images/icon-search.png) !important;
+	background-repeat: no-repeat !important;
+	background-position: 21px center !important;
+	padding: 10px 22px 10px 42px !important;
+}
+
+.datagrid .datagrid-wrap .datagrid-toolbar div div .addBTN {
+	background-image:url(./images/icon-add.png) !important;
+	background-repeat: no-repeat !important;
+	background-position: 21px center !important;
+	padding: 10px 22px 10px 42px !important;
+}
+.datagrid .datagrid-wrap .datagrid-toolbar div div .exportBTN {
+	background-image:url(./images/icon-export.png) !important;
+	background-repeat: no-repeat !important;
+	background-position: 21px center !important;
+	padding: 10px 22px 10px 42px !important;
+}
+
 a.l-btn-plain, a.l-btn-plain span.l-btn-left {
 	/*background: transparent;
 	border: 0;*/
@@ -1537,7 +1572,7 @@ easyui-table:1366x768;
 	margin: 0;
 	border-width: 0 0 0 0;
 	border-style: solid;
-	padding: 10px;
+	padding-bottom: 10px;
 }
 
 .datagrid .datagrid-pager-top {
@@ -1594,6 +1629,47 @@ easyui-table:1366x768;
 	line-height: 46px;
 	/*font-weight: normal; */
 	font-size: 14px;
+}
+
+.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .viewBTN {
+	color: #366DF0;
+	background-color: #EBF0FD !important;
+	background-image:url(./images/icon-to-view.png) !important;
+	background-repeat: no-repeat !important;
+	background-position:15px center !important;
+	border: 1px solid #366DF0;
+	padding: 7px 18px 7px 36px !important;
+
+}
+
+.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .updateBTN {
+	color: #666666;
+	background-color: #FFFFFF !important;
+	background-image:url(./images/icon-amend.png) !important;
+	background-repeat: no-repeat !important;
+	background-position:15px center !important;
+	border: 1px solid #DDDDDD;
+	padding: 7px 18px 7px 36px !important;
+}
+
+.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .deleteBTN {
+	color: #F96767;
+	background-color: #FDF5F5 !important;
+	background-image:url(./images/icon-delete.png) !important;
+	background-repeat: no-repeat !important;
+	background-position:15px center !important;
+	border: 1px solid #F96767;
+	padding: 7px 18px 7px 36px !important;
+}
+
+.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .right {
+	color: #08DD84;
+	background-color: #E6FCF2 !important;
+	background-image:url(./images/icon-else.png) !important;
+	background-repeat: no-repeat !important;
+	background-position:15px center !important;
+	border: 1px solid #08DD84;
+	padding: 7px 18px 7px 36px !important;
 }
 
 /*update-end--Author:xuelin  Date:20170613 for闁挎稒鐡朅SK #2100 闁靛棙鍔曢崹顏嗘偘閵婏妇澹夌�殿喖绻掔欢銊╁礌閺嶃儮鍋撻幋娆屽亾閹邦厾澹夌�殿喖绻嬬粭鎾达紣濡硶鍋撻幈姊昬cg妤犵偛鍟胯ぐ瀛樼鐠囨彃顫� ---4闁告帗顨夐妴鍐┿亜閻㈠憡妗ㄩ柨娑樻湰鐎垫粓鏌﹂鍏煎闁告帗顨夐妴鍐儍閸曨偆鎽熷ù锝忔嫹 闁告瑥鍊介埀顒�鍎籷grid---------------------- */
@@ -1778,7 +1854,7 @@ easyui-table:1366x768;
 	height: 30px !important;
 	border: 1px solid #DDDDDD;
 	border-radius: 5px;
-	margin: 0 13px 0 15px;
+	margin: 0 13px 3px 15px;
 	color: #999999 !important;
 }
 
