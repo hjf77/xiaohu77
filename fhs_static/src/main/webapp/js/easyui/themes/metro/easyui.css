@@ -1511,6 +1511,8 @@ a.l-btn-disabled, a:hover.l-btn-disabled {
 	left: 20;
 }
 
+
+
 .datagrid-view2 {
 	padding-left: 20px;
 }
@@ -1662,14 +1664,20 @@ easyui-table:1366x768;
 	padding: 7px 18px 7px 36px !important;
 }
 
-.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .right {
+.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .toggle {
+	font-size: 12px;
 	color: #08DD84;
 	background-color: #E6FCF2 !important;
 	background-image:url(./images/icon-else.png) !important;
 	background-repeat: no-repeat !important;
-	background-position:15px center !important;
+	background-position:52px center !important;
 	border: 1px solid #08DD84;
-	padding: 7px 18px 7px 36px !important;
+	padding: 7px 36px 7px 18px !important;
+	border-radius: 5px;
+	margin-left: 10px;
+}
+.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id i {
+	font-style: normal;
 }
 
 /*update-end--Author:xuelin  Date:20170613 for闁挎稒鐡朅SK #2100 闁靛棙鍔曢崹顏嗘偘閵婏妇澹夌�殿喖绻掔欢銊╁礌閺嶃儮鍋撻幋娆屽亾閹邦厾澹夌�殿喖绻嬬粭鎾达紣濡硶鍋撻幈姊昬cg妤犵偛鍟胯ぐ瀛樼鐠囨彃顫� ---4闁告帗顨夐妴鍐┿亜閻㈠憡妗ㄩ柨娑樻湰鐎垫粓鏌﹂鍏煎闁告帗顨夐妴鍐儍閸曨偆鎽熷ù锝忔嫹 闁告瑥鍊介埀顒�鍎籷grid---------------------- */
