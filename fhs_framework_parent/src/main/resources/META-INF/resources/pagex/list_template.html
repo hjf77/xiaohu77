@@ -148,6 +148,8 @@
 
             $('body').append(_popMenu);
         })
+
+
     </script>
 
 
@@ -196,7 +198,7 @@
 
 
 <div id="toolbar">
-    <div style="margin-bottom: 5px;">
+    <div >
         <div style="float: left;">
         ${filtersHtml}
         <#shiro name="${namespace}:see">
@@ -228,9 +230,6 @@
                 >${button.title}</a>
             </#shiro>
         <% } %>
-        </div>
-        <div style="float: right">
-            <img src="${staticPath}/images/sett.png" width="30" style="padding-top: 10px;padding-left: 10px;" height="30"  id="columnSettLogo"/>
         </div>
         <div style="clear: both"></div>
     </div>
