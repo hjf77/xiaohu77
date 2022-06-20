@@ -110,9 +110,10 @@ public class PagexListService implements IPageXService, InitializingBean {
             paramMap.put("excss", listPageSett.getExcss());
             paramMap.put("exjs", listPageSett.getExjs());
             paramMap.put("buttons", getListTopButtons(listPageSett.getButtons()));
-            String columnButtonsJson = getColumnButtons(listPageSett.getButtons());
-            paramMap.put("basicButtonsRule", getBasicButtonsRules(namespace, new HashSet<>(listPageSett.getDisableButtons())));
-            paramMap.put("operatorColumnWidth", getOperatorColumnWidth( columnButtonsJson,  new HashSet<>(listPageSett.getDisableButtons())));
+            Set<String> disableButtons = new HashSet<>(listPageSett.getDisableButtons());
+            String columnButtonsJson = getColumnButtons(listPageSett.getButtons(),namespace,disableButtons);
+            paramMap.put("basicButtonsRule", getBasicButtonsRules(namespace, disableButtons));
+            paramMap.put("operatorColumnWidth", getOperatorColumnWidth( columnButtonsJson,  disableButtons));
             paramMap.put("columnButtons", columnButtonsJson);
             paramMap.put("disableButtons", listPageSett.getDisableButtons());
             paramMap.put("filterParams", filterParams);
@@ -135,14 +136,14 @@ public class PagexListService implements IPageXService, InitializingBean {
      */
     public int getOperatorColumnWidth(String columnButtonsJson, Set<String> disableButtons){
         int width = 30;
-        if (!disableButtons.contains("viewBTN")) {
-            width = width + 60;
+        if (!disableButtons.contains("view")) {
+            width = width + 90;
         }
-        if (!disableButtons.contains("updateBTN")) {
-            width = width + 60;
+        if (!disableButtons.contains("update")) {
+            width = width + 90;
         }
-        if (!disableButtons.contains("deleteBTN")) {
-            width = width + 60;
+        if (!disableButtons.contains("delete")) {
+            width = width + 90;
         }
         if(columnButtonsJson.length() > 3){
             width = width + 70;
@@ -176,13 +177,13 @@ public class PagexListService implements IPageXService, InitializingBean {
      */
     public String getBasicButtonsRules(String namespace, Set<String> disableButtons) {
         Map<String, Boolean> result = new HashMap<>();
-        if (!disableButtons.contains("viewBTN")) {
+        if (!disableButtons.contains("view")) {
             result.put("isHasView", SecurityUtils.getSubject().isPermitted(namespace + ":see"));
         }
-        if (!disableButtons.contains("updateBTN")) {
+        if (!disableButtons.contains("update")) {
             result.put("isHasUpdate", SecurityUtils.getSubject().isPermitted(namespace + ":update"));
         }
-        if (!disableButtons.contains("deleteBTN")) {
+        if (!disableButtons.contains("delete")) {
             result.put("isHasDel", SecurityUtils.getSubject().isPermitted(namespace + ":del"));
         }
         return JsonUtils.map2json(result);
@@ -194,7 +195,7 @@ public class PagexListService implements IPageXService, InitializingBean {
      * @param allButtons 所有按钮
      * @return 操作列上的按钮json - 前端可直接用
      */
-    public String getColumnButtons(List<Map<String, Object>> allButtons) {
+    public String getColumnButtons(List<Map<String, Object>> allButtons, String namespace,Set<String> disableButtons) {
         List<Map<String, Object>> buttons = allButtons.stream().filter(btn -> {
             //isRow 并且 isRow 属性 为true的过滤掉
             if (!btn.containsKey("isRow") || !Constant.STR_TRUE.equals(ConverterUtils.toString(btn.get("isRow")))) {
@@ -206,6 +207,12 @@ public class PagexListService implements IPageXService, InitializingBean {
             }
             return true;
         }).collect(Collectors.toList());
+        if (!disableButtons.contains("delete") && SecurityUtils.getSubject().isPermitted(namespace + ":update")) {
+            Map<String,Object> delBtn = new HashMap<>();
+            delBtn.put("title","删除");
+            delBtn.put("type","delete");
+            buttons.add(delBtn);
+        }
         return JsonUtils.list2json(buttons);
     }
 

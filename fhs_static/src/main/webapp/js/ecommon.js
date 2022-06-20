@@ -2257,11 +2257,6 @@ function formartOperatorColumnButtons(val,row,index){
             '               plain="true"\n' +
             '               onclick="setTimeout(function(){addSelectRowFun(\'listGrid\',update);},100)">修改</a>';
     }
-    if(basicButtonsRule.isHasDel){
-        _result = _result + ' <a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"\n' +
-            '               iconCls="icon-remove" plain="true"\n' +
-            '               onclick="setTimeout(function(){pubDel(\'listGrid\',delUrl,pkeyCamel);},100)">删除</a>';
-    }
     if(columnButtons.length>0){
         _result = _result + '<a href="javascript:;" class="toggle right" id="menu-toggle' + index + '">\n' +
             '    <i class="material-icons">更多</i>\n' +

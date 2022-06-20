@@ -139,8 +139,12 @@
                 '                    data-menu-toggle="' + ids.join(', ') + '"\n' +
                 '                >';
             columnButtons.forEach(function(item,index){
+                var clickFun = 'addSelectRowFun(\'listGrid\',' + item.fun + ')';
+                if(item.type=='delete'){
+                    clickFun = "pubDel('listGrid',delUrl,pkeyCamel)"
+                }
                 var _tempHtml = ' <li>\n' +
-                    '                        <a href="#" onclick="addSelectRowFun(\'listGrid\',' + item.fun + ')"> ' + item.title + '</a>\n' +
+                    '                        <a href="#" onclick="' + clickFun + '"> ' + item.title + '</a>\n' +
                     '                    </li>';
                 _popMenu = _popMenu + _tempHtml;
             })
@@ -156,8 +160,11 @@
 
 </head>
 <body >
+
 <table id="listGrid"
-       fit="true" style="width: 90%;"  data-options="onLoadSuccess:renderColumnButtons"
+
+       fit="true" style="width: 90%;"
+       data-options="onLoadSuccess:renderColumnButtons"
        <% if(isNotEmpty(modelConfig.title)){ %>
             title="${modelConfig.title}列表"
         <% } %>
@@ -189,9 +196,7 @@
             <% } %>
             >${field.title}</th>
         <% } %>
-        <th data-options="width:'${operatorColumnWidth}px',align:'center'"  field="${modelConfig.pkeyCamel}" formatter="formartOperatorColumnButtons">
-            操作
-        </th>
+
     </tr>
     </thead>
 </table>
@@ -221,9 +226,6 @@
             <#shiro name="${button.permissionsCode}">
                 <a href="javascript:void(0)" class="easyui-linkbutton"
                    iconcls="icon-view" plain="true" id="${button.id}"
-                <% if(nvl(button.isRow,false)){ %>
-                    onclick="addSelectRowFun('listGrid',${button.fun});"
-                <% } %>
                 <% if(!nvl(button.isRow,false)){ %>
                     onclick="${button.fun}();"
                 <% } %>
@@ -255,55 +257,17 @@
     //全局变量
     var overallVariable = {};
 
-    var columnStatus = {};
 
-    //设置列状态
-    function setColumn(_field,_isChecked){
-        columnStatus[_field] = _isChecked;
-        if(_isChecked){
-            $("#listGrid").datagrid("showColumn", _field); // 设置隐藏列
-        }else{
-            $("#listGrid").datagrid("hideColumn", _field); // 设置隐藏列
-        }
-       localStorage.setItem('datagrid_columnsett_${namespace}',json2str(columnStatus));
-    }
-
-    //显示列设置
-    function showColumnSett(e){
-        var items = [
-            <% for(field in listFields){ %>
-
-                    { title: '${field.title}',visible:!'${field.hidden}', fn: setColumn, clickFun: 'setColumn',val:<% if(field.showField == null){ %>_fieldName='${field.camelName}'<% }else{%>'${field.showField}'<% } %> },
-
-            <% } %>
-        ];
-        basicContext.show(items, e)
-        $('.cloumnCheckbox').prop('checked',true);
-        $('.cloumnCheckbox').each(function(){
-            if(columnStatus[this.value]===false){
-                $(this).prop('checked',false);
-                $("#listGrid").datagrid("hideColumn",this.value); // 设置隐藏列
-            }
-        });
-        console.log(e);
-    }
 
     // 列设置
     $(function () {
-        var _columnStatusCache = localStorage.getItem('datagrid_columnsett_${namespace}');
-        if(_columnStatusCache){
-            columnStatus = str2json(_columnStatusCache);
-            setTimeout(function(){
-                for(_key in columnStatus)
-                {
-                    if(columnStatus[_key]===false) {
-                        $("#listGrid").datagrid("hideColumn",_key); // 设置隐藏列
-                    }
-                }
-            },200);
-        }
-        var _btn = document.getElementById('columnSettLogo');
-        _btn.onclick = showColumnSett;
+
+        setTimeout(function(){
+            $("#listGrid").datagrid({
+                frozenColumns:[[{title:'操作',width:'${operatorColumnWidth}px',field:'${modelConfig.pkeyCamel}',align:'center',formatter:formartOperatorColumnButtons}]]
+        }); // 设置隐藏列
+        },200);
+
         //代表后端没有返回总数
         <% if(isNotEmpty(modelConfig.isNotTotal)){ %>
             setTimeout(function(){
