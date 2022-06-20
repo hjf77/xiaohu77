@@ -6,8 +6,21 @@ body{
 }
 input{
  font-family: "Microsoft YaHei";
- border-radius:2px;
+ border-radius:5px;
 }
+input::-webkit-input-placeholder { /* WebKit browsers */
+	color: #999999;
+}
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	color: #999999;
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */
+	color: #999999;
+}
+input:-ms-input-placeholder { /* Internet Explorer 10+ */
+	color: #999999;
+}
+
 .big_text {
 	width: 87% !important;
 }
@@ -37,10 +50,10 @@ input{
    width: 90% !important;
 }
 input[type="text"],input[type="password"]{
-	height: 38px;
-	width: 208px;
-	border: 1px solid #e5e6e7;
-	line-height: 30px;
+	height: 32px;
+	width: 200px;
+	border: 1px solid #dddddd;
+	line-height: 28px;
 	padding:0 3px;
 	margin: 0px 0 0 13px;
 	padding-left: 10px;
@@ -198,7 +211,7 @@ input[type="checkbox"]{
 }
 .fitemDiv{ width:50%; float:left;}
 .fitemDiv label {
-	width: 30%;
+	width: 38%;
 	text-align: right;
 	padding-right: 10px;
 	font-weight: 400;
@@ -273,7 +286,7 @@ form{
    height: 25px;
 }
 .bigLabelDiv{
-	float: left; vertical-align: top; padding-top: 8px; width:15%;text-align: right; padding-right: 10px;
+	float: left; vertical-align: top; padding-top: 8px; width:19%;text-align: right; padding-right: 10px;
 }
 .bigContent{
 	float: left; vertical-align: top; width:79%;font-size: 14px;margin-left:4px;
@@ -390,7 +403,7 @@ testFileImg{
 }
 /**
 
-**aceÐÞ¸Ä
+**aceï¿½Þ¸ï¿½
 
 */
 .sidebar{
@@ -534,16 +547,16 @@ width:95% !important;
 	margin-left: 13px;width: 100px;height:80px;
 }
 
-a:link{text-decoration:none;   /* Ö¸Õý³£µÄÎ´±»·ÃÎÊ¹ýµÄÁ´½Ó*/
+a:link{text-decoration:none;   /* Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
-}a:visited{text-decoration:none; /*Ö¸ÒÑ¾­·ÃÎÊ¹ýµÄÁ´½Ó*/
-
-}
-a:hover{text-decoration:none;/*Ö¸Êó±êÔÚÁ´½Ó*/}
-a:active{text-decoration:none;/* Ö¸ÕýÔÚµãµÄÁ´½Ó*/
+}a:visited{text-decoration:none; /*Ö¸ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 }
-/*ÎÄ¼þÉÏ´«*/
+a:hover{text-decoration:none;/*Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/}
+a:active{text-decoration:none;/* Ö¸ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+
+}
+/*ï¿½Ä¼ï¿½ï¿½Ï´ï¿½*/
 .fileShowLi {
 	margin-top:10px;
 	padding:0;
