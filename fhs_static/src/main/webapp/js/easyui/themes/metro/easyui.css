@@ -1,4 +1,6 @@
 
+
+
 .panel {
 	overflow: hidden;
 	font-size: 14px;
@@ -120,6 +122,7 @@
 	padding: 0;
 	border: 0;
 	overflow: hidden;
+	background-color: #F4F4F4;
 }
 
 .panel-loading {
@@ -167,6 +170,10 @@
 	border-bottom: 1px solid #e7eaec;
 	border-top-right-radius: 2px;
 	border-top-left-radius: 2px;
+
+}
+.datagrid .panel-header{
+	display: none;
 }
 /*update-end--Author:xuelin  Date:20170517 for闁挎稒鐡朅SK#1969::闁靛棙锟界煼缂傚洤楠哥�垫煡濡撮幈锟�+濡炲瀛╅悧鍛婄▔鐎ｅ墎绀夐柛鎺擃殙閵嗗啴寮紙鐘电Ъ濡炲瀛╅悧鎼佸嫉婢跺苯浠柣蹇ユ嫹--------------------	*/
 .panel-body {
@@ -233,23 +240,37 @@
 	/*padding: 1px;*/
 	border-width: 1px;
 	border-style: solid;
-
+	background: #F4F4F4 !important;
 	/*border-radius:5px;*/
 }
 
 .window .window-header {
-	border-bottom:1px solid #ddd;
-	border:none;
-	background: transparent;
-	padding: 0px 0px 1px 0px;
-	background-image: -webkit-linear-gradient(top, #D6D6D6 0%, #e8e8e8 100%);
-	height:40px;
+	margin-bottom: 20px;
+	padding: 15px 0;
+	height:48px;
+}
+.window .window-body {
+	width: calc(100% - 40px) !important;
+	padding: 30px 0 !important;
+	margin: 0 20px;
+}
+.window .panel-title {
+	background-color: #FFFFFF;
+	font-size: 18px;
+	font-weight: 400;
+}
+.window .panel-header {
+	border: none;
+	text-align: center;
+	padding: 0;
+	background-color: transparent;
 }
 
 .window .window-body {
 	border-width: 1px;
 	border-style: solid;
 	border-top-width: 0px;
+	border-radius: 8px 8px 0 0;
 }
 
 .window .window-body-noheader {
@@ -349,8 +370,7 @@
 }
 
 .dialog-button {
-	padding: 5px;
-	text-align: right;
+	text-align: center;
 
 }
 
@@ -367,8 +387,27 @@
 }
 
 .dialog-button {
-	border-top: 1px solid #ddd;
+	margin: 0 0 20px 20px;
+	border-radius: 0 0 8px 8px;
+	padding-bottom: 30px;
 }
+.dialog-button .easyui-linkbutton {
+	width: 24px;
+	height: 14px;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px !important;
+	background-color: #FFFFFF !important;
+	margin: 0 !important;
+}
+.window .dialog-button .l-btn {
+	margin: 0 !important;
+}
+.window .dialog-button .easyui-linkbutton .l-btn-left {
+	color: #666666 !important;
+	line-height: 20px;
+	font-size: 16px;
+}
+
 
 .textbox {
 	position: relative;
@@ -409,8 +448,7 @@
     margin-left: 5px;
 	margin-right: 5px;
     padding-left: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 3px;
 }
 .combo {
 	display: inline-block;
@@ -1198,20 +1236,28 @@ a.l-btn .l-btn-focus {
 
 /*清除 padding*/
 .datagrid-toolbar{
-	padding-top: 10px;
-	padding-left: 10px;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	border-radius: 8px !important;
+	margin-bottom: 20px;
+	border: none !important;
 }
 
+.datagrid-wrap {
+	background-color: #F4F4F4 !important;
+	border: none !important;
+}
 a.easyui-linkbutton {
-	padding: 8px 17px !important;
+	padding: 8px 32px !important;
+	border-radius: 5px !important;
 	font-size: 12px;
     font-weight: 400;
     background-color: #51b0fe !important;
     margin: 10px 0 0 10px !important;
     /*border: 1px #1AB394 solid;*/
-	border-radius: 2px !important;
-	-webkit-border-radius: 2px !important;
-	-moz-border-radius: 2px !important;
+	-webkit-border-radius: 5px !important;
+	-moz-border-radius: 5px !important;
 	cursor:hand;
 }
 a.easyui-linkbutton:hover {
@@ -1406,27 +1452,33 @@ a.l-btn-disabled, a:hover.l-btn-disabled {
 }
 
 .datagrid .panel-body {
+	width: calc(100% - 40px) !important;
 	overflow: hidden;
 	position: relative;
+	margin: 20px;
 }
 
 .datagrid-view {
 	position: relative;
 	overflow: hidden;
+	border-radius: 8px 8px 0 0;
+	background-color: white;
+	padding: 20px;
 }
 
 .datagrid-view1, .datagrid-view2 {
 	position: absolute;
 	overflow: hidden;
 	top: 0;
+	padding-top: 20px;
 }
 
 .datagrid-view1 {
-	left: 0;
+	left: 20;
 }
 
 .datagrid-view2 {
-	right: 0;
+	padding-left: 20px;
 }
 
 .datagrid-mask {
@@ -1512,14 +1564,12 @@ easyui-table:1366x768;
 /*update-end--Author:xuelin  Date:20170517 for闁挎稒鐡朅SK#1969::闁靛棙锟界煼缂傚洤楠哥�垫煡濡撮幈锟�+濡炲瀛╅悧鍛婄▔鐎ｅ墎绀夐柛鎺擃殙閵嗗啴寮紙鐘电Ъ濡炲瀛╅悧鎼佸嫉婢跺苯浠柣蹇ユ嫹------------------- */
 .datagrid-row {
 	height: 35px;
-	background-color: #f9f9f9;
+	background: #FFFFFF;
 }
 
 .datagrid-header td {
 	font-weight: bold;
 	text-align: center;
-	border-width: 0 1px 1px 0;
-	border-style: solid;
 	margin: 0;
 	padding-top:2px;
 	padding-bottom:2px;
@@ -1527,14 +1577,13 @@ easyui-table:1366x768;
 }
 
 .datagrid-body td, .datagrid-footer td {
-	border-width: 0 1px 1px 0;
+	border-width: 0 0px 1px 0;
 	border-style: solid;
 	margin: 0;
 	padding-top:2px;
 	padding-bottom:2px;
 	overflow: hidden;
 }
-
 /*update-begin--Author:xuelin  Date:20170613 for闁挎稒鐡朅SK #2100 闁靛棙鍔曢崹顏嗘偘閵婏妇澹夌�殿喖绻掔欢銊╁礌閺嶃儮鍋撻幋娆屽亾閹邦厾澹夌�殿喖绻嬬粭鎾达紣濡硶鍋撻幈姊昬cg妤犵偛鍟胯ぐ瀛樼鐠囨彃顫� ---4闁告帗顨夐妴鍐┿亜閻㈠憡妗ㄩ柨娑樻湰鐎垫粓鏌﹂鍏煎闁告帗顨夐妴鍐儍閸曨偆鎽熷ù锝忔嫹 闁告瑥鍊介埀顒�鍎籷grid-------------------- */
 .datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber,
 	.datagrid-cell-rownumber {
@@ -1543,11 +1592,11 @@ easyui-table:1366x768;
 	white-space: nowrap;
 	word-wrap: normal;
 	overflow: hidden;
-	height: 34px;
-	line-height: 34px;
+	line-height: 46px;
 	/*font-weight: normal; */
 	font-size: 14px;
 }
+
 /*update-end--Author:xuelin  Date:20170613 for闁挎稒鐡朅SK #2100 闁靛棙鍔曢崹顏嗘偘閵婏妇澹夌�殿喖绻掔欢銊╁礌閺嶃儮鍋撻幋娆屽亾閹邦厾澹夌�殿喖绻嬬粭鎾达紣濡硶鍋撻幈姊昬cg妤犵偛鍟胯ぐ瀛樼鐠囨彃顫� ---4闁告帗顨夐妴鍐┿亜閻㈠憡妗ㄩ柨娑樻湰鐎垫粓鏌﹂鍏煎闁告帗顨夐妴鍐儍閸曨偆鎽熷ù锝忔嫹 闁告瑥鍊介埀顒�鍎籷grid---------------------- */
 .datagrid-cell-group {
 	text-align: center;
@@ -1659,9 +1708,18 @@ easyui-table:1366x768;
 .datagrid-mask-msg {
 	background: #fff url('images/loading.gif') no-repeat scroll 5px center;
 }
-
-.datagrid-header, .datagrid-td-rownumber {
+.datagrid-btable.datagrid-row .datagrid-td-rownumber .datagrid-cell-rownumber {
+	background: #F8F9FB;
+}
+.datagrid-header {
 	background-color: #ffffff;
+}
+.datagrid .datagrid-view2 .datagrid-header {
+	height: 47px !important;
+}
+.datagrid datagrid-view1, .datagrid-header {
+	height: 47px !important;
+	background: #F2F3F5;
 }
 
 .datagrid-cell-rownumber {
@@ -1686,8 +1744,9 @@ easyui-table:1366x768;
 }
 /* update-begin--Author:xuelin  Date:20170608 for闁挎稒鐡朅SK #2090 闁靛棙鍔栭悧鍗烆嚕韫囧鍋撻幋婵嗙�诲銈呯仛閻楀崬顕ｈ箛鏃�鏆梺顐ゅ缁辨繈宕ｉ崒婵冨亾閿燂拷 jqgrid濡炲瀛╅悧锟�-------------------- */
 .datagrid-pager {
-	/*background: #FAFAFA; */
+	background: #FFFFFF;
 	padding-bottom:12px;
+	border-radius: 0 0 8px 8px;
 
 }
 /* update-end--Author:xuelin  Date:20170608 for闁挎稒鐡朅SK #2090 闁靛棙鍔栭悧鍗烆嚕韫囧鍋撻幋婵嗙�诲銈呯仛閻楀崬顕ｈ箛鏃�鏆梺顐ゅ缁辨繈宕ｉ崒婵冨亾閿燂拷 jqgrid濡炲瀛╅悧锟�-------------------- */
@@ -1706,6 +1765,24 @@ easyui-table:1366x768;
 	/*line-height:34px;*/
 	margin-top: 3px;
 }
+.datagrid .datagrid-toolbar input {
+	width: 200px;
+	height: 32px;
+	border: 1px solid #DDDDDD;
+	border-radius: 5px;
+	margin: 0 15px;
+	color: #999999 !important;
+}
+
+.datagrid .datagrid-toolbar .combo {
+	width: 200px !important;
+	height: 32px !important;
+	border: 1px solid #DDDDDD;
+	border-radius: 5px;
+	margin: 0 15px;
+	color: #999999 !important;
+}
+
 /* update-end--Author:xuelin  Date:20170523 for闁挎稒鐡朅SK #2004 闁靛棙锟界煼濞村吋锚鐎垫煡濡撮幋婵嗙闂侇偄顦扮�垫粓鏌﹂渚ヤ礁顕ｈ箛銉х闁哄被鍎撮妤呭级閳ュ弶顐介柡宥囧帶缁憋紕绱樻惔鈥愁嚙-------------------- */
 .datagrid-header, .datagrid-toolbar, .datagrid-pager,
 	.datagrid-footer-inner {
@@ -1727,8 +1804,9 @@ easyui-table:1366x768;
 }
 
 .datagrid-row-alt {
-	background: #ffffff;
+	background: #F8F9FB;
 }
+
 
 .datagrid-row-over {
 	background: #F5F5F5;
