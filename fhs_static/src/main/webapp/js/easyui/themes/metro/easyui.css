@@ -1508,12 +1508,16 @@ a.l-btn-disabled, a:hover.l-btn-disabled {
 }
 
 .datagrid-view1 {
-	left: 20;
+	left: auto;
+	right: 0;
+	margin-right: 20px;
 }
 
 
 
 .datagrid-view2 {
+	left: 0;
+	right: auto;
 	padding-left: 20px;
 }
 
@@ -1633,7 +1637,7 @@ easyui-table:1366x768;
 	font-size: 14px;
 }
 
-.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .viewBTN {
+.datagrid  .viewBTN {
 	color: #366DF0;
 	background-color: #EBF0FD !important;
 	background-image:url(./images/icon-to-view.png) !important;
@@ -1644,7 +1648,7 @@ easyui-table:1366x768;
 
 }
 
-.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .updateBTN {
+.datagrid  .updateBTN {
 	color: #666666;
 	background-color: #FFFFFF !important;
 	background-image:url(./images/icon-amend.png) !important;
@@ -1654,17 +1658,9 @@ easyui-table:1366x768;
 	padding: 7px 18px 7px 36px !important;
 }
 
-.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .deleteBTN {
-	color: #F96767;
-	background-color: #FDF5F5 !important;
-	background-image:url(./images/icon-delete.png) !important;
-	background-repeat: no-repeat !important;
-	background-position:15px center !important;
-	border: 1px solid #F96767;
-	padding: 7px 18px 7px 36px !important;
-}
 
-.datagrid .datagrid-wrap .datagrid-view .datagrid-view2 .datagrid-body .datagrid-btable .datagrid-cell-c1-id .toggle {
+
+.datagrid .toggle {
 	font-size: 12px;
 	color: #08DD84;
 	background-color: #E6FCF2 !important;
