@@ -1,5 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <script>
+        var columnButtons = JSON.parse('${columnButtons}');
+        var delUrl = '${modelConfig.delUrl}';
+        var pkeyCamel = '${modelConfig.pkeyCamel}';
+        var basicButtonsRule = JSON.parse('${basicButtonsRule}');
+    </script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--链接样式表-->
@@ -12,10 +18,15 @@
     <link rel="stylesheet" type="text/css"
           href="${staticPath}css/loading_preloader.css"/>
     <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/menu_min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/loading_preloader.css"/>
+    <link rel="stylesheet" type="text/css"
           href="${staticPath}js/pop_menu/pop_menu.css"/>
     <script type="text/javascript" src="${staticPath}js/jquery.min.js"></script>
 
     <script type="text/javascript" src="${staticPath}js/json2.js"></script>
+    <script type="text/javascript" src="${staticPath}js/menu_min.js"></script>
     <!--topso start-->
     <link rel="stylesheet" type="text/css"
           href="${staticPath}css/tipso.min.css"/>
@@ -115,10 +126,36 @@
         <% } %>
     <% } %>
     <!--扩展js和css引入 end-->
+    <script>
+
+
+        $(function(){
+            var ids = [];
+            for (let i = 0; i < 50; i++) {
+                ids.push('#menu-toggle' + i);
+            }
+            var _popMenu = '  <ul' +
+                '                    class="menu data-menu"' +
+                '                    data-menu-toggle="' + ids.join(', ') + '"\n' +
+                '                >';
+            columnButtons.forEach(function(item,index){
+                var _tempHtml = ' <li>\n' +
+                    '                        <a href="#" onclick="addSelectRowFun(\'listGrid\',' + item.fun + ')"> ' + item.title + '</a>\n' +
+                    '                    </li>';
+                _popMenu = _popMenu + _tempHtml;
+            })
+            _popMenu = _popMenu +'</ul>';
+
+            $('body').append(_popMenu);
+        })
+    </script>
+
+
+
 </head>
 <body >
 <table id="listGrid"
-       fit="true" style="width: 90%;"
+       fit="true" style="width: 90%;"  data-options="onLoadSuccess:renderColumnButtons"
        <% if(isNotEmpty(modelConfig.title)){ %>
             title="${modelConfig.title}列表"
         <% } %>
@@ -130,7 +167,7 @@
             pagination="true"
         <% } %>
        rownumbers="true" fitColumns="true"
-       singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
+       singleSelect="true" pageSize="${modelConfig.pageSize!10}" striped="true" toolbar="#toolbar">
     <thead>
     <tr>
         <!--遍历列表字段-->
@@ -150,6 +187,9 @@
             <% } %>
             >${field.title}</th>
         <% } %>
+        <th data-options="width:'${operatorColumnWidth}px',align:'center'"  field="${modelConfig.pkeyCamel}" formatter="formartOperatorColumnButtons">
+            操作
+        </th>
     </tr>
     </thead>
 </table>
@@ -166,25 +206,6 @@
         <#shiro name="${namespace}:add">
             <a href="javascript:void(0)" class="easyui-linkbutton addBTN"
                iconCls="icon-add" plain="true" onclick="add()">添加</a>
-        </#shiro>
-
-        <#shiro name="${namespace}:see">
-            <a href="javascript:void(0)" class="easyui-linkbutton viewBTN"
-               iconcls="icon-view" plain="true"
-               onclick="addSelectRowFun('listGrid',view);">查看</a>&nbsp;&nbsp;&nbsp;
-        </#shiro>
-
-
-        <#shiro name="${namespace}:update">
-            <a href="javascript:void(0)" class="easyui-linkbutton  updateBTN"
-               plain="true"
-               onclick="addSelectRowFun('listGrid',update);">修改</a>
-        </#shiro>
-
-        <#shiro name="${namespace}:del">
-            <a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"
-               iconCls="icon-remove" plain="true"
-               onclick="pubDel('listGrid','${modelConfig.delUrl}','${modelConfig.pkeyCamel}');">删除</a>
         </#shiro>
 
         <#shiro name="${namespace}:see">
@@ -226,6 +247,8 @@
 </div>
 
 
+
+
 </body>
 <script type="text/javascript" src="${staticPath}js/pop_menu/pop_menu.js"></script>
 <script type="text/javascript">
@@ -237,7 +260,6 @@
 
     //设置列状态
     function setColumn(_field,_isChecked){
-        console.log(_field + _isChecked);
         columnStatus[_field] = _isChecked;
         if(_isChecked){
             $("#listGrid").datagrid("showColumn", _field); // 设置隐藏列
@@ -394,6 +416,10 @@
     })
     //其他的自定义的方法
     ${otherFunctions}
+
+    function renderColumnButtons(){
+        $('.data-menu').popMenu();
+    }
 </script>
 </html>
 <script type="text/javascript">

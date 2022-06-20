@@ -1,6 +1,8 @@
 package com.fhs.pagex.service.xsimpl;
 
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
@@ -13,16 +15,15 @@ import com.fhs.pagex.service.PagexDataService;
 import com.fhs.pagex.tag.grid.BaseGridTag;
 import com.fhs.pagex.tag.grid.GridTagFactory;
 import com.mybatis.jpa.common.ColumnNameUtil;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 处理pagex列表页面的服务
@@ -39,6 +40,22 @@ import java.util.Map;
 @Component
 public class PagexListService implements IPageXService, InitializingBean {
 
+    private static Map<String, Object> viewButton = new HashMap<>();
+    private static Map<String, Object> updateButton = new HashMap<>();
+    private static Map<String, Object> delButton = new HashMap<>();
+
+    static {
+        viewButton.put("name", "查看");
+        viewButton.put("className", "viewBTN");
+        viewButton.put("fun", "view");
+
+        updateButton.put("name", "修改");
+        updateButton.put("className", "updateBTN");
+        updateButton.put("fun", "update");
+
+        delButton.put("name", "删除");
+        delButton.put("className", "deleteBTN");
+    }
 
     private static final Logger LOG = Logger.getLogger(PagexListService.class);
 
@@ -92,7 +109,11 @@ public class PagexListService implements IPageXService, InitializingBean {
             paramMap.put("formFieldTypes", formFieldSetts.toString());
             paramMap.put("excss", listPageSett.getExcss());
             paramMap.put("exjs", listPageSett.getExjs());
-            paramMap.put("buttons", listPageSett.getButtons());
+            paramMap.put("buttons", getListTopButtons(listPageSett.getButtons()));
+            String columnButtonsJson = getColumnButtons(listPageSett.getButtons());
+            paramMap.put("basicButtonsRule", getBasicButtonsRules(namespace, new HashSet<>(listPageSett.getDisableButtons())));
+            paramMap.put("operatorColumnWidth", getOperatorColumnWidth( columnButtonsJson,  new HashSet<>(listPageSett.getDisableButtons())));
+            paramMap.put("columnButtons", columnButtonsJson);
             paramMap.put("disableButtons", listPageSett.getDisableButtons());
             paramMap.put("filterParams", filterParams);
             paramMap.put("filterParamsForBetween", filterParamsForBetween);
@@ -104,6 +125,88 @@ public class PagexListService implements IPageXService, InitializingBean {
             LOG.error(this, e);
             throw new BusinessException("页面解析错误");
         }
+    }
+
+    /**
+     * 操作列按钮宽度
+     * @param columnButtonsJson
+     * @param disableButtons
+     * @return
+     */
+    public int getOperatorColumnWidth(String columnButtonsJson, Set<String> disableButtons){
+        int width = 30;
+        if (!disableButtons.contains("viewBTN")) {
+            width = width + 60;
+        }
+        if (!disableButtons.contains("updateBTN")) {
+            width = width + 60;
+        }
+        if (!disableButtons.contains("deleteBTN")) {
+            width = width + 60;
+        }
+        if(columnButtonsJson.length() > 3){
+            width = width + 70;
+        }
+        return width;
+    }
+
+
+    /**
+     * 只有全局按钮才放到上面
+     *
+     * @param allButtons 所有按钮
+     * @return 放到上面的按钮
+     */
+    public List<Map<String, Object>> getListTopButtons(List<Map<String, Object>> allButtons) {
+        return allButtons.stream().filter(btn -> {
+            //isRow 并且 isRow 属性 为true的过滤掉
+            if (btn.containsKey("isRow") && Constant.STR_TRUE.equals(ConverterUtils.toString(btn.get("isRow")))) {
+                return false;
+            }
+            return true;
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取基础按钮
+     *
+     * @param namespace
+     * @param disableButtons
+     * @return
+     */
+    public String getBasicButtonsRules(String namespace, Set<String> disableButtons) {
+        Map<String, Boolean> result = new HashMap<>();
+        if (!disableButtons.contains("viewBTN")) {
+            result.put("isHasView", SecurityUtils.getSubject().isPermitted(namespace + ":see"));
+        }
+        if (!disableButtons.contains("updateBTN")) {
+            result.put("isHasUpdate", SecurityUtils.getSubject().isPermitted(namespace + ":update"));
+        }
+        if (!disableButtons.contains("deleteBTN")) {
+            result.put("isHasDel", SecurityUtils.getSubject().isPermitted(namespace + ":del"));
+        }
+        return JsonUtils.map2json(result);
+    }
+
+    /**
+     * 获取操作列上的按钮
+     *
+     * @param allButtons 所有按钮
+     * @return 操作列上的按钮json - 前端可直接用
+     */
+    public String getColumnButtons(List<Map<String, Object>> allButtons) {
+        List<Map<String, Object>> buttons = allButtons.stream().filter(btn -> {
+            //isRow 并且 isRow 属性 为true的过滤掉
+            if (!btn.containsKey("isRow") || !Constant.STR_TRUE.equals(ConverterUtils.toString(btn.get("isRow")))) {
+                return false;
+            }
+            //设置了权限编码当前登录人没有权限编码的时候
+            if (btn.containsKey("permissionsCode") && !SecurityUtils.getSubject().isPermitted(ConverterUtils.toString(btn.get("permissionsCode")))) {
+                return false;
+            }
+            return true;
+        }).collect(Collectors.toList());
+        return JsonUtils.list2json(buttons);
     }
 
 

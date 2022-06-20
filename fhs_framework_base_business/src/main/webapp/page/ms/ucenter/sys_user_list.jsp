@@ -19,7 +19,7 @@
 		<th align='center' field="userName" width="15%">用户名</th>
 		<th align='center' field="userLoginName" width="15%">登录名</th>
 		<th align='center' field="transMap.sexName" width="10%">性别</th>
-		<th align='center' field="transMap.organizationIdOrganizationName" width="19%">机构</th>
+		<th align='center' field="transMap.orgName" width="19%">机构</th>
 		<th align='center' field="mobile" width="10%">电话</th>
 		<th align='center' field="email" width="20%">邮箱</th>
 		<th align='center' field="transMap.isDisableName" width="10%">状态</th>
