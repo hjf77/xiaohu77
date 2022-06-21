@@ -135,7 +135,7 @@ public class PagexListService implements IPageXService, InitializingBean {
      * @return
      */
     public int getOperatorColumnWidth(String columnButtonsJson, Set<String> disableButtons){
-        int width = 30;
+        int width = 50;
         if (!disableButtons.contains("view")) {
             width = width + 90;
         }

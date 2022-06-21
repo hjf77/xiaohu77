@@ -1699,8 +1699,12 @@ easyui-table:1366x768;
 	padding-bottom: 20px;
 }
 
+.datagrid-view2 .datagrid-body {
+	overflow-y: hidden;
+}
+
 .datagrid-view1 .datagrid-body {
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 .datagrid-footer {

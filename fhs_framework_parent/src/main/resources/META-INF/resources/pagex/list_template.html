@@ -143,7 +143,7 @@
                 if(item.type=='delete'){
                     clickFun = "pubDel('listGrid',delUrl,pkeyCamel)"
                 }
-                var _tempHtml = ' <li>\n' +
+                var _tempHtml = ' <li id="' + item.id + '">\n' +
                     '                        <a href="#" onclick="' + clickFun + '"> ' + item.title + '</a>\n' +
                     '                    </li>';
                 _popMenu = _popMenu + _tempHtml;
@@ -238,7 +238,7 @@
 </div>
 <div id="addOrUpdateDialog" class="easyui-dialog" title="添加/修改${modelConfig.title}"
      data-options="iconCls:'icon-save'" closed="true"
-     style="width: 80%; height: 70%; padding: 10px"
+     style="width: 80%; height: 80%; padding: 10px"
      buttons="#dlg-buttons">
 </div>
 

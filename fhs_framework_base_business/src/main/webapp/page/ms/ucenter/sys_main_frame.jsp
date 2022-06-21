@@ -20,7 +20,7 @@
 
 	<div id="addOrUpdateDialog" class="easyui-dialog" 
 		data-options="iconCls:'icon-save'"  closed="true"
-		style="width: 820px; height: 410px; padding: 5px;font-size: 14px;" >
+		style="width: 920px; height: 410px; padding: 5px;font-size: 14px;" >
 		
 	<script type="text/javascript">
 		function changeRight(treeId, menuType, menuname) {
