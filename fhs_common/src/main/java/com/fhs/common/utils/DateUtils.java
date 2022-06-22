@@ -897,4 +897,16 @@ public class DateUtils {
         return endTimeStr;
     }
 
+    /**
+     * 两个时间相差距离多少分
+     *
+     * @param source 时间参数 1 格式：1990-01-01 12:00:00
+     * @param target 时间参数 2 格式：2009-01-01 12:00:00
+     * @return int 返回值为：xx分钟
+     */
+    public static int getDistanceTimeMinute(Date source, Date target) {
+        //获取时间差
+        int i = (int) ((source.getTime() - target.getTime()) / 1000 / 60);
+        return i > 0 ? i : 0;
+    }
 }
