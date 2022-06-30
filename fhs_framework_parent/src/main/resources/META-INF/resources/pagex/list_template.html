@@ -5,7 +5,10 @@
         var delUrl = '${modelConfig.delUrl}';
         var pkeyCamel = '${modelConfig.pkeyCamel}';
         var basicButtonsRule = JSON.parse('${basicButtonsRule}');
+        var isShowMore = ${isShowMore};
     </script>
+
+    <title>${modelConfig.title}列表</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--链接样式表-->
@@ -130,6 +133,10 @@
 
 
         $(function(){
+            //不显示更多就不拼接了
+            if(!isShowMore){
+                return;
+            }
             var ids = [];
             for (let i = 0; i < 50; i++) {
                 ids.push('#menu-toggle' + i);
@@ -143,7 +150,7 @@
                 if(item.type=='delete'){
                     clickFun = "pubDel('listGrid',delUrl,pkeyCamel)"
                 }
-                var _tempHtml = ' <li id="' + item.id + '">\n' +
+                var _tempHtml = ' <li class="columnButton" id="' + item.id + '">\n' +
                     '                        <a href="#" onclick="' + clickFun + '"> ' + item.title + '</a>\n' +
                     '                    </li>';
                 _popMenu = _popMenu + _tempHtml;
@@ -263,9 +270,13 @@
     $(function () {
 
         setTimeout(function(){
-            $("#listGrid").datagrid({
-                frozenColumns:[[{title:'操作',width:'${operatorColumnWidth}px',field:'${modelConfig.pkeyCamel}',align:'center',formatter:formartOperatorColumnButtons}]]
-        }); // 设置隐藏列
+            if(columnButtons.length>0 || basicButtonsRule.isHasView || basicButtonsRule.isHasUpdate){
+                $("#listGrid").datagrid({
+                    frozenColumns:[[{title:'操作',width:'${operatorColumnWidth}px',field:'${modelConfig.pkeyCamel}',align:'center',formatter:formartOperatorColumnButtons}]]
+                });
+            }else{
+                $('html').append('<style>.datagrid-view2 .datagrid-body{overflow-y:auto !important;}</style>');
+            }
         },200);
 
         //代表后端没有返回总数

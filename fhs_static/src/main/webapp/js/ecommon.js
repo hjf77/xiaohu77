@@ -2257,11 +2257,27 @@ function formartOperatorColumnButtons(val,row,index){
             '               plain="true"\n' +
             '               onclick="setTimeout(function(){addSelectRowFun(\'listGrid\',update);},100)">修改</a>';
     }
-    if(columnButtons.length>0){
-        _result = _result + '<a href="javascript:;" class="toggle right" id="menu-toggle' + index + '">\n' +
-            '    <i class="material-icons">更多</i>\n' +
-            '  </a>';
+    if(isShowMore){
+        if(columnButtons.length>0){
+            _result = _result + '<a href="javascript:;" class="toggle right" id="menu-toggle' + index + '">\n' +
+                '    <i class="material-icons">更多</i>\n' +
+                '  </a>';
+        }
+    }else{
+        columnButtons.forEach(function(item,index){
+            if(item.type=='delete'){
+                _result = _result + '<a href="javascript:void(0)" class="easyui-linkbutton" style="padding: 8px 12px !important;color: white;background-color: #f44336 !important" \n' +
+                    '               plain="true"\n' +
+                    '               onclick="setTimeout(function(){pubDel(\'listGrid\',delUrl,pkeyCamel);},100)">' + item.title+'  </a>';
+            }else{
+                _result = _result + '<a href="javascript:void(0)" class="easyui-linkbutton" style="padding: 8px 12px !important;color: white" \n' +
+                    '               plain="true"\n' +
+                    '               onclick="setTimeout(function(){addSelectRowFun(\'listGrid\','+ item.fun + ');},100)">' + item.title+'  </a>';
+            }
+
+        });
     }
+
     return _result;
 }
 

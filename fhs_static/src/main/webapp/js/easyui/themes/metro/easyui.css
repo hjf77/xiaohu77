@@ -1270,7 +1270,7 @@ a.easyui-linkbutton {
 	cursor:hand;
 }
 a.easyui-linkbutton:hover {
-	opacity:.8;filter:alpha(opacity=80);color:#fff
+	opacity:.8;filter:alpha(opacity=80);
 }
 
 /**

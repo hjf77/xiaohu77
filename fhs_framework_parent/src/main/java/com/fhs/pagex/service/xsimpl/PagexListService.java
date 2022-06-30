@@ -111,10 +111,13 @@ public class PagexListService implements IPageXService, InitializingBean {
             paramMap.put("exjs", listPageSett.getExjs());
             paramMap.put("buttons", getListTopButtons(listPageSett.getButtons()));
             Set<String> disableButtons = new HashSet<>(listPageSett.getDisableButtons());
-            String columnButtonsJson = getColumnButtons(listPageSett.getButtons(),namespace,disableButtons);
+            List<Map<String, Object>> moreButtons = getMoreButtons(listPageSett.getButtons(), namespace, disableButtons);
+            boolean isShowMore = this.isShowMore(moreButtons,namespace,disableButtons);
+            paramMap.put("isShowMore", isShowMore);
             paramMap.put("basicButtonsRule", getBasicButtonsRules(namespace, disableButtons));
-            paramMap.put("operatorColumnWidth", getOperatorColumnWidth( columnButtonsJson,  disableButtons));
-            paramMap.put("columnButtons", columnButtonsJson);
+            paramMap.put("operatorColumnWidth", getOperatorColumnWidth(moreButtons,
+                    namespace,disableButtons,isShowMore));
+            paramMap.put("columnButtons", JsonUtils.list2json(moreButtons));
             paramMap.put("disableButtons", listPageSett.getDisableButtons());
             paramMap.put("filterParams", filterParams);
             paramMap.put("filterParamsForBetween", filterParamsForBetween);
@@ -130,27 +133,47 @@ public class PagexListService implements IPageXService, InitializingBean {
 
     /**
      * 操作列按钮宽度
-     * @param columnButtonsJson
+     *
+     * @param moreButtons
      * @param disableButtons
      * @return
      */
-    public int getOperatorColumnWidth(String columnButtonsJson, Set<String> disableButtons){
-        int width = 50;
-        if (!disableButtons.contains("view")) {
-            width = width + 90;
+    public int getOperatorColumnWidth(List<Map<String, Object>> moreButtons, String namespace,Set<String> disableButtons,boolean isShowMore) {
+        int width = 30;
+        if (!disableButtons.contains("view") && SecurityUtils.getSubject().isPermitted(namespace + ":see")) {
+            width = width + 95;
         }
-        if (!disableButtons.contains("update")) {
-            width = width + 90;
+        if (!disableButtons.contains("update") && SecurityUtils.getSubject().isPermitted(namespace + ":update")) {
+            width = width + 95;
         }
-        if (!disableButtons.contains("delete")) {
-            width = width + 90;
-        }
-        if(columnButtonsJson.length() > 3){
-            width = width + 70;
+        if(isShowMore){
+            width = width + 95;
+        }else{
+            for (Map<String, Object> moreButton : moreButtons) {
+                width = width + ConverterUtils.toString(moreButton.get("title")).length() * 14 + 30;
+            }
+
         }
         return width;
     }
 
+    /**
+     * 是否展示更多按钮
+     * @param moreButtons 更多按钮里有多少个按钮
+     * @param namespace 命名空间
+     * @param disableButtons 禁用的按钮
+     * @return
+     */
+    public boolean isShowMore(List<Map<String, Object>> moreButtons, String namespace, Set<String> disableButtons) {
+        int buttonCount = moreButtons.size();
+        if (!disableButtons.contains("view") && SecurityUtils.getSubject().isPermitted(namespace + ":see")) {
+            buttonCount++;
+        }
+        if (!disableButtons.contains("update") && SecurityUtils.getSubject().isPermitted(namespace + ":update")) {
+            buttonCount++;
+        }
+        return buttonCount > 3;
+    }
 
     /**
      * 只有全局按钮才放到上面
@@ -190,12 +213,12 @@ public class PagexListService implements IPageXService, InitializingBean {
     }
 
     /**
-     * 获取操作列上的按钮
+     * 获取操作列上的更多按钮
      *
      * @param allButtons 所有按钮
      * @return 操作列上的按钮json - 前端可直接用
      */
-    public String getColumnButtons(List<Map<String, Object>> allButtons, String namespace,Set<String> disableButtons) {
+    public List<Map<String, Object>> getMoreButtons(List<Map<String, Object>> allButtons, String namespace, Set<String> disableButtons) {
         List<Map<String, Object>> buttons = allButtons.stream().filter(btn -> {
             //isRow 并且 isRow 属性 为true的过滤掉
             if (!btn.containsKey("isRow") || !Constant.STR_TRUE.equals(ConverterUtils.toString(btn.get("isRow")))) {
@@ -208,12 +231,12 @@ public class PagexListService implements IPageXService, InitializingBean {
             return true;
         }).collect(Collectors.toList());
         if (!disableButtons.contains("delete") && SecurityUtils.getSubject().isPermitted(namespace + ":update")) {
-            Map<String,Object> delBtn = new HashMap<>();
-            delBtn.put("title","删除");
-            delBtn.put("type","delete");
+            Map<String, Object> delBtn = new HashMap<>();
+            delBtn.put("title", "删除");
+            delBtn.put("type", "delete");
             buttons.add(delBtn);
         }
-        return JsonUtils.list2json(buttons);
+        return buttons;
     }
 
 
