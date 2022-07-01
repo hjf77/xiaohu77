@@ -23,6 +23,7 @@ public class SaTokenConfig  implements WebMvcConfigurer {
         // 去除拦截大屏接口
         List<String> excludePathList = new ArrayList<>();
         excludePathList.add("/ms/bizEstate/list");
+        excludePathList.add("/ms/bizWeather/getWeatherNow");
         registry.addInterceptor(new SaRouteInterceptor((req, res, handler)->{
             // 根据路由划分模块，不同模块不同鉴权
             SaRouter.match("/ms/**", r -> StpUtil.checkLogin());
