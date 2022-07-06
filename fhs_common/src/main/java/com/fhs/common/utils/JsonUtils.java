@@ -8,7 +8,9 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -293,6 +295,40 @@ public class JsonUtils {
             e.printStackTrace();
         } finally {
             if (!CheckUtils.isNullOrEmpty(out)) {
+                out.close();
+            }
+        }
+    }
+
+    /**
+     * 向客户端输入jsonp
+     *
+     * @param json json
+     * @return
+     */
+    public static void outJsonp(String json, HttpServletRequest request, HttpServletResponse response) {
+
+        response.setContentType("text/plain");
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setCharacterEncoding("UTF-8");
+        String jsonpCallback = request.getParameter("jsonpCallback");// 客户端请求参数
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            if (!StringUtils.isEmpty(jsonpCallback)) {
+                out.println(jsonpCallback + "(" + json + ")");// 返回jsonp格式数据
+            } else {
+                out.println(json);// 返回json格式数据
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (out != null){
                 out.close();
             }
         }

@@ -1,10 +1,9 @@
 package com.fhs.ucenter.action;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.Logger;
-import com.fhs.common.utils.Md5Util;
-import com.fhs.common.utils.SCaptcha;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -14,14 +13,19 @@ import com.fhs.ucenter.api.vo.SysUserVo;
 import com.fhs.ucenter.bean.SysUser;
 import com.fhs.ucenter.service.SysSystemService;
 import com.fhs.ucenter.service.SysUserService;
+import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.subject.support.WebDelegatingSubject;
+import org.beetl.ext.simulate.JsonUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,6 +76,15 @@ public class MsLoginAction {
     @Autowired
     private RedisCacheService redisCacheService;
 
+    @Value("${user.jwt.secret:f4e2e52034348f86b67cde581c0f9eb5}")
+    private String secret;
+
+    @Value("${user.jwt.expire:604800}")
+    private Long expire;
+
+    @Value("${user.jwt.header:authorization}")
+    private String header;
+
 
     /**
      * 用户登录
@@ -108,6 +122,52 @@ public class MsLoginAction {
         BeanUtils.copyProperties(sysUser, sysUserVo);
         request.getSession().setAttribute(Constant.SESSION_USER, sysUserVo);
         return HttpResult.success(true);
+    }
+
+    @GetMapping("/loginJsonp")
+    public void jsonPLogin(String smartToken, String callback, HttpServletRequest request, HttpServletResponse response) {
+        Claims decode = JWTUtils.parseJWT(smartToken, secret);
+        String phoneNumber = (String) decode.get("phoneNumber");
+        Map map = new HashMap();
+        map.put("mobile", phoneNumber);
+        List<SysUser> users = sysUserService.findForListFromMap(map);
+        if (users.isEmpty()) {
+            JsonUtils.outJsonp("{\"code\":401,\"message\":\"本系统没有此账号\"}", request, response);
+            return;
+        }
+        SysUser user = users.get(0);
+        String msg = "用户或密码错误";
+        try {
+            user = sysUserService.login(user);
+            if (user == null) {
+                throw new ParamException("用户名或者密码错误");
+            }
+            //如果不是admin就去加载全部的数据
+            if (user.getIsAdmin() == Constant.INT_TRUE) {
+                request.getSession().setAttribute(Constant.SESSION_USER_DATA_PERMISSION, new HashMap<>());
+            } else {
+                request.getSession().setAttribute(Constant.SESSION_USER_DATA_PERMISSION, sysUserService.findUserDataPermissions(user.getUserId()));
+            }
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getUserLoginName(), user.getPassword());
+            SecurityUtils.getSubject().login(token);
+            Subject subjects = SecurityUtils.getSubject();
+            // 显示调用，让程序重新去加载授权数据
+            subjects.isPermitted("init");
+
+            SysUserVo sysUserVo = new SysUserVo();
+            BeanUtils.copyProperties(user, sysUserVo);
+            request.getSession().setAttribute(Constant.SESSION_USER, sysUserVo);
+            response.setHeader("Set-Cookie", "JSESSIONID=" + StringUtil.getUUID() + ";SameSite=None;Secure");
+            JsonUtils.outJsonp(HttpResult.success().asJson(), request, response);
+            return;
+        } catch (AuthenticationException e) {
+            if (StringUtils.isNotEmpty(e.getMessage())) {
+                msg = e.getMessage();
+            }
+            String jsonString = JSONUtils.toJSONString(HttpResult.error(msg));
+            JsonUtils.outJsonp(jsonString, request, response);
+            return;
+        }
     }
 
     /**
