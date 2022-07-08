@@ -1,6 +1,8 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
@@ -13,6 +15,9 @@ import com.fhs.basics.service.LogLoginService;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
+import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryField;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -25,9 +30,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,13 +82,11 @@ public class MsLoginController extends BaseController {
     @Autowired
     private RedisCacheService redisCacheService;
 
-
     /**
      * 后台用户服务
      */
     @Autowired
     private UcenterMsUserService sysUserService;
-
 
     @Autowired
     private UcenterMsRoleService roleService;
@@ -106,7 +112,6 @@ public class MsLoginController extends BaseController {
     @Autowired
     private StpInterfaceImpl stpInterface;
 
-
     /**
      * 判断用户是否锁定
      *
@@ -118,7 +123,6 @@ public class MsLoginController extends BaseController {
             throw new ParamException("用户被锁定，请您" + redisCacheService.getExpire(key) + "秒后重试");
         }
     }
-
 
     /**
      * 添加用户输入密码错误次数
@@ -218,6 +222,80 @@ public class MsLoginController extends BaseController {
     }
 
     /**
+     * 用户在线列表查询
+     * @param filter
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/getUserOnlineList")
+    @ApiOperation("用户在线列表查询")
+    public IPage<UcenterMsUserVO> getUserOnlineList(@RequestBody QueryFilter<UcenterMsUserVO> filter, HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> parameterMap = new HashMap();
+        if (!CollectionUtils.isEmpty(filter.getQuerys())) {
+            for (QueryField queryField : filter.getQuerys()) {
+                parameterMap.put(queryField.getProperty(), queryField.getValue() + "");
+            }
+        }
+        //获取在线用户的session
+        List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
+        if(CollectionUtils.isEmpty(sessionList)){
+            return new FhsPager<>();
+        }
+        List<String> users = new ArrayList<>();
+        String userIds = null;
+        for (String session : sessionList) {
+            users.add(session.replaceAll("Authorization:login:session:", ""));
+            userIds = StringUtils.join(users, ",");
+        }
+        parameterMap.put("userIds",userIds);
+        return sysUserService.userOnlineList(filter.getPagerInfo(), parameterMap);
+    }
+
+    /**
+     * 用户在线统计
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/getUserOnlineTotal")
+    @ApiOperation("用户在线统计")
+    public HttpResult<Map<String,Object>> getUserOnlineTotal(HttpServletRequest request, HttpServletResponse response) {
+        String userOrgId = UserContext.getSessionuser().getOrganizationId();
+        Map<String, Object> parameterMap = new HashMap();
+        Long userCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                .eq(UcenterMsUserPO::getIsEnable, Constant.INT_TRUE)
+                .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
+        parameterMap.put("userCount",userCount);
+        //获取在线用户的session
+        List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
+        parameterMap.put("onlineNum",sessionList.size());
+        double count = sessionList.size() * 1.0;
+        List<String> users = new ArrayList<>();
+        for (String session : sessionList) {
+            users.add(session.replaceAll("Authorization:login:session:", ""));
+        }
+        DecimalFormat df1 = new DecimalFormat("##.00%");
+        List<UcenterMsUserVO> ucenterMsUserList = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                .eq(UcenterMsUserPO::getIsEnable, Constant.INT_TRUE)
+                .in(UcenterMsUserPO::getUserId, users)
+                .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
+        //作业区在线人数
+        long opeAreaCount = ucenterMsUserList.stream().filter(u -> u.getOrganizationId().length() == 12).count();
+        parameterMap.put("opeAreaCount",opeAreaCount);
+        //计算作业区登录率
+        double opeAreaNum = opeAreaCount * 1.0;
+        parameterMap.put("opeAreaRate",df1.format(opeAreaNum / count));
+        //二级单位在线人数
+        long oilProCount = ucenterMsUserList.stream().filter(u -> u.getOrganizationId().length() == 9).count();
+        parameterMap.put("oilProCount",oilProCount);
+        //计算二级单位登录率
+        double oilProNum = oilProCount * 1.0;
+        parameterMap.put("oilProRate",df1.format(oilProNum / count));
+        return HttpResult.success(parameterMap);
+    }
+
+    /**
      * 获取路由
      *
      * @return
@@ -228,7 +306,6 @@ public class MsLoginController extends BaseController {
         UcenterMsUserVO user = UserContext.getSessionuser();
         return HttpResult.success(sysUserService.getRouters(user, menuType));
     }
-
 
     /**
      * 生成验证码
@@ -248,8 +325,6 @@ public class MsLoginController extends BaseController {
         return HttpResult.success(resultMap);
     }
 
-
-
     @GetMapping("/logout")
     @ApiOperation("注销登出 for vue")
     public HttpResult<String> logout(String token) {
@@ -258,5 +333,4 @@ public class MsLoginController extends BaseController {
         StpUtil.logout();
         return HttpResult.success("登出成功");
     }
-
 }

@@ -530,6 +530,32 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
     /**
+     * 用户在线列表查询
+     * @param page
+     * @param map
+     * @return
+     */
+    @Override
+    public IPage<UcenterMsUserVO> userOnlineList(FhsPager<UcenterMsUserVO> page, Map<String, Object> map) {
+        ParamChecker.isNotNull(page, "前端调用接口的时候没传分页信息");
+        page = sysUserMapper.userOnlineList(page, map);
+        for (UcenterMsUserVO record : page.getRecords()) {
+            Integer minuteTime = record.getMinuteTime();
+            int hours = minuteTime / 60;
+            int minutes = minuteTime % 60;
+            record.setHourMinuteTime(hours+"h"+minutes);
+        }
+        List<UcenterMsUserVO> records = page.getRecords();
+        this.transService.transMore(records);
+        FhsPager<UcenterMsUserVO> result = new FhsPager();
+        result.setTotal(page.getTotal());
+        result.setPageSize(page.getSize());
+        result.setPageNumber(page.getCurrent());
+        result.setRecords(records);
+        return result;
+    }
+
+    /**
      * 查询角色下用户数量
      * @param roleId
      * @return

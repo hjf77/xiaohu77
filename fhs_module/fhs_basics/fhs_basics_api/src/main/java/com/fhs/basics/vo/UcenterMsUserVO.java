@@ -62,4 +62,10 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
 
     @ApiModelProperty(value = "地图放大级别")
     private String zoom;
+
+    @ApiModelProperty(value = "用户在线时长")
+    private Integer minuteTime;
+
+    @ApiModelProperty(value = "用户在线时长 02h58")
+    private String hourMinuteTime;
 }

@@ -285,4 +285,12 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
     List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap);
 
     FhsPager<UcenterMsUserVO> advancedPaging(FhsPager<UcenterMsUserVO> page, @Param("ew") QueryWrapper<UcenterMsUserVO> queryWrapper);
+
+    /**
+     * 在线用户列表查询
+     * @param page
+     * @param map
+     * @return
+     */
+    FhsPager<UcenterMsUserVO> userOnlineList(FhsPager<UcenterMsUserVO> page, @Param("map") Map<String,Object> map);
 }

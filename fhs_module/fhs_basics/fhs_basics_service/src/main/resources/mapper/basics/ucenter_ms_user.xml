@@ -699,5 +699,34 @@
             ${ew.customSqlSegment}
     </select>
 
+    <select id="userOnlineList" resultType="com.fhs.basics.vo.UcenterMsUserVO">
+        select
+            u.`user_id`,
+            u.`user_login_name`,
+            u.`user_name`,
+            u.`mobile`,
+            u.`sex`,
+            u.`email`,
+            u.`organization_id`,
+            ul.`create_time`,
+            TIMESTAMPDIFF(MINUTE,ul.`create_time`,now()) as minute_time,
+            u.`group_code`,
+            u.`header`,
+            u.`remark`
+        from t_ucenter_ms_user u
+        left join (select l.user_id,l.create_time from t_log_login l
+            RIGHT join (select max(create_time) as create_time,user_id from t_log_login
+            where user_id is not null GROUP BY user_id) ll
+            on ll.user_id = l.user_id and ll.create_time = l.create_time) ul on ul.user_id = u.user_id
+        where u.is_delete = '0' and u.is_enable = '1'
+          <if test="map.userIds != null and map.userIds != ''">
+              and u.user_id in (${map.userIds})
+          </if>
+          <if test="map.organizationId != null and map.organizationId != ''">
+              and u.`organization_id` like concat(#{map.organizationId},'%')
+          </if>
+        order by ul.`create_time` desc
+    </select>
+
 </mapper>
 

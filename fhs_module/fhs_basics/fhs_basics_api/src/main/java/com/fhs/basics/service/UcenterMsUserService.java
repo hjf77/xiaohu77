@@ -231,6 +231,14 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     IPage<UcenterMsUserVO> advancedPaging(FhsPager<UcenterMsUserVO> page, QueryWrapper<UcenterMsUserVO> wrapper);
 
     /**
+     * 用户在线列表查询
+     * @param page
+     * @param map
+     * @return
+     */
+    IPage<UcenterMsUserVO> userOnlineList(FhsPager<UcenterMsUserVO> page, Map<String,Object> map);
+
+    /**
      * 查询角色下用户数量
      * @param roleId
      * @return
