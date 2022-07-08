@@ -275,7 +275,7 @@ public class MsLoginController extends BaseController {
         for (String session : sessionList) {
             users.add(session.replaceAll("Authorization:login:session:", ""));
         }
-        DecimalFormat df1 = new DecimalFormat("##.00%");
+        DecimalFormat df1 = new DecimalFormat("0.00%");
         List<UcenterMsUserVO> ucenterMsUserList = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>()
                 .eq(UcenterMsUserPO::getIsEnable, Constant.INT_TRUE)
                 .in(UcenterMsUserPO::getUserId, users)

@@ -544,6 +544,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             int hours = minuteTime / 60;
             int minutes = minuteTime % 60;
             record.setHourMinuteTime(hours+"h"+minutes);
+            if(record.getOrganizationId().length() >= 9){
+                record.setOilpro(record.getOrganizationId().substring(0,9));
+            }
+            if(record.getOrganizationId().length() >= 12){
+                record.setOpeArea(record.getOrganizationId().substring(0,12));
+            }
         }
         List<UcenterMsUserVO> records = page.getRecords();
         this.transService.transMore(records);

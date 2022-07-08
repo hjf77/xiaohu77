@@ -1,14 +1,13 @@
 package com.fhs.basics.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.fhs.common.utils.StringUtils;
+import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-
-import java.util.Map;
 
 /**
  * 用户vo
@@ -38,9 +37,11 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
     private String company;
 
     @ApiModelProperty("顶级单位的下一级单位")
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.basics.po.UcenterMsOrganizationPO", alias = "oilPro", fields = {"name"}, serviceName = "basic", dataSource = "basic")
     private String oilpro;
 
     @ApiModelProperty("三级单位")
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.basics.po.UcenterMsOrganizationPO", alias = "opeArea", fields = {"name"}, serviceName = "basic", dataSource = "basic")
     private String opeArea;
 
     @ApiModelProperty("四级单位")
