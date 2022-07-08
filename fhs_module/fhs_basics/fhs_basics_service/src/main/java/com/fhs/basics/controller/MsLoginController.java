@@ -267,10 +267,9 @@ public class MsLoginController extends BaseController {
                 .eq(UcenterMsUserPO::getIsEnable, Constant.INT_TRUE)
                 .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
         parameterMap.put("userCount",userCount);
+        double count = userCount * 1.0;
         //获取在线用户的session
         List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
-        parameterMap.put("onlineNum",sessionList.size());
-        double count = sessionList.size() * 1.0;
         List<String> users = new ArrayList<>();
         for (String session : sessionList) {
             users.add(session.replaceAll("Authorization:login:session:", ""));
@@ -280,6 +279,7 @@ public class MsLoginController extends BaseController {
                 .eq(UcenterMsUserPO::getIsEnable, Constant.INT_TRUE)
                 .in(UcenterMsUserPO::getUserId, users)
                 .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
+        parameterMap.put("onlineNum",ucenterMsUserList.size());
         //作业区在线人数
         long opeAreaCount = ucenterMsUserList.stream().filter(u -> u.getOrganizationId().length() == 12).count();
         parameterMap.put("opeAreaCount",opeAreaCount);
@@ -292,6 +292,9 @@ public class MsLoginController extends BaseController {
         //计算二级单位登录率
         double oilProNum = oilProCount * 1.0;
         parameterMap.put("oilProRate",df1.format(oilProNum / count));
+        //总登录率
+        double userLoginNum = ucenterMsUserList.size() * 1.0;
+        parameterMap.put("userLoginRate",df1.format(userLoginNum / count));
         return HttpResult.success(parameterMap);
     }
 
