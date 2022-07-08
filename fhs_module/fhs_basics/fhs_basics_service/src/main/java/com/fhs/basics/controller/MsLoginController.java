@@ -228,7 +228,7 @@ public class MsLoginController extends BaseController {
      * @param response
      * @return
      */
-    @PostMapping("/getUserOnlineList")
+    @PostMapping("/ms/getUserOnlineList")
     @ApiOperation("用户在线列表查询")
     public IPage<UcenterMsUserVO> getUserOnlineList(@RequestBody QueryFilter<UcenterMsUserVO> filter, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> parameterMap = new HashMap();
@@ -258,7 +258,7 @@ public class MsLoginController extends BaseController {
      * @param response
      * @return
      */
-    @PostMapping("/getUserOnlineTotal")
+    @PostMapping("/ms/getUserOnlineTotal")
     @ApiOperation("用户在线统计")
     public HttpResult<Map<String,Object>> getUserOnlineTotal(HttpServletRequest request, HttpServletResponse response) {
         String userOrgId = UserContext.getSessionuser().getOrganizationId();
