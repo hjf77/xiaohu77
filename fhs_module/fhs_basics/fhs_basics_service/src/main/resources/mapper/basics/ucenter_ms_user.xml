@@ -725,7 +725,7 @@
           <if test="map.organizationId != null and map.organizationId != ''">
               and u.`organization_id` like concat(#{map.organizationId},'%')
           </if>
-        order by ul.`create_time` desc
+        order by ul.`create_time` asc
     </select>
 
 </mapper>
