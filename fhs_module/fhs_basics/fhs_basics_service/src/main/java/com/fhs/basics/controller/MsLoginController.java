@@ -281,7 +281,7 @@ public class MsLoginController extends BaseController {
                 .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
         parameterMap.put("onlineNum",ucenterMsUserList.size());
         //作业区在线人数
-        long opeAreaCount = ucenterMsUserList.stream().filter(u -> u.getOrganizationId().length() == 12).count();
+        long opeAreaCount = ucenterMsUserList.stream().filter(u -> u.getOrganizationId().length() >= 12).count();
         parameterMap.put("opeAreaCount",opeAreaCount);
         //计算作业区登录率
         double opeAreaNum = opeAreaCount * 1.0;

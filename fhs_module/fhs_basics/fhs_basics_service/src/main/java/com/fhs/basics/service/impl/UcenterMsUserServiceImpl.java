@@ -543,7 +543,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             Integer minuteTime = record.getMinuteTime();
             int hours = minuteTime / 60;
             int minutes = minuteTime % 60;
-            record.setHourMinuteTime(hours+"h"+minutes);
+            record.setHourMinuteTime(hours+"小时"+minutes+"分钟");
             if(record.getOrganizationId().length() >= 9){
                 record.setOilpro(record.getOrganizationId().substring(0,9));
             }
