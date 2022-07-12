@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -237,17 +238,18 @@ public class MsLoginController extends BaseController {
                 parameterMap.put(queryField.getProperty(), queryField.getValue() + "");
             }
         }
-        //获取在线用户的session
-        List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
-        if(CollectionUtils.isEmpty(sessionList)){
+        //获取在线用户token
+        List<String> userIdList = new ArrayList<>();
+        List<String> tokenList = StpUtil.searchTokenValue("", -1, -1);
+        for (String token : tokenList) {
+            Object loginIdByToken = StpUtil.getLoginIdByToken(token.replaceAll("Authorization:login:token:",""));
+            userIdList.add(loginIdByToken.toString());
+        }
+        if(CollectionUtils.isEmpty(userIdList)){
             return new FhsPager<>();
         }
-        List<String> users = new ArrayList<>();
-        String userIds = null;
-        for (String session : sessionList) {
-            users.add(session.replaceAll("Authorization:login:session:", ""));
-            userIds = StringUtils.join(users, ",");
-        }
+        userIdList = userIdList.stream().distinct().collect(Collectors.toList());
+        String userIds = StringUtils.join(userIdList, ",");
         parameterMap.put("userIds",userIds);
         return sysUserService.userOnlineList(filter.getPagerInfo(), parameterMap);
     }
@@ -268,16 +270,18 @@ public class MsLoginController extends BaseController {
                 .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
         parameterMap.put("userCount",userCount);
         double count = userCount * 1.0;
-        //获取在线用户的session
-        List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
-        List<String> users = new ArrayList<>();
-        for (String session : sessionList) {
-            users.add(session.replaceAll("Authorization:login:session:", ""));
+        //获取在线用户的token
+        List<String> userIdList = new ArrayList<>();
+        List<String> tokenList = StpUtil.searchTokenValue("", -1, -1);
+        for (String token : tokenList) {
+            Object loginIdByToken = StpUtil.getLoginIdByToken(token.replaceAll("Authorization:login:token:",""));
+            userIdList.add(loginIdByToken.toString());
         }
+        userIdList = userIdList.stream().distinct().collect(Collectors.toList());
         DecimalFormat df1 = new DecimalFormat("0.00%");
         List<UcenterMsUserVO> ucenterMsUserList = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>()
                 .eq(UcenterMsUserPO::getIsEnable, Constant.INT_TRUE)
-                .in(UcenterMsUserPO::getUserId, users)
+                .in(UcenterMsUserPO::getUserId, userIdList)
                 .likeRight(UcenterMsUserPO::getOrganizationId,userOrgId));
         parameterMap.put("onlineNum",ucenterMsUserList.size());
         //作业区在线人数
@@ -335,5 +339,54 @@ public class MsLoginController extends BaseController {
         redisCacheService.remove(USER_KEY + token);
         StpUtil.logout();
         return HttpResult.success("登出成功");
+    }
+
+    @GetMapping("/getTokenList")
+    public HttpResult<Map<String,Object>> getTokenList(){
+        Map<String,Object> map = new HashMap<>();
+        List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
+        List<String> tokenList = StpUtil.searchTokenValue("", -1, -1);
+        List<String> tokenSessionList = StpUtil.searchTokenSessionId("", -1, -1);
+        map.put("sessionList",sessionList);
+        map.put("tokenList",tokenList);
+        map.put("tokenSessionList",tokenSessionList);
+        return HttpResult.success(map);
+    }
+
+    @GetMapping("/getTokenSession")
+    public HttpResult<Map<String,Object>> getTokenSession(){
+        Map<String,Object> map = new HashMap<>();
+        List<SaSession> listMap = new ArrayList<>();
+        List<Object> objList = new ArrayList<>();
+        List<String> tokenList = StpUtil.searchTokenValue("", -1, -1);
+        for (String token : tokenList) {
+            SaSession tokenSessionByToken = StpUtil.getTokenSessionByToken(token.replaceAll("Authorization:login:token:",""));
+            listMap.add(tokenSessionByToken);
+        }
+        for (String token : tokenList) {
+            Object loginIdByToken = StpUtil.getLoginIdByToken(token.replaceAll("Authorization:login:token:",""));
+            objList.add(loginIdByToken);
+        }
+        map.put("listMap",listMap);
+        map.put("objList",objList);
+        map.put("tokenList",tokenList);
+        return HttpResult.success(map);
+    }
+
+    @GetMapping("/getToken")
+    public void getToken(){
+        //List<String> sessionList = StpUtil.searchSessionId("", -1, -1);
+        List<String> tokenList = StpUtil.searchTokenValue("", -1, -1);
+        //List<String> tokenSessionList = StpUtil.searchTokenSessionId("", -1, -1);
+        for (String token : tokenList) {
+            String t = token.replaceAll("Authorization:login:token:", "");
+            try {
+                redisCacheService.remove("auth:" + t);
+                redisCacheService.remove(USER_KEY + t);
+                StpUtil.logoutByTokenValue(t);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
