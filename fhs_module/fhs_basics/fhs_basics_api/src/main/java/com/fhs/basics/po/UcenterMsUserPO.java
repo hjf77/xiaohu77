@@ -203,6 +203,14 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private Integer menuType;
 
     /**
+     * 是否可关闭报警弹窗
+     */
+    @TableField("close_remind")
+    @Trans(type = TransType.DICTIONARY, key = "close_remind")
+    @ApiModelProperty("是否可关闭报警弹窗")
+    private Integer closeRemind;
+
+    /**
      * 角色集合
      */
     @TableField(exist = false)
