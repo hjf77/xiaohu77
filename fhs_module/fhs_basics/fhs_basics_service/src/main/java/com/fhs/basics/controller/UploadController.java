@@ -44,7 +44,7 @@ public class UploadController {
      * @param file
      * @return
      */
-    @RequestMapping(value = "file", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
+    @RequestMapping(value = "file", headers = "content-type=multipart/form-data")
     @ApiOperation("上传文件")
     public PubFileVO uploadFile(@RequestPart MultipartFile file, String ext,String fileId) {
         if (file == null) {
