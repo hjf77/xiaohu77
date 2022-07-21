@@ -2,12 +2,24 @@ package com.fhs.pagex.dto;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.StringUtil;
+import com.fhs.core.config.EConfig;
+import com.fhs.core.trans.Trans;
+import com.fhs.pagex.bean.BasePagexBean;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.NamingStrategy;
+import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 
 import javax.script.ScriptException;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+
 
 /**
  * pagex 列表页面DTO
@@ -25,6 +37,28 @@ import java.util.*;
 @Data
 public class PagexListSettDTO extends PagexBaseDTO {
 
+    /**
+     * 翻译简写
+     */
+    private static Map<String, String> transAbbreviationMap = new HashMap<>();
+
+    static {
+        transAbbreviationMap.put("book", "wordbook");
+        transAbbreviationMap.put("user", "sysUser");
+        transAbbreviationMap.put("type", "classifyInfo");
+        transAbbreviationMap.put("fuser", "ucenter:frontUser");
+    }
+
+    public static final Set<String> DEFAULT_FIELD_SET = new HashSet<>();
+
+    static {
+        DEFAULT_FIELD_SET.add("create_user");
+        DEFAULT_FIELD_SET.add("update_user");
+        DEFAULT_FIELD_SET.add("create_time");
+        DEFAULT_FIELD_SET.add("update_time");
+    }
+
+    private Class poClass;
 
     /**
      * 列表页面对象
@@ -166,9 +200,7 @@ public class PagexListSettDTO extends PagexBaseDTO {
      * @throws ScriptException
      */
     public void initButtons() throws NoSuchMethodException, ScriptException {
-
         buttons = getListM("buttons", listPageObject);
-        ;
         for (Map<String, Object> field : buttons) {
             field.put("camelName", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(field.get("name"))));
         }
@@ -208,4 +240,76 @@ public class PagexListSettDTO extends PagexBaseDTO {
 
         return "";
     }
+
+    /**
+     * 编译一个po的class
+     *
+     * @return
+     */
+    public synchronized Class<? extends BasePagexBean> getPoClass() {
+        if (poClass != null) {
+            return poClass;
+        }
+        String namespace = ConverterUtils.toString(this.getModelConfig().get("namespace"));
+        String javaClassName = StringUtil.firstCharUpperCase(ColumnNameUtil.underlineToCamel(namespace));
+        DynamicType.Builder dynamicBuilder = new ByteBuddy()
+                //指定类名
+                .with(new NamingStrategy.SuffixingRandom(javaClassName))
+                //指定基类
+                .subclass(BasePagexBean.class);
+        Set<String> filedNameSet = new HashSet<>();
+        filedNameSet.addAll(DEFAULT_FIELD_SET);
+        filedNameSet.add(ConverterUtils.toString(this.getModelConfig().get("pkeyCamel")));
+        dynamicBuilder =  dynamicBuilder.defineProperty(ConverterUtils.toString(ConverterUtils.toString(this.getModelConfig().get("pkeyCamel"))), String.class);
+        //便利列表页面所有的行
+        for (Map<String, Object> row : this.getListSett()) {
+            if (filedNameSet.contains(row.get("name"))) {
+                continue;
+            }
+            filedNameSet.add(ConverterUtils.toString(row.get("name")));
+            AnnotationDescription apiModelPropertyDescription = null;
+            //此列需要翻译
+            if (row.containsKey("trans") && (!CheckUtils.isNullOrEmpty(row.get("trans")))) {
+                String trans = ConverterUtils.toString(row.get("trans"));
+                //如果已经默认集成了就不集成了，如果默认没集成，就给 trans 拼接
+                if (transAbbreviationMap.containsKey(row.get("trans"))) {
+                    trans = transAbbreviationMap.get(trans);
+                }
+                apiModelPropertyDescription = AnnotationDescription.Builder.ofType(Trans.class)
+                        .define("type", trans)
+                        .define("targetClassName", ConverterUtils.toString(row.get("target")))
+                        .define("alias", ConverterUtils.toString(row.get("alias")))
+                        .defineArray("fields", ConverterUtils.toString(row.get("field")))
+                        .define("key", ConverterUtils.toString(row.get("key")))
+                        .build();
+                dynamicBuilder = dynamicBuilder.defineProperty(ConverterUtils.toString(row.get("camelName")), String.class)
+                        .annotateField(apiModelPropertyDescription);
+            } else {
+                dynamicBuilder =  dynamicBuilder.defineProperty(ConverterUtils.toString(row.get("camelName")), String.class);
+            }
+        }
+        poClass = saveAndLoad(dynamicBuilder.make());
+        return poClass;
+    }
+
+    /**
+     * 保存到本地目录，并且加载到类加载器中
+     *
+     * @param dynamicType
+     */
+    private Class saveAndLoad(DynamicType.Unloaded<?> dynamicType) {
+        File path = new File(EConfig.getPathPropertiesValue("saveFilePath") + "/pagex/class");
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        //写入到本地目录
+        try {
+            dynamicType.saveIn(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dynamicType.load(Thread.currentThread().getContextClassLoader(),
+                ClassLoadingStrategy.Default.INJECTION).getLoaded();
+    }
+
 }

@@ -130,7 +130,6 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
             LOGGER.info("本系统无需刷新此缓存namespace:" + namespace);
             return;
         }
-
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("start", Constant.PAGE_ALL);
         PagexListSettDTO pagexListSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
@@ -144,6 +143,9 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
         if (pagexListSettDTO.getModelConfig().containsKey("db")) {
             ReadWriteDataSourceDecision.markParam();
             ReadWriteDataSourceDecision.setDataSource(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("db")));
+        }
+        if(pagexListSettDTO.getModelConfig().containsKey("dataGridUrl")){
+            return;
         }
         String rows = pageXDBService.findListPage(paramMap, namespace);
         JSONArray rowsJson = JSON.parseArray(rows);

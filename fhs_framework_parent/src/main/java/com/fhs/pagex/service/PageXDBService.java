@@ -182,11 +182,11 @@ public class PageXDBService {
      */
     public String findListPage(Map<String, Object> param, String namespace) {
         List<Map<String, Object>> rows = sqlsession.selectList(getSqlNamespace() + namespace + "_findPageX", param);
-        //如果不包含的话就直接转换为json
+       /* //如果不包含的话就直接转换为json
         if (!needTransNamespaceSet.contains(namespace)) {
             return JsonUtils.list2json(rows);
-        }
-        final Class clazz = namespaceClassMap.get(namespace);
+        }*/
+        final Class clazz = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace).getPoClass();
         final List<SuperBean<?>> superBeans = new ArrayList<>();
         // List map 转List SuperBean
         rows.forEach(row -> {

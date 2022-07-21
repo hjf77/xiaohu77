@@ -279,7 +279,7 @@ public class PageXAutoSqlService {
         String name = null;
         String colName;
         for (Map<String, Object> field : fields) {
-            if (PageXAutoJavaService.DEFAULT_FIELD_SET.contains(field.get("name"))) {
+            if (PagexListSettDTO.DEFAULT_FIELD_SET.contains(field.get("name"))) {
                 continue;
             }
             name = ConverterUtils.toString(field.get("name"));

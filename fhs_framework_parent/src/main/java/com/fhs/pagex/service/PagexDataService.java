@@ -82,7 +82,6 @@ public enum PagexDataService {
     private Map<String, String> addPageExtendsHtmlPathMap = new ConcurrentHashMap<>();
 
 
-    private PageXAutoJavaService pageXAutoJavaService;
 
     private PageXAutoSqlService pageXAutoSqlService;
 
@@ -111,11 +110,9 @@ public enum PagexDataService {
             if (isOldNamespace) {
                 LOG.info("正在刷新:" + namespace);
                 try {
-                    if (pageXAutoJavaService == null && SpringContextUtil.getApplicationContext() != null) {
-                        pageXAutoJavaService = SpringContextUtil.getBeanByName(PageXAutoJavaService.class);
+                    if (pageXAutoSqlService == null && SpringContextUtil.getApplicationContext() != null) {
                         pageXAutoSqlService = SpringContextUtil.getBeanByName(PageXAutoSqlService.class);
                     }
-                    pageXAutoJavaService.autoJava(fileContent);
                     pageXAutoSqlService.autoSql(fileContent);
                     LOG.info("刷新完成:" + namespace);
                 } catch (Exception e) {
