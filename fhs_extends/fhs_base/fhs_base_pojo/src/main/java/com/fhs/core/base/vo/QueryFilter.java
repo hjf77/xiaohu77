@@ -123,7 +123,7 @@ public class QueryFilter<T> {
     public Map<String, List<QueryField>> groupQueryField() {
         Map<String, List<QueryField>> map = new HashMap();
         this.querys.stream().filter(query->{
-            return !"null".equals(query.getValue())&&!"".equals(query.getValue());
+            return !"null".equals(query.getValue())&&CheckUtils.isNotEmpty(query.getValue());
         }).forEach((q) -> {
             String group = q.getGroup();
             List<QueryField> list = (List) map.get(group);
