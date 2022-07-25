@@ -1,7 +1,6 @@
 package com.fhs.core.result;
 
 import com.fhs.core.base.pojo.BaseObject;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Map;
 
@@ -41,14 +40,20 @@ public class HttpResultByOfpl<V> extends BaseObject<HttpResultByOfpl> {
      */
     public static int ERRORS = 500;
 
+    /**
+     * 数据
+     */
+    private V data;
 
-
-
-/*    private String character = "";
-
-    private int check;
-
-    private String treatment = "";*/
+    /**
+     * 成功 只返回code 和 data
+     */
+    public static HttpResultByOfpl<Map> OK(Map data) {
+        HttpResultByOfpl<Map> result = new HttpResultByOfpl<>();
+        result.code = SUCCESSFUL;
+        result.data = data;
+        return result;
+    }
 
     /**
      * 成功 只返回code 和 message
@@ -88,5 +93,11 @@ public class HttpResultByOfpl<V> extends BaseObject<HttpResultByOfpl> {
         this.msg = msg;
     }
 
+    public V getData() {
+        return data;
+    }
 
+    public void setData(V data) {
+        this.data = data;
+    }
 }
