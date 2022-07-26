@@ -3,14 +3,14 @@
 <mapper namespace="com.fhs.generate.mapper.TableInfoMapper">
 
     <select id="getTableFields" resultMap="fieldsVOResultMap" parameterType="map">
-         show full columns from `${dbName}`.${tableName};
+         show full columns from ${dbName}.${tableName};
     </select>
 
     <select id="getTableComment" resultType="string" parameterType="map">
         SELECT
             table_comment
         FROM
-            information_schema.`TABLES`
+            information_schema.TABLES
         WHERE
             TABLE_SCHEMA = #{dbName} and table_name=#{tableName};
     </select>

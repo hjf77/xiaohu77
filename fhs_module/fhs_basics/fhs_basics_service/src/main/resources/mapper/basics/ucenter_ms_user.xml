@@ -124,7 +124,7 @@
         is_show AS isShow,
         system_id AS systemId
         FROM
-        `t_sett_ms_menu` m
+        t_sett_ms_menu m
         <where>
         <!-- 查询制定的菜单类型 -->
         <if test="menuType !=null">
@@ -144,27 +144,25 @@
     <!-- 查询admin 拥有的所有的权限列表 -->
     <select id="selectMenuIdByAdmin" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT DISTINCT (m.menu_id) AS menuId
-        FROM `t_sett_ms_menu` m
-        ORDER BY m.father_menu_id, m.order_index
+        FROM t_sett_ms_menu m
     </select>
 
     <!-- 查询一个用户拥有的所有的权限列表 -->
     <select id="selectMenuIdByUserId" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT distinct (m.menu_id) AS menuId
-        FROM `t_sett_ms_menu` m
-                 LEFT JOIN `t_sett_ms_menu_permission` b ON
+        FROM t_sett_ms_menu m
+                 LEFT JOIN t_sett_ms_menu_permission b ON
             b.menu_id = m.menu_id
-                 LEFT JOIN `t_ucenter_ms_role_permission` rt ON
+                 LEFT JOIN t_ucenter_ms_role_permission rt ON
             rt.permission_id = b.permission_id
-                 LEFT JOIN `t_ucenter_ms_role_user_rela` ru ON
+                 LEFT JOIN t_ucenter_ms_role_user_rela ru ON
             rt.role_id = ru.role_id
-                 LEFT JOIN `t_ucenter_ms_user` u ON u.user_id = ru.user_id
-                 LEFT JOIN `t_ucenter_ms_role` r ON ru.role_id = r.role_id
+                 LEFT JOIN t_ucenter_ms_user u ON u.user_id = ru.user_id
+                 LEFT JOIN t_ucenter_ms_role r ON ru.role_id = r.role_id
         WHERE m.is_enable = 1
           AND r.is_delete = 0
           AND m.is_enable = b.is_enable
           AND u.user_id = #{userId}
-        ORDER BY m.father_menu_id, m.order_index
     </select>
 
     <select id="selectNotPlanfromMenuAll" resultType="com.fhs.basics.po.SettMsMenuPO"
@@ -185,9 +183,9 @@
         AND m.menu_id IN (
         SELECT model_key AS modelKey
         FROM
-        `t_admin_app_menu_item` WHERE app_id IN (
+        t_admin_app_menu_item WHERE app_id IN (
         SELECT app_id AS appId FROM
-        `t_admin_app_group_rela` WHERE
+        t_admin_app_group_rela WHERE
         group_id = (
         <include refid="findManagerAllAppIds"></include>
         )
@@ -199,13 +197,13 @@
 
     <sql id="findManagerAllAppIds">
         SELECT group_id
-        FROM `t_admin_group`
+        FROM t_admin_group
         WHERE group_code =
               #{groupCode}) AND
 		state = 0
         UNION
         SELECT app_id AS appId
-        FROM `t_app_apply`
+        FROM t_app_apply
         WHERE manager_code =
               #{managerCode}
           AND apply_state = 3)
@@ -235,15 +233,15 @@
                        LEFT JOIN t_ucenter_ms_user u
                                  ON u.user_id = ru.user_id
 
-              WHERE m.`namespace` IS NOT NULL
-                AND m.`namespace` != ''
+              WHERE m.namespace IS NOT NULL
+                AND m.namespace != ''
 		AND u.user_login_name = #{userLoginName}
                 AND m.is_enable
                   = b.is_enable
                 AND m.is_enable = 1
               ORDER BY m.father_menu_id,
                   m.order_index) me
-        WHERE me.`namespace` IS NOT NULL
+        WHERE me.namespace IS NOT NULL
     </select>
 
     <select id="selectUserByULname" resultType="com.fhs.basics.po.UcenterMsUserPO"
@@ -335,7 +333,7 @@
     <!-- 删除用户角色 -->
     <delete id="deleteUserRole" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         DELETE
-        FROM `t_ucenter_ms_role_user_rela`
+        FROM t_ucenter_ms_role_user_rela
         WHERE user_id = #{userId}
     </delete>
 
@@ -376,7 +374,7 @@
     <select id="validataPass" resultType="int" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
         COUNT(1)
-        FROM `t_ucenter_ms_user`
+        FROM t_ucenter_ms_user
         <where>
             AND password = #{password}
             AND user_id = #{userId}
@@ -385,8 +383,8 @@
 
     <!-- 修改密码 -->
     <update id="updatePass" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        UPDATE `t_ucenter_ms_user`
-        SET `password`=#{password}
+        UPDATE t_ucenter_ms_user
+        SET password=#{password}
         WHERE user_id = #{userId}
     </update>
 
@@ -422,7 +420,7 @@
         permission_type AS buttonType,
         menu_id AS menuId,
         is_enable AS isEnable
-        FROM `t_sett_ms_menu_permission` where permission_id In
+        FROM t_sett_ms_menu_permission where permission_id In
         <foreach collection="Ids" index="index" item="item" open="("
                  separator="," close=")">
             #{item}
@@ -528,7 +526,7 @@
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
         COUNT(1)
-        FROM `t_ucenter_ms_user`
+        FROM t_ucenter_ms_user
         <where>
             <if test="userId !=null and userId != ''">
                 AND user_id != #{userId}
@@ -582,18 +580,18 @@
     <!-- 根据角色不同获取当前集团下对应的菜单 id-->
     <sql id="getRoleMenuIdOfGroup">
         SELECT model_key AS modelKey
-        FROM `t_admin_app_menu_item`
+        FROM t_admin_app_menu_item
         WHERE app_id IN
               (SELECT app_id
-               FROM `t_admin_app_group_rela`
+               FROM t_admin_app_group_rela
                WHERE group_id =
                      (SELECT group_id
-                      FROM `t_admin_group`
+                      FROM t_admin_group
                       WHERE group_code = #{groupCode})
                  AND state = 0
                UNION
                SELECT app_id AS appId
-               FROM `t_app_apply`
+               FROM t_app_apply
                WHERE manager_code = #{managerCode}
                  AND apply_state = 3)
           AND model_type = 0
@@ -630,7 +628,7 @@
              t_sett_ms_menu_permission_url_rela mpu
         WHERE ur.role_id = rp.role_id
           AND rp.permission_id = mpu.permission_id
-          AND ur.`user_id` = #{userId}
+          AND ur.user_id = #{userId}
         GROUP BY mpu.url
     </select>
 

@@ -46,6 +46,12 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_generate</artifactId>
             <version>${fhs.release.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <groupId>mysql</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
@@ -74,6 +80,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>2.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.6</version>
         </dependency>
     </dependencies>
 

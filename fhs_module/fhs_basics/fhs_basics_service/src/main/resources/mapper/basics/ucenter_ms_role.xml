@@ -125,7 +125,7 @@
     <!-- 删除权限信息 -->
     <delete id="deleteButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO">
 		DELETE FROM
-		`t_ucenter_ms_role_permission`
+		t_ucenter_ms_role_permission
 		WHERE
 		role_id=#{roleId}
 	</delete>

@@ -11,7 +11,7 @@
             l.user_id userId,
             count(*) count
         FROM
-        `t_log_login` l
+        t_log_login l
         LEFT JOIN t_ucenter_ms_user u on u.user_id = l.user_id
         where l.is_delete = 0
         and l.create_time <![CDATA[ >= ]]> #{statTime}

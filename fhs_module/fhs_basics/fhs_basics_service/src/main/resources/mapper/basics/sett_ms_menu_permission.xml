@@ -3,13 +3,13 @@
 <mapper namespace="com.fhs.basics.mapper.SettMsMenuPermissionMapper">
     <!-- 批量添加基础权限 -->
 	<insert id="addBaseMenuBatch" parameterType="map">
-		INSERT INTO `t_sett_ms_menu_permission` (
-		  `permission_id`,
-		  `permission_name`,
-		  `permission_code`,
-		  `menu_id`,
-		  `is_enable`,
-		  `permission_type`
+		INSERT INTO t_sett_ms_menu_permission (
+		  permission_id,
+		  permission_name,
+		  permission_code,
+		  menu_id,
+		  is_enable,
+		  permission_type
 		) VALUES
 		<foreach collection="baseButtonList" item="item" separator=",">
 			(replace(uuid(),'-',''),#{item.permissionName}, #{item.permissionCode}, #{menuId}, 1, #{item.permissionType})

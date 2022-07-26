@@ -15,16 +15,16 @@
 							   LEFT JOIN
 						   t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
 					   WHERE
-						   m.`namespace` IS NOT NULL
-						 AND m.`namespace` !=''
-		AND m.`is_enable`
+						   m.namespace IS NOT NULL
+						 AND m.namespace !=''
+		AND m.is_enable
 		= 1
-		AND b.`is_enable` = 1
+		AND b.is_enable = 1
 					   ORDER BY
 						   m.father_menu_id,m.order_index
 					  ) m
 		WHERE
-			m.`namespace` IS NOT NULL
+			m.namespace IS NOT NULL
 	</select>
 
 
