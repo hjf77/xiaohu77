@@ -10,7 +10,7 @@
     :allow-create="isAllowCreate"
     :default-first-option="isDefaultFirstOption"
     @change="_change"
-    :remote-method="remoteMethod"
+    :remote-method="remote?remoteMethod:''"
     :placeholder="placeholder"
   >
     <template v-if="isHaveFatherOption">
