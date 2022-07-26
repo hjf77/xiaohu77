@@ -147,6 +147,15 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private String organizationId;
 
     /**
+     * 备注
+     */
+    @Length(message = "{备注字段的长度最大为255}", groups = {Add.class, Update.class}, max = 255)
+    @TableField("remark")
+    @ApiModelProperty("备注")
+    private String remark;
+
+
+    /**
      * 头像
      */
     @TableField("header")
