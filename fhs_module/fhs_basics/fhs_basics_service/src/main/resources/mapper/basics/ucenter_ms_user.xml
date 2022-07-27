@@ -678,13 +678,17 @@
         from t_ucenter_ms_user u
         left join t_ucenter_ms_role_user_rela r on u.user_id = r.user_id
         where 1=1
-            and r.role_id = #{roleId}
-            AND u.organization_id LIKE CONCAT(#{organizationId}, '%')
+            and u.is_delete = '0'
+            and u.is_enable = '1'
+          <if test="roleId != null">
+              and r.role_id = #{roleId}
+          </if>
+          <if test="organizationId != null and organizationId != ''">
+              AND u.organization_id LIKE CONCAT(#{organizationId}, '%')
+          </if>
           <if test="userId != null">
               and u.user_id != #{userId}
           </if>
-            and u.is_delete = '0'
-            and u.is_enable = '1'
     </select>
 
     <select id="advancedPaging" resultType="com.fhs.basics.vo.UcenterMsUserVO">
