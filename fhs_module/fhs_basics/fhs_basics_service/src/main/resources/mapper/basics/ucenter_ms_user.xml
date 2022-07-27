@@ -680,6 +680,9 @@
         where 1=1
             and r.role_id = #{roleId}
             AND u.organization_id LIKE CONCAT(#{organizationId}, '%')
+          <if test="userId != null">
+              and u.user_id != #{userId}
+          </if>
             and u.is_delete = '0'
             and u.is_enable = '1'
     </select>
