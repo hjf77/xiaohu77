@@ -684,7 +684,7 @@
               and r.role_id = #{roleId}
           </if>
           <if test="organizationId != null and organizationId != ''">
-              AND u.organization_id LIKE CONCAT(#{organizationId}, '%')
+              AND u.organization_id = #{organizationId}
           </if>
           <if test="userId != null">
               and u.user_id != #{userId}
@@ -731,7 +731,7 @@
               and u.user_id in (${map.userIds})
           </if>
           <if test="map.organizationId != null and map.organizationId != ''">
-              and u.`organization_id` = #{map.organizationId}
+              and u.`organization_id` like concat(#{map.organizationId},'%')
           </if>
         order by ul.`create_time` asc
     </select>
