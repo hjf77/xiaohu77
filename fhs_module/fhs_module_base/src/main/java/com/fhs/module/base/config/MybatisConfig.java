@@ -52,7 +52,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @Slf4j
 @org.springframework.context.annotation.Configuration
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
-public class MybatisConfig implements MetaObjectHandler {
+public class MybatisConfig{
 
 
     @Bean("fhsXMLMapperLoader")
@@ -64,11 +64,11 @@ public class MybatisConfig implements MetaObjectHandler {
         return loader;
     }
 
-    /**
+/*    *//**
      * 插入元对象字段填充（用于插入时对公共字段的填充）
      *
      * @param metaObject 元对象
-     */
+     *//*
     @Override
     public void insertFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
@@ -77,20 +77,20 @@ public class MybatisConfig implements MetaObjectHandler {
         this.setFieldValByName("updateTime",new Date(),metaObject);
         this.setFieldValByName("createUser", userId,metaObject);
         this.setFieldValByName("updateUser",userId,metaObject);
-    }
-
-    /**
+    }*/
+/*
+    *//**
      * 更新元对象字段填充（用于更新时对公共字段的填充）
      *
      * @param metaObject 元对象
-     */
+     *//*
     @Override
     public void updateFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
         this.setFieldValByName("updateTime",new Date(),metaObject);
         this.setFieldValByName("updateUser",userId,metaObject);
-    }
+    }*/
 }
 
 
