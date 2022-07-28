@@ -30,7 +30,7 @@ import java.util.List;
 @Api(tags = {"菜单"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = "sysMenu", module = "菜单管理")
-public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuPO> {
+public class SettMsMenuController extends ModelSuperController<SettMsMenuVO, SettMsMenuPO,String> {
 
     private static final Logger LOG = Logger.getLogger(SettMsMenuController.class);
 

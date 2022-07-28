@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(tags = {"菜单权限"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = "sysMenuPermission", module = "菜单权限管理")
-public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionPO> {
+public class SettMsMenuPermissionController extends ModelSuperController<SettMsMenuPermissionVO, SettMsMenuPermissionPO, String> {
 
     @Autowired
     private SettMsMenuPermissionService sysMenuPermissionService;

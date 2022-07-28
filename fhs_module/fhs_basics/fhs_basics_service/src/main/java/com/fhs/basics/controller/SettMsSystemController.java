@@ -29,7 +29,7 @@ import java.util.List;
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/settMsSystem")
 @LogNamespace(namespace = "settMsSystem", module = "子系统管理")
-public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemPO> {
+public class SettMsSystemController extends ModelSuperController<SettMsSystemVO, SettMsSystemPO,String> {
 
     @Autowired
     private SettMsSystemService sysSystemService;
