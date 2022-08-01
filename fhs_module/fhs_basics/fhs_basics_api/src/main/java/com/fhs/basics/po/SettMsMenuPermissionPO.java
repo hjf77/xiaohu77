@@ -45,7 +45,6 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

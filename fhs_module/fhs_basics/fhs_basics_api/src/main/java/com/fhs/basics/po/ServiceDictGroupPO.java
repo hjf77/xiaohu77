@@ -31,7 +31,6 @@ import javax.validation.constraints.NotNull;
  * @since [产品/模块版本]
  */
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

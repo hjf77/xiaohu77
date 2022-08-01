@@ -41,7 +41,6 @@ import java.util.List;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Entity
 @Data
 @TableName("t_sett_ms_menu")
 @EqualsAndHashCode(callSuper = true)

@@ -34,7 +34,6 @@ import java.text.DecimalFormat;
  * @since [产品/模块版本]
  */
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("t_pub_file")

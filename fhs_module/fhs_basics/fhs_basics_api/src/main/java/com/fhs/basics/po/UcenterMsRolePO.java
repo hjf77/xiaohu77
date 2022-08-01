@@ -39,7 +39,6 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("t_ucenter_ms_role")
