@@ -32,10 +32,6 @@
             <artifactId>mybatis-plus-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-advance</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_excel_anno</artifactId>
             <version>${fhs.release.version}</version>
