@@ -26,7 +26,7 @@
     zh_CN:field => field + '必须是11位手机号码',
   },
   validate: value => {
-    return !value  || (value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value))
+    return !value  || (value.length == 11 && /^1(3[0-9]|4[01456879]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[0-35-9])\d{8}$/.test(value))
   }
  }
  export { range, greaterThanZero,mobile }

@@ -59,8 +59,8 @@
                         name: "userName",
                         label: "姓名",
                         rule: "required",
+                        mock:'@name'
                     },
-
                     {
                         type: "treeSelect",
                         name: "organizationId",
@@ -77,6 +77,7 @@
                         name: "userLoginName",
                         label: "账号",
                         rule: "required",
+                        mock:'@userName'
                     },
                     {
                         type: "password",
@@ -100,7 +101,7 @@
                         label: "状态",
                         rule: "required",
                         dictCode: "isEnable",
-                        isValueNum: true,
+                        isValueNum: true
                     },
                     {
                         type: "text",
@@ -108,24 +109,26 @@
                         label: "邮箱",
                         rule: "email|required",
                         isValueNum: true,
+                        mock:'@email'
                     },
                     {
                         type: "text",
                         name: "mobile",
                         label: "手机号",
                         rule: "mobile|required",
+                        mock:'@mobile'
                     },
                     {
                         type: "select",
                         name: "sex",
                         label: "性别",
                         dictCode: "sex",
-                        isValueNum: true,
+                        isValueNum: true
                     },
                     {
                         type: "textarea",
                         name: "remark",
-                        label: "备注",
+                        label: "备注"
                     },
                 ],
                 isEditFirst: true //是否是第一次加载

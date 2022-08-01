@@ -29,14 +29,14 @@
             v-model="model[item.name]"
             v-if="item.type === 'password'"
             v-bind="item"
-            :clearable = "item.clearable?item.clearable:true"
+            :clearable="item.clearable?item.clearable:true"
             :style="{ width: item.width ? item.width + 'px' : '305px' }"
           ></el-input>
           <el-input
             :disabled="proxyIf(item.disabledOn, false)"
             v-model="model[item.name]"
             v-if="item.type === 'text'"
-            :clearable = "item.clearable?item.clearable:true"
+            :clearable="item.clearable?item.clearable:true"
             show-word-limit
             v-bind="item"
             :style="{ width: item.width ? item.width + 'px' : '305px' }"
@@ -46,10 +46,10 @@
           </el-input>
 
           <el-input
-            :disabled="proxyIf(item.disabledOn, false)"afterText
+            :disabled="proxyIf(item.disabledOn, false)" afterText
             v-model="model[item.name]"
             v-if="item.type === 'textarea'"
-            :clearable = "item.clearable?item.clearable:true"
+            :clearable="item.clearable?item.clearable:true"
             maxlength="200"
             v-bind="item"
             show-word-limit
@@ -68,7 +68,7 @@
             :value-format="item.formatVal"
             v-if="item.type === 'dates'"
             :picker-options="item.pickerOptions"
-            @change = "(value) => changeFn(value,item.changeFn)"
+            @change="(value) => changeFn(value,item.changeFn)"
             :class="{'surplus' : item.name === 'effectiveDate'}"
             :style="{ width: item.width ? item.width + 'px' : '305px' }"
           ></el-date-picker>
@@ -86,6 +86,7 @@
             :isValueNum="item.isValueNum"
             :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
             @change="item.change?item.change.call(this,item, model[item.name]):''"
+            @refreshOptions="refreshOptions"
           ></pagex-select>
 
           <pagex-radio
@@ -95,6 +96,7 @@
             v-if="item.type === 'radio'"
             @change="item.click.call(this,item, model[item.name])"
             :style="{ width: item.width ? item.width + 'px' : '740px'}"
+            @refreshOptions="refreshOptions"
           ></pagex-radio>
 
           <pagex-checkbox
@@ -102,6 +104,7 @@
             v-model="model[item.name]"
             v-if="item.type === 'checkbox'"
             :style="{ width: item.width ? item.width + 'px' : '740px'}"
+            @refreshOptions="refreshOptions"
           ></pagex-checkbox>
           <pagex-switchs
             v-bind="item"
@@ -137,7 +140,7 @@
             :labelField="item.labelField"
             :valueField="item.valueField"
             :isValueNum="item.isValueNum"
-            :propsField = "item.propsField"
+            :propsField="item.propsField"
             :style="{ 'width': item.width ? item.width + 'px' : '305px' }"
           ></pagex-cascader>
 
@@ -146,7 +149,7 @@
             :url="item.api"
             :querys="item.querys"
             v-model="model[item.name]"
-            :propsField = "item.propsField"
+            :propsField="item.propsField"
             @change="item.change ? item.change.call(this,item, model[item.name]):''"
           ></pagex-transfer>
 
@@ -164,15 +167,19 @@
               :type="itemBtn.type || 'primary'"
               v-if="proxyBtnIf(itemBtn)"
               @click="formButtonsClick(itemBtn)"
-            >{{ itemBtn.name }}</el-button
+            >{{ itemBtn.name }}
+            </el-button
             >
           </div>
 
-         <div v-if="item.type === 'labels'" title="xzx" :style="'width:' + item.width">
-              <label  v-for="(itemLabel, index) in item.labels" :key="index" >{{itemLabel.title + ':' + model[itemLabel.name]}}</label>
+          <div v-if="item.type === 'labels'" title="xzx" :style="'width:' + item.width">
+            <label v-for="(itemLabel, index) in item.labels"
+                   :key="index">{{ itemLabel.title + ':' + model[itemLabel.name] }}</label>
           </div>
 
-          <pagex-one2x  v-if="item.type === 'one2x'" :isEdit="isEdit" :optionsInitSetts="optionsInitSetts" :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"  v-bind.sync="item" ></pagex-one2x>
+          <pagex-one2x v-if="item.type === 'one2x'" :isEdit="isEdit" :optionsInitSetts="optionsInitSetts"
+                       :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"
+                       v-bind.sync="item"></pagex-one2x>
 
           <pagex-uploadFileAsync
             v-bind="item"
@@ -180,7 +187,7 @@
             v-if="item.type === 'uploadFileAsync'"
           ></pagex-uploadFileAsync>
           <!-- @success="upLoadSuccess" -->
-          <label v-if="item.type === 'label'">{{model[item.name]}}</label>
+          <label v-if="item.type === 'label'">{{ model[item.name] }}</label>
           <pagex-uploadFile
             v-bind="item"
             v-model="model[item.name]"
@@ -198,8 +205,8 @@
             v-model="model[item.name]"
             v-if="item.type === 'treeSelect'"
             :api="item.api"
-            :selectOn = "item.selectOn"
-            :isDisabled = "item.isDisabled"
+            :selectOn="item.selectOn"
+            :isDisabled="item.isDisabled"
             :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
           ></pagex-formTreeSelect>
 
@@ -234,16 +241,20 @@
           v-if="isHaveAddBtn"
           :disabled="saveButtonDisable"
           @click="submit()"
-          >保存</el-button
+        >保存
+        </el-button
         >
+
         <el-button
           v-for="(itemBtn, index) in buttons"
           :key="index"
           v-if="proxyBtnIf(itemBtn)"
           @click="btnClick(itemBtn)"
-          >{{ itemBtn.name }}</el-button
+        >{{ itemBtn.name }}
+        </el-button
         >
-        <el-button @click="cancel"  v-if="isHaveCancelBtn" class="form-btn-item">取消</el-button>
+        <el-button @click="cancel" v-if="isHaveCancelBtn" class="form-btn-item">取消</el-button>
+        <el-button @click="initForm"  v-hasPermi="['sysUser:mock']"  class="form-btn-item">填充</el-button>
       </div>
     </div>
   </el-scrollbar>
@@ -261,6 +272,8 @@
 <script>
 import Editor from "@/components/Editor/index.vue";
 import PagexSelect from "./select.vue";
+import initer from "@/utils/form-initer";
+
 export default {
   inject: ["reloadable"],
   components: {
@@ -268,9 +281,9 @@ export default {
     Editor,
   },
   props: {
-   labelWidth:{
-     type:String,
-     default:"120px",
+    labelWidth: {
+      type: String,
+      default: "120px",
     },
     isVee: {
       type: Boolean,
@@ -323,7 +336,8 @@ export default {
     // 接口附带参数
     param: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     // 表单字段和插件
     controls: {
@@ -338,7 +352,8 @@ export default {
     //新增的时候设置默认值用的
     data: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     //新增接口的methodType
     addMethodType: {
@@ -367,8 +382,8 @@ export default {
     },
     //提交之前去执行 一些自定义业务逻辑，返回true代表可以给后台提交返回false 不可以给后台提交
     onSubmit: {
-        type: Function,
-        default: null,
+      type: Function,
+      default: null,
     },
     //用来关闭dialog，刷新列表
     namespace: {
@@ -377,7 +392,7 @@ export default {
     },
     optionsInitSetts: {
       type: Array,
-      default: () =>[]
+      default: () => []
     }
   },
   computed: {
@@ -395,7 +410,8 @@ export default {
       //编辑 表单的详情数据
       initData: {},
       realControls: [],
-      saveButtonDisable:false,
+      saveButtonDisable: false,
+      options:{},
       // newDate: new Date(),
     };
   },
@@ -430,7 +446,7 @@ export default {
               if (_item.type == "dates") {
                 _that.$set(_that.model, _item.name, _that.model[_item.name]
                   ? _that.model[_item.name]
-                  :'');
+                  : '');
               }
             });
           });
@@ -438,11 +454,11 @@ export default {
       },
       deep: true,
     },
-    data: function(){
-      if(this.model.companyId){
+    data: function () {
+      if (this.model.companyId) {
         this.model.companyId = this.data.companyId;
       }
-      if(this.model.companyIdName){
+      if (this.model.companyIdName) {
         this.model.companyIdName = this.data.companyIdName;
       }
     }
@@ -455,9 +471,9 @@ export default {
     }
     this.controls.forEach((_item) => {
       if (this.proxyIf(_item.ifFun, true)) {
-        if(!_item.placeholder){
-          _item.placeholder =  (_item.type=='text' || _item.type=='textarea') ? '请输入' : '请选择';
-          _item.placeholder =  _item.placeholder + _item.label;
+        if (!_item.placeholder) {
+          _item.placeholder = (_item.type == 'text' || _item.type == 'textarea') ? '请输入' : '请选择';
+          _item.placeholder = _item.placeholder + _item.label;
         }
         this.realControls.push(_item);
       }
@@ -485,9 +501,9 @@ export default {
       }
       if (_item.type == "dates") {
         if (_item.type == "dates") {
-         _that.$set(_that.model, _item.name, _that.model[_item.name]
-          ? _that.model[_item.name]
-          :'');
+          _that.$set(_that.model, _item.name, _that.model[_item.name]
+            ? _that.model[_item.name]
+            : '');
         }
       }
     });
@@ -515,8 +531,8 @@ export default {
         }
         return false;
       }
-      if(_btn.ifAttr){
-        if(this.model[_btn.ifAttr]){
+      if (_btn.ifAttr) {
+        if (this.model[_btn.ifAttr]) {
           return true;
         }
         return false;
@@ -524,10 +540,10 @@ export default {
       return true;
     },
     cancel() {
-      if(this.isColseParent){
+      if (this.isColseParent) {
         if (this.namespace) {
           this.$EventBus.$emit(this.namespace + '_closeDialog');
-        }else {
+        } else {
           this.$emit("open", false);
           this.reloadable.$parent.$parent.open = false;
           this.reloadable.open = false;
@@ -540,7 +556,7 @@ export default {
           this.reloadable.$parent.$parent.open = false;
           this.reloadable.$parent.$parent.$parent.open = false;
         }
-      }else{
+      } else {
         this.$emit("open", false);
       }
 
@@ -556,7 +572,7 @@ export default {
     },
     //表单上的按钮点击代理
     formButtonsClick(itemBtn) {
-      if(itemBtn.click) {
+      if (itemBtn.click) {
         itemBtn.click(this, this.model);
       }
     },
@@ -564,7 +580,7 @@ export default {
     // 校验
     validate(_callback) {
       this.$refs.form.validate((valid, errors) => {
-        if(valid){
+        if (valid) {
           _callback(this.model);
         }
       });
@@ -572,12 +588,12 @@ export default {
 
     submit(_extParam) {
       if (this.isFormDataSub) {
-          this.subFormData(_extParam);
+        this.subFormData(_extParam);
       } else {
-          this.subForm()
+        this.subForm()
       }
     },
-    changeFn(val,itemBtn){
+    changeFn(val, itemBtn) {
       itemBtn && itemBtn(val);
     },
     // 防抖
@@ -595,15 +611,16 @@ export default {
           let obj = {};
           if (this.other) {
             obj = Object.assign(this.other, this.model);
-          }else if(_extParam){
+          } else if (_extParam) {
             obj = Object.assign(_extParam, this.model);
           } else {
             obj = this.model;
           }
           obj = JSON.parse(JSON.stringify(obj))
-          if(this.onSubmit && !this.onSubmit(obj)){
-              return;
-          }this.saveButtonDisable = true;
+          if (this.onSubmit && !this.onSubmit(obj)) {
+            return;
+          }
+          this.saveButtonDisable = true;
           this.$pagexRequest({
             url: this.isEdit ? this.updateApi : this.addApi,
             data: obj,
@@ -616,9 +633,9 @@ export default {
                 );
                 // 通过 $EventBus 刷新指定页面的列表 和关闭指定弹框
                 if (this.namespace) {
-                  this.$EventBus.$emit(this.namespace + '_reload',this.model)
+                  this.$EventBus.$emit(this.namespace + '_reload', this.model)
                   this.$EventBus.$emit(this.namespace + '_closeDialog');
-                }else{
+                } else {
                   this.reload();
                   this.$emit("open", false);
                   this.reloadable.open = false;
@@ -653,7 +670,7 @@ export default {
               fd.append(i, this.model[i]); //传文件
             }
           }
-          if(_extParam) {
+          if (_extParam) {
             for (let i in _extParam) {
               if (_extParam[i] != undefined) {
                 fd.append(i, _extParam[i]); //传文件
@@ -679,7 +696,7 @@ export default {
               // 通过 $EventBus 刷新指定页面的列表
               if (this.eventBusNames.length > 0) {
                 this.eventBusNames.forEach((item) => {
-                  this.$EventBus.$emit(item,this.model)
+                  this.$EventBus.$emit(item, this.model)
                 })
               }
             } else {
@@ -690,7 +707,7 @@ export default {
                   : "新增失败," + res.message
               );
             }
-          }).catch(()=>{
+          }).catch(() => {
             this.saveButtonDisable = false;
           });
         } else {
@@ -729,6 +746,25 @@ export default {
     // 新增时 clear 校验
     clearValidate() {
       this.$refs['form'].clearValidate()
+    },
+    refreshOptions(_optionSett){
+      this.options[_optionSett.name] = _optionSett.options;
+    },
+    //填充表单数据
+    initForm() {
+      let rules = {};
+      this.controls.forEach((item) => {
+        if(item.mock){
+          rules[item.name] = item.mock;
+        }else
+        // 使用自定义规则
+        if (item.type === 'select' || item.type === 'radio' || item.type === 'checkbox') {
+          rules[item.name] = {options: this.options[item.name],  change: item.selectOn, sleep: item.sleep}
+        } else if (item.type !== 'treeSelect' && item.type !== 'treeSelect2') {
+          rules[item.name] = '123456';
+        }
+      })
+      initer.init(this.model, rules, this);
     }
   },
 };
@@ -740,11 +776,13 @@ export default {
   margin-right: 20px;
   margin-bottom: 17px;
 }
+
 ::v-deep .save-btn {
   color: #fff;
   border: #0f9b9c;
   background: #0f9b9c;
 }
+
 .form-btn .form-btn-item {
   margin-left: 20px;
   height: 36px;
@@ -753,63 +791,79 @@ export default {
 
 ::v-deep .el-form-item--small .el-form-item__content .el-date-editor {
   width: 305px;
-  .el-input__prefix {
-    left: 275px;
-    .el-input__icon{
-      line-height: 40px;
-    }
-  }
-  .el-input__suffix {
-    display: none;
-  }
+
+.el-input__prefix {
+  left: 275px;
+
+.el-input__icon {
+  line-height: 40px;
+}
+
+}
+.el-input__suffix {
+  display: none;
+}
+
 }
 ::v-deep .el-form-item--small .el-form-item__content .surplus {
 
-  .el-input__prefix {
-    left: 170px;
-  }
+.el-input__prefix {
+  left: 170px;
+}
+
 }
 ::v-deep
-  .el-form-item--small
-  .el-form-item__content
-  .el-date-editor
-  .el-input__prefix
-  .el-input__inner {
+.el-form-item--small
+.el-form-item__content
+.el-date-editor
+.el-input__prefix
+.el-input__inner {
   padding-left: 18px;
 }
+
 ::v-deep .el-form-item .el-form-item__content .el-input--small .el-input__icon {
   font-size: 20px;
 }
+
 ::v-deep .el-input--small .el-input__inner {
   height: 40px;
   width: 100%;
 }
+
 ::v-deep .el-textarea {
   width: 740px;
 }
+
 ::v-deep .el-textarea__inner {
   resize: none;
 }
+
 ::v-deep .el-form-item__label {
   line-height: 40px;
 }
+
 ::v-deep .scrollbar {
   overflow: hidden;
 }
+
 ::v-deep .el-scrollbar__wrap {
   overflow-x: hidden;
   overflow-y: scroll;
 }
-::v-deep .labelLeft .el-form-item__label{
+
+::v-deep .labelLeft .el-form-item__label {
   padding-left: 10px;
   text-align: left;
   line-height: 20px;
   padding-top: 10px;
 
 }
+
 ::v-deep .labelHeight {
-  .el-form-item__content {
-    line-height: 40px !important;
-  }
+
+.el-form-item__content {
+  line-height: 40px !important;
+}
+
 }
 </style>

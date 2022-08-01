@@ -24,6 +24,7 @@
 
 <script>
 import {handleStrParam} from "@/lib/utils/param";
+import {deepClone} from "../utils";
 
 export default {
   name: "pagexCheckBox",
@@ -35,6 +36,11 @@ export default {
     url: {
       type: String,
       default: () => "",
+    },
+    //本组件绑定字段的名称
+    name: {
+      type: String,
+      default: () => "select",
     },
     labelField: {
       type: String,
@@ -79,6 +85,13 @@ export default {
   },
   async mounted() {
     this.isHaveFatherOption = typeof this.options != "undefined";
+    if (this.isHaveFatherOption) {
+      let _options = deepClone(this.options);
+      _options.forEach((item) => {
+        item.valueField = item[this.valueField]
+      })
+      this.$emit("refreshOptions", {name: this.name, options: _options});
+    }
     this.newURL = this.url;
     this.newLabelField = this.labelField;
     this.newValueField = this.valueField;
@@ -129,6 +142,7 @@ export default {
       } else {
         this.ownerOption = _options;
       }
+      this.$emit("refreshOptions", {name: this.name, options: _options});
     },
   },
 };

@@ -35,8 +35,10 @@
 </template>
 
 <script>
-import { handleStrParam } from "@/lib/utils/param";
-import { debounce } from "@/utils";
+import {handleStrParam} from "@/lib/utils/param";
+import {debounce} from "@/utils";
+import {deepClone} from "../utils";
+
 export default {
   name: "pagexSelect",
   props: {
@@ -49,6 +51,11 @@ export default {
     url: {
       type: String,
       default: () => "",
+    },
+    //本组件绑定字段的名称
+    name: {
+      type: String,
+      default: () => "select",
     },
     //显示的字段
     labelField: {
@@ -63,7 +70,8 @@ export default {
     //请求后台接口附带参数
     param: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     //如果是字典的话字典分组编码是多少
     dictCode: {
@@ -86,7 +94,7 @@ export default {
       default: 'GET',
     },
     //value是否强制转换为number
-    isValueNum:{
+    isValueNum: {
       type: Boolean,
       default: false,
     },
@@ -125,7 +133,7 @@ export default {
       default: '请选择',
     },
     //选中事件
-    selectOn:{
+    selectOn: {
       type: Function
     },
     title: {
@@ -144,6 +152,13 @@ export default {
   },
   async mounted() {
     this.isHaveFatherOption = typeof this.options != "undefined";
+    if (this.isHaveFatherOption) {
+      let _options = deepClone(this.options);
+      _options.forEach((item) => {
+        item.valueField = item[this.valueField]
+      })
+      this.$emit("refreshOptions", {name: this.name, options: _options});
+    }
     this.newURL = this.url;
     this.newLabelField = this.labelField;
     this.newValueField = this.valueField;
@@ -203,9 +218,10 @@ export default {
 
       if (this.isHaveFatherOption) {
         this.$emit("update:options", _options);
-      }else{
+      } else {
         this.ownerOption = _options;
       }
+      this.$emit("refreshOptions", {name: this.name, options: _options});
     },
     _change() {
       this.selectOn && this.selectOn(this.radioValue);
