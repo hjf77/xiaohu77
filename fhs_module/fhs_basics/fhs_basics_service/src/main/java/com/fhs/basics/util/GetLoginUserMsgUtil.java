@@ -220,7 +220,7 @@ public class GetLoginUserMsgUtil {
         if (mat.find()) {
             s = mat.group();
             sys.put("type", "safari");
-            sys.put("version", s.split("/")[1].split(".")[0]);
+            sys.put("version", s.split("/")[1]);
             return sys;
         }
         return sys;
