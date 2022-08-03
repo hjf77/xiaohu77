@@ -171,10 +171,10 @@ public class MsLoginController extends BaseController {
         // 判断短信验证码是否正确过期
         String smsCode = redisCacheService.get(SMS_CODE_KEY + sysUser.getUuid() + sysUser.getUserLoginName()).toString();
         if(StringUtils.isEmpty(smsCode)){
-            ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码已过期，请重新发送");
+            throw new ParamException("验证码已过期，请重新发送");
         }
-        if(smsCode.equals(sysUser.getSmsCode())){
-            ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不正确");
+        if(!smsCode.equals(sysUser.getSmsCode())){
+            throw new ParamException("验证码不正确");
         }
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
@@ -221,10 +221,10 @@ public class MsLoginController extends BaseController {
             // 判断短信验证码是否正确过期
             String smsCode = redisCacheService.get(SMS_CODE_KEY + loginVO.getUuid() + loginVO.getUserLoginName()).toString();
             if(StringUtils.isEmpty(smsCode)){
-                ParamChecker.isNotNull(loginVO.getSmsCode(),"验证码已过期，请重新发送");
+                throw new ParamException("验证码已过期，请重新发送");
             }
-            if(smsCode.equals(loginVO.getSmsCode())){
-                ParamChecker.isNotNull(loginVO.getSmsCode(),"验证码不正确");
+            if(!smsCode.equals(loginVO.getSmsCode())){
+                throw new ParamException("验证码不正确");
             }
         }
         checkUserNameIsLock(loginVO.getUserLoginName());
@@ -273,10 +273,10 @@ public class MsLoginController extends BaseController {
         // 判断短信验证码是否正确过期
         String smsCode = redisCacheService.get(SMS_CODE_KEY + sysUser.getUuid() + sysUser.getUserLoginName()).toString();
         if(StringUtils.isEmpty(smsCode)){
-            ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码已过期，请重新发送");
+            throw new ParamException("验证码已过期，请重新发送");
         }
-        if(smsCode.equals(sysUser.getSmsCode())){
-            ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不正确");
+        if(!smsCode.equals(sysUser.getSmsCode())){
+            throw new ParamException("验证码不正确");
         }
         sysUser.setUpdateTime(new Date());
         // 添加用户信息
