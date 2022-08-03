@@ -20,13 +20,14 @@
         update_user AS updateUser,
         update_time AS updateTime,
         group_code AS groupCode
-        FROM
-        t_ucenter_ms_user
+        FROM t_ucenter_ms_user
         <where>
-            AND
-            user_login_name =
-            #{userLoginName}
-            AND password = #{password}
+            <if test="userLoginName != null and userLoginName != ''">
+                AND (user_login_name = #{userLoginName} or mobile = #{userLoginName} or email = #{userLoginName})
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
             <if test="groupCode !=null and groupCode!=''">
                 AND group_code = #{groupCode}
             </if>
@@ -535,7 +536,7 @@
                 AND user_name = #{userName}
             </if>
             <if test="userLoginName !=null and userLoginName != ''">
-                AND user_login_name = #{userLoginName}
+                AND (user_login_name = #{userLoginName} or mobile = #{userLoginName} or email = #{userLoginName})
             </if>
         </where>
     </select>

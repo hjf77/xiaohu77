@@ -27,4 +27,10 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
     @ApiModelProperty("部门名称")
     private String orgName;
 
+    @ApiModelProperty("随机串")
+    private String uuid;
+
+    @ApiModelProperty("短信验证码")
+    private String smsCode;
+
 }

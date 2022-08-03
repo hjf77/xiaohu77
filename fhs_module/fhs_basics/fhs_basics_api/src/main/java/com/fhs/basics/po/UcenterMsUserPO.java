@@ -111,7 +111,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private String email;
 
     /**
-     * 是否禁用 0:启用 1:禁用
+     * 是否禁用 1:启用 0:禁用
      */
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
@@ -152,6 +152,13 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     @TableField("header")
     @ApiModelProperty("头像")
     private String header;
+
+    /**
+     * 用户类型（0后台用户 1APP用户）
+     */
+    @TableField("is_app_user")
+    @ApiModelProperty("用户类型（0后台用户 1APP用户）")
+    private Integer isAppUser;
 
     /**
      * 状态

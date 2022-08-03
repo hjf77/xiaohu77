@@ -17,5 +17,9 @@ public class LoginVO {
     private String uuid;
     @ApiModelProperty("租户编码")
     private String groupCode;
+    @ApiModelProperty("是否验证码登录（0否 1是）")
+    private Integer isCode;
+    @ApiModelProperty("短信验证码")
+    private String smsCode;
 
 }

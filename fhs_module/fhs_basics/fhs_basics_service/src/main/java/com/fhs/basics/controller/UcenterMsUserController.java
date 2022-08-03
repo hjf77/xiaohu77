@@ -88,6 +88,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());
                 sysUser.setIsAdmin(Constant.INT_FALSE);
+                sysUser.setIsAppUser(Constant.INT_FALSE);
             }
             Map<String, Object> resultMap = sysUserService.addUser(sysUser);
             boolean retult = ConverterUtils.toBoolean(resultMap.get("retult"));
@@ -106,9 +107,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * 获取密码
-     *
-     * @param request
-     * @param response
      * @param sysUser
      */
     @PostMapping("readPass")

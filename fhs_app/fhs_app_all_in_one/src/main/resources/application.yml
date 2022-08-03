@@ -51,6 +51,8 @@ fhs:
     enable: false #默认不适用beetl
   session:
     timeout: 1800
+  smscode:
+    timeout: 300 #短信验证码过期时间（秒）
   task:
     default-lock-Minutes: 10
     pool-size: 10
