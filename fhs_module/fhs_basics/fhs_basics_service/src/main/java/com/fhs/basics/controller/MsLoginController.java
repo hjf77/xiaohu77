@@ -265,8 +265,8 @@ public class MsLoginController extends BaseController {
      * @param sysUser
      * @return
      */
-    @PostMapping("/忘记密码验证码修改密码")
-    @ApiOperation(value = "updatePassword")
+    @PostMapping("/updatePassword")
+    @ApiOperation(value = "忘记密码验证码修改密码")
     public HttpResult<Boolean> updatePassword(@RequestBody UcenterMsUserVO sysUser) {
         //判断短信验证码
         ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不能为空");
@@ -373,5 +373,4 @@ public class MsLoginController extends BaseController {
         StpUtil.logout();
         return HttpResult.success("登出成功");
     }
-
 }
