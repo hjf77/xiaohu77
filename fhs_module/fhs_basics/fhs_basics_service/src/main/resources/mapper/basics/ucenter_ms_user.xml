@@ -509,11 +509,11 @@
         WHEN
         b.permission_type = 1 THEN CONCAT('r_',b.menu_id)
         WHEN b.permission_type = 2
-        THEN CONCAT("w_",b.menu_id)
+        THEN CONCAT('w_',b.menu_id)
         WHEN b.permission_type = 3 THEN
-        CONCAT("e_",b.menu_id)
+        CONCAT('e_',b.menu_id)
         WHEN b.permission_type = 4 THEN
-        CONCAT("d_",b.menu_id) END AS boxId
+        CONCAT('d_',b.menu_id) END AS boxId
         FROM
         t_sett_ms_menu_permission b
         WHERE b.permission_id IN

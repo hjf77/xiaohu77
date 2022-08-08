@@ -147,9 +147,9 @@
 		SELECT
 		CASE WHEN b.permission_type = 5 THEN CONCAT('el_',b.permission_id)
 		WHEN b.permission_type = 1 THEN CONCAT('r_',b.menu_id)
-		WHEN b.permission_type = 2 THEN CONCAT("w_",b.menu_id)
-		WHEN b.permission_type = 3 THEN CONCAT("e_",b.menu_id)
-		WHEN b.permission_type = 4 THEN CONCAT("d_",b.menu_id) END AS boxId
+		WHEN b.permission_type = 2 THEN CONCAT('w_',b.menu_id)
+		WHEN b.permission_type = 3 THEN CONCAT('e_',b.menu_id)
+		WHEN b.permission_type = 4 THEN CONCAT('d_',b.menu_id) END AS boxId
 		FROM
 		t_sett_ms_menu_permission b
 		LEFT JOIN t_ucenter_ms_role_permission ro
@@ -177,7 +177,7 @@
 
     <select id="getRolePermissionButtons" resultType="java.lang.String">
 	    SELECT
-		    CONCAT( "p_", b.permission_id)
+		    CONCAT( 'p_', b.permission_id)
 		FROM
 			t_sett_ms_menu_permission b
 			LEFT JOIN t_ucenter_ms_role_permission ro ON ro.permission_id = b.permission_id
