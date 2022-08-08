@@ -78,7 +78,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) UcenterMsRoleVO sysRole) {
         UcenterMsRoleVO oldRole = sysRoleService.selectById(sysRole.getRoleId());
-        if (Constant.ENABLED == oldRole.getIsEnable() && Constant.DISABLE == sysRole.getIsEnable()) {
+        if (Constant.ENABLED.equals(oldRole.getIsEnable()) && Constant.DISABLE.equals(sysRole.getIsEnable())) {
             // 根据roleid查询用户关联表用户数
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("roleId", sysRole.getRoleId());

@@ -111,8 +111,7 @@
 
 
     <!-- 添加权限信息 -->
-    <insert id="addButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO"
-            useGeneratedKeys="true" keyProperty="roleId">
+    <insert id="addButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO">
         INSERT INTO t_ucenter_ms_role_permission
         (role_id,permission_id )
         VALUES
