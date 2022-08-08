@@ -5,6 +5,7 @@ import com.fhs.basics.po.SettMsMenuPermissionPO;
 import com.fhs.basics.mapper.SettMsMenuPermissionMapper;
 import com.fhs.basics.service.SettMsMenuPermissionService;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.autodel.anno.AutoDel;
 import com.fhs.core.base.autodel.anno.AutoDelSett;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
@@ -72,6 +73,7 @@ public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuP
         Map<String, Object> tempMap;
         for (int i = 0; i < buttonArray.length; i++) {
             tempMap = new HashMap<>();
+            tempMap.put("permissionId", StringUtils.getUUID());
             tempMap.put("permissionCode", buttonArray[i][0]);
             tempMap.put("permissionName", buttonArray[i][1]);
             tempMap.put("permissionType", buttonArray[i][2]);

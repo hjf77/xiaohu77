@@ -60,7 +60,7 @@
             </if>
             ORDER BY user_id DESC
             <if test="start !=null and start!=''">
-                LIMIT ${start},${end}
+                LIMIT ${start} OFFSET ${end}
             </if>
         </where>
     </select>
