@@ -16,17 +16,12 @@
 						   t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
 					   WHERE
 						   m.namespace IS NOT NULL
-						 AND m.namespace !=''
-		AND m.is_enable
-		= 1
-		AND b.is_enable = 1
-					   ORDER BY
-						   m.father_menu_id,m.order_index
+						 AND m.namespace !='' AND m.is_enable = 1
+						 AND b.is_enable = 1
+					   ORDER BY m.father_menu_id,m.order_index
 					  ) m
-		WHERE
-			m.namespace IS NOT NULL
+		WHERE m.namespace IS NOT NULL
 	</select>
-
 
     <select id="getMenuPermissionTree" resultType="com.fhs.basics.vo.TreeMenuPermissionVO">
 		(SELECT
@@ -38,11 +33,9 @@
 		WHERE is_delete = 0
 		ORDER BY parentId
 		)
-
 		UNION  ALL
-
 		SELECT
-			CONCAT("p_", p.permission_id) AS id,
+			CONCAT('p_', p.permission_id) AS id,
 			p.menu_id AS parentId,
 			p.permission_name AS name
 		FROM
