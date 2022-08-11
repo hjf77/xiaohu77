@@ -161,6 +161,13 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private Integer isAppUser;
 
     /**
+     * 国家
+     */
+    @TableField("country")
+    @ApiModelProperty("国家")
+    private String country;
+
+    /**
      * 状态
      */
 

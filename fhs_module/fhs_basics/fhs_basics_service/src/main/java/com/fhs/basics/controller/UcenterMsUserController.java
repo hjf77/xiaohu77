@@ -253,9 +253,14 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             }
             ucenterMsUserPO.setEmail(ucenterAppUserSetVO.getEmail());
         }
-        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getMobile()) || !StringUtils.isEmpty(ucenterAppUserSetVO.getEmail())){
-            sysUserService.updateById(ucenterMsUserPO);
+        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getHeader())){
+            ucenterMsUserPO.setHeader(ucenterAppUserSetVO.getHeader());
         }
+        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getUserName())){
+            ucenterMsUserPO.setUserName(ucenterAppUserSetVO.getUserName());
+        }
+        ucenterMsUserPO.setUpdateTime(new Date());
+        sysUserService.updateById(ucenterMsUserPO);
         //用户信息设置
 
         UcenterAppUserSetPO ucenterAppUserSetPO = (UcenterAppUserSetPO) ucenterAppUserSetVO;

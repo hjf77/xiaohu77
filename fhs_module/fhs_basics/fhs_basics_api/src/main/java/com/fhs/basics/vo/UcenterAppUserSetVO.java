@@ -25,5 +25,11 @@ public class UcenterAppUserSetVO extends UcenterAppUserSetPO implements VO {
 
     @ApiModelProperty("邮箱")
     private String email;
+
+    @ApiModelProperty("头像")
+    private String header;
+
+    @ApiModelProperty("姓名")
+    private String userName;
 }
     
