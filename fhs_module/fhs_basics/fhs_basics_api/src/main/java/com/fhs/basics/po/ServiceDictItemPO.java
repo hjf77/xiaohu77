@@ -45,7 +45,7 @@ public class ServiceDictItemPO extends BasePO<ServiceDictItemPO> {
     /**
      * id
      */
-    @TableId(value = "dict_id", type = IdType.AUTO)
+    @TableId(value = "dict_id", type = IdType.NONE)
     @ApiModelProperty("主键id")
     private Integer dictId;
 

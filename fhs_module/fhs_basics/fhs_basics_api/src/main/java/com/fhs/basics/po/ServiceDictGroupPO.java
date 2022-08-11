@@ -47,7 +47,7 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     /**
      * ID
      */
-    @TableId(value = "group_id", type = IdType.AUTO)
+    @TableId(value = "group_id", type = IdType.NONE)
     @NotNull(message = "id不能为空", groups = {Update.class})
     @ApiModelProperty("主键id")
     private Integer groupId;

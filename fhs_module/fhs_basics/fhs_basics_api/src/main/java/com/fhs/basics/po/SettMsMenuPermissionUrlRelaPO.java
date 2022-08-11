@@ -37,7 +37,7 @@ public class SettMsMenuPermissionUrlRelaPO extends BasePO<SettMsMenuPermissionUr
     /**
      * 权限id
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.NONE)
     @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     @ApiModelProperty("权限id")
     private Integer permissionId;
