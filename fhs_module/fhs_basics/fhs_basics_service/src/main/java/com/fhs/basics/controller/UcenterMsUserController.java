@@ -5,16 +5,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.constant.LoggerConstant;
+import com.fhs.basics.po.UcenterAppUserSetPO;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.service.UcenterAppUserSetService;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.SysUserOrgVO;
+import com.fhs.basics.vo.UcenterAppUserSetVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.exception.ParamException;
@@ -29,11 +33,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,16 +49,12 @@ import java.util.stream.Collectors;
 @LogNamespace(namespace = "sysUser", module = "用户管理")
 public class UcenterMsUserController extends ModelSuperController<UcenterMsUserVO, UcenterMsUserPO, Long> {
 
-
     @Autowired
     private UcenterMsUserService sysUserService;
-
-    /**
-     * 机构服务
-     */
     @Autowired
     private UcenterMsOrganizationService sysOrganizationService;
-
+    @Autowired
+    private UcenterAppUserSetService ucenterAppUserSetService;
 
     /**
      * 获取用户jsontree 用于easyui下拉tree数据源
@@ -68,7 +64,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     public List<SysUserOrgVO> getUserTree() {
         return sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode());
     }
-
 
     @Override
     @NotRepeat
@@ -83,7 +78,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             UcenterMsUserVO loginSysUser = super.getSessionuser();
             sysUser.setUpdateTime(new Date());
             sysUser.setUpdateUser(loginSysUser.getUserId());
-            if (sysUser.getUserId() == null) { //新增
+            //新增
+            if (sysUser.getUserId() == null) {
                 sysUser.setCreateTime(new Date());
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());
@@ -207,12 +203,92 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         return sysUserService.selectById(super.getSessionuser().getUserId());
     }
 
+    /**
+     * 获取自己的个人信息
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("getAppUserInfo")
+    @LogMethod
+    public HttpResult<Map<String, Object>> getAppUserInfo(HttpServletRequest request) {
+        Map<String, Object> result = new HashMap<>();
+        UcenterMsUserVO sysUser = sysUserService.selectById(super.getSessionuser().getUserId());
+        result.put("userInfo", sysUser);
+        //获取APP用户设置信息
+        if(sysUser.getIsAppUser().equals(Constant.INT_TRUE)){
+            UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
+            result.put("userSetInfo", ucenterAppUserSetVO);
+        }
+        return HttpResult.success(result);
+    }
+
+
+    /**
+     * 用户信息设置
+     * @param ucenterAppUserSetVO
+     * @return
+     */
+    @PostMapping("setAppUser")
+    @LogMethod
+    public HttpResult<Boolean> setAppUser(@RequestBody UcenterAppUserSetVO ucenterAppUserSetVO) {
+        Long userId = super.getSessionuser().getUserId();
+        UcenterMsUserPO ucenterMsUserPO = new UcenterMsUserPO();
+        ucenterMsUserPO.setUserId(userId);
+        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getMobile())){
+            Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                    .eq(UcenterMsUserPO::getMobile,ucenterAppUserSetVO.getMobile())
+                    .ne(UcenterMsUserPO::getUserId,userId));
+            if(mobileCount > 0L){
+                return HttpResult.error(null,"该手机号已被使用！");
+            }
+            ucenterMsUserPO.setMobile(ucenterAppUserSetVO.getMobile());
+        }
+        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getEmail())){
+            Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                    .eq(UcenterMsUserPO::getEmail,ucenterAppUserSetVO.getEmail())
+                    .ne(UcenterMsUserPO::getUserId,userId));
+            if(emailCount > 0L){
+                return HttpResult.error(null,"该邮箱已被使用！");
+            }
+            ucenterMsUserPO.setEmail(ucenterAppUserSetVO.getEmail());
+        }
+        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getMobile()) || !StringUtils.isEmpty(ucenterAppUserSetVO.getEmail())){
+            sysUserService.updateById(ucenterMsUserPO);
+        }
+        //用户信息设置
+
+        UcenterAppUserSetPO ucenterAppUserSetPO = (UcenterAppUserSetPO) ucenterAppUserSetVO;
+        ucenterAppUserSetPO.setUserId(userId);
+        Long count = ucenterAppUserSetService.findCount(UcenterAppUserSetPO.builder().userId(userId).build());
+        if(count > 0L){
+            ucenterAppUserSetService.updateById(ucenterAppUserSetPO);
+        }else{
+            ucenterAppUserSetService.insert(ucenterAppUserSetPO);
+        }
+        return HttpResult.success(true);
+    }
+
+
+
+    /**
+     * 根据单位id，namespace，和方法编码获取符合条件的人
+     * @param companyId
+     * @param namespace
+     * @param permissonMethodCode
+     * @return
+     */
     @GetMapping("getUserByOrgAndPermission")
     @ApiOperation("根据单位id，namespace，和方法编码获取符合条件的人")
     public List<UcenterMsUserPO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         return sysUserService.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
     }
 
+    /**
+     * 获取公司tree(带用户)
+     * @param wrapper
+     * @return
+     */
     @GetMapping("getUserCompanyTree")
     @ApiOperation("获取公司tree(带用户)")
     public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {

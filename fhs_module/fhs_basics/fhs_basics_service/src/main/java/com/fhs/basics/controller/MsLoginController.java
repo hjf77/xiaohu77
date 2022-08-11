@@ -94,9 +94,6 @@ public class MsLoginController extends BaseController {
     @Autowired
     private LogLoginService logLoginService;
 
-    @Autowired
-    private UcenterAppUserSetService ucenterAppUserSetService;
-
     /**
      * 登录地址
      */
@@ -114,6 +111,9 @@ public class MsLoginController extends BaseController {
 
     @Autowired
     private StpInterfaceImpl stpInterface;
+
+    @Autowired
+    private UcenterAppUserSetService ucenterAppUserSetService;
 
 
     /**
@@ -195,6 +195,15 @@ public class MsLoginController extends BaseController {
             String[] roleIds = {"1"};
             sysUser.setRoleList(roleIds);
             Map<String, Object> resultMap = sysUserService.addUser(sysUser);
+            //添加用户默认设置
+            UcenterAppUserSetPO ucenterAppUserSetPO = new UcenterAppUserSetPO();
+            ucenterAppUserSetPO.setUserId(sysUser.getUserId());
+            ucenterAppUserSetPO.setIsGesture(Constant.INT_FALSE);
+            ucenterAppUserSetPO.setLanguage("1");
+            ucenterAppUserSetPO.setTimeZone("+8");
+            ucenterAppUserSetPO.setIsMessage(Constant.INT_FALSE);
+            ucenterAppUserSetPO.setTemperatureType(1);
+            ucenterAppUserSetService.insert(ucenterAppUserSetPO);
             boolean retult = ConverterUtils.toBoolean(resultMap.get("retult"));
             if (retult) {
                 String passWord = ConverterUtils.toString(resultMap.get("passWord"));
@@ -258,11 +267,6 @@ public class MsLoginController extends BaseController {
         result.put("token", tokenStr);
         result.put("tokenName", StpUtil.getTokenName());
         result.put("userInfo", sysUser);
-        //获取APP用户设置信息
-        if(sysUser.getIsAppUser().equals(Constant.INT_TRUE)){
-            UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
-            result.put("userSetInfo", ucenterAppUserSetVO);
-        }
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         return HttpResult.success(result);
     }
