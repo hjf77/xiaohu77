@@ -22,25 +22,20 @@
 	</select>
 
     <!-- 根据用户获取角色 -->
-    <select id="findRolesByUserId" parameterType="string"
-            resultType="com.fhs.basics.po.UcenterMsRolePO">
+    <select id="findRolesByUserId"  resultType="com.fhs.basics.po.UcenterMsRolePO">
 		SELECT
-		distinct ar.role_id AS roleId,
-		ar.role_name AS
-		roleName,
+		distinct ar.role_id AS "roleId",
+		ar.role_name AS "roleName",
 		ar.remark AS remark,
-		organization_id AS organizationId,
-		data_permissions AS dataPermissions,
-		create_user AS createUser,
-		create_time AS createTime,
-		update_user AS updateUser,
-		update_time AS updateTime
+		organization_id AS "organizationId",
+		data_permissions AS "dataPermissions",
+		create_user AS "createUser",
+		create_time AS "createTime",
+		update_user AS "updateUser",
+		update_time AS "updateTime"
 		FROM t_ucenter_ms_role ar
-		INNER JOIN
-		t_ucenter_ms_role_user_rela arur ON
-		ar.role_id=arur.role_id
-		WHERE
-		arur.user_id = #{userId}
+		INNER JOIN t_ucenter_ms_role_user_rela arur ON ar.role_id=arur.role_id
+		WHERE arur.user_id = #{userId}
 	</select>
 
     <!-- 获取角色集合 -->

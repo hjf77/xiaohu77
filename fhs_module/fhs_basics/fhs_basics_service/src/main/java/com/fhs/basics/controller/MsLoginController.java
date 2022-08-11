@@ -1,13 +1,12 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.fhs.basics.po.UcenterAppUserSetPO;
 import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.service.UcenterAppUserSetService;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
-import com.fhs.basics.vo.LoginVO;
-import com.fhs.basics.vo.UcenterMsRoleVO;
-import com.fhs.basics.vo.UcenterMsUserVO;
-import com.fhs.basics.vo.VueRouterVO;
+import com.fhs.basics.vo.*;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.service.LogLoginService;
 import com.fhs.common.constant.Constant;
@@ -94,6 +93,9 @@ public class MsLoginController extends BaseController {
 
     @Autowired
     private LogLoginService logLoginService;
+
+    @Autowired
+    private UcenterAppUserSetService ucenterAppUserSetService;
 
     /**
      * 登录地址
@@ -256,6 +258,11 @@ public class MsLoginController extends BaseController {
         result.put("token", tokenStr);
         result.put("tokenName", StpUtil.getTokenName());
         result.put("userInfo", sysUser);
+        //获取APP用户设置信息
+        if(sysUser.getIsAppUser().equals(Constant.INT_TRUE)){
+            UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
+            result.put("userSetInfo", ucenterAppUserSetVO);
+        }
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         return HttpResult.success(result);
     }
