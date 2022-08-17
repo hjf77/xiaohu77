@@ -21,9 +21,11 @@ import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -55,6 +57,13 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     private UcenterMsOrganizationService sysOrganizationService;
     @Autowired
     private UcenterAppUserSetService ucenterAppUserSetService;
+    @Autowired
+    private RedisCacheService redisCacheService;
+
+    /**
+     * 短信验证码
+     */
+    private static final String SMS_CODE_KEY = "sms:code:";
 
     /**
      * 获取用户jsontree 用于easyui下拉tree数据源
@@ -198,7 +207,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @PostMapping("appValidataPass")
     public HttpResult<Boolean> appValidataPass(@RequestBody UcenterMsUserPO ucenterMsUserPO) {
         ucenterMsUserPO.setUserId(this.getSessionuser().getUserId());
-        boolean isSuccess = sysUserService.validataPass(ucenterMsUserPO);
+        boolean isSuccess = sysUserService.appValidataPass(ucenterMsUserPO);
         return isSuccess ? HttpResult.success(true) : HttpResult.error(false);
     }
 
@@ -247,24 +256,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         Long userId = super.getSessionuser().getUserId();
         UcenterMsUserPO ucenterMsUserPO = new UcenterMsUserPO();
         ucenterMsUserPO.setUserId(userId);
-        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getMobile())){
-            Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
-                    .eq(UcenterMsUserPO::getMobile,ucenterAppUserSetVO.getMobile())
-                    .ne(UcenterMsUserPO::getUserId,userId));
-            if(mobileCount > 0L){
-                return HttpResult.error(null,"该手机号已被使用！");
-            }
-            ucenterMsUserPO.setMobile(ucenterAppUserSetVO.getMobile());
-        }
-        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getEmail())){
-            Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
-                    .eq(UcenterMsUserPO::getEmail,ucenterAppUserSetVO.getEmail())
-                    .ne(UcenterMsUserPO::getUserId,userId));
-            if(emailCount > 0L){
-                return HttpResult.error(null,"该邮箱已被使用！");
-            }
-            ucenterMsUserPO.setEmail(ucenterAppUserSetVO.getEmail());
-        }
         if(!StringUtils.isEmpty(ucenterAppUserSetVO.getHeader())){
             ucenterMsUserPO.setHeader(ucenterAppUserSetVO.getHeader());
         }
@@ -283,6 +274,59 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         }else{
             ucenterAppUserSetService.insert(ucenterAppUserSetPO);
         }
+        return HttpResult.success(true);
+    }
+
+    /**
+     * 修改手机号邮箱
+     * @param ucenterMsUserVO
+     * @return
+     */
+    @PostMapping("setUserMobileOrEmail")
+    @LogMethod
+    public HttpResult<Boolean> setUserMobileOrEmail(@RequestBody UcenterMsUserVO ucenterMsUserVO) {
+        //判断短信验证码
+        ParamChecker.isNotNull(ucenterMsUserVO.getSmsCode(),"验证码不能为空");
+
+        Long userId = super.getSessionuser().getUserId();
+        UcenterMsUserPO ucenterMsUserPO = new UcenterMsUserPO();
+        ucenterMsUserPO.setUserId(userId);
+        if(!StringUtils.isEmpty(ucenterMsUserVO.getMobile())){
+            // 判断短信验证码是否正确过期
+            String smsCode = redisCacheService.get(SMS_CODE_KEY + ucenterMsUserVO.getUuid() + ucenterMsUserVO.getMobile()).toString();
+            if(StringUtils.isEmpty(smsCode)){
+                throw new ParamException("验证码已过期，请重新发送");
+            }
+            if(!smsCode.equals(ucenterMsUserVO.getSmsCode())){
+                throw new ParamException("验证码不正确");
+            }
+            Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                    .eq(UcenterMsUserPO::getMobile,ucenterMsUserVO.getMobile())
+                    .ne(UcenterMsUserPO::getUserId,userId));
+            if(mobileCount > 0L){
+                return HttpResult.error(null,"该手机号已被使用！");
+            }
+            ucenterMsUserPO.setMobile(ucenterMsUserVO.getMobile());
+        }
+        if(!StringUtils.isEmpty(ucenterMsUserVO.getEmail())){
+            // 判断短信验证码是否正确过期
+            String smsCode = redisCacheService.get(SMS_CODE_KEY + ucenterMsUserVO.getUuid() + ucenterMsUserVO.getEmail()).toString();
+            if(StringUtils.isEmpty(smsCode)){
+                throw new ParamException("验证码已过期，请重新发送");
+            }
+            if(!smsCode.equals(ucenterMsUserVO.getSmsCode())){
+                throw new ParamException("验证码不正确");
+            }
+            Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                    .eq(UcenterMsUserPO::getEmail,ucenterMsUserVO.getEmail())
+                    .ne(UcenterMsUserPO::getUserId,userId));
+            if(emailCount > 0L){
+                return HttpResult.error(null,"该邮箱已被使用！");
+            }
+            ucenterMsUserPO.setEmail(ucenterMsUserVO.getEmail());
+        }
+        ucenterMsUserPO.setUpdateTime(new Date());
+        sysUserService.updateById(ucenterMsUserPO);
         return HttpResult.success(true);
     }
 
