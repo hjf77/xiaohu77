@@ -202,6 +202,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return count > 0;
     }
 
+    @Override
+    public boolean appValidataPass(UcenterMsUserPO adminUser) {
+        int count = sysUserMapper.validataPass(adminUser);
+        return count > 0;
+    }
+
     /**
      * 验证登录名是否存在
      */

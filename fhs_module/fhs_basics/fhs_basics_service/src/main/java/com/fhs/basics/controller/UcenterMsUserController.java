@@ -190,6 +190,18 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         return isSuccess ? HttpResult.success(true) : HttpResult.error(false);
     }
 
+    /**
+     * 校验密码
+     *
+     * @param ucenterMsUserPO
+     */
+    @PostMapping("appValidataPass")
+    public HttpResult<Boolean> appValidataPass(@RequestBody UcenterMsUserPO ucenterMsUserPO) {
+        ucenterMsUserPO.setUserId(this.getSessionuser().getUserId());
+        boolean isSuccess = sysUserService.validataPass(ucenterMsUserPO);
+        return isSuccess ? HttpResult.success(true) : HttpResult.error(false);
+    }
+
 
     /**
      * 获取自己的个人信息
@@ -262,11 +274,11 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         ucenterMsUserPO.setUpdateTime(new Date());
         sysUserService.updateById(ucenterMsUserPO);
         //用户信息设置
-
         UcenterAppUserSetPO ucenterAppUserSetPO = (UcenterAppUserSetPO) ucenterAppUserSetVO;
         ucenterAppUserSetPO.setUserId(userId);
-        Long count = ucenterAppUserSetService.findCount(UcenterAppUserSetPO.builder().userId(userId).build());
-        if(count > 0L){
+        UcenterAppUserSetVO userSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(userId).build());
+        if(userSetVO != null){
+            ucenterAppUserSetPO.setId(userSetVO.getId());
             ucenterAppUserSetService.updateById(ucenterAppUserSetPO);
         }else{
             ucenterAppUserSetService.insert(ucenterAppUserSetPO);

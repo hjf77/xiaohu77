@@ -100,6 +100,14 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     boolean validataPass(UcenterMsUserPO adminUser);
 
     /**
+     * 监测原始密码是否正确
+     *
+     * @return
+     * @paramsysUserGroupcode
+     */
+    boolean appValidataPass(UcenterMsUserPO adminUser);
+
+    /**
      * 修改用户密码
      *
      * @return
@@ -137,6 +145,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param adminUser
      * @return
      */
+    @CloudMethod
     UcenterMsUserVO selectUserByULname(UcenterMsUserPO adminUser);
 
     /**
