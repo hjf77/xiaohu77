@@ -167,7 +167,7 @@ public class MsLoginController extends BaseController {
      */
     @PostMapping("/registerUser")
     @ApiOperation(value = "APP用户注册")
-    public HttpResult<Boolean> registerUser(@RequestBody UcenterMsUserVO sysUser) {
+    public HttpResult<UcenterMsUserVO> registerUser(@RequestBody UcenterMsUserVO sysUser) {
         //判断短信验证码
         ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不能为空");
         // 判断短信验证码是否正确过期
@@ -192,9 +192,8 @@ public class MsLoginController extends BaseController {
             sysUser.setIsEnable(Constant.INT_TRUE);
             sysUser.setIsAdmin(Constant.INT_FALSE);
             sysUser.setIsAppUser(Constant.INT_TRUE);
-            String[] roleIds = {"1"};
-            sysUser.setRoleList(roleIds);
-            Map<String, Object> resultMap = sysUserService.addUser(sysUser);
+            sysUser.setRoleIds("1");
+            sysUserService.addUser(sysUser);
             //添加用户默认设置
             UcenterAppUserSetPO ucenterAppUserSetPO = new UcenterAppUserSetPO();
             ucenterAppUserSetPO.setUserId(sysUser.getUserId());
@@ -204,14 +203,7 @@ public class MsLoginController extends BaseController {
             ucenterAppUserSetPO.setIsMessage(Constant.INT_FALSE);
             ucenterAppUserSetPO.setTemperatureType(1);
             ucenterAppUserSetService.insert(ucenterAppUserSetPO);
-            boolean retult = ConverterUtils.toBoolean(resultMap.get("retult"));
-            if (retult) {
-                String passWord = ConverterUtils.toString(resultMap.get("passWord"));
-                UcenterMsUserVO mailUser = (UcenterMsUserVO) resultMap.get("sysUser");
-                // 发送邮件
-                sysUserService.sendMail(mailUser, passWord);
-            }
-            return HttpResult.success(retult);
+            return HttpResult.success(sysUser);
         } else {
             throw new ParamException("该账号已经注册了，请直接登录！");
         }
