@@ -45,7 +45,7 @@ public class PageXAutoCodeController implements ApplicationRunner {
         if (CheckUtils.isNotEmpty(namespace)) {
             try {
                 String js = PagexDataService.SIGNEL.getJsContent(namespace);
-                pageXAutoJavaService.autoJava(js);
+               // pageXAutoJavaService.autoJava(js);
                 pageXAutoSqlService.autoSql(js);
             } catch (Exception e) {
                 LOGGER.error("生成代码错误:", e);
@@ -57,7 +57,7 @@ public class PageXAutoCodeController implements ApplicationRunner {
                 final String js = PagexDataService.SIGNEL.getJsContent(tempNamepsace);
                 new Thread(() -> {
                     try {
-                        pageXAutoJavaService.autoJava(js);
+                        //pageXAutoJavaService.autoJava(js);
                         pageXAutoSqlService.autoSql(js);
                         countDownLatch.countDown();
                     } catch (Exception e) {
