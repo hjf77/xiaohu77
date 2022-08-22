@@ -170,15 +170,14 @@ public class MsLoginController extends BaseController {
     public HttpResult<UcenterMsUserVO> registerUser(@RequestBody UcenterMsUserVO sysUser) {
         //判断短信验证码
         ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不能为空");
-        //短信验证码暂未启用,暂时关闭验证码验证 -lyl
-       /* // 判断短信验证码是否正确过期
+        // 判断短信验证码是否正确过期
         String smsCode = redisCacheService.get(SMS_CODE_KEY + sysUser.getUuid() + sysUser.getUserLoginName()).toString();
         if(StringUtils.isEmpty(smsCode)){
             throw new ParamException("验证码已过期，请重新发送");
         }
         if(!smsCode.equals(sysUser.getSmsCode())){
             throw new ParamException("验证码不正确");
-        }*/
+        }
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
