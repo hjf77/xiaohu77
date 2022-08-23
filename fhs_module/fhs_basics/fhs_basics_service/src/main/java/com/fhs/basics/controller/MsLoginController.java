@@ -168,16 +168,6 @@ public class MsLoginController extends BaseController {
     @PostMapping("/registerUser")
     @ApiOperation(value = "APP用户注册")
     public HttpResult<UcenterMsUserVO> registerUser(@RequestBody UcenterMsUserVO sysUser) {
-        //判断短信验证码
-        ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不能为空");
-        // 判断短信验证码是否正确过期
-        String smsCode = redisCacheService.get(SMS_CODE_KEY + sysUser.getUuid() + sysUser.getUserLoginName()).toString();
-        if(StringUtils.isEmpty(smsCode)){
-            throw new ParamException("验证码已过期，请重新发送");
-        }
-        if(!smsCode.equals(sysUser.getSmsCode())){
-            throw new ParamException("验证码不正确");
-        }
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
@@ -270,7 +260,7 @@ public class MsLoginController extends BaseController {
      */
     @PostMapping("/updatePassword")
     @ApiOperation(value = "忘记密码验证码修改密码")
-    public HttpResult<Boolean> updatePassword(@RequestBody UcenterMsUserVO sysUser) {
+    public HttpResult<String> updatePassword(@RequestBody UcenterMsUserVO sysUser) {
         //判断短信验证码
         ParamChecker.isNotNull(sysUser.getSmsCode(),"验证码不能为空");
         // 判断短信验证码是否正确过期
@@ -286,11 +276,14 @@ public class MsLoginController extends BaseController {
         LoginVO loginVO = new LoginVO();
         loginVO.setUserLoginName(sysUser.getUserLoginName());
         UcenterMsUserPO sysUserInfo = sysUserService.login(loginVO);
+        if(sysUserInfo == null){
+            return HttpResult.error("账号未注册，请先注册账号！");
+        }
         int result = sysUserService.updateById(UcenterMsUserPO.builder().userId(sysUserInfo.getUserId()).password(sysUser.getPassword()).build());
         if(result > 0){
-            return HttpResult.success(true);
+            return HttpResult.success("密码修改成功！");
         }
-        return HttpResult.error(false);
+        return HttpResult.error("密码修改失败！");
     }
 
     /**
@@ -353,7 +346,8 @@ public class MsLoginController extends BaseController {
     @PostMapping("/getSmsCode")
     @ApiOperation("生成手机验证码FOR VUE")
     public HttpResult<Map<String, String>> getSmsCode(@RequestBody LoginVO loginVO) throws Exception {
-        String code = String.valueOf((int)(Math.random() * 900000 + 100000));
+//        String code = String.valueOf((int)(Math.random() * 900000 + 100000));
+        String code = "888888";
         String uuid = StringUtils.getUUID();
         if(loginVO.getUserLoginName().contains("@")){
             // 发送邮件
@@ -368,6 +362,30 @@ public class MsLoginController extends BaseController {
         return HttpResult.success(resultMap);
     }
 
+    /**
+     * 验证验证码接口
+     */
+    @PostMapping("/ifSmsCode")
+    @ApiOperation("验证验证码接口")
+    public HttpResult<Boolean> ifSmsCode(@RequestBody LoginVO loginVO) throws Exception {
+        //判断短信验证码
+        ParamChecker.isNotNull(loginVO.getSmsCode(),"验证码不能为空");
+        // 判断短信验证码是否正确过期
+        String smsCode = redisCacheService.get(SMS_CODE_KEY + loginVO.getUuid() + loginVO.getUserLoginName()).toString();
+        if(StringUtils.isEmpty(smsCode)){
+            throw new ParamException("验证码已过期，请重新发送");
+        }
+        if(!smsCode.equals(loginVO.getSmsCode())){
+            throw new ParamException("验证码不正确");
+        }
+        return HttpResult.success(true);
+    }
+
+    /**
+     * 注销登出 for vue
+     * @param token
+     * @return
+     */
     @GetMapping("/logout")
     @ApiOperation("注销登出 for vue")
     public HttpResult<String> logout(String token) {

@@ -35,7 +35,7 @@ public class NetworkUtil {
     public final static String getIpAddress(HttpServletRequest request) throws IOException {
         // 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
 
-        String ip = request.getHeader("X-Forwarded-For");
+        String ip = request.getHeader("X-Real-IP");
 
 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

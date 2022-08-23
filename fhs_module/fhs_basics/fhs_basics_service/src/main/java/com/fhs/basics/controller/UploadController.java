@@ -61,5 +61,22 @@ public class UploadController {
         return pubFileVO;
     }
 
+    /**
+     * APP 上传文件
+     * @param file
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/appfile", method = { RequestMethod.POST,RequestMethod.GET })
+    public PubFileVO usersInsert(@RequestParam(value="file",required=false) MultipartFile file,HttpServletRequest request, HttpServletResponse response) {
+        if (file == null) {
+            throw new ParamException("文件为空");
+        }
+        LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
+        PubFileVO pubFileVO = fileServerBusiness.uploadFile(file,null);
+        LOG.infoMsg("结束上传文件,结束时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
+        return pubFileVO;
+    }
 
 }
