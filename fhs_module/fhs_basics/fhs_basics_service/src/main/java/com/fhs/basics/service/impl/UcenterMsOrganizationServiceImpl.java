@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 @Primary
 @Service
 @DataSource("basic")
-@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", defaultAlias = "org")
+@AutoTrans(namespace = BaseTransConstant.ORG, fields = {"name","aliasName"}, defaultAlias = "org")
 public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationPO> implements UcenterMsOrganizationService {
 
     @Autowired
