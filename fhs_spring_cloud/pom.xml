@@ -5,12 +5,12 @@
     <parent>
         <artifactId>fhs_framework</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0_pim</version>
+        <version>3.0.0</version>
 
     </parent>
     <artifactId>fhs_spring_cloud</artifactId>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0_pim</version>
+    <version>3.0.0</version>
     <properties>
     </properties>
     <description>如果不是springcloud项目请勿以来此项目</description>
