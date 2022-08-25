@@ -304,7 +304,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
                     .eq(UcenterMsUserPO::getMobile,ucenterMsUserVO.getMobile())
                     .ne(UcenterMsUserPO::getUserId,userId));
             if(mobileCount > 0L){
-                return HttpResult.error(null,"该手机号已被使用！");
+                throw new ParamException("该手机号已被使用！");
             }
             ucenterMsUserPO.setMobile(ucenterMsUserVO.getMobile());
         }
@@ -321,7 +321,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
                     .eq(UcenterMsUserPO::getEmail,ucenterMsUserVO.getEmail())
                     .ne(UcenterMsUserPO::getUserId,userId));
             if(emailCount > 0L){
-                return HttpResult.error(null,"该邮箱已被使用！");
+                throw new ParamException("该邮箱已被使用！");
             }
             ucenterMsUserPO.setEmail(ucenterMsUserVO.getEmail());
         }

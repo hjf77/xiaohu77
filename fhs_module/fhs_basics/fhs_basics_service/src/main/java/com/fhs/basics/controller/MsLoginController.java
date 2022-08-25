@@ -277,13 +277,13 @@ public class MsLoginController extends BaseController {
         loginVO.setUserLoginName(sysUser.getUserLoginName());
         UcenterMsUserPO sysUserInfo = sysUserService.login(loginVO);
         if(sysUserInfo == null){
-            return HttpResult.error("账号未注册，请先注册账号！");
+            throw new ParamException("账号未注册，请先注册账号！");
         }
         int result = sysUserService.updateById(UcenterMsUserPO.builder().userId(sysUserInfo.getUserId()).password(sysUser.getPassword()).build());
         if(result > 0){
             return HttpResult.success("密码修改成功！");
         }
-        return HttpResult.error("密码修改失败！");
+        throw new ParamException("密码修改失败！");
     }
 
     /**
