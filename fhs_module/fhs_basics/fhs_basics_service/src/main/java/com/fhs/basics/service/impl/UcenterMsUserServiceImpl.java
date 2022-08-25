@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Primary
 @Service
 @DataSource("basic")
-@AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = "userName")
+@AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = {"userName","header"})
 public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserPO> implements UcenterMsUserService {
 
     private final int ADMIN = 1;
