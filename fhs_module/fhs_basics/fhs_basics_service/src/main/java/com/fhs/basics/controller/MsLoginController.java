@@ -238,7 +238,7 @@ public class MsLoginController extends BaseController {
         if (sysUser == null) {
             logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, null, false);
             addErrorPassTimes(userName);
-            throw new ParamException("用户名或者密码错误");
+            throw new ParamException("账号或者密码不对");
         }
         clearLockKey(userName);
         StpUtil.login(sysUser.getUserId());

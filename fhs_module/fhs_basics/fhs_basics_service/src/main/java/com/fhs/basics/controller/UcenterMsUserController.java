@@ -112,6 +112,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * 获取密码
+     *
      * @param sysUser
      */
     @PostMapping("readPass")
@@ -208,7 +209,10 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     public HttpResult<Boolean> appValidataPass(@RequestBody UcenterMsUserPO ucenterMsUserPO) {
         ucenterMsUserPO.setUserId(this.getSessionuser().getUserId());
         boolean isSuccess = sysUserService.appValidataPass(ucenterMsUserPO);
-        return isSuccess ? HttpResult.success(true) : HttpResult.error(false);
+        if (isSuccess) {
+            return HttpResult.success(true);
+        }
+        throw new ParamException("密码输入错误");
     }
 
 
@@ -237,7 +241,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         UcenterMsUserVO sysUser = sysUserService.selectById(super.getSessionuser().getUserId());
         result.put("userInfo", sysUser);
         //获取APP用户设置信息
-        if(sysUser.getIsAppUser().equals(Constant.INT_TRUE)){
+        if (sysUser.getIsAppUser().equals(Constant.INT_TRUE)) {
             UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
             result.put("userSetInfo", ucenterAppUserSetVO);
         }
@@ -247,6 +251,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * 用户信息设置
+     *
      * @param ucenterAppUserSetVO
      * @return
      */
@@ -256,10 +261,10 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         Long userId = super.getSessionuser().getUserId();
         UcenterMsUserPO ucenterMsUserPO = new UcenterMsUserPO();
         ucenterMsUserPO.setUserId(userId);
-        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getHeader())){
+        if (!StringUtils.isEmpty(ucenterAppUserSetVO.getHeader())) {
             ucenterMsUserPO.setHeader(ucenterAppUserSetVO.getHeader());
         }
-        if(!StringUtils.isEmpty(ucenterAppUserSetVO.getUserName())){
+        if (!StringUtils.isEmpty(ucenterAppUserSetVO.getUserName())) {
             ucenterMsUserPO.setUserName(ucenterAppUserSetVO.getUserName());
         }
         ucenterMsUserPO.setUpdateTime(new Date());
@@ -268,10 +273,10 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         UcenterAppUserSetPO ucenterAppUserSetPO = (UcenterAppUserSetPO) ucenterAppUserSetVO;
         ucenterAppUserSetPO.setUserId(userId);
         UcenterAppUserSetVO userSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(userId).build());
-        if(userSetVO != null){
+        if (userSetVO != null) {
             ucenterAppUserSetPO.setId(userSetVO.getId());
             ucenterAppUserSetService.updateById(ucenterAppUserSetPO);
-        }else{
+        } else {
             ucenterAppUserSetService.insert(ucenterAppUserSetPO);
         }
         return HttpResult.success(true);
@@ -279,6 +284,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * 修改手机号邮箱
+     *
      * @param ucenterMsUserVO
      * @return
      */
@@ -286,41 +292,41 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @LogMethod
     public HttpResult<Boolean> setUserMobileOrEmail(@RequestBody UcenterMsUserVO ucenterMsUserVO) {
         //判断短信验证码
-        ParamChecker.isNotNull(ucenterMsUserVO.getSmsCode(),"验证码不能为空");
+        ParamChecker.isNotNull(ucenterMsUserVO.getSmsCode(), "验证码不能为空");
 
         Long userId = super.getSessionuser().getUserId();
         UcenterMsUserPO ucenterMsUserPO = new UcenterMsUserPO();
         ucenterMsUserPO.setUserId(userId);
-        if(!StringUtils.isEmpty(ucenterMsUserVO.getMobile())){
+        if (!StringUtils.isEmpty(ucenterMsUserVO.getMobile())) {
             // 判断短信验证码是否正确过期
             String smsCode = redisCacheService.get(SMS_CODE_KEY + ucenterMsUserVO.getUuid() + ucenterMsUserVO.getMobile()).toString();
-            if(StringUtils.isEmpty(smsCode)){
+            if (StringUtils.isEmpty(smsCode)) {
                 throw new ParamException("验证码已过期，请重新发送");
             }
-            if(!smsCode.equals(ucenterMsUserVO.getSmsCode())){
+            if (!smsCode.equals(ucenterMsUserVO.getSmsCode())) {
                 throw new ParamException("验证码不正确");
             }
             Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
-                    .eq(UcenterMsUserPO::getMobile,ucenterMsUserVO.getMobile())
-                    .ne(UcenterMsUserPO::getUserId,userId));
-            if(mobileCount > 0L){
+                    .eq(UcenterMsUserPO::getMobile, ucenterMsUserVO.getMobile())
+                    .ne(UcenterMsUserPO::getUserId, userId));
+            if (mobileCount > 0L) {
                 throw new ParamException("该手机号已被使用！");
             }
             ucenterMsUserPO.setMobile(ucenterMsUserVO.getMobile());
         }
-        if(!StringUtils.isEmpty(ucenterMsUserVO.getEmail())){
+        if (!StringUtils.isEmpty(ucenterMsUserVO.getEmail())) {
             // 判断短信验证码是否正确过期
             String smsCode = redisCacheService.get(SMS_CODE_KEY + ucenterMsUserVO.getUuid() + ucenterMsUserVO.getEmail()).toString();
-            if(StringUtils.isEmpty(smsCode)){
+            if (StringUtils.isEmpty(smsCode)) {
                 throw new ParamException("验证码已过期，请重新发送");
             }
-            if(!smsCode.equals(ucenterMsUserVO.getSmsCode())){
+            if (!smsCode.equals(ucenterMsUserVO.getSmsCode())) {
                 throw new ParamException("验证码不正确");
             }
             Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
-                    .eq(UcenterMsUserPO::getEmail,ucenterMsUserVO.getEmail())
-                    .ne(UcenterMsUserPO::getUserId,userId));
-            if(emailCount > 0L){
+                    .eq(UcenterMsUserPO::getEmail, ucenterMsUserVO.getEmail())
+                    .ne(UcenterMsUserPO::getUserId, userId));
+            if (emailCount > 0L) {
                 throw new ParamException("该邮箱已被使用！");
             }
             ucenterMsUserPO.setEmail(ucenterMsUserVO.getEmail());
@@ -331,9 +337,9 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-
     /**
      * 根据单位id，namespace，和方法编码获取符合条件的人
+     *
      * @param companyId
      * @param namespace
      * @param permissonMethodCode
@@ -347,6 +353,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     /**
      * 获取公司tree(带用户)
+     *
      * @param wrapper
      * @return
      */
