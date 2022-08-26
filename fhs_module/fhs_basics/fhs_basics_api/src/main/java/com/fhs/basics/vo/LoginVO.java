@@ -21,5 +21,7 @@ public class LoginVO {
     private Integer isCode;
     @ApiModelProperty("短信验证码")
     private String smsCode;
+    @ApiModelProperty("是否注册(0 否 1是)")
+    private Integer isRegister;
 
 }
