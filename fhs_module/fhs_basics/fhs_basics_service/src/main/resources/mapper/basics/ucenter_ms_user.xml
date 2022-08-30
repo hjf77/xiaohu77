@@ -531,8 +531,9 @@
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
         COUNT(1)
-        FROM t_ucenter_ms_user where is_delete = 0
+        FROM t_ucenter_ms_user
         <where>
+            is_delete = 0
             <if test="userId !=null and userId != ''">
                 AND user_id != #{userId}
             </if>

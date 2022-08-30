@@ -349,13 +349,18 @@ public class MsLoginController extends BaseController {
     @PostMapping("/getSmsCode")
     @ApiOperation("生成手机验证码FOR VUE")
     public HttpResult<Map<String, String>> getSmsCode(@RequestBody LoginVO loginVO) throws Exception {
+        UcenterMsUserPO userPO = new UcenterMsUserPO();
+        BeanUtils.copyProperties(loginVO, userPO);
 //        String code = String.valueOf((int)(Math.random() * 900000 + 100000));
         if (null != loginVO.getIsRegister() && loginVO.getIsRegister() == 1) {
-            UcenterMsUserPO userPO = new UcenterMsUserPO();
-            BeanUtils.copyProperties(loginVO, userPO);
             boolean notExist = sysUserService.validataLoginName(userPO);
             if (!notExist) {
                 throw new ParamException("该账号已经注册了，请直接登录！");
+            }
+        }else {
+            boolean notExist = sysUserService.validataLoginName(userPO);
+            if (notExist){
+                throw new ParamException("该账号还没有注册，请先注册！");
             }
         }
         String code = "888888";
