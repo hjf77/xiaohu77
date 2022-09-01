@@ -357,12 +357,12 @@ public class MsLoginController extends BaseController {
             if (!notExist) {
                 throw new ParamException("该账号已经注册了，请直接登录！");
             }
-        }else {
+        }/*else {
             boolean notExist = sysUserService.validataLoginName(userPO);
             if (notExist){
                 throw new ParamException("该账号还没有注册，请先注册！");
             }
-        }
+        }*/
         String code = "888888";
         String uuid = StringUtils.getUUID();
         if (loginVO.getUserLoginName().contains("@")) {
@@ -410,5 +410,21 @@ public class MsLoginController extends BaseController {
         redisCacheService.remove(USER_KEY + token);
         StpUtil.logout();
         return HttpResult.success("登出成功");
+    }
+
+    /**
+     * 验证当前用户是否存在
+     *
+     * @param sysUser
+     * @return
+     */
+    @PostMapping("/checkUserIsexist")
+    @ApiOperation(value = "验证当前用户是否存在")
+    public HttpResult<Boolean> checkUserIsexist(@RequestBody UcenterMsUserVO sysUser) {
+        boolean notExist = sysUserService.validataLoginName(sysUser);
+        if (notExist) {
+            return HttpResult.success(true);
+        }
+        return HttpResult.success(false);
     }
 }
