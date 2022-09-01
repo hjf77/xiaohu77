@@ -423,8 +423,8 @@ public class MsLoginController extends BaseController {
     public HttpResult<Boolean> checkUserIsexist(@RequestBody UcenterMsUserVO sysUser) {
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
-            return HttpResult.success(true);
+            return HttpResult.success(false);
         }
-        return HttpResult.success(false);
+        return HttpResult.success(true);
     }
 }
