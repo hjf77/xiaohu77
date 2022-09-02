@@ -50,10 +50,11 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     @Override
     public PubFileVO uploadInputStream(InputStream inputStream) {
         PubFileVO sf = new PubFileVO();
+        String fileId = StringUtils.getUUID();
         String suffix = ".jpg";
-        String fileName = StringUtils.getUUID()+suffix;
+        String fileName = fileId+suffix;
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
-        sf.setFileId(StringUtils.getUUID());
+        sf.setFileId(fileId);
         sf.setFileName(fileName);
         sf.setFileSuffix(suffix);
         sf.setUploadDate(currentDate);
