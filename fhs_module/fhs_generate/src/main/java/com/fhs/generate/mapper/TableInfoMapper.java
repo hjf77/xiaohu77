@@ -1,5 +1,7 @@
 package com.fhs.generate.mapper;
 
+import com.fhs.core.base.mapper.FhsBaseMapper;
+import com.fhs.generate.po.TableInfoPO;
 import com.fhs.generate.vo.FieldsVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -7,23 +9,23 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TableInfoMapper {
+public interface TableInfoMapper extends FhsBaseMapper<TableInfoPO> {
 
     /**
      * 获取表字段
      *
-     * @param dbName    库名
+     * @param tableSchema    库名
      * @param tableName 表名
      * @return
      */
-    List<FieldsVO> getTableFields(@Param("dbName") String dbName, @Param("tableName") String tableName);
+    List<FieldsVO> getTableFields(@Param("tableSchema") String tableSchema, @Param("tableName") String tableName);
 
     /**
      * 获取表注释
      *
-     * @param dbName    库名
+     * @param tableSchema    库名
      * @param tableName 表名
      * @return
      */
-    String getTableComment(@Param("dbName") String dbName, @Param("tableName") String tableName);
+    String getTableComment(@Param("tableSchema") String tableSchema, @Param("tableName") String tableName);
 }

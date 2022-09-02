@@ -177,7 +177,7 @@
                    :key="index">{{ itemLabel.title + ':' + model[itemLabel.name] }}</label>
           </div>
 
-          <pagex-one2x v-if="item.type === 'one2x'" :isEdit="isEdit" :optionsInitSetts="optionsInitSetts"
+          <pagex-one2x v-if="item.type === 'one2x'" :isEdit="isEdit" :optionsInitSetts="item.optionsInitSetts"
                        :ref="item.name" :attrName="item.name" :style="'width:' + item.width" v-model="model[item.name]"
                        v-bind.sync="item"></pagex-one2x>
 
@@ -254,7 +254,7 @@
         </el-button
         >
         <el-button @click="cancel" v-if="isHaveCancelBtn" class="form-btn-item">取消</el-button>
-        <el-button @click="initForm"  v-hasPermi="['sysUser:mock']"  class="form-btn-item">填充</el-button>
+        <el-button @click="initForm"  v-if="isHaveInitBtn" v-hasPermi="['sysUser:mock']"  class="form-btn-item">填充</el-button>
       </div>
     </div>
   </el-scrollbar>
@@ -290,6 +290,11 @@ export default {
       default: () => {
         return true;
       },
+    },
+    isHaveInitBtn: {
+      //是否有填充按钮
+      type: Boolean,
+      default: true,
     },
     isHaveAddBtn: {
       //是否有保存按钮
@@ -467,7 +472,6 @@ export default {
   created() {
     if (this.data) {
       this.$set(this, "model", JSON.parse(JSON.stringify(this.data)));
-      console.log(this.model);
     }
     this.controls.forEach((_item) => {
       if (this.proxyIf(_item.ifFun, true)) {
@@ -721,6 +725,7 @@ export default {
         this.realControls.forEach((i) => {
           this.$set(this.model, i.name, this.init[i.name]);
         });
+
         if (this.initApi) {
           this.$pagexRequest.get(this.initApi).then((resp) => {
             this.model = resp;

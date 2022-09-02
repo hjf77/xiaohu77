@@ -16,16 +16,37 @@ import java.util.Map;
 public class FieldsVO {
 
     @ApiModelProperty("字段名")
-    private String filedName;
+    private String name;
 
     @ApiModelProperty("字段注释")
-    private String comment;
+    private String label;
+
+    @ApiModelProperty("列表是否显示")
+    private Integer isListShow = Constant.INT_TRUE;
+
+    @ApiModelProperty("是否需要翻译")
+    private Integer isTrans = Constant.INT_FALSE;
+
+    @ApiModelProperty("字典分组编码")
+    private String dictCode;
+
+    @ApiModelProperty("翻译目标表")
+    private String transTable;
+
+    @ApiModelProperty("目标表字段")
+    private  String transField;
+
+    @ApiModelProperty("翻译唯一键")
+    private String uniqueField;
 
     @ApiModelProperty("字段类型")
     private String type;
 
     @ApiModelProperty("键类型")
     private String key;
+
+    @ApiModelProperty("宽度")
+    private Integer width;
 
     @ApiModelProperty("是否必填 NO必填 YES非必填")
     private String isNullable;
@@ -37,7 +58,7 @@ public class FieldsVO {
     private Integer isForm = 1;
 
     @ApiModelProperty("是否忽略")
-    private Integer isIgnore = 0;
+    private Integer isIgnore;
 
     @ApiModelProperty("是否必填")
     private Integer isRequired;
@@ -58,7 +79,7 @@ public class FieldsVO {
 
     @JsonIgnore
     public String getCamelFieldName() {
-        return ColumnNameUtil.underlineToCamel(this.filedName);
+        return ColumnNameUtil.underlineToCamel(this.name);
     }
 
     public Integer getLength() {
@@ -79,14 +100,14 @@ public class FieldsVO {
         return "NO".equals(this.isNullable) ? Constant.INT_TRUE : Constant.INT_FALSE;
     }
 
-    public String getComment() {
-        if (comment == null) {
+    public String getLabel() {
+        if (label == null) {
             return null;
         }
-        if (comment.contains("(")) {
-            return comment.substring(0, comment.indexOf("("));
+        if (label.contains("(")) {
+            return label.substring(0, label.indexOf("("));
         }
-        return comment;
+        return label;
     }
 
 }

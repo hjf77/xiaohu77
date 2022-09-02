@@ -3,7 +3,7 @@
 <mapper namespace="com.fhs.generate.mapper.TableInfoMapper">
 
     <select id="getTableFields" resultMap="fieldsVOResultMap" parameterType="map">
-         show full columns from `${dbName}`.${tableName};
+         show full columns from `${tableSchema}`.${tableName};
     </select>
 
     <select id="getTableComment" resultType="string" parameterType="map">
@@ -12,16 +12,16 @@
         FROM
             information_schema.`TABLES`
         WHERE
-            TABLE_SCHEMA = #{dbName} and table_name=#{tableName};
+            TABLE_SCHEMA = #{tableSchema} and table_name=#{tableName};
     </select>
 
 
 
     <resultMap id="fieldsVOResultMap" type="com.fhs.generate.vo.FieldsVO">
-        <result column="Field" property="filedName" />
+        <result column="Field" property="name" />
         <result column="Null" property="isNullable" />
         <result column="Type" property="type" />
         <result column="Key" property="key" />
-        <result column="Comment" property="comment" />
+        <result column="Comment" property="label" />
     </resultMap>
 </mapper>

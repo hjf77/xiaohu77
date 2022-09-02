@@ -2,6 +2,7 @@ package com.fhs.generate.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.generate.po.TableInfoPO;
 import com.fhs.generate.util.ColumnNameUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,20 +17,8 @@ import java.util.List;
  */
 @Data
 @ApiModel("表信息")
-public class TableInfoVO {
+public class TableInfoVO extends TableInfoPO {
 
-
-    @ApiModelProperty("数据库名")
-    private String dbName;
-
-    @ApiModelProperty("表名")
-    private String tableName;
-
-    @ApiModelProperty("开发者名字")
-    private String author;
-
-    @ApiModelProperty("表注释")
-    private String comment;
 
     /**
      * 主键
@@ -43,6 +32,10 @@ public class TableInfoVO {
     @JsonIgnore
     private String namespace;
 
+    @ApiModelProperty("开发者名字")
+    private String author;
+
+
 
     /**
      * namespace = t_ucenter_user  去掉t_ 转驼峰  为 ucenterUser
@@ -50,10 +43,10 @@ public class TableInfoVO {
      * @return
      */
     public String getNamespace() {
-        String result = this.tableName.replace("t_", "");
+        String result = this.getTableName().replace("t_", "");
         return ColumnNameUtil.underlineToCamel(ConverterUtils.toString(result));
     }
 
     @ApiModelProperty("表字段集合")
-    private FieldsVO[] fieldsVOS;
+    private FieldsVO[] fields;
 }

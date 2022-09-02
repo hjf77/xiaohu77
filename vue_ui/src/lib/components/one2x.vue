@@ -35,14 +35,20 @@
                 v-model="datas[scope.$index][item.name]"
                 v-if="item.type === 'select'"
                 :url="item.url"
-                :options.sync="optionsSetts[scope.$index][item.name]"
+                :options.sync="item.cascade ?  optionsSetts[scope.$index][item.name] : item.options"
                 :methodType="item.methodType"
                 :querys="item.querys"
                 :labelField="item.labelField"
                 :valueField="item.valueField"
                 :isValueNum="item.isValueNum"
-                @change="item.change?item.change.call(this,item, scope.row[item.name]):''"
+                @change="item.change?item.change.call(this,item, scope.row[item.name],scope.$index):''"
               ></pagex-select>
+              <pagex-switchs
+                v-bind="item"
+                v-model="datas[scope.$index][item.name]"
+                v-if="item.type === 'switch'"
+                @change="item.change?item.change.call(this,item, scope.row[item.name]):''"
+              ></pagex-switchs>
               <el-date-picker
                 v-model="datas[scope.$index][item.name]"
                 :type="item.formatType || 'date'"
@@ -58,6 +64,7 @@
       </template>
       <!--按钮-->
       <el-table-column
+        v-if="isHasOperator"
         label="操作"
         :width="120"
         fixed="right"
@@ -81,10 +88,13 @@
 <script>
 
 import {deepClone} from "../utils";
-
 export default {
   name: "pagexOne2x",
   props: {
+    isHasOperator:{
+      type: Boolean,
+      default: false,
+    },
     //每行的表单项
     controls: {
       type: Array,
@@ -150,7 +160,7 @@ export default {
         });
       });
     } else {
-      this.optionsSetts = deepClone(this.optionsInitSetts)
+      this.optionsSetts = this.optionsInitSetts
     }
     this.controls.forEach((_item) => {
       if (!_item.placeholder) {
@@ -179,7 +189,11 @@ export default {
       this.controls.forEach((_item) => {
         rowOptions[_item.name] = _item.options;
       });
-      this.datas.push(deepClone(this.defaultValue));
+      if(this.defaultValue){
+        this.datas.push(deepClone(this.defaultValue));
+      }else{
+        this.datas.push({});
+      }
     },
     //删除一行
     delRow(_index, _row) {

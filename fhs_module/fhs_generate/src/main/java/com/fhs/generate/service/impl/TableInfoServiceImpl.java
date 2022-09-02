@@ -2,9 +2,11 @@ package com.fhs.generate.service.impl;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
 import com.fhs.generate.mapper.TableInfoMapper;
+import com.fhs.generate.po.TableInfoPO;
 import com.fhs.generate.service.TableInfoService;
 import com.fhs.generate.vo.FieldsVO;
 import com.fhs.generate.vo.TableInfoVO;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class TableInfoServiceImpl implements TableInfoService {
+public class TableInfoServiceImpl extends BaseServiceImpl<TableInfoVO, TableInfoPO> implements TableInfoService {
 
     /**
      * 默认忽略集合
@@ -40,14 +42,14 @@ public class TableInfoServiceImpl implements TableInfoService {
     private TableInfoMapper tableInfoMapper;
 
     @Override
-    public TableInfoVO getTableInfo(String dbName, String tableName) {
+    public TableInfoVO getTableInfo(String tableSchema, String tableName,String configType) {
         boolean isDev = ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel"));
         if (!isDev) {
             throw new ParamException("代码生成器仅仅开发模式可用，请配置isDevModel为true");
         }
         List<FieldsVO> fieldList = null;
         try{
-            fieldList = tableInfoMapper.getTableFields(dbName, tableName);
+            fieldList = tableInfoMapper.getTableFields(tableSchema, tableName);
         }catch (Exception e){
             log.error("获取表信息错误");
             if(e instanceof BadSqlGrammarException){
@@ -57,15 +59,15 @@ public class TableInfoServiceImpl implements TableInfoService {
         }
 
         fieldList = fieldList.stream().filter(fieldsVO -> {
-            return (!IGNORE_SET.contains(fieldsVO.getFiledName()));
+            return (!IGNORE_SET.contains(fieldsVO.getName()));
         }).collect(Collectors.toList());
         initPageElementType(fieldList);
-        TableInfoVO tableSearchVO = new TableInfoVO();
-        tableSearchVO.setComment(tableInfoMapper.getTableComment(dbName, tableName));
-        tableSearchVO.setDbName(dbName);
-        tableSearchVO.setTableName(tableName);
-        tableSearchVO.setFieldsVOS(fieldList.toArray(new FieldsVO[fieldList.size()]));
-        return tableSearchVO;
+        TableInfoVO tableInfoVO = new TableInfoVO();
+        tableInfoVO.setTableComment(tableInfoMapper.getTableComment(tableSchema, tableName));
+        tableInfoVO.setTableSchema(tableSchema);
+        tableInfoVO.setTableName(tableName);
+        tableInfoVO.setFields(fieldList.toArray(new FieldsVO[fieldList.size()]));
+        return tableInfoVO;
     }
 
 
@@ -91,5 +93,11 @@ public class TableInfoServiceImpl implements TableInfoService {
                 fieldsVO.setPageElementType("text");
             }
         }
+    }
+
+    @Override
+    public List<TableInfoVO> findForList(TableInfoPO bean) {
+        List<TableInfoPO> dos = baseMapper.selectList(bean.asWrapper());
+        return pos2vos(dos);
     }
 }

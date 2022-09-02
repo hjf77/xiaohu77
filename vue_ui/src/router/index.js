@@ -66,7 +66,11 @@ export const constantRoutes = [
     component: () => import('@/views/demo/form_one2x_demo.vue'),
     hidden: true
   },
-
+  {
+    path: '/generate/listSett',
+    component: () => import('@/views/generate/table/components/listSett.vue'),
+    hidden: true
+  },
   {
     path: '/dict',
     component: Layout,

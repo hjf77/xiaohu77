@@ -10,7 +10,7 @@
     :allow-create="isAllowCreate"
     :default-first-option="isDefaultFirstOption"
     @change="_change"
-    :remote-method="remote?remoteMethod:''"
+    :remote-method="remote?remoteMethod:null"
     :placeholder="placeholder"
   >
     <template v-if="isHaveFatherOption">
@@ -62,6 +62,11 @@ export default {
       type: String,
       default: () => "title",
     },
+    //labelField(remarkLabelField)
+    remarkLabelField: {
+      type: String,
+      default: null,
+    },
     //赋值的 字段
     valueField: {
       type: String | Number,
@@ -98,21 +103,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    //通过自定义方法格式化显示的数据 配合 customLabelQuerys使用
-    isCustomLabel: {
-      type: Boolean,
-      default: false,
-    },
-    customLabelQuerys: {
-      type: Object,
-      default: () => {
-        return {
-          field: 'name',
-          start: '(',
-          end: ')'
-        }
-      },
-    },
+
     //是否默认选中第一个
     isDefaultFirstOption: {
       type: Boolean,
@@ -199,8 +190,8 @@ export default {
       let _that = this;
       if (Array.isArray(_options)) {
         _options.forEach(function (_item) {
-          if (_that.isCustomLabel) {
-            _item.labelField = _item[_that.newLabelField] + _that.customLabelQuerys.start + _item[_that.customLabelQuerys.field] + _that.customLabelQuerys.end;
+          if (_that.remarkLabelField) {
+            _item.labelField = _item[_that.newLabelField] + '(' + _item[_that.remarkLabelField] + ')';
           } else {
             _item.labelField = _item[_that.newLabelField];
           }
@@ -225,7 +216,7 @@ export default {
     },
     _change() {
       this.selectOn && this.selectOn(this.radioValue);
-      this.$emit("change", this.radioValue);
+      //this.$emit("change", this.radioValue);
     },
 
     // 远程搜索
