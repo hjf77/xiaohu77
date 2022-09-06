@@ -312,6 +312,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             if (mobileCount > 0L) {
                 throw new ParamException("该手机号已被使用！");
             }
+            ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getMobile());
             ucenterMsUserPO.setMobile(ucenterMsUserVO.getMobile());
         }
         if (!StringUtils.isEmpty(ucenterMsUserVO.getEmail())) {
@@ -329,6 +330,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             if (emailCount > 0L) {
                 throw new ParamException("该邮箱已被使用！");
             }
+            ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getEmail());
             ucenterMsUserPO.setEmail(ucenterMsUserVO.getEmail());
         }
         ucenterMsUserPO.setUpdateTime(new Date());
