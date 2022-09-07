@@ -6,7 +6,7 @@
         v-model="switchValue"
         active-color="#13ce66"
         inactive-color="gray"
-        @change="switchchange"
+        @change="switchChange"
       >
       </el-switch>
   </div>
@@ -32,12 +32,12 @@ export default {
     };
   },
   async mounted() {
-    this.switchchange(this.switchValue);
+    this.switchChange(this.switchValue);
 
   },
 
   methods: {
-    switchchange(val) {
+    switchChange(val) {
       this.$emit("change", val);
     },
   },

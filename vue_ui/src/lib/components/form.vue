@@ -58,7 +58,7 @@
           ></el-input>
           <Editor
             v-model="model[item.name]"
-            v-if="item.type === 'textareaEditor'"
+            v-if="item.type === 'editor'"
           />
           <el-date-picker
             v-model="model[item.name]"

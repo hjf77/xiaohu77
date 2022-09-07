@@ -42,11 +42,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/generate',
-    component: () => import('@/views/generate.vue'),
-    hidden: true
-  },
-  {
     path: '/404',
     component: () => import('@/views/error/404.vue'),
     hidden: true
@@ -67,9 +62,17 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/generate/listSett',
-    component: () => import('@/views/generate/table/components/listSett.vue'),
-    hidden: true
+    path: '/generate',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'listSett',
+        component: () => import('@/views/generate/table/components/listSett.vue'),
+        name: 'generateListSett',
+        meta: { title: '列表配置', icon: '' }
+      }
+    ]
   },
   {
     path: '/dict',
