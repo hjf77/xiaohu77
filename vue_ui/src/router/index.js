@@ -41,7 +41,6 @@ export const constantRoutes = [
     component: () => import('@/views/login.vue'),
     hidden: true
   },
-  {
     path: '/404',
     component: () => import('@/views/error/404.vue'),
     hidden: true
@@ -71,6 +70,11 @@ export const constantRoutes = [
         component: () => import('@/views/generate/table/components/listSett.vue'),
         name: 'generateListSett',
         meta: { title: '列表配置', icon: '' }
+      },
+      {
+		 path: 'form',
+         component: () => import('@/views/formCreate.vue'),
+		 name: 'generateFormSett',
       }
     ]
   },
