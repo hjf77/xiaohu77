@@ -43,7 +43,7 @@ export const constantRoutes = [
   },
   {
     path: '/generate',
-    component: () => import('@/views/generate.vue'),
+    component: () => import('@/views/formCreate.vue'),
     hidden: true
   },
   {
