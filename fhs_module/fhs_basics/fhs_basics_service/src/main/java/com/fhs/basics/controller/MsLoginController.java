@@ -1,23 +1,20 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.fhs.basics.constant.LoggerConstant;
+import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterAppUserSetPO;
 import com.fhs.basics.po.UcenterMsUserPO;
-import com.fhs.basics.service.UcenterAppUserSetService;
-import com.fhs.basics.service.UcenterMsRoleService;
-import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.service.*;
 import com.fhs.basics.vo.*;
-import com.fhs.basics.constant.LoggerConstant;
-import com.fhs.basics.service.LogLoginService;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.logger.Logger;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.fhs.core.logger.Logger;
-import com.fhs.basics.context.UserContext;
 import com.fhs.module.base.auth.StpInterfaceImpl;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -29,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -116,6 +115,8 @@ public class MsLoginController extends BaseController {
     @Autowired
     private UcenterAppUserSetService ucenterAppUserSetService;
 
+    @Autowired
+    private CommonMessageService commonMessageService;
 
     /**
      * 判断用户是否锁定
@@ -252,6 +253,20 @@ public class MsLoginController extends BaseController {
         result.put("tokenName", StpUtil.getTokenName());
         result.put("userInfo", sysUser);
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
+        //插入通知消息
+        String userAgent = request.getHeader("user-agent");
+        Pattern pattern = Pattern.compile(";\\s?(\\S*?\\s?\\S*?)\\s?(Build)?/");
+        Matcher matcher = pattern.matcher(userAgent);
+        String phoneModel = null;
+        if (matcher.find()) {
+            phoneModel = matcher.group(1).trim();
+        }
+        phoneModel = phoneModel == null ? "Iphone" : phoneModel;
+        CommonMessageVO commonMessageVO = new CommonMessageVO();
+        commonMessageVO.setPhoneModel(phoneModel);
+        commonMessageVO.setCreateUser(sysUser.getUserId());
+        commonMessageVO.setUserId(sysUser.getUserId());
+        commonMessageService.insertCommonMsg(commonMessageVO);
         return HttpResult.success(result);
     }
 
