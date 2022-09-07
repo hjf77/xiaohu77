@@ -57,7 +57,7 @@ export default {
               type: "bottom",
               size: 'mini',
               click: (_row) => {
-
+                  this.$router.push({path: '/generate/listSett',query:{tableSchema: _row.tableSchema,tableName: _row.tableName}});
               }
             },{
               title: "配置表单",

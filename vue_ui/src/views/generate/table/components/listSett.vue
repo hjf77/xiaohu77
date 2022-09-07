@@ -21,7 +21,7 @@
       ref="listSettForm"
     >
     </pagex-form>
-    <el-button>下一步配置过滤条件</el-button>
+    <el-button @click="submit()">下一步配置过滤条件</el-button>
   </div>
 </template>
 <script>
@@ -45,7 +45,6 @@ export default {
         tableSchema: "fhs-demo",
         tableName: "t_user",
         tableComment: "用户",
-        tableCollation: "utf8b4",
         fields: [{
           label: 'username',
           name: '用户名',
@@ -80,11 +79,6 @@ export default {
           type: "label",
           name: "tableComment",
           label: "表备注"
-        },
-        {
-          type: "label",
-          name: "tableCollation",
-          label: "编码"
         },
         {
           type: "one2x",
@@ -127,19 +121,7 @@ export default {
               valueField: 'valueField',
               labelField: 'labelField',
               change: (row, newValue, _index) => {
-                this.$pagexRequest({
-                  url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${newValue}`,
-                  method: 'get',
-                }).then((res) => {
-                  let fields = res.fields;
-                  fields.forEach((item) => {
-                    item.valueField = item.name;
-                    item.labelField = item.label + '(' + item.name + ')';
-                  })
-                  this.$set(this.controls[4].optionsSetts[_index], 'transField', fields)
-                  this.$set(this.controls[4].optionsSetts[_index], 'uniqueField', fields)
-                });
-
+                this.loadTableFields(_index,newValue)
               },
             },
             {
@@ -164,8 +146,8 @@ export default {
     }
   },
   created() {
-    /* this.tableSchema = this.$route.query && this.$route.query.tableSchema;
-     this.tableName = this.$route.query && this.$route.query.tableName;*/
+    this.tableSchema = this.$route.query && this.$route.query.tableSchema;
+    this.tableName = this.$route.query && this.$route.query.tableName;
   },
   mounted() {
     this.initData()
@@ -173,14 +155,18 @@ export default {
   methods: {
     async initData() {
       this.init = await this.$pagexRequest({
-        url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${this.tableName}`,
+        url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${this.tableName}&configType=listColumn`,
         method: 'get',
       });
-      this.controls[4].optionsInitSetts = this.controls[4].optionsSetts;
+      this.controls[3].optionsInitSetts = this.controls[3].optionsSetts;
       this.init.fields.forEach((item) => {
-        this.controls[4].optionsSetts.push({transField: [], uniqueField: []});
+        this.controls[3].optionsSetts.push({transField: [], uniqueField: []});
       });
-      console.log(this.controls[4].optionsInitSetts);
+      this.init.fields.forEach((item,_index) => {
+        if(item.transTable){
+          this.loadTableFields(_index,item.transTable)
+        }
+      });
 
       let dictGroups = await this.$pagexRequest({
         url: '/basic/ms/dictGroup/findList',
@@ -193,7 +179,7 @@ export default {
       })
 
 
-      this.controls[4].controls[4].options = dictGroups;
+      this.controls[3].controls[4].options = dictGroups;
 
       let tables = await this.$pagexRequest({
         url: `/basic/ms/table/findList?tableSchema=${this.tableSchema}`,
@@ -205,10 +191,38 @@ export default {
         item.labelField = item.tableComment + '(' + item.tableName + ')';
       })
 
-      this.controls[4].controls[5].options = tables;
+      this.controls[3].controls[5].options = tables;
 
       this.$nextTick(() => {
         this.$set(this, 'initFinsh', true);
+      });
+    },
+    loadTableFields(_index,_tableName){
+      this.$pagexRequest({
+        url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${_tableName}`,
+        method: 'get',
+      }).then((res) => {
+        let fields = res.fields;
+        fields.forEach((item) => {
+          item.valueField = item.name;
+          item.labelField = item.label + '(' + item.name + ')';
+        })
+        this.$set(this.controls[3].optionsSetts[_index], 'transField', fields)
+        this.$set(this.controls[3].optionsSetts[_index], 'uniqueField', fields)
+      });
+    },
+    submit() {
+      let formData = {};
+      formData.dbName = this.tableSchema;
+      formData.tableName = this.tableName;
+      formData.remark = this.tableComment;
+      formData.listColumnSett = JSON.stringify(this.$refs.listSettForm.getModel().fields);
+      this.$pagexRequest({
+        url: `/basic/ms/table/updateTableGenerateConfig`,
+        method: 'put',
+        data:formData
+      }).then((res)=>{
+        console.log(res);
       });
     }
   }
