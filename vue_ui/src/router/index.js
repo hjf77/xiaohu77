@@ -41,6 +41,7 @@ export const constantRoutes = [
     component: () => import('@/views/login.vue'),
     hidden: true
   },
+  {
     path: '/404',
     component: () => import('@/views/error/404.vue'),
     hidden: true
@@ -69,12 +70,12 @@ export const constantRoutes = [
         path: 'listSett',
         component: () => import('@/views/generate/table/components/listSett.vue'),
         name: 'generateListSett',
-        meta: { title: '列表配置', icon: '' }
+        meta: {title: '列表配置', icon: ''}
       },
       {
-		 path: 'form',
-         component: () => import('@/views/formCreate.vue'),
-		 name: 'generateFormSett',
+        path: 'form',
+        component: () => import('@/views/formCreate.vue'),
+        name: 'generateFormSett',
       }
     ]
   },
@@ -87,7 +88,7 @@ export const constantRoutes = [
         path: 'type/data',
         component: () => import('@/views/system/dict/data.vue'),
         name: 'Data',
-        meta: { title: '字典数据', icon: '' }
+        meta: {title: '字典数据', icon: ''}
       }
     ]
   },
