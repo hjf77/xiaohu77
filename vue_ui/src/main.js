@@ -134,9 +134,14 @@ validator.localize("zh_CN", zh_CN);
 import("@/lib/utils/element-reset.js")
 
 
+
+
 //自定义vee提示信息
 validator.localize(veeValidator);
 Vue.use(VeeElement, validator, false)
+
+import formCreate from '@form-create/element-ui';
+Vue.use(formCreate);
 new Vue({
   el: '#app',
   store,
