@@ -42,22 +42,10 @@ export default {
       tableSchema: 'fhs-demo',
       tableName: "t_pub_file",
       init: {
-        tableSchema: "fhs-demo",
-        tableName: "t_user",
-        tableComment: "用户",
-        fields: [{
-          label: 'username',
-          name: '用户名',
-          width: '150',
-          isListShow: 1,
-          isTrans: 0,
-          transType: 'dict',
-          dictCode: 'sex',
-          transTable: '',
-          transDB: '',
-          transField: '',
-          uniqueField: ''
-        }],
+        tableSchema: "-demo",
+        tableName: "",
+        tableComment: "",
+        fields: [],
       },
       optionsInitSetts: [],
       initFinsh: false,
@@ -90,12 +78,14 @@ export default {
             {
               type: 'label',
               name: 'name',
-              label: '字段名'
+              label: '字段名',
+              fixed:'fixed'
             },
             {
               type: 'label',
               name: 'label',
-              label: '备注'
+              label: '备注',
+              fixed:'fixed'
             },
             {
               type: 'switch',
@@ -109,6 +99,12 @@ export default {
             },
             {
               type: 'select',
+              name: 'elementType',
+              label: '过滤条件类型',
+              dictCode:'filter_element_type'
+            },
+            {
+              type: 'select',
               name: 'dictCode',
               label: '字典分组',
               valueField: 'valueField',
@@ -116,7 +112,7 @@ export default {
             },
             {
               type: 'select',
-              name: 'transTable',
+              name: 'table',
               label: '表',
               valueField: 'valueField',
               labelField: 'labelField',
@@ -126,8 +122,8 @@ export default {
             },
             {
               type: 'select',
-              name: 'transField',
-              label: '翻译字段',
+              name: 'titleFiled',
+              label: 'title字段',
               cascade: true,
               valueField: 'valueField',
               labelField: 'labelField',
@@ -139,7 +135,22 @@ export default {
               label: '唯一键',
               valueField: 'valueField',
               labelField: 'labelField',
-            }
+            },
+            {
+              type: 'text',
+              name: 'api',
+              label: '接口',
+            },
+            {
+              type: 'text',
+              name: 'valueField',
+              label: 'value字段',
+            },
+            {
+              type: 'text',
+              name: 'labelField',
+              label: 'label字段',
+            },
           ],
         }
       ]
@@ -160,11 +171,12 @@ export default {
       });
       this.controls[3].optionsInitSetts = this.controls[3].optionsSetts;
       this.init.fields.forEach((item) => {
-        this.controls[3].optionsSetts.push({transField: [], uniqueField: []});
+        this.controls[3].optionsSetts.push({titleFiled: [], uniqueField: []});
       });
+      //初始化级联下拉框
       this.init.fields.forEach((item,_index) => {
-        if(item.transTable){
-          this.loadTableFields(_index,item.transTable)
+        if(item.table){
+          this.loadTableFields(_index,item.table)
         }
       });
 
@@ -172,15 +184,16 @@ export default {
         url: '/basic/ms/dictGroup/findList',
         method: 'get',
       });
-
+      // 字典分组下拉
       dictGroups.forEach((item) => {
         item.valueField = item.groupCode;
         item.labelField = item.groupName + '(' + item.groupCode + ')';
       })
 
 
-      this.controls[3].controls[4].options = dictGroups;
+      this.controls[3].controls[5].options = dictGroups;
 
+      //表数据下拉
       let tables = await this.$pagexRequest({
         url: `/basic/ms/table/findList?tableSchema=${this.tableSchema}`,
         method: 'get',
@@ -191,25 +204,31 @@ export default {
         item.labelField = item.tableComment + '(' + item.tableName + ')';
       })
 
-      this.controls[3].controls[5].options = tables;
+      this.controls[3].controls[6].options = tables;
 
       this.$nextTick(() => {
         this.$set(this, 'initFinsh', true);
       });
     },
+    // 加载表下面的字段
     loadTableFields(_index,_tableName){
-      this.$pagexRequest({
-        url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${_tableName}`,
-        method: 'get',
-      }).then((res) => {
-        let fields = res.fields;
-        fields.forEach((item) => {
-          item.valueField = item.name;
-          item.labelField = item.label + '(' + item.name + ')';
-        })
-        this.$set(this.controls[3].optionsSetts[_index], 'transField', fields)
-        this.$set(this.controls[3].optionsSetts[_index], 'uniqueField', fields)
-      });
+      if(_tableName){
+        this.$pagexRequest({
+          url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${_tableName}`,
+          method: 'get',
+        }).then((res) => {
+          let fields = res.fields;
+          fields.forEach((item) => {
+            item.valueField = item.name;
+            item.labelField = item.label + '(' + item.name + ')';
+          })
+          this.$set(this.controls[3].optionsSetts[_index], 'titleFiled', fields)
+          this.$set(this.controls[3].optionsSetts[_index], 'uniqueField', fields)
+        });
+      }else{
+        this.$set(this.controls[3].optionsSetts[_index], 'titleFiled', [])
+        this.$set(this.controls[3].optionsSetts[_index], 'uniqueField', [])
+      }
     },
     submit() {
       let formData = {};

@@ -87,12 +87,12 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         for (FieldsVO fieldsVO : tableInfoVO.getFields()) {
             if (Constant.INT_TRUE == fieldsVO.getIsList()) {
                 columns.append("                     {label: '" + fieldsVO.getLabel() + "', name: '" +
-                        (needTransElementType.contains(fieldsVO.getPageElementType())
+                        (needTransElementType.contains(fieldsVO.getElementType())
                                 ? fieldsVO.getCamelFieldName() + "Name" : fieldsVO.getCamelFieldName())
                         + "', width: 150},\n");
             }
             //如果没指定元素类型 或者不是过滤条件则看下一个字段
-            if (CheckUtils.isNullOrEmpty(fieldsVO.getPageElementType()) || Constant.INT_TRUE != fieldsVO.getIsFilter()) {
+            if (CheckUtils.isNullOrEmpty(fieldsVO.getElementType()) || Constant.INT_TRUE != fieldsVO.getIsFilter()) {
                 continue;
             }
             filters.append("                     " + this.getFilterJson(fieldsVO).toJSONString() + ",\n");
@@ -118,17 +118,17 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         StringBuilder controls = new StringBuilder("\n");
         //列表展示列
         StringBuilder formData = new StringBuilder("\n");
-        for (FieldsVO fieldsVO : tableInfoVO.getFields()) {
+       /* for (FieldsVO fieldsVO : tableInfoVO.getFields()) {
             if (Constant.INT_FALSE == fieldsVO.getIsIgnore() && Constant.INT_TRUE != fieldsVO.getIsForm()) {
                 formData.append("                     " + fieldsVO.getCamelFieldName() + ": this.init." + fieldsVO.getCamelFieldName()
                         + " ? this.init." + fieldsVO.getCamelFieldName() + " : null,\n");
             }
             //如果没指定元素类型 或者不是过滤条件则看下一个字段
-            if (CheckUtils.isNullOrEmpty(fieldsVO.getPageElementType()) || Constant.INT_TRUE != fieldsVO.getIsForm()) {
+            if (CheckUtils.isNullOrEmpty(fieldsVO.getElementType()) || Constant.INT_TRUE != fieldsVO.getIsForm()) {
                 continue;
             }
             controls.append("                     " + this.getFormJson(fieldsVO).toJSONString() + ",\n");
-        }
+        }*/
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("tableComment", tableInfoVO.getTableComment());
         paramMap.put("author", tableInfoVO.getAuthor());
@@ -148,10 +148,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
      */
     private JSONObject getFilterJson(FieldsVO fieldsVO) {
         JSONObject result = new JSONObject();
-        result.put("type", typeConverter.containsKey(fieldsVO.getPageElementType()) ? typeConverter.get(fieldsVO.getPageElementType()) : fieldsVO.getPageElementType());
+        result.put("type", typeConverter.containsKey(fieldsVO.getElementType()) ? typeConverter.get(fieldsVO.getElementType()) : fieldsVO.getElementType());
         result.put("label", fieldsVO.getLabel());
         result.put("name", fieldsVO.getCamelFieldName());
-        result.put("operation", operationMap.containsKey(fieldsVO.getPageElementType()) ? operationMap.get(fieldsVO.getPageElementType()) : "=");
+        result.put("operation", operationMap.containsKey(fieldsVO.getElementType()) ? operationMap.get(fieldsVO.getElementType()) : "=");
         result.putAll(fieldsVO.getExtParam());
         return result;
     }
@@ -165,10 +165,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     private JSONObject getFormJson(FieldsVO fieldsVO) {
         JSONObject result = getFilterJson(fieldsVO);
         result.remove("operation");
-        result.put("type", fieldsVO.getPageElementType());
-        if (Constant.INT_TRUE == fieldsVO.getIsRequired()) {
-            result.put("rule", "required");
-        }
+        result.put("type", fieldsVO.getElementType());
         return result;
     }
 

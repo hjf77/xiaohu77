@@ -72,7 +72,7 @@ public class TableInfoServiceImpl extends BaseServiceImpl<TableInfoVO, TableInfo
                 .tableName(tableName).build());
         //列配置的话，把老数据拿出来
         if (GenerateConstant.CONFIG_TYPE_LIST_COLUMN.equals(configType)) {
-            if (tableConfig.getListColumnSett() != null) {
+            if (tableConfig!=null && tableConfig.getListColumnSett() != null) {
                 List<FieldsVO> oldSetts = JSONObject.parseArray(tableConfig.getListColumnSett(),FieldsVO.class);
                 Map<String,FieldsVO> fieldsVOMap = oldSetts.stream().collect(Collectors.toMap(e -> e.getName(), v -> v));
                 for (FieldsVO fieldsVO : fieldList) {
@@ -81,8 +81,8 @@ public class TableInfoServiceImpl extends BaseServiceImpl<TableInfoVO, TableInfo
                         fieldsVO.setIsListShow(old.getIsListShow());
                         fieldsVO.setIsTrans(old.getIsTrans());
                         fieldsVO.setDictCode(old.getDictCode());
-                        fieldsVO.setTransTable(old.getTransTable());
-                        fieldsVO.setTransField(old.getTransField());
+                        fieldsVO.setTable(old.getTable());
+                        fieldsVO.setTitleFiled(old.getTitleFiled());
                         fieldsVO.setUniqueField(old.getUniqueField());
                     }
                 }
@@ -97,29 +97,7 @@ public class TableInfoServiceImpl extends BaseServiceImpl<TableInfoVO, TableInfo
     }
 
 
-    /**
-     * 根据字段类型设置默认的长度
-     *
-     * @param fieldList
-     */
-    private void initPageElementType(List<FieldsVO> fieldList) {
-        for (FieldsVO fieldsVO : fieldList) {
-            fieldsVO.setIsForm(Constant.INT_TRUE);
-            //如果长度大于200的默认设置多行文本框
-            if (fieldsVO.getLength() > 200) {
-                fieldsVO.setPageElementType("textarea");
-                //带日期的默认是日期
-            } else if (fieldsVO.getType().contains("date")) {
-                fieldsVO.setPageElementType("dates");
-                fieldsVO.getExtParam().put("formatVal", "yyyy-MM-dd");
-                //数字的默认设置为下拉框，因为字典之类的都是下拉框
-            } else if (fieldsVO.getType().contains("int")) {
-                fieldsVO.setPageElementType("select");
-            } else {
-                fieldsVO.setPageElementType("text");
-            }
-        }
-    }
+
 
     @Override
     public List<TableInfoVO> findForList(TableInfoPO bean) {
