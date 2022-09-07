@@ -17,4 +17,6 @@ public interface TableInfoService extends BaseService<TableInfoVO, TableInfoPO>{
      * @return
      */
     TableInfoVO getTableInfo(String tableSchema, String tableName,String configType);
+
+
 }

@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.exception.NotPremissionException;
+import com.fhs.core.result.HttpResult;
+import com.fhs.generate.po.SystemTableGenerateConfigPO;
 import com.fhs.generate.po.TableInfoPO;
+import com.fhs.generate.service.SystemTableGenerateConfigService;
 import com.fhs.generate.service.TableInfoService;
 import com.fhs.generate.vo.TableInfoVO;
 import com.fhs.module.base.controller.ModelSuperController;
@@ -28,6 +31,9 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
 
     @Autowired
     private TableInfoService tableInfoService;
+
+    @Autowired
+    private SystemTableGenerateConfigService tableGenerateConfigService;
 
     /**
      * @param tableName
@@ -59,4 +65,21 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
         List<TableInfoVO> dataList = baseService.findForList((TableInfoPO) e);
         return dataList;
     }
+
+
+    @PutMapping("updateTableGenerateConfig")
+    @ApiOperation("更新配置")
+    public HttpResult<Boolean> findList(@RequestBody  SystemTableGenerateConfigPO tableGenerateConfigPO) throws Exception {
+        SystemTableGenerateConfigPO old = tableGenerateConfigService.selectBean(SystemTableGenerateConfigPO.builder().dbName(tableGenerateConfigPO.getDbName())
+                .tableName(tableGenerateConfigPO.getTableName()).build());
+        if (old != null) {
+            tableGenerateConfigPO.setId(old.getId());
+            tableGenerateConfigService.updateSelectiveById(tableGenerateConfigPO);
+        } else {
+            tableGenerateConfigService.insert(tableGenerateConfigPO);
+        }
+        return HttpResult.success(true);
+    }
+
+
 }
