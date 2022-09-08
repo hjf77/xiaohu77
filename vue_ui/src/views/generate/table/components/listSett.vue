@@ -21,7 +21,7 @@
       ref="listSettForm"
     >
     </pagex-form>
-    <el-button @click="submit()">下一步配置过滤条件</el-button>
+    <center><el-button @click="submit()">下一步配置过滤条件</el-button></center>
   </div>
 </template>
 <script>
