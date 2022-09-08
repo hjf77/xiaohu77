@@ -364,4 +364,44 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
         return sysUserService.getUserCompanyTree(new QueryWrapper<>());
     }
+
+    /**
+     * 修改手机号/邮箱判断是否被占用
+     *
+     * @param ucenterMsUserVO
+     * @return
+     */
+    @PostMapping("mobileOrEmailIsExist")
+    @ApiOperation("修改手机号/邮箱判断是否被占用")
+    public HttpResult<Boolean> mobileOrEmailIsExist(@RequestBody UcenterMsUserVO ucenterMsUserVO) {
+        Long userId = this.getSessionuser().getUserId();
+        UcenterMsUserVO msUserVO = sysUserService.selectById(userId);
+        if (!StringUtils.isEmpty(ucenterMsUserVO.getMobile())) {
+            if (!StringUtils.isEmpty(msUserVO.getMobile())) {
+                if (msUserVO.getMobile().equals(ucenterMsUserVO.getMobile())) {
+                    throw new ParamException("所更换的手机号号码不能与当前手机号码一致");
+                }
+            }
+            Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                    .eq(UcenterMsUserPO::getMobile, ucenterMsUserVO.getMobile())
+                    .ne(UcenterMsUserPO::getUserId, userId));
+            if (mobileCount > 0L) {
+                throw new ParamException("该手机号已被使用！");
+            }
+        }
+        if (!StringUtils.isEmpty(ucenterMsUserVO.getEmail())) {
+            if (!StringUtils.isEmpty(msUserVO.getEmail())) {
+                if (msUserVO.getEmail().equals(ucenterMsUserVO.getEmail())) {
+                    throw new ParamException("所更换的邮箱号码不能与当前邮箱号码一致");
+                }
+            }
+            Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
+                    .eq(UcenterMsUserPO::getEmail, ucenterMsUserVO.getEmail())
+                    .ne(UcenterMsUserPO::getUserId, userId));
+            if (emailCount > 0L) {
+                throw new ParamException("该邮箱已被使用！");
+            }
+        }
+        return HttpResult.success(true);
+    }
 }

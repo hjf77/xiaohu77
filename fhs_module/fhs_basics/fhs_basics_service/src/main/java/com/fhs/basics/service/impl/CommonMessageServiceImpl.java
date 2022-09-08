@@ -28,6 +28,7 @@ public class CommonMessageServiceImpl extends BaseServiceImpl<CommonMessageVO, C
     @Override
     public void insertCommonMsg(CommonMessageVO commonMessageVO) {
         String title = commonMessageVO.getTitle();
+        commonMessageVO.setMsgType(CommonMessageConstant.FAMILY);
         if (null != title && title.equals(CommonMessageConstant.BECOME_FAMILY_MEMBER)) {
             commonMessageVO.setContent(this.getBecomeFamilmemberMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
         }
@@ -42,9 +43,9 @@ public class CommonMessageServiceImpl extends BaseServiceImpl<CommonMessageVO, C
         }
         if (StringUtils.isNotBlank(commonMessageVO.getPhoneModel())) {
             commonMessageVO.setContent(this.getLoginMsg(commonMessageVO.getPhoneModel()));
+            commonMessageVO.setMsgType(CommonMessageConstant.NOTICE);
         }
         commonMessageVO.setIsRead(CommonMessageConstant.NO);
-        commonMessageVO.setMsgType(CommonMessageConstant.NOTICE);
         commonMessageVO.setUpdateUser(commonMessageVO.getCreateUser());
         this.insert(commonMessageVO);
     }

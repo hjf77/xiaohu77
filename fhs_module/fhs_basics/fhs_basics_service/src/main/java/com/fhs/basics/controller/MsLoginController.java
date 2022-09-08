@@ -261,7 +261,7 @@ public class MsLoginController extends BaseController {
         if (matcher.find()) {
             phoneModel = matcher.group(1).trim();
         }
-        phoneModel = phoneModel == null ? "Iphone" : phoneModel;
+        phoneModel = phoneModel == null ? "iphone" : phoneModel;
         CommonMessageVO commonMessageVO = new CommonMessageVO();
         commonMessageVO.setPhoneModel(phoneModel);
         commonMessageVO.setCreateUser(sysUser.getUserId());
