@@ -86,6 +86,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         if (isPermitted("see")) {
             QueryWrapper wrapper = filter.asWrapper(getDOClass());
             wrapper.eq("user_id", this.getSessionuser().getUserId());
+            wrapper.orderByDesc("create_time");
             //这里的是1是DO的index
             IPage<CommonMessageVO> page = baseService.selectPageMP(filter.getPagerInfo(), wrapper);
             return page.getRecords().stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate));

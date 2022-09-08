@@ -56,19 +56,19 @@ public class CommonMessageServiceImpl extends BaseServiceImpl<CommonMessageVO, C
     }
 
     private String getJoinFamilyMsg(String familyName, String userName) {
-        return time+" " + userName + " 邀请你加入家庭" + '"' + familyName + '"' + ",在" + '"' + "我的>家庭管理" + '"' + "中接受邀请后即可加入";
+        return time + "|" + userName + " 邀请你加入家庭" + '"' + familyName + '"' + ",在" + '"' + "我的>家庭管理" + '"' + "中接受邀请后即可加入";
     }
 
     private String getLeaveFamilyMsg(String familyName, String userName) {
-        return time+" " + userName + " 已经离开当前你的家庭" + '"' + familyName + '"' + ",在" + '"' + "我的>家庭管理" + '"' + "中查看现有成员信息";
+        return time + "|" + userName + " 已经离开当前你的家庭" + '"' + familyName + '"' + ",在" + '"' + "我的>家庭管理" + '"' + "中查看现有成员信息";
     }
 
     private String getBecomeFamilmemberMsg(String familyName, String userName) {
-        return time+" " + userName + " 将你设为家庭" + '"' + familyName + '"' + "的管理员,可以管理房间、设备和智能了";
+        return time + "|" + userName + " 将你设为家庭" + '"' + familyName + '"' + "的管理员,可以管理房间、设备和智能了";
     }
 
     private String getRemoveFamilmemberMsg(String familyName, String userName) {
-        return time+" " + userName + " 已经将你从家庭" + '"' + familyName + '"' + "中移除,在" + '"' + "我的>家庭管理" + '"' + "中查看现有家庭信息";
+        return time + "|" + userName + " 已经将你从家庭" + '"' + familyName + '"' + "中移除,在" + '"' + "我的>家庭管理" + '"' + "中查看现有家庭信息";
     }
 
     private String getLoginMsg(String phoneModel) {
