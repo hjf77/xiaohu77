@@ -127,4 +127,12 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     @ApiModelProperty(value = "用户id")
     @Trans(type = TransType.SIMPLE, target = UcenterMsUserPO.class, fields = "userName",alias="userName")
     private Long userId;
+
+
+    /**
+     * 通知日期
+     */
+    @TableField("notice_date")
+    @ApiModelProperty(value = "通知日期")
+    private String noticeDate;
 }

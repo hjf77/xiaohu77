@@ -6,11 +6,11 @@ public interface CommonMessageConstant {
     /**
      * 否
      */
-    Integer YES = 0;
+    Integer YES = 1;
     /**
      * 是
      */
-    Integer NO = 1;
+    Integer NO = 0;
 
     /**
      * 消息类型 -- 告警
