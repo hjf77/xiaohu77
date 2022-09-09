@@ -30,20 +30,22 @@ public class FieldsVO {
     @ApiModelProperty("字典分组编码")
     private String dictCode;
 
-    @ApiModelProperty("翻译目标表")
-    private String transTable;
+    @ApiModelProperty("目标表")
+    private String table;
 
-    @ApiModelProperty("目标表字段")
-    private  String transField;
+    @ApiModelProperty("表字段")
+    private  String titleFiled;
 
     @ApiModelProperty("翻译唯一键")
     private String uniqueField;
 
+    @ApiModelProperty("key")
+    private String key;
+
     @ApiModelProperty("字段类型")
     private String type;
 
-    @ApiModelProperty("键类型")
-    private String key;
+
 
     @ApiModelProperty("宽度")
     private Integer width;
@@ -54,14 +56,9 @@ public class FieldsVO {
     @ApiModelProperty("是否参与列表过滤")
     private Integer isFilter = 0;
 
-    @ApiModelProperty("表单中是否包含")
-    private Integer isForm = 1;
-
     @ApiModelProperty("是否忽略")
     private Integer isIgnore;
 
-    @ApiModelProperty("是否必填")
-    private Integer isRequired;
 
     @ApiModelProperty("长度")
     private Integer length;
@@ -71,7 +68,16 @@ public class FieldsVO {
     private Integer isList = 0;
 
     @ApiModelProperty("页面元素")
-    private String pageElementType;
+    private String elementType;
+
+    @ApiModelProperty("接口地址")
+    private String api;
+
+    @ApiModelProperty("labelField")
+    private String labelField;
+
+    @ApiModelProperty("valueField")
+    private String valueField;
 
     @ApiModelProperty("扩展信息")
     private Map<String, Object> extParam = new HashMap<>();
@@ -92,13 +98,6 @@ public class FieldsVO {
         return 0;
     }
 
-
-    public Integer getIsRequired() {
-        if (this.isRequired != null) {
-            return isRequired;
-        }
-        return "NO".equals(this.isNullable) ? Constant.INT_TRUE : Constant.INT_FALSE;
-    }
 
     public String getLabel() {
         if (label == null) {

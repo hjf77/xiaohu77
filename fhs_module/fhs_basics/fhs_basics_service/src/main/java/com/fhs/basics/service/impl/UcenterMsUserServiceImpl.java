@@ -168,8 +168,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateUser(UcenterMsUserPO adminUser) {
+        UcenterMsUserPO old = selectById(adminUser.getUserId());
+        ParamChecker.isNotNull(old,"用户id错误");
+        adminUser.setIsAdmin(old.getIsAdmin());
         if(adminUser.getPassword() == null){
-            adminUser.setPassword(selectById(adminUser.getUserId()).getPassword());
+            adminUser.setPassword(old.getPassword());
         }
         // 删除原有的角色
         boolean count = deleteUserRole(adminUser);
