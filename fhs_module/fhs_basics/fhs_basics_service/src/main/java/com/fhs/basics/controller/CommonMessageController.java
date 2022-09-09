@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +38,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
 
     @ResponseBody
     @PostMapping({"delMessages"})
-    @ApiOperation("删除消息")
+    @ApiOperation("批量删除消息")
     @LogMethod(type = 2, pkeyParamIndex = 0)
     public HttpResult<Boolean> delMessages(@RequestParam("ids") List<Long> ids) {
         if (!ids.isEmpty()) {
@@ -49,13 +50,13 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         throw new ParamException("请选择需要删除的消息!");
     }
 
-/*
-    */
+    /*
+     */
 /**
-     * 无分页查询bean列表数据
-     *
-     * @throws Exception
-     *//*
+ * 无分页查询bean列表数据
+ *
+ * @throws Exception
+ *//*
 
     @ResponseBody
     @GetMapping("findCommonMsgList")
@@ -89,7 +90,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
             wrapper.orderByDesc("create_time");
             //这里的是1是DO的index
             IPage<CommonMessageVO> page = baseService.selectPageMP(filter.getPagerInfo(), wrapper);
-            return page.getRecords().stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate));
+            return page.getRecords().stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate, TreeMap::new, Collectors.toList())).descendingMap();
         } else {
             throw new NotPremissionException();
         }
