@@ -109,6 +109,12 @@ export default {
             },
             {
               type: 'select',
+              name: 'elementType',
+              label: '过滤条件类型',
+              dictCode:'filter_element_type'
+            },
+            {
+              type: 'select',
               name: 'dictCode',
               label: '字典分组',
               valueField: 'valueField',
