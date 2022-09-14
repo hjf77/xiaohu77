@@ -5,6 +5,7 @@ import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -32,7 +33,7 @@ public interface FileServerBusiness {
      * @return
      */
     @CloudMethod
-    PubFileVO uploadInputStream(InputStream inputStream);
+    PubFileVO uploadInputStream(InputStream inputStream) throws IOException;
 
     /**
      * 删除文件

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 
@@ -48,11 +49,11 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     }
 
     @Override
-    public PubFileVO uploadInputStream(InputStream inputStream) {
+    public PubFileVO uploadInputStream(InputStream inputStream) throws IOException {
         PubFileVO sf = new PubFileVO();
         String fileId = StringUtils.getUUID();
         String suffix = ".jpg";
-        String fileName = fileId+suffix;
+        String fileName = fileId + suffix;
         String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
         sf.setFileId(fileId);
         sf.setFileName(fileName);
