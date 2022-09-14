@@ -46,6 +46,7 @@ export default {
         tableName: "",
         tableComment: "",
         fields: [],
+        tableOperation:['0'],
       },
       optionsInitSetts: [],
       initFinsh: false,
@@ -152,6 +153,12 @@ export default {
               label: 'label字段',
             },
           ],
+        },
+        {
+          type: "checkbox",
+          name: "tableOperation",
+          label: "操作",
+          dictCode:'operator_type'
         }
       ]
     }
