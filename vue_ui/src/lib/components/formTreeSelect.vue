@@ -35,7 +35,7 @@ export default {
     },
   },
   props: {
-    api: String,
+    url: String,
     value: {
       default: () => {
         return undefined;
@@ -62,7 +62,7 @@ export default {
         return '请选择';
       },
     },
-    idField: {
+    valueField: {
       type: String,
       default: () => {
         return 'id';
@@ -126,7 +126,7 @@ export default {
     requestData() {
       if (this.httpMehod == 'POST') {
         this.$pagexRequest({
-          url: this.api,
+          url: this.url,
           data: this.queryFilter,
           method: "POST",
         })
@@ -134,7 +134,7 @@ export default {
             this.treeDatas = res;
           });
       } else if (this.httpMehod == 'GET') {
-        this.$pagexRequest.get(this.api)
+        this.$pagexRequest.get(this.url)
           .then((res) => {
             this.treeDatas = res;
           });
@@ -147,7 +147,7 @@ export default {
         delete node.children;
       }
       return {
-        id: this.idField == 'id' ? node.id : node.data[this.idField],
+        id: this.valueField == 'id' ? node.id : node.data[this.valueField],
         label: node.name,
         isDisabled: this.disableOn && (typeof node =='object')  ? this.disableOn(node) : false,
         children: node.children,

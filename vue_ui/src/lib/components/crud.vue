@@ -30,7 +30,7 @@ by wanglei
             v-bind="item"
             v-model="query.params[item.name]"
             v-if="item.type === 'treeSelect'"
-            :api="item.api"
+            :url="item.url"
             :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
           ></pagex-formTreeSelect>
 
@@ -39,8 +39,8 @@ by wanglei
             v-if="item.type === 'date-picker'"
             type="daterange"
             range-separator="~"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
             :default-time="['00:00:00', '23:59:59']"
           >
           </el-date-picker>
@@ -460,7 +460,6 @@ export default {
       this.searchFormItemWidth = searchFormDom.getElementsByClassName('el-form-item')[0].clientWidth
       if (this.namespace) {
         this.$EventBus.$on(this.namespace + '_reload', () => {
-          console.log(this.query);
           this.getList()
         })
       }

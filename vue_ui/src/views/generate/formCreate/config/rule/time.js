@@ -19,15 +19,6 @@ export default {
     },
     props() {
         return [
-            { type: 'input', field: 'width', title: '宽度' },
-            { type: 'input', field: 'defaultValue', title: '默认值' },
-            makeRequiredRule(),
-            { type: 'inputNumber', field: 'maxlength', title: '最大输入长度' },
-            {
-                type: 'inputNumber',
-                field: 'minlength',
-                title: '最小输入长度'
-            },
             {
                 type: 'switch',
                 field: 'clearable',

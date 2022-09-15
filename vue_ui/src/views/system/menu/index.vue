@@ -108,7 +108,7 @@
               <el-form-item label="上级菜单" prop="fatherMenuId">
                 <pagex-formTreeSelect
                   v-model="form.fatherMenuId"
-                  api="/basic/ms/sysMenu/tree"
+                  url="/basic/ms/sysMenu/tree"
                 ></pagex-formTreeSelect>
               </el-form-item>
             </el-col>
@@ -147,31 +147,6 @@
                 <e-icon-picker v-model="form.icon"/>
               </el-form-item>
             </el-col>
-
-  <!--          <el-col :span="12">
-              <el-form-item label="子系统" prop="systemId">
-                <el-select v-model="form.systemId" placeholder="请选择子系统">
-                  <el-option
-                    v-for="item in systemOptions"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>-->
-  <!--          <el-col :span="12">
-              <el-form-item label="菜单类型" prop="menuType">
-                <el-select v-model="form.menuType" placeholder="请选择菜单类型">
-                  <el-option
-                    v-for="item in menuTypeOptions"
-                    :key="item.wordbookCode"
-                    :label="item.wordbookDesc"
-                    :value="item.wordbookCode"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>-->
           </el-row>
         </el-form>
       </div>

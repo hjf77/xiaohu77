@@ -143,7 +143,6 @@
 </style>
 
 <template>
-    <!-- <ElContainer class="_fc-designer" :style="'height:'+height_"> -->
     <ElContainer class="_fc-designer">
         <ElMain>
             <ElContainer style="height: 100%;">
@@ -187,14 +186,9 @@
                             <div class="_fc-r-tab" :class="{active: activeTab==='props'}" v-if="!!activeRule"
                                  @click="activeTab='props'">组件配置
                             </div>
-                            <div class="_fc-r-tab" :class="{active: activeTab==='form' && !!activeRule}"
-                                 @click="activeTab='form'">表单配置
-                            </div>
+
                         </el-header>
-                        <ElMain v-show="activeTab==='form'">
-                            <component :is="FormCreate" :rule="form.rule" :option="form.option"
-                                        :value.sync="form.value.form"></component>
-                        </ElMain>
+
                         <ElMain v-show="activeTab==='props'" style="padding: 0 20px;"
                                 :key="activeRule ? activeRule._id: ''">
                             <div>
@@ -229,6 +223,7 @@
 
 import form from '../config/base/form';
 import field from '../config/base/field';
+import {getOptions} from '../config/base/field';
 import validate from '../config/base/validate';
 import {deepCopy} from '@form-create/utils/lib/deepextend';
 import is, {hasProperty} from '@form-create/utils/lib/type';
@@ -321,6 +316,7 @@ export default {
                     submitBtn: false,
                     mounted: (fapi) => {
                         fapi.activeRule = this.activeRule;
+                        console.log(fapi.options.formData);
                         fapi.setValue(fapi.options.formData || {});
                     }
                 }
@@ -692,15 +688,17 @@ export default {
                 });
             });
             this.propsForm.options.formData = formData;
-
             this.showBaseRule = hasProperty(rule, 'field') && rule.input !== false;
-
             if (this.showBaseRule) {
                 this.baseForm.options.formData = {
                     field: rule.field,
                     title: rule.title || '',
                     info: rule.info,
                     _control: rule._control,
+                    name:rule.name,
+                    width:rule.width,
+                    defaultValue:rule.defaultValue,
+                    required: rule.required
                 };
 
                 this.validateForm.options.formData = {validate: rule.validate ? [...rule.validate] : []};

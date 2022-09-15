@@ -6,6 +6,8 @@ import com.fhs.core.trans.vo.VO;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
+import javax.validation.Valid;
+
 /**
  * 表生成代码配置(SystemTableGenerateConfig)实体类
  *
@@ -18,6 +20,8 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value ="表生成代码配置",description ="表生成代码配置")
 public class SystemTableGenerateConfigVO extends SystemTableGenerateConfigPO implements VO {
-    
+
+    @Valid
+    private FormFiledVO[] checkFormFileds;
  }
     

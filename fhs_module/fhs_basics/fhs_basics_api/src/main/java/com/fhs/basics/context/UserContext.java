@@ -1,5 +1,6 @@
 package com.fhs.basics.context;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
@@ -18,17 +19,23 @@ public class UserContext {
      * @return session里面的user
      */
     public static UcenterMsUserVO getSessionuser() {
-        return (UcenterMsUserVO) StpUtil.getTokenSession().get(Constant.SESSION_USER);
+        try {
+            return (UcenterMsUserVO) StpUtil.getTokenSession().get(Constant.SESSION_USER);
+        } catch (NotLoginException e) {
+            return null;
+        }
+
     }
 
 
     /**
      * 获取数据权限
+     *
      * @return
      */
-    public static Map<String, Set<String>> getDataPermission(){
-        if(StpUtil.isLogin()){
-            return (Map)StpUtil.getTokenSession().get(Constant.SESSION_USER_DATA_PERMISSION);
+    public static Map<String, Set<String>> getDataPermission() {
+        if (StpUtil.isLogin()) {
+            return (Map) StpUtil.getTokenSession().get(Constant.SESSION_USER_DATA_PERMISSION);
         }
         return new HashMap<>();
     }

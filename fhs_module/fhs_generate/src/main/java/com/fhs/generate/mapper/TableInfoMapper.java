@@ -2,7 +2,7 @@ package com.fhs.generate.mapper;
 
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.generate.po.TableInfoPO;
-import com.fhs.generate.vo.FieldsVO;
+import com.fhs.generate.vo.ListFieldVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +18,7 @@ public interface TableInfoMapper extends FhsBaseMapper<TableInfoPO> {
      * @param tableName 表名
      * @return
      */
-    List<FieldsVO> getTableFields(@Param("tableSchema") String tableSchema, @Param("tableName") String tableName);
+    List<ListFieldVO> getTableFields(@Param("tableSchema") String tableSchema, @Param("tableName") String tableName);
 
     /**
      * 获取表注释

@@ -1,19 +1,20 @@
 <template>
-  <base-container>
+  <!-- <base-container> -->
+  <div style="padding: 0 20px 20px 20px">
     <div class="_fc-t-header">
       <div class="_fc-t-menu">
         <el-button size="small" type="primary" @click="showJson"
           >生成JSON</el-button
         >
-        <el-button size="small" type="success" @click="showOption"
-          >生成Options</el-button
+        <el-button size="small" type="success" @click="save"
+          >保存配置</el-button
         >
         <el-button size="small" type="danger" @click="showTemplate"
           >生成组件</el-button
         >
       </div>
     </div>
-    <fc-designer ref="designer" />
+    <fc-designer ref="designer" v-if="isInit" />
     <el-dialog :title="title[type]" :visible.sync="state" class="_fc-t-dialog">
       <div ref="editor" v-if="state"></div>
       <span style="color: red" v-if="err">输入内容格式有误!</span>
@@ -22,12 +23,12 @@
         <el-button type="primary" @click="onOk" size="small">确 定</el-button>
       </span>
     </el-dialog>
-  </base-container>
+  </div>
+  <!-- </base-container> -->
 </template>
-  
+
 <script>
-// import FcDesigner from "@/formCreate/index.js";
-import FcDesigner from "./generate/formCreate/index";
+import FcDesigner from "./index";
 import jsonlint from "jsonlint-mod";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/lint/lint.css";
@@ -49,10 +50,17 @@ import is from "@form-create/utils/lib/type";
 import formCreate from "@form-create/element-ui";
 const TITLE = ["生成规则", "表单规则", "生成组件"];
 
+import { getFieIdList } from "./config/base/field.js";
+import { getDictList } from "./config/rule/select.js";
+
 export default {
   name: "Index",
   components: {
     FcDesigner,
+  },
+  props: {
+    tableSchema: String,//数据库名字
+    tableName: String,//表名字
   },
   data() {
     return {
@@ -61,7 +69,29 @@ export default {
       title: TITLE,
       editor: null,
       err: false,
+      isInit:false,
       type: -1,
+      init: {
+        tableSchema: "fhs-demo",
+        tableName: "t_user",
+        tableComment: "用户",
+        formConfig:'',
+        fields: [
+          {
+            label: "username",
+            name: "用户名",
+            width: "150",
+            isListShow: 1,
+            isTrans: 0,
+            transType: "dict",
+            dictCode: "sex",
+            transTable: "",
+            transDB: "",
+            transField: "",
+            uniqueField: "",
+          },
+        ],
+      },
     };
   },
   watch: {
@@ -75,7 +105,44 @@ export default {
       this.load();
     },
   },
+  created() {
+    this.initData();
+  },
+  mounted() {
+
+  },
   methods: {
+    async initData() {
+      getFieIdList(this.tableSchema, this.tableName).then((res) => {
+        let options = [];
+        for (let i = 0; i < res.fields.length; i++) {
+          const item = res.fields[i];
+          options.push({
+            lable: item.label,
+            value: item.name,
+          });
+        }
+        sessionStorage.setItem("fieIds", JSON.stringify(options));
+        this.isInit = true;
+        this.$nextTick(() => {
+          if(res.formConfig){
+            this.$refs.designer.setRule(formCreate.parseJson(res.formConfig));
+          }
+        });
+      });
+      getDictList().then((res) => {
+        let dictOptions = [];
+        for (let i = 0; i < res.length; i++) {
+          const item = res[i];
+          dictOptions.push({
+            label: item.groupName + "(" + item.groupCode + ")",
+            value: item.groupCode,
+          });
+        }
+        sessionStorage.setItem("dictKey", JSON.stringify(dictOptions));
+      });
+    },
+
     load() {
       let val;
       if (this.type === 2) {
@@ -109,10 +176,25 @@ export default {
       this.type = 0;
       this.value = this.$refs.designer.getRule();
     },
-    showOption() {
-      this.state = true;
-      this.type = 1;
-      this.value = this.$refs.designer.getOption();
+    save() {
+      this.type = 0;
+      this.value = this.$refs.designer.getRule();
+      let formData = {};
+      formData.dbName = this.tableSchema;
+      formData.tableName = this.tableName;
+      formData.formConfig = JSON.stringify(
+        this.value
+      );
+      formData.checkFormFileds = this.value;
+      this.$pagexRequest({
+        url: `/basic/ms/table/updateTableGenerateConfig`,
+        method: "put",
+        data: formData,
+      }).then((res) => {
+        this.msgSuccess(
+          "保存成功"
+        );
+      });
     },
     showTemplate() {
       this.state = true;
@@ -210,4 +292,3 @@ export default {
   display: flex;
 }
 </style>
-  

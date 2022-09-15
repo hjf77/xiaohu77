@@ -52,7 +52,7 @@ export default {
             label: '分组编码', name: 'groupCode', type: 'formart',
             formart: "<label style='cursor:pointer'>${groupCode}</label>",
             click: function (_row) {
-              this.$router.push({path: '/dict/type/data/',query:{groupCode: _row.groupCode}});
+              this.$router.push({path: '/dict/type/dictItemList/',query:{groupCode: _row.groupCode}});
             }
           },
           {

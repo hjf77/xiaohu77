@@ -28,7 +28,7 @@
 export default {
     name: 'TableOptions',
     props: {
-        value: [Object, Array, String]
+        value: [String]
     },
     data() {
         return {

@@ -18,6 +18,7 @@ export default {
                 fetch: ''
             },
             props: {},
+            dictCode:'',
             options: [
                 { value: '1', label: '选项1' },
                 { value: '2', label: '选项2' },

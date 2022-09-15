@@ -74,8 +74,9 @@ export const constantRoutes = [
       },
       {
         path: 'form',
-        component: () => import('@/views/formCreate.vue'),
+        component: () => import('@/views/generate/formCreate/formCreate.vue'),
         name: 'generateFormSett',
+        meta: {title: '表单配置', icon: ''}
       }
     ]
   },
@@ -85,9 +86,9 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: 'type/data',
-        component: () => import('@/views/system/dict/data.vue'),
-        name: 'Data',
+        path: 'type/dictItemList',
+        component: () => import('@/views/system/dict/dictItemList.vue'),
+        name: 'dictItemList',
         meta: {title: '字典数据', icon: ''}
       }
     ]

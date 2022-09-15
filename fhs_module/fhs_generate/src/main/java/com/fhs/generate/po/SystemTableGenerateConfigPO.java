@@ -4,6 +4,8 @@ import java.io.Serializable;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.*;
 import javax.validation.constraints.*;
+
+import com.fhs.core.jsonfilter.anno.AutoArray;
 import org.hibernate.validator.constraints.Length;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -103,6 +105,9 @@ public class SystemTableGenerateConfigPO extends BasePO<SystemTableGenerateConfi
     @ApiModelProperty(value = "列表列配置")
     private String listColumnSett;
 
-
+    @AutoArray
+    @TableField("table_operation")
+    @ApiModelProperty("此表有哪些操作")
+    private String tableOperation;
 
 }

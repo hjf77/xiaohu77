@@ -67,7 +67,7 @@
                         label: "部门",
                         rule: "required",
                         query: {},
-                        api: '/basic/ms/sysOrganization/tree',
+                        url: '/basic/ms/sysOrganization/tree',
                         selectOn: (node) => {
                             this.changeRoleSelect(node.id);
                         }

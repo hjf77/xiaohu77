@@ -88,7 +88,7 @@
               <el-form-item label="上级部门" prop="parentId">
                 <pagex-formTreeSelect
                   :disabled="this.form.id != undefined" v-model="form.parentId"
-                  api="/basic/ms/sysOrganization/tree"
+                  url="/basic/ms/sysOrganization/tree"
                 ></pagex-formTreeSelect>
               </el-form-item>
             </el-col>

@@ -1,25 +1,25 @@
 <template>
-  <div>
-    <template v-if="isHaveFatherOption">
-      <el-checkbox
-        v-model="newValue"
-        v-for="item in options"
-        :key="item.value"
-        :label="item.value"
-      >{{ item.label }}
-      </el-checkbox>
-    </template>
-
-    <template v-else>
-      <el-checkbox
-        v-model="newValue"
-        v-for="item in ownerOption"
-        :key="item.valueField"
-        :label="item.valueField"
-      >{{ item.labelField }}
-      </el-checkbox>
-    </template>
-  </div>
+    <div >
+      <el-checkbox-group
+        v-if="isHaveFatherOption"
+        v-model="newValue">
+        <el-checkbox
+          v-for="item in options"
+          :key="item.value"
+          :label="item.value"
+        >{{ item.label }}
+        </el-checkbox>
+      </el-checkbox-group>
+      <el-checkbox-group
+        v-model="newValue" v-else>
+        <el-checkbox
+          v-for="item in ownerOption"
+          :key="item.valueField"
+          :label="item.valueField"
+        >{{ item.labelField }}
+        </el-checkbox>
+      </el-checkbox-group>
+    </div>
 </template>
 
 <script>
@@ -28,6 +28,11 @@ import {deepClone} from "../utils";
 
 export default {
   name: "pagexCheckBox",
+
+  model: {
+    prop: "value",
+    event: "input"
+  },
   props: {
     options: {
       type: Array,
@@ -97,9 +102,9 @@ export default {
     this.newValueField = this.valueField;
     if (this.dictCode) {
       this.newURL =
-        "/webApi/wordbook/getData?wordbookGroupCode=" + this.dictCode;
-      this.newValueField = "wordbookCode";
-      this.newLabelField = "wordbookDesc";
+        "/basic/ms/dictItem/findList?dictGroupCode=" + this.dictCode;
+      this.newValueField = "dictCode";
+      this.newLabelField = "dictDesc";
     }
     if (this.newURL) {
       this.loadData();

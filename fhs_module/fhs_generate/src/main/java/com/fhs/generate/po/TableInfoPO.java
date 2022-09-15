@@ -44,4 +44,5 @@ public class TableInfoPO extends BasePO<TableInfoPO> {
     @TableField("TABLE_COLLATION")
     private String tableCollation;
 
+
 }

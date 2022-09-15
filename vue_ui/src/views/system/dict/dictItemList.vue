@@ -11,7 +11,7 @@
       <template v-slot:form="prop">
         <!-- 新增 修改 弹框-->
         <pagex-dialog slot="form" :title="title"  v-if="open" :visible.sync="open"  class="pagex-dialog-theme">
-          <addDictio :dictGroupCode="groupCode"  :init="init" :isEdit="isEdit"></addDictio>
+          <dictItemForm :dictGroupCode="groupCode"  :init="init" :isEdit="isEdit"></dictItemForm>
         </pagex-dialog>
       </template>
     </pagex-crud>
@@ -20,12 +20,12 @@
 
 <script>
 import crudMixins from "@/mixins/crudMixins";
-import addDictio from "@/views/system/dict/components/addDictio.vue";
+import dictItemForm from "@/views/system/dict/components/dictItemForm.vue";
 
 export default {
   name: "Data",
   components: {
-    addDictio
+    dictItemForm
   },
   mixins: [crudMixins],
   data() {

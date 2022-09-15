@@ -2,6 +2,7 @@
   <el-scrollbar class="scrollbar" :style="styleName">
     <div class="pagex-from-theme">
       <el-form
+        v-if="formCreate"
         ref="form"
         size="small"
         label-position="right"
@@ -273,7 +274,7 @@
 import Editor from "@/components/Editor/index.vue";
 import PagexSelect from "./select.vue";
 import initer from "@/utils/form-initer";
-
+import {deepClone} from "../utils";
 export default {
   inject: ["reloadable"],
   components: {
@@ -471,7 +472,7 @@ export default {
 
   created() {
     if (this.data) {
-      this.$set(this, "model", JSON.parse(JSON.stringify(this.data)));
+      this.$set(this, "model", deepClone(this.data));
     }
     this.controls.forEach((_item) => {
       if (this.proxyIf(_item.ifFun, true)) {
@@ -722,13 +723,10 @@ export default {
     //获取到 详情信息
     edit() {
       if (this.isEdit) {
-        this.realControls.forEach((i) => {
-          this.$set(this.model, i.name, this.init[i.name]);
-        });
-
+        this.$set(this, 'model', this.init);
         if (this.initApi) {
           this.$pagexRequest.get(this.initApi).then((resp) => {
-            this.model = resp;
+            this.$set(this, 'model', resp);
           });
         }
       }

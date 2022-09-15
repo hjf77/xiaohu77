@@ -50,7 +50,7 @@
 
 <script>
 export default {
-  name: "addDict",
+  name: "dictItemForm",
   data() {
     return {
       formData:{

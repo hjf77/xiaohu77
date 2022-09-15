@@ -9,44 +9,33 @@ export function makeRequiredRule() {
 
 export function makeOptionsRule(to, flag) {
     const options = [
-        {'label': 'JSON数据', 'value': 0},
-        {'label': '接口数据', 'value': 1},
+        {'label': '接口数据', 'value': 1}
     ];
 
     const control = [
         {
-            value: 0,
-            rule: [
-                {
-                    type: 'Struct',
-                    field: 'formCreate' + upper(to).replace('.', '>'),
-                    props: {defaultValue: []}
-                },
-            ],
-        },
-        {
             value: 1,
             rule: [
                 {
-                    type: 'Fetch',
-                    field: 'formCreateEffect>fetch',
-                    props: {
-                        to
-                    }
-                }
-            ]
+                  type: 'Fetch',
+                  field: 'formCreateEffect>fetch',
+                  props: {
+                    to
+                  }
+                },
+            ],
         }
     ];
 
     if (flag !== false) {
-        options.splice(0, 0, {'label': '静态数据', 'value': 2});
+        options.splice(0, 0, {'label': '字典数据', 'value': 0});
         control.push({
-            value: 2,
+            value: 0,
             rule: [
                 {
-                    type: 'TableOptions',
-                    field: 'formCreate' + upper(to).replace('.', '>'),
-                    props: {defaultValue: []}
+                  type: 'select',
+                  field: 'formCreateDictCode',
+                  options: getDicts()
                 },
             ],
         });
@@ -69,6 +58,10 @@ export function upper(str) {
     return str.replace(str[0], str[0].toLocaleUpperCase());
 }
 
+function getDicts(){
+  let dicts = sessionStorage.getItem("dictKey") || `[]`;
+  return JSON.parse(dicts)
+}
 
 export const toJSON = function (val) {
     const type = /object ([a-zA-Z]*)/.exec(Object.prototype.toString.call(val));

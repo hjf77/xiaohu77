@@ -35,36 +35,8 @@ export default {
                     { label: '图片', value: 'image' }
                 ]
             },
-            { type: 'input', field: 'width', title: '宽度' },
-            { type: 'input', field: 'defaultValue', title: '默认值' },
-            makeRequiredRule(),
-            { type: 'input', field: 'action', title: '上传的地址(必填)' },
-            {
-                type: 'Struct',
-                field: 'headers',
-                title: '设置上传的请求头部',
-                props: { defaultValue: {} }
-            },
             { type: 'switch', field: 'multiple', title: '是否支持多选文件' },
-            {
-                type: 'Struct',
-                field: 'data',
-                title: '上传时附带的额外参数',
-                props: { defaultValue: {} }
-            },
-            { type: 'input', field: 'name', title: '上传的文件字段名' },
-            {
-                type: 'switch',
-                field: 'withCredentials',
-                title: '支持发送 cookie 凭证信息'
-            },
-            { type: 'input', field: 'accept', title: '接受上传的文件类型（thumbnail-mode 模式下此参数无效）' },
-            {
-                type: 'switch',
-                field: 'autoUpload',
-                title: '是否在选取文件后立即进行上传',
-                value: true
-            },
+            { type: 'input', field: 'accept', title: '接受上传的文件类型（图片模式无效）' },
             {
                 type: 'switch',
                 field: 'disabled',
@@ -74,6 +46,11 @@ export default {
                 type: 'inputNumber',
                 field: 'limit',
                 title: '最大允许上传个数'
+            },
+            {
+              type: 'inputNumber',
+              field: 'maxSize',
+              title: '单个文件最大(MB)'
             }
         ];
     }

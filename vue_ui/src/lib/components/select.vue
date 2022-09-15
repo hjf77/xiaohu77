@@ -7,14 +7,17 @@
     :disabled="disabled"
     filterable
     :remote="remote"
+    :multiple="multiple"
     :allow-create="isAllowCreate"
     :default-first-option="isDefaultFirstOption"
     @change="_change"
+    @visible-change="visibleChange"
     :remote-method="remote?remoteMethod:null"
     :placeholder="placeholder"
   >
     <template v-if="isHaveFatherOption">
       <el-option
+        v-if="showAll || item[valueField] == $attrs.value"
         v-for="item in options"
         :key="item[valueField]"
         :label="item[labelField]"
@@ -24,6 +27,7 @@
     </template>
     <template v-else>
       <el-option
+        v-if="showAll || item.valueField == $attrs.value"
         v-for="item in ownerOption"
         :key="item.valueField"
         :label="item.labelField"
@@ -123,6 +127,10 @@ export default {
       type: String,
       default: '请选择',
     },
+    multiple:{
+      type: Boolean,
+      default: false,
+    },
     //选中事件
     selectOn: {
       type: Function
@@ -139,7 +147,19 @@ export default {
       newUrl: "",
       newLabelField: "",
       newValueField: "",
+      visible:false,
     };
+  },
+  computed:{
+    //当visible 为true或者 多选的时候显示全部
+    showAll: {
+      get() {
+        return this.visible || this.multiple
+      },
+      set(val) {
+
+      }
+    },
   },
   async mounted() {
     this.isHaveFatherOption = typeof this.options != "undefined";
@@ -215,8 +235,8 @@ export default {
       this.$emit("refreshOptions", {name: this.name, options: _options});
     },
     _change() {
-      this.selectOn && this.selectOn(this.radioValue);
-      //this.$emit("change", this.radioValue);
+      this.selectOn && this.selectOn(this.$attrs.value);
+      this.$emit("change", this.$attrs.value);
     },
 
     // 远程搜索
@@ -228,6 +248,9 @@ export default {
       } else {
         this.options = [];
       }
+    },
+    visibleChange(_visible){
+      this.visible = _visible;
     }
   },
 };

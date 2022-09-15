@@ -34,15 +34,6 @@ export default {
                     value: 'daterange'
                 }, { label: 'monthrange', value: 'monthrange' }]
             },
-            { type: 'input', field: 'width', title: '宽度' },
-            { type: 'input', field: 'defaultValue', title: '默认值' },
-            makeRequiredRule(),
-            { type: 'inputNumber', field: 'maxlength', title: '最大输入长度' },
-            {
-                type: 'inputNumber',
-                field: 'minlength',
-                title: '最小输入长度'
-            },
             {
                 type: 'switch',
                 field: 'clearable',
@@ -53,42 +44,7 @@ export default {
                 type: 'switch',
                 field: 'disabled',
                 title: '禁用'
-            },
-            
-            { type: 'input', field: 'rangeSeparator', title: '选择范围时的分隔符' },
-            // {
-            //     type: 'Struct',
-            //     field: 'pickerOptions',
-            //     title: '当前时间日期选择器特有的选项',
-            //     props: { defaultValue: {} }
-            // }, { type: 'switch', field: 'readonly', title: '完全只读' },
-            // { type: 'switch', field: 'editable', title: '文本框可输入', value: true },
-            // { type: 'input', field: 'placeholder', title: '非范围选择时的占位内容' }, {
-            //     type: 'input',
-            //     field: 'startPlaceholder',
-            //     title: '范围选择时开始日期的占位内容'
-            // }, { type: 'input', field: 'endPlaceholder', title: '范围选择时结束日期的占位内容' }, {
-            //     type: 'input',
-            //     field: 'format',
-            //     title: '显示在输入框中的格式'
-            // }, {
-            //     type: 'select',
-            //     field: 'align',
-            //     title: '对齐方式',
-            //     options: [{ label: 'left', value: 'left' }, { label: 'center', value: 'center' }, {
-            //         label: 'right',
-            //         value: 'right'
-            //     }, { label: 'left', value: 'left' }]
-            // },
-            // {
-            //     type: 'switch',
-            //     field: 'unlinkPanels',
-            //     title: '在范围选择器里取消两个日期面板之间的联动'
-            // }, { type: 'input', field: 'prefixIcon', title: '自定义头部图标的类名' }, {
-            //     type: 'input',
-            //     field: 'clearIcon',
-            //     title: '自定义清空图标的类名'
-            // }
+            }
         ];
     }
 };

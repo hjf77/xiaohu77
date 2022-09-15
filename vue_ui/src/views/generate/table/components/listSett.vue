@@ -5,32 +5,59 @@
 -->
 <template>
   <div>
-    <!-- 编辑参数配置对话框 -->
-    <pagex-form
-      v-if="initFinsh"
-      :isEdit="true"
-      :data="formData"
-      :isVee="false"
-      :controls.sync="controls"
-      :isHaveSaveBtn="false"
-      :isHaveAddBtn="false"
-      :init="init"
-      :optionsInitSetts="optionsInitSetts"
-      :isHaveCancelBtn="false"
-      :isHaveInitBtn="false"
-      ref="listSettForm"
-    >
-    </pagex-form>
-    <center><el-button @click="submit()">下一步配置过滤条件</el-button></center>
+    <div v-if="!showForm">
+      <!-- 编辑参数配置对话框 -->
+      <pagex-form
+        v-if="initFinsh"
+        :isEdit="true"
+        :data="formData"
+        :isVee="false"
+        :controls.sync="controls"
+        :isHaveSaveBtn="false"
+        :isHaveAddBtn="false"
+        :init="init"
+        :optionsInitSetts="optionsInitSetts"
+        :isHaveCancelBtn="false"
+        :isHaveInitBtn="false"
+        ref="listSettForm"
+      >
+      </pagex-form>
+      <center>
+        <el-button @click="submit()">保存并配置表单</el-button>
+        <el-button @click="submitAndReview()">保存并预览</el-button>
+      </center>
+
+      <el-dialog
+        v-if="openReview"
+        class="pagex-dialog-theme"
+        title="预览"
+        :visible.sync="openReview"
+      >
+        <!-- 新增/修改/修订 -->
+        <list-review
+          :tableSchema="tableSchema"
+          :tableName="tableName"
+        >
+        </list-review>
+      </el-dialog>
+    </div>
+    <div v-if="showForm">
+      <formCreate :table-name="tableName" :table-schema="tableSchema"></formCreate>
+    </div>
   </div>
 </template>
 <script>
 import {mapGetters} from "vuex";
-
+import listReview from "./listReview.vue";
+import formCreate from "@/views/generate/formCreate/formCreate.vue";
 export default {
   name: "listSett",
+  components: {
+    listReview,
+    formCreate
+  },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user"]),
   },
   provide() {
     return {
@@ -39,40 +66,42 @@ export default {
   },
   data() {
     return {
-      tableSchema: 'fhs-demo',
-      tableName: "t_pub_file",
+      showForm:false,
+      openReview:false,
+      tableSchema: "",
+      tableName: "",
       init: {
-        tableSchema: "-demo",
+        tableSchema: "",
         tableName: "",
         tableComment: "",
         fields: [],
-        tableOperation:['0'],
       },
       optionsInitSetts: [],
       initFinsh: false,
       formData: {
-        fields: []
+        fields: [],
+        tableOperation: [],
       },
       controls: [
         {
           type: "label",
           name: "tableSchema",
-          label: "数据库名"
+          label: "数据库名",
         },
         {
           type: "label",
           name: "tableName",
-          label: "表名"
+          label: "表名",
         },
         {
           type: "label",
           name: "tableComment",
-          label: "表备注"
+          label: "表备注",
         },
         {
           type: "one2x",
           name: "fields",
-          width: '1500px',
+          width: "1500px",
           optionsSetts: [],
           optionsInitSetts: [],
           controls: [
@@ -80,29 +109,29 @@ export default {
               type: 'label',
               name: 'name',
               label: '字段名',
-              fixed:'fixed'
+              fixed: 'fixed'
             },
             {
-              type: 'label',
+              type: 'text',
               name: 'label',
               label: '备注',
-              fixed:'fixed'
+              fixed: 'fixed'
             },
             {
-              type: 'switch',
-              name: 'isListShow',
-              label: '列表是否展示',
+              type: "switch",
+              name: "isListShow",
+              label: "列表是否展示",
             },
             {
-              type: 'switch',
-              name: 'isTrans',
-              label: '是否需要翻译',
+              type: "switch",
+              name: "isDict",
+              label: "是否是字典",
             },
             {
               type: 'select',
               name: 'elementType',
               label: '过滤条件类型',
-              dictCode:'filter_element_type'
+              dictCode: 'filter_element_type'
             },
             {
               type: 'select',
@@ -112,34 +141,8 @@ export default {
               labelField: 'labelField'
             },
             {
-              type: 'select',
-              name: 'table',
-              label: '表',
-              valueField: 'valueField',
-              labelField: 'labelField',
-              change: (row, newValue, _index) => {
-                this.loadTableFields(_index,newValue)
-              },
-            },
-            {
-              type: 'select',
-              name: 'titleFiled',
-              label: 'title字段',
-              cascade: true,
-              valueField: 'valueField',
-              labelField: 'labelField',
-            },
-            {
-              type: 'select',
-              name: 'uniqueField',
-              cascade: true,
-              label: '唯一键',
-              valueField: 'valueField',
-              labelField: 'labelField',
-            },
-            {
               type: 'text',
-              name: 'api',
+              name: 'url',
               label: '接口',
             },
             {
@@ -158,7 +161,7 @@ export default {
           type: "checkbox",
           name: "tableOperation",
           label: "操作",
-          dictCode:'operator_type'
+          dictCode: 'operator_type'
         }
       ]
     }
@@ -168,89 +171,55 @@ export default {
     this.tableName = this.$route.query && this.$route.query.tableName;
   },
   mounted() {
-    this.initData()
+    this.initData();
   },
   methods: {
     async initData() {
       this.init = await this.$pagexRequest({
         url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${this.tableName}&configType=listColumn`,
-        method: 'get',
+        method: "get",
       });
       this.controls[3].optionsInitSetts = this.controls[3].optionsSetts;
-      this.init.fields.forEach((item) => {
-        this.controls[3].optionsSetts.push({titleFiled: [], uniqueField: []});
-      });
-      //初始化级联下拉框
-      this.init.fields.forEach((item,_index) => {
-        if(item.table){
-          this.loadTableFields(_index,item.table)
-        }
-      });
-
       let dictGroups = await this.$pagexRequest({
-        url: '/basic/ms/dictGroup/findList',
-        method: 'get',
+        url: "/basic/ms/dictGroup/findList",
+        method: "get",
       });
       // 字典分组下拉
       dictGroups.forEach((item) => {
         item.valueField = item.groupCode;
-        item.labelField = item.groupName + '(' + item.groupCode + ')';
-      })
-
-
+        item.labelField = item.groupName + "(" + item.groupCode + ")";
+      });
       this.controls[3].controls[5].options = dictGroups;
-
-      //表数据下拉
-      let tables = await this.$pagexRequest({
-        url: `/basic/ms/table/findList?tableSchema=${this.tableSchema}`,
-        method: 'get',
-      });
-
-      tables.forEach((item) => {
-        item.valueField = item.tableName;
-        item.labelField = item.tableComment + '(' + item.tableName + ')';
-      })
-
-      this.controls[3].controls[6].options = tables;
-
       this.$nextTick(() => {
-        this.$set(this, 'initFinsh', true);
+        this.$set(this, "initFinsh", true);
       });
     },
-    // 加载表下面的字段
-    loadTableFields(_index,_tableName){
-      if(_tableName){
-        this.$pagexRequest({
-          url: `/basic/ms/table/getTableInfo?tableSchema=${this.tableSchema}&tableName=${_tableName}`,
-          method: 'get',
-        }).then((res) => {
-          let fields = res.fields;
-          fields.forEach((item) => {
-            item.valueField = item.name;
-            item.labelField = item.label + '(' + item.name + ')';
-          })
-          this.$set(this.controls[3].optionsSetts[_index], 'titleFiled', fields)
-          this.$set(this.controls[3].optionsSetts[_index], 'uniqueField', fields)
-        });
-      }else{
-        this.$set(this.controls[3].optionsSetts[_index], 'titleFiled', [])
-        this.$set(this.controls[3].optionsSetts[_index], 'uniqueField', [])
-      }
-    },
-    submit() {
+    submit(_callback) {
       let formData = {};
       formData.dbName = this.tableSchema;
       formData.tableName = this.tableName;
       formData.remark = this.tableComment;
-      formData.listColumnSett = JSON.stringify(this.$refs.listSettForm.getModel().fields);
+      formData.listColumnSett = JSON.stringify(
+        this.$refs.listSettForm.getModel().fields
+      );
+      formData.tableOperation = this.$refs.listSettForm.getModel().tableOperation;
       this.$pagexRequest({
         url: `/basic/ms/table/updateTableGenerateConfig`,
-        method: 'put',
-        data:formData
-      }).then((res)=>{
-        console.log(res);
+        method: "put",
+        data: formData,
+      }).then((res) => {
+         if(_callback){
+           _callback(res);
+         }else{
+           this.showForm=true;
+         }
       });
-    }
-  }
+    },
+    submitAndReview() {
+      this.submit((res)=>{
+        this.openReview = true;
+      })
+    },
+  },
 };
 </script>

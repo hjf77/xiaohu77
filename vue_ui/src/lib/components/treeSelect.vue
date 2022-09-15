@@ -22,7 +22,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   props: {
-    api: String,
+    url: String,
     query: Object,
     placeholder: String,
     option: Object,
@@ -100,9 +100,9 @@ export default {
 
     async initOption() {
       let _data = this.option;
-      if (this.api) {
+      if (this.url) {
         _data = await this.$pagexRequest({
-          url: this.api,
+          url: this.url,
           data: this.query,
           method: this.methodType || "POST",
         });

@@ -25,7 +25,7 @@ import crudMixins from "@/mixins/crudMixins";
 import {mapGetters} from "vuex"
 
 export default {
-  name: "logLogin",
+  name: "tableGenerateConfig",
   mixins: [crudMixins],
   data() {
     return {
@@ -60,14 +60,7 @@ export default {
                   this.$router.push({path: '/generate/listSett',query:{tableSchema: _row.tableSchema,tableName: _row.tableName}});
               }
             },{
-              title: "配置表单",
-              type: "bottom",
-              size: 'mini',
-              click: (_row) => {
-
-              }
-            },{
-              title: "配置列表+表单",
+              title: "生成代码",
               type: "bottom",
               size: 'mini',
               click: (_row) => {

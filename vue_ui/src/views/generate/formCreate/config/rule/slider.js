@@ -19,18 +19,16 @@ export default {
     },
     props() {
         return [
-            { type: 'input', field: 'width', title: '宽度' },
-            { type: 'input', field: 'defaultValue', title: '默认值' },
-            makeRequiredRule(),
-            // { type: 'inputNumber', field: 'min', title: '最小值' }, {
-            //     type: 'inputNumber',
-            //     field: 'max',
-            //     title: '最大值'
-            // }, { type: 'switch', field: 'disabled', title: '是否禁用' }, {
-            //     type: 'inputNumber',
-            //     field: 'step',
-            //     title: '步长'
-            // }, { type: 'switch', field: 'showInput', title: '是否显示输入框，仅在非范围选择时有效' }, {
+             { type: 'inputNumber', field: 'min', title: '最小值' }, {
+                 type: 'inputNumber',
+                 field: 'max',
+                 title: '最大值'
+             }, { type: 'switch', field: 'disabled', title: '是否禁用' }, {
+                 type: 'inputNumber',
+                 field: 'step',
+                 title: '步长'
+            }
+            //{ type: 'switch', field: 'showInput', title: '是否显示输入框，仅在非范围选择时有效' }, {
             //     type: 'switch',
             //     field: 'showInputControls',
             //     title: '在显示输入框的情况下，是否显示输入框的控制按钮',

@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Data
 @ApiModel("表字段信息")
-public class FieldsVO {
+public class ListFieldVO {
 
     @ApiModelProperty("字段名")
     private String name;
@@ -24,27 +24,18 @@ public class FieldsVO {
     @ApiModelProperty("列表是否显示")
     private Integer isListShow = Constant.INT_TRUE;
 
-    @ApiModelProperty("是否需要翻译")
-    private Integer isTrans = Constant.INT_FALSE;
+    @ApiModelProperty("是否是字典")
+    private Integer isDict = Constant.INT_FALSE;
 
     @ApiModelProperty("字典分组编码")
     private String dictCode;
 
-    @ApiModelProperty("目标表")
-    private String table;
-
-    @ApiModelProperty("表字段")
-    private  String titleFiled;
-
-    @ApiModelProperty("翻译唯一键")
-    private String uniqueField;
 
     @ApiModelProperty("key")
     private String key;
 
     @ApiModelProperty("字段类型")
     private String type;
-
 
 
     @ApiModelProperty("宽度")
@@ -71,7 +62,7 @@ public class FieldsVO {
     private String elementType;
 
     @ApiModelProperty("接口地址")
-    private String api;
+    private String url;
 
     @ApiModelProperty("labelField")
     private String labelField;
@@ -84,8 +75,13 @@ public class FieldsVO {
 
 
     @JsonIgnore
-    public String getCamelFieldName() {
-        return ColumnNameUtil.underlineToCamel(this.name);
+    public String getCamelFieldName(boolean isTransFlag) {
+        String camelFieldName = ColumnNameUtil.underlineToCamel(this.name);
+        //字典处理
+        if (isTransFlag && this.isDict != null && this.isDict == Constant.INT_TRUE) {
+            camelFieldName = "transMap." + camelFieldName + "Name";
+        }
+        return camelFieldName;
     }
 
     public Integer getLength() {
