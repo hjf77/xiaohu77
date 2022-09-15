@@ -25,6 +25,6 @@ import com.fhs.basics.vo.PubFileVO;
  */
 public interface PubFileService extends BaseService<PubFileVO, PubFilePO> {
 
-
+    int deletePubFile(String fileId);
 
 }

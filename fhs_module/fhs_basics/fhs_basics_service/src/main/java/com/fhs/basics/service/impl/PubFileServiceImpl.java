@@ -10,15 +10,13 @@
  */
 package com.fhs.basics.service.impl;
 
-
-import com.alicp.jetcache.anno.Cached;
+import com.fhs.basics.mapper.PubFileMapper;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
-import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
-import com.fhs.core.exception.ParamException;
 import com.fhs.basics.po.PubFilePO;
 import com.fhs.basics.service.PubFileService;
 import com.fhs.basics.vo.PubFileVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -35,7 +33,11 @@ import java.io.File;
 @DataSource("basic")
 public class PubFileServiceImpl extends BaseServiceImpl<PubFileVO, PubFilePO> implements PubFileService {
 
+    @Autowired
+    private PubFileMapper pubFileMapper;
 
-
-
+    @Override
+    public int deletePubFile(String fileId) {
+        return pubFileMapper.deletePubFile(fileId);
+    }
 }

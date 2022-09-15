@@ -12,6 +12,7 @@ package com.fhs.basics.mapper;
 
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.basics.po.PubFilePO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 
@@ -25,4 +26,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PubFileMapper extends FhsBaseMapper<PubFilePO> {
+
+    int deletePubFile(@Param("fileId") String fileId);
+
 }

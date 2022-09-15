@@ -83,6 +83,7 @@ public class FileServerBusinessImpl implements FileServerBusiness {
         }
         PubFileVO pubFileVO = fileService.selectById(fileId);
         fileStorage.deleteFile(pubFileVO);
+        fileService.deletePubFile(fileId);
     }
 
 }
