@@ -95,7 +95,7 @@
                         rule: "required",
                         query: {},
                         width:'740',
-                        api: '/basic/ms/sysOrganization/tree'
+                        url: '/basic/ms/sysOrganization/tree'
                     },
 
                     {

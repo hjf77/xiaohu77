@@ -17,7 +17,7 @@ export default function field() {
     },
     {
       type: 'input',
-      field: 'info',
+      field: 'placeholder',
       value: '',
       title: '提示信息',
     },

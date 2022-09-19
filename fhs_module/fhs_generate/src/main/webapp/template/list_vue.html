@@ -47,8 +47,7 @@
         mixins: [crudMixins],
         data() {
             return {
-                rightContent: false,//右侧内容区域
-                api: "/ms/${namespace}/pagerAdvance",
+                api: "${microServiceName}/ms/${namespace}/pagerAdvance",
                 isEdit: false,
                 open: false,
                 isDetail:false,
@@ -112,9 +111,10 @@
                             {
                                 name: "删除",
                                 type: "danger",
-                                api: "/ms/${namespace}/",
+                                api: "${microServiceName}/ms/${namespace}/",
                                 size: "mini",
                                 permission: ["${namespace}:del"],
+                                idFieldName:'${idFieldName}',
                             },
                         ],
                     },

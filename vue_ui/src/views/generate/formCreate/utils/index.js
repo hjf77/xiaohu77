@@ -44,7 +44,7 @@ export function makeOptionsRule(to, flag) {
     return {
         type: 'radio',
         title: '选项数据',
-        field: '_optionType',
+        field: 'optionType',
         value: flag !== false ? 2 : 0,
         options,
         props: {

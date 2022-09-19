@@ -71,4 +71,6 @@ public interface GenerateConstant {
      * time 时间区间
      */
     String FILTER_TYPE_TIME_RANGE = "timeRange";
+
+
 }

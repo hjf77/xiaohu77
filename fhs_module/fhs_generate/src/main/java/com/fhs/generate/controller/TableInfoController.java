@@ -13,6 +13,7 @@ import com.fhs.generate.po.TableInfoPO;
 import com.fhs.generate.service.GenerateCodeService;
 import com.fhs.generate.service.SystemTableGenerateConfigService;
 import com.fhs.generate.service.TableInfoService;
+import com.fhs.generate.vo.FormSettVO;
 import com.fhs.generate.vo.ListSettVO;
 import com.fhs.generate.vo.SystemTableGenerateConfigVO;
 import com.fhs.generate.vo.TableInfoVO;
@@ -92,11 +93,21 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
     }
 
 
-    @ApiOperation("获取预览json")
+    @ApiOperation("获取列表预览json")
     @GetMapping("listViewJson")
     public ListSettVO findListViewJson(String tableSchema, String tableName) {
         TableInfoVO tableInfo = tableInfoService.getTableInfo(tableSchema, tableName, GenerateConstant.CONFIG_TYPE_LIST_COLUMN);
         return generateCodeService.getListJson(tableInfo);
     }
+
+    @ApiOperation("获取表单预览json")
+    @GetMapping("formViewJson")
+    public FormSettVO findFormViewJson(String tableSchema, String tableName) {
+        TableInfoVO tableInfo = tableInfoService.getTableInfo(tableSchema, tableName, GenerateConstant.CONFIG_TYPE_LIST_COLUMN);
+        return generateCodeService.getFormJson(tableInfo);
+    }
+
+
+
 
 }

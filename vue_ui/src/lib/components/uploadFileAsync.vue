@@ -6,7 +6,7 @@
 <template>
   <div>
 
-    <pagex-fileItem v-for="(file,i) in fileAllList" :key="i" :file="file" :isDownload="isDownload" :isDelete="isDelete" @delete="deleteFile"></pagex-fileItem>
+    <pagex-fileItem v-for="(file,i) in fileAllList" :key="i" :file="file" :downloadble="downloadble" :deleteble="deleteble" @delete="deleteFile"></pagex-fileItem>
 
     <!-- on-remove -->
     <el-upload
@@ -14,7 +14,7 @@
       v-model="upload"
       :accept="acceptFormat"
       action=""
-      :multiple="isMultiple"
+      :multiple="multiple"
       :disabled="upload.isUploading"
       :auto-upload="true"
       :before-upload="beforUpload"
@@ -45,7 +45,7 @@
         </i>
       </div> -->
     </el-upload>
-    <el-tooltip class="tooltipStyle" effect="light" v-if="isTip" :content="tipContent" placement="left-end">
+    <el-tooltip class="tooltipStyle" effect="light" v-if="placeholder" :content="placeholder" placement="left-end">
         <i class="tipStyle">
           <i class="exclamationHeardStyle"></i>
           <i class="exclamationStyle"></i>
@@ -91,9 +91,9 @@ export default {
     url: {
       type: String,
     },
-    isMultiple: {
+    multiple: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     size: {
       type: Number, //单个文件最大限制 单位为"M"
@@ -104,21 +104,17 @@ export default {
       type: String,
       default: "",
     },
-    isDownload: {
+    downloadble: {
       type: Boolean,
       default: true
     },
-    isDelete: {
+    deleteble: {
       type: Boolean,
       default: true
     },
-    tipContent:{
+    placeholder:{
       type:String,
       default:()=>''
-    },
-    isTip:{
-      type:Boolean,
-      default:()=>false
     }
   },
   data() {

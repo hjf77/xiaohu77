@@ -21,7 +21,7 @@ export default {
         return [
             {
                 type: 'select',
-                field: 'type',
+                field: 'formatType',
                 title: '显示类型',
                 options: [{ label: 'year', value: 'year' }, { label: 'month', value: 'month' }, {
                     label: 'date',

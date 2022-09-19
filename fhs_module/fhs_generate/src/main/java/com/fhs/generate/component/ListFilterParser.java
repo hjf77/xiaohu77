@@ -1,4 +1,4 @@
-package com.fhs.generate.component.list;
+package com.fhs.generate.component;
 
 import com.fhs.generate.constant.GenerateConstant;
 import com.fhs.generate.service.GenerateCodeService;

@@ -124,12 +124,7 @@ export default {
     props() {
         return [
             makeOptionsRule('props.options', false),
-            { type: 'input', field: 'width', title: '宽度' },
-            { type: 'input', field: 'defaultValue', title: '默认值' },
-            makeRequiredRule(),
             { type: 'switch', field: 'clearable', title: '是否支持清空选项' },
-            { type: 'input', field: 'dataFilter', title: '数据过滤' },
-            { type: 'input', field: 'dictionaryBind', title: '字典绑定' },
 
             {
                 type: 'Object',
@@ -166,8 +161,7 @@ export default {
                             type: 'input',
                             field: 'disabled',
                             title: '指定选项的禁用为选项对象的某个属性值'
-                        },
-                        // { type: 'input', field: 'leaf', title: '指定选项的叶子节点的标志位为选项对象的某个属性值' }
+                        }
                     ]
                 }
             },

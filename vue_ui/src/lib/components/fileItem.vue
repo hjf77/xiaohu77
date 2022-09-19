@@ -5,8 +5,8 @@
       <span class="textStyle" :title="file.fileName">{{ file.fileName }}</span>
       <span class="file-right">
           <span class="file-size">{{ file.fileSizeDesc }}</span>
-          <el-button v-if="isDownload"  type="text" @click="download">下载</el-button>
-          <el-button v-if="isDelete" type="text" class="del-btn" @click="deleteFile">删除</el-button>
+          <el-button v-if="downloadble"  type="text" @click="download">下载</el-button>
+          <el-button v-if="deleteble" type="text" class="del-btn" @click="deleteFile">删除</el-button>
       </span>
     </p>
   </div>
@@ -22,11 +22,11 @@ export default {
       type: Object,
       default: 0
     },
-    isDownload: {
+    downloadble: {
       type: Boolean,
       default: true
     },
-    isDelete: {
+    deleteble: {
       type: Boolean,
       default: true
     }

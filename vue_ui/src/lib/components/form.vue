@@ -135,7 +135,7 @@
             v-bind="item"
             v-model="model[item.name]"
             v-if="item.type === 'cascader'"
-            :url="item.api"
+            :url="item.url"
             :methodType="item.methodType"
             :querys="item.querys"
             :labelField="item.labelField"
@@ -146,11 +146,9 @@
           ></pagex-cascader>
 
           <pagex-transfer
+            v-bind="item"
             v-if="item.type === 'transfer'"
-            :url="item.api"
-            :querys="item.querys"
             v-model="model[item.name]"
-            :propsField="item.propsField"
             @change="item.change ? item.change.call(this,item, model[item.name]):''"
           ></pagex-transfer>
 
@@ -211,12 +209,7 @@
             :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
           ></pagex-formTreeSelect>
 
-          <pagex-treeSelect
-            v-bind="item"
-            v-model="model[item.name]"
-            v-if="item.type === 'treeSelect2'"
-            :api="item.api"
-          ></pagex-treeSelect>
+
 
           <el-date-picker
             v-model="model[item.name]"
@@ -275,6 +268,7 @@ import Editor from "@/components/Editor/index.vue";
 import PagexSelect from "./select.vue";
 import initer from "@/utils/form-initer";
 import {deepClone} from "../utils";
+import { rules } from '@/utils/validate'
 export default {
   inject: ["reloadable"],
   components: {
@@ -484,6 +478,23 @@ export default {
       }
     });
     let _that = this;
+    let includeRules = rules();
+    let ruleCodeMap = {};
+    includeRules.forEach(function(rule){
+      ruleCodeMap[rule.value] = rule.fun;
+    })
+    // rule的code转换
+    this.realControls.forEach(function (_item) {
+      if(_item.rule && _item.rule instanceof Array){
+        _item.rule.forEach(function(tempRule,_index){
+          //rule替换
+          if(tempRule.ruleCode && ruleCodeMap[tempRule.ruleCode]){
+            tempRule.validator = ruleCodeMap[tempRule.ruleCode];
+          }
+        })
+      }
+    });
+
     //处理checkbox和开关
     this.realControls.forEach(function (_item) {
       if (_item.rule) {

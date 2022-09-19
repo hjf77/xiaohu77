@@ -3,18 +3,21 @@
   <div style="padding: 0 20px 20px 20px">
     <div class="_fc-t-header">
       <div class="_fc-t-menu">
-        <el-button size="small" type="primary" @click="showJson"
-          >生成JSON</el-button
-        >
+<!--        <el-button size="small" type="primary" @click="showJson"-->
+<!--        >生成JSON-->
+<!--        </el-button>-->
         <el-button size="small" type="success" @click="save"
-          >保存配置</el-button
-        >
-        <el-button size="small" type="danger" @click="showTemplate"
-          >生成组件</el-button
-        >
+        >保存配置
+        </el-button>
+        <el-button size="small" type="success" @click="saveAndReview"
+        >保存并预览
+        </el-button>
+        <el-button size="small" type="danger" @click="openGenForm"
+        >生成组件
+        </el-button>
       </div>
     </div>
-    <fc-designer ref="designer" v-if="isInit" />
+    <fc-designer ref="designer" v-if="isInit"/>
     <el-dialog :title="title[type]" :visible.sync="state" class="_fc-t-dialog">
       <div ref="editor" v-if="state"></div>
       <span style="color: red" v-if="err">输入内容格式有误!</span>
@@ -22,6 +25,14 @@
         <el-button @click="state = false" size="small">取 消</el-button>
         <el-button type="primary" @click="onOk" size="small">确 定</el-button>
       </span>
+    </el-dialog>
+    <el-dialog title="预览" v-if="reviewForm" :visible.sync="reviewForm" class="_fc-t-dialog">
+      <form-review :tableSchema="tableSchema"
+                   :tableName="tableName"></form-review>
+    </el-dialog>
+    <el-dialog title="生成代码配置" v-if="genForm" :visible.sync="genForm" class="_fc-t-dialog">
+      <generate :tableSchema="tableSchema"
+                   :tableName="tableName"></generate>
     </el-dialog>
   </div>
   <!-- </base-container> -->
@@ -45,18 +56,22 @@ import "codemirror/addon/selection/selection-pointer";
 import "codemirror/mode/handlebars/handlebars";
 import "codemirror/mode/htmlmixed/htmlmixed";
 import "codemirror/mode/pug/pug";
-
+import FormReview from "./components/FormReview.vue";
+import Generate from "./components/Generate.vue";
 import is from "@form-create/utils/lib/type";
 import formCreate from "@form-create/element-ui";
+
 const TITLE = ["生成规则", "表单规则", "生成组件"];
 
-import { getFieIdList } from "./config/base/field.js";
-import { getDictList } from "./config/rule/select.js";
+import {getFieIdList} from "./config/base/field.js";
+import {getDictList} from "./config/rule/select.js";
 
 export default {
   name: "Index",
   components: {
     FcDesigner,
+    FormReview,
+    Generate
   },
   props: {
     tableSchema: String,//数据库名字
@@ -64,18 +79,20 @@ export default {
   },
   data() {
     return {
+      reviewForm: false,
+      genForm:false,
       state: false,
       value: null,
       title: TITLE,
       editor: null,
       err: false,
-      isInit:false,
+      isInit: false,
       type: -1,
       init: {
         tableSchema: "fhs-demo",
         tableName: "t_user",
         tableComment: "用户",
-        formConfig:'',
+        formConfig: '',
         fields: [
           {
             label: "username",
@@ -125,7 +142,7 @@ export default {
         sessionStorage.setItem("fieIds", JSON.stringify(options));
         this.isInit = true;
         this.$nextTick(() => {
-          if(res.formConfig){
+          if (res.formConfig) {
             this.$refs.designer.setRule(formCreate.parseJson(res.formConfig));
           }
         });
@@ -155,7 +172,7 @@ export default {
       this.$nextTick(() => {
         this.editor = CodeMirror(this.$refs.editor, {
           lineNumbers: true,
-          mode: this.type === 2 ? { name: "vue" } : "application/json",
+          mode: this.type === 2 ? {name: "vue"} : "application/json",
           gutters: ["CodeMirror-lint-markers"],
           lint: true,
           line: true,
@@ -176,7 +193,7 @@ export default {
       this.type = 0;
       this.value = this.$refs.designer.getRule();
     },
-    save() {
+    save(_callback) {
       this.type = 0;
       this.value = this.$refs.designer.getRule();
       let formData = {};
@@ -191,15 +208,22 @@ export default {
         method: "put",
         data: formData,
       }).then((res) => {
-        this.msgSuccess(
-          "保存成功"
-        );
+        if(_callback){
+          _callback();
+        }else{
+          this.msgSuccess(
+            "保存成功"
+          );
+        }
       });
     },
-    showTemplate() {
-      this.state = true;
-      this.type = 2;
-      this.value = this.makeTemplate();
+    saveAndReview(){
+      this.save(()=>{
+        this.reviewForm = true;
+      });
+    },
+    openGenForm() {
+      this.genForm =true
     },
     onOk() {
       if (this.err) return;
@@ -240,8 +264,8 @@ export default {
     return {
         fapi: null,
         rule: formCreate.parseJson('${formCreate
-          .toJson(rule)
-          .replaceAll("\\", "\\\\")}'),
+        .toJson(rule)
+        .replaceAll("\\", "\\\\")}'),
         option: formCreate.parseJson('${JSON.stringify(opt)}')
     }
   },
@@ -268,10 +292,12 @@ export default {
   align-items: center;
   cursor: default;
 }
+
 ._fc-t-menu {
   position: absolute;
   right: 0;
 }
+
 ._fc-t-dialog .CodeMirror {
   height: 500px;
 }
@@ -288,6 +314,7 @@ export default {
 ._fc-t-dialog .el-dialog__body {
   padding: 0px 20px;
 }
+
 ._fc-b-item {
   display: flex;
 }

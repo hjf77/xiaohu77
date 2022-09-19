@@ -6,70 +6,6 @@ export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
-  return valid_map.indexOf(str.trim()) >= 0
-}
-
-/**
- * @param {string} url
- * @returns {Boolean}
- */
-export function validURL(url) {
-  const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
-  return reg.test(url)
-}
-
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function validLowerCase(str) {
-  const reg = /^[a-z]+$/
-  return reg.test(str)
-}
-
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function validUpperCase(str) {
-  const reg = /^[A-Z]+$/
-  return reg.test(str)
-}
-
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function validAlphabets(str) {
-  const reg = /^[A-Za-z]+$/
-  return reg.test(str)
-}
-
-/**
- * @param {string} email
- * @returns {Boolean}
- */
-export function validEmail(email) {
-  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return reg.test(email)
-}
-
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function isString(str) {
-  if (typeof str === 'string' || str instanceof String) {
-    return true
-  }
-  return false
-}
 
 /**
  * @param {Array} arg
@@ -82,43 +18,6 @@ export function isArray(arg) {
   return Array.isArray(arg)
 }
 
-/**
- * 验证经度输入范围在-180-180之间，且小数可7位
- * @param {*} rule
- * @param {*} value
- * @param {*} callback
- */
-export function checkLon(rule, value, callback) {
-  if (value) {
-    value += ''
-    if (value.match(/^(\-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,7})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,6}|180)$/)) {
-      callback()
-    } else {
-      callback(new Error('经度为-180~180,小数限7位!'))
-    }
-  } else {
-    callback()
-  }
-}
-
-/**
- * 验证纬度输入范围在-180-180之间，且小数可7位
- * @param {*} rule
- * @param {*} value
- * @param {*} callback
- */
-export function checkLat(rule, value, callback) {
-  if (value) {
-    value += ''
-    if (value.match(/^(\-|\+)?([0-8]?\d{1}\.\d{0,7}|90\.0{0,6}|[0-8]?\d{1}|90)$/)) {
-      callback()
-    } else {
-      callback(new Error('纬度为-90~90,小数限7位'))
-    }
-  } else {
-    callback()
-  }
-}
 
 /**
  * 手机号校验
@@ -164,7 +63,7 @@ export function isEmail(rule, value, callback) {
  * @param {*} value
  * @param {*} callback
  */
-export function isInteger(rule, value, callback) {
+export function validateInteger(rule, value, callback) {
   const reg = /^[0-9]*[1-9][0-9]*$/;
   if (value == '' || value == undefined || value == null) {
     callback();
@@ -183,7 +82,7 @@ export function isInteger(rule, value, callback) {
  * @param {*} value
  * @param {*} callback
  */
-export function isFax(rule, value, callback) {
+export function validateFax(rule, value, callback) {
   const reg = /^(?:\d{3,4}-)?\d{7,8}(?:-\d{1,6})?$/;
   if (value == '' || value == undefined || value == null) {
     callback();
@@ -202,7 +101,7 @@ export function isFax(rule, value, callback) {
  * @param {*} value
  * @param {*} callback
  */
-export function isDecimal(rule, value, callback) {
+export function validateDecimal(rule, value, callback) {
   const reg = /(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/;
   if (value == '' || value == undefined || value == null) {
     callback();
@@ -215,11 +114,71 @@ export function isDecimal(rule, value, callback) {
   }
 }
 
-// 手机号正则验证
-export const phoneNumReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-// 手机号或者座机，支持带区号和不带区号
-export const mobileOrTelReg = /^(((\d{3,4})?[0-9]{7,8})|(-)|(1(3|4|5|6|7|8|9)\d{9}))$/;
-// 身份证校验正则(18位)
-export const ID18Reg = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-// 整整数正则
-export const wholeNumReg = /(^-?[1-9]([0-9]*)$|^-?[0-9]$)/
+export function validateIP(rule, value,callback) {
+  if(value==''||value==undefined||value==null){
+    callback();
+  }else {
+    const reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+    if ((!reg.test(value)) && value != '') {
+      callback(new Error('请输入正确的IP地址'));
+    } else {
+      callback();
+    }
+  }
+}
+
+export function validatePhoneTwo(rule, value, callback) {
+  const reg = /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/;;
+  if (value == '' || value == undefined || value == null) {
+    callback();
+  } else {
+    if ((!reg.test(value)) && value != '') {
+      callback(new Error('请输入正确的电话号码或者固话号码'));
+    } else {
+      callback();
+    }
+  }
+}
+
+export function validatePhone(rule, value,callback) {
+  const reg =/^[1][3-9][0-9]{9}$/;
+  if(value==''||value==undefined||value==null){
+    callback();
+  }else {
+    if ((!reg.test(value)) && value != '') {
+      callback(new Error('请输入正确的电话号码'));
+    } else {
+      callback();
+    }
+  }
+}
+
+
+export function validateIdNo(rule, value,callback) {
+  const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+  if(value==''||value==undefined||value==null){
+    callback();
+  }else {
+    if ((!reg.test(value)) && value != '') {
+      callback(new Error('请输入正确的身份证号码'));
+    } else {
+      callback();
+    }
+  }
+}
+
+
+
+
+
+export function rules(){
+  return [
+    {value:'ip',label:'IPV4',fun:validateIP},
+    {value:'phoneTwo',label:'手机号或者固定电话',fun:validatePhoneTwo},
+    {value:'phone',label:'手机号',fun:validatePhone},
+    {value:'idNo',label:'身份证号',fun:validateIdNo},
+    {value:'int',label:'正整数',fun:validateInteger},
+    {value:'fax',label:'传真号',fun:validateFax},
+    {value:'decimal',label:'小数后保留2位',fun:validateDecimal},
+  ]
+}

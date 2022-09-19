@@ -39,21 +39,29 @@ export default {
       type: Number,
       default: 425,
     },
-    propsField:{
-      type: Object,
-      default: () => {
-        return {
-          label:"label",
-          value:"value",
-        }
-      },
-    }
+    //显示的字段
+    labelField: {
+      type: String,
+      default: () => "label",
+    },
+    valueField: {
+      type: String | Number,
+      default: () => "value",
+    },
   },
   data() {
     return {
       modifyOptions:[],
       newUrl: "",
+      propsField:{
+        label:null,
+        value:null,
+      }
     };
+  },
+  created() {
+    this.propsField.label = this.labelField;
+    this.propsField.value = this.valueField;
   },
   async mounted() {
     this.newURL = this.url;
@@ -75,7 +83,7 @@ export default {
       } else {
         console.log("没传入数据，也没有传请求参数和请求地址；")
       }
-      
+
       this.removeEmptyArr(data);
       this.modifyOptions = data;
     },

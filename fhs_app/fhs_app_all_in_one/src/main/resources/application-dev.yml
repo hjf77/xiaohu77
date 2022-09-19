@@ -11,3 +11,16 @@ spring:
     password: 123456
     port: 6379
 #JDK17 用户请设置application.yaml的 easy-trans.is-enable-tile 为false 不然会报一个cglib的错误
+fhs:
+  beetl:
+    enable: true
+
+  path: "{
+        'fileSavePath': 'c:/flies'
+        }"
+
+  other: "{
+          'isDevModel': 'true',
+          'access_token_time_out_second': '500',
+          'systemTitle': 'FHS演示系统'
+          }"

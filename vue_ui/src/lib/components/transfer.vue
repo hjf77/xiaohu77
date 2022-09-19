@@ -5,7 +5,7 @@
         style="text-align: left; display: inline-block;width: 100%"
         v-bind="$attrs"
         v-on="$listeners"
-        :filterable="isFilterable"
+        :filterable="filterable"
         :data="ownerOption"
         :titles="titles"
         :button-texts="buttonTexts"
@@ -30,7 +30,7 @@ export default {
         return ['所有', '已选中']
       }
     },
-    isFilterable: {
+    filterable: {
       type: Boolean,
       default: true
     },
@@ -44,30 +44,37 @@ export default {
       type: String,
       default: ''
     },
-    httpMehod: {
+    //显示的字段
+    labelField: {
+      type: String,
+      default: () => "title",
+    },
+    //赋值的 字段
+    valueField: {
+      type: String | Number,
+      default: () => "id",
+    },
+    methodType: {
       type: String,
       default: 'POST'
     },
     querys: {
       type: Object,
       default: () => null,
-    },
-    propsField:{
-      type: Object,
-      default: () => {
-        return {
-          label:"name",
-          key:"id",
-        }
-      }
     }
   },
   data() {
     return {
-      ownerOption: []
+      ownerOption: [],
+      propsField:{
+        label:null,
+        key:null,
+      }
     }
   },
   created() {
+    this.propsField.label = this.labelField;
+    this.propsField.key = this.valueField;
     if (this.url) {
       this.getData();
     }
@@ -79,11 +86,10 @@ export default {
 
     // 加载数据
     async getData() {
-      if (this.querys) {
         this.$pagexRequest({
           url: this.url,
           data: this.querys,
-          method: this.httpMehod,
+          method: this.methodType,
         }).then((res) => {
           let allData = [];
           res.forEach((item) => {
@@ -94,7 +100,6 @@ export default {
           })
           this.ownerOption = allData
         })
-      }
     }
   }
 }

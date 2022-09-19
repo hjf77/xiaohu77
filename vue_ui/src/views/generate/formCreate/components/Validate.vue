@@ -5,7 +5,7 @@
 
 <script>
 import {designerForm} from '../utils/form';
-
+import { rules } from '@/utils/validate'
 export default {
     name: 'Validate',
     inject: ['designer'],
@@ -35,24 +35,37 @@ export default {
                     type: 'select',
                     field: 'type',
                     value: undefined,
-                    title: '字段类型',
+                    title: '验证类型',
                     options: [
                         {value: undefined, label: '请选择'},
-                        {value: 'string', label: 'String'},
-                        {value: 'array', label: 'Array'},
-                        {value: 'number', label: 'Number'},
-                        {value: 'integer', label: 'Integer'},
-                        {value: 'float', label: 'Float'},
-                        {value: 'object', label: 'Object'},
-                        {value: 'date', label: 'Date'},
-                        {value: 'url', label: 'url'},
-                        {value: 'hex', label: 'hex'},
-                        {value: 'email', label: 'email'},
+                        {value: 'include', label: '内置'},
+                        {value: 'sett', label: '自己配置'},
                     ],
                     control: [
                         {
+                          handle: v => {
+                            return v === 'include';
+                          },
+                          rule: [
+                            {
+                              type: 'group',
+                              field: 'validate',
+                              props: {
+                                expand: 1,
+                                rules: [{
+                                  type: 'select',
+                                  title: '验证方式',
+                                  field: 'ruleCode',
+                                  options: rules()
+                                }]
+                              },
+                              value: []
+                            }
+                          ]
+                        },
+                        {
                             handle: v => {
-                                return !!v;
+                                return v==='sett';
                             },
                             rule: [
                                 {
@@ -77,24 +90,11 @@ export default {
                                                 title: '验证方式',
                                                 field: 'mode',
                                                 options: [
-                                                    {value: 'required', label: '必填'},
                                                     {value: 'pattern', label: '正则表达式'},
-                                                    {value: 'min', label: '最小值'},
-                                                    {value: 'max', label: '最大值'},
-                                                    {value: 'len', label: '长度'},
+                                                    {value: 'between', label: '长度或者值区间'},
                                                 ],
-                                                value: 'required',
+                                                value: 'pattern',
                                                 control: [
-                                                    {
-                                                        value: 'required',
-                                                        rule: [
-                                                            {
-                                                                type: 'hidden',
-                                                                field: 'required',
-                                                                value: true
-                                                            }
-                                                        ]
-                                                    },
                                                     {
                                                         value: 'pattern',
                                                         rule: [
@@ -106,63 +106,32 @@ export default {
                                                         ]
                                                     },
                                                     {
-                                                        value: 'min',
+                                                        value: 'between',
                                                         rule: [
                                                             {
                                                                 type: 'inputNumber',
                                                                 field: 'min',
-                                                                title: '最小值'
+                                                                title: '最小'
                                                             }
                                                         ]
                                                     },
                                                     {
-                                                        value: 'max',
+                                                        value: 'between',
                                                         rule: [
                                                             {
                                                                 type: 'inputNumber',
                                                                 field: 'max',
-                                                                title: '最大值'
+                                                                title: '最大'
                                                             }
                                                         ]
-                                                    },
-                                                    {
-                                                        value: 'len',
-                                                        rule: [
-                                                            {
-                                                                type: 'inputNumber',
-                                                                field: 'len',
-                                                                title: '长度'
-                                                            }
-                                                        ]
-                                                    },
+                                                    }
                                                 ]
                                             },
                                             {
                                                 type: 'input',
-                                                title: '错误信息',
+                                                title: '错误提示信息(正则的时候建议指定)',
                                                 field: 'message',
                                                 value: '',
-                                                children: [
-                                                    {
-                                                        type: 'span',
-                                                        slot: 'append',
-                                                        inject: true,
-                                                        class: 'append-msg',
-                                                        on: {
-                                                            click: (inject) => {
-                                                                if (this.designer.activeRule) {
-                                                                    let msg = '请输入';
-                                                                    if (inject.api.form.mode !== 'required') {
-                                                                        msg += '正确的';
-                                                                    }
-                                                                    msg += this.designer.activeRule.title;
-                                                                    inject.api.setValue('message', msg);
-                                                                }
-                                                            }
-                                                        },
-                                                        children: ['自动获取']
-                                                    }
-                                                ]
                                             }
                                         ]
                                     },

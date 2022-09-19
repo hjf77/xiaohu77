@@ -28,20 +28,15 @@ export default {
                 type: 'select',
                 field: 'uploadType',
                 title: '上传类型',
-                value: 'fileAsync',
+                value: '',
                 options: [
-                    { label: '文件异步', value: 'fileAsync' },
-                    { label: '文件同步', value: 'fileSynchro' },
-                    { label: '图片', value: 'image' }
+                    { label: '文件异步', value: 'uploadFileAsync' },
+                    { label: '文件同步', value: 'uploadFile' },
+                    { label: '图片', value: 'uploadPicture' }
                 ]
             },
-            { type: 'switch', field: 'multiple', title: '是否支持多选文件' },
-            { type: 'input', field: 'accept', title: '接受上传的文件类型（图片模式无效）' },
-            {
-                type: 'switch',
-                field: 'disabled',
-                title: '是否禁用'
-            },
+            { type: 'switch', field: 'multiple', title: '是否支持多选文件',value:true },
+            { type: 'input', field: 'acceptFormat', title: '接受上传的文件类型（图片模式无效）' },
             {
                 type: 'inputNumber',
                 field: 'limit',
@@ -49,7 +44,7 @@ export default {
             },
             {
               type: 'inputNumber',
-              field: 'maxSize',
+              field: 'size',
               title: '单个文件最大(MB)'
             }
         ];

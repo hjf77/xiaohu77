@@ -10,7 +10,9 @@
       :placeholder="placeholder"
       v-model="newValue"
       :multiple="multiple"
-      :value-consists-of="'LEAF_PRIORITY'"
+      :default-expand-level="defaultExpandLevel"
+      :searchable="searchable"
+      :value-consists-of="valueConsistsOf"
       @select="selectFn"
       :clearable="clearable"
       :disabled="disabled"
@@ -46,6 +48,11 @@ export default {
       type: Boolean,
       default: true
     },
+    //是否支持搜索过滤
+    searchable: {
+      type: Boolean,
+      default: true
+    },
     disabled:{
       type: Boolean,
       default: false
@@ -55,6 +62,10 @@ export default {
       default: () => {
         return {};
       },
+    },
+    defaultExpandLevel: {
+      type: Number,
+      default: 1,
     },
     placeholder: {
       type: String,
@@ -97,7 +108,11 @@ export default {
     },
     selectOn:{
       type: Function
-    }
+    },
+    valueConsistsOf: {
+      type: String,
+      default: 'LEAF_PRIORITY'
+    },
   },
   computed: {
     newValue: {

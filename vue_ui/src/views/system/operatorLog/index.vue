@@ -54,7 +54,7 @@
                      {label: '数据主键', name: 'pkey'}
                 ],
                 filters:[
-                     {"name":"namespace","label":"模块","type":"treeSelect","api":'/basic/ms/sysMenu/tree',idField:"namespace"},
+                     {"name":"namespace","label":"模块","type":"treeSelect","url":'/basic/ms/sysMenu/tree',idField:"namespace"},
                      {"name":"createTime","label":"操作时间","type":"datetimerange","operation":"between"},
                      {"name":"createUser","label":"操作人","type":"select",url:"/basic/ms/sysUser/findList",labelField:"userName",valueField:"userId"},
                 ],

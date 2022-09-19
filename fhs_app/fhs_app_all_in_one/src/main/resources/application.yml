@@ -72,14 +72,7 @@ fhs:
   operator-log: # 操作日志记录，打开会慢
     enable: true
 
-  path: "{
-        'fileSavePath': 'c:/flies'
-        }"
-  other: "{
-          'isDevModel': 'true',
-          'access_token_time_out_second': '500',
-          'systemTitle': 'FHS演示系统'
-          }"
+
 spring:
   profiles:
     active: dev

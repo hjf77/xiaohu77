@@ -23,7 +23,6 @@ export default {
                 type: 'select',
                 field: 'type',
                 title: '类型',
-                value:'text',
                 options: [{ label: 'text', value: 'text' }, {
                     label: 'textarea',
                     value: 'textarea'

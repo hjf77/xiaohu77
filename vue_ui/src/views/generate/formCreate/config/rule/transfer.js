@@ -1,4 +1,5 @@
 import uniqueId from '@form-create/utils/lib/unique';
+import {makeOptionsRule} from "@/views/generate/formCreate/utils";
 
 const label = '穿梭框';
 const name = 'el-transfer';
@@ -32,12 +33,9 @@ export default {
     },
     props() {
         return [
-            {
-                type: 'Struct',
-                field: 'data',
-                title: 'Transfer 的数据源',
-                props: { defaultValue: [] }
-            },
+            makeOptionsRule('options',false),
+            { type: 'switch', field: 'filterable', title: '数据过滤' ,value:true},
+
         ];
     }
 };

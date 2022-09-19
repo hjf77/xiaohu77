@@ -27,13 +27,7 @@ export default {
     },
     props() {
         return [
-            makeOptionsRule('options'),
-            { type: 'input', field: 'width', title: '宽度' },
-            { type: 'input', field: 'defaultValue', title: '默认值' },
-            makeRequiredRule(),
-            { type: 'input', field: 'dataFilter', title: '数据过滤' },
-            { type: 'input', field: 'dictionaryBind', title: '字典绑定' },
-            { type: 'switch', field: 'disabled', title: '是否禁用' },
+            makeOptionsRule('options')
             // {
             //     type: 'switch',
             //     field: 'type',

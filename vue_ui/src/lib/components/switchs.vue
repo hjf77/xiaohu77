@@ -4,9 +4,11 @@
         :active-value="activeValue"
         :inactive-value="inactiveValue"
         v-model="switchValue"
-        active-color="#13ce66"
-        inactive-color="gray"
+        :active-color="activeColor"
+        :inactive-color="inactiveColor"
         @change="switchChange"
+        v-bind="$attrs"
+        v-on="$listeners"
       >
       </el-switch>
   </div>
@@ -22,6 +24,14 @@ export default {
   props: {
     value: {
       type: String | Boolean | Array,
+    },
+    activeColor: {
+      type: String,
+      default:  "#13ce66",
+    },
+    inactiveColor: {
+      type: String,
+      default:  "gray",
     },
   },
   data() {
