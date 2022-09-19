@@ -194,6 +194,10 @@ public class MsLoginController extends BaseController {
             ucenterAppUserSetPO.setLanguage("1");
             ucenterAppUserSetPO.setTimeZone("+8");
             ucenterAppUserSetPO.setIsMessage(Constant.INT_FALSE);
+            ucenterAppUserSetPO.setAlarmIsReport(Constant.INT_TRUE);
+            ucenterAppUserSetPO.setFamilyIsReport(Constant.INT_TRUE);
+            ucenterAppUserSetPO.setAlarmIsReport(Constant.INT_TRUE);
+            ucenterAppUserSetPO.setNoticeIsReport(Constant.INT_TRUE);
             ucenterAppUserSetPO.setTemperatureType(1);
             ucenterAppUserSetService.insert(ucenterAppUserSetPO);
             return HttpResult.success(sysUser);

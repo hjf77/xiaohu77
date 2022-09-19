@@ -40,7 +40,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     @PostMapping({"delMessages"})
     @ApiOperation("批量删除消息")
     @LogMethod(type = 2, pkeyParamIndex = 0)
-    public HttpResult<Boolean> delMessages(@RequestParam("ids") List<Long> ids) {
+    public HttpResult<Boolean> delMessages(@RequestBody List<Long> ids) {
         if (!ids.isEmpty()) {
             int count = commonMessageService.deleteBatchIds(ids);
             if (count > 0) {
@@ -88,7 +88,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
             QueryWrapper wrapper = filter.asWrapper(getDOClass());
             wrapper.eq("user_id", this.getSessionuser().getUserId());
             wrapper.orderByDesc("create_time");
-            //这里的是1是DO的index
+            //这里的是1是DO的indexo
             IPage<CommonMessageVO> page = baseService.selectPageMP(filter.getPagerInfo(), wrapper);
             return page.getRecords().stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate, TreeMap::new, Collectors.toList())).descendingMap();
         } else {

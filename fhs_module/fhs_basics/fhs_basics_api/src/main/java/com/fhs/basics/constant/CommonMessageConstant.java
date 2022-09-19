@@ -4,11 +4,11 @@ public interface CommonMessageConstant {
 
 
     /**
-     * 否
+     * 是
      */
     Integer YES = 1;
     /**
-     * 是
+     * 否
      */
     Integer NO = 0;
 

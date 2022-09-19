@@ -90,4 +90,26 @@ public class UcenterAppUserSetPO extends BasePO<UcenterAppUserSetPO> {
     @TableField("temperature_type")
     @ApiModelProperty(value = "温度类型(1摄氏 2华氏)")
     private Integer temperatureType;
+
+    /**
+     * 启用告警消息推送(0否,1是)
+     */
+    @TableField("alarm_is_report")
+    @ApiModelProperty(value = "启用告警消息推送(0否,1是)")
+    private Integer alarmIsReport;
+
+    /**
+     * 启用家庭消息推送(0否,1是)
+     */
+    @TableField("family_is_report")
+    @ApiModelProperty(value = "启用家庭消息推送(0否,1是)")
+    private Integer familyIsReport;
+
+    /**
+     * 启用通知消息推送(0否,1是)
+     */
+    @TableField("notice_is_report")
+    @ApiModelProperty(value = "启用通知消息推送(0否,1是)")
+    private Integer noticeIsReport;
+
 }
