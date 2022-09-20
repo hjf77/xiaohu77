@@ -4,6 +4,7 @@ package com.fhs.generate.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fhs.common.utils.EMap;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.result.HttpResult;
@@ -73,8 +74,9 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
     @Override
     @GetMapping("findList")
     @ApiOperation("后台-不分页查询")
-    public List<TableInfoVO> findList(TableInfoVO e) throws Exception {
-        List<TableInfoVO> dataList = baseService.findForList((TableInfoPO) e);
+    public List<TableInfoVO> findList() throws Exception {
+        EMap<String, Object> paramMap = super.getParameterMap();
+        List<TableInfoVO> dataList = baseService.selectListMP(QueryFilter.asWrapper(baseService.getPoClass(),paramMap));
         return dataList;
     }
 

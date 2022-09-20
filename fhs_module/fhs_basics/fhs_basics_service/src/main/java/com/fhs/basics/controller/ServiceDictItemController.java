@@ -3,6 +3,8 @@ package com.fhs.basics.controller;
 import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.vo.ServiceDictItemVO;
+import com.fhs.common.utils.EMap;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -27,13 +29,13 @@ public class ServiceDictItemController extends ModelSuperController<ServiceDictI
     /**
      * 重写去掉权限校验
      *
-     * @param e
      * @return
      * @throws Exception
      */
     @Override
-    public List<ServiceDictItemVO> findList(ServiceDictItemVO e) throws Exception {
-        List<ServiceDictItemVO> dataList = baseService.findForList(e);
+    public List<ServiceDictItemVO> findList() throws Exception {
+        EMap<String, Object> paramMap = super.getParameterMap();
+        List<ServiceDictItemVO> dataList = baseService.selectListMP(QueryFilter.asWrapper(baseService.getPoClass(),paramMap));
         return dataList;
     }
 }
