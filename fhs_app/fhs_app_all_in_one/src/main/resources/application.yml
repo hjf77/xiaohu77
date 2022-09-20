@@ -32,6 +32,7 @@ easy-trans:
   #关闭springcloud支持
   is-enable-cloud: false
 fhs:
+
   vue:
     is-verification: false
   autoware:

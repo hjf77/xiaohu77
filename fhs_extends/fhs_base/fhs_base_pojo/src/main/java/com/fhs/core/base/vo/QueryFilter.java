@@ -9,10 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtils;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.anno.SafeField;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import io.swagger.annotations.ApiModel;
@@ -150,6 +147,44 @@ public class QueryFilter<T> {
             ((List) list).add(q);
         });
         return map;
+    }
+
+    /**
+     * 类似bean seacher的高级查询语法支持
+     * @param currentModelClass
+     * @param paramMap
+     * @param <Z>
+     * @return
+     */
+    public static <Z> QueryWrapper<Z> asWrapper(Class<Z> currentModelClass, EMap<String,Object> paramMap){
+        // 获取所有字段
+        List<String> fieldNames = ReflectUtils.getAllField(currentModelClass).stream().map(Field::getName).collect(Collectors.toList());
+        QueryFilter<Z> queryFilter = new QueryFilter<>();
+        for (String fieldName : fieldNames) {
+            //有值并且不为空的才处理
+            if(paramMap.containsKey(fieldName) && !StringUtils.isEmpty(ConverterUtils.toString(paramMap.get(fieldName)))){
+                QueryField queryField = new QueryField();
+                //指定了运算符则使用指定的运算符，没有指定则使用=
+                if(paramMap.containsKey(fieldName + "-op")){
+                    queryField.setOperation(ConverterUtils.toString(paramMap.get(fieldName + "-op")));
+                }else{
+                    queryField.setOperation("=");
+                }
+                queryField.setProperty(fieldName);
+                queryField.setValue(paramMap.get(fieldName));
+                queryFilter.getQuerys().add(queryField);
+            }
+        }
+        //处理is null和 not_null
+        for (Map.Entry<String, Object> paramEntry : paramMap.entrySet()) {
+            if("is_null".equals(paramEntry.getValue()) || "not_null".equals(paramEntry.getValue())){
+                QueryField queryField = new QueryField();
+                queryField.setOperation(ConverterUtils.toString(paramEntry.getValue()));
+                queryField.setProperty(paramEntry.getKey().replace("-op",""));
+                queryFilter.getQuerys().add(queryField);
+            }
+        }
+        return queryFilter.asWrapper(currentModelClass);
     }
 
     public QueryWrapper<T> asWrapper(Class currentModelClass, String... safeFields) {
@@ -395,6 +430,11 @@ public class QueryFilter<T> {
         }
     }
 
+    /**
+     * 处理特殊符号
+     * @param str
+     * @return
+     */
     private String handleQuotation(String str) {
         String ResultString = str;
         try {

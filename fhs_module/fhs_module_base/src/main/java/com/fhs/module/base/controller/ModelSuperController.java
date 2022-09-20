@@ -45,9 +45,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 /**
@@ -80,7 +82,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     }
 
     /**
-     * 查询bean列表数据
+     * 高级查询带分页
      *
      * @throws Exception
      */
@@ -100,7 +102,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
 
 
     /**
-     * 查询bean列表数据-不分页
+     * 高级查询不分页
      *
      * @throws Exception
      */
@@ -127,7 +129,8 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     public List<V> findList(V e)
             throws Exception {
         if (isPermitted("see")) {
-            List<V> dataList = baseService.findForList((D) e);
+            EMap<String, Object> paramMap = super.getParameterMap();
+            List<V> dataList = baseService.selectListMP(QueryFilter.asWrapper(baseService.getPoClass(),paramMap));
             return dataList;
         } else {
             throw new NotPremissionException();
