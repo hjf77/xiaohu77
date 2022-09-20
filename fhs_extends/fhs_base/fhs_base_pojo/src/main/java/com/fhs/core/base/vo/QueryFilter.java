@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtils;
+import com.fhs.core.base.anno.SafeField;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -153,6 +155,10 @@ public class QueryFilter<T> {
     public QueryWrapper<T> asWrapper(Class currentModelClass, String... safeFields) {
         if (safeFields != null) {
             safeFieldsSet = new HashSet<>(Arrays.asList(safeFields));
+        }
+        List<Field> safeFieldList = ReflectUtils.getAnnotationField(currentModelClass, SafeField.class);
+        if(!safeFieldList.isEmpty()){
+            safeFieldsSet.addAll(safeFieldList.stream().map(Field::getName).collect(Collectors.toList()));
         }
         QueryWrapper<T> queryWrapper = new QueryWrapper();
         Map<String, List<QueryField>> groupQueryField = this.groupQueryField();
