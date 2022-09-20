@@ -28,6 +28,7 @@ import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
+import com.fhs.trans.service.impl.TransService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     private UcenterAppUserSetService ucenterAppUserSetService;
     @Autowired
     private RedisCacheService redisCacheService;
+    @Autowired
+    private TransService transService;
 
     /**
      * 短信验证码
@@ -239,6 +242,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     public HttpResult<Map<String, Object>> getAppUserInfo(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         UcenterMsUserVO sysUser = sysUserService.selectById(super.getSessionuser().getUserId());
+        transService.transOne(sysUser);
         result.put("userInfo", sysUser);
         //获取APP用户设置信息
         if (sysUser.getIsAppUser().equals(Constant.INT_TRUE)) {
