@@ -70,6 +70,13 @@ http://82.157.62.164/login   admin  123456
 &#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;可视化拖拉拽即可完成简单的表单开发，生成代码后可进行自定义业务逻辑处理，生成的代码均使用JSON驱动组件，代码量比传统生成的代码少50%以上。
 ## - &#8194;&#8194;&#8194;&#8194;高级查询API
 &#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;提供高级查询api，单表查询基本不需要写sql。
+## - &#8194;&#8194;&#8194;&#8194;Mybatis Plus多表查询
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194; 具体用法见MP官方仓库 https://gitee.com/baomidou/mybatis-plus4。
+## - &#8194;&#8194;&#8194;&#8194;Mybatis Plus链式查询
+
+```
+new User().select(User.SCHOOLID,User.USERID,User.NAME).userId().eq(1).innerJoin(School.class).orgName().like("一").select(School.ID,School.REMARK,School.SCHOOLNAME).list();
+```
 
 # 使用说明
 
@@ -81,8 +88,9 @@ http://82.157.62.164/login   admin  123456
  
  &#8194;&#8194;&#8194;&#8194; A 准备好redis和mysql <br/>
  &#8194;&#8194;&#8194;&#8194; B 创建数据库，导入sql&docs 下的fhs-demo.sql （如果遇到部分sql执行失败，请手动执行） <br/>
- &#8194;&#8194;&#8194;&#8194; C 修改fhs_app/fhs_app_all_in_one/src/main/resources/application-dev.yml redis和mysql配置 <br/>
- &#8194;&#8194;&#8194;&#8194; C 启动fhs_app/fhs_app_all_in_one/src/main/java/com/fhs/app/SingleApplication.java <br/>
+ &#8194;&#8194;&#8194;&#8194; C sql&docs的mybatis_plus_advance_ext-1.0.0.jar 拖到idea中安装此插件，此插件类似lombok，可以对PO进行增强  <br/>
+ &#8194;&#8194;&#8194;&#8194; D 修改fhs_app/fhs_app_all_in_one/src/main/resources/application-dev.yml redis和mysql配置 <br/>
+ &#8194;&#8194;&#8194;&#8194; E 启动fhs_app/fhs_app_all_in_one/src/main/java/com/fhs/app/SingleApplication.java <br/>
 
 &#8194;&#8194;&#8194;&#8194; 如果遇到下载不了的jar，请使用中央仓库官方地址：https://repo1.maven.org/maven2/ 
 
