@@ -20,13 +20,10 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 @DataSource("basic")
 public class LogHistoryDataServiceImpl extends BaseServiceImpl<LogHistoryDataVO, LogHistoryDataPO> implements LogHistoryDataService {
 
-    @Autowired
-    private LogHistoryDataMapper logHistoryDataMapper;
-
     @Override
     public LogHistoryDataVO getLastVersionData(String pkey, String namespace) {
-        return super.selectOneMP(new LambdaQueryWrapper<LogHistoryDataPO>().eq(LogHistoryDataPO::getPkey, pkey)
-                .eq(LogHistoryDataPO::getNamespace, namespace).orderByDesc(LogHistoryDataPO::getVersion).last(" limit 0,1"));
+        return p2v(new LogHistoryDataPO().pkey().eq(pkey).namespace()
+                .eq(namespace).version().orderByDesc().one());
     }
 
 }

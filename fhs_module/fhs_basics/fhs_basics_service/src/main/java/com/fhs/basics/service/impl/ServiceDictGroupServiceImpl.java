@@ -51,11 +51,12 @@ public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGrou
     @Override
     public int updateById(ServiceDictGroupPO entity) {
         ServiceDictGroupPO oldData = super.selectById(entity.getGroupId());
-        List<ServiceDictItemVO> items = dictItemService.selectListMP(new LambdaQueryWrapper<ServiceDictItemPO>().eq(ServiceDictItemPO::getDictGroupCode,oldData.getGroupCode()));
+        List<ServiceDictItemPO> items =
+                new ServiceDictItemPO().dictGroupCode().eq(oldData.getGroupCode()).list();
         for (ServiceDictItemPO item : items) {
             item.setDictGroupCode(entity.getGroupCode());
         }
-        dictItemService.batchUpdate(ListUtils.copyListToPararentList(items,ServiceDictItemPO.class));
+        dictItemService.batchUpdate(items);
         int result = super.updateById(entity);
         return result;
     }

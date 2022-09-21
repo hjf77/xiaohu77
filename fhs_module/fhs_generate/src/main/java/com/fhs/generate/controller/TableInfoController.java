@@ -1,12 +1,9 @@
 package com.fhs.generate.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fhs.common.utils.EMap;
 import com.fhs.core.base.vo.QueryFilter;
-import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.generate.constant.GenerateConstant;
 import com.fhs.generate.po.SystemTableGenerateConfigPO;
@@ -22,12 +19,9 @@ import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.criteria.ListJoin;
 import java.util.List;
 
 /**
@@ -75,8 +69,7 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
     @GetMapping("findList")
     @ApiOperation("后台-不分页查询")
     public List<TableInfoVO> findList() throws Exception {
-        EMap<String, Object> paramMap = super.getParameterMap();
-        List<TableInfoVO> dataList = baseService.selectListMP(QueryFilter.asWrapper(baseService.getPoClass(),paramMap));
+        List<TableInfoVO> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()));
         return dataList;
     }
 

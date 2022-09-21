@@ -129,8 +129,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     public List<V> findList()
             throws Exception {
         if (isPermitted("see")) {
-            EMap<String, Object> paramMap = super.getParameterMap();
-            List<V> dataList = baseService.selectListMP(QueryFilter.asWrapper(baseService.getPoClass(),paramMap));
+            List<V> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()));
             return dataList;
         } else {
             throw new NotPremissionException();

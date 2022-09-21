@@ -28,6 +28,18 @@
                     <artifactId>ecj</artifactId>
                     <groupId>org.eclipse.jdt</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-plus-annotation</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-plus-core</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-plus-extension</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 

@@ -70,9 +70,9 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${fhs.mp-anno.version}</version>
+            <version>${fhs.mp.version}</version>
         </dependency>
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>

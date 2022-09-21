@@ -107,8 +107,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     /**
      * 获取密码
      *
-     * @param request
-     * @param response
      * @param sysUser
      */
     @PostMapping("readPass")
@@ -126,9 +124,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         if (orgs.isEmpty()) {
             return new ArrayList<>();
         }
-        List<UcenterMsUserVO> users = sysUserService.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>().in(UcenterMsUserPO::getOrganizationId, orgs.stream()
-                .map(UcenterMsOrganizationVO::getId).collect(Collectors.toList())));
-        return users;
+        return sysUserService.pos2vos(new UcenterMsUserPO().organizationId().in( orgs.stream()
+                .map(UcenterMsOrganizationVO::getId).collect(Collectors.toList())).list());
     }
 
 

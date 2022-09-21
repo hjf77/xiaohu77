@@ -19,7 +19,7 @@
             <exclusions>
                 <exclusion>
                     <artifactId>mybatis-plus-annotation</artifactId>
-                    <groupId>com.baomidou</groupId>
+                    <groupId>com.fhs-opensource</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -28,7 +28,7 @@
             <artifactId>swagger-annotations</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-core</artifactId>
         </dependency>
         <dependency>
@@ -37,7 +37,7 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
         </dependency>
 

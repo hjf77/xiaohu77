@@ -226,13 +226,6 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         if (list == null || list.isEmpty()) {
             return false;
         }
-        //如果po标记了重复数据校验,则进行重复数据校验
-        if (this.getPoClass().isAnnotationPresent(NotRepeatDesc.class)) {
-            Set<String> hasData = new HashSet<>();
-            List<Field> fields = ReflectUtils.getAnnotationField(this.getPoClass(), NotRepeatField.class);
-            StringBuilder errorMsg = new StringBuilder();
-            boolean isHasError = false;
-        }
         for (P d : list) {
             initPkeyAndIsDel(d);
         }
@@ -525,7 +518,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     }
 
     /**
-     * do集合转vo集合
+     * po集合转vo集合
      *
      * @param pos
      * @return

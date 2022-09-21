@@ -169,9 +169,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateUser(UcenterMsUserPO adminUser) {
         UcenterMsUserPO old = selectById(adminUser.getUserId());
-        ParamChecker.isNotNull(old,"用户id错误");
+        ParamChecker.isNotNull(old, "用户id错误");
         adminUser.setIsAdmin(old.getIsAdmin());
-        if(adminUser.getPassword() == null){
+        if (adminUser.getPassword() == null) {
             adminUser.setPassword(old.getPassword());
         }
         // 删除原有的角色
@@ -189,7 +189,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         return false;
     }
-
 
 
     /**
@@ -226,7 +225,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         int count = sysUserMapper.validataPass(adminUser);
         if (count > 0) {
             if (adminUser.getNewPassword() == null) {
-                throw  new ParamException("新密码不可为空");
+                throw new ParamException("新密码不可为空");
             }
             adminUser.setPassword(adminUser.getNewPassword());
             count = sysUserMapper.updatePass(adminUser);
@@ -236,11 +235,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             }
             return count > 0;
         } else {
-            throw  new ParamException("密码不正确");
+            throw new ParamException("密码不正确");
         }
     }
-
-
 
 
     /**
@@ -283,12 +280,10 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
     @Override
     public UcenterMsUserVO selectUserByULname(UcenterMsUserPO adminUser) {
         return p2v(sysUserMapper.selectUserByULname(adminUser));
     }
-
 
 
     @Override
@@ -323,7 +318,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         menuList.forEach(adminMenu -> {
             if (ConverterUtils.toInt(adminMenu.getIsShow()) != SettMsMenuService.NOT_SHOW) {
                 // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null &&  (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
+                if (adminMenu.getFatherMenuId() != null && (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
                     if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
@@ -470,9 +465,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
-
-
     @Override
     public List<SysUserOrgVO> getUserOrgTreeList(String groupCode) {
         List<SysUserOrgVO> dbRecord = sysUserMapper.getUserOrgTreeList(groupCode);
@@ -496,7 +488,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public List<UcenterMsUserPO> getUserByOrgAndPermission(String companyId, String namespace, String permissonMethodCode) {
         List<UcenterMsUserPO> result = sysUserMapper.getUserByOrgAndPermission(companyId, namespace, permissonMethodCode);
-        List<UcenterMsUserVO> adminUsers = super.selectListMP(new LambdaQueryWrapper<UcenterMsUserPO>().eq(UcenterMsUserPO::getIsAdmin, Constant.INT_TRUE));
+        List<UcenterMsUserPO> adminUsers = new UcenterMsUserPO().isAdmin().eq(Constant.INT_TRUE).list();
         //把admin也加入进来
         if (!adminUsers.isEmpty()) {
             result.addAll(adminUsers);
@@ -507,11 +499,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
     private List<String> getPermissionUrlByUserId(Long userId) {
         return sysUserMapper.getPermissionUrlByUserId(userId);
     }
-
 
 
     public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
@@ -550,7 +540,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         return result;
     }
-
 
 
     private List<String> getPermissionUrlAll() {

@@ -34,8 +34,9 @@ public class ServiceDictItemController extends ModelSuperController<ServiceDictI
      */
     @Override
     public List<ServiceDictItemVO> findList() throws Exception {
-        EMap<String, Object> paramMap = super.getParameterMap();
-        List<ServiceDictItemVO> dataList = baseService.selectListMP(QueryFilter.asWrapper(baseService.getPoClass(),paramMap));
+        List<ServiceDictItemVO> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()));
         return dataList;
     }
+
+
 }

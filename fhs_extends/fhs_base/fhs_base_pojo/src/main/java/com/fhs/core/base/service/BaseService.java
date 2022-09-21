@@ -234,4 +234,12 @@ public interface BaseService<V extends VO, P extends BasePO> {
      * @return
      */
     Class<V> getVOClass();
+
+    /**
+     * po集合转vo集合
+     *
+     * @param pos
+     * @return
+     */
+    List<V> pos2vos(List<P> pos);
 }

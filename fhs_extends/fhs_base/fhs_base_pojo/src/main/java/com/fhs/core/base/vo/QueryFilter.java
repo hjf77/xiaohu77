@@ -21,7 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -149,14 +152,21 @@ public class QueryFilter<T> {
         return map;
     }
 
+
+
     /**
      * 类似bean seacher的高级查询语法支持
      * @param currentModelClass
-     * @param paramMap
      * @param <Z>
      * @return
      */
-    public static <Z> QueryWrapper<Z> asWrapper(Class<Z> currentModelClass, EMap<String,Object> paramMap){
+    public static <Z> QueryWrapper<Z> reqParam2Wrapper(Class<Z> currentModelClass){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Map<String, String> paramMap = new HashMap<>();
+        Map<String, String[]> tempMap = request.getParameterMap();
+        for (String key : tempMap.keySet()) {
+            paramMap.put(key, request.getParameter(key));
+        }
         // 获取所有字段
         List<String> fieldNames = ReflectUtils.getAllField(currentModelClass).stream().map(Field::getName).collect(Collectors.toList());
         QueryFilter<Z> queryFilter = new QueryFilter<>();
@@ -176,7 +186,7 @@ public class QueryFilter<T> {
             }
         }
         //处理is null和 not_null
-        for (Map.Entry<String, Object> paramEntry : paramMap.entrySet()) {
+        for (Map.Entry<String, String> paramEntry : paramMap.entrySet()) {
             if("is_null".equals(paramEntry.getValue()) || "not_null".equals(paramEntry.getValue())){
                 QueryField queryField = new QueryField();
                 queryField.setOperation(ConverterUtils.toString(paramEntry.getValue()));
