@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fhs.basics.mapper.CommonLanguageMapper">
+
+
+    <delete id="deleteAll">
+        DELETE
+        FROM t_common_language
+        WHERE is_delete = 0
+    </delete>
+    <select id="selectByCommonLanguageVO" resultType="java.lang.Integer">
+        select count(*)
+        from t_common_language
+        where (values_zh = #{valuesZh} or values_ar = #{valuesAr} or values_en = #{valuesEn} or name = #{name})
+        <if test="id != null">
+            and id !=#{id}
+        </if>
+    </select>
+</mapper>
