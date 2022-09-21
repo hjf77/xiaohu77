@@ -48,6 +48,7 @@ http://82.157.62.164/login   admin  123456
 # 预览图
 
 ![输入图片说明](img/fhs.jpg)
+![输入图片说明](https://foruda.gitee.com/images/1663741224303275569/6356ba0a_339743.png "codegen.png")
 # 3. 技术栈
 ![输入图片说明](img/jiagou.jpg)
 
