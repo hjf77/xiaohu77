@@ -41,6 +41,12 @@ public class VueRouterVO extends BaseObject<VueRouterVO> {
      */
     private String redirect;
 
+
+    /**
+     * 排序.
+     */
+    private int orderIndex;
+
     /**
      * 组件类型
      */

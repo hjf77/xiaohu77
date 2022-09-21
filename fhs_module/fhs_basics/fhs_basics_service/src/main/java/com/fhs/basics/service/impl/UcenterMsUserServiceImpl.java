@@ -329,15 +329,14 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     public List<VueRouterVO> getRouters(UcenterMsUserPO user, String menuType) {
         List<LeftMenuVO> menus = getMenu(user, menuType);
-        List<LeftMenuVO> leftMenuVOS = menus.stream().sorted(Comparator.comparing(LeftMenuVO::getOrderIndex)).collect(Collectors.toList());
         List<VueRouterVO> result = new ArrayList<>();
         VueRouterVO tempRouter = null;
-        for (LeftMenuVO menu : leftMenuVOS) {
+        for (LeftMenuVO menu : menus) {
             tempRouter = new VueRouterVO();
             converterMenu2Router(menu, tempRouter, true);
             result.add(tempRouter);
         }
-        return result;
+        return result.stream().sorted(Comparator.comparing(VueRouterVO::getOrderIndex)).collect(Collectors.toList());
     }
 
     /**
@@ -354,6 +353,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         String component = null;
         component = menu.getUrl();
         vueRouterVO.setComponent(isFirst ? "Layout" : component);
+        vueRouterVO.setOrderIndex(menu.getOrderIndex());
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
         vueRouterVO.getMeta().put("title", menu.getName());
         vueRouterVO.getMeta().put("icon", menu.getIcon());
