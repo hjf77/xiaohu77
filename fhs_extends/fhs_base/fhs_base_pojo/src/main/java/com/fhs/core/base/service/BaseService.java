@@ -221,6 +221,14 @@ public interface BaseService<V extends VO, P extends BasePO> {
      */
     P v2p(V vo);
 
+    /**
+     * po转vo
+     *
+     * @param p p
+     * @return vo
+     */
+    V p2v(P p);
+
 
     /**
      * 获取PO的class

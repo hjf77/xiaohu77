@@ -8,6 +8,8 @@ import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -61,6 +63,7 @@ public class UcenterAppUserSetPO extends BasePO<UcenterAppUserSetPO> {
      */
     @TableField("time_zone")
     @ApiModelProperty(value = "时区")
+    @Trans(type = TransType.DICTIONARY, key = "timeZoneType")
     private String timeZone;
     
     /**

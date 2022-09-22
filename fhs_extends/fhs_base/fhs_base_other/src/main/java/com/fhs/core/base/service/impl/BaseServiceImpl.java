@@ -495,6 +495,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @param p p
      * @return vo
      */
+    @Override
     public V p2v(P p) {
         return p2v(p, true);
     }
