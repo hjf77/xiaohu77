@@ -86,12 +86,16 @@ public class DictRefresh implements ApplicationRunner {
             }
         }
         dictItemVOList.addAll(dictItemVOListTemp);
-        Map<String, List<ServiceDictItemVO>> dictGroupMap = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
+        Map<String, List<ServiceDictItemVO>> dictGroupMapTemp = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
+
+        List<ServiceDictItemVO> itemVOListTemp = serviceDictItemService.selectListMP(new LambdaQueryWrapper<>());
+        Map<String,List<ServiceDictItemVO>> dictGroupMap = itemVOListTemp.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
+
         for (String dictGroupCode : dictGroupMap.keySet()) {
             dictionaryTransService.refreshCache(dictGroupCode, dictGroupMap.get(dictGroupCode).stream().collect(Collectors
                     .toMap(ServiceDictItemVO::getDictCode, ServiceDictItemVO::getDictDesc)));
         }
-        dictionaryTransService.openI18n(new LocaleGetter() {
+       /* dictionaryTransService.openI18n(new LocaleGetter() {
             @Override
             public String getLanguageTag() {
                 Locale locale = LocaleContextHolder.getLocale();
@@ -101,7 +105,7 @@ public class DictRefresh implements ApplicationRunner {
                 }
                 return "en";
             }
-        });
+        });*/
     }
 
 }

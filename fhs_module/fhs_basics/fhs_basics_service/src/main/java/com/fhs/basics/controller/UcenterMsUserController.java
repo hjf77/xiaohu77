@@ -247,6 +247,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         //获取APP用户设置信息
         if (sysUser.getIsAppUser().equals(Constant.INT_TRUE)) {
             UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
+            transService.transOne(ucenterAppUserSetVO);
             result.put("userSetInfo", ucenterAppUserSetVO);
         }
         return HttpResult.success(result);

@@ -11,7 +11,7 @@
     <select id="selectByCommonLanguageVO" resultType="java.lang.Integer">
         select count(*)
         from t_common_language
-        where (values_zh = #{valuesZh} or values_ar = #{valuesAr} or values_en = #{valuesEn} or name = #{name})
+        where (values_zh = #{valuesZh} or values_ar = #{valuesAr} or values_en = #{valuesEn} or name = #{name}) and is_delete = 0
         <if test="id != null">
             and id !=#{id}
         </if>
