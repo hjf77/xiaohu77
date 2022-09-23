@@ -79,7 +79,9 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     @Override
     public void deleteFile(String fileId) {
         PubFileVO pubFileVO = fileService.selectById(fileId);
-        fileStorage.deleteFile(pubFileVO);
+        if(pubFileVO != null){
+            fileStorage.deleteFile(pubFileVO);
+        }
         fileService.deletePubFile(fileId);
     }
 
