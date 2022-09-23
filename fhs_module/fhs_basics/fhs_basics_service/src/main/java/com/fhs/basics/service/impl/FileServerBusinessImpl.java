@@ -78,9 +78,6 @@ public class FileServerBusinessImpl implements FileServerBusiness {
      */
     @Override
     public void deleteFile(String fileId) {
-        if (StringUtils.isEmpty(fileId)) {
-            throw new ParamException("文件为空");
-        }
         PubFileVO pubFileVO = fileService.selectById(fileId);
         fileStorage.deleteFile(pubFileVO);
         fileService.deletePubFile(fileId);

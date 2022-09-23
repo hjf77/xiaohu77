@@ -96,7 +96,6 @@ public class DiskFileStorage implements FileStorage {
             file.delete();
             return;
         }
-        throw new ParamException("文件不存在：" + serviceFile.getFileId());
     }
 
     @Override
