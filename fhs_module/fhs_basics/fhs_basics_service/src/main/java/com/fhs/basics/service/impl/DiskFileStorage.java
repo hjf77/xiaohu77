@@ -94,7 +94,6 @@ public class DiskFileStorage implements FileStorage {
         File file = getFile(serviceFile);
         if (file.exists()) {
             file.delete();
-            return;
         }
     }
 
