@@ -53,18 +53,11 @@ export default {
           width: 400,
           textBtn: [
             {
-              title: "配置列表",
+              title: "代码生成",
               type: "bottom",
               size: 'mini',
               click: (_row) => {
                   this.$router.push({path: '/generate/listSett',query:{tableSchema: _row.tableSchema,tableName: _row.tableName}});
-              }
-            },{
-              title: "生成代码",
-              type: "bottom",
-              size: 'mini',
-              click: (_row) => {
-
               }
             }
           ],

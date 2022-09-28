@@ -13,6 +13,7 @@ import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +38,7 @@ public class UcenterMsTenantController extends ModelSuperController<UcenterMsTen
      * @param groupCode 租户集团编码
      * @return 重置后的密码
      */
-    @RequestMapping("resetAdminPass")
+    @GetMapping("resetAdminPass")
     public HttpResult<String> resetAdminPass(String groupCode) {
         ParamChecker.isNotNull(groupCode, "groupCode不能为空");
         String newPass = StringUtils.getUUID();

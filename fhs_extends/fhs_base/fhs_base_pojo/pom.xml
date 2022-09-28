@@ -14,6 +14,10 @@
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
+            <artifactId>mybatis-plus-advance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>easy_trans_anno</artifactId>
             <version>${fhs.easytrans.version}</version>
             <exclusions>
@@ -31,6 +35,7 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_excel_anno</artifactId>
