@@ -161,11 +161,25 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private Integer isAppUser;
 
     /**
+     * 是否涂鸦用户(0否,1是)
+     */
+    @TableField("is_tuya_user")
+    @ApiModelProperty("是否涂鸦用户(0否,1是)")
+    private Integer isTuyaUser;
+
+    /**
+     * 涂鸦平台用户密码
+     */
+    @TableField("password_tuya")
+    @ApiModelProperty("涂鸦平台用户密码)")
+    private String passwordTuya;
+
+    /**
      * 国家
      */
     @TableField("country")
     @ApiModelProperty("国家")
-    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "fullCname",alias="countryName")
+    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "fullCname", alias = "countryName")
     private String country;
 
     /**

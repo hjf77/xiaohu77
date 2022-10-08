@@ -23,5 +23,9 @@ public class LoginVO {
     private String smsCode;
     @ApiModelProperty("是否注册(0 否 1是)")
     private Integer isRegister;
+    @ApiModelProperty("是否涂鸦用户(0 否 1是)")
+    private Integer isTuYaUser;
+    @ApiModelProperty("涂鸦用户注册类型(1 手机号 2邮箱 3其他)")
+    private Integer usernameType;
 
 }

@@ -1,15 +1,13 @@
 package com.fhs.basics.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
-import com.fhs.basics.po.UcenterMsUserPO;
-import com.fhs.basics.po.UcenterMsTenantPO;
 import com.fhs.basics.mapper.SettMsMenuMapper;
 import com.fhs.basics.mapper.UcenterMsUserMapper;
+import com.fhs.basics.po.UcenterMsTenantPO;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.*;
 import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
@@ -21,16 +19,19 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.google.common.collect.HashMultimap;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
 @Primary
 @Service
 @DataSource("basic")
-@AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = {"userName","header"})
+@AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = {"userName", "header"})
 public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserPO> implements UcenterMsUserService {
 
     private final int ADMIN = 1;
@@ -98,6 +99,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 result.setCompanyName(organization.getName());
             }
         }
+        result.setPasswordTuya(null);
         result.setPassword(null);
         return result;
     }
@@ -168,7 +170,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateUser(UcenterMsUserPO adminUser) {
-        if(adminUser.getPassword() == null){
+        if (adminUser.getPassword() == null) {
             adminUser.setPassword(selectById(adminUser.getUserId()).getPassword());
         }
         // 删除原有的角色
@@ -186,7 +188,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         return false;
     }
-
 
 
     /**
@@ -229,7 +230,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         int count = sysUserMapper.validataPass(adminUser);
         if (count > 0) {
             if (adminUser.getNewPassword() == null) {
-                throw  new ParamException("新密码不可为空");
+                throw new ParamException("新密码不可为空");
             }
             adminUser.setPassword(adminUser.getNewPassword());
             count = sysUserMapper.updatePass(adminUser);
@@ -239,11 +240,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             }
             return count > 0;
         } else {
-            throw  new ParamException("密码不正确");
+            throw new ParamException("密码不正确");
         }
     }
-
-
 
 
     /**
@@ -272,7 +271,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         if (tempUser.getIsAdmin() == ADMIN) {
             adminMenus = ListUtils.copyListToList(sysMenuMapper.findForAllList(paramMap), SettMsMenuVO.class);
         } else {
-            paramMap.put("userId",userId);
+            paramMap.put("userId", userId);
             adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap), SettMsMenuVO.class);
         }
         return readPermissionSet(adminMenus);
@@ -287,12 +286,10 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
     @Override
     public UcenterMsUserVO selectUserByULname(UcenterMsUserPO adminUser) {
         return p2v(sysUserMapper.selectUserByULname(adminUser));
     }
-
 
 
     @Override
@@ -327,7 +324,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         menuList.forEach(adminMenu -> {
             if (ConverterUtils.toInt(adminMenu.getIsShow()) != SettMsMenuService.NOT_SHOW) {
                 // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null &&  (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
+                if (adminMenu.getFatherMenuId() != null && (!BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId()))) {
                     if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
@@ -474,9 +471,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
-
-
     @Override
     public List<SysUserOrgVO> getUserOrgTreeList(String groupCode) {
         List<SysUserOrgVO> dbRecord = sysUserMapper.getUserOrgTreeList(groupCode);
@@ -511,11 +505,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
-
     private List<String> getPermissionUrlByUserId(Long userId) {
         return sysUserMapper.getPermissionUrlByUserId(userId);
     }
-
 
 
     public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
@@ -554,8 +546,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         return result;
     }
-
-
 
     private List<String> getPermissionUrlAll() {
         return sysUserMapper.getPermissionUrlAll();

@@ -6,6 +6,7 @@ import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterAppUserSetPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.*;
+import com.fhs.basics.util.RequestSignUtils;
 import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
@@ -17,6 +18,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.module.base.auth.StpInterfaceImpl;
 import com.fhs.module.base.swagger.anno.ApiGroup;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -74,6 +76,20 @@ public class MsLoginController extends BaseController {
 
     @Value("${fhs.smscode.timeout:300}")
     private Integer smscodeTimeout;
+
+    // 校验涂鸦用户密码
+    @Value("${tuyaconfig.checkUser}")
+    private String checkUser;
+
+    // 同步用户
+    @Value("${tuyaconfig.syncUser}")
+    private String syncUser;
+
+    //获取token的url
+    @Value("${tuyaconfig.tokenUrl}")
+    private String tokenUrl;
+
+    private static final Gson gson = new Gson().newBuilder().create();
 
     /**
      * redis 缓存服务
@@ -240,6 +256,34 @@ public class MsLoginController extends BaseController {
                 throw new ParamException("验证码错误，请重新输入");
             }
         }
+        //校验涂鸦密码
+        UcenterMsUserVO ucenterMsUserVO = sysUserService.selectBean(UcenterMsUserPO.builder().userLoginName(loginVO.getUserLoginName()).isTuyaUser(Constant.INT_TRUE).build());
+        if (ucenterMsUserVO != null && null == ucenterMsUserVO.getPasswordTuya()) {
+            //涂鸦用户第一次在app登录
+            //获取token
+            Object tokenJson = RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>());
+            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(tokenJson));
+            tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(tokenJsonMap.get("result")));
+            Map<String, Object> map = new HashMap<>();
+            map.put("username", loginVO.getUserLoginName());
+            map.put("password", loginVO.getPassword());
+            map.put("country_code", "86");
+            map.put("username_type", loginVO.getUsernameType());
+            //发送请求
+            Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>());
+            Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(result));
+            System.out.println("========" + userJsonMap);
+            if (userJsonMap.get("success").equals((false))){
+                throw new ParamException("账号或者密码错误");
+            }
+            //涂鸦校验通过,拿到涂鸦用户名/密码更新
+            UcenterMsUserPO userPO = new UcenterMsUserPO();
+            userPO.setUserLoginName(loginVO.getUserLoginName());
+            userPO = sysUserService.selectBean(userPO);
+            userPO.setPassword(loginVO.getPassword());
+            userPO.setPasswordTuya(loginVO.getPassword());
+            sysUserService.updateById(userPO);
+        }
         String userName = loginVO.getUserLoginName();
         UcenterMsUserPO sysUser = sysUserService.login(loginVO);
         if (sysUser == null) {
@@ -300,6 +344,26 @@ public class MsLoginController extends BaseController {
         UcenterMsUserPO sysUserInfo = sysUserService.login(loginVO);
         if (sysUserInfo == null) {
             throw new ParamException("账号未注册，请先注册账号！");
+        }
+        //如果当前用户是涂鸦平台用户 同时修改涂鸦平台密码
+        if (sysUserInfo.getIsTuyaUser().equals(Constant.INT_TRUE)) {
+            //修改涂鸦平台用户密码
+            //获取token
+            Object tokenJson = RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>());
+            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(tokenJson));
+            tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(tokenJsonMap.get("result")));
+            Map<String, Object> map = new HashMap<>();
+            map.put("username", sysUser.getUserLoginName());
+            map.put("password", sysUser.getPassword());
+            map.put("country_code", "86");
+            map.put("username_type", sysUser.getUsernameType());
+            //发送请求
+            Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>());
+            Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));
+            System.out.println(userJsonMap);
+            if (userJsonMap.get("success").equals(false)) {
+                throw new ParamException("密码修改失败！");
+            }
         }
         int result = sysUserService.updateById(UcenterMsUserPO.builder().userId(sysUserInfo.getUserId()).password(sysUser.getPassword()).build());
         if (result > 0) {

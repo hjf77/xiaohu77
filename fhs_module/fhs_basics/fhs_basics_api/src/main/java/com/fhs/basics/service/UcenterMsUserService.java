@@ -90,7 +90,6 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     boolean updateUser(UcenterMsUserPO adminUser);
 
 
-
     /**
      * 监测原始密码是否正确
      *
@@ -133,6 +132,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
 
     /**
      * 根据用户id获取权限
+     *
      * @param userId
      * @return
      */
@@ -155,8 +155,6 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @paramsysUserGroupcode
      */
     boolean validataLoginName(UcenterMsUserPO adminUser);
-
-
 
 
     /**
@@ -182,8 +180,6 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * 删除用户
      */
     Boolean deleteSysUserById(Long userId);
-
-
 
 
     /**
