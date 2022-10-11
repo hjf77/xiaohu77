@@ -263,6 +263,13 @@ public class MsLoginController extends BaseController {
                 throw new ParamException("验证码不正确");
             }
         }
+        LoginVO loginVOTemp = new LoginVO();
+        BeanUtils.copyProperties(loginVO, loginVOTemp);
+        loginVOTemp.setPassword(null);
+        UcenterMsUserVO msUserVO = sysUserService.login(loginVOTemp);
+        if (null == msUserVO) {
+            throw new ParamException("账号未注册，请先注册账号！");
+        }
         checkUserNameIsLock(loginVO.getUserLoginName());
         if (isVerification) {
             String identifyCode = loginVO.getIdentifyCode();
@@ -300,7 +307,7 @@ public class MsLoginController extends BaseController {
             map.put("username", loginVO.getUserLoginName());
             map.put("password", loginVO.getPassword());
             //获取用户country_code
-            map.put("country_code",JsonUtils.parseJSON2Map(gson.toJson(userMap.get("result"))).get("country_code").toString());
+            map.put("country_code", JsonUtils.parseJSON2Map(gson.toJson(userMap.get("result"))).get("country_code").toString());
             map.put("username_type", loginVO.getUsernameType());
             //发送请求
             Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>());
