@@ -263,13 +263,6 @@ public class MsLoginController extends BaseController {
                 throw new ParamException("验证码不正确");
             }
         }
-        LoginVO loginVOTemp = new LoginVO();
-        BeanUtils.copyProperties(loginVO, loginVOTemp);
-        loginVOTemp.setPassword(null);
-        UcenterMsUserVO msUserVO = sysUserService.login(loginVOTemp);
-        if (null == msUserVO) {
-            throw new ParamException("账号未注册，请先注册账号！");
-        }
         checkUserNameIsLock(loginVO.getUserLoginName());
         if (isVerification) {
             String identifyCode = loginVO.getIdentifyCode();
