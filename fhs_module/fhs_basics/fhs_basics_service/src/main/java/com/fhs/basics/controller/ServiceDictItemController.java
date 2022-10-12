@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.service.ServiceDictItemService;
 import com.fhs.basics.vo.ServiceDictItemVO;
@@ -40,6 +41,6 @@ public class ServiceDictItemController extends ModelSuperController<ServiceDictI
      */
     @Override
     public List<ServiceDictItemVO> findList(ServiceDictItemVO e, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return serviceDictItemService.findForList(e);
+        return serviceDictItemService.selectListMP(new LambdaQueryWrapper<ServiceDictItemPO>().eq(ServiceDictItemPO::getDictGroupCode,e.getDictGroupCode()).orderByAsc(ServiceDictItemPO::getOrderNum));
     }
 }
