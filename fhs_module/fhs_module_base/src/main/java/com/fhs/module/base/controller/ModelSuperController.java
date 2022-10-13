@@ -195,7 +195,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @PostMapping
     @ApiOperation(value = "新增")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) V e) {
+    public HttpResult<Object> add(@RequestBody @Validated(Add.class) V e) {
         if (isPermitted("add")) {
             if (e instanceof BasePO) {
                 BasePO<?> baseDo = (BasePO<?>) e;
@@ -207,7 +207,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             }
             beforSave(e, true);
             baseService.insert((D) e);
-            return HttpResult.success(true);
+            return HttpResult.success(e.getPkey());
 
         }
         throw new NotPremissionException();

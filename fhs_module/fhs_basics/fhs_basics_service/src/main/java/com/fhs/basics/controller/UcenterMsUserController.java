@@ -75,7 +75,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser) {
+    public HttpResult<Object> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser) {
 
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
@@ -97,7 +97,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
                 // 发送邮件
                 sysUserService.sendMail(mailUser, passWord);
             }
-            return HttpResult.success(retult);
+            return HttpResult.success(sysUser.getUserId());
         } else {
             throw new ParamException("用户名重复");
         }

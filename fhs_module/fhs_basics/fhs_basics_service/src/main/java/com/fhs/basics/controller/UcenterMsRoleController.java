@@ -102,14 +102,14 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @PostMapping("/")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
-    public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole) {
+    public HttpResult<Object> add(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
         sysRole.setCreateTime(new Date());
         sysRole.setGroupCode(sysUser.getGroupCode());
         sysRoleService.addRole(sysRole);
-        return HttpResult.success(true);
+        return HttpResult.success(sysRole.getRoleId());
     }
 
 
