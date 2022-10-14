@@ -135,4 +135,18 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     @TableField("notice_date")
     @ApiModelProperty(value = "通知日期")
     private String noticeDate;
+
+    /**
+     * 设备id
+     */
+    @TableField("device_id")
+    @ApiModelProperty(value = "设备id")
+    private String deviceId;
+
+    /**
+     * 家庭id
+     */
+    @TableField("home_id")
+    @ApiModelProperty(value = "家庭id")
+    private Long homeId;
 }
