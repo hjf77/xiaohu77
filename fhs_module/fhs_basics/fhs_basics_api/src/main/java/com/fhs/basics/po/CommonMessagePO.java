@@ -137,10 +137,26 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     private String noticeDate;
 
     /**
+     * 设备id
+     */
+    @TableField("device_id")
+    @ApiModelProperty(value = "设备id")
+    private String deviceId;
+
+    /**
+     * 家庭id
+     */
+    @TableField("home_id")
+    @ApiModelProperty(value = "家庭id")
+    private Long homeId;
+
+
+   /**
      * 是否发布(0否,1是)
      */
     @TableField("is_release")
     @ApiModelProperty(value = "是否发布(0否,1是)")
     @Trans(type = TransType.DICTIONARY, key = "yesOrNo")
     private Integer isRelease;
+
 }
