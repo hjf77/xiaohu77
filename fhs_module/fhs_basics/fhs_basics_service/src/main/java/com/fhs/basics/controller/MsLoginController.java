@@ -277,7 +277,10 @@ public class MsLoginController extends BaseController {
             }
         }
         //校验涂鸦密码
-        UcenterMsUserVO ucenterMsUserVO = sysUserService.selectBean(UcenterMsUserPO.builder().userLoginName(loginVO.getUserLoginName()).isTuyaUser(Constant.INT_TRUE).build());
+        LoginVO loginVOTemp = new LoginVO();
+        loginVOTemp.setUserLoginName(loginVO.getUserLoginName());
+        loginVOTemp.setIsTuYaUser(Constant.INT_TRUE);
+        UcenterMsUserVO ucenterMsUserVO = sysUserService.login(loginVOTemp);
         if (ucenterMsUserVO != null && null == ucenterMsUserVO.getPasswordTuya()) {
             //涂鸦用户第一次在app登录
             //获取token
@@ -297,10 +300,12 @@ public class MsLoginController extends BaseController {
             System.out.println("=====用户列表获取用户" + userMapTemp);
             System.out.println("=====用户信息" + userMap);
             Map<String, Object> map = new HashMap<>();
+            //获取用户country_code
+            String countryCode = JsonUtils.parseJSON2Map(gson.toJson(userMap.get("result"))).get("country_code").toString();
             map.put("username", loginVO.getUserLoginName());
             map.put("password", loginVO.getPassword());
             //获取用户country_code
-            map.put("country_code", JsonUtils.parseJSON2Map(gson.toJson(userMap.get("result"))).get("country_code").toString());
+            map.put("country_code", countryCode);
             map.put("username_type", loginVO.getUsernameType());
             //发送请求
             Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>());
@@ -311,8 +316,7 @@ public class MsLoginController extends BaseController {
             }
             //涂鸦校验通过,拿到涂鸦用户名/密码更新
             UcenterMsUserPO userPO = new UcenterMsUserPO();
-            userPO.setUserLoginName(loginVO.getUserLoginName());
-            userPO = sysUserService.selectBean(userPO);
+            userPO.setUserId(ucenterMsUserVO.getUserId());
             userPO.setPassword(loginVO.getPassword());
             userPO.setPasswordTuya(loginVO.getPassword());
             sysUserService.updateById(userPO);
