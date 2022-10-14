@@ -135,4 +135,12 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     @TableField("notice_date")
     @ApiModelProperty(value = "通知日期")
     private String noticeDate;
+
+    /**
+     * 是否发布(0否,1是)
+     */
+    @TableField("is_release")
+    @ApiModelProperty(value = "是否发布(0否,1是)")
+    @Trans(type = TransType.DICTIONARY, key = "yesOrNo")
+    private Integer isRelease;
 }
