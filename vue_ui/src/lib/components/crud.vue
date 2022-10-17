@@ -285,7 +285,7 @@ export default {
   props: {
     setColumns: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     //列表上面的按钮
     buttons: {
