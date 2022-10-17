@@ -462,10 +462,11 @@ export default {
         setRealColumns.push({
           label: parse[key].label,
           name: key,
+          checked: parse[key].checked,
           width: parse[key].width,
         })
       }
-      this.realColumns = setRealColumns
+      this.realColumns = setRealColumns.filter(item => item.checked)
     }
     this.buttons.forEach((button) => {
       if (button.ifFun) {

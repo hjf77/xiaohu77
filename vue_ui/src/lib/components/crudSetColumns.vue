@@ -1,13 +1,7 @@
 <template>
   <div>
-    <pagex-dialog
-      v-if="open"
-      title="自定义列"
-      class="pagex-dialog-theme"
-      slot="form"
-      :visible.sync="open"
-      :namespace="namespace"
-    >
+   
+    <el-dialog title="自定义列" :visible.sync="open" class="pagex-dialog-theme"  >
       <base-container>
         <div class="columns-header">
           <el-tree
@@ -22,16 +16,18 @@
             @node-drop="handleDrop"
             @check-change="handleCheckChange"
           >
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ node.label }}</span>
-              <span>
-                <span>宽度</span>
-                <span>
-                  <el-input size="mini" v-model.trim="data.width"></el-input>
-                </span>
-                <span>px</span>
-              </span>
-            </span>
+            <template slot-scope="{ node, data }">
+              <div class="custom-tree-node">
+                <div>{{ node.label }}</div>
+                <div class="custom-tree-right">
+                  <span>宽度</span>
+                  <span>
+                    <el-input size="mini" v-model.trim="data.width"></el-input>
+                  </span>
+                  <span>px</span>
+                </div>
+              </div>
+            </template>
           </el-tree>
           <el-checkbox
             class="checkbox-sty"
@@ -45,7 +41,7 @@
           </div>
         </div>
       </base-container>
-    </pagex-dialog>
+    </el-dialog>
   </div>
 </template>
 
@@ -94,14 +90,23 @@ export default {
   },
   watch: {
     isOpenSetColumnsDialog: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         if (newValue) {
-          this.open = true;
+          this.open = newValue;
           this.treeDataSort();
         }
       },
-      immediate: true,
+      immediate: true
     },
+    open: {
+      handler(newValue) {
+        if (!newValue) {
+          // 关闭弹框时间
+          this.$emit('isSetColumnsDialogStatus', false)
+        }
+      },
+      immediate: true
+    }
   },
   created() {},
   mounted() {},
@@ -143,11 +148,10 @@ export default {
         }
       });
 
-      this.viewAllColumn.sort((o1, o2) => {
+      const params = this.viewAllColumn.sort((o1, o2) => {
         return o1.index - o2.index;
       });
-
-      this.treeData = this.viewAllColumn;
+      this.$set(this, 'treeData', deepClone(params))
       this.handleCheckAllChange(this.treeData, {}, 'type'); // 初始化全选按钮事件
     },
     // 拖拽时判定目标节点能否被放置
@@ -266,18 +270,15 @@ export default {
               JSON.stringify({ ...columnSettPermission, ...param })
             );
           }
-          // 关闭弹框时间
-          this.$emit('isSetColumnsDialogStatus', false);
+          this.open = false
           // 选中的表头 需要更新父组件table显示字段 realColumn
           this.$emit('realColumn', choiseCheckList);
-          this.open = false;
         })
         .catch((res) => {});
     },
     // 弹框取消事件
     close() {
-      this.open = false;
-      this.$emit('isSetColumnsDialogStatus', false);
+      this.open = false
     },
   },
 };
@@ -302,13 +303,12 @@ export default {
   display: none;
 }
 .columns-header .mytree ::v-deep .el-input {
-  width: 30%;
   padding: 0 10px 0 10px;
 }
 .columns-header .mytree ::v-deep .el-tree-node__content .custom-tree-node {
   display: flex;
   justify-content: space-between;
-  flex: 1;
+  width: 92%;
   line-height: 28px;
 }
 .checkbox-sty {
@@ -316,5 +316,8 @@ export default {
 }
 .dialog-footer {
   padding-top: 20px;
+}
+.custom-tree-right{
+  width: 10%;
 }
 </style>
