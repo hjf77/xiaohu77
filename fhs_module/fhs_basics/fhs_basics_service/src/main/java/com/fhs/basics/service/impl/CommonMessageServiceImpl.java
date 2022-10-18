@@ -34,23 +34,23 @@ public class CommonMessageServiceImpl extends BaseServiceImpl<CommonMessageVO, C
         String title = commonMessageVO.getTitle();
         commonMessageVO.setMsgType(CommonMessageConstant.FAMILY);
         if (null != title && title.equals(CommonMessageConstant.BECOME_FAMILY_MEMBER)) {
-            commonMessageVO.setContent(this.getBecomeFamilmemberMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
+            commonMessageVO.setMsgContent(this.getBecomeFamilmemberMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
         }
         if (null != title && title.equals(CommonMessageConstant.LEAVE_FAMILY)) {
-            commonMessageVO.setContent(this.getLeaveFamilyMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
+            commonMessageVO.setMsgContent(this.getLeaveFamilyMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
         }
         if (null != title && title.equals(CommonMessageConstant.INVITATION_FAMILY_MEMBER)) {
-            commonMessageVO.setContent(this.getJoinFamilyMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
+            commonMessageVO.setMsgContent(this.getJoinFamilyMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
         }
         if (null != title && title.equals(CommonMessageConstant.REMOVE_FAMILY_MEMBER)) {
-            commonMessageVO.setContent(this.getRemoveFamilmemberMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
+            commonMessageVO.setMsgContent(this.getRemoveFamilmemberMsg(commonMessageVO.getFamilyName(), commonMessageVO.getUserName()));
         }
         if (StringUtils.isNotBlank(commonMessageVO.getPhoneModel())) {
-            commonMessageVO.setContent(this.getLoginMsg(commonMessageVO.getPhoneModel()));
+            commonMessageVO.setMsgContent(this.getLoginMsg(commonMessageVO.getPhoneModel()));
             commonMessageVO.setMsgType(CommonMessageConstant.NOTICE);
         }
         commonMessageVO.setIsRead(CommonMessageConstant.NO);
-        commonMessageVO.setNoticeDate(DateUtils.formartDate(new Date(), "yyyy-MM-dd"));
+        commonMessageVO.setDateTime(DateUtils.formartDate(new Date(), "yyyy-MM-dd"));
         commonMessageVO.setUpdateUser(commonMessageVO.getCreateUser());
         this.insert(commonMessageVO);
     }

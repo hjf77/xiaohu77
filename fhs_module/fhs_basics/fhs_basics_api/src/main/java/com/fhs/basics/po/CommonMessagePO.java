@@ -62,9 +62,9 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     /**
      * 消息内容
      */
-    @TableField("content")
+    @TableField("msg_content")
     @ApiModelProperty(value = "消息内容")
-    private String content;
+    private String msgContent;
 
     /**
      * 有效开始时间
@@ -132,9 +132,9 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     /**
      * 通知日期
      */
-    @TableField("notice_date")
+    @TableField("date_time")
     @ApiModelProperty(value = "通知日期")
-    private String noticeDate;
+    private String dateTime;
 
     /**
      * 设备id
@@ -167,4 +167,87 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "name" ,alias="name")
     private String area;
 
+    /**
+     * 系统提醒
+     */
+    @TableField("msg_type_content")
+    @ApiModelProperty(value = "系统提醒")
+    private String msgTypeContent;
+
+    /**
+     * 图标
+     */
+    @TableField("icon")
+    @ApiModelProperty(value = "图标")
+    private String icon;
+
+    /**
+     * 指令
+     */
+    @TableField("action_url")
+    @ApiModelProperty(value = "指令")
+    private String actionURL;
+
+    /**
+     * 报警类型
+     */
+    @TableField("alarm_type")
+    @ApiModelProperty(value = "报警类型")
+    private String alarmType;
+
+    /**
+     * 报警类型
+     */
+    @TableField("attach_audios")
+    @ApiModelProperty(value = "")
+    private String attachAudios;
+
+    /**
+     * 报警类型
+     */
+    @TableField("attach_pics")
+    @ApiModelProperty(value = "")
+    private String attachPics;
+
+    /**
+     * 报警类型
+     */
+    @TableField("attach_videos")
+    @ApiModelProperty(value = "")
+    private String attachVideos;
+
+    /**
+     * 密钥
+     */
+    @TableField("encrypt_key")
+    @ApiModelProperty(value = "密钥")
+    private String encryptKey;
+
+    /**
+     * 家庭名称
+     */
+    @TableField("home_name")
+    @ApiModelProperty(value = "家庭名称")
+    private String homeName;
+
+    /**
+     * 家庭名称
+     */
+    @TableField("message_attach")
+    @ApiModelProperty(value = "")
+    private String messageAttach;
+
+    /**
+     * 家庭名称
+     */
+    @TableField("msg_srcid")
+    @ApiModelProperty(value = "")
+    private String msgSrcid;
+
+    /**
+     * 家庭名称
+     */
+    @TableField("time")
+    @ApiModelProperty(value = "")
+    private String time;
 }
