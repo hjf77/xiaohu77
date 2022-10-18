@@ -14,18 +14,13 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.mysql.cj.Messages;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.border.TitledBorder;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 
 /**
@@ -58,10 +53,11 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         }
         throw new ParamException("请选择需要删除的消息!");
     }
+
     @ResponseBody
     @PostMapping({"saveMessage"})
     @ApiOperation("新增消息推送")
-    public HttpResult<Boolean> saveMessage(@RequestBody String messageJson){
+    public HttpResult<Boolean> saveMessage(@RequestBody String messageJson) {
         Map<String, Object> messageJsonMap = JsonUtils.parseJSON2Map(gson.toJson(messageJson));
         CommonMessagePO commonMessagePO = new CommonMessagePO();
         commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlert").toString()));
@@ -76,41 +72,39 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
 
         //中文
         commonMessagePO.setTitle(messageJsonMap.get("titleZh").toString());
-       // commonMessagePO.setContent(messageJsonMap.get("contentZH").toString());
+        // commonMessagePO.setContent(messageJsonMap.get("contentZH").toString());
         commonMessagePO.setMsgLanguage(messageJsonMap.get("areaZh").toString());
         commonMessageService.insert(commonMessagePO);
 
         //阿拉伯文
         commonMessagePO.setTitle(messageJsonMap.get("titleAr").toString());
-       // commonMessagePO.setContent(messageJsonMap.get("contentAr").toString());
+        // commonMessagePO.setContent(messageJsonMap.get("contentAr").toString());
         commonMessagePO.setMsgLanguage(messageJsonMap.get("areaAr").toString());
         commonMessageService.insert(commonMessagePO);
         return HttpResult.success(true);
     }
 
-    /*
+
+    /**
+     * 查询bean列表数据
+     *
+     * @throws Exception
      */
-/**
- * 无分页查询bean列表数据
- *
- * @throws Exception
- *//*
-
+    @Override
     @ResponseBody
-    @GetMapping("findCommonMsgList")
-    @ApiOperation("后台-不分页查询集合-一般用于下拉")
-    public Map<String, List<CommonMessageVO>> findCommonMsgList(CommonMessageVO commonMessageVO) throws Exception {
+    @PostMapping("pagerAdvance")
+    @ApiOperation("后台-高级分页查询")
+    public IPage<CommonMessageVO> findPagerAdvance(@RequestBody QueryFilter<CommonMessagePO> filter) {
         if (isPermitted("see")) {
-            commonMessageVO.setUserId(this.getSessionuser().getUserId());
-            List<CommonMessageVO> dataList = baseService.findForList(commonMessageVO);
-
-            Map<String, List<CommonMessageVO>> dateListMap = dataList.subList(0, 9).stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate));
-            return dateListMap;
+            QueryWrapper wrapper = filter.asWrapper(getDOClass());
+            wrapper.eq("user_id", this.getSessionuser().getUserId());
+            this.setExportCache(wrapper);
+            //这里的是1是DO的index
+            return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
         } else {
             throw new NotPremissionException();
         }
     }
-*/
 
 
     /**
