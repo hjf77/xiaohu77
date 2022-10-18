@@ -6,20 +6,27 @@ import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.po.CommonMessagePO;
 import com.fhs.basics.service.CommonMessageService;
 import com.fhs.basics.vo.CommonMessageVO;
+import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mysql.cj.Messages;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.border.TitledBorder;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+
 
 /**
  * 消息推送表(CommonMessage)表控制层
@@ -36,6 +43,8 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     @Autowired
     private CommonMessageService commonMessageService;
 
+    private static final Gson gson = new Gson().newBuilder().create();
+
     @ResponseBody
     @PostMapping({"delMessages"})
     @ApiOperation("批量删除消息")
@@ -48,6 +57,35 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
             }
         }
         throw new ParamException("请选择需要删除的消息!");
+    }
+    @ResponseBody
+    @PostMapping({"saveMessage"})
+    @ApiOperation("新增消息推送")
+    public HttpResult<Boolean> saveMessage(@RequestBody String messageJson){
+        Map<String, Object> messageJsonMap = JsonUtils.parseJSON2Map(gson.toJson(messageJson));
+        CommonMessagePO commonMessagePO = new CommonMessagePO();
+        commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlert").toString()));
+        commonMessagePO.setIsRead(Constant.ZERO);
+        commonMessagePO.setIsRelease(Constant.ZERO);
+
+        //英文
+        commonMessagePO.setTitle(messageJsonMap.get("titleEn").toString());
+        commonMessagePO.setContent(messageJsonMap.get("contentEn").toString());
+        commonMessagePO.setMsgLanguage(messageJsonMap.get("areaEn").toString());
+        commonMessageService.insert(commonMessagePO);
+
+        //中文
+        commonMessagePO.setTitle(messageJsonMap.get("titleZh").toString());
+        commonMessagePO.setContent(messageJsonMap.get("contentZH").toString());
+        commonMessagePO.setMsgLanguage(messageJsonMap.get("areaZh").toString());
+        commonMessageService.insert(commonMessagePO);
+
+        //阿拉伯文
+        commonMessagePO.setTitle(messageJsonMap.get("titleAr").toString());
+        commonMessagePO.setContent(messageJsonMap.get("contentAr").toString());
+        commonMessagePO.setMsgLanguage(messageJsonMap.get("areaAr").toString());
+        commonMessageService.insert(commonMessagePO);
+        return HttpResult.success(true);
     }
 
     /*

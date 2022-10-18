@@ -159,4 +159,12 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     @Trans(type = TransType.DICTIONARY, key = "yesOrNo")
     private Integer isRelease;
 
+    /**
+     * 国家
+     */
+    @TableField("area")
+    @ApiModelProperty(value = "国家")
+    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "name" ,alias="name")
+    private String area;
+
 }
