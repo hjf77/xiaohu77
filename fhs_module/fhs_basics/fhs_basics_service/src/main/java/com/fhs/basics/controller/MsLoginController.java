@@ -348,10 +348,14 @@ public class MsLoginController extends BaseController {
         }
         phoneModel = phoneModel == null ? "iphone" : phoneModel;
         CommonMessageVO commonMessageVO = new CommonMessageVO();
-        commonMessageVO.setPhoneModel(phoneModel);
-        commonMessageVO.setCreateUser(sysUser.getUserId());
+        commonMessageVO.setEquipmentMsg(userAgent);
         commonMessageVO.setUserId(sysUser.getUserId());
-        commonMessageService.insertCommonMsg(commonMessageVO);
+        Long count = commonMessageService.findCount(commonMessageVO);
+        if (count == 0L) {
+            commonMessageVO.setPhoneModel(phoneModel);
+            commonMessageVO.setCreateUser(sysUser.getUserId());
+            commonMessageService.insertCommonMsg(commonMessageVO);
+        }
         return HttpResult.success(result);
     }
 

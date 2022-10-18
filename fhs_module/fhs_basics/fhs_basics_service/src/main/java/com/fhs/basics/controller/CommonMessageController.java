@@ -70,19 +70,19 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
 
         //英文
         commonMessagePO.setTitle(messageJsonMap.get("titleEn").toString());
-        commonMessagePO.setContent(messageJsonMap.get("contentEn").toString());
+        //commonMessagePO.setContent(messageJsonMap.get("contentEn").toString());
         commonMessagePO.setMsgLanguage(messageJsonMap.get("areaEn").toString());
         commonMessageService.insert(commonMessagePO);
 
         //中文
         commonMessagePO.setTitle(messageJsonMap.get("titleZh").toString());
-        commonMessagePO.setContent(messageJsonMap.get("contentZH").toString());
+       // commonMessagePO.setContent(messageJsonMap.get("contentZH").toString());
         commonMessagePO.setMsgLanguage(messageJsonMap.get("areaZh").toString());
         commonMessageService.insert(commonMessagePO);
 
         //阿拉伯文
         commonMessagePO.setTitle(messageJsonMap.get("titleAr").toString());
-        commonMessagePO.setContent(messageJsonMap.get("contentAr").toString());
+       // commonMessagePO.setContent(messageJsonMap.get("contentAr").toString());
         commonMessagePO.setMsgLanguage(messageJsonMap.get("areaAr").toString());
         commonMessageService.insert(commonMessagePO);
         return HttpResult.success(true);
@@ -117,7 +117,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
      * 查询bean列表数据
      *
      * @throws Exception
-     */
+     *//*
     @ResponseBody
     @PostMapping("findCommonMsgList")
     @ApiOperation("后台-高级分页查询根据通知时间分组")
@@ -132,5 +132,5 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         } else {
             throw new NotPremissionException();
         }
-    }
+    }*/
 }
