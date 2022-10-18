@@ -32,6 +32,9 @@
             <if test="groupCode !=null and groupCode!=''">
                 AND group_code = #{groupCode}
             </if>
+            <if test="isTuYaUser !=null">
+                AND is_tuya_user = #{isTuYaUser}
+            </if>
             AND is_enable=1
             AND is_delete=0
         </where>
