@@ -23,15 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
@@ -99,7 +94,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 result.setCompanyName(organization.getName());
             }
         }
-        result.setPasswordTuya(null);
+        if (null == loginVO.getIsTuYaUser()) {
+            result.setPasswordTuya(null);
+        }
         result.setPassword(null);
         return result;
     }

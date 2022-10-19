@@ -252,6 +252,14 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     private String time;
 
     /**
+     * 登录设备信息
+     */
+    @TableField("equipment_msg")
+    @ApiModelProperty(value = "登录设备信息")
+    private String equipmentMsg;
+
+
+    /**
      * 关系id
      */
     @TableField("relation_id")

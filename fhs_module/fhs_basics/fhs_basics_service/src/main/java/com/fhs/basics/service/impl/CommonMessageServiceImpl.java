@@ -50,7 +50,7 @@ public class CommonMessageServiceImpl extends BaseServiceImpl<CommonMessageVO, C
             commonMessageVO.setMsgType(CommonMessageConstant.NOTICE);
         }
         commonMessageVO.setIsRead(CommonMessageConstant.NO);
-        commonMessageVO.setDateTime(DateUtils.formartDate(new Date(), "yyyy-MM-dd"));
+        commonMessageVO.setDateTime(DateUtils.formartDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         commonMessageVO.setUpdateUser(commonMessageVO.getCreateUser());
         this.insert(commonMessageVO);
     }

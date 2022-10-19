@@ -20,8 +20,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -126,34 +126,28 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     }
     /*
      */
-/**
- * 无分页查询bean列表数据
- *
- * @throws Exception
- *//*
-
+    @Override
     @ResponseBody
-    @GetMapping("findCommonMsgList")
-    @ApiOperation("后台-不分页查询集合-一般用于下拉")
-    public Map<String, List<CommonMessageVO>> findCommonMsgList(CommonMessageVO commonMessageVO) throws Exception {
+    @PostMapping("pagerAdvance")
+    @ApiOperation("后台-高级分页查询")
+    public IPage<CommonMessageVO> findPagerAdvance(@RequestBody QueryFilter<CommonMessagePO> filter) {
         if (isPermitted("see")) {
-            commonMessageVO.setUserId(this.getSessionuser().getUserId());
-            List<CommonMessageVO> dataList = baseService.findForList(commonMessageVO);
-
-            Map<String, List<CommonMessageVO>> dateListMap = dataList.subList(0, 9).stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate));
-            return dateListMap;
+            QueryWrapper wrapper = filter.asWrapper(getDOClass());
+            wrapper.eq("user_id", this.getSessionuser().getUserId());
+            this.setExportCache(wrapper);
+            //这里的是1是DO的index
+            return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
         } else {
             throw new NotPremissionException();
         }
     }
-*/
 
 
     /**
      * 查询bean列表数据
      *
      * @throws Exception
-     */
+     *//*
     @ResponseBody
     @PostMapping("findCommonMsgList")
     @ApiOperation("后台-高级分页查询根据通知时间分组")
@@ -168,5 +162,5 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         } else {
             throw new NotPremissionException();
         }
-    }
+    }*/
 }
