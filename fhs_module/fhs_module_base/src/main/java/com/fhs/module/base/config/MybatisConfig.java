@@ -23,7 +23,9 @@ import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
+
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -37,6 +39,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+
 /**
  * mybatis jpa 配置
  *
@@ -52,7 +55,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @Slf4j
 @org.springframework.context.annotation.Configuration
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
-public class MybatisConfig{
+public class MybatisConfig implements MetaObjectHandler{
 
 
     @Bean("fhsXMLMapperLoader")
@@ -64,43 +67,43 @@ public class MybatisConfig{
         return loader;
     }
 
-/*    *//**
+    /**
      * 插入元对象字段填充（用于插入时对公共字段的填充）
      *
      * @param metaObject 元对象
-     *//*
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
-        Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
+        //Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
-        this.setFieldValByName("createTime",new Date(),metaObject);
-        this.setFieldValByName("updateTime",new Date(),metaObject);
-        this.setFieldValByName("createUser", userId,metaObject);
-        this.setFieldValByName("updateUser",userId,metaObject);
-    }*/
-/*
-    *//**
+        this.setFieldValByName("createTime", new Date(), metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
+       /* this.setFieldValByName("createUser", userId, metaObject);
+        this.setFieldValByName("updateUser", userId, metaObject);*/
+    }
+
+    /**
      * 更新元对象字段填充（用于更新时对公共字段的填充）
      *
      * @param metaObject 元对象
-     *//*
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
         this.setFieldValByName("updateTime",new Date(),metaObject);
         this.setFieldValByName("updateUser",userId,metaObject);
-    }*/
+    }
 }
-
 
 
 /**
  * xml mp 热加载支持 by wanglei
+ *
  * @ 本代码由https://my.oschina.net/houke/blog/901909 copy修改
  */
 @Slf4j
- class XMLMapperLoader implements DisposableBean, InitializingBean, ApplicationContextAware {
+class XMLMapperLoader implements DisposableBean, InitializingBean, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(XMLMapperLoader.class);
 
@@ -140,8 +143,6 @@ public class MybatisConfig{
             }
         }
     }
-
-
 
 
     class Scanner implements Runnable {
@@ -356,6 +357,7 @@ public class MybatisConfig{
             executorService.shutdownNow();
         }
     }
+
     public void setInitialDelay(Long initialDelay) {
         this.initialDelay = initialDelay;
     }

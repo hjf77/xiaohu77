@@ -28,7 +28,8 @@ public class SaTokenConfig  implements WebMvcConfigurer {
         excludePathList.add("/ms/bizEstate/countFarmlandByYear");
         excludePathList.add("/ms/bizEstate/countTownIndustryNumByType");
         excludePathList.add("/ms/bizEstate/countNumByType");
-        excludePathList.add("/ms/bizEstate/pagerAdvance");
+        excludePathList.add("/ms/bizEstate/countMessageByType");
+        excludePathList.add("/ms/dictItem/findList");
         registry.addInterceptor(new SaRouteInterceptor((req, res, handler)->{
             // 根据路由划分模块，不同模块不同鉴权
             SaRouter.match("/ms/**", r -> StpUtil.checkLogin());

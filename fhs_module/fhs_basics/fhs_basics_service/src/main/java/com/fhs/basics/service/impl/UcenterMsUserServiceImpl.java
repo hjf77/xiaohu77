@@ -303,8 +303,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = LeftMenuVO.builder().id(adminMenu.getMenuId()).name(adminMenu.getMenuName())
-                    .icon(adminMenu.getIcon())
-                    .orderIndex(adminMenu.getOrderIndex())
+                    .icon(adminMenu.getIcon()).orderIndex(adminMenu.getOrderIndex())
                     .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).sonMenu(new ArrayList<>()).build();
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
