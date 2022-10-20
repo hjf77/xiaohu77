@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.po.CommonMessagePO;
 import com.fhs.basics.service.CommonMessageService;
+import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.CommonMessageVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.JsonUtils;
@@ -40,6 +41,8 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
 
     @Autowired
     private CommonMessageService commonMessageService;
+    @Autowired
+    private UcenterMsUserService userService;
 
     private static final Gson gson = new Gson().newBuilder().create();
 
@@ -126,8 +129,8 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         });
         return messageVOMap;
     }
-    /*
-     */
+
+
     @Override
     @ResponseBody
     @PostMapping("pagerAdvance")
@@ -135,7 +138,15 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     public IPage<CommonMessageVO> findPagerAdvance(@RequestBody QueryFilter<CommonMessagePO> filter) {
         if (isPermitted("see")) {
             QueryWrapper wrapper = filter.asWrapper(getDOClass());
-            wrapper.eq("user_id", this.getSessionuser().getUserId());
+            Long userId = this.getSessionuser().getUserId();
+            List<Map<String, Object>> userRoleMaps = userService.searchUserRole(userService.selectById(userId));
+            wrapper.eq("user_id", userId);
+            for (Map<String, Object> roleMap : userRoleMaps) {
+                if (roleMap.get("roleId").equals(Constant.THREE)) {
+                    wrapper.clear();
+                }
+                break;
+            }
             this.setExportCache(wrapper);
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
