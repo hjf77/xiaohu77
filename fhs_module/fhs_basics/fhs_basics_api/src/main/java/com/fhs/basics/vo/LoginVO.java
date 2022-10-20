@@ -27,5 +27,7 @@ public class LoginVO {
     private Integer isTuYaUser;
     @ApiModelProperty("涂鸦用户注册类型(1 手机号 2邮箱 3其他)")
     private Integer usernameType;
+    @ApiModelProperty("登录类型0APP用户 1APP用户")
+    private String isAppUser;
 
 }

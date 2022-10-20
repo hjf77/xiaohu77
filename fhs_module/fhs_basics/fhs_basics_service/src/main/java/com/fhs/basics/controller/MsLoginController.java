@@ -321,6 +321,8 @@ public class MsLoginController extends BaseController {
             userPO.setPasswordTuya(loginVO.getPassword());
             sysUserService.updateById(userPO);
         }
+        String header = request.getHeader("Access-source");
+        loginVO.setIsAppUser(header);
         String userName = loginVO.getUserLoginName();
         UcenterMsUserPO sysUser = sysUserService.login(loginVO);
         if (sysUser == null) {
