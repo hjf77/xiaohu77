@@ -16,11 +16,14 @@ import com.fhs.module.base.controller.ModelSuperController;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -58,37 +61,72 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     @PostMapping({"saveMessage"})
     @ApiOperation("新增消息推送")
     public HttpResult<Boolean> saveMessage(@RequestBody String messageJson) {
-        Map<String, Object> messageJsonMap = JsonUtils.parseJSON2Map(gson.toJson(messageJson));
+        Map<String, Object> messageJsonMapTemp = JsonUtils.parseJSON2Map(messageJson);
+        Map<String, Object> messageJsonMap = JsonUtils.parseJSON2Map(messageJsonMapTemp.get("messageJson").toString());
         CommonMessagePO commonMessagePO = new CommonMessagePO();
-        commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlert").toString()));
+        commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
+        commonMessagePO.setRelationId(UUID.randomUUID().toString());
         commonMessagePO.setIsRead(Constant.ZERO);
         commonMessagePO.setIsRelease(Constant.ZERO);
 
         //英文
-        commonMessagePO.setTitle(messageJsonMap.get("titleEn").toString());
-        //commonMessagePO.setContent(messageJsonMap.get("contentEn").toString());
-        commonMessagePO.setMsgLanguage(messageJsonMap.get("areaEn").toString());
-        commonMessageService.insert(commonMessagePO);
+        CommonMessagePO commonMessageEn = new CommonMessagePO();
+        BeanUtils.copyProperties(commonMessagePO, commonMessageEn);
+        commonMessageEn.setMsgLanguage(Constant.STR_NO);
+        commonMessageEn.setTitle(messageJsonMap.get("titleEn").toString());
+        commonMessageEn.setMsgContent(messageJsonMap.get("contentEn").toString());
+        commonMessageEn.setArea(messageJsonMap.get("areaEn").toString());
+        commonMessageService.insert(commonMessageEn);
 
         //中文
-        commonMessagePO.setTitle(messageJsonMap.get("titleZh").toString());
-        // commonMessagePO.setContent(messageJsonMap.get("contentZH").toString());
-        commonMessagePO.setMsgLanguage(messageJsonMap.get("areaZh").toString());
-        commonMessageService.insert(commonMessagePO);
+        CommonMessagePO commonMessageZh = new CommonMessagePO();
+        BeanUtils.copyProperties(commonMessagePO, commonMessageZh);
+        commonMessageZh.setMsgLanguage(Constant.STR_YES);
+        commonMessageZh.setTitle(messageJsonMap.get("titleZh").toString());
+        commonMessageZh.setMsgContent(messageJsonMap.get("contentZh").toString());
+        commonMessageZh.setArea(messageJsonMap.get("areaZh").toString());
+        commonMessageService.insert(commonMessageZh);
 
         //阿拉伯文
-        commonMessagePO.setTitle(messageJsonMap.get("titleAr").toString());
-        // commonMessagePO.setContent(messageJsonMap.get("contentAr").toString());
-        commonMessagePO.setMsgLanguage(messageJsonMap.get("areaAr").toString());
-        commonMessageService.insert(commonMessagePO);
+        CommonMessagePO commonMessageAr = new CommonMessagePO();
+        BeanUtils.copyProperties(commonMessagePO, commonMessageAr);
+        commonMessageAr.setMsgLanguage(Constant.CHECK_ING);
+        commonMessageAr.setTitle(messageJsonMap.get("titleAr").toString());
+        commonMessageAr.setMsgContent(messageJsonMap.get("contentAr").toString());
+        commonMessageAr.setArea(messageJsonMap.get("areaAr").toString());
+        commonMessageService.insert(commonMessageAr);
         return HttpResult.success(true);
     }
 
 
     /**
-     * 查询bean列表数据
+     * 根据ID集合查询对象数据
      *
+     * @param relationId relationId
+     * @return
      * @throws Exception
+     */
+    @LogMethod
+    @ResponseBody
+    @GetMapping("findDetail")
+    @ApiOperation("根据id获取单挑数据信息")
+    public Map<String, CommonMessageVO> info(@RequestParam("relationId") String relationId) {
+        Map<String, CommonMessageVO> messageVOMap = new HashMap<>();
+        List<CommonMessageVO> commonMessageVOS = commonMessageService.findForList(CommonMessagePO.builder().relationId(relationId).build());
+        commonMessageVOS.forEach(c -> {
+            if (c.getMsgLanguage().equals("0")) {
+                messageVOMap.put("messageEn", c);
+            }
+            if (c.getMsgLanguage().equals("1")) {
+                messageVOMap.put("messageCh", c);
+            }
+            if (c.getMsgLanguage().equals("2")) {
+                messageVOMap.put("messageAr", c);
+            }
+        });
+        return messageVOMap;
+    }
+    /*
      */
     @Override
     @ResponseBody
@@ -122,7 +160,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
             wrapper.orderByDesc("create_time");
             //这里的是1是DO的indexo
             IPage<CommonMessageVO> page = baseService.selectPageMP(filter.getPagerInfo(), wrapper);
-            return page.getRecords().stream().collect(Collectors.groupingBy(CommonMessagePO::getNoticeDate, TreeMap::new, Collectors.toList())).descendingMap();
+            return page.getRecords().stream().collect(Collectors.groupingBy(CommonMessagePO::getDateTime, TreeMap::new, Collectors.toList())).descendingMap();
         } else {
             throw new NotPremissionException();
         }

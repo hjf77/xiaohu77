@@ -164,7 +164,7 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
      */
     @TableField("area")
     @ApiModelProperty(value = "国家")
-    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "name" ,alias="name")
+    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "cname" ,alias="name")
     private String area;
 
     /**
@@ -257,4 +257,12 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     @TableField("equipment_msg")
     @ApiModelProperty(value = "登录设备信息")
     private String equipmentMsg;
+
+
+    /**
+     * 关系id
+     */
+    @TableField("relation_id")
+    @ApiModelProperty(value = "关系id")
+    private String relationId;
 }
