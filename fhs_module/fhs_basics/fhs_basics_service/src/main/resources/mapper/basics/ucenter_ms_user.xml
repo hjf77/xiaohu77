@@ -5,23 +5,22 @@
     <select id="login" resultType="com.fhs.basics.po.UcenterMsUserPO"
             parameterType="com.fhs.basics.vo.LoginVO">
         SELECT
-        user_name AS userName,
-        is_enable AS isEnable,
-        user_id AS userId,
-        user_login_name AS userLoginName,
-        is_admin AS isAdmin,
-        password AS password,
-        mobile,
-        email,
-        sex,
-        organization_id AS organizationId,
-        create_user AS createUser,
-        create_time AS createTime,
-        update_user AS updateUser,
-        update_time AS updateTime,
-        group_code AS groupCode
-        FROM
-        t_ucenter_ms_user
+            user_name AS "userName",
+            is_enable AS "isEnable",
+            user_id AS "userId",
+            user_login_name AS "userLoginName",
+            is_admin AS "isAdmin",
+            password AS "password",
+            mobile,
+            email,
+            sex,
+            organization_id AS "organizationId",
+            create_user AS "createUser",
+            create_time AS "createTime",
+            update_user AS "updateUser",
+            update_time AS "updateTime",
+            group_code AS "groupCode"
+            FROM t_ucenter_ms_user
         <where>
             AND
             user_login_name =
@@ -37,21 +36,19 @@
 
     <select id="findForListFromMap" parameterType="map" resultType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
-        user_name AS userName,
-        user_id AS userId,
-        user_login_name AS userLoginName,
+        user_name AS "userName",
+        user_id AS "userId",
+        user_login_name AS "userLoginName",
         mobile,
         email,
         sex,
-        is_admin AS isAdmin,
-        ( CasE is_enable
-        WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
-
-        organization_id AS organizationId,
-        create_user AS createUser,
-        create_time AS createTime,
-        update_user AS updateUser,
-        update_time AS updateTime
+        is_admin AS "isAdmin",
+        ( CasE is_enable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
+        organization_id AS "organizationId",
+        create_user AS "createUser",
+        create_time AS "createTime",
+        update_user AS "updateUser",
+        update_time AS "updateTime"
         FROM t_ucenter_ms_user
         <where>
             <if test="userName !=null and userName!=''">
@@ -59,7 +56,7 @@
             </if>
             ORDER BY user_id DESC
             <if test="start !=null and start!=''">
-                LIMIT ${start},${end}
+                LIMIT ${start} OFFSET ${end}
             </if>
         </where>
     </select>
@@ -82,13 +79,12 @@
     <!-- 通过用户编号查询菜单 -->
     <select id="selectMenuByUid" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT m.menu_name AS menuName,
-        m.menu_id AS menuId,
-        m.is_show AS isShow,
-        s.server_url AS serverUrl,
-        CONCAT(s.server_url,m.menu_url) AS menuUrl,
-        m.father_menu_id AS
-        fatherMenuId
+        SELECT m.menu_name AS "menuName",
+        m.menu_id AS "menuId",
+        m.is_show AS "isShow",
+        s.server_url AS "serverUrl",
+        CONCAT(s.server_url,m.menu_url) AS "menuUrl",
+        m.father_menu_id AS "fatherMenuId"
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
         b.menu_id = m.menu_id
@@ -110,21 +106,19 @@
 
     <select id="selectMenuAll" resultType="com.fhs.basics.po.SettMsMenuPO" parameterType="map">
         SELECT
-        menu_id AS menuId,
-        menu_name AS menuName,
-        father_menu_id AS
-        fatherMenuId,
-        menu_url AS menuUrl,
-        menu_type AS menuType,
+        menu_id AS "menuId",
+        menu_name AS "menuName",
+        father_menu_id AS "fatherMenuId",
+        menu_url AS "menuUrl",
+        menu_type AS "menuType",
         is_enable AS
         isEnable,
         icon,
-        order_index AS orderIndex,
+        order_index AS "orderIndex",
         namespace,
-        is_show AS isShow,
-        system_id AS systemId
-        FROM
-        `t_sett_ms_menu` m
+        is_show AS "isShow",
+        system_id AS "systemId"
+        FROM t_sett_ms_menu m
         <where>
         <!-- 查询制定的菜单类型 -->
         <if test="menuType !=null">
@@ -143,23 +137,22 @@
 
     <!-- 查询admin 拥有的所有的权限列表 -->
     <select id="selectMenuIdByAdmin" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT DISTINCT (m.menu_id) AS menuId
-        FROM `t_sett_ms_menu` m
-        ORDER BY m.father_menu_id, m.order_index
+        SELECT DISTINCT (m.menu_id) AS "menuId"
+        FROM t_sett_ms_menu m
     </select>
 
     <!-- 查询一个用户拥有的所有的权限列表 -->
     <select id="selectMenuIdByUserId" resultType="string" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT distinct (m.menu_id) AS menuId
-        FROM `t_sett_ms_menu` m
-                 LEFT JOIN `t_sett_ms_menu_permission` b ON
+        SELECT distinct (m.menu_id) AS "menuId"
+        FROM t_sett_ms_menu m
+                 LEFT JOIN t_sett_ms_menu_permission b ON
             b.menu_id = m.menu_id
-                 LEFT JOIN `t_ucenter_ms_role_permission` rt ON
+                 LEFT JOIN t_ucenter_ms_role_permission rt ON
             rt.permission_id = b.permission_id
-                 LEFT JOIN `t_ucenter_ms_role_user_rela` ru ON
+                 LEFT JOIN t_ucenter_ms_role_user_rela ru ON
             rt.role_id = ru.role_id
-                 LEFT JOIN `t_ucenter_ms_user` u ON u.user_id = ru.user_id
-                 LEFT JOIN `t_ucenter_ms_role` r ON ru.role_id = r.role_id
+                 LEFT JOIN t_ucenter_ms_user u ON u.user_id = ru.user_id
+                 LEFT JOIN t_ucenter_ms_role r ON ru.role_id = r.role_id
         WHERE m.is_enable = 1
           AND r.is_delete = 0
           AND m.is_enable = b.is_enable
@@ -169,13 +162,11 @@
 
     <select id="selectNotPlanfromMenuAll" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="map">
-        SELECT m.menu_name AS menuName,
-        m.menu_id AS
-        menuId,
+        SELECT m.menu_name AS "menuName",
+        m.menu_id AS "menuId",
         m.icon AS icon,
-        menu_url AS menuUrl,
-        m.father_menu_id AS
-        fatherMenuId
+        menu_url AS "menuUrl",
+        m.father_menu_id AS "fatherMenuId"
         FROM t_sett_ms_menu m
         WHERE
         m.father_menu_id!=-1
@@ -185,9 +176,9 @@
         AND m.menu_id IN (
         SELECT model_key AS modelKey
         FROM
-        `t_admin_app_menu_item` WHERE app_id IN (
+        t_admin_app_menu_item WHERE app_id IN (
         SELECT app_id AS appId FROM
-        `t_admin_app_group_rela` WHERE
+        t_admin_app_group_rela WHERE
         group_id = (
         <include refid="findManagerAllAppIds"></include>
         )
@@ -199,13 +190,13 @@
 
     <sql id="findManagerAllAppIds">
         SELECT group_id
-        FROM `t_admin_group`
+        FROM t_admin_group
         WHERE group_code =
               #{groupCode}) AND
 		state = 0
         UNION
         SELECT app_id AS appId
-        FROM `t_app_apply`
+        FROM t_app_apply
         WHERE manager_code =
               #{managerCode}
           AND apply_state = 3)
@@ -216,12 +207,11 @@
     <select id="selectMenuByUname" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="map">
         SELECT *
-        FROM (SELECT m.menu_name                                 AS menuName,
-                     m.menu_id                                   AS menuId,
-                     CONCAT(m.namespace, ':', b.permission_code) AS namespace,
-                     m.menu_url                                  AS menuUrl,
-                     m.father_menu_id                            AS
-                                                                    fatherMenuId
+        FROM (SELECT m.menu_name                                 AS "menuName",
+                     m.menu_id                                   AS "menuId",
+                     CONCAT(m.namespace, ':', b.permission_code) AS "namespace",
+                     m.menu_url                                  AS "menuUrl",
+                     m.father_menu_id                            AS "fatherMenuId"
               FROM t_sett_ms_menu m
                        LEFT JOIN t_sett_ms_menu_permission b
                                  ON
@@ -235,46 +225,44 @@
                        LEFT JOIN t_ucenter_ms_user u
                                  ON u.user_id = ru.user_id
 
-              WHERE m.`namespace` IS NOT NULL
-                AND m.`namespace` != ''
+              WHERE m.namespace IS NOT NULL
+                AND m.namespace != ''
 		AND u.user_login_name = #{userLoginName}
                 AND m.is_enable
                   = b.is_enable
                 AND m.is_enable = 1
               ORDER BY m.father_menu_id,
                   m.order_index) me
-        WHERE me.`namespace` IS NOT NULL
+        WHERE me.namespace IS NOT NULL
     </select>
 
     <select id="selectUserByULname" resultType="com.fhs.basics.po.UcenterMsUserPO"
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT user_name                                                  AS userName,
-               user_id                                                    AS userId,
-               user_login_name                                            AS userLoginName,
+        SELECT user_name                                                  AS "userName",
+               user_id                                                    AS "userId",
+               user_login_name                                            AS "userLoginName",
                mobile,
                email,
-               is_admin                                                   AS isAdmin,
+               is_admin                                                   AS "isAdmin",
                (CasE is_enable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END) AS state,
-               organization_id                                            AS organizationId
+               organization_id                                            AS "organizationId"
         FROM t_ucenter_ms_user
         WHERE user_login_name = #{userLoginName}
           AND is_enable = 1
     </select>
     <!-- 通过权限编号集合嘻哈下权限 -->
     <select id="readMenuByButtonIds" parameterType="map" resultType="com.fhs.basics.po.SettMsMenuPO">
-        SELECT m.menu_name AS menuName,
-        m.menu_id as menuId,
-        CONCAT(m.namespace,':',b.permission_code) AS namespace,
-        menu_url AS menuUrl,
-        m.father_menu_id AS
-        fatherMenuId
+        SELECT m.menu_name AS "menuName",
+        m.menu_id as "menuId",
+        CONCAT(m.namespace,':',b.permission_code) AS "namespace",
+        menu_url AS "menuUrl",
+        m.father_menu_id AS "fatherMenuId"
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
         b.menu_id = m.menu_id
         WHERE m.is_enable=b.is_enable
         AND m.is_enable=1
-        AND
-        b.permission_id In
+        AND b.permission_id In
         <foreach collection="Ids" index="index" item="item" open="("
                  separator="," close=")">
             #{item}
@@ -289,15 +277,12 @@
     <!-- 通过父节点编号查询菜单 -->
     <select id="selectParentMenuById" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="map">
-        SELECT m.menu_name as menuName,
-        m.menu_id as menuId,
-        m.menu_url as
-        menuUrl ,
-        m.father_menu_id as fatherMenuId
-        FROM
-        t_sett_ms_menu m
-        WHERE
-        m.menu_id = #{fatherMenuId}
+        SELECT m.menu_name as "menuName",
+        m.menu_id as "menuId",
+        m.menu_url as "menuUrl" ,
+        m.father_menu_id as "fatherMenuId"
+        FROM t_sett_ms_menu m
+        WHERE m.menu_id = #{fatherMenuId}
         <if test="menuType !=null">
             AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
         </if>
@@ -308,15 +293,14 @@
     <select id="findBean" parameterType="com.fhs.basics.po.UcenterMsUserPO"
             resultType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
-        user_name AS userName,
-        user_id AS userId,
-        user_login_name AS
-        userLoginName,
-        password,header,
-        email,is_admin AS isAdmin,
-        is_enable
-        AS isEnable,
-        organization_id AS organizationId
+        user_name AS "userName",
+        user_id AS "userId",
+        user_login_name AS "userLoginName",
+        password,
+        header,
+        email,is_admin AS "isAdmin",
+        is_enable AS "isEnable",
+        organization_id AS "organizationId"
         FROM t_ucenter_ms_user
         <where>
             <if test="userLoginName != null and userLoginName != ''">
@@ -335,13 +319,13 @@
     <!-- 删除用户角色 -->
     <delete id="deleteUserRole" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         DELETE
-        FROM `t_ucenter_ms_role_user_rela`
+        FROM t_ucenter_ms_role_user_rela
         WHERE user_id = #{userId}
     </delete>
 
     <!-- 查询用户级角色 -->
     <select id="searchUserRole" resultType="map" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT r.role_id AS roleId, r.role_name AS roleName
+        SELECT r.role_id AS "roleId", r.role_name AS "roleName"
         FROM t_ucenter_ms_role r
                  LEFT JOIN t_ucenter_ms_role_user_rela ru ON r.role_id = ru.role_id
         WHERE ru.user_id = #{userId}
@@ -349,16 +333,14 @@
 
     <!-- 通过菜单编号查询菜单集合 -->
     <select id="readMenuByIds" parameterType="map" resultType="com.fhs.basics.po.SettMsMenuPO">
-        SELECT m.menu_name AS menuName,
-        m.menu_id AS menuId,
-        menu_url AS menuUrl,
+        SELECT m.menu_name AS "menuName",
+        m.menu_id AS "menuId",
+        menu_url AS "menuUrl",
         namespace,
-        menu_type AS
-        menuType,
+        menu_type AS "menuType",
         icon,
-        is_attention AS isAttention,
-        m.father_menu_id AS
-        fatherMenuId
+        is_attention AS "isAttention",
+        m.father_menu_id AS "fatherMenuId"
         FROM t_sett_ms_menu m
         WHERE m.menu_id in
         <foreach collection="Ids" index="index" item="item" open="("
@@ -376,7 +358,7 @@
     <select id="validataPass" resultType="int" parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
         COUNT(1)
-        FROM `t_ucenter_ms_user`
+        FROM t_ucenter_ms_user
         <where>
             AND password = #{password}
             AND user_id = #{userId}
@@ -385,24 +367,22 @@
 
     <!-- 修改密码 -->
     <update id="updatePass" parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        UPDATE `t_ucenter_ms_user`
-        SET `password`=#{password}
+        UPDATE t_ucenter_ms_user
+        SET password=#{password}
         WHERE user_id = #{userId}
     </update>
 
     <!-- 查询用户权限 -->
     <select id="searchUserButton" resultType="com.fhs.basics.po.SettMsMenuPermissionPO"
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT b.permission_name            AS buttonName,
-               b.permission_id              AS
-                                               buttonId,
-               b.permission_code            AS permissionCode,
-               b.permission_type            AS buttonType,
+        SELECT b.permission_name            AS "buttonName",
+               b.permission_id              AS "buttonId",
+               b.permission_code            AS "permissionCode",
+               b.permission_type            AS "buttonType",
                (CASE
                    b.is_enable
                     WHEN '0' THEN '启用'
-                    WHEN '1' THEN '禁用' end) AS
-                                               state
+                    WHEN '1' THEN '禁用' end) AS state
         FROM t_sett_ms_menu_permission b
                  LEFT JOIN t_ucenter_ms_role_permission rb
                            ON rb.permission_id =
@@ -416,13 +396,13 @@
     <!-- 通过用户编号集合查询权限集合 -->
     <select id="searchUserButtonIds" resultType="com.fhs.basics.po.SettMsMenuPermissionPO"
             parameterType="map">
-        SELECT permission_id AS buttonId,
-        permission_name AS buttonName,
+        SELECT permission_id AS "buttonId",
+        permission_name AS "buttonName",
         permission_code ,
-        permission_type AS buttonType,
-        menu_id AS menuId,
-        is_enable AS isEnable
-        FROM `t_sett_ms_menu_permission` where permission_id In
+        permission_type AS "buttonType",
+        menu_id AS "menuId",
+        is_enable AS "isEnable"
+        FROM t_sett_ms_menu_permission where permission_id In
         <foreach collection="Ids" index="index" item="item" open="("
                  separator="," close=")">
             #{item}
@@ -431,12 +411,11 @@
 
     <select id="searchUserButtonAll" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="map">
-        SELECT m.menu_name AS menuName,
-        m.menu_id AS menuId,
-        CONCAT(m.namespace,':',b.permission_code ) AS namespace,
-        menu_url AS menuUrl,
-        m.father_menu_id AS
-        fatherMenuId
+        SELECT m.menu_name AS "menuName",
+        m.menu_id AS "menuId",
+        CONCAT(m.namespace,':',b.permission_code ) AS "namespace",
+        menu_url AS "menuUrl",
+        m.father_menu_id AS "fatherMenuId"
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
         b.menu_id = m.menu_id
@@ -450,17 +429,14 @@
     <!-- 通过权限查询菜单 -->
     <select id="selectMenuByButtonIds" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="map">
-        SELECT m.menu_name AS menuName,
-        m.menu_id AS menuId,
-        menu_url AS menuUrl,
-        m.father_menu_id AS
-        fatherMenuId,
+        SELECT m.menu_name AS "menuName",
+        m.menu_id AS "menuId",
+        menu_url AS "menuUrl",
+        m.father_menu_id AS "fatherMenuId",
         m.icon AS icon,
-        m.order_index AS orderIndex
+        m.order_index AS "orderIndex"
         FROM t_sett_ms_menu m
-        LEFT
-        JOIN t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id
+        LEFT JOIN t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
         <where>
             <if test="Ids.size() > 0">
                 AND b.permission_id IN
@@ -483,12 +459,11 @@
     <!-- 通过权限编号集合获取菜单 -->
     <select id="selectMenuByButtons" resultType="com.fhs.basics.po.SettMsMenuPO"
             parameterType="map">
-        SELECT m.menu_name AS menuName,
-        m.menu_id as menuId,
-        CONCAT(m.namespace,':',b.permission_code) AS namespace,
-        menu_url AS menuUrl,
-        m.father_menu_id AS
-        fatherMenuId
+        SELECT m.menu_name AS "menuName",
+        m.menu_id as "menuId",
+        CONCAT(m.namespace,':',b.permission_code) AS "namespace",
+        menu_url AS "menuUrl",
+        m.father_menu_id AS "fatherMenuId"
         FROM t_sett_ms_menu m
         LEFT JOIN t_sett_ms_menu_permission b ON
         b.menu_id = m.menu_id
@@ -528,7 +503,7 @@
             parameterType="com.fhs.basics.po.UcenterMsUserPO">
         SELECT
         COUNT(1)
-        FROM `t_ucenter_ms_user`
+        FROM t_ucenter_ms_user
         <where>
             <if test="userId !=null and userId != ''">
                 AND user_id != #{userId}
@@ -544,20 +519,15 @@
     <!-- 根据传来的fatherIds查出所有的father信息 -->
     <select id="getFatherMenu" parameterType="string"
             resultType="com.fhs.basics.po.UcenterMsUserPO">
-        SELECT m.menu_name                      AS menuName,
-               m.menu_id                        AS
-                                                   menuId,
-               m.menu_url                        AS menuUrl,
-               m.father_menu_id                 AS
-                                                   fatherMenuId,
-               m.order_index                    AS orderIndex
+        SELECT m.menu_name                      AS "menuName",
+               m.menu_id                        AS "menuId",
+               m.menu_url                       AS "menuUrl",
+               m.father_menu_id                 AS "fatherMenuId",
+               m.order_index                    AS "orderIndex"
         FROM t_sett_ms_menu m
-
-        WHERE m.is_enable
-            = 0
-          AND m.father_menu_id!=-1
-		AND
-		m.menu_id IN (${fatherMenuIds})
+        WHERE m.is_enable = 0
+            AND m.father_menu_id!=-1
+		    AND m.menu_id IN (${fatherMenuIds})
         ORDER BY
             m.father_menu_id, m.order_index
     </select>
@@ -567,11 +537,9 @@
     <select id="findAllHasPermissionId" parameterType="map"
             resultType="int">
         SELECT
-        m.menu_id as menuId
+        m.menu_id as "menuId"
         FROM t_sett_ms_menu m
-        LEFT JOIN
-        t_sett_ms_menu_permission b ON
-        b.menu_id = m.menu_id
+        LEFT JOIN t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
         WHERE b.permission_id IN
         (${menuIds})
         <if test="menuType !=null">
@@ -581,33 +549,31 @@
     </select>
     <!-- 根据角色不同获取当前集团下对应的菜单 id-->
     <sql id="getRoleMenuIdOfGroup">
-        SELECT model_key AS modelKey
-        FROM `t_admin_app_menu_item`
+        SELECT model_key AS "modelKey"
+        FROM t_admin_app_menu_item
         WHERE app_id IN
               (SELECT app_id
-               FROM `t_admin_app_group_rela`
+               FROM t_admin_app_group_rela
                WHERE group_id =
                      (SELECT group_id
-                      FROM `t_admin_group`
+                      FROM t_admin_group
                       WHERE group_code = #{groupCode})
                  AND state = 0
                UNION
                SELECT app_id AS appId
-               FROM `t_app_apply`
+               FROM t_app_apply
                WHERE manager_code = #{managerCode}
                  AND apply_state = 3)
           AND model_type = 0
     </sql>
     <select id="checkOperatorLogin" parameterType="map" resultType="map">
-        SELECT user_name       AS userName,
-               is_enable       AS isEnable,
-               user_id         AS userId,
-               user_login_name AS
-                                  userLoginName,
+        SELECT user_name       AS "userName",
+               is_enable       AS "isEnable",
+               user_id         AS "userId",
+               user_login_name AS "userLoginName",
                isadmin,
-               password        AS password,
-               operator_code   AS
-                                  operatorCode
+               password        AS "password",
+               operator_code   AS "operatorCode"
         FROM t_ucenter_ms_role_user_rela
         WHERE user_login_name = #{userLoginName}
           AND password = #{password}
@@ -630,7 +596,7 @@
              t_sett_ms_menu_permission_url_rela mpu
         WHERE ur.role_id = rp.role_id
           AND rp.permission_id = mpu.permission_id
-          AND ur.`user_id` = #{userId}
+          AND ur.user_id = #{userId}
         GROUP BY mpu.url
     </select>
 
@@ -643,7 +609,7 @@
     <!-- 获取用户tree的list数据(处理后可为tree数据) -->
     <select id="getUserOrgTreeList" resultType="com.fhs.basics.vo.SysUserOrgVO" parameterType="string">
         SELECT *
-        FROM (SELECT id, name as text, parent_id AS parentId, 0 AS isUser, create_time
+        FROM (SELECT id, name as text, parent_id AS "parentId", 0 AS "isUser", create_time
               FROM t_ucenter_ms_organization
               WHERE group_code = #{groupCode}
               ORDER BY create_time) temp
@@ -666,7 +632,6 @@
             AND o.company_id=#{companyId}
         </if>
         AND m.namespace=#{namespace} AND p.permission_code=#{permissonMethodCode}
-
     </select>
 
 </mapper>

@@ -21,7 +21,7 @@
         GROUP BY url
         order by count(url) DESC
         <if test="start !=null and end !=null">
-            LIMIT ${start},${end}
+            LIMIT ${start} OFFSET ${end}
         </if>
     </select>
 

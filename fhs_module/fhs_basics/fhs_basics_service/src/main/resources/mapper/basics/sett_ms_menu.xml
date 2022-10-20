@@ -5,46 +5,42 @@
 	<select id="findForAllList" resultType="com.fhs.basics.po.SettMsMenuPO"
 			parameterType="map">
 		SELECT * FROM (SELECT
-						   m.menu_name AS menuName,
-						   m.menu_id AS menuId,
-						   CONCAT(m.namespace,':',b.permission_code) AS namespace,
-						   m.menu_url AS menuUrl ,
-						   m.father_menu_id AS fatherMenuId
+						   m.menu_name AS "menuName",
+						   m.menu_id AS "menuId",
+						   CONCAT(m.namespace,':',b.permission_code) AS "namespace",
+						   m.menu_url AS "menuUrl" ,
+						   m.father_menu_id AS "fatherMenuId"
 					   FROM
 						   t_sett_ms_menu m
 							   LEFT JOIN
 						   t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
 					   WHERE
-						   m.`namespace` IS NOT NULL
-						 AND m.`namespace` !=''
-		AND m.`is_enable`
-		= 1
-		AND b.`is_enable` = 1
+						   m.namespace IS NOT NULL
+						 AND m.namespace !=''
+		AND m.is_enable = 1
+		AND b.is_enable = 1
 					   ORDER BY
 						   m.father_menu_id,m.order_index
 					  ) m
 		WHERE
-			m.`namespace` IS NOT NULL
+			m.namespace IS NOT NULL
 	</select>
 
 
     <select id="getMenuPermissionTree" resultType="com.fhs.basics.vo.TreeMenuPermissionVO">
 		(SELECT
-			menu_id AS id,
-			father_menu_id AS parentId,
-			menu_name AS name
-		FROM
-			t_sett_ms_menu
+			menu_id AS "id",
+			father_menu_id AS "parentId",
+			menu_name AS "name"
+		FROM t_sett_ms_menu
 		WHERE is_delete = 0
 		ORDER BY parentId
 		)
-
 		UNION  ALL
-
 		SELECT
-			CONCAT("p_", p.permission_id) AS id,
-			p.menu_id AS parentId,
-			p.permission_name AS name
+			CONCAT("p_", p.permission_id) AS "id",
+			p.menu_id AS "parentId",
+			p.permission_name AS "name"
 		FROM
 			t_sett_ms_menu_permission p
 		INNER JOIN t_sett_ms_menu m ON m.menu_id = p.menu_id

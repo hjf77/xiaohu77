@@ -1,7 +1,5 @@
 package com.fhs.basics.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
@@ -21,8 +19,6 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.google.common.collect.HashMultimap;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -42,7 +38,6 @@ import java.util.stream.Collectors;
  * @author user
  * @date 2020-05-18 16:46:36
  */
-
 @Primary
 @Service
 @DataSource("basic")
@@ -511,6 +506,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
 
 
+    @Override
     public List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper) {
         List<UcenterMsUserVO> users = super.selectListMP(wrapper);
         List<UcenterMsOrganizationVO> orgs = this.organizationService.selectListMP(new LambdaQueryWrapper<>());

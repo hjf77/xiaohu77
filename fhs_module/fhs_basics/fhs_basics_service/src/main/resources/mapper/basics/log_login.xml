@@ -5,13 +5,12 @@
 
     <select id="getLoginIogSummary" resultType="com.fhs.basics.vo.LogLoginVO">
         SELECT
-            u.user_name userName,
+            u.user_name "userName",
 	        l.log_id,
-            l.login_name loginName,
-            l.user_id userId,
+            l.login_name "loginName",
+            l.user_id "userId",
             count(*) count
-        FROM
-        `t_log_login` l
+        FROM t_log_login l
         LEFT JOIN t_ucenter_ms_user u on u.user_id = l.user_id
         where l.is_delete = 0
         and l.create_time <![CDATA[ >= ]]> #{statTime}

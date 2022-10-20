@@ -26,7 +26,7 @@ public class LogHistoryDataServiceImpl extends BaseServiceImpl<LogHistoryDataVO,
     @Override
     public LogHistoryDataVO getLastVersionData(String pkey, String namespace) {
         return super.selectOneMP(new LambdaQueryWrapper<LogHistoryDataPO>().eq(LogHistoryDataPO::getPkey, pkey)
-                .eq(LogHistoryDataPO::getNamespace, namespace).orderByDesc(LogHistoryDataPO::getVersion).last(" limit 0,1"));
+                .eq(LogHistoryDataPO::getNamespace, namespace).orderByDesc(LogHistoryDataPO::getVersion).last(" LIMIT 0 OFFSET 1"));
     }
 
 }
