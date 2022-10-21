@@ -341,14 +341,18 @@ public class MsLoginController extends BaseController {
         result.put("userInfo", sysUser);
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         //插入通知消息
-        String userAgent = request.getHeader("user-agent");
-        Pattern pattern = Pattern.compile(";\\s?(\\S*?\\s?\\S*?)\\s?(Build)?/");
-        Matcher matcher = pattern.matcher(userAgent);
         String phoneModel = null;
-        if (matcher.find()) {
-            phoneModel = matcher.group(1).trim();
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent.contains("Windows")) {
+            phoneModel = "Windows";
+        } else {
+            Pattern pattern = Pattern.compile("; (Android.*;) (.*?) Build");
+            Matcher matcher = pattern.matcher(userAgent.trim());
+            if (matcher.find()) {
+                phoneModel = matcher.group(2);
+            }
+            phoneModel = phoneModel == null ? "iPhone" : phoneModel;
         }
-        phoneModel = phoneModel == null ? "iphone" : phoneModel;
         CommonMessageVO commonMessageVO = new CommonMessageVO();
         commonMessageVO.setEquipmentMsg(userAgent);
         commonMessageVO.setUserId(sysUser.getUserId());
