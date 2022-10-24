@@ -45,7 +45,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
     /**
      * 区域主键
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.NONE)
     @NotNull(message = "area的id字段 不可为null ", groups = {Update.class, Delete.class})
     @Max(message = "area的id超过int最大值", value = 2147483647, groups = {Delete.class, Update.class})
     @Min(message = "area的id小于int最大值", value = -2147483648, groups = {Delete.class, Update.class})
