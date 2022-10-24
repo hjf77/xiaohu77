@@ -59,7 +59,7 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
     @PostMapping("pagerAdvance")
     @ApiOperation("后台-高级分页查询")
     public IPage<TableInfoVO> findPagerAdvance(@RequestBody QueryFilter<TableInfoPO> filter) {
-        QueryWrapper wrapper = filter.asWrapper(getDOClass());
+        QueryWrapper wrapper = filter.asWrapper(getPOClass());
         this.setExportCache(wrapper);
         //这里的是1是DO的index
         return baseService.selectPageMP(filter.getPagerInfo(), wrapper);

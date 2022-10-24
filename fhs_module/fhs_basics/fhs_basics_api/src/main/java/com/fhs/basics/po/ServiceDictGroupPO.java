@@ -18,7 +18,6 @@ import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -55,7 +54,7 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     /**
      * 分组名称
      */
-    @NotEmpty(message = "分组名称不能为空", groups = {Update.class,Add.class, Delete.class})
+    @NotEmpty(message = "分组名称不能为空", groups = {Update.class,Add.class})
     @TableField("group_name")
     @ApiModelProperty("分组名称")
     private String groupName;
@@ -63,7 +62,7 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     /**
      * 分组编码
      */
-    @NotEmpty(message = "分组编码不能为空", groups = {Update.class,Add.class, Delete.class})
+    @NotEmpty(message = "分组编码不能为空", groups = {Update.class,Add.class})
     @TableField("group_code")
     @ApiModelProperty("分组编码")
     @NotRepeatField

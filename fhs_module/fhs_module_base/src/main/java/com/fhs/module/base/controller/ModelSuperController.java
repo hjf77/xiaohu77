@@ -91,7 +91,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ApiOperation("后台-高级分页查询")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter) {
         if (isPermitted("see")) {
-            QueryWrapper wrapper = filter.asWrapper(getDOClass());
+            QueryWrapper wrapper = filter.asWrapper(getPOClass());
             this.setExportCache(wrapper);
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
@@ -112,7 +112,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     public List<V> findListAdvance(@RequestBody QueryFilter<D> filter) {
         if (isPermitted("see")) {
             //这里的是1是DO的index
-            return baseService.selectListMP(filter.asWrapper(getDOClass()));
+            return baseService.selectListMP(filter.asWrapper(getPOClass()));
         } else {
             throw new NotPremissionException();
         }
@@ -150,7 +150,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         if (CheckUtils.isNotEmpty(ids)) {
             wrapper.in("id", ids.split(","));
         }
-        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getDOClass());
+        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getPOClass());
         String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID() + ".xlsx";
         FileOutputStream os = new FileOutputStream(excelTempPath);
         book.write(os);
@@ -296,11 +296,11 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     )
     @ApiOperation("获取tree格式的json数据")
     public List<TreeNode<Treeable>> treeData(@ApiParam(name = "queryFilter", value = "过滤条件") @RequestBody QueryFilter<D> queryFilter) throws IllegalAccessException {
-        List<V> datas = this.baseService.selectListMP(queryFilter.asWrapper(getDOClass()));
+        List<V> datas = this.baseService.selectListMP(queryFilter.asWrapper(getPOClass()));
         return TreeUtils.formartTree(datas);
     }
 
-    protected Class<D> getDOClass() {
+    protected Class<D> getPOClass() {
         return (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
@@ -345,13 +345,13 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @NotRepeat
     public HttpResult<String> pubImportExcel(MultipartFile file, D otherParam) throws Exception {
         if (otherParam == null) {
-            otherParam = this.getDOClass().newInstance();
+            otherParam = this.getPOClass().newInstance();
         }
         ExcelImportSett importSett = getExcelImportSett(otherParam);
         ParamChecker.isNotNull(importSett, "此接口后台没有配置导入参数，请联系后台");
         try {
             importSett.setDoModel(otherParam);
-            this.excelService.importExcel(file, this.getBaseService(), this.getDOClass(), importSett);
+            this.excelService.importExcel(file, this.getBaseService(), this.getPOClass(), importSett);
         } catch (ValidationException e) {
             throw new ParamException(e.getMessage());
         }
