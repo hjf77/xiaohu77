@@ -76,6 +76,13 @@ by wanglei
           >重置
           </el-button>
           <el-button
+            v-if="setColumns"
+            size="mini"
+            type="primary"
+            @click="isSetColumnsDialog = true"
+            >设置</el-button
+          >
+          <el-button
             size="mini"
             type="text"
             @click="moreSearch"
@@ -255,6 +262,13 @@ by wanglei
 
       <slot name="form"></slot>
     </div>
+    <pagex-crudSetColumns
+      :isOpenSetColumnsDialog="isSetColumnsDialog"
+      :allColumn="allColumn"
+      :namespace="namespace"
+      @isSetColumnsDialogStatus="isSetColumnsDialogStatusFn"
+      @realColumn="realColumnFn"
+    ></pagex-crudSetColumns>
   </div>
 </template>
 
@@ -264,10 +278,15 @@ import Dialog from "@/lib/components/dialog.vue";
 import $moment from "moment";
 import {checkPermi} from "@/utils/permission";
 import PagexCheckBox from "./checkbox.vue";
+import {deepClone} from "@/utils/index.js";
 
 export default {
   components: {PagexCheckBox, Dialog},
   props: {
+    setColumns: {
+      type: Boolean,
+      default: false,
+    },
     //列表上面的按钮
     buttons: {
       type: Array,
@@ -358,6 +377,9 @@ export default {
   },
   data() {
     return {
+      awaitApiResponse: false,
+      isSetColumnsDialog: false,
+      allColumn: [], // 所有的列
       // 显示总数组件使用参数，判断是否禁用下一页，默认不禁用
       isEndPage: false,
       searchFormWidth: 0,
@@ -426,6 +448,26 @@ export default {
         this.realColumns.push(column);
       }
     });
+    this.allColumn = deepClone(this.realColumns);
+    let columnSettPermission = JSON.parse(localStorage.getItem('columnSett'))
+    if(columnSettPermission[this.namespace]) {
+      let parse = {}
+      if(columnSettPermission[this.namespace] instanceof Object) {
+        parse = columnSettPermission[this.namespace]
+      } else {
+        parse = JSON.parse(columnSettPermission[this.namespace])
+      }
+      const setRealColumns = []
+      for(let key in parse){
+        setRealColumns.push({
+          label: parse[key].label,
+          name: key,
+          checked: parse[key].checked,
+          width: parse[key].width,
+        })
+      }
+      this.realColumns = setRealColumns.filter(item => item.checked)
+    }
     this.buttons.forEach((button) => {
       if (button.ifFun) {
         if (button.ifFun.call()) {
@@ -780,7 +822,17 @@ export default {
       if (val) {
         this.getList()
       }
-    }
+    },
+    isSetColumnsDialogStatusFn(val) {
+      this.isSetColumnsDialog = val;
+    },
+    realColumnFn(val) {
+      this.realColumns = [];
+      this.$nextTick(() => {
+        this.$set(this, 'realColumns', val)
+      })
+      
+    },
   }
 }
 </script>

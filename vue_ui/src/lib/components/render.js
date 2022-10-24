@@ -32,6 +32,7 @@ import previewPicture from "./previewPicture.vue";
 import crudForm from "./crudForm.vue";
 import one2x from "./one2x.vue";
 import advancePagination from "./advancePagination.vue";
+import crudSetColumns from "./crudSetColumns.vue";
 
 import Vue from "vue";
 import getProps from "../utils/getProps";
@@ -77,6 +78,7 @@ const comList = {
   crudForm,
   one2x,
   advancePagination,
+  crudSetColumns,
   render: renderCom
 };
 Object.entries(comList).forEach(([key, val]) => {
