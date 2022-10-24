@@ -20,8 +20,7 @@
 	</select>
 
     <!-- 根据用户获取角色 -->
-    <select id="findRolesByUserId" parameterType="string"
-            resultType="com.fhs.basics.po.UcenterMsRolePO">
+    <select id="findRolesByUserId"  resultType="com.fhs.basics.po.UcenterMsRolePO">
 		SELECT
 		distinct ar.role_id AS "roleId",
 		ar.role_name AS "roleName",
