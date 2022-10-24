@@ -101,8 +101,7 @@
     </select>
 
     <!-- 添加权限信息 -->
-    <insert id="addButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO"
-            useGeneratedKeys="true" keyProperty="roleId">
+    <insert id="addButtons" parameterType="com.fhs.basics.po.UcenterMsRolePO">
         INSERT INTO t_ucenter_ms_role_permission
         (role_id,permission_id )
         VALUES
@@ -162,7 +161,7 @@
 
     <select id="getRolePermissionButtons" resultType="java.lang.String">
 	    SELECT
-		    CONCAT( "p_", b.permission_id)
+		    CONCAT( 'p_', b.permission_id)
 		FROM
 			t_sett_ms_menu_permission b
 			LEFT JOIN t_ucenter_ms_role_permission ro ON ro.permission_id = b.permission_id

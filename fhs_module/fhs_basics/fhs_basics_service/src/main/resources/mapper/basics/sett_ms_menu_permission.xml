@@ -12,7 +12,7 @@
 		  permission_type
 		) VALUES
 		<foreach collection="baseButtonList" item="item" separator=",">
-			(replace(uuid(),'-',''),#{item.permissionName}, #{item.permissionCode}, #{menuId}, 1, #{item.permissionType})
+			(#{item.permissionId},#{item.permissionName}, #{item.permissionCode}, #{menuId}, 1, #{item.permissionType})
 		</foreach>
 	</insert>
 

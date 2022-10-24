@@ -1,6 +1,5 @@
 package com.fhs.basics.controller;
 
-import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.po.ServiceDictGroupPO;
 import com.fhs.basics.service.ServiceDictGroupService;
 import com.fhs.basics.vo.ServiceDictGroupVO;
@@ -15,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 字典管理controller

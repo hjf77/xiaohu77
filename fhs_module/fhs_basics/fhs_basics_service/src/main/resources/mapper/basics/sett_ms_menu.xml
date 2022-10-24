@@ -34,11 +34,11 @@
 			menu_name AS "name"
 		FROM t_sett_ms_menu
 		WHERE is_delete = 0
-		ORDER BY parentId
+		ORDER BY "parentId"
 		)
 		UNION  ALL
 		SELECT
-			CONCAT("p_", p.permission_id) AS "id",
+			CONCAT('p_', p.permission_id) AS "id",
 			p.menu_id AS "parentId",
 			p.permission_name AS "name"
 		FROM
