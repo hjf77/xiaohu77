@@ -169,8 +169,8 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
             for (Map<String, Object> roleMap : userRoleMaps) {
                 if (roleMap.get("roleId").equals(Constant.THREE)) {
                     wrapper.clear();
+                    break;
                 }
-                break;
             }
             this.setExportCache(wrapper);
             //这里的是1是DO的index
