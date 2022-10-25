@@ -249,8 +249,9 @@ public class MsLoginController extends BaseController {
             if (registerUserMap.get("success").equals((false))) {
                 throw new ParamException("注册失败");
             } else {
-                registerUserMap = JsonUtils.parseJSON2Map(registerUserMap.get("result").toString()) ;
+                registerUserMap = JsonUtils.parseJSON2Map(registerUserMap.get("result").toString());
                 sysUser.setUId(gson.toJson(registerUserMap.get("uid")).replace("\"", ""));
+                sysUser.setIsTuyaUser(Constant.ONE);
                 sysUserService.addUser(sysUser);
                 //添加用户默认设置
                 UcenterAppUserSetPO ucenterAppUserSetPO = new UcenterAppUserSetPO();
@@ -315,19 +316,13 @@ public class MsLoginController extends BaseController {
             //涂鸦用户第一次在app登录
             //获取token
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
-            //在telo1中查询用户
-            Map<String, Object> usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsers + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
-            //如果telo1中不存在 在telo中查询用户
-            if (usersMapList.get("success").equals(false)) {
-                usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsers + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
-            }
+            //在telo中查询用户
+           // Map<String, Object> usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsers + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
             //解析用户信息 获取用户uid
-            List<String> userList = (List<String>) JsonUtils.parseJSON2Map(gson.toJson(usersMapList.get("result"))).get("list");
-            Map<String, Object> userMapTemp = JsonUtils.parseJSON2Map(gson.toJson(userList.get(0)));
+          //  List<String> userList = (List<String>) JsonUtils.parseJSON2Map(gson.toJson(usersMapList.get("result"))).get("list");
+           // Map<String, Object> userMapTemp = JsonUtils.parseJSON2Map(gson.toJson(userList.get(0)));
             //根据用户uid查询用户信息 获取用户country_code
-            Map<String, Object> userMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUser.replace("{uid}", userMapTemp.get("uid").toString()), "GET", "", new HashMap<>())))));
-            System.out.println("=====查询用户列表" + usersMapList);
-            System.out.println("=====用户列表获取用户" + userMapTemp);
+            Map<String, Object> userMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUser.replace("{uid}", ucenterMsUserVO.getUId()), "GET", "", new HashMap<>())))));
             System.out.println("=====用户信息" + userMap);
             Map<String, Object> map = new HashMap<>();
             //获取用户country_code
@@ -433,7 +428,7 @@ public class MsLoginController extends BaseController {
             map.put("username", sysUser.getUserLoginName());
             map.put("password", sysUser.getPassword());
             map.put("country_code", "86");
-            map.put("username_type", sysUser.getUsernameType());
+            map.put("username_type", "3");
             //发送请求
             Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));

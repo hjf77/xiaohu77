@@ -36,6 +36,9 @@ public class BusinessException extends RuntimeException {
         this.code = 500;
     }
 
+    public BusinessException(int code) {
+        this.code = code;
+    }
 
     public BusinessException() {
     }
