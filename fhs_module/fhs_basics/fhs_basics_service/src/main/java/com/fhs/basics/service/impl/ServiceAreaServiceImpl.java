@@ -37,23 +37,6 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
     @Autowired
     private RedisCacheService<String> redisCacheService;
 
-    @Override
-    public String findAddressById(Map<String, Object> map) {
-        String address = null;
-        String provinceId = (String) map.get("provinceId");
-        if (!CheckUtils.isNullOrEmpty(provinceId)) {
-            address = super.selectById(provinceId).getAreaName();
-        }
-        String cityId = (String) map.get("cityId");
-        if (!CheckUtils.isNullOrEmpty(cityId)) {
-            address = address + super.selectById(cityId).getAreaName();
-        }
-        String areaId = (String) map.get("areaId");
-        if (!CheckUtils.isNullOrEmpty(areaId)) {
-            address = address + super.selectById(areaId).getAreaName();
-        }
-        return address;
-    }
 
     @Override
     public void refreshRedisCache() {
@@ -70,4 +53,10 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
         }
     }
 
+    /**
+     * 根据id获取区域编码
+     */
+    public Integer getById(Integer id){
+        return super.selectById(id).getCode();
+    }
 }

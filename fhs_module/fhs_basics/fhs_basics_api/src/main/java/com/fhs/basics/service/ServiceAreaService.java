@@ -3,6 +3,8 @@ package com.fhs.basics.service;
 import com.fhs.basics.po.ServiceAreaPO;
 import com.fhs.basics.vo.ServiceAreaVO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.easycloud.anno.CloudApi;
+import com.fhs.easycloud.anno.CloudMethod;
 
 import java.util.Map;
 
@@ -19,22 +21,18 @@ import java.util.Map;
  * Copyright (c) 2017 All Rights Reserved.
  */
 
+@CloudApi(serviceName = "basic")
 public interface ServiceAreaService extends BaseService<ServiceAreaVO, ServiceAreaPO> {
 
-
-    /**
-     * 返回完整的省市区地址
-     * map参数：provinceId，cityId，areaId
-     *
-     * @param map
-     * @return
-     */
-    String findAddressById(Map<String, Object> map);
 
     /**
      * 刷新区域缓存
      */
     void refreshRedisCache();
 
-
+    /**
+     * 根据id获取区域编码
+     */
+    @CloudMethod
+    Integer getById(Integer id);
 }
