@@ -3,6 +3,7 @@ package com.fhs.core.base.po;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.DateUtils;
@@ -175,7 +176,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
      *
      * @return
      */
-    public QueryWrapper<T> asWrapper() {
+    public LambdaJoinQueryWrapper<T> asWrapper() {
         List<Field> fields = ReflectUtils.getAnnotationField(this.getClass(), TableField.class);
         //过滤掉忽略字段
         fields = fields.stream().filter(field -> {

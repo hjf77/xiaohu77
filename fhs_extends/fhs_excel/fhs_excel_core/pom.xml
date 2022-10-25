@@ -28,7 +28,7 @@
         <!--excel -->
 
         <dependency>
-            <groupId>com.baomidou</groupId>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-core</artifactId>
             <version>${fhs.mp-anno.version}</version>
         </dependency>

@@ -33,6 +33,10 @@
                     <artifactId>spring-boot-starter-web</artifactId>
                     <groupId>org.springframework.boot</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-plus-annotation</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
             </exclusions>
             <groupId>com.fhs-opensource</groupId>
             <version>${fhs.release.version}</version>

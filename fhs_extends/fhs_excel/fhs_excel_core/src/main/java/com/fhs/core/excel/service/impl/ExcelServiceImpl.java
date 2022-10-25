@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.*;
@@ -58,7 +59,7 @@ public class ExcelServiceImpl implements ExcelService {
      * @return Workbook Excel对象
      */
     @Override
-    public Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass) {
+    public Workbook exportExcel(LambdaJoinQueryWrapper query, BaseService targetService, Class<?> doClass) {
         BaseService service = targetService;
         List<?> dos = service.selectListMP(query);
         if (null == dos) {

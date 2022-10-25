@@ -5,13 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtils;
+import com.fhs.core.base.po.BasePO;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,12 +27,18 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
+import java.lang.invoke.CallSite;
+import java.lang.invoke.LambdaMetafactory;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+
+import static com.fhs.common.utils.ReflectUtils.getDeclaredField;
 
 @Data
 @Slf4j
@@ -52,7 +62,7 @@ public class QueryFilter<T> {
 
     private static final String OR = "OR";
 
-    static{
+    static {
         OPEARTOR_SET.add("=");
         OPEARTOR_SET.add(">");
         OPEARTOR_SET.add(">=");
@@ -150,11 +160,11 @@ public class QueryFilter<T> {
         return map;
     }
 
-    public QueryWrapper<T> asWrapper(Class currentModelClass, String... safeFields) {
+    public LambdaJoinQueryWrapper<T> asWrapper(Class currentModelClass, String... safeFields) {
         if (safeFields != null) {
             safeFieldsSet = new HashSet<>(Arrays.asList(safeFields));
         }
-        QueryWrapper<T> queryWrapper = new QueryWrapper();
+        LambdaJoinQueryWrapper<T> queryWrapper = new LambdaJoinQueryWrapper<>(currentModelClass);
         Map<String, List<QueryField>> groupQueryField = this.groupQueryField();
         String groupRelation = this.getGroupRelation();
         groupQueryField.forEach((group, list) -> {
@@ -165,7 +175,7 @@ public class QueryFilter<T> {
             if (AND.equals(groupRelation)) {
                 queryWrapper.and((x) -> {
                     newListFields.forEach((l) -> {
-                        this.convertQueryField(x, l, currentModelClass);
+                        this.convertQueryField((LambdaJoinQueryWrapper<T>) x, l, currentModelClass);
                     });
                 });
             } else {
@@ -174,7 +184,7 @@ public class QueryFilter<T> {
                 }
                 queryWrapper.or((x) -> {
                     newListFields.forEach((l) -> {
-                        this.convertQueryField(x, l, currentModelClass);
+                        this.convertQueryField((LambdaJoinQueryWrapper<T>) x, l, currentModelClass);
                     });
                 });
             }
@@ -253,6 +263,7 @@ public class QueryFilter<T> {
 
     /**
      * 获取目标类
+     *
      * @param targetClassName 类全名
      * @return 类对象
      */
@@ -272,7 +283,7 @@ public class QueryFilter<T> {
      * @param queryField
      * @param currentModelClass
      */
-    private void convertQueryField(QueryWrapper<T> queryWrapper, QueryField queryField, Class<T> currentModelClass) {
+    private void convertQueryField(LambdaJoinQueryWrapper<T> queryWrapper, QueryField queryField, Class<T> currentModelClass) {
         String r = queryField.getRelation();
         if (OR.equals(r)) {
             queryWrapper.or();
@@ -282,32 +293,32 @@ public class QueryFilter<T> {
             return;
         }
         String field = null;
-        if (!StringUtils.isEmpty(queryField.getTarget()) ) {
-            if(StringUtils.isEmpty(queryField.getField())){
+        if (!StringUtils.isEmpty(queryField.getTarget())) {
+            if (StringUtils.isEmpty(queryField.getField())) {
                 throw new ParamsInValidException("当target不为空的时候field也一定不可以为空，字段:" + queryField.getProperty());
             }
 
-            if(!OPEARTOR_SET.contains(queryField.getOperation())){
+            if (!OPEARTOR_SET.contains(queryField.getOperation())) {
                 throw new ParamsInValidException("操作符不受支持:" + queryField.getOperation());
             }
-            if(!isSqlValid(queryField.getValue() + "")){
+            if (!isSqlValid(queryField.getValue() + "")) {
                 throw new ParamsInValidException("字段值校验出SQL注入风险:" + queryField.getValue());
             }
 
             field = getField(queryField.getField(), currentModelClass);
 
             Object propValue = queryField.getValue();
-            if("like".equals(queryField.getOperation())){
+            if ("like".equals(queryField.getOperation())) {
                 propValue = "%" + propValue + "%";
             }
             //不是数字的时候加引号
-            if(!CheckUtils.isNumber(propValue)){
+            if (!CheckUtils.isNumber(propValue)) {
                 propValue = "'" + propValue + "'";
             }
             //目标标字段
             String targetField = getField(queryField.getProperty(), getTargetClass(queryField.getTarget()));
-            String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from "  + getTargetTableName(queryField.getTarget()) + " where " + targetField
-                     + " " + queryField.getOperation() + " " +  propValue + ")";
+            String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from " + getTargetTableName(queryField.getTarget()) + " where " + targetField
+                    + " " + queryField.getOperation() + " " + propValue + ")";
             queryWrapper.apply(sql);
             return;
         }
@@ -316,50 +327,50 @@ public class QueryFilter<T> {
 
         switch (operation) {
             case "=":
-                queryWrapper.eq(field, queryField.getValue());
+                queryWrapper.eq(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "<":
-                queryWrapper.lt(field, queryField.getValue());
+                queryWrapper.lt(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case ">":
-                queryWrapper.gt(field, queryField.getValue());
+                queryWrapper.gt(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "<=":
-                queryWrapper.le(field, queryField.getValue());
+                queryWrapper.le(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case ">=":
-                queryWrapper.ge(field, queryField.getValue());
+                queryWrapper.ge(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "!=":
-                queryWrapper.ne(field, queryField.getValue());
+                queryWrapper.ne(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "like":
-                queryWrapper.like(field, queryField.getValue());
+                queryWrapper.like(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "like_l":
-                queryWrapper.likeLeft(field, queryField.getValue());
+                queryWrapper.likeLeft(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "like_r":
-                queryWrapper.likeRight(field, queryField.getValue());
+                queryWrapper.likeRight(getSFunction(currentModelClass, field), queryField.getValue());
                 break;
             case "is_null":
-                queryWrapper.isNull(field);
+                queryWrapper.isNull(getSFunction(currentModelClass, field));
                 break;
             case "not_null":
-                queryWrapper.isNotNull(field);
+                queryWrapper.isNotNull(getSFunction(currentModelClass, field));
                 break;
             case "in":
                 Object[] values = this.convert2ObjectArray(queryField.getValue());
                 if (values != null && values.length > 0) {
-                    queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
+                    queryWrapper.in(getSFunction(currentModelClass, field), this.convert2ObjectArray(queryField.getValue()));
                 }
                 break;
             case "between"://前端经常用的是 时间过滤，比如查询 2020-01-01 到2020-01-02 如果用between会是 >   2020-01-01 and 2020-01-02<
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());
                 if (objs != null && objs.length > 0) {
                     Assert.isTrue(objs.length == 2, String.format("查询条件为between时，查询值必须为两个，但是传入的查询值为：%s", objs));
-                    queryWrapper.ge(field, objs[0]);
-                    queryWrapper.le(field, objs[1]);
+                    queryWrapper.ge(getSFunction(currentModelClass, field), objs[0]);
+                    queryWrapper.le(getSFunction(currentModelClass, field), objs[1]);
                 }
         }
 
@@ -405,15 +416,51 @@ public class QueryFilter<T> {
 
     /**
      * 参数校验
+     *
      * @param str ep: "or 1=1"
      */
     public static boolean isSqlValid(String str) {
         Matcher matcher = sqlPattern.matcher(str);
         if (matcher.find()) {
             //获取非法字符：or
-            log.info("参数存在非法字符，请确认："+matcher.group());
+            log.info("参数存在非法字符，请确认：" + matcher.group());
             return false;
         }
         return true;
+    }
+
+    /**
+     * 可序列化
+     */
+    private static final int FLAG_SERIALIZABLE = 1;
+
+    private static Map<String, SFunction> functionMap = new HashMap<>();
+
+    public static SFunction getSFunction(Class<?> entityClass, String fieldName) {
+        if (functionMap.containsKey(entityClass.getName() + fieldName)) {
+            return functionMap.get(entityClass.getName() + fieldName);
+        }
+        Field field = getDeclaredField(entityClass, fieldName);
+        if (field == null) {
+            throw ExceptionUtils.mpe("This class %s is not have field %s ", entityClass.getName(), fieldName);
+        }
+        SFunction func = null;
+        final MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodType methodType = MethodType.methodType(field.getType(), entityClass);
+        final CallSite site;
+        String getFunName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+        try {
+            site = LambdaMetafactory.altMetafactory(lookup,
+                    "invoke",
+                    MethodType.methodType(SFunction.class),
+                    methodType,
+                    lookup.findVirtual(entityClass, getFunName, MethodType.methodType(field.getType())),
+                    methodType, FLAG_SERIALIZABLE);
+            func = (SFunction) site.getTarget().invokeExact();
+            functionMap.put(entityClass.getName() + field, func);
+            return func;
+        } catch (Throwable e) {
+            throw ExceptionUtils.mpe("This class %s is not have method %s ", entityClass.getName(), getFunName);
+        }
     }
 }

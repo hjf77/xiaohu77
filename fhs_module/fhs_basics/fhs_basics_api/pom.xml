@@ -15,6 +15,12 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_base_pojo</artifactId>
             <version>${fhs.release.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis-plus-annotation</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>

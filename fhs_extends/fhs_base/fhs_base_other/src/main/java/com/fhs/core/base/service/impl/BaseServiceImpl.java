@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
@@ -346,7 +347,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public V selectBean(P param) {
-        return p2v(baseMapper.selectOne((QueryWrapper<P>) param.asWrapper()));
+        return p2v(baseMapper.selectOne((LambdaJoinQueryWrapper<P>) param.asWrapper()));
     }
 
 

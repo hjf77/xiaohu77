@@ -36,6 +36,16 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>easy_trans_mybatis_plus_extend</artifactId>
             <version>${fhs.easytrans.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis-plus-core</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-plus-extension</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
@@ -70,7 +80,7 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${fhs.mp-anno.version}</version>
         </dependency>

@@ -27,6 +27,12 @@
             <groupId>com.fhs-opensource</groupId>
             <artifactId>easy_trans_anno</artifactId>
             <version>${fhs.easytrans.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis-plus-annotation</artifactId>
+                    <groupId>com.baomidou</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

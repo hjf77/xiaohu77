@@ -1,6 +1,7 @@
 package com.fhs.core.excel.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.excel.dto.ExcelImportSett;
@@ -20,7 +21,7 @@ public interface ExcelService {
      * @param doClass       do类
      * @return
      */
-    Workbook exportExcel(QueryWrapper query, BaseService targetService, Class<?> doClass);
+    Workbook exportExcel(LambdaJoinQueryWrapper query, BaseService targetService, Class<?> doClass);
 
 
     /**

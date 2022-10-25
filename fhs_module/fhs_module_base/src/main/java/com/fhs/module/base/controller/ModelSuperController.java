@@ -3,6 +3,7 @@ package com.fhs.module.base.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.context.UserContext;
@@ -64,7 +65,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     /**
      * 用于导出用的缓存
      */
-    protected Cache<Long, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+    protected Cache<Long, LambdaJoinQueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
     protected BaseService<V, D> baseService;
@@ -89,7 +90,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ApiOperation("后台-高级分页查询")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter) {
         if (isPermitted("see")) {
-            QueryWrapper wrapper = filter.asWrapper(getDOClass());
+            LambdaJoinQueryWrapper wrapper = filter.asWrapper(getDOClass());
             this.setExportCache(wrapper);
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
@@ -142,9 +143,9 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
     public void exportExcel(HttpServletResponse response, String fileName, String ids) throws IOException {
-        QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        wrapper = wrapper == null ? new QueryWrapper() : wrapper;
-        wrapper = (QueryWrapper) wrapper.clone();
+        LambdaJoinQueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        wrapper = wrapper == null ? new LambdaJoinQueryWrapper(this.getDOClass()) : wrapper;
+        wrapper = (LambdaJoinQueryWrapper) wrapper.clone();
         if (CheckUtils.isNotEmpty(ids)) {
             wrapper.in("id", ids.split(","));
         }
@@ -334,7 +335,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
      *
      * @param wrapper 过滤条件
      */
-    protected void setExportCache(QueryWrapper<D> wrapper) {
+    protected void setExportCache(LambdaJoinQueryWrapper<D> wrapper) {
         exportParamCache.put(UserContext.getSessionuser().getUserId(), wrapper);
     }
 
