@@ -83,7 +83,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser) {
-
+        sysUser.setIsAppUser(Constant.ZERO);
         // 添加用户信息
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
