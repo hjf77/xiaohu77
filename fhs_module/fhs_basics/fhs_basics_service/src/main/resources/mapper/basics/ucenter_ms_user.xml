@@ -539,6 +539,10 @@
         FROM t_ucenter_ms_user
         <where>
             is_delete = 0
+            AND is_app_user = 1
+            <if test="isAppUser !=null">
+                AND is_app_user != #{isAppUser}
+            </if>
             <if test="userId !=null and userId != ''">
                 AND user_id != #{userId}
             </if>

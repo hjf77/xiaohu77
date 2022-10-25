@@ -208,6 +208,7 @@ public class MsLoginController extends BaseController {
     @ApiOperation(value = "APP用户注册")
     public HttpResult<UcenterMsUserVO> registerUser(@RequestBody UcenterMsUserVO sysUser) {
         // 添加用户信息
+        sysUser.setIsAppUser(Constant.ONE);
         boolean notExist = sysUserService.validataLoginName(sysUser);
         if (notExist) {
             if (sysUser.getUserLoginName().contains("@")) {
