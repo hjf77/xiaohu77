@@ -81,13 +81,13 @@ public class MsLoginController extends BaseController {
     @Value("${tuyaconfig.checkUser}")
     private String checkUser;
 
-    // 校验涂鸦用户密码telo1
+  /*  // 校验涂鸦用户密码telo1
     @Value("${tuyaconfig.checkUserTeloOne}")
-    private String checkUserTeloOne;
+    private String checkUserTeloOne;*/
 
-    // 修改涂鸦用户密码
+   /* // 修改涂鸦用户密码
     @Value("${tuyaconfig.syncUserTeloOne}")
-    private String syncUserTeloOne;
+    private String syncUserTeloOne;*/
 
     // 同步用户
     @Value("${tuyaconfig.syncUser}")
@@ -97,9 +97,9 @@ public class MsLoginController extends BaseController {
     @Value("${tuyaconfig.getUsers}")
     private String getUsers;
 
-    // 获取telo1用户信息
+   /* // 获取telo1用户信息
     @Value("${tuyaconfig.getUsersTeloOne}")
-    private String getUsersTeloOne;
+    private String getUsersTeloOne;*/
 
     // 获取用户详细信息
     @Value("${tuyaconfig.getUser}")
@@ -108,6 +108,10 @@ public class MsLoginController extends BaseController {
     //获取token的url
     @Value("${tuyaconfig.tokenUrl}")
     private String tokenUrl;
+
+    //注册时同步用户到tuya
+    @Value("${tuyaconfig.registerSyncUser}")
+    private String registerSyncUser;
 
     private static final Gson gson = new Gson().newBuilder().create();
 
@@ -223,20 +227,45 @@ public class MsLoginController extends BaseController {
             sysUser.setIsAdmin(Constant.INT_FALSE);
             sysUser.setIsAppUser(Constant.INT_TRUE);
             sysUser.setRoleIds("1");
-            sysUserService.addUser(sysUser);
-            //添加用户默认设置
-            UcenterAppUserSetPO ucenterAppUserSetPO = new UcenterAppUserSetPO();
-            ucenterAppUserSetPO.setUserId(sysUser.getUserId());
-            ucenterAppUserSetPO.setIsGesture(Constant.INT_FALSE);
-            ucenterAppUserSetPO.setLanguage("1");
-            ucenterAppUserSetPO.setTimeZone("8");
-            ucenterAppUserSetPO.setIsMessage(Constant.INT_FALSE);
-            ucenterAppUserSetPO.setAlarmIsReport(Constant.INT_TRUE);
-            ucenterAppUserSetPO.setFamilyIsReport(Constant.INT_TRUE);
-            ucenterAppUserSetPO.setAlarmIsReport(Constant.INT_TRUE);
-            ucenterAppUserSetPO.setNoticeIsReport(Constant.INT_TRUE);
-            ucenterAppUserSetPO.setTemperatureType(1);
-            ucenterAppUserSetService.insert(ucenterAppUserSetPO);
+            //注册时同步用户至涂鸦
+            //获取token {
+            //  "country_code": "86",
+            //  "username": "182*****678",
+            //  "password": "c7fb2740c5f******4ed765a479fa",
+            //  "username_type": 1,
+            //  "time_zone_id": "Asia/Shanghai"
+            //}
+            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
+            Map<String, String> userMap = new HashMap<>();
+            userMap.put("country_code", "86");
+            userMap.put("username", sysUser.getUserLoginName());
+            userMap.put("password", sysUser.getPassword());
+            userMap.put("username_type", "3");
+            userMap.put("time_zone_id", "Asia/Shanghai");
+            System.out.println(JsonUtils.map2json(userMap));
+            //{result={"uid":"ay16666699656006MUWe"}, t=1666675968062, success=true, tid=75c4f4a5542611ed9f2b629ef151a136}
+            Map<String, Object> registerUserMap = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), registerSyncUser, "POST", JsonUtils.map2json(userMap), new HashMap<>())));
+            System.out.println("========涂鸦注册用户" + registerUserMap);
+            if (registerUserMap.get("success").equals((false))) {
+                throw new ParamException("注册失败");
+            } else {
+                registerUserMap = JsonUtils.parseJSON2Map(registerUserMap.get("result").toString()) ;
+                sysUser.setUId(gson.toJson(registerUserMap.get("uid")).replace("\"", ""));
+                sysUserService.addUser(sysUser);
+                //添加用户默认设置
+                UcenterAppUserSetPO ucenterAppUserSetPO = new UcenterAppUserSetPO();
+                ucenterAppUserSetPO.setUserId(sysUser.getUserId());
+                ucenterAppUserSetPO.setIsGesture(Constant.INT_FALSE);
+                ucenterAppUserSetPO.setLanguage("1");
+                ucenterAppUserSetPO.setTimeZone("8");
+                ucenterAppUserSetPO.setIsMessage(Constant.INT_FALSE);
+                ucenterAppUserSetPO.setAlarmIsReport(Constant.INT_TRUE);
+                ucenterAppUserSetPO.setFamilyIsReport(Constant.INT_TRUE);
+                ucenterAppUserSetPO.setAlarmIsReport(Constant.INT_TRUE);
+                ucenterAppUserSetPO.setNoticeIsReport(Constant.INT_TRUE);
+                ucenterAppUserSetPO.setTemperatureType(1);
+                ucenterAppUserSetService.insert(ucenterAppUserSetPO);
+            }
             return HttpResult.success(sysUser);
         } else {
             throw new ParamException("该账号已经注册了，请直接登录！");
@@ -287,7 +316,7 @@ public class MsLoginController extends BaseController {
             //获取token
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
             //在telo1中查询用户
-            Map<String, Object> usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsersTeloOne + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
+            Map<String, Object> usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsers + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
             //如果telo1中不存在 在telo中查询用户
             if (usersMapList.get("success").equals(false)) {
                 usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsers + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
@@ -406,7 +435,7 @@ public class MsLoginController extends BaseController {
             map.put("country_code", "86");
             map.put("username_type", sysUser.getUsernameType());
             //发送请求
-            Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUserTeloOne, "POST", JsonUtils.map2json(map), new HashMap<>());
+            Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));
             System.out.println(userJsonMap);
             if (userJsonMap.get("success").equals(false)) {

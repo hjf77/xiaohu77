@@ -175,6 +175,13 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private String passwordTuya;
 
     /**
+     * 涂鸦平台用户uid
+     */
+    @TableField("u_id")
+    @ApiModelProperty("涂鸦平台用户uid)")
+    private String uId;
+
+    /**
      * 国家
      */
     @TableField("country")
