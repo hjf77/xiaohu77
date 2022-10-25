@@ -104,6 +104,12 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
     private String initDate;
 
     /**
+     * 区域编码
+     */
+    @ApiModelProperty("区域编码")
+    private Integer code;
+
+    /**
      * 初始地址
      */
     @Length(message = "area的initAddr字段的长度最大为16", groups = {Add.class, Update.class}, max = 16, min = 0)
