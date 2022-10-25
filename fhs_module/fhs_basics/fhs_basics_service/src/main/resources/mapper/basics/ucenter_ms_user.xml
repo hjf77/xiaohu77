@@ -111,8 +111,7 @@
         father_menu_id AS "fatherMenuId",
         menu_url AS "menuUrl",
         menu_type AS "menuType",
-        is_enable AS
-        isEnable,
+        is_enable AS isEnable,
         icon,
         order_index AS "orderIndex",
         namespace,
@@ -124,13 +123,13 @@
             <if test="menuType !=null">
                 AND (m.menu_type=#{menuType} OR m.menu_type=2)
             </if>
-
             <if test="systemIds != null and systemIds != ''">
-                AND system_id IN(${systemIds})
+                AND m.system_id IN(${systemIds})
             </if>
             AND m.is_enable = 1
             AND m.is_delete = 0
         </where>
+        ORDER BY m.father_menu_id,m.order_index
     </select>
 
     <!-- 查询admin 拥有的所有的权限列表 -->
