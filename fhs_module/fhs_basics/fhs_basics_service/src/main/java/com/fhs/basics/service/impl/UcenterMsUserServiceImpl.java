@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.mapper.SettMsMenuMapper;
 import com.fhs.basics.mapper.UcenterMsUserMapper;
 import com.fhs.basics.po.UcenterMsTenantPO;
@@ -16,6 +17,7 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
@@ -227,7 +229,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         int count = sysUserMapper.validataPass(adminUser);
         if (count > 0) {
             if (adminUser.getNewPassword() == null) {
-                throw new ParamException("新密码不可为空");
+                throw new BusinessException(ExceptionConstant.NEW_PASSWORD_NOT_NULL);
             }
             adminUser.setPassword(adminUser.getNewPassword());
             count = sysUserMapper.updatePass(adminUser);
@@ -237,7 +239,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             }
             return count > 0;
         } else {
-            throw new ParamException("密码不正确");
+            throw new BusinessException(ExceptionConstant.PASSWORD_INCORRECT);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterAppUserSetPO;
@@ -12,6 +13,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.cache.service.RedisCacheService;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
 import com.fhs.core.result.HttpResult;
@@ -183,7 +185,7 @@ public class MsLoginController extends BaseController {
                 //锁定
                 redisCacheService.put(USER_LOCK_KEY + userName, "");
                 redisCacheService.expire(USER_LOCK_KEY + userName, userLockSeconds);
-                throw new ParamException("密码输入次数过多，账号已被锁定");
+                throw new BusinessException(ExceptionConstant.PASSWORD_TOO_MUCH);
             }
             //存在的话+1
             redisCacheService.put(key, "" + errorTimes);
@@ -269,7 +271,7 @@ public class MsLoginController extends BaseController {
             }
             return HttpResult.success(sysUser);
         } else {
-            throw new ParamException("该账号已经注册了，请直接登录！");
+            throw new BusinessException(ExceptionConstant.ACCOUNT_NUMBER_EXISTENCE);
         }
     }
 
@@ -288,10 +290,10 @@ public class MsLoginController extends BaseController {
             // 判断短信验证码是否正确过期
             String smsCode = redisCacheService.get(SMS_CODE_KEY + loginVO.getUuid() + loginVO.getUserLoginName()).toString();
             if (StringUtils.isEmpty(smsCode)) {
-                throw new ParamException("验证码已过期，请重新发送");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_OVERDUE);
             }
             if (!smsCode.equals(loginVO.getSmsCode())) {
-                throw new ParamException("验证码不正确");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_ERROR);
             }
         }
         checkUserNameIsLock(loginVO.getUserLoginName());
@@ -300,11 +302,11 @@ public class MsLoginController extends BaseController {
             Object sessionIdentify = redisCacheService.get(LOGIN_VCODE_KEY + loginVO.getUuid());
             if (null == sessionIdentify) {
                 logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE_INVALID, null, false);
-                throw new ParamException("验证码失效，请刷新验证码后重新输入");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_INVALID);
             }
             if (!sessionIdentify.toString().equals(identifyCode)) {
                 logLoginService.addLoginUserInfo(request, loginVO.getUserLoginName(), true, LoggerConstant.LOG_LOGIN_ERROR_CODE, null, false);
-                throw new ParamException("验证码错误，请重新输入");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_WRONG);
             }
         }
         //校验涂鸦密码
@@ -332,7 +334,7 @@ public class MsLoginController extends BaseController {
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(result));
             System.out.println("========校验用户名密码" + userJsonMap);
             if (userJsonMap.get("success").equals((false))) {
-                throw new ParamException("账号或者密码错误");
+                throw new BusinessException(ExceptionConstant.ACCOUNT_NUMBER_ERROR);
             }
             //涂鸦校验通过,拿到涂鸦用户名/密码更新
             UcenterMsUserPO userPO = new UcenterMsUserPO();
@@ -348,7 +350,7 @@ public class MsLoginController extends BaseController {
         if (sysUser == null) {
             logLoginService.addLoginUserInfo(request, userName, true, LoggerConstant.LOG_LOGIN_ERROR_USER, null, false);
             addErrorPassTimes(userName);
-            throw new ParamException("账号或者密码错误");
+            throw new BusinessException(ExceptionConstant.ACCOUNT_NUMBER_ERROR);
         }
         clearLockKey(userName);
         StpUtil.login(sysUser.getUserId());
@@ -393,16 +395,16 @@ public class MsLoginController extends BaseController {
      */
     @PostMapping("/updatePassword")
     @ApiOperation(value = "忘记密码验证码修改密码")
-    public HttpResult<String> updatePassword(@RequestBody UcenterMsUserVO sysUser) {
+    public HttpResult<Integer> updatePassword(@RequestBody UcenterMsUserVO sysUser) {
         //判断短信验证码
         ParamChecker.isNotNull(sysUser.getSmsCode(), "验证码不能为空");
         // 判断短信验证码是否正确过期
         String smsCode = redisCacheService.get(SMS_CODE_KEY + sysUser.getUuid() + sysUser.getUserLoginName()).toString();
         if (StringUtils.isEmpty(smsCode)) {
-            throw new ParamException("验证码已过期，请重新发送");
+            throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_OVERDUE);
         }
         if (!smsCode.equals(sysUser.getSmsCode())) {
-            throw new ParamException("验证码不正确");
+            throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_ERROR);
         }
         sysUser.setUpdateTime(new Date());
         // 添加用户信息
@@ -410,7 +412,7 @@ public class MsLoginController extends BaseController {
         loginVO.setUserLoginName(sysUser.getUserLoginName());
         UcenterMsUserPO sysUserInfo = sysUserService.login(loginVO);
         if (sysUserInfo == null) {
-            throw new ParamException("账号未注册，请先注册账号！");
+            throw new BusinessException(ExceptionConstant.ACCOUNT_NUMBER_NOT_REGISTER);
         }
         //如果当前用户是涂鸦平台用户 同时修改涂鸦平台密码
         if (sysUserInfo.getIsTuyaUser().equals(Constant.INT_TRUE)) {
@@ -429,14 +431,14 @@ public class MsLoginController extends BaseController {
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));
             System.out.println(userJsonMap);
             if (userJsonMap.get("success").equals(false)) {
-                throw new ParamException("密码修改失败！");
+                throw new BusinessException(ExceptionConstant.PASSWORD_MODIFY_FAIL);
             }
         }
         int result = sysUserService.updateById(UcenterMsUserPO.builder().userId(sysUserInfo.getUserId()).password(sysUser.getPassword()).build());
         if (result > 0) {
-            return HttpResult.success("密码修改成功！");
+            return HttpResult.success(ExceptionConstant.PASSWORD_MODIFY_SUCCESS);
         }
-        throw new ParamException("密码修改失败！");
+        throw new BusinessException(ExceptionConstant.PASSWORD_MODIFY_FAIL);
     }
 
     /**
@@ -447,7 +449,7 @@ public class MsLoginController extends BaseController {
     public HttpResult<Map<String, Object>> getUserInfo(HttpServletRequest request) {
         UcenterMsUserVO user = UserContext.getSessionuser();
         if (user == null) {
-            throw new ParamException("token失效");
+            throw new BusinessException(ExceptionConstant.TOKEN_INVALID);
         }
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("user", user);
@@ -505,7 +507,7 @@ public class MsLoginController extends BaseController {
         if (null != loginVO.getIsRegister() && loginVO.getIsRegister() == 1) {
             boolean notExist = sysUserService.validataLoginName(userPO);
             if (!notExist) {
-                throw new ParamException("该账号已经注册了，请直接登录！");
+                throw new BusinessException(ExceptionConstant.ACCOUNT_NUMBER_EXISTENCE);
             }
         }/*else {
             boolean notExist = sysUserService.validataLoginName(userPO);
@@ -539,10 +541,10 @@ public class MsLoginController extends BaseController {
         // 判断短信验证码是否正确过期
         String smsCode = redisCacheService.get(SMS_CODE_KEY + loginVO.getUuid() + loginVO.getUserLoginName()).toString();
         if (StringUtils.isEmpty(smsCode)) {
-            throw new ParamException("验证码已过期，请重新发送");
+            throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_OVERDUE);
         }
         if (!smsCode.equals(loginVO.getSmsCode())) {
-            throw new ParamException("验证码不正确");
+            throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_ERROR);
         }
         return HttpResult.success(true);
     }
@@ -555,11 +557,11 @@ public class MsLoginController extends BaseController {
      */
     @GetMapping("/logout")
     @ApiOperation("注销登出 for vue")
-    public HttpResult<String> logout(String token) {
+    public HttpResult<Integer> logout(String token) {
         redisCacheService.remove("auth:" + token);
         redisCacheService.remove(USER_KEY + token);
         StpUtil.logout();
-        return HttpResult.success("登出成功");
+        return HttpResult.success(ExceptionConstant.LOG_OUT_SUCCESS);
     }
 
     /**

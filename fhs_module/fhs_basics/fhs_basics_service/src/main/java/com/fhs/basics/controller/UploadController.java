@@ -1,9 +1,11 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.controller.BaseController;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
 import com.fhs.basics.service.FileServerBusiness;
@@ -48,7 +50,7 @@ public class UploadController {
     @ApiOperation("上传文件")
     public PubFileVO uploadFile(@RequestPart MultipartFile file, String ext,String fileId) {
         if (file == null) {
-            throw new ParamException("文件为空");
+            throw new BusinessException(ExceptionConstant.FILE_IS_NULL);
         }
         LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         PubFileVO pubFileVO = fileServerBusiness.uploadFile(file,fileId);
@@ -71,7 +73,7 @@ public class UploadController {
     @RequestMapping(value = "/appfile", method = { RequestMethod.POST,RequestMethod.GET })
     public PubFileVO usersInsert(@RequestParam(value="file",required=false) MultipartFile file,HttpServletRequest request, HttpServletResponse response) {
         if (file == null) {
-            throw new ParamException("文件为空");
+            throw new BusinessException(ExceptionConstant.FILE_IS_NULL);
         }
         LOG.infoMsg("开始上传文件,当前时间为{}", DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         PubFileVO pubFileVO = fileServerBusiness.uploadFile(file,null);

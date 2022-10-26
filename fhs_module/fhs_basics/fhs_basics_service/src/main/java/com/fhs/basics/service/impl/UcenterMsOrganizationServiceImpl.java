@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.mapper.UcenterMsOrganizationMapper;
@@ -16,6 +17,7 @@ import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.AutoTrans;
@@ -53,7 +55,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         if (!CheckUtils.isNullOrEmpty(organization.getParentId())) {
             UcenterMsOrganizationVO sysOrganizationQuery = this.selectById(organization.getParentId());
             if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsEnable()) {
-                throw new ParamException("父机构处于禁用状态，不能添加子机构");
+                throw new BusinessException(ExceptionConstant.NOT_ADD_TO);
             }
             organization.setCompanyId(sysOrganizationQuery.getCompanyId());
         }
@@ -115,12 +117,12 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
             // 查询当前机构下级机构数
             Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(org.getId()).isEnable(Constant.ENABLED).build());
             if (orgCount > 0) {
-                throw new ParamException("拥有子结构不可禁用");
+                throw new BusinessException(ExceptionConstant.SUBSTRUCTURE_NOT_DISABLE);
             }
             // 查询当前机构和下级机构人员
             Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(oldOrg.getId()).build());
             if (userCount > 0) {
-                throw new ParamException("该机构下拥有用户,不可禁用!");
+                throw new BusinessException(ExceptionConstant.MECHANISM_NOT_DISABLE);
             }
         }
         if (CheckUtils.isNullOrEmpty(org.getExtJson())) {
@@ -134,12 +136,12 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         // 查询当前机构下级机构数
         Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(ConverterUtils.toString(id)).build());;
         if (orgCount > 0) {
-            throw new ParamException("该机构拥有子机构,不可删除!");
+            throw new BusinessException(ExceptionConstant.MECHANISM_NOT_DELETE);
         }
         // 查询当前机构和下级机构人员
         Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(ConverterUtils.toString(id)).build());
         if (userCount > 0) {
-            throw new ParamException("该机构下拥有用户,不可删除!");
+            throw new BusinessException(ExceptionConstant.USER_NOT_DELETE);
         }
         return super.deleteById(id);
     }
