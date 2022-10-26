@@ -239,11 +239,11 @@ public class MsLoginController extends BaseController {
             //}
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
             Map<String, String> userMap = new HashMap<>();
-            userMap.put("country_code", "86");
+            userMap.put("country_code", sysUser.getCountryCode());
             userMap.put("username", sysUser.getUserLoginName());
             userMap.put("password", sysUser.getPassword());
             userMap.put("username_type", "3");
-            userMap.put("time_zone_id", "Asia/Shanghai");
+            //userMap.put("time_zone_id", "Asia/Shanghai");
             System.out.println(JsonUtils.map2json(userMap));
             //{result={"uid":"ay16666699656006MUWe"}, t=1666675968062, success=true, tid=75c4f4a5542611ed9f2b629ef151a136}
             Map<String, Object> registerUserMap = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), registerSyncUser, "POST", JsonUtils.map2json(userMap), new HashMap<>())));
@@ -318,11 +318,6 @@ public class MsLoginController extends BaseController {
             //涂鸦用户第一次在app登录
             //获取token
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
-            //在telo中查询用户
-           // Map<String, Object> usersMapList = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUsers + "?page_no=1&page_size=10&username=" + loginVO.getUserLoginName(), "GET", "", new HashMap<>())));
-            //解析用户信息 获取用户uid
-          //  List<String> userList = (List<String>) JsonUtils.parseJSON2Map(gson.toJson(usersMapList.get("result"))).get("list");
-           // Map<String, Object> userMapTemp = JsonUtils.parseJSON2Map(gson.toJson(userList.get(0)));
             //根据用户uid查询用户信息 获取用户country_code
             Map<String, Object> userMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUser.replace("{uid}", ucenterMsUserVO.getUId()), "GET", "", new HashMap<>())))));
             System.out.println("=====用户信息" + userMap);

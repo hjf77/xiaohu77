@@ -184,10 +184,10 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 国家
      */
-    @TableField("country")
+    @TableField("country_code")
     @ApiModelProperty("国家")
     @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "fullCname", alias = "countryName")
-    private String country;
+    private String countryCode;
 
     /**
      * 状态
