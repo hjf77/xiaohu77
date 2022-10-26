@@ -1,15 +1,18 @@
 package com.fhs.basics.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.po.BasePO;
+import com.fhs.core.base.valid.group.Add;
+import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.core.base.valid.group.*;
-
-import org.hibernate.validator.constraints.Length;
-import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 操作日志(LogOperatorMain)实体类
@@ -23,7 +26,7 @@ import lombok.*;
 @ApiModel(value = "LogOperatorMainDO", description = "LogOperatorMain参数")
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "t_log_operator_main", autoResultMap = true)
+@TableName(value="t_log_operator_main",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
     private static final long serialVersionUID = -83321483098557581L;
@@ -92,7 +95,7 @@ public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
      */
     @TableField("namespace")
     @ApiModelProperty(value = "命名空间")
-    @Trans(type = TransType.SIMPLE, target = SettMsMenuPO.class, fields = "menuName", uniqueField = "namespace")
+    @Trans(type=TransType.SIMPLE,target = SettMsMenuPO.class,fields = "menuName",uniqueField = "namespace")
     private String namespace;
 
     /**
@@ -100,5 +103,17 @@ public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
      */
     @TableField("pkey")
     private String pkeyStr;
+
+    /**
+     * 原始表单参数
+     */
+    @TableField("req_param_source")
+    private String reqParamSource;
+
+    /**
+     * 开发者-假如大家都用admin测试，你现在想找小红的，那么就可以在前端设置当前账号是admin开发者是小红，当然小红也可能是测试
+     */
+    @TableField("dev_operator")
+    private String devOperator;
 
 }

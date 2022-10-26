@@ -27,6 +27,11 @@ public class BisLoggerContext {
     private static ThreadLocal<Set<Object>> logHistoryDataPKeySet = new ThreadLocal<>();
 
     /**
+     * 操作日志
+     */
+    private static ThreadLocal<StringBuilder> sysLog = new ThreadLocal<>();
+
+    /**
      * 模型map key namespace value 模型
      */
     private static Map<String, String> modeuleMap = new HashMap<>();
@@ -36,10 +41,19 @@ public class BisLoggerContext {
         BisLoggerContext.logOperatorExtParamList.set(new ArrayList<>());
         BisLoggerContext.logHistoryDataVOList.set(new ArrayList<>());
         BisLoggerContext.logHistoryDataPKeySet.set(new HashSet<Object>());
+        BisLoggerContext.sysLog.set(new StringBuilder());
     }
 
     public static List<LogOperatorExtParamVO> getLogOperatorExtParamList() {
         return logOperatorExtParamList.get();
+    }
+
+    /**
+     * 系统日志
+     * @return
+     */
+    public static StringBuilder getSysLogBuilder(){
+        return sysLog.get();
     }
 
     public static List<LogHistoryDataVO> getLogHistoryDataVOList() {
@@ -130,6 +144,7 @@ public class BisLoggerContext {
         BisLoggerContext.logOperatorExtParamList.set(null);
         BisLoggerContext.logHistoryDataVOList.set(null);
         BisLoggerContext.traceId.set(null);
+        BisLoggerContext.sysLog.set(null);
     }
 
     public static boolean isNeedLogger() {

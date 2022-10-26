@@ -1,6 +1,7 @@
 package com.fhs.basics.api.aop;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fhs.basics.vo.LogOperatorSysLogVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.api.anno.LogNamespace;
@@ -30,6 +31,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +63,12 @@ public class OperatorLogAop implements InitializingBean {
     @Value("${easy-trans.is-enable-tile:false}")
     private Boolean isEnableTile;
 
+    /**
+     * 是否开启记录系统日志
+     */
+    @Value("${fhs.operator-log.sys-log-enable:false}")
+    private Boolean isEnableSysLog;
+
     private Map<Method, Integer> VO_INDEX_MAP = new HashMap<>();
 
 
@@ -90,7 +98,18 @@ public class OperatorLogAop implements InitializingBean {
         }
         Object result = null;
         Exception error = null;
+        String reqParamSource = null;
         try {
+            LogMethod logMethod = method.getAnnotation(LogMethod.class);
+            VO vo = getReqParamVO(joinPoint, method, logMethod);
+            Object[] args = joinPoint.getArgs();
+            if (vo != null) {
+                reqParamSource = JsonUtils.bean2json(vo);
+            } else if (logMethod.reqBodyParamIndex() != LoggerConstant.INDEX_NOT) {
+                reqParamSource = JsonUtils.bean2json(args[logMethod.reqBodyParamIndex()]);
+            } else {
+                reqParamSource = JsonUtil.map2json(getParameterMap());
+            }
             result = joinPoint.proceed();
             return result;
         } catch (Exception e) {
@@ -99,12 +118,24 @@ public class OperatorLogAop implements InitializingBean {
         } finally {
             final Object finalResult = result;
             final Exception finalError = error;
-            addLog(joinPoint, method, classTarget, finalResult, finalError);
+
+            addLog(joinPoint, method, classTarget, finalResult, finalError,reqParamSource);
             BisLoggerContext.clear();
         }
-
     }
 
+    /**
+     * 获取实际操作人
+     * @return
+     */
+    private String getDevOperator(){
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if(servletRequestAttributes == null){
+            return null;
+        }
+        String devOperator = servletRequestAttributes.getRequest().getHeader("devOperator");
+        return  devOperator == null ? null : URLDecoder.decode(devOperator);
+    }
 
     /**
      * 添加操作日志
@@ -115,26 +146,28 @@ public class OperatorLogAop implements InitializingBean {
      * @param result      方法返回值
      * @param e           异常
      */
-    public void addLog(ProceedingJoinPoint joinPoint, Method method, Class<?> classTarget, Object result, Exception e) {
+    public void addLog(ProceedingJoinPoint joinPoint, Method method, Class<?> classTarget, Object result, Exception e,String reqParamSource) {
         LogMethod logMethod = method.getAnnotation(LogMethod.class);
         LogOperatorMainVO mainVO = new LogOperatorMainVO();
         HttpServletRequest request = getRequest();
-        mainVO.setUrl(request.getRequestURI().toString());
+        mainVO.setUrl(request.getRequestURI());
         mainVO.setLogId(BisLoggerContext.getTranceId());
+        mainVO.setDevOperator(getDevOperator());
         try {
             mainVO.setIp(NetworkUtil.getIpAddress(request));
         } catch (IOException ex) {
             log.error("", ex);
         }
         mainVO.setReqMethod(request.getMethod());
+        mainVO.setReqParamSource(reqParamSource);
         VO vo = getReqParamVO(joinPoint, method, logMethod);
         Object[] args = joinPoint.getArgs();
         String pkey = null;
         if (vo != null) {
             //创建代理对象平铺数据
             try {
-                vo = (VO) TransUtil.transOne(vo, transService, isEnableTile,new ArrayList<>());
                 pkey = ConverterUtils.toString(vo.getPkey());
+                vo = (VO) TransUtil.transOne(vo, transService, isEnableTile,new ArrayList<>());
             } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
             } catch (InstantiationException ex) {
@@ -158,7 +191,15 @@ public class OperatorLogAop implements InitializingBean {
         mainVO.setState(e == null ? LoggerConstant.LOG_STATE_SUCCESS : LoggerConstant.LOG_STATE_ERROR);
         LogNamespace logNamespace = classTarget.getAnnotation(LogNamespace.class);
         mainVO.setNamespace(logNamespace.namespace());
+
         LogAddOperatorLogVO operatorLogVO = new LogAddOperatorLogVO();
+        if(BisLoggerContext.getSysLogBuilder().length()>0){
+            LogOperatorSysLogVO operatorSysLogVO = new LogOperatorSysLogVO();
+            operatorSysLogVO.setId(StringUtil.getUUID());
+            operatorSysLogVO.setOperatorMainId(mainVO.getLogId());
+            operatorSysLogVO.setSysLog(BisLoggerContext.getSysLogBuilder().toString());
+            operatorLogVO.setOperatorSysLogVO(operatorSysLogVO);
+        }
         operatorLogVO.setOperatorMainVO(mainVO);
         operatorLogVO.setHistoryDataVOList(BisLoggerContext.getLogHistoryDataVOList());
         operatorLogVO.setOperatorExtParamVOList(BisLoggerContext.getLogOperatorExtParamList());
@@ -174,7 +215,12 @@ public class OperatorLogAop implements InitializingBean {
      * @param log
      */
     private void addLog(LogAddOperatorLogVO log) {
-        bisLoggerApiService.addLog(log);
+        try{
+            bisLoggerApiService.addLog(log);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 

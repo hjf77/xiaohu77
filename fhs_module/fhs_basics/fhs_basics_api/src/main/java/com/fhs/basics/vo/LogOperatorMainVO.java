@@ -4,7 +4,10 @@ package com.fhs.basics.vo;
 import com.fhs.basics.po.LogOperatorMainPO;
 import com.fhs.core.trans.vo.VO;
 import io.swagger.annotations.ApiModel;
-import lombok.*;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 操作日志(LogOperatorMain)实体类 vo
@@ -23,5 +26,8 @@ public class LogOperatorMainVO extends LogOperatorMainPO implements VO {
      * 访问次数
      */
     private Integer visits;
+
+    @ApiModelProperty("系统日志")
+    private String sysLog;
 
 }

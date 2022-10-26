@@ -23,9 +23,9 @@
 
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-       <!-- <filter class="com.fhs.weblog.filter.ProcessLogFilter">
-
-        </filter>-->
+        <!--记录系统操作日志-->
+        <filter class="com.fhs.basics.api.filter.SysLogLogbackFilter">
+        </filter>
         <!-- 对日志进行格式化 -->
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger -%msg%n</pattern>

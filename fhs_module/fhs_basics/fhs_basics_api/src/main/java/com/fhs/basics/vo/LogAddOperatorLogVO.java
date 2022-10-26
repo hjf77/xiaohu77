@@ -25,6 +25,11 @@ public class LogAddOperatorLogVO {
     private LogOperatorMainVO operatorMainVO;
 
     /**
+     * 系统日志
+     */
+    private LogOperatorSysLogVO operatorSysLogVO;
+
+    /**
      * 扩展参数,修改或者删除的时候会有
      */
     private List<LogOperatorExtParamVO> operatorExtParamVOList = new ArrayList<>();
