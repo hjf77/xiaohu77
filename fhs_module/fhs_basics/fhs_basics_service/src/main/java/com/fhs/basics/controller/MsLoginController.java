@@ -322,11 +322,11 @@ public class MsLoginController extends BaseController {
             Map<String, Object> map = new HashMap<>();
             //获取用户country_code
             String countryCode = JsonUtils.parseJSON2Map(gson.toJson(userMap.get("result"))).get("country_code").toString();
-            map.put("username", loginVO.getUserLoginName());
+            map.put("username", countryCode+"-"+loginVO.getUserLoginName());
             map.put("password", loginVO.getPassword());
             //获取用户country_code
             map.put("country_code", countryCode);
-            map.put("username_type", loginVO.getUsernameType());
+            map.put("username_type", 3);
             //发送请求
             Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(result));
