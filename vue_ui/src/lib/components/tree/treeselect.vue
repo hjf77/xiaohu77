@@ -5,7 +5,7 @@
       :options="dataList"
       :normalizer="normalizer"
       :placeholder="name || '请选择'"
-      v-model="Selectid"
+      v-model="selectId"
       @select="repair"
     />
   </div>
@@ -29,14 +29,14 @@ export default {
     return {
       url: "",
       dataList: [],
-      Selectid: "",
+      selectId: "",
       status: true,
     };
   },
   mounted() {
     this.url = this.treeUrl;
     if (this.repairid != "") {
-      this.Selectid = this.repairid;
+      this.selectId = this.repairid;
     }
   },
   watch: {
@@ -47,10 +47,10 @@ export default {
       this.status = false;
       this.$nextTick(() => {
         this.status = true;
-        this.Selectid = data;
+        this.selectId = data;
       });
     },
-    Selectid: function (data) {
+    selectId: function (data) {
       if (data == undefined) {
         this.repair(null);
       }
@@ -69,10 +69,10 @@ export default {
     },
     repair(e) {
       if (e == null) {
-        this.$emit("Selectid", e);
+        this.$emit("selectId", e);
       } else {
         this.$emit("change", e.id);
-        this.$emit("Selectid", e);
+        this.$emit("selectId", e);
       }
     },
     // 刷新

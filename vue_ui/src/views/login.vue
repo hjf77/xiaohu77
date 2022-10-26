@@ -1,21 +1,21 @@
 <template>
 
 
-<!--  <div id="full-screen-container" :ref="ref" class="login-container">-->
-<!--      <div class="login-wrap">-->
-<!--          <div class="login-content">-->
+  <!--  <div id="full-screen-container" :ref="ref" class="login-container">-->
+  <!--      <div class="login-wrap">-->
+  <!--          <div class="login-content">-->
 
-<!--          </div>-->
-<!--      </div>-->
+  <!--          </div>-->
+  <!--      </div>-->
 
-<!--  </div>-->
+  <!--  </div>-->
 
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">FHS-DEMO</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
-          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon"/>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
@@ -26,7 +26,7 @@
           placeholder="密码"
           @keyup.enter.native="handleLogin"
         >
-          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
+          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon"/>
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
@@ -37,10 +37,10 @@
           style="width: 63%"
           @keyup.enter.native="handleLogin"
         >
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon"/>
         </el-input>
         <div class="login-code">
-          <img :src="codeUrl" @click="getCode" />
+          <img :src="codeUrl" @click="getCode"/>
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
@@ -57,6 +57,19 @@
         </el-button>
       </el-form-item>
     </el-form>
+    <el-dialog
+      title="设置开发者"
+      :visible.sync="open"
+      v-if="open"
+    >
+      <el-form>
+          <el-form-item label="开发者名称">
+            <el-input v-model="devForm.devOperator" :style="{'width':'220px'}"></el-input>
+            <el-button type="primary" @click="setDevOperator">确定</el-button>
+          </el-form-item>
+      </el-form>
+    </el-dialog>
+
     <!--  底部  -->
     <div class="el-login-footer">
       <span>Copyright © 2018-2021 fhs-opensource All Rights Reserved.</span>
@@ -65,22 +78,24 @@
 </template>
 
 <script>
-import { getCodeImg } from "@/api/login";
+import {getCodeImg} from "@/api/login";
 import Cookies from "js-cookie";
-import { encrypt, decrypt } from '@/utils/jsencrypt'
+import {encrypt, decrypt} from '@/utils/jsencrypt'
 import md5 from "js-md5";
+
 export default {
   name: "Login",
   data() {
     return {
-
+      open:false,
       ref: 'full-screen-container',
       allWidth: 0,
       scale: 0,
       datavRoot: '',
       ready: false,
-
-
+      devForm:{
+        devOperator:''
+      },
       codeUrl: "",
       cookiePassword: "",
       loginForm: {
@@ -92,12 +107,12 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: "用户名不能为空" }
+          {required: true, trigger: "blur", message: "用户名不能为空"}
         ],
         password: [
-          { required: true, trigger: "blur", message: "密码不能为空" }
+          {required: true, trigger: "blur", message: "密码不能为空"}
         ],
-        identifyCode: [{ required: true, trigger: "change", message: "验证码不能为空" }]
+        identifyCode: [{required: true, trigger: "change", message: "验证码不能为空"}]
       },
       loading: false,
       redirect: undefined
@@ -105,7 +120,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
@@ -122,13 +137,31 @@ export default {
     this.getCode();
     this.getCookie();
   },
+  mounted() {
+    window.addEventListener('keydown', this.handleEvent)
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.handleEvent) // 在页面销毁的时候记得解除
+  },
   methods: {
     getCode() {
-
       getCodeImg().then(res => {
         this.codeUrl = "data:image/gif;base64," + res.data.img;
         this.loginForm.uuid = res.data.uuid;
       });
+    },
+    //快捷键监听
+    handleEvent(e){
+      //ctrl + Q
+      if (e.ctrlKey && e.keyCode === 81) {
+        this.open = true;
+      }
+    },
+    //设置开发者--用于后台日志记录
+    setDevOperator(){
+      localStorage.setItem('devOperator', this.devForm.devOperator);
+      this.open = false;
+      this.msgSuccess("设置成功");
     },
     getCookie() {
       const username = Cookies.get("username");
@@ -145,24 +178,24 @@ export default {
         if (valid) {
           this.loading = true;
           if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, { expires: 30 });
-            Cookies.set("password", encrypt(this.loginForm.password), { expires: 30 });
-            Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
+            Cookies.set("username", this.loginForm.username, {expires: 30});
+            Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
+            Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
           } else {
             Cookies.remove("username");
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
           let payload = {
-            username: this.loginForm.username ,
-            password:  md5(this.loginForm.password),
+            username: this.loginForm.username,
+            password: md5(this.loginForm.password),
             uuid: this.loginForm.uuid,
             identifyCode: this.loginForm.identifyCode
           };
           this.$store
             .dispatch("Login", payload)
             .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
+              this.$router.push({path: this.redirect || "/"});
             })
             .catch(() => {
               this.loading = false;
@@ -184,6 +217,7 @@ export default {
   background-image: url("../assets/image/login-background.jpg");
   background-size: cover;
 }
+
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
@@ -195,32 +229,39 @@ export default {
   background: #ffffff;
   width: 400px;
   padding: 25px 25px 5px 25px;
+
   .el-input {
     height: 38px;
+
     input {
       height: 38px;
     }
   }
+
   .input-icon {
     height: 39px;
     width: 14px;
     margin-left: 2px;
   }
 }
+
 .login-tip {
   font-size: 13px;
   text-align: center;
   color: #bfbfbf;
 }
+
 .login-code {
   width: 33%;
   height: 38px;
   float: right;
+
   img {
     cursor: pointer;
     vertical-align: middle;
   }
 }
+
 .el-login-footer {
   height: 40px;
   line-height: 40px;
@@ -245,32 +286,35 @@ export default {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  padding:70px 140px;
+  padding: 70px 140px;
 
 }
-.login-wrap{
-  width:100%;
-  height:940px;
+
+.login-wrap {
+  width: 100%;
+  height: 940px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(249,249,249,0.5);
+  border: 1px solid rgba(249, 249, 249, 0.5);
   box-shadow: 0px 0px 40px 0px rgba(0, 84, 89, 0.2);
   box-sizing: border-box;
-  padding:20px;
+  padding: 20px;
 
 }
+
 .login-container:after {
-  content:"";
+  content: "";
   display: block;
-  width:708px;
-  height:503px;
+  width: 708px;
+  height: 503px;
   background-image: url("/static/login-bg.png");
   background-size: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
 }
-.login-content{
+
+.login-content {
   width: 100%;
   height: 100%;
   background: #fff;

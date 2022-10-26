@@ -4,12 +4,11 @@ import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.po.LogHistoryDataPO;
 import com.fhs.basics.po.LogOperatorExtParamPO;
 import com.fhs.basics.po.LogOperatorMainPO;
+import com.fhs.basics.po.LogOperatorSysLogPO;
 import com.fhs.basics.service.LogHistoryDataService;
 import com.fhs.basics.service.LogOperatorExtParamService;
-import com.fhs.basics.vo.LogAddOperatorLogVO;
-import com.fhs.basics.vo.LogHistoryDataVO;
-import com.fhs.basics.vo.LogOperatorExtParamVO;
-import com.fhs.basics.vo.LogOperatorMainVO;
+import com.fhs.basics.service.LogOperatorSysLogService;
+import com.fhs.basics.vo.*;
 import com.fhs.basics.mapper.LogOperatorMainMapper;
 import com.fhs.basics.service.LogOperatorMainService;
 import com.fhs.common.utils.ListUtils;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
 @Service
 @DataSource("basic")
 @Namespace("log_operator_main")
-public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService{
+public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainVO, LogOperatorMainPO> implements LogOperatorMainService {
 
     @Autowired
     private LogOperatorExtParamService logOperatorExtParamService;
@@ -43,6 +43,19 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
 
     @Autowired
     private LogOperatorMainMapper logOperatorMainMapper;
+
+    @Autowired
+    private LogOperatorSysLogService operatorSysLogService;
+
+    @Override
+    public LogOperatorMainVO selectById(Serializable primaryValue) {
+        LogOperatorMainVO result = super.selectById(primaryValue);
+        LogOperatorSysLogVO sysLogVO = operatorSysLogService.selectBean(LogOperatorSysLogPO.builder().operatorMainId(result.getLogId()).build());
+        if (sysLogVO != null) {
+            result.setSysLog(sysLogVO.getSysLog());
+        }
+        return result;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -95,6 +108,9 @@ public class LogOperatorMainServiceImpl extends BaseServiceImpl<LogOperatorMainV
         }
         logHistoryDataService.batchInsert(ListUtils.copyListToPararentList(logAddOperatorLogVO.getHistoryDataVOList(),
                 LogHistoryDataPO.class));
+        if (logAddOperatorLogVO.getOperatorSysLogVO() != null) {
+            operatorSysLogService.insert(logAddOperatorLogVO.getOperatorSysLogVO());
+        }
     }
 
     @Override

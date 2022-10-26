@@ -81,15 +81,8 @@ request.interceptors.request.use(config => {
     if(config.data && config.data.parse){
       config.data = parseAdvanceParam(config.data);
     }
-    /*if(config.data && config.data.useJson){
-      config.headers['Content-Type']='application/json;charset=utf-8'
-      delete config.data.useJson;
-      config.data = JSON.stringify(config.data);
-    }else{
-      config.headers['Content-Type']='application/x-www-form-urlencoded'
-      config.data = qs.stringify(config.data)
-    }*/
-    return config
+    config.headers['devOperator'] = encodeURIComponent(localStorage.getItem('devOperator'))
+  return config
 }, error => {
     Promise.reject(error)
 });

@@ -51,10 +51,9 @@
             v-model="model[item.name]"
             v-if="item.type === 'textarea'"
             :clearable="item.clearable?item.clearable:true"
-            maxlength="200"
             v-bind="item"
             show-word-limit
-            rows="3"
+            :rows="item.rows ? item.rows : 3"
             :style="{ 'width': item.width ? item.width + 'px' : '740px' }"
           ></el-input>
           <Editor

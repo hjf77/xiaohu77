@@ -16,6 +16,7 @@ by wanglei
             v-if="item.type === 'text'"
             prefix-icon="el-icon-search"
             :placeholder="item.placeholder"
+            :style="{ width: item.width ? item.width + 'px' : '220px' }"
             clearable
           ></el-input>
 
@@ -24,6 +25,7 @@ by wanglei
             v-model="query.params[item.name]"
             v-if="item.type === 'select'"
             :placeholder="item.placeholder"
+            :style="{ width: item.width ? item.width + 'px' :   '220px' }"
           ></pagex-select>
 
           <pagex-formTreeSelect
@@ -31,7 +33,7 @@ by wanglei
             v-model="query.params[item.name]"
             v-if="item.type === 'treeSelect'"
             :url="item.url"
-            :style="{ width: item.width ? item.width + 'px' : (item.multiple ? '740px' : '305px') }"
+            :style="{ width: item.width ? item.width + 'px' :   '220px' }"
           ></pagex-formTreeSelect>
 
           <el-date-picker
@@ -831,7 +833,7 @@ export default {
       this.$nextTick(() => {
         this.$set(this, 'realColumns', val)
       })
-      
+
     },
   }
 }

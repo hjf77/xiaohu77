@@ -72,7 +72,7 @@ fhs:
       name: 公共接口文档
   operator-log: # 操作日志记录，打开会慢
     enable: true
-
+    sys-log-enable: true
 
 spring:
   profiles:

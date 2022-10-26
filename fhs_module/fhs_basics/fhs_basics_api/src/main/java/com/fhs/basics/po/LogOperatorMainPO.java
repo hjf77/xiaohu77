@@ -101,4 +101,16 @@ public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
     @TableField("pkey")
     private String pkeyStr;
 
+    /**
+     * 原始表单参数
+     */
+    @TableField("req_param_source")
+    private String reqParamSource;
+
+    /**
+     * 开发者-假如大家都用admin测试，你现在想找小红的，那么就可以在前端设置当前账号是admin开发者是小红，当然小红也可能是测试
+     */
+    @TableField("dev_operator")
+    private String devOperator;
+
 }
