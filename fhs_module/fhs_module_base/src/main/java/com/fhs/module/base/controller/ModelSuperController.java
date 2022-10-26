@@ -125,10 +125,10 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ResponseBody
     @GetMapping("findList")
     @ApiOperation("后台-不分页查询集合-一般用于下拉")
-    public List<V> findList(V e)
+    public List<V> findList(D e)
             throws Exception {
         if (isPermitted("see")) {
-            List<V> dataList = baseService.findForList((D) e);
+            List<V> dataList = baseService.findForList(e);
             return dataList;
         } else {
             throw new NotPremissionException();

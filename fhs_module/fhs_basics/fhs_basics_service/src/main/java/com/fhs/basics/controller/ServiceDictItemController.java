@@ -32,7 +32,7 @@ public class ServiceDictItemController extends ModelSuperController<ServiceDictI
      * @throws Exception
      */
     @Override
-    public List<ServiceDictItemVO> findList(ServiceDictItemVO e) throws Exception {
+    public List<ServiceDictItemVO> findList(ServiceDictItemPO e) throws Exception {
         List<ServiceDictItemVO> dataList = baseService.findForList(e);
         return dataList;
     }
