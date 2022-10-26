@@ -1,8 +1,10 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.logger.Logger;
 import com.fhs.easycloud.util.ParamChecker;
@@ -63,7 +65,7 @@ public class DownLoadController extends BaseController {
             if (!(e instanceof ParamException)) {
                 LOG.error(this, e);
             }
-            throw new ParamException("下载文件异常,可能是文件不存在");
+            throw new BusinessException(ExceptionConstant.DOWNLOAD_ABNORMAL_FILE_ABSENT);
         }
     }
 

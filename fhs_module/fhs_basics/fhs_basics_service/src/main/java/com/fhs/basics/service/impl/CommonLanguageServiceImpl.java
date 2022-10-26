@@ -1,12 +1,14 @@
 package com.fhs.basics.service.impl;
 
 
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.mapper.CommonLanguageMapper;
 import com.fhs.basics.po.CommonLanguagePO;
 import com.fhs.basics.service.CommonLanguageService;
 import com.fhs.basics.vo.CommonLanguageVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.annotation.Namespace;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.github.liaochong.myexcel.core.SaxExcelReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class CommonLanguageServiceImpl extends BaseServiceImpl<CommonLanguageVO,
             });
             this.batchInsert(commonLanguagePOS);
         } catch (IOException e) {
-            throw new ParamException("导入的Excel数据格式不正确");
+            throw new BusinessException(ExceptionConstant.EXCEL_FORMAT_ERROR);
         }
         msgList.add("导入成功");
         return msgList;

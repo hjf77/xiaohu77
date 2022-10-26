@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.api.anno.LogNamespace;
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.po.UcenterAppUserSetPO;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
@@ -22,6 +23,7 @@ import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.cache.service.RedisCacheService;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
@@ -108,7 +110,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             }
             return HttpResult.success(retult);
         } else {
-            throw new ParamException("用户名重复");
+            throw new BusinessException(ExceptionConstant.USER_NAME_REPEAT);
         }
     }
 
@@ -215,7 +217,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         if (isSuccess) {
             return HttpResult.success(true);
         }
-        throw new ParamException("密码输入错误");
+        throw new BusinessException(ExceptionConstant.PASSWORD_INPUT_ERROR);
     }
 
 
@@ -306,16 +308,16 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             // 判断短信验证码是否正确过期
             String smsCode = redisCacheService.get(SMS_CODE_KEY + ucenterMsUserVO.getUuid() + ucenterMsUserVO.getMobile()).toString();
             if (StringUtils.isEmpty(smsCode)) {
-                throw new ParamException("验证码已过期，请重新发送");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_OVERDUE);
             }
             if (!smsCode.equals(ucenterMsUserVO.getSmsCode())) {
-                throw new ParamException("验证码不正确");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_ERROR);
             }
             Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
                     .eq(UcenterMsUserPO::getMobile, ucenterMsUserVO.getMobile())
                     .ne(UcenterMsUserPO::getUserId, userId));
             if (mobileCount > 0L) {
-                throw new ParamException("该手机号已被使用！");
+                throw new BusinessException(ExceptionConstant.PHONE_NUMBER_USE);
             }
             ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getMobile());
             ucenterMsUserPO.setMobile(ucenterMsUserVO.getMobile());
@@ -324,16 +326,16 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             // 判断短信验证码是否正确过期
             String smsCode = redisCacheService.get(SMS_CODE_KEY + ucenterMsUserVO.getUuid() + ucenterMsUserVO.getEmail()).toString();
             if (StringUtils.isEmpty(smsCode)) {
-                throw new ParamException("验证码已过期，请重新发送");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_OVERDUE);
             }
             if (!smsCode.equals(ucenterMsUserVO.getSmsCode())) {
-                throw new ParamException("验证码不正确");
+                throw new BusinessException(ExceptionConstant.VERIFICATION_CODE_ERROR);
             }
             Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
                     .eq(UcenterMsUserPO::getEmail, ucenterMsUserVO.getEmail())
                     .ne(UcenterMsUserPO::getUserId, userId));
             if (emailCount > 0L) {
-                throw new ParamException("该邮箱已被使用！");
+                throw new BusinessException(ExceptionConstant.MAILBOX_USE);
             }
             ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getEmail());
             ucenterMsUserPO.setEmail(ucenterMsUserVO.getEmail());
@@ -384,27 +386,27 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         if (!StringUtils.isEmpty(ucenterMsUserVO.getMobile())) {
             if (!StringUtils.isEmpty(msUserVO.getMobile())) {
                 if (msUserVO.getMobile().equals(ucenterMsUserVO.getMobile())) {
-                    throw new ParamException("所更换的手机号号码不能与当前手机号码一致");
+                    throw new BusinessException(ExceptionConstant.PHONE_NUMBER_NOT_AGREEMENT);
                 }
             }
             Long mobileCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
                     .eq(UcenterMsUserPO::getMobile, ucenterMsUserVO.getMobile())
                     .ne(UcenterMsUserPO::getUserId, userId));
             if (mobileCount > 0L) {
-                throw new ParamException("该手机号已被使用！");
+                throw new BusinessException(ExceptionConstant.PHONE_NUMBER_USE);
             }
         }
         if (!StringUtils.isEmpty(ucenterMsUserVO.getEmail())) {
             if (!StringUtils.isEmpty(msUserVO.getEmail())) {
                 if (msUserVO.getEmail().equals(ucenterMsUserVO.getEmail())) {
-                    throw new ParamException("所更换的邮箱号码不能与当前邮箱号码一致");
+                    throw new BusinessException(ExceptionConstant.MAILBOX_USE_NOT_AGREEMENT);
                 }
             }
             Long emailCount = sysUserService.selectCountMP(new LambdaQueryWrapper<UcenterMsUserPO>()
                     .eq(UcenterMsUserPO::getEmail, ucenterMsUserVO.getEmail())
                     .ne(UcenterMsUserPO::getUserId, userId));
             if (emailCount > 0L) {
-                throw new ParamException("该邮箱已被使用！");
+                throw new BusinessException(ExceptionConstant.MAILBOX_USE);
             }
         }
         return HttpResult.success(true);

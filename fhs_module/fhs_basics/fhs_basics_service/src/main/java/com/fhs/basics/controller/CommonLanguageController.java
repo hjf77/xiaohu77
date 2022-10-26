@@ -3,6 +3,7 @@ package com.fhs.basics.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.po.CommonLanguagePO;
 import com.fhs.basics.po.CommonMessagePO;
 import com.fhs.basics.service.CommonLanguageService;
@@ -12,6 +13,7 @@ import com.fhs.basics.vo.CommonMessageVO;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -57,7 +59,7 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
     @PostMapping(value = "/importCommonLanguageInfo")
     public List<String> importCommonLanguageInfo(@RequestParam("file") MultipartFile multipartFile) {
         if (multipartFile == null) {
-            throw new ParamException("导入文件不能为空");
+            throw new BusinessException(ExceptionConstant.FILE_NOT_EMPTY_CODE);
         }
         return commonLanguageService.importCommonLanguageInfo(multipartFile, this.getSessionuser().getUserId());
     }
@@ -95,7 +97,7 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
                     .build(commonLanguageExportVOS)) {
                 AttachmentExportUtil.export(workbook, "语言信息一览表", response);
             } catch (IOException e) {
-                throw new ParamException("导出失败");
+                throw new BusinessException(ExceptionConstant.EXPORT_FAIL);
             }
         } else {
             throw new NotPremissionException();
@@ -113,7 +115,7 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
         if (commonLanguageVO instanceof BasePO) {
             int count = commonLanguageService.selectByCommonLanguageVO(commonLanguageVO);
             if (count > 0) {
-                throw new ParamException("语言信息不能重复");
+                throw new BusinessException(ExceptionConstant.LANGUAGE_MESSAGE_NOT_REPEAT);
             }
             commonLanguageVO.preInsert(this.getSessionuser().getUserId());
             this.baseService.insert(commonLanguageVO);
@@ -156,7 +158,7 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
         if (this.isPermitted("update")) {
             int count = commonLanguageService.selectByCommonLanguageVO(commonLanguageVO);
             if (count > 0) {
-                throw new ParamException("语言信息不能重复");
+                throw new BusinessException(ExceptionConstant.LANGUAGE_MESSAGE_NOT_REPEAT);
             }
             this.beforSave(commonLanguageVO, false);
             this.baseService.updateById(commonLanguageVO);

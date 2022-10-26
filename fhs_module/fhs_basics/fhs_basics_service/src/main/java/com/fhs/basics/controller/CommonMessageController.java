@@ -3,6 +3,7 @@ package com.fhs.basics.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.api.anno.LogMethod;
+import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.po.CommonMessagePO;
 import com.fhs.basics.service.CommonMessageService;
 import com.fhs.basics.service.UcenterMsUserService;
@@ -10,6 +11,7 @@ import com.fhs.basics.vo.CommonMessageVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.vo.QueryFilter;
+import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
@@ -57,7 +59,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
                 return HttpResult.success(true);
             }
         }
-        throw new ParamException("请选择需要删除的消息!");
+        throw new BusinessException(ExceptionConstant.CHOICE_DELETE_MESSAGE);
     }
 
     @ResponseBody
