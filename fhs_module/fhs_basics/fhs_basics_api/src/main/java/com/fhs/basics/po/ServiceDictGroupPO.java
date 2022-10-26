@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
+import org.apache.ibatis.type.JdbcType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -46,10 +47,11 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     /**
      * ID
      */
-    @TableId(value = "group_id", type = IdType.NONE)
+    @TableId(value = "group_id", type = IdType.ASSIGN_ID)
+    @TableField(jdbcType = JdbcType.BIGINT )
     @NotNull(message = "id不能为空", groups = {Update.class})
     @ApiModelProperty("主键id")
-    private Integer groupId;
+    private Long groupId;
 
 
     /**

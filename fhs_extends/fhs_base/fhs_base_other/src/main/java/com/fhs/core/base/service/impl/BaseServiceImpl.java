@@ -615,7 +615,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
                 }
                 fieldList.get(0).setAccessible(true);
                 TableId tableId = fieldList.get(0).getAnnotation(TableId.class);
-                wrapper.ne(tableId.value(), ConverterUtils.toString(fieldList.get(0).get(newData)));
+                wrapper.ne(tableId.value(), fieldList.get(0).get(newData));
             }
         } catch (IllegalAccessException e) {
             log.error("反射错误", e);
