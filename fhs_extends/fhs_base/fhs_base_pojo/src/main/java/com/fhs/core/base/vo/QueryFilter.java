@@ -207,11 +207,11 @@ public class QueryFilter<T> {
     private static final String WHERE_SQL_TAG = "whereSql";
     private static final String ORDER_SQL_TAG = "orderBySql";
 
-    private List<String> convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
+    private List<SFunction> convertSortFieldList(List<FieldSort> list, Class<T> currentModelClass) {
         if (list == null) {
             return null;
         } else {
-            List<String> result = new ArrayList<>();
+            List<SFunction> result = new ArrayList<>();
             for (int i = 0; i < list.size(); ++i) {
                 result.add(getField(list.get(i).getProperty(), currentModelClass));
             }
@@ -227,18 +227,19 @@ public class QueryFilter<T> {
      * @return
      */
     @JSONField(serialize = false)
-    public String getField(String fieldName, Class<T> currentModelClass) {
+    public SFunction getField(String fieldName, Class<T> currentModelClass) {
         if (currentModelClass == null) {
             throw new ParamsInValidException("currentModelClass不能为null");
         }
-        Map<String, ColumnCache> cacheMap = LambdaUtils.getColumnMap(currentModelClass);
+        return getSFunction(currentModelClass,fieldName);
+      /*  Map<String, ColumnCache> cacheMap = LambdaUtils.getColumnMap(currentModelClass);
         if (cacheMap == null) {
             throw new ParamsInValidException(currentModelClass + "找不到表字段对应关系，请检查mapper.xml是否已经存在并且目录正确");
         }
         if (!cacheMap.containsKey(fieldName.toUpperCase())) {
             throw new ParamsInValidException(fieldName + "不正确");
         }
-        return cacheMap.get(fieldName.toUpperCase()).getColumn();
+        return cacheMap.get(fieldName.toUpperCase()).getColumn();*/
     }
 
     /**
@@ -292,85 +293,56 @@ public class QueryFilter<T> {
         if (CheckUtils.isNullOrEmpty(queryField.getValue()) || "null".equals(ConverterUtils.toString(queryField.getValue()))) {
             return;
         }
-        String field = null;
-        if (!StringUtils.isEmpty(queryField.getTarget())) {
-            if (StringUtils.isEmpty(queryField.getField())) {
-                throw new ParamsInValidException("当target不为空的时候field也一定不可以为空，字段:" + queryField.getProperty());
-            }
-
-            if (!OPEARTOR_SET.contains(queryField.getOperation())) {
-                throw new ParamsInValidException("操作符不受支持:" + queryField.getOperation());
-            }
-            if (!isSqlValid(queryField.getValue() + "")) {
-                throw new ParamsInValidException("字段值校验出SQL注入风险:" + queryField.getValue());
-            }
-
-            field = getField(queryField.getField(), currentModelClass);
-
-            Object propValue = queryField.getValue();
-            if ("like".equals(queryField.getOperation())) {
-                propValue = "%" + propValue + "%";
-            }
-            //不是数字的时候加引号
-            if (!CheckUtils.isNumber(propValue)) {
-                propValue = "'" + propValue + "'";
-            }
-            //目标标字段
-            String targetField = getField(queryField.getProperty(), getTargetClass(queryField.getTarget()));
-            String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from " + getTargetTableName(queryField.getTarget()) + " where " + targetField
-                    + " " + queryField.getOperation() + " " + propValue + ")";
-            queryWrapper.apply(sql);
-            return;
-        }
+        SFunction field = null;
         field = getField(queryField.getProperty(), currentModelClass);
         String operation = queryField.getOperation();
 
         switch (operation) {
             case "=":
-                queryWrapper.eq(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.eq(field, queryField.getValue());
                 break;
             case "<":
-                queryWrapper.lt(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.lt(field, queryField.getValue());
                 break;
             case ">":
-                queryWrapper.gt(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.gt(field, queryField.getValue());
                 break;
             case "<=":
-                queryWrapper.le(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.le(field, queryField.getValue());
                 break;
             case ">=":
-                queryWrapper.ge(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.ge(field, queryField.getValue());
                 break;
             case "!=":
-                queryWrapper.ne(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.ne(field, queryField.getValue());
                 break;
             case "like":
-                queryWrapper.like(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.like(field, queryField.getValue());
                 break;
             case "like_l":
-                queryWrapper.likeLeft(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.likeLeft(field, queryField.getValue());
                 break;
             case "like_r":
-                queryWrapper.likeRight(getSFunction(currentModelClass, field), queryField.getValue());
+                queryWrapper.likeRight(field, queryField.getValue());
                 break;
             case "is_null":
-                queryWrapper.isNull(getSFunction(currentModelClass, field));
+                queryWrapper.isNull(field);
                 break;
             case "not_null":
-                queryWrapper.isNotNull(getSFunction(currentModelClass, field));
+                queryWrapper.isNotNull(field);
                 break;
             case "in":
                 Object[] values = this.convert2ObjectArray(queryField.getValue());
                 if (values != null && values.length > 0) {
-                    queryWrapper.in(getSFunction(currentModelClass, field), this.convert2ObjectArray(queryField.getValue()));
+                    queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
                 }
                 break;
             case "between"://前端经常用的是 时间过滤，比如查询 2020-01-01 到2020-01-02 如果用between会是 >   2020-01-01 and 2020-01-02<
                 Object[] objs = this.convert2ObjectArray(queryField.getValue());
                 if (objs != null && objs.length > 0) {
                     Assert.isTrue(objs.length == 2, String.format("查询条件为between时，查询值必须为两个，但是传入的查询值为：%s", objs));
-                    queryWrapper.ge(getSFunction(currentModelClass, field), objs[0]);
-                    queryWrapper.le(getSFunction(currentModelClass, field), objs[1]);
+                    queryWrapper.ge(field, objs[0]);
+                    queryWrapper.le(field, objs[1]);
                 }
         }
 

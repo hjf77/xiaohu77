@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -36,7 +37,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_service_area")
+@TableName(value = "t_service_area", autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ServiceAreaDO", description = "ServiceArea参数")
 public class ServiceAreaPO extends BasePO<ServiceAreaPO> {

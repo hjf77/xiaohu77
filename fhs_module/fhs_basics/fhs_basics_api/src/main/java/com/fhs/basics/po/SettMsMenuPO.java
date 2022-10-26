@@ -42,7 +42,7 @@ import java.util.List;
  * @since [产品/模块版本]
  */
 @Data
-@TableName("t_sett_ms_menu")
+@TableName(value = "t_sett_ms_menu", autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "SettMsMenuDO", description = "SettMsMenu参数")
 public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
@@ -53,7 +53,7 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     /**
      * 菜单id
      */
-    @TableId(value = "menu_id",type = IdType.ASSIGN_UUID)
+    @TableId(value = "menu_id", type = IdType.ASSIGN_UUID)
     @NotNull(message = "id不可为空", groups = {Update.class, Delete.class})
     @ApiModelProperty("菜单id")
     private String menuId;
@@ -74,7 +74,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @NotNull(message = "父菜单不可为空", groups = {Update.class, Add.class})
     @ApiModelProperty("父菜单id")
     private String fatherMenuId;
-
 
 
     /**
@@ -115,8 +114,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     private Integer menuType;
 
 
-
-
     @TableField(exist = false)
     private String[] menuTypes;
 
@@ -128,7 +125,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @ApiModelProperty("是否禁用")
     @Trans(type = TransType.DICTIONARY, key = "is_enable")
     private Integer isEnable;
-
 
 
     /**
@@ -145,7 +141,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @ApiModelProperty("菜单状态")
     @Trans(type = TransType.DICTIONARY, key = "yesOrNo")
     private Integer isShow;
-
 
 
     /**

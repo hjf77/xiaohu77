@@ -33,7 +33,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_ucenter_ms_organization")
+@TableName(value = "t_ucenter_ms_organization", autoResultMap = true)
 @NotRepeatDesc("同一个父部门下的子部门名称不可重复")
 @ApiModel(value = "UcenterMsOrganizationDO", description = "UcenterMsOrganization参数")
 public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> implements Treeable {

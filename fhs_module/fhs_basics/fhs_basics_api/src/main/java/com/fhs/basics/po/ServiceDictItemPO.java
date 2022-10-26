@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_service_dict_item")
+@TableName(value = "t_service_dict_item", autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @NotRepeatDesc("字典编码不可重复")
 @ApiModel(description = "字典项")
@@ -63,7 +63,7 @@ public class ServiceDictItemPO extends BasePO<ServiceDictItemPO> {
     /**
      * 字典解释/描述
      */
-    @NotNull(message = "字典解释/描述", groups = {Add.class,Update.class, Delete.class})
+    @NotNull(message = "字典解释/描述", groups = {Add.class, Update.class, Delete.class})
     @TableField("dict_desc")
     @ApiModelProperty("字典解释/描述")
     private String dictDesc;

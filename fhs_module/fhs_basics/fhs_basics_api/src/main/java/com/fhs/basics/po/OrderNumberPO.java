@@ -35,7 +35,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_service_order_log")
+@TableName(value = "t_service_order_log", autoResultMap = true)
 @ApiModel(value = "OrderNumberDO", description = "OrderNumber参数")
 public class OrderNumberPO extends BasePO<OrderNumberPO> {
     private static final long serialVersionUID = 1L;

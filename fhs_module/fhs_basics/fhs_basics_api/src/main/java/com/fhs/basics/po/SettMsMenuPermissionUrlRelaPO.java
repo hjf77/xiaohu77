@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_sett_ms_menu_permission_url_rela")
+@TableName(value = "t_sett_ms_menu_permission_url_rela", autoResultMap = true)
 @ApiModel(value = "SettMsMenuPermissionUrlRelaDO", description = "SettMsMenuPermissionUrlRela参数")
 public class SettMsMenuPermissionUrlRelaPO extends BasePO<SettMsMenuPermissionUrlRelaPO> {
 

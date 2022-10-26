@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_service_dict_group")
+@TableName(value = "t_service_dict_group", autoResultMap = true)
 @NotRepeatDesc("分组编码不可重复")
 @ApiModel(description = "字典分组参数")
 public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
@@ -55,7 +55,7 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     /**
      * 分组名称
      */
-    @NotEmpty(message = "分组名称不能为空", groups = {Update.class,Add.class, Delete.class})
+    @NotEmpty(message = "分组名称不能为空", groups = {Update.class, Add.class, Delete.class})
     @TableField("group_name")
     @ApiModelProperty("分组名称")
     private String groupName;
@@ -63,7 +63,7 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     /**
      * 分组编码
      */
-    @NotEmpty(message = "分组编码不能为空", groups = {Update.class,Add.class, Delete.class})
+    @NotEmpty(message = "分组编码不能为空", groups = {Update.class, Add.class, Delete.class})
     @TableField("group_code")
     @ApiModelProperty("分组编码")
     @NotRepeatField

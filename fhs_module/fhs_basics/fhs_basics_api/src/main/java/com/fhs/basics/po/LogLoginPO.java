@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "LogLoginDO", description = "LogLogin参数")
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_log_login")
+@TableName(value = "t_log_login", autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 public class LogLoginPO extends BasePO<LogLoginPO> {
     private static final long serialVersionUID = 330446860714574816L;
@@ -97,7 +97,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 状态 0成功 1 失败
      */
     @TableField("state")
-    @Trans(type=TransType.DICTIONARY,key = "log_login_state")
+    @Trans(type = TransType.DICTIONARY, key = "log_login_state")
     @ApiModelProperty(value = "状态 0成功 1 失败")
     private Integer state;
 
@@ -105,7 +105,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 类型0 登入 1 登出
      */
     @TableField("type")
-    @Trans(type=TransType.DICTIONARY,key = "log_login_type")
+    @Trans(type = TransType.DICTIONARY, key = "log_login_type")
     @ApiModelProperty(value = "类型0 登入 1 登出")
     private Integer type;
 
@@ -113,7 +113,7 @@ public class LogLoginPO extends BasePO<LogLoginPO> {
      * 0 用户名不存在 1 密码错误 2 验证码错误 3 验证码失效 4 其他
      */
     @TableField("error_info")
-    @Trans(type=TransType.DICTIONARY,key = "log_login_error")
+    @Trans(type = TransType.DICTIONARY, key = "log_login_error")
     @ApiModelProperty(value = "0 用户名不存在 1 密码错误 2 验证码错误 3 验证码失效 4 其他")
     private Integer errorInfo;
 
