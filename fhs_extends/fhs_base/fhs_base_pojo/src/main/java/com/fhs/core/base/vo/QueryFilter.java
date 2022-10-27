@@ -32,6 +32,7 @@ import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -425,7 +426,7 @@ public class QueryFilter<T> {
         }
         Field field = getDeclaredField(entityClass, fieldName);
         if (field == null) {
-            throw ExceptionUtils.mpe("This class %s is not have field %s ", entityClass.getName(), fieldName);
+            throw new ParamsInValidException(MessageFormat.format("This class {0} is not have field {1} ", entityClass.getName(), fieldName));
         }
         SFunction func = null;
         final MethodHandles.Lookup lookup = MethodHandles.lookup();
