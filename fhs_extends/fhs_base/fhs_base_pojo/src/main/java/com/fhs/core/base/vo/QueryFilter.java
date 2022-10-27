@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrappe
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtils;
 import com.fhs.core.base.po.BasePO;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
@@ -26,7 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandles;
@@ -129,6 +133,48 @@ public class QueryFilter<T> {
         return this;
     }
 
+    /**
+     * 类似bean seacher的高级查询语法支持
+     * @param currentModelClass
+     * @param <Z>
+     * @return
+     */
+    public static <Z> LambdaJoinQueryWrapper<Z> reqParam2Wrapper(Class<Z> currentModelClass){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Map<String, String> paramMap = new HashMap<>();
+        Map<String, String[]> tempMap = request.getParameterMap();
+        for (String key : tempMap.keySet()) {
+            paramMap.put(key, request.getParameter(key));
+        }
+        // 获取所有字段
+        List<String> fieldNames = ReflectUtils.getAllField(currentModelClass).stream().map(Field::getName).collect(Collectors.toList());
+        QueryFilter<Z> queryFilter = new QueryFilter<>();
+        for (String fieldName : fieldNames) {
+            //有值并且不为空的才处理
+            if(paramMap.containsKey(fieldName) && !StringUtils.isEmpty(ConverterUtils.toString(paramMap.get(fieldName)))){
+                QueryField queryField = new QueryField();
+                //指定了运算符则使用指定的运算符，没有指定则使用=
+                if(paramMap.containsKey(fieldName + "-op")){
+                    queryField.setOperation(ConverterUtils.toString(paramMap.get(fieldName + "-op")));
+                }else{
+                    queryField.setOperation("=");
+                }
+                queryField.setProperty(fieldName);
+                queryField.setValue(paramMap.get(fieldName));
+                queryFilter.getQuerys().add(queryField);
+            }
+        }
+        //处理is null和 not_null
+        for (Map.Entry<String, String> paramEntry : paramMap.entrySet()) {
+            if("is_null".equals(paramEntry.getValue()) || "not_null".equals(paramEntry.getValue())){
+                QueryField queryField = new QueryField();
+                queryField.setOperation(ConverterUtils.toString(paramEntry.getValue()));
+                queryField.setProperty(paramEntry.getKey().replace("-op",""));
+                queryFilter.getQuerys().add(queryField);
+            }
+        }
+        return queryFilter.asWrapper(currentModelClass);
+    }
 
     @JSONField(serialize = false)
     public Map<String, List<QueryField>> groupQueryField() {
