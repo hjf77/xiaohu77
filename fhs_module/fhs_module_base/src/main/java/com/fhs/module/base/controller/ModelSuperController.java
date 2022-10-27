@@ -90,13 +90,37 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ApiOperation("后台-高级分页查询")
     public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter) {
         if (isPermitted("see")) {
-            LambdaJoinQueryWrapper wrapper = filter.asWrapper(getDOClass());
+            LambdaJoinQueryWrapper<D> wrapper = filter.asWrapper(getDOClass());
+            initQueryWrapper(wrapper, filter, true);
             this.setExportCache(wrapper);
             //这里的是1是DO的index
-            return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
+            IPage<V> result = baseService.selectPageMP(filter.getPagerInfo(), wrapper);
+            parseRecords(result.getRecords(), true);
+            return result;
         } else {
             throw new NotPremissionException();
         }
+    }
+
+    /**
+     * 通过此方法自动拼接自定义的过滤字段
+     *
+     * @param wrapper wrapper
+     * @param filter 前端传的 可能为null
+     * @param isPager 是否分页场景
+     */
+    public void initQueryWrapper(LambdaJoinQueryWrapper<D> wrapper, QueryFilter<D> filter, boolean isPager) {
+
+    }
+
+    /**
+     * 格式化返回结果
+     * 比如密码字段不给前端返回
+     * @param records 数据集合
+     * @param isPager 是否分页
+     */
+    public void parseRecords(List<V> records, boolean isPager) {
+
     }
 
 
@@ -110,8 +134,12 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ApiOperation("后台-高级查询不分页一般用于下拉")
     public List<V> findListAdvance(@RequestBody QueryFilter<D> filter) {
         if (isPermitted("see")) {
+            LambdaJoinQueryWrapper<D> wrapper = filter.asWrapper(getDOClass());
+            initQueryWrapper(wrapper, filter, false);
             //这里的是1是DO的index
-            return baseService.selectListMP(filter.asWrapper(getDOClass()));
+            List<V> result = baseService.selectListMP(wrapper);
+            parseRecords(result, false);
+            return result;
         } else {
             throw new NotPremissionException();
         }
@@ -128,7 +156,10 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     public List<V> findList(D e)
             throws Exception {
         if (isPermitted("see")) {
+            LambdaJoinQueryWrapper<D> wrapper = QueryFilter.reqParam2Wrapper(baseService.getPoClass());
+            initQueryWrapper(wrapper, null, false);
             List<V> dataList = baseService.findForList(e);
+            parseRecords(dataList, false);
             return dataList;
         } else {
             throw new NotPremissionException();
