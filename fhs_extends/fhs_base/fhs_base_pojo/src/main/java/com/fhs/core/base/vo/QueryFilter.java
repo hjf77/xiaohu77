@@ -231,7 +231,7 @@ public class QueryFilter<T> {
         if (currentModelClass == null) {
             throw new ParamsInValidException("currentModelClass不能为null");
         }
-        return getSFunction(currentModelClass,fieldName);
+        return getSFunction(currentModelClass, fieldName);
       /*  Map<String, ColumnCache> cacheMap = LambdaUtils.getColumnMap(currentModelClass);
         if (cacheMap == null) {
             throw new ParamsInValidException(currentModelClass + "找不到表字段对应关系，请检查mapper.xml是否已经存在并且目录正确");
@@ -294,7 +294,18 @@ public class QueryFilter<T> {
             return;
         }
         SFunction field = null;
-        field = getField(queryField.getProperty(), currentModelClass);
+        if (queryField.getTarget() != null) {
+            try {
+                Class<T> targetClass = (Class<T>) Class.forName(queryField.getTarget());
+                queryWrapper.innerJoin(targetClass);
+                field = getField(queryField.getProperty(), targetClass);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            field = getField(queryField.getProperty(), currentModelClass);
+        }
+
         String operation = queryField.getOperation();
 
         switch (operation) {
