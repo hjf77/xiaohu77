@@ -31,8 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.fhs.core.valid.checker.ParamChecker;
+
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -293,6 +296,28 @@ public class ExcelServiceImpl implements ExcelService {
                                 if (data.toString().length() < length.min()) {
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
+                                }
+                            }
+                            if (org.apache.commons.lang3.StringUtils.isNotEmpty(data.toString())) {
+                                // 邮箱校验
+                                Email emailAnnotation = field.getAnnotation(Email.class);
+                                if (null != emailAnnotation) {
+                                    String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+                                    boolean isMatch = java.util.regex.Pattern.matches(emailPattern, data.toString());
+                                    if (!isMatch) {
+                                        valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
+                                }
+                                // 正则校验
+                                Pattern patternAnnotation = field.getAnnotation(Pattern.class);
+                                if (null != patternAnnotation) {
+                                    String regexp = patternAnnotation.regexp();
+                                    boolean isMatch = java.util.regex.Pattern.matches(regexp, data.toString());
+                                    if (!isMatch) {
+                                        valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
                                 }
                             }
                             if (field.getGenericType().equals(Integer.class)) {

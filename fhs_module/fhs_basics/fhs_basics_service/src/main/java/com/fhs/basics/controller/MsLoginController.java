@@ -1,13 +1,12 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.fhs.basics.po.SettUserColumnPO;
 import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.service.SettUserColumnService;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
-import com.fhs.basics.vo.LoginVO;
-import com.fhs.basics.vo.UcenterMsRoleVO;
-import com.fhs.basics.vo.UcenterMsUserVO;
-import com.fhs.basics.vo.VueRouterVO;
+import com.fhs.basics.vo.*;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.service.LogLoginService;
 import com.fhs.common.constant.Constant;
@@ -74,7 +73,6 @@ public class MsLoginController extends BaseController {
     @Autowired
     private RedisCacheService redisCacheService;
 
-
     /**
      * 后台用户服务
      */
@@ -87,6 +85,9 @@ public class MsLoginController extends BaseController {
 
     @Autowired
     private LogLoginService logLoginService;
+
+    @Autowired
+    private SettUserColumnService userColumnService;
 
     /**
      * 登录地址
@@ -214,6 +215,10 @@ public class MsLoginController extends BaseController {
             String roles = StringUtils.join(roleList.stream().map(UcenterMsRoleVO::getRoleId).collect(Collectors.toList()), ",");
             resultMap.put("roles", collect);
         }
+        SettUserColumnPO param = new SettUserColumnPO();
+        param.setCreateUser(user.getUserId());
+        List<SettUserColumnVO> userColumnVOS = userColumnService.findForList(param);
+        resultMap.put("columnSett",userColumnVOS.stream().collect(Collectors.toMap(SettUserColumnVO::getNamespace,SettUserColumnVO::getColumnJson)));
         return HttpResult.success(resultMap);
     }
 
