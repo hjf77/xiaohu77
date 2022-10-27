@@ -116,7 +116,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 区域编码
      */
     @ApiModelProperty("区域编码")
-    @TableId(value = "code")
+    @TableField(value = "code")
     private Integer code;
 
     /**
@@ -124,7 +124,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      */
     @Length(message = "area的initAddr字段的长度最大为16", groups = {Add.class, Update.class}, max = 16, min = 0)
     @ApiModelProperty("初始地址")
-    @TableId(value = "init_addr")
+    @TableField(value = "init_addr")
     private String initAddr;
 
 }
