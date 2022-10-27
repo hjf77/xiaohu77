@@ -10,7 +10,6 @@
     <!-- 添加或修改参数配置对话框 -->
     <pagex-form
       ref="genForm"
-      :init="init"
       :isHaveCancelBtn="false"
       :isHaveAddBtn="false"
       :data="formData"
@@ -22,9 +21,9 @@
                 label: '生成页面',
                 rule:'required',
                 options: [
-                    {labelField:'all',valueField:'表单+列表' },
-                    {labelField:'form',valueField:'只表单' },
-                    {labelField:'list',valueField:'只列表' }
+                    {id:'all',title:'表单+列表' },
+                    {id:'form',title:'只表单' },
+                    {id:'list',title:'只列表' }
                   ]
               },
               {

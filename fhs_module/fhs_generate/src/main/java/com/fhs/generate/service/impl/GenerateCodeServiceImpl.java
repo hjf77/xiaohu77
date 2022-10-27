@@ -2,6 +2,7 @@ package com.fhs.generate.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
@@ -109,7 +110,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         String columns = JSON.toJSONString(listSettVO.getColumns().stream().filter(column -> {
             return !"textBtn".equals(column.getType());
         }).collect(Collectors.toList()));
-        String filters = JSON.toJSONString(listSettVO.getFilters());
+        String filters = JSON.toJSONString(listSettVO.getFilters(),SerializerFeature.WriteDateUseDateFormat);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("tableComment", tableInfoVO.getTableComment());
         paramMap.put("author", generateCodeVO.getAuthor());
@@ -123,6 +124,18 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
     /**
+     * 格式化json
+     * @param jsonStr
+     * @return
+     */
+    public String parseJson(String jsonStr){
+        JSONObject object = JSONObject.parseObject(jsonStr);
+        return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteDateUseDateFormat);
+
+    }
+
+    /**
      * 生成表单 vue代码
      *
      * @param tableInfoVO 表对象
@@ -131,8 +144,8 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     private String generateFormVue(TableInfoVO tableInfoVO, GenerateCodeVO generateCodeVO) {
         FormSettVO formSettVO = getFormJson(tableInfoVO);
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("controls", JSON.toJSONString(formSettVO.getControls()));
-        paramMap.put("formData", JSON.toJSONString(formSettVO.getDefaultValueData()));
+        paramMap.put("controls", JSON.toJSONString(formSettVO.getControls(),SerializerFeature.WriteDateUseDateFormat));
+        paramMap.put("formData", JSON.toJSONString(formSettVO.getDefaultValueData(),SerializerFeature.WriteDateUseDateFormat));
         paramMap.put("tableComment", tableInfoVO.getTableComment());
         paramMap.put("author", generateCodeVO.getAuthor());
         paramMap.put("nowDate", DateUtils.formartDate(new Date(), DateUtils.DATETIME_PATTERN_DATE));
@@ -280,7 +293,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                 .isHasEdit(operationCodes.contains(GenerateConstant.OPERATOR_TYPE_UPDATE))
                 .isHasDel(operationCodes.contains(GenerateConstant.OPERATOR_TYPE_DELETE)).build();
         //有设置编辑或者删除才有操作列
-        if (operationColumn.isHasDel() || operationColumn.isHasEdit()) {
+        if (operationColumn.getIsHasDel() || operationColumn.getIsHasEdit()) {
             result.add(operationColumn);
         }
         return result;

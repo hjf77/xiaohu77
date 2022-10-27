@@ -16,9 +16,10 @@
             >
                 <template v-if="open" v-slot:form="prop">
                     <!-- 新增 修改 详情 弹框-->
-                    <el-dialog
+                    <pagex-dialog
                             class="pagex-dialog-theme"
                             slot="form"
+                            namespace="${namespace}"
                             :title="title"
                             :visible.sync="open"
                             v-if="open"

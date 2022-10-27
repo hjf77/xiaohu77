@@ -47,7 +47,7 @@ export default {
       listSett.columns.forEach((item)=>{
         if(item.type=='textBtn'){
           item.textBtn = [];
-          if(item.hasEdit){
+          if(item.isHasEdit){
             item.textBtn.push({
               title: "编辑",
               type: "bottom",
@@ -60,7 +60,7 @@ export default {
               }
             });
           }
-          if(item.hasDel){
+          if(item.isHasDel){
             item.textBtn.push({
               title: "删除",
               type: "danger",

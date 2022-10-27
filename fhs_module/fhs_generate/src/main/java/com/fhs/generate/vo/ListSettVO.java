@@ -65,7 +65,7 @@ public class ListSettVO {
         private String label;
         private Integer width;
         private String type;
-        private boolean isHasEdit;
-        private boolean isHasDel;
+        private Boolean isHasEdit;
+        private Boolean isHasDel;
     }
 }
