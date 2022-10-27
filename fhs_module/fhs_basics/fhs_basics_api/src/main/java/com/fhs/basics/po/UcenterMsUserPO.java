@@ -11,18 +11,17 @@
 package com.fhs.basics.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.po.BasePO;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
-import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -186,8 +185,14 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
      */
     @TableField("country_code")
     @ApiModelProperty("国家")
-    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "fullCname", alias = "countryName")
     private String countryCode;
+
+    /**
+     * 涂鸦平台返回设备所在家庭id
+     */
+    @TableField("home_id_tuya")
+    @ApiModelProperty("涂鸦平台返回设备所在家庭id)")
+    private String homeIdTuya;
 
     /**
      * 状态

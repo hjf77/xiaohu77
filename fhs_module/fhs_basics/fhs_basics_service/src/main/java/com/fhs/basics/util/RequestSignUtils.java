@@ -37,10 +37,12 @@ public class RequestSignUtils {
     // 开发者accessKey
     @Value("${tuyaconfig.accessKey}")
     private String accessKey;
-    // Tuya云endpoint
-    @Value("${tuyaconfig.endpoint}")
-    private String endpoint;
-
+    // Tuya云endpoint中国数据中心
+    @Value("${tuyaconfig.endpointChina}")
+    private String endpointChina;
+    // Tuya云endpoint中欧数据中心
+    @Value("${tuyaconfig.endpointCentralEurope}")
+    private String endpointCentralEurope;
 
     /* // 开发者accessId
      private static String accessId = "nyjfprpm8k43dqv9rc53";
@@ -50,19 +52,20 @@ public class RequestSignUtils {
      private static String endpoint = "https://openapi.tuyacn.com";*/
     @PostConstruct
     void init() {
-        Constant.CONTAINER.put(Constant.ENDPOINT, endpoint);
+        Constant.CONTAINER.put(Constant.ENDPOINT_CHINA, endpointChina);
+        Constant.CONTAINER.put(Constant.ENDPOINT_CENTRAL_EUROPE, endpointCentralEurope);
         Constant.CONTAINER.put(Constant.ACCESS_ID, accessId);
         Constant.CONTAINER.put(Constant.ACCESS_KEY, accessKey);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         String getTokenPath = "/v1.0/token?grant_type=1";
         Object result = RequestSignUtils.execute(getTokenPath, "GET", "", new HashMap<>());
         Map<String, Object> stringObjectMap = JsonUtils.parseJSON2Map(gson.toJson(result));
         System.out.println(gson.toJson(result));
         System.out.println(stringObjectMap);
-    }
+    }*/
 
     private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
     private static final String EMPTY_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
@@ -75,21 +78,25 @@ public class RequestSignUtils {
     /**
      * 用于获取令牌、刷新令牌：无Token请求
      */
-    public static Object execute(String path, String method, String body, Map<String, String> customHeaders) {
-        return RequestSignUtils.execute("", path, method, body, customHeaders);
+    public static Object execute(String path, String method, String body, Map<String, String> customHeaders, String countryCode) {
+        return RequestSignUtils.execute("", path, method, body, customHeaders, countryCode);
     }
 
     /**
      * 用于业务接口：携带Token请求
      */
-    public static Object execute(String accessToken, String path, String method, String body, Map<String, String> customHeaders) {
+    public static Object execute(String accessToken, String path, String method, String body, Map<String, String> customHeaders, String countryCode) {
         try {
             // 验证开发者信息
             if (MapUtils.isEmpty(Constant.CONTAINER)) {
                 throw new TuyaCloudSDKException("未初始化开发者信息！");
             }
+            String url = Constant.CONTAINER.get(Constant.ENDPOINT_CHINA) + path;
+            //涂鸦暂时不支持访问国外服务器
+          /*  if (!countryCode.equals("86")) {
+                url = Constant.CONTAINER.get(Constant.ENDPOINT_CENTRAL_EUROPE) + path;
+            }*/
 
-            String url = Constant.CONTAINER.get(Constant.ENDPOINT) + path;
 
             Request.Builder request;
             if ("GET".equals(method)) {
@@ -108,7 +115,12 @@ public class RequestSignUtils {
             }
             Headers headers = getHeader(accessToken, request.build(), body, customHeaders);
             request.headers(headers);
-            request.url(Constant.CONTAINER.get(Constant.ENDPOINT) + getPathAndSortParam(new URL(url)));
+            request.url(Constant.CONTAINER.get(Constant.ENDPOINT_CHINA) + getPathAndSortParam(new URL(url)));
+            //涂鸦暂时不支持访问国外服务器
+           /* if (!countryCode.equals("86")) {
+                request.url(Constant.CONTAINER.get(Constant.ENDPOINT_CENTRAL_EUROPE) + getPathAndSortParam(new URL(url)));
+            }*/
+
             Response response = doRequest(request.build());
             return gson.fromJson(response.body().string(), Object.class);
         } catch (Exception e) {
@@ -337,7 +349,8 @@ public class RequestSignUtils {
          * 开发者密钥，容器中用作键
          */
         public static final String ACCESS_KEY = "accessKey";
-        public static final String ENDPOINT = "endpoint";
+        public static final String ENDPOINT_CHINA = "endpointChina";
+        public static final String ENDPOINT_CENTRAL_EUROPE = "endpointCentralEurope";
         public static final String NONCE_HEADER_NAME = "nonce";
     }
 

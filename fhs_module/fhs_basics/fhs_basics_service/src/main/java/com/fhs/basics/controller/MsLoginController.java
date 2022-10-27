@@ -83,14 +83,6 @@ public class MsLoginController extends BaseController {
     @Value("${tuyaconfig.checkUser}")
     private String checkUser;
 
-  /*  // 校验涂鸦用户密码telo1
-    @Value("${tuyaconfig.checkUserTeloOne}")
-    private String checkUserTeloOne;*/
-
-   /* // 修改涂鸦用户密码
-    @Value("${tuyaconfig.syncUserTeloOne}")
-    private String syncUserTeloOne;*/
-
     // 同步用户
     @Value("${tuyaconfig.syncUser}")
     private String syncUser;
@@ -98,10 +90,6 @@ public class MsLoginController extends BaseController {
     // 获取telo用户信息
     @Value("${tuyaconfig.getUsers}")
     private String getUsers;
-
-   /* // 获取telo1用户信息
-    @Value("${tuyaconfig.getUsersTeloOne}")
-    private String getUsersTeloOne;*/
 
     // 获取用户详细信息
     @Value("${tuyaconfig.getUser}")
@@ -114,6 +102,7 @@ public class MsLoginController extends BaseController {
     //注册时同步用户到tuya
     @Value("${tuyaconfig.registerSyncUser}")
     private String registerSyncUser;
+
 
     private static final Gson gson = new Gson().newBuilder().create();
 
@@ -237,7 +226,8 @@ public class MsLoginController extends BaseController {
             //  "username_type": 1,
             //  "time_zone_id": "Asia/Shanghai"
             //}
-            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
+            Object get = RequestSignUtils.execute(this.tokenUrl, "GET", "", new HashMap(), sysUser.getCountryCode());
+            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>(), sysUser.getCountryCode()))).get("result")));
             Map<String, String> userMap = new HashMap<>();
             userMap.put("country_code", sysUser.getCountryCode());
             userMap.put("username", sysUser.getUserLoginName());
@@ -246,7 +236,7 @@ public class MsLoginController extends BaseController {
             //userMap.put("time_zone_id", "Asia/Shanghai");
             System.out.println(JsonUtils.map2json(userMap));
             //{result={"uid":"ay16666699656006MUWe"}, t=1666675968062, success=true, tid=75c4f4a5542611ed9f2b629ef151a136}
-            Map<String, Object> registerUserMap = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), registerSyncUser, "POST", JsonUtils.map2json(userMap), new HashMap<>())));
+            Map<String, Object> registerUserMap = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), registerSyncUser, "POST", JsonUtils.map2json(userMap), new HashMap<>(), sysUser.getCountryCode())));
             System.out.println("========涂鸦注册用户" + registerUserMap);
             if (registerUserMap.get("success").equals((false))) {
                 throw new ParamException("注册失败");
@@ -317,20 +307,18 @@ public class MsLoginController extends BaseController {
         if (ucenterMsUserVO != null && null == ucenterMsUserVO.getPasswordTuya()) {
             //涂鸦用户第一次在app登录
             //获取token
-            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>()))).get("result")));
-            //根据用户uid查询用户信息 获取用户country_code
-            Map<String, Object> userMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), getUser.replace("{uid}", ucenterMsUserVO.getUId()), "GET", "", new HashMap<>())))));
-            System.out.println("=====用户信息" + userMap);
+            Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>(), ucenterMsUserVO.getCountryCode()))).get("result")));
             Map<String, Object> map = new HashMap<>();
-            //获取用户country_code
-            String countryCode = JsonUtils.parseJSON2Map(gson.toJson(userMap.get("result"))).get("country_code").toString();
-            map.put("username", countryCode+"-"+loginVO.getUserLoginName());
+            map.put("username", ucenterMsUserVO.getCountryCode() + "-" + loginVO.getUserLoginName());
+            if (ucenterMsUserVO.getUserLoginName().contains("@")) {
+                map.put("username", loginVO.getUserLoginName());
+            }
             map.put("password", loginVO.getPassword());
             //获取用户country_code
-            map.put("country_code", countryCode);
+            map.put("country_code", ucenterMsUserVO.getCountryCode());
             map.put("username_type", 3);
             //发送请求
-            Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>());
+            Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>(), ucenterMsUserVO.getCountryCode());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(result));
             System.out.println("========校验用户名密码" + userJsonMap);
             if (userJsonMap.get("success").equals((false))) {
@@ -418,16 +406,16 @@ public class MsLoginController extends BaseController {
         if (sysUserInfo.getIsTuyaUser().equals(Constant.INT_TRUE)) {
             //修改涂鸦平台用户密码
             //获取token
-            Object tokenJson = RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>());
+            Object tokenJson = RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>(), sysUserInfo.getCountryCode());
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(tokenJson));
             tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(tokenJsonMap.get("result")));
             Map<String, Object> map = new HashMap<>();
             map.put("username", sysUser.getUserLoginName());
             map.put("password", sysUser.getPassword());
-            map.put("country_code", "86");
+            map.put("country_code", sysUserInfo.getCountryCode());
             map.put("username_type", "3");
             //发送请求
-            Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>());
+            Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>(), sysUserInfo.getCountryCode());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));
             System.out.println(userJsonMap);
             if (userJsonMap.get("success").equals(false)) {
