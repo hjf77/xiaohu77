@@ -169,7 +169,12 @@ public class QueryFilter<T> {
         Map<String, List<QueryField>> groupQueryField = this.groupQueryField();
         String groupRelation = this.getGroupRelation();
         groupQueryField.forEach((group, list) -> {
-            List<QueryField> newListFields = list.stream().filter(queryField -> !safeFieldsSet.contains(queryField.getProperty())).collect(Collectors.toList());
+            List<QueryField> newListFields = list.stream().filter(queryField -> !safeFieldsSet.contains(queryField.getProperty()))
+                    .filter(queryField -> {
+                        String value = ConverterUtils.toString(queryField.getValue(), null);
+                        return value != null && !"".equals(value) && !"[]".equals(value);
+                    })
+                    .collect(Collectors.toList());
             if (newListFields.isEmpty()) {
                 return;
             }

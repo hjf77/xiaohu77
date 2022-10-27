@@ -32,7 +32,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.logger.Logger;
 import com.fhs.log.LoggerContext;
-import com.fhs.trans.service.AutoTransable;
+import com.fhs.trans.service.AutoTransAble;
 import com.fhs.trans.service.impl.TransService;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
 import org.apache.ibatis.binding.MapperMethod;
@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements BaseService<V, P>, AutoTransable<V>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements BaseService<V, P>, AutoTransAble<V>, InitializingBean {
 
     public static final int DEFAULT_BATCH_SIZE = 1000;
 
