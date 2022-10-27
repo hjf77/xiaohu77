@@ -497,7 +497,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @return vo
      */
     public V p2v(P p) {
-        return p2v(p, true);
+        return p2v(p, false);
     }
 
     /**
@@ -532,7 +532,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @return
      */
     public List<V> pos2vos(List<P> pos) {
-        return pos2vos(pos, true);
+        return pos2vos(pos, false);
     }
 
     public List<V> pos2vos(List<P> pos, boolean isTrans) {
