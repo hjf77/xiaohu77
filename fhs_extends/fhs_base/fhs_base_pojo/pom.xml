@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>easy_trans_anno</artifactId>
+            <artifactId>easy-trans-anno</artifactId>
             <version>${fhs.easytrans.version}</version>
             <exclusions>
                 <exclusion>
