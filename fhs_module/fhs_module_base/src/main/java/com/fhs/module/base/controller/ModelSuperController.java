@@ -158,7 +158,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         if (isPermitted("see")) {
             LambdaJoinQueryWrapper<D> wrapper = QueryFilter.reqParam2Wrapper(baseService.getPoClass());
             initQueryWrapper(wrapper, null, false);
-            List<V> dataList = baseService.findForList(e);
+            List<V> dataList = baseService.selectListMP(wrapper);
             parseRecords(dataList, false);
             return dataList;
         } else {
