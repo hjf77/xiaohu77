@@ -67,7 +67,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      */
     @Length(message = "area的areaCode字段的长度最大为128", groups = {Add.class, Update.class}, max = 128, min = 0)
     @ApiModelProperty("区域代码")
-    @TableId(value = "area_code")
+    @TableField(value = "area_code")
     private String areaCode;
 
     /**
@@ -75,7 +75,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      */
     @Length(message = "area的areaShort字段的长度最大为32", groups = {Add.class, Update.class}, max = 32, min = 0)
     @ApiModelProperty("区域简称")
-    @TableId(value = "area_short")
+    @TableField(value = "area_short")
     private String areaShort;
 
     /**
@@ -83,7 +83,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      */
     @Length(message = "area的areaIsHot字段的长度最大为1", groups = {Add.class, Update.class}, max = 1, min = 0)
     @ApiModelProperty("是否热门")
-    @TableId(value = "area_is_hot")
+    @TableField(value = "area_is_hot")
     private String areaIsHot;
 
     /**
