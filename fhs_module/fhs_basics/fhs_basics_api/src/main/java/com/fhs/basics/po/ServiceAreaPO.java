@@ -58,7 +58,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
      * 区域名称
      */
     @Length(message = "area的areaName字段的长度最大为16", groups = {Add.class, Update.class}, max = 16, min = 0)
-    @TableId(value = "area_name")
+    @TableField(value = "area_name")
     @ApiModelProperty("区域名称")
     private String areaName;
 
