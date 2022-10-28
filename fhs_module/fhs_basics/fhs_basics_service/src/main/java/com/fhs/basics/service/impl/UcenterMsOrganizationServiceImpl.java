@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @DataSource("basic")
-@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", defaultAlias = "org")
+@AutoTrans(namespace = BaseTransConstant.ORG, fields = {"name","aliasName"}, defaultAlias = "org")
 public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationPO> implements UcenterMsOrganizationService {
 
     @Autowired
@@ -52,7 +52,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     public int insert(UcenterMsOrganizationPO organization) {
         if (!CheckUtils.isNullOrEmpty(organization.getParentId())) {
             UcenterMsOrganizationVO sysOrganizationQuery = this.selectById(organization.getParentId());
-            if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsEnable()) {
+            if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && !Constant.ENABLED.equals(sysOrganizationQuery.getIsEnable())) {
                 throw new ParamException("父机构处于禁用状态，不能添加子机构");
             }
             organization.setCompanyId(sysOrganizationQuery.getCompanyId());
@@ -111,7 +111,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     public int updateById(UcenterMsOrganizationPO org) {
         UcenterMsOrganizationVO oldOrg = this.selectById(org.getId());
         // 如果是启用改为禁用
-        if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == org.getIsEnable()) {
+        if (Constant.ENABLED.equals(oldOrg.getIsEnable()) && Constant.DISABLE.equals(org.getIsEnable())) {
             // 查询当前机构下级机构数
             Long orgCount = this.findCount(UcenterMsOrganizationPO.builder().parentId(org.getId()).isEnable(Constant.ENABLED).build());
             if (orgCount > 0) {

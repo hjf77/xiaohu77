@@ -59,6 +59,13 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     private String name;
 
     /**
+     * 机构简称
+     */
+    @TableField("alias_name")
+    @ApiModelProperty(value = "机构简称")
+    private String aliasName;
+
+    /**
      * 父类编号
      */
     @NotNull(message = "父类编号字段不可为null", groups = {Update.class, Delete.class})
