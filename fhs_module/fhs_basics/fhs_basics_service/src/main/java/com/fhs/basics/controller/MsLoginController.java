@@ -229,7 +229,8 @@ public class MsLoginController extends BaseController {
             Object get = RequestSignUtils.execute(this.tokenUrl, "GET", "", new HashMap(), sysUser.getCountryCode());
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>(), sysUser.getCountryCode()))).get("result")));
             Map<String, String> userMap = new HashMap<>();
-            userMap.put("country_code", sysUser.getCountryCode());
+            //userMap.put("country_code", sysUser.getCountryCode());
+            userMap.put("country_code", "86");
             userMap.put("username", sysUser.getUserLoginName());
             userMap.put("password", sysUser.getPassword());
             userMap.put("username_type", "3");
