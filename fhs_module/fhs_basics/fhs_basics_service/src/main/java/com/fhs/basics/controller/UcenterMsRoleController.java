@@ -104,6 +104,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Boolean> add(@RequestBody @Validated(Add.class) UcenterMsRoleVO sysRole) {
         UcenterMsUserVO sysUser = super.getSessionuser();
+        sysRole.setOrganizationId(sysUser.getOrganizationId());
         sysRole.setIsDelete(Constant.ZERO);
         sysRole.setCreateUser(sysUser.getUserId());
         sysRole.setCreateTime(new Date());
