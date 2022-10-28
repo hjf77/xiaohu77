@@ -56,7 +56,7 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
     /**
      * 根据id获取区域编码
      */
-    public Integer getById(Integer id){
+    public Integer getById(Long id){
         return super.selectById(id).getCode();
     }
 }

@@ -34,5 +34,5 @@ public interface ServiceAreaService extends BaseService<ServiceAreaVO, ServiceAr
      * 根据id获取区域编码
      */
     @CloudMethod
-    Integer getById(Integer id);
+    Integer getById(Long id);
 }
