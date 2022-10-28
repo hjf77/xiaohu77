@@ -244,7 +244,7 @@ public class ExcelServiceImpl implements ExcelService {
                 }
             }
             fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
-            getFieldData(fieldName, data);
+            return getFieldData(fieldName, data);
         }
         return getGetMethod(data, fieldName);
     }

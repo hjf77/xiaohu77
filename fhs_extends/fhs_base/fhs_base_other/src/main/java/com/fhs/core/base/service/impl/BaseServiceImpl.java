@@ -125,7 +125,9 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     @Override
     public Long findCount(P bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        return baseMapper.selectCount(bean.asWrapper());
+        LambdaJoinQueryWrapper<P>  wrapper = bean.asWrapper();
+        wrapper.setIsCount(true);
+        return baseMapper.selectCount(wrapper);
     }
 
     @Override
