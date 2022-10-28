@@ -49,8 +49,11 @@ public class TableInfoVO extends TableInfoPO {
      * @return
      */
     public String getNamespace() {
-        String result = this.getTableName().replace("t_", "");
-        return ColumnNameUtil.underlineToCamel(ConverterUtils.toString(result));
+        String tableName = this.getTableName();
+        if(tableName.startsWith("t_") || tableName.startsWith("v_")){
+            tableName = tableName.substring(2);
+        }
+        return ColumnNameUtil.underlineToCamel(ConverterUtils.toString(tableName));
     }
 
     @ApiModelProperty("表字段集合")

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.config.EConfig;
@@ -107,10 +108,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     private String generateListVue(TableInfoVO tableInfoVO, GenerateCodeVO generateCodeVO) {
         //过滤条件
         ListSettVO listSettVO = getListJson(tableInfoVO);
-        String columns = JSON.toJSONString(listSettVO.getColumns().stream().filter(column -> {
+        String columns = parseJson(JSON.toJSONString(listSettVO.getColumns().stream().filter(column -> {
             return !"textBtn".equals(column.getType());
-        }).collect(Collectors.toList()));
-        String filters = JSON.toJSONString(listSettVO.getFilters(),SerializerFeature.WriteDateUseDateFormat);
+        }).collect(Collectors.toList()),SerializerFeature.PrettyFormat),true);
+        String filters = parseJson(JSON.toJSONString(listSettVO.getFilters(),SerializerFeature.PrettyFormat),true);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("tableComment", tableInfoVO.getTableComment());
         paramMap.put("author", generateCodeVO.getAuthor());
@@ -123,16 +124,27 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         return BeetlUtil.renderBeelt("/template/list_vue.html", paramMap);
     }
 
+    public static final String[] KEYWORDS = new String[]{"name","label","api","clearable","rule","message","required"
+            ,"type","options","url","labelField","valueField","dictCode","methodType","param","isValueNum","remote","multiple","trigger","title"};
+
+
     /**
      * 格式化json
      * @param jsonStr
      * @return
      */
-    public String parseJson(String jsonStr){
-        JSONObject object = JSONObject.parseObject(jsonStr);
-        return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
-                SerializerFeature.WriteDateUseDateFormat);
-
+    public String parseJson(String jsonStr,boolean appendComma){
+        if(jsonStr.startsWith("[")){
+            jsonStr = jsonStr.substring(1);
+            jsonStr = jsonStr.substring(0,jsonStr.length()-1);
+        }
+        for (String keyword : KEYWORDS) {
+            jsonStr = jsonStr.replaceAll("\"" + keyword + "\":",keyword + " : ");
+        }
+        if(appendComma){
+            jsonStr = jsonStr + ",";
+        }
+        return jsonStr;
     }
 
     /**
@@ -144,8 +156,8 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     private String generateFormVue(TableInfoVO tableInfoVO, GenerateCodeVO generateCodeVO) {
         FormSettVO formSettVO = getFormJson(tableInfoVO);
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("controls", JSON.toJSONString(formSettVO.getControls(),SerializerFeature.WriteDateUseDateFormat));
-        paramMap.put("formData", JSON.toJSONString(formSettVO.getDefaultValueData(),SerializerFeature.WriteDateUseDateFormat));
+        paramMap.put("controls", parseJson(JSON.toJSONString(formSettVO.getControls(),SerializerFeature.PrettyFormat),false));
+        paramMap.put("formData", parseJson(JSON.toJSONString(formSettVO.getDefaultValueData(),SerializerFeature.PrettyFormat),false));
         paramMap.put("tableComment", tableInfoVO.getTableComment());
         paramMap.put("author", generateCodeVO.getAuthor());
         paramMap.put("nowDate", DateUtils.formartDate(new Date(), DateUtils.DATETIME_PATTERN_DATE));
@@ -223,7 +235,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
             } else {
                 control = controlParserMap.get(formFiledVO.getType()).apply(formFiledVO);
             }
-            control.setName(formFiledVO.getName());
+            control.setName(ColumnNameUtil.underlineToCamel(formFiledVO.getName()));
             control.setLabel(formFiledVO.getTitle());
             control.setDictCode(formFiledVO.getDictCode());
             control.setQuerys(formFiledVO.getEffect().getFetch().getData());

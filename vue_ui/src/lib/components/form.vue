@@ -733,7 +733,7 @@ export default {
     //获取到 详情信息
     edit() {
       if (this.isEdit) {
-        this.$set(this, 'model', this.init);
+        this.$set(this, 'model', deepClone(this.init));
         if (this.initApi) {
           this.$pagexRequest.get(this.initApi).then((resp) => {
             this.$set(this, 'model', resp);

@@ -9,7 +9,7 @@
         <pagex-formDetail
                 v-if="isDetail"
                 :controls="controls"
-                :data="init"
+                :init="init"
         >
         </pagex-formDetail>
 
@@ -23,6 +23,7 @@
                 :init="init"
                 :controls="controls"
                 :buttons="buttons"
+                :isVee="false"
         >
 
         </pagex-form>
@@ -43,11 +44,12 @@
         },
         data() {
             return {
-                formData: {${formData}
-                },
+                formData:
+                ${formData},
                 addApi: "${microServiceName}/ms/${namespace}/",
                 updateApi: "${microServiceName}/ms/${namespace}/",
-                controls: [${controls}
+                controls: [
+                    ${controls}
                 ]
             }
         },
