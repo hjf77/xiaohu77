@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"字典分组"})
 @ApiGroup(group = "group_default")
 @LogNamespace(namespace = "dictGroup", module = "字典分组管理")
-public class ServiceDictGroupController extends ModelSuperController<ServiceDictGroupVO, ServiceDictGroupPO,Integer> {
+public class ServiceDictGroupController extends ModelSuperController<ServiceDictGroupVO, ServiceDictGroupPO,Long> {
 
     private static final Logger LOG = Logger.getLogger(ServiceDictGroupController.class);
 
