@@ -1,7 +1,6 @@
 package com.fhs.module.base.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
@@ -16,6 +15,8 @@ import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.base.vo.ExcelExportFieldVO;
+import com.fhs.core.base.vo.ExcelFieldVO;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
@@ -29,6 +30,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.trans.service.impl.TransService;
+import com.github.liaochong.myexcel.utils.FileExportUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -65,7 +68,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     /**
      * 用于导出用的缓存
      */
-    protected Cache<Long, LambdaJoinQueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+    protected Cache<Long, QueryFilter<D>> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
     protected BaseService<V, D> baseService;
@@ -92,10 +95,10 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         if (isPermitted("see")) {
             LambdaJoinQueryWrapper<D> wrapper = filter.asWrapper(getDOClass());
             initQueryWrapper(wrapper, filter, true);
-            this.setExportCache(wrapper);
+            this.setExportCache(filter);
             //这里的是1是DO的index
             IPage<V> result = baseService.selectPageMP(filter.getPagerInfo(), wrapper);
-            parseRecords(result.getRecords(), true);
+            parseRecords(result.getRecords(), true, false);
             return result;
         } else {
             throw new NotPremissionException();
@@ -106,7 +109,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
      * 通过此方法自动拼接自定义的过滤字段
      *
      * @param wrapper wrapper
-     * @param filter 前端传的 可能为null
+     * @param filter  前端传的 可能为null
      * @param isPager 是否分页场景
      */
     public void initQueryWrapper(LambdaJoinQueryWrapper<D> wrapper, QueryFilter<D> filter, boolean isPager) {
@@ -116,10 +119,11 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     /**
      * 格式化返回结果
      * 比如密码字段不给前端返回
+     *
      * @param records 数据集合
      * @param isPager 是否分页
      */
-    public void parseRecords(List<V> records, boolean isPager) {
+    public void parseRecords(List<V> records, boolean isPager, boolean isExport) {
 
     }
 
@@ -138,7 +142,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             initQueryWrapper(wrapper, filter, false);
             //这里的是1是DO的index
             List<V> result = baseService.selectListMP(wrapper);
-            parseRecords(result, false);
+            parseRecords(result, false, false);
             return result;
         } else {
             throw new NotPremissionException();
@@ -159,37 +163,33 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             LambdaJoinQueryWrapper<D> wrapper = QueryFilter.reqParam2Wrapper(baseService.getPoClass());
             initQueryWrapper(wrapper, null, false);
             List<V> dataList = baseService.selectListMP(wrapper);
-            parseRecords(dataList, false);
+            parseRecords(dataList, false, false);
             return dataList;
         } else {
             throw new NotPremissionException();
         }
     }
 
+
+
     /**
-     * 公共导出excel
-     * by wanglei
+     * 公共导出指定字段excel
+     * by zhangdong
      */
-    @GetMapping("advanceExportExcel")
-    @ApiOperation("配合高级搜索一起使用的excel导出")
+    @PostMapping("advanceExportExcelField")
+    @ApiOperation("配合高级搜索一起使用的excel指定字段导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcel(HttpServletResponse response, String fileName, String ids) throws IOException {
-        LambdaJoinQueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        wrapper = wrapper == null ? new LambdaJoinQueryWrapper(this.getDOClass()) : wrapper;
-        wrapper = (LambdaJoinQueryWrapper) wrapper.clone();
-        if (CheckUtils.isNotEmpty(ids)) {
-            wrapper.in("id", ids.split(","));
-        }
-        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getDOClass());
+    public void exportExcelField(@RequestBody ExcelExportFieldVO excelExportFieldVO) throws Exception {
+        QueryFilter<D> filter = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        LambdaJoinQueryWrapper<D>  wrapper = filter == null ? new LambdaJoinQueryWrapper<>(getDOClass()) : filter.asWrapper(getDOClass());
+        //查询出需要导出的数据
+        List<V> data = this.baseService.selectListMP(wrapper);
+        transService.transMore(data);
+        parseRecords(data, false, true);
+        Workbook book = this.excelService.exportExcelField(data, excelExportFieldVO.getFieldVOList());
         String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID() + ".xlsx";
-        FileOutputStream os = new FileOutputStream(excelTempPath);
-        book.write(os);
-        try {
-            os.close();
-        } catch (Exception e) {
-            log.error("关闭流错误", e);
-        }
-        FileUtils.download(excelTempPath, response, fileName);
+        FileExportUtil.export(book, new File(excelTempPath));
+        FileUtils.download(excelTempPath, getResponse(), excelExportFieldVO.getFileName() + ".xlsx");
         FileUtils.deleteFile(excelTempPath);
     }
 
@@ -364,10 +364,10 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     /**
      * 设置导出缓存
      *
-     * @param wrapper 过滤条件
+     * @param filter 过滤条件
      */
-    protected void setExportCache(LambdaJoinQueryWrapper<D> wrapper) {
-        exportParamCache.put(UserContext.getSessionuser().getUserId(), wrapper);
+    protected void setExportCache(QueryFilter<D> filter) {
+        exportParamCache.put(UserContext.getSessionuser().getUserId(), filter);
     }
 
     @PostMapping("pubImportExcel")

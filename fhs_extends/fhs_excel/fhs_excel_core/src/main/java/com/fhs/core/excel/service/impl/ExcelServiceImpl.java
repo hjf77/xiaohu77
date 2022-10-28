@@ -3,11 +3,11 @@ package com.fhs.core.excel.service.impl;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.vo.ExcelFieldVO;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
@@ -21,6 +21,7 @@ import com.fhs.core.trans.constant.TransType;
 import com.fhs.excel.anno.IgnoreExport;
 import com.fhs.excel.anno.Order;
 import com.fhs.trans.service.impl.DictionaryTransService;
+import com.github.liaochong.myexcel.core.DefaultExcelBuilder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -29,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import com.fhs.core.valid.checker.ParamChecker;
 
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -189,6 +192,61 @@ public class ExcelServiceImpl implements ExcelService {
             }
         }
         return null;
+    }
+
+    /**
+     * 导出Excel 根据选择的数据列导出数据
+     *
+     * @param datas  需要导出的数据
+     * @param fields 需要导出的数据列
+     * @return
+     */
+    @Override
+    public <V extends VO> Workbook exportExcelField(List<V> datas, List<ExcelFieldVO> fields) throws Exception {
+        if (CollectionUtils.isEmpty(datas) || CollectionUtils.isEmpty(fields)) {
+            return null;
+        }
+        List<String> titles = fields.stream().map(ExcelFieldVO::getLabel).collect(Collectors.toList());
+        List<String> names = fields.stream().map(ExcelFieldVO::getName).collect(Collectors.toList());
+        List<Map> dataMapList = new ArrayList<>();
+        for (Object data : datas) {
+            Map<String, Object> val = new HashMap<>();
+            for (ExcelFieldVO field : fields) {
+                String fieldName = field.getName();
+                //处理字段解析数据
+                Object obj = getFieldData(fieldName, data);
+                val.put(field.getName(), obj);
+            }
+            dataMapList.add(val);
+        }
+        return DefaultExcelBuilder.of(Map.class).sheetName("sheet1").titles(titles).fieldDisplayOrder(names).build(dataMapList);
+    }
+
+    /**
+     * 解析指定字段的数据
+     *
+     * @param fieldName 字段名称
+     * @param data      需要解析的数据
+     * @return
+     */
+    private Object getFieldData(String fieldName, Object data) throws Exception {
+        if(data == null){
+            return null;
+        }
+        if (fieldName.contains(".")) {
+            data = getGetMethod(data, fieldName.substring(0, fieldName.indexOf(".")));
+            //解析翻译好的数据
+            if (fieldName.startsWith("transMap")) {
+                fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
+                Map<String, Object> transMap = (Map<String, Object>) data;
+                if(transMap != null){
+                    return transMap.get(fieldName);
+                }
+            }
+            fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
+            getFieldData(fieldName, data);
+        }
+        return getGetMethod(data, fieldName);
     }
 
     /**
