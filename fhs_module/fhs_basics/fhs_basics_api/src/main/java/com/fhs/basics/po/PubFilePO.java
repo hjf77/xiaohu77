@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.po.BasePO;
+import com.fhs.core.config.EConfig;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -90,6 +91,21 @@ public class PubFilePO extends BasePO<PubFilePO> implements Serializable {
     @ApiModelProperty("扩展字段")
     private String ext;
 
+    @TableField(exist = false)
+    @ApiModelProperty("缩略图url")
+    private String thumbnailUrl;
+
+    @TableField(exist = false)
+    @ApiModelProperty("下载地址url")
+    private String downloadUrl;
+
+    public String getThumbnailUrl(){
+        return EConfig.getPathPropertiesValue("basicServiceUrl") + "/downLoad/thumbnail?imgFileWidth=50&imgFileHeight=50&fileId=" + this.fileId;
+    }
+
+    public String getDownloadUrl(){
+        return EConfig.getPathPropertiesValue("basicServiceUrl") + "/downLoad/file?fileId=" + this.fileId;
+    }
 
     /**
      * 格式化文件大小描述

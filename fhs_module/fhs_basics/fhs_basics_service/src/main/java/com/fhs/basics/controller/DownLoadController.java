@@ -104,7 +104,7 @@ public class DownLoadController extends BaseController {
      * @param request
      * @param response
      */
-    @GetMapping("downImgMin")
+    @GetMapping("thumbnail")
     @ApiOperation("获取指定分辨率的图片")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "fileId", paramType = "query", value = "文件id", required = true),
