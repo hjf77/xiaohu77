@@ -20,5 +20,5 @@ public class ExcelExportFieldVO {
     private String ids;
 
     @ApiModelProperty("需要导出数据的字段")
-    private List<ExcelFieldVO> fieldVOList;
+    private List<FieldVO> fieldVOList;
 }

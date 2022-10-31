@@ -2,7 +2,7 @@ package com.fhs.core.excel.service;
 
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.core.base.service.BaseService;
-import com.fhs.core.base.vo.ExcelFieldVO;
+import com.fhs.core.base.vo.FieldVO;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.excel.dto.ExcelImportSett;
@@ -46,5 +46,5 @@ public interface ExcelService {
      * @param <V>
      * @return
      */
-    <V extends VO> Workbook exportExcelField(List<V> datas, List<ExcelFieldVO> fields) throws Exception;
+    <V extends VO> Workbook exportExcelField(List<V> datas, List<FieldVO> fields) throws Exception;
 }

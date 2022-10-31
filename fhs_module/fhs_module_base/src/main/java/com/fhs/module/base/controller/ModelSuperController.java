@@ -16,7 +16,7 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.base.vo.ExcelExportFieldVO;
-import com.fhs.core.base.vo.ExcelFieldVO;
+import com.fhs.core.base.vo.FieldVO;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
@@ -44,13 +44,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
@@ -170,6 +170,27 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         }
     }
 
+    /**
+     * 获取所有列
+     *
+     * @throws Exception
+     */
+    @ResponseBody
+    @PostMapping("getAllColumn")
+    @ApiOperation("后台-获取所有列")
+    public List<FieldVO> getAllColumn(@RequestBody List<FieldVO> fieldVOS) throws Exception {
+        LinkedHashMap<String, String> columnMap = baseService.getAllColumn(baseService.getPoClass(), null);
+        for (FieldVO field : fieldVOS) {
+            //剔除前端传过来的字段
+            columnMap.remove(field.getName());
+        }
+        List<FieldVO> allField = new ArrayList<>();
+        for (String key : columnMap.keySet()) {
+            FieldVO field = FieldVO.builder().name(key).label(columnMap.get(key)).build();
+            allField.add(field);
+        }
+        return allField;
+    }
 
 
     /**
@@ -181,7 +202,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
     public void exportExcelField(@RequestBody ExcelExportFieldVO excelExportFieldVO) throws Exception {
         QueryFilter<D> filter = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        LambdaJoinQueryWrapper<D>  wrapper = filter == null ? new LambdaJoinQueryWrapper<>(getDOClass()) : filter.asWrapper(getDOClass());
+        LambdaJoinQueryWrapper<D> wrapper = filter == null ? new LambdaJoinQueryWrapper<>(getDOClass()) : filter.asWrapper(getDOClass());
         //查询出需要导出的数据
         List<V> data = this.baseService.selectListMP(wrapper);
         transService.transMore(data);

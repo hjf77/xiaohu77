@@ -8,6 +8,7 @@ import com.fhs.core.trans.vo.VO;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -234,4 +235,11 @@ public interface BaseService<V extends VO, P extends BasePO> {
      * @return
      */
     Class<V> getVOClass();
+
+    /**
+     * 解析PO的所有列数据
+     * @param poClass
+     * @return
+     */
+    LinkedHashMap<String, String> getAllColumn(Class<P> poClass,String propertyName);
 }
