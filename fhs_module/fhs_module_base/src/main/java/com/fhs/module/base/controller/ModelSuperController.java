@@ -13,6 +13,7 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.utils.ColumnUtils;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.base.vo.ExcelExportFieldVO;
@@ -179,7 +180,8 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @PostMapping("getAllColumn")
     @ApiOperation("后台-获取所有列")
     public List<FieldVO> getAllColumn(@RequestBody List<FieldVO> fieldVOS) throws Exception {
-        LinkedHashMap<String, String> columnMap = baseService.getAllColumn(baseService.getPoClass(), null);
+        LinkedHashMap<String, String> columnMap = ColumnUtils.getAllColumn(baseService.getPoClass());
+        parseFields(columnMap);
         for (FieldVO field : fieldVOS) {
             //剔除前端传过来的字段
             columnMap.remove(field.getName());
@@ -190,6 +192,14 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             allField.add(field);
         }
         return allField;
+    }
+
+    /**
+     * 格式化返回列
+     * @param records
+     */
+    public void parseFields(LinkedHashMap<String, String> records) {
+
     }
 
 
