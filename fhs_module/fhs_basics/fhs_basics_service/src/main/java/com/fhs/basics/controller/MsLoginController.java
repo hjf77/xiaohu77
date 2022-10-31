@@ -218,7 +218,11 @@ public class MsLoginController extends BaseController {
         SettUserColumnPO param = new SettUserColumnPO();
         param.setCreateUser(user.getUserId());
         List<SettUserColumnVO> userColumnVOS = userColumnService.findForList(param);
-        resultMap.put("columnSett",userColumnVOS.stream().collect(Collectors.toMap(SettUserColumnVO::getNamespace,SettUserColumnVO::getColumnJson)));
+        Map<String,String> columnSett = new HashMap<>();
+        for (SettUserColumnVO userColumnVO : userColumnVOS) {
+            columnSett.put(userColumnVO.getNamespace(),userColumnVO.getColumnJson());
+        }
+        resultMap.put("columnSett",columnSett);
         return HttpResult.success(resultMap);
     }
 

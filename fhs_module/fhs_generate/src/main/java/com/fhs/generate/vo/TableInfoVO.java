@@ -1,13 +1,15 @@
 package com.fhs.generate.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.core.jsonfilter.anno.AutoArray;
+import com.fhs.core.jsonfilter.serializer.Str2ArrayValueSerializer;
+import com.fhs.generate.po.TableInfoPO;
 import com.fhs.generate.util.ColumnNameUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author LiYuLin
@@ -16,20 +18,7 @@ import java.util.List;
  */
 @Data
 @ApiModel("表信息")
-public class TableInfoVO {
-
-
-    @ApiModelProperty("数据库名")
-    private String dbName;
-
-    @ApiModelProperty("表名")
-    private String tableName;
-
-    @ApiModelProperty("开发者名字")
-    private String author;
-
-    @ApiModelProperty("表注释")
-    private String comment;
+public class TableInfoVO extends TableInfoPO {
 
     /**
      * 主键
@@ -43,6 +32,16 @@ public class TableInfoVO {
     @JsonIgnore
     private String namespace;
 
+    @ApiModelProperty("开发者名字")
+    private String author;
+
+    @AutoArray
+    @JSONField(serializeUsing = Str2ArrayValueSerializer.class)
+    @ApiModelProperty("此表有哪些操作")
+    private String tableOperation = "";
+
+    @ApiModelProperty(value = "表单配置")
+    private String formConfig;
 
     /**
      * namespace = t_ucenter_user  去掉t_ 转驼峰  为 ucenterUser
@@ -50,10 +49,13 @@ public class TableInfoVO {
      * @return
      */
     public String getNamespace() {
-        String result = this.tableName.replace("t_", "");
-        return ColumnNameUtil.underlineToCamel(ConverterUtils.toString(result));
+        String tableName = this.getTableName();
+        if(tableName.startsWith("t_") || tableName.startsWith("v_")){
+            tableName = tableName.substring(2);
+        }
+        return ColumnNameUtil.underlineToCamel(ConverterUtils.toString(tableName));
     }
 
     @ApiModelProperty("表字段集合")
-    private FieldsVO[] fieldsVOS;
+    private ListFieldVO[] fields;
 }

@@ -3,25 +3,37 @@
 <mapper namespace="com.fhs.generate.mapper.TableInfoMapper">
 
     <select id="getTableFields" resultMap="fieldsVOResultMap" parameterType="map">
-         show full columns from ${dbName}.${tableName};
+        select m.*,  f.attname as  key  from  (SELECT a.attnum, a.attname AS field, t.typname AS type, a.attlen AS length, a.atttypmod AS lengthvar
+                , a.attnotnull AS notnull, b.description AS comment,c.oid
+            FROM pg_class c, pg_attribute a
+            LEFT JOIN pg_description b
+            ON a.attrelid = b.objoid
+            AND a.attnum = b.objsubid, pg_type t
+            WHERE c.relname = #{tableName}
+            AND a.attnum > 0
+            AND a.attrelid = c.oid
+            AND a.atttypid = t.oid
+            ORDER BY a.attnum)  m  left join (SELECT a.attname
+            FROM   pg_index i -- 保存了索引的相关信息
+            JOIN   pg_attribute a ON a.attrelid = i.indrelid -- 保存了列的相关信息，连接条件是索引和列在同一个表中
+            AND a.attnum = ANY(i.indkey) -- 列是被该索引索引的
+            WHERE  i.indrelid = #{tableName}::regclass -- 你想查的表
+            AND    i.indisprimary)  f  on f.attname = m.field
     </select>
 
     <select id="getTableComment" resultType="string" parameterType="map">
-        SELECT
-            table_comment
-        FROM
-            information_schema.TABLES
-        WHERE
-            TABLE_SCHEMA = #{dbName} and table_name=#{tableName};
+        select
+            cast(obj_description(relfilenode,'pg_class') as varchar) as comment from pg_class c
+        where relname =#{tableName}
     </select>
 
 
 
-    <resultMap id="fieldsVOResultMap" type="com.fhs.generate.vo.FieldsVO">
-        <result column="Field" property="filedName" />
-        <result column="Null" property="isNullable" />
-        <result column="Type" property="type" />
-        <result column="Key" property="key" />
-        <result column="Comment" property="comment" />
+    <resultMap id="fieldsVOResultMap" type="com.fhs.generate.vo.ListFieldVO">
+        <result column="field" property="name" />
+        <result column="notnull" property="isNullable" />
+        <result column="type" property="type" />
+        <result column="key" property="key" />
+        <result column="comment" property="label" />
     </resultMap>
 </mapper>

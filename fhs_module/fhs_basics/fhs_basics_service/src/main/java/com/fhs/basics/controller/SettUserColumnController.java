@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 用户自定义列信息配置(SettUserColumn)表控制层
  *
@@ -42,7 +44,8 @@ public class SettUserColumnController {
     public HttpResult<SettUserColumnVO> getByNamespace(@PathVariable("namespace") String namespace){
         SettUserColumnPO queryParam = SettUserColumnPO.builder().namespace(namespace).build();
         queryParam.setCreateUser(UserContext.getSessionuser().getUserId());
-        return HttpResult.success(settUserColumnService.selectBean(queryParam));
+        List<SettUserColumnVO> userColumnVOList = settUserColumnService.selectListMP(queryParam.asWrapper());
+        return HttpResult.success(userColumnVOList.isEmpty() ? null : userColumnVOList.get(0));
     }
 
 }

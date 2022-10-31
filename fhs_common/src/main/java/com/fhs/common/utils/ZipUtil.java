@@ -1,9 +1,7 @@
 package com.fhs.common.utils;
 
 import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.zip.*;
 
 /**
  * 本程序为liujiduo创建，wanglei
@@ -110,10 +108,75 @@ public final class ZipUtil {
         }
     }
 
-    public static void main(String[] args) {
+    /**
+     *
+     * @param resourcesPath 被压缩文件路径
+     * @param targetPath 保存路径
+     * @throws Exception
+     */
+    public static String compressedFile(String resourcesPath, String targetPath) throws Exception {
+        //源文件
+        File resourcesFile = new File(resourcesPath);
+        //目的文件夹
+        File targetFile = new File(targetPath);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        String targetName ="" ;
+        if(resourcesFile.getName().indexOf(".")!=-1){
+            //如果是文件则取文件名字
+            targetName = resourcesFile.getName().substring(0,resourcesFile.getName().indexOf("."))+".zip";
+        }else{
+            //目的压缩文件名
+            targetName = resourcesFile.getName() + ".zip";
+        }
+        FileOutputStream outputStream = new FileOutputStream(targetPath + "\\" + targetName);
 
-        zip("d:/1.zip", new String[]{"d:/QQ图片20160112144921.jpg", "d:/1.doc"});
+        CheckedOutputStream cos = new CheckedOutputStream(outputStream, new CRC32());
+
+        ZipOutputStream out = new ZipOutputStream(cos);
+
+        createCompressedFile(out, resourcesFile, "");
+
+        out.close();
+
+        return targetPath + "\\" + targetName;
     }
+
+    public static void createCompressedFile(ZipOutputStream out, File file, String dir) throws Exception {
+        //如果当前的是文件夹，则进行进一步处理
+        if (file.isDirectory()) {
+            //得到文件列表信息
+
+            File[] files = file.listFiles();
+            //将文件夹添加到下一级打包目录
+            out.putNextEntry(new ZipEntry(dir + "/"));
+            dir = dir.length() == 0 ? "" : dir + "/";
+            //循环将文件夹中的文件打包
+            for (int i = 0; i < files.length; i++) {
+                //递归处理
+                createCompressedFile(out, files[i], dir + files[i].getName());
+            }
+
+        } else {
+            //当前的是文件，打包处理
+            //文件输入流
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+            ZipEntry entry = new ZipEntry(dir);
+            out.putNextEntry(entry);
+            int j = 0;
+            byte[] buffer = new byte[1024];
+
+            while ((j = bis.read(buffer)) > 0) {
+                out.write(buffer, 0, j);
+            }
+            //关闭输入流
+            bis.close();
+        }
+    }
+
+
+
 }
 
 /**
