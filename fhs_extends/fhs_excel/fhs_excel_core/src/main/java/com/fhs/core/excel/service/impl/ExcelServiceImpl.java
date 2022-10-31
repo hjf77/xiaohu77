@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrappe
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.FhsSpringContextUtil;
 import com.fhs.common.utils.*;
-import com.fhs.core.base.vo.ExcelFieldVO;
+import com.fhs.core.base.vo.FieldVO;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
@@ -202,16 +202,16 @@ public class ExcelServiceImpl implements ExcelService {
      * @return
      */
     @Override
-    public <V extends VO> Workbook exportExcelField(List<V> datas, List<ExcelFieldVO> fields) throws Exception {
+    public <V extends VO> Workbook exportExcelField(List<V> datas, List<FieldVO> fields) throws Exception {
         if (CollectionUtils.isEmpty(datas) || CollectionUtils.isEmpty(fields)) {
             return null;
         }
-        List<String> titles = fields.stream().map(ExcelFieldVO::getLabel).collect(Collectors.toList());
-        List<String> names = fields.stream().map(ExcelFieldVO::getName).collect(Collectors.toList());
+        List<String> titles = fields.stream().map(FieldVO::getLabel).collect(Collectors.toList());
+        List<String> names = fields.stream().map(FieldVO::getName).collect(Collectors.toList());
         List<Map> dataMapList = new ArrayList<>();
         for (Object data : datas) {
             Map<String, Object> val = new HashMap<>();
-            for (ExcelFieldVO field : fields) {
+            for (FieldVO field : fields) {
                 String fieldName = field.getName();
                 //处理字段解析数据
                 Object obj = getFieldData(fieldName, data);

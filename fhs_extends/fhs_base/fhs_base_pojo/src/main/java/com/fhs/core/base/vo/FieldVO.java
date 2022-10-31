@@ -1,7 +1,10 @@
 package com.fhs.core.base.vo;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Description Excel导出字段VO
@@ -9,7 +12,10 @@ import lombok.Data;
  * @Date 2022年10月27日 17:27 星期四
  */
 @Data
-public class ExcelFieldVO {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class FieldVO {
 
     @ApiModelProperty("字段名称")
     private String name;

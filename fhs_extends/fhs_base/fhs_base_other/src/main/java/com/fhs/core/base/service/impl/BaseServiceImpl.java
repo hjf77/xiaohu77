@@ -4,6 +4,7 @@ import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.CacheUpdateManager;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
+import com.baomidou.mybatisplus.annotation.Relation;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -14,6 +15,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.anno.NotRepeatDesc;
@@ -27,14 +29,17 @@ import com.fhs.core.cache.annotation.Cacheable;
 import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.trans.anno.AutoTrans;
+import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.logger.Logger;
+import com.fhs.excel.anno.IgnoreExport;
 import com.fhs.log.LoggerContext;
-import com.fhs.trans.service.AutoTransable;
+import com.fhs.trans.service.AutoTransAble;
 import com.fhs.trans.service.impl.TransService;
 import com.github.liangbaika.validate.exception.ParamsInValidException;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -60,7 +65,7 @@ import java.util.stream.Collectors;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements BaseService<V, P>, AutoTransable<V>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements BaseService<V, P>, AutoTransAble<V>, InitializingBean {
 
     public static final int DEFAULT_BATCH_SIZE = 1000;
 
@@ -125,7 +130,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     @Override
     public Long findCount(P bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        LambdaJoinQueryWrapper<P>  wrapper = bean.asWrapper();
+        LambdaJoinQueryWrapper<P> wrapper = bean.asWrapper();
         wrapper.setIsCount(true);
         return baseMapper.selectCount(wrapper);
     }
@@ -656,4 +661,55 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
         }
         return mapperClass + "." + sqlMethod.getMethod();
     }
+
+    @Override
+    public LinkedHashMap<String, String> getAllColumn(Class<P> poClass, String propertyName) {
+        LinkedHashMap<String, String> allField = new LinkedHashMap<>();
+        List<Field> fields = ReflectUtils.getAllField(poClass);
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            TableField tableField = field.getAnnotation(TableField.class);
+            if (tableField != null) {
+                JsonIgnore jsonIgnore = field.getAnnotation(JsonIgnore.class);
+                IgnoreExport IgnoreExport = field.getAnnotation(IgnoreExport.class);
+                //没有被忽略的字段
+                if (jsonIgnore == null && IgnoreExport == null) {
+                    Relation relation = tableField.relation();
+                    if (relation != null && !Relation.NONE.equals(relation)) {
+                        //处理表关联字段
+                        allField.putAll(getAllColumn((Class<P>) field.getType(), fieldName));
+                    } else {
+                        Trans trans = field.getAnnotation(Trans.class);
+                        //处理带翻译的字段
+                        if (trans != null) {
+                            String alias = trans.alias();
+                            String type = trans.type();
+                            //字典翻译
+                            if (TransType.DICTIONARY.equals(type)) {
+
+                            }
+                            //处理翻译带别名的字段
+                            if (alias != null) {
+                                fieldName = "transMap." + alias + "Name";
+                            } else {
+                                fieldName = "transMap." + fieldName + "Name";
+                            }
+                            if (propertyName != null) {
+                                fieldName = propertyName + ".transMap." + alias + "Name";
+                            }
+                        }
+                    }
+                    ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
+                    if (apiModelProperty != null) {
+                        allField.put(fieldName, apiModelProperty.value());
+                    } else {
+                        allField.put(fieldName, "");
+                    }
+                }
+            }
+        }
+        return allField;
+    }
+
+
 }
