@@ -99,13 +99,12 @@ public class PubFilePO extends BasePO<PubFilePO> implements Serializable {
     @ApiModelProperty("下载地址url")
     private String downloadUrl;
 
-    public String getThumbnailUrl(){
-        return EConfig.getPathPropertiesValue("basicServiceUrl") + "/downLoad/thumbnail?imgFileWidth=50&imgFileHeight=50&fileId=" + this.fileId;
+    public void setFileId(String fileId){
+        this.fileId = fileId;
+        this.thumbnailUrl =  EConfig.getPathPropertiesValue("basicServiceUrl") + "/downLoad/thumbnail?imgFileWidth=50&imgFileHeight=50&fileId=" + this.fileId;
+        this.downloadUrl =  EConfig.getPathPropertiesValue("basicServiceUrl") + "/downLoad/file?fileId=" + this.fileId;
     }
 
-    public String getDownloadUrl(){
-        return EConfig.getPathPropertiesValue("basicServiceUrl") + "/downLoad/file?fileId=" + this.fileId;
-    }
 
     /**
      * 格式化文件大小描述

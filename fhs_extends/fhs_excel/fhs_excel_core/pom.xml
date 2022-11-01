@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-plus-core</artifactId>
-            <version>${fhs.mp-anno.version}</version>
+            <version>${fhs.mp.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
