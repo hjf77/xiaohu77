@@ -56,7 +56,7 @@ public class ThumbnailatorUtils {
          * toOutputStream(流对象)
          */
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        Thumbnails.of(soucerPath).size(width, height).toOutputStream(os);
+        Thumbnails.of(soucerPath).size(width, height).keepAspectRatio(false).toOutputStream(os);
         byte[] result = os.toByteArray();
         os.close();
         return result;

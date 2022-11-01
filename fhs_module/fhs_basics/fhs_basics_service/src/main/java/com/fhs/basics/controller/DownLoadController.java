@@ -150,6 +150,7 @@ public class DownLoadController extends BaseController {
                 fileStorage.uploadFileByToken(fileByte,  serviceFile);
             } catch (IOException e) {
                 LOG.error(this, e);
+                this.download(fileId,response);
             }
         }
     }
