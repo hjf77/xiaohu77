@@ -118,6 +118,11 @@ public class DownLoadController extends BaseController {
         if (serviceFile == null) {
             return;
         }
+        //webp的不处理
+        if(serviceFile.getFileSuffix()!=null && serviceFile.getFileSuffix().contains("webp")){
+            this.download(fileId,response);
+            return;
+        }
 
         int maxWidth = CheckUtils.isNullOrEmpty(request.getParameter("imgFileWidth"))
                 ? ConverterUtils.toInt(EConfig.getOtherConfigPropertiesValue("imgFileWidth"))
