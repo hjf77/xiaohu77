@@ -87,7 +87,7 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
      */
     @TableField("is_enable")
     @ApiModelProperty(value = "是否启用")
-    @Trans(type = TransType.DICTIONARY, key = "is_enable")
+    @Trans(type = TransType.DICTIONARY, key = "isEnable")
     private Integer isEnable;
 
     /**

@@ -77,7 +77,7 @@ public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {
      */
     @TableField("is_enable")
     @NotNull(message = "状态不能为空", groups = {Update.class, Add.class})
-    @Trans(type = TransType.DICTIONARY, key = "is_enable")
+    @Trans(type = TransType.DICTIONARY, key = "isEnable")
     @ApiModelProperty("是否禁用")
     private Integer isEnable;
 
