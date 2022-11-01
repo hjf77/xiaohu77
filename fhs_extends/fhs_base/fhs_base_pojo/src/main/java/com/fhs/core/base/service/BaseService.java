@@ -235,11 +235,4 @@ public interface BaseService<V extends VO, P extends BasePO> {
      * @return
      */
     Class<V> getVOClass();
-
-    /**
-     * 解析PO的所有列数据
-     * @param poClass
-     * @return
-     */
-    LinkedHashMap<String, String> getAllColumn(Class<P> poClass,String propertyName);
 }
