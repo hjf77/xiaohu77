@@ -5,11 +5,11 @@
     <parent>
         <artifactId>fhs_app</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0</version>
+        <version>3.0.0-qr</version>
 
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0</version>
+    <version>3.0.0-qr</version>
     <artifactId>fhs_app_all_in_one</artifactId>
     <description>
         本项目把所有的依赖都加到一个里面了,适用于非分布式部署模式,同时也没有使用Ncos等，也不需要网关
