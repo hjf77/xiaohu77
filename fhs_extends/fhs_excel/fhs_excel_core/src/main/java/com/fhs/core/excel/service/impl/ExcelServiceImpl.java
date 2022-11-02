@@ -3,9 +3,12 @@ package com.fhs.core.excel.service.impl;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.FhsSpringContextUtil;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.vo.FieldVO;
 import com.fhs.core.trans.vo.VO;
@@ -230,7 +233,7 @@ public class ExcelServiceImpl implements ExcelService {
      * @return
      */
     private Object getFieldData(String fieldName, Object data) throws Exception {
-        if(data == null){
+        if (data == null) {
             return null;
         }
         if (fieldName.contains(".")) {
@@ -239,7 +242,7 @@ public class ExcelServiceImpl implements ExcelService {
             if (fieldName.startsWith("transMap")) {
                 fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
                 Map<String, Object> transMap = (Map<String, Object>) data;
-                if(transMap != null){
+                if (transMap != null) {
                     return transMap.get(fieldName);
                 }
             }
@@ -338,6 +341,29 @@ public class ExcelServiceImpl implements ExcelService {
                                 }
                                 needTrans.get(namespace).add(ConverterUtils.toString(data));
                                 ReflectUtils.setValue(objDo, field, data);
+                            }
+                            //SIMPLE类型的翻译
+                            if (TransType.SIMPLE.equals(trans.type())) {
+                                //获取翻译对应的Class
+                                Class<? extends VO> target = trans.target();
+                                List<Field> targetFields = ReflectUtils.getAnnotationField(target, ApiModelProperty.class);
+                                List<String> transFields = Arrays.asList(trans.fields());
+                                for (Field targetField : targetFields) {
+                                    String targetFieldName = targetField.getName();
+                                    ApiModelProperty apiModelProperty = targetField.getAnnotation(ApiModelProperty.class);
+                                    //获取到导入翻译对应的字段
+                                    if (transFields.contains(targetFieldName) && apiModelProperty != null && fieldName.equals(apiModelProperty.value())) {
+                                        //获取当前target的service
+                                        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, target.getName(), 1);
+                                        QueryWrapper queryWrapper = new QueryWrapper();
+                                        queryWrapper.eq(targetFieldName, data);
+                                        VO vo = baseService.selectOneMP(queryWrapper);
+                                        if(vo != null){
+                                            Object pkey = vo.getPkey();
+                                            ReflectUtils.setValue(objDo, field, pkey);
+                                        }
+                                    }
+                                }
                             }
                         } else {
                             //不需要反翻译时进行非空和长度校验
