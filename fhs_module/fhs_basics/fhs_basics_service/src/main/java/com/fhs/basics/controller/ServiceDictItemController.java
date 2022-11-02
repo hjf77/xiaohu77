@@ -33,7 +33,7 @@ public class ServiceDictItemController extends ModelSuperController<ServiceDictI
      */
     @Override
     public List<ServiceDictItemVO> findList() throws Exception {
-        List<ServiceDictItemVO> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()));
+        List<ServiceDictItemVO> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()).orderByAsc(ServiceDictItemPO::getOrderNum));
         return dataList;
     }
 }
