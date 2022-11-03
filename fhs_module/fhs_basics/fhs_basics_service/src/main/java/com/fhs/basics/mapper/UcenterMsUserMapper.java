@@ -265,4 +265,12 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      */
     List<UcenterMsUserPO> getUserByOrgAndPermission(@Param("companyId") String companyId, @Param("namespace") String namespace, @Param("permissonMethodCode") String permissonMethodCode);
+
+    /**
+     * 查询组织机构某个角色下的所有用户信息
+     * @param paramMap roleId 角色id
+     * @param paramMap organizationId 组织机构id
+     * @return
+     */
+    List<UcenterMsUserPO> findOrgRoleList(Map<String, Object> paramMap);
 }
