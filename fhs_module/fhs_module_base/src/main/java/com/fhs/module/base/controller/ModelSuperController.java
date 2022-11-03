@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
+import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.vo.UcenterMsUserVO;
@@ -48,10 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -323,6 +321,15 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         String path = super.getRequest().getServletPath();
         String namespace = path.split("/")[2];
         boolean bool = StpUtil.hasPermission(namespace + ":" + permitName);
+        if(!bool){
+            LogNamespace annotation = this.getClass().getAnnotation(LogNamespace.class);
+            List<String> namespaces = Arrays.asList(annotation.namespace());
+            for (String ns : namespaces) {
+                if(StpUtil.hasPermission(ns + ":" + permitName)){
+                    return true;
+                }
+            }
+        }
         return bool;
     }
 

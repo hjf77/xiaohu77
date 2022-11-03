@@ -13,6 +13,3 @@ import java.lang.annotation.Target;
 public @interface ImportExcelTitle {
     String value() default "";
 }
-
-// @ImportExcelTitle("管道名称")
-// private Long xxId;

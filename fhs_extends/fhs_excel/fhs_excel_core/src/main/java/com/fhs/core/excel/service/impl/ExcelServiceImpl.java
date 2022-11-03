@@ -15,6 +15,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
 import com.fhs.excel.anno.GroupUntrans;
+import com.fhs.excel.anno.ImportExcelTitle;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
@@ -302,8 +303,13 @@ public class ExcelServiceImpl implements ExcelService {
         for (int i = 0; i < titleArray.length; i++) {
             for (Field field : fields) {
                 String fieldName = getFieldRemark(field);
-                if (fieldName.equals(titleArray[i])
-                        && field.getAnnotation(TableField.class).exist()) {
+                if(!fieldName.equals(titleArray[i])){
+                    ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
+                    if (importExcelTitle != null) {
+                        fieldName = importExcelTitle.value();
+                    }
+                }
+                if (fieldName.equals(titleArray[i]) && field.getAnnotation(TableField.class).exist()) {
                     for (int j = 0; j < dataArray.length; j++) {
                         Object objDo = doList.get(j);
                         Object data = dataArray[j][i];
@@ -358,7 +364,7 @@ public class ExcelServiceImpl implements ExcelService {
                                         QueryWrapper queryWrapper = new QueryWrapper();
                                         queryWrapper.eq(targetFieldName, data);
                                         VO vo = baseService.selectOneMP(queryWrapper);
-                                        if(vo != null){
+                                        if (vo != null) {
                                             Object pkey = vo.getPkey();
                                             ReflectUtils.setValue(objDo, field, pkey);
                                         }

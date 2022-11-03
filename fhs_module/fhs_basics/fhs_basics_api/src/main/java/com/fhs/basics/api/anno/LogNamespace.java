@@ -17,7 +17,7 @@ public @interface LogNamespace {
      *
      * @return
      */
-    String namespace();
+    String[] namespace() default {};
 
     /**
      * 描述
