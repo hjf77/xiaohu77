@@ -411,15 +411,15 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @PostMapping("pubImportExcel")
     @ApiOperation("公共excel导入")
     @NotRepeat
-    public HttpResult<String> pubImportExcel(MultipartFile file, D otherParam) throws Exception {
+    public HttpResult<String> pubImportExcel(MultipartFile file, V otherParam) throws Exception {
         if (otherParam == null) {
-            otherParam = this.getDOClass().newInstance();
+            otherParam = baseService.getVOClass().newInstance();
         }
         ExcelImportSett importSett = getExcelImportSett(otherParam);
         ParamChecker.isNotNull(importSett, "此接口后台没有配置导入参数，请联系后台");
         try {
-            importSett.setDoModel(otherParam);
-            this.excelService.importExcel(file, this.getBaseService(), this.getDOClass(), importSett);
+            importSett.setVoModel(otherParam);
+            this.excelService.importExcel(file, this.getBaseService(), baseService.getVOClass(), importSett);
         } catch (ValidationException e) {
             throw new ParamException(e.getMessage());
         }
@@ -431,7 +431,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
      *
      * @return
      */
-    protected ExcelImportSett getExcelImportSett(D otherParam) {
+    protected ExcelImportSett getExcelImportSett(V otherParam) {
         return null;
     }
 

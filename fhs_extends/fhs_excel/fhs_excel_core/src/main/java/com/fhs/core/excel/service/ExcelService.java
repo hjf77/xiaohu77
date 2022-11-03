@@ -32,11 +32,11 @@ public interface ExcelService {
      *
      * @param file          文件
      * @param targetService baseservice
-     * @param doClass       do的类
+     * @param voClass       do的类
      * @param importSett    其他配置
      * @throws ValidationException
      */
-    void importExcel(MultipartFile file, BaseService targetService, Class<?> doClass, ExcelImportSett importSett) throws Exception;
+    void importExcel(MultipartFile file, BaseService targetService, Class<?> voClass, ExcelImportSett importSett) throws Exception;
 
     /**
      * 导出excel

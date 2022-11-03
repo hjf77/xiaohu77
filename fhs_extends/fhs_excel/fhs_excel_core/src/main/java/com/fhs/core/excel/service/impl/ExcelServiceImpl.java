@@ -287,7 +287,7 @@ public class ExcelServiceImpl implements ExcelService {
     public void importExcel(Object[][] dataArray, Object[] titleArray, BaseService targetService, ExcelImportSett importSett) throws Exception {
 
         BaseService service = targetService;
-        List<Field> fields = ReflectUtils.getAnnotationField(importSett.getDoModel().getClass(), ApiModelProperty.class);
+        List<Field> fields = ReflectUtils.getAnnotationField(importSett.getVoModel().getClass(), ApiModelProperty.class);
         DictionaryTransService dictionaryTransService = FhsSpringContextUtil.getBeanByName(DictionaryTransService.class);
         //excel错误格式提醒
         StringBuilder valiStr = new StringBuilder();
@@ -297,7 +297,7 @@ public class ExcelServiceImpl implements ExcelService {
         //初始化数据集合
         List<Object> doList = new ArrayList<>();
         for (int i = 0; i < dataArray.length; i++) {
-            doList.add(JacksonUtil.jacksonDeserialize(JacksonUtil.jacksonSerialize(importSett.getDoModel()), importSett.getDoModel().getClass()));
+            doList.add(JacksonUtil.jacksonDeserialize(JacksonUtil.jacksonSerialize(importSett.getVoModel()), importSett.getVoModel().getClass()));
         }
 
         for (int i = 0; i < titleArray.length; i++) {
@@ -433,7 +433,7 @@ public class ExcelServiceImpl implements ExcelService {
             }
         }
 
-        untransAuto(needTrans, doList, valiStr, importSett.getDoModel().getClass());
+        untransAuto(needTrans, doList, valiStr, importSett.getVoModel().getClass());
         if (doList.size() > 0) {
             notNullNotEmptyCheck(doList, valiStr, titleArray);
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
@@ -441,7 +441,7 @@ public class ExcelServiceImpl implements ExcelService {
                 throw new ValidationException(valiStr.toString());
             }
             for (Object o : doList) {
-                importSett.getDoIniter().init(o);
+                importSett.getVoIniter().init(o);
             }
 
             service.batchInsert(doList);
@@ -575,12 +575,12 @@ public class ExcelServiceImpl implements ExcelService {
      *
      * @param file          文件对象
      * @param targetService 对应的service
-     * @param doClass       对应的 DO Class
+     * @param voClass       对应的 DO Class
      * @param importSett    导入配置
      * @throws ValidationException 返回整个Excel验证结果
      */
     @Override
-    public void importExcel(MultipartFile file, BaseService targetService, Class<?> doClass, ExcelImportSett importSett) throws Exception {
+    public void importExcel(MultipartFile file, BaseService targetService, Class<?> voClass, ExcelImportSett importSett) throws Exception {
 
         Object[][] dataArray = new Object[0][];
         Object[] titleArray = new Object[0];
