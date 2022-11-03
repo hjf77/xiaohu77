@@ -209,7 +209,6 @@
           ></pagex-formTreeSelect>
 
 
-
           <el-date-picker
             v-model="model[item.name]"
             type="datetime"
@@ -247,10 +246,22 @@
         </el-button
         >
         <el-button @click="cancel" v-if="isHaveCancelBtn" class="form-btn-item">取消</el-button>
-        <el-button @click="initForm"  v-if="isHaveInitBtn" v-hasPermi="['sysUser:mock']"  class="form-btn-item">填充</el-button>
+        <el-button @click="initForm" v-if="isHaveInitBtn" v-hasPermi="['sysUser:mock']" class="form-btn-item">填充
+        </el-button>
       </div>
     </div>
+    <el-dialog
+      title="选择历史记录参数"
+      :visible.sync="openHistoryParamDialog"
+      :modal="false"
+    >
+      <form-history :onSelect="chooseHisotyData" :url="addApi"></form-history>
+    </el-dialog>
   </el-scrollbar>
+
+
+
+
 
   <!--
       支持下载模板   downloadUrl:
@@ -267,10 +278,13 @@ import Editor from "@/components/Editor/index.vue";
 import PagexSelect from "./select.vue";
 import initer from "@/utils/form-initer";
 import {deepClone} from "../utils";
-import { rules } from '@/utils/validate'
+import {rules} from '@/utils/validate'
+import FormHistory from "@/lib/components/formHistory.vue";
+
 export default {
   inject: ["reloadable"],
   components: {
+    FormHistory,
     PagexSelect,
     Editor,
   },
@@ -403,6 +417,7 @@ export default {
   },
   data() {
     return {
+      openHistoryParamDialog: false,
       formCreate: false, //是否已经执行完created方法
       model: {},
       rules: {},
@@ -410,7 +425,7 @@ export default {
       initData: {},
       realControls: [],
       saveButtonDisable: false,
-      options:{},
+      options: {},
       // newDate: new Date(),
     };
   },
@@ -452,14 +467,6 @@ export default {
         }
       },
       deep: true,
-    },
-    data: function () {
-      if (this.model.companyId) {
-        this.model.companyId = this.data.companyId;
-      }
-      if (this.model.companyIdName) {
-        this.model.companyIdName = this.data.companyIdName;
-      }
     }
   },
 
@@ -479,15 +486,15 @@ export default {
     let _that = this;
     let includeRules = rules();
     let ruleCodeMap = {};
-    includeRules.forEach(function(rule){
+    includeRules.forEach(function (rule) {
       ruleCodeMap[rule.value] = rule.fun;
     })
     // rule的code转换
     this.realControls.forEach(function (_item) {
-      if(_item.rule && _item.rule instanceof Array){
-        _item.rule.forEach(function(tempRule,_index){
+      if (_item.rule && _item.rule instanceof Array) {
+        _item.rule.forEach(function (tempRule, _index) {
           //rule替换
-          if(tempRule.ruleCode && ruleCodeMap[tempRule.ruleCode]){
+          if (tempRule.ruleCode && ruleCodeMap[tempRule.ruleCode]) {
             tempRule.validator = ruleCodeMap[tempRule.ruleCode];
           }
         })
@@ -527,6 +534,12 @@ export default {
     this.$nextTick(() => {
       this.clearValidate()
     })
+  },
+  mounted() {
+    window.addEventListener('keydown', this.handleEvent)
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.handleEvent) // 在页面销毁的时候记得解除
   },
   methods: {
     proxyIf(_ifFun, _default) {
@@ -760,24 +773,42 @@ export default {
     clearValidate() {
       this.$refs['form'].clearValidate()
     },
-    refreshOptions(_optionSett){
+    refreshOptions(_optionSett) {
       this.options[_optionSett.name] = _optionSett.options;
     },
     //填充表单数据
     initForm() {
       let rules = {};
       this.controls.forEach((item) => {
-        if(item.mock){
+        if (item.mock) {
           rules[item.name] = item.mock;
-        }else
-        // 使用自定义规则
+        } else
+          // 使用自定义规则
         if (item.type === 'select' || item.type === 'radio' || item.type === 'checkbox') {
-          rules[item.name] = {options: this.options[item.name],  change: item.selectOn, sleep: item.sleep}
+          rules[item.name] = {options: this.options[item.name], change: item.selectOn, sleep: item.sleep}
         } else if (item.type !== 'treeSelect' && item.type !== 'treeSelect2') {
           rules[item.name] = '123456';
         }
       })
       initer.init(this.model, rules, this);
+    },
+    //快捷键监听
+    handleEvent(e) {
+      //ctrl + Q
+      if (e.ctrlKey && e.keyCode === 81) {
+        this.openHistoryParamDialog = true;
+      }
+    },
+    //选择历史数据的时候
+    chooseHisotyData(_historyData){
+      this.realControls.forEach(item=>{
+        if(item.multiple && _historyData[item.name] && typeof _historyData[item.name]  == 'string'){
+          _historyData[item.name] = _historyData[item.name].split(',');
+        }
+      })
+      console.log(_historyData);
+      this.$set(this, 'model', _historyData);
+      this.openHistoryParamDialog = false;
     }
   },
 };
@@ -805,26 +836,29 @@ export default {
 ::v-deep .el-form-item--small .el-form-item__content .el-date-editor {
   width: 305px;
 
-.el-input__prefix {
-  left: 275px;
+  .el-input__prefix {
+    left: 275px;
 
-.el-input__icon {
-  line-height: 40px;
-}
+    .el-input__icon {
+      line-height: 40px;
+    }
+
+  }
+
+  .el-input__suffix {
+    display: none;
+  }
 
 }
-.el-input__suffix {
-  display: none;
-}
 
-}
 ::v-deep .el-form-item--small .el-form-item__content .surplus {
 
-.el-input__prefix {
-  left: 170px;
-}
+  .el-input__prefix {
+    left: 170px;
+  }
 
 }
+
 ::v-deep
 .el-form-item--small
 .el-form-item__content
@@ -874,9 +908,9 @@ export default {
 
 ::v-deep .labelHeight {
 
-.el-form-item__content {
-  line-height: 40px !important;
-}
+  .el-form-item__content {
+    line-height: 40px !important;
+  }
 
 }
 </style>

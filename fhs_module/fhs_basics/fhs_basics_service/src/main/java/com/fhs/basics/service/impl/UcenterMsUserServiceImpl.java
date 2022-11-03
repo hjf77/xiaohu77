@@ -435,17 +435,17 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         //根据用户id获取当前用户的角色
         List<Map<String, Object>> sysUserRoleList = this.searchUserRole(sysUser);
         if (sysUserRoleList.size() > 0) {
-            Vector<String> roleVectorList = new Vector<>();
+            Vector<Long> roleVectorList = new Vector<>();
             for (int i = 0; i < sysUserRoleList.size(); i++) {
                 Map<String, Object> map = sysUserRoleList.get(i);
-                roleVectorList.add(map.get("roleId").toString());
+                roleVectorList.add(ConverterUtils.toLong(map.get("roleId")));
             }
-            String[] roleList = new String[roleVectorList.size()];
+            Long[] roleList = new Long[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
             sysUser.setRoleIds(StringUtils.getStrForIn(roleVectorList, false));
         } else {
-            sysUser.setRoleList(new String[0]);
+            sysUser.setRoleList(new Long[0]);
         }
         return sysUser;
     }

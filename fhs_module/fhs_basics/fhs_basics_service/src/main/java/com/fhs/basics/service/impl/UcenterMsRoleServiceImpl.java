@@ -137,7 +137,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
     @Override
     public int deleteById(Serializable primaryValue) {
         UcenterMsRoleVO role = new UcenterMsRoleVO();
-        role.setRoleId(ConverterUtils.toInt(primaryValue));
+        role.setRoleId(ConverterUtils.toLong(primaryValue));
         // 删除按钮信息
         boolean count = deleteButtons(role);
         if (count) {

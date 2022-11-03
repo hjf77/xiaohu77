@@ -116,7 +116,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = TransType.DICTIONARY, key = "is_enable")
+    @Trans(type = TransType.DICTIONARY, key = "isEnable")
     @ApiModelProperty("是否禁用")
     private Integer isEnable;
 
@@ -166,7 +166,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
      */
     @TableField(exist = false)
     @ApiModelProperty("用户角色")
-    private String[] roleList;
+    private Long[] roleList;
 
     /**
      * 角色id逗号分隔

@@ -1,10 +1,9 @@
 <!--
-  模块名称：操作日志
+  模块名称：选择之前的表单
   开发人员：wanglei
   创建时间: 2022-05-13
 -->
 <template>
-  <base-container>
     <pagex-crud
       ref="crud"
       :filters="filters"
@@ -14,14 +13,7 @@
       :buttons="buttons"
       :querys="querys"
     >
-      <template v-slot:form="prop">
-        <!-- 新增 修改 弹框-->
-        <pagex-dialog slot="form" namespace="logOperatorMain" :title="title"  v-if="open" :visible.sync="open" width="90%" class="pagex-dialog-theme">
-          <operatorLogForm  :init="init" :visible.sync="open"></operatorLogForm>
-        </pagex-dialog>
-      </template>
     </pagex-crud>
-  </base-container>
 </template>
 
 <script>
@@ -33,10 +25,20 @@ import {mapGetters} from "vuex"
 import operatorLogForm from "@/views/system/operatorLog/components/operatorLogForm.vue";
 
 export default {
-  name: "logOperatorMain",
+  name: "formHistory",
   mixins: [crudMixins],
   components: {
     operatorLogForm
+  },
+  props:{
+    url:{
+      type:String,
+      default:null,
+    },
+    onSelect:{
+      type:Function,
+      default: null
+    }
   },
   data() {
     return {
@@ -52,15 +54,8 @@ export default {
       buttons: [],
       columns: [
         {label: '时间', name: 'createTime'},
-        {label: '模块', name: 'transMap.menuName', width: 150},
-        {label: 'url', name: 'url', width: 150},
-        {label: '操作类型', name: 'transMap.typeName', width: 150},
         {label: '请求参数', name: 'reqParam', type: 'popover', width: 150},
         {label: '返回参数', name: 'respBody', type: 'popover', width: 150},
-        {label: '状态', name: 'transMap.stateName', width: 150},
-        {label: '操作人', name: 'transMap.createUserUserName', width: 150},
-        {label: 'IP', name: 'ip', width: 150},
-        {label: '数据主键', name: 'pkeyStr'},
         {label: '开发者', name: 'devOperator'},
         {
           label: '操作',
@@ -68,33 +63,18 @@ export default {
           type: 'textBtn',
           textBtn: [
             {
-              title: "详情",
+              title: "选择",
               type: "bottom",
               size: 'mini',
               click: (_row) => {
-                this.title = '详情';
-                this.$pagexRequest({
-                  url: '/basic/ms/logOperatorMain/' + _row.logId,
-                  method: 'get',
-                }).then((res)=>{
-                  this.init = res;
-                  this.open = true;
-                })
+                this.onSelect(JSON.parse(_row.reqParamSource));
               }
             }
           ]
         }
       ],
       filters: [
-        {
-          "name": "namespace",
-          "label": "模块",
-          "type": "treeSelect",
-          "url": '/basic/ms/sysMenu/tree',
-          valueField: "namespace"
-        },
         {"name": "state", "label": "状态", "type": "select", dictCode: "state", width: '220'},
-        {"name": "pkeyStr", "label": "主键", "type": "text"},
         {"name": "devOperator", "label": "开发者", "type": "text"},
         {"name": "createTime", "label": "操作时间", "type": "datetimerange", "operation": "between"},
         {
@@ -106,10 +86,21 @@ export default {
           valueField: "userId"
         }
       ],
-      querys: [],
+      //默认查询条件为url= 并且新增表单
+      querys: [{
+        property:'url',
+        value:'',
+        operation:'like'
+      },
+      {
+        property:'type',
+        value:'0'
+      }],
     };
   },
   created() {
+    //如果带ms的，就以ms开头把微服务名字截掉
+    this.querys[0].value = this.url.indexOf("/ms/")!=-1 ? this.url.substring(this.url.indexOf("/ms/")) : this.url;
   },
   computed: {
     ...mapGetters(["user"]),

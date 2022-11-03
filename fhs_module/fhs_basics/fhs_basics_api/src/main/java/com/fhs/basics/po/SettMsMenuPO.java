@@ -126,7 +126,7 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
      */
     @NotNull(message = "isEnable不能为空", groups = {Update.class, Add.class})
     @ApiModelProperty("是否禁用")
-    @Trans(type = TransType.DICTIONARY, key = "is_enable")
+    @Trans(type = TransType.DICTIONARY, key = "isEnable")
     private Integer isEnable;
 
 

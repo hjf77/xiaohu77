@@ -91,7 +91,7 @@ public class SettMsMenuPermissionPO extends BasePO<SettMsMenuPermissionPO> {
      */
     @TableField("is_enable")
     @NotNull(message = "isDisable 不能为空", groups = {Update.class, Add.class})
-    @Trans(type = TransType.DICTIONARY, key = "is_enable")
+    @Trans(type = TransType.DICTIONARY, key = "isEnable")
     @ApiModelProperty("是否禁用 0:启用 1:禁用")
     private Integer isEnable;
 
