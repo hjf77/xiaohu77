@@ -284,7 +284,7 @@ public class ExcelServiceImpl implements ExcelService {
      * @throws ValidationException 返回整个Excel验证结果
      */
     public void importExcel(Object[][] dataArray, Object[] titleArray, BaseService targetService, ExcelImportSett importSett) throws Exception {
-        importSett.getDoIniter().init(importSett.getDoModel());
+
         BaseService service = targetService;
         List<Field> fields = ReflectUtils.getAnnotationField(importSett.getDoModel().getClass(), ApiModelProperty.class);
         DictionaryTransService dictionaryTransService = FhsSpringContextUtil.getBeanByName(DictionaryTransService.class);
@@ -428,13 +428,16 @@ public class ExcelServiceImpl implements ExcelService {
         }
 
         untransAuto(needTrans, doList, valiStr, importSett.getDoModel().getClass());
-
         if (doList.size() > 0) {
             notNullNotEmptyCheck(doList, valiStr, titleArray);
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
             if (valiStr.length() != 0) {
                 throw new ValidationException(valiStr.toString());
             }
+            for (Object o : doList) {
+                importSett.getDoIniter().init(o);
+            }
+
             service.batchInsert(doList);
         } else {
             throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
