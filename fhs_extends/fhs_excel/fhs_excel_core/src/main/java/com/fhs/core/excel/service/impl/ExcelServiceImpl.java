@@ -3,7 +3,6 @@ package com.fhs.core.excel.service.impl;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.common.excel.ExcelUtils;
@@ -14,16 +13,13 @@ import com.fhs.core.base.vo.FieldVO;
 import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.excel.exception.ValidationException;
-import com.fhs.excel.anno.GroupUntrans;
-import com.fhs.excel.anno.ImportExcelTitle;
+import com.fhs.excel.anno.*;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.excel.anno.IgnoreExport;
-import com.fhs.excel.anno.Order;
 import com.fhs.trans.service.impl.DictionaryTransService;
 import com.github.liaochong.myexcel.core.DefaultExcelBuilder;
 import io.swagger.annotations.ApiModelProperty;
@@ -42,7 +38,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -303,7 +301,7 @@ public class ExcelServiceImpl implements ExcelService {
         for (int i = 0; i < titleArray.length; i++) {
             for (Field field : fields) {
                 String fieldName = getFieldRemark(field);
-                if(!fieldName.equals(titleArray[i])){
+                if (!fieldName.equals(titleArray[i])) {
                     ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
                     if (importExcelTitle != null) {
                         fieldName = importExcelTitle.value();
@@ -587,6 +585,8 @@ public class ExcelServiceImpl implements ExcelService {
         try {
             dataArray = ExcelUtils.importExcel(file, importSett.getTitleRowNum(), importSett.getColNum());
             titleArray = ExcelUtils.getExcelTitleRow(file, importSett.getTitleRowNum(), importSett.getColNum());
+            //校验导入文件title和模板文件title是否一致
+            validationFileTemplate(targetService, importSett, titleArray);
             for (int i = 0; i < titleArray.length; i++) {
                 // ParamChecker.isNotNullOrEmpty(titleArray[i], "模板格式有误, 请检查模板!");
                 String tempTitle = ConverterUtils.toString(titleArray[i]);
@@ -599,5 +599,44 @@ public class ExcelServiceImpl implements ExcelService {
         }
 
         importExcel(dataArray, titleArray, targetService, importSett);
+    }
+
+    /**
+     * 校验导入文件title和模板文件title是否一致
+     *
+     * @param targetService
+     * @param importSett
+     * @param titleArray
+     */
+    private void validationFileTemplate(BaseService targetService, ExcelImportSett importSett, Object[] titleArray) throws Exception {
+        //获取PO注解的ImportExcelTemplate中的模板文件
+        String classLambdaName = importSett.getVoIniter().getClass().getName();
+        String className = classLambdaName.substring(0, classLambdaName.indexOf("$$"));
+        ImportExcelTemplate excelTemplate = Class.forName(className).getAnnotation(ImportExcelTemplate.class);;
+        if (excelTemplate != null) {
+            String template = excelTemplate.template();
+            InputStream templateStream = targetService.getClass().getResourceAsStream("/template/" + template);
+            String extension = template.lastIndexOf(".") == -1 ? "" : template.substring(template.lastIndexOf(".") + 1);
+            // 根据不同excel版本调用不同的excel类型
+            Object[] dataList = null;
+            if ("xls".equals(extension)) {
+                dataList = ExcelUtils.readExcelTitle03(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
+            } else if ("xlsx".equals(extension)) {
+                dataList = ExcelUtils.readExcelTitle07(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
+            } else {
+                log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+            }
+            if(dataList == null || titleArray == null || dataList.length != titleArray.length){
+                throw new ValidationException("导入数据文件和模板不一致！");
+            }
+            List<Object> titleList = Arrays.asList(titleArray);
+            for (Object data : dataList) {
+                if(!titleList.contains(data)){
+                    throw new ValidationException("导入数据文件和模板不一致！");
+                }
+            }
+        }else{
+            throw new ValidationException("没有获取到配置的导入模板信息");
+        }
     }
 }
