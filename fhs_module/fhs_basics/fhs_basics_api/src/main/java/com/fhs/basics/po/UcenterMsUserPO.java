@@ -10,6 +10,8 @@
  */
 package com.fhs.basics.po;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -26,6 +28,7 @@ import com.fhs.basics.constant.BaseTransConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Max;
@@ -42,6 +45,8 @@ import java.util.List;
  * @since [产品/模块版本]
  */
 @Data
+@Accessors(chain = true)
+@ExcelTarget("ReportInfoExcel")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -63,6 +68,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 登录名
      */
+    @Excel(name = "登录名", width = 20)
     @NotNull(message = "登录名不能为空", groups = {Update.class, Add.class})
     @Length(message = "登录名不能最大为20", max = 20, min = 0)
     @TableField("user_login_name")
@@ -72,6 +78,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 用户的名字
      */
+    @Excel(name = "用户的名字", width = 20)
     @NotNull(message = "姓名不能为空", groups = {Update.class, Add.class})
     @Length(message = "姓名最大20", max = 20, min = 0)
     @TableField("user_name")
@@ -89,6 +96,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 手机号
      */
+    @Excel(name = "手机号", width = 20)
     @NotNull(message = "手机号不能为空", groups = {Update.class, Add.class})
     @TableField("mobile")
     @ApiModelProperty("手机号")
@@ -104,6 +112,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 邮箱
      */
+    @Excel(name = "邮箱", width = 20)
     @NotNull(message = "邮箱不能为空", groups = {Update.class, Add.class})
     @Length(message = "邮箱最大为255", max = 255, min = 0)
     @TableField("email")

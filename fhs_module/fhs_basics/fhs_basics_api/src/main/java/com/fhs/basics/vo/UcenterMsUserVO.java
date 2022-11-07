@@ -36,4 +36,7 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
     @ApiModelProperty("涂鸦用户注册类型(1 手机号 2邮箱 3其他)")
     private Integer usernameType;
 
+    @ApiModelProperty("设备名称")
+    private String name;
+
 }

@@ -17,6 +17,11 @@
         <module>fhs_generate</module>
     </modules>
     <artifactId>fhs_module</artifactId>
-
-
+    <dependencies>
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-spring-boot-starter</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+    </dependencies>
 </project>

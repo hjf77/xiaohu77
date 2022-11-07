@@ -125,7 +125,7 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
      */
     @TableField("user_id")
     @ApiModelProperty(value = "用户id")
-    @Trans(type = TransType.SIMPLE, target = UcenterMsUserPO.class, fields = "userName",alias="userName")
+    @Trans(type = TransType.SIMPLE, target = UcenterMsUserPO.class, fields = "userName", alias = "userName")
     private Long userId;
 
 
@@ -151,7 +151,7 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     private Long homeId;
 
 
-   /**
+    /**
      * 是否发布(0否,1是)
      */
     @TableField("is_release")
@@ -164,7 +164,7 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
      */
     @TableField("area")
     @ApiModelProperty(value = "国家")
-    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "cname" ,alias="name")
+    @Trans(type = TransType.SIMPLE, target = ServiceCountryPO.class, fields = "cname", alias = "name")
     private String area;
 
     /**
@@ -231,7 +231,7 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     private String homeName;
 
     /**
-     * 家庭名称
+     *
      */
     @TableField("message_attach")
     @ApiModelProperty(value = "")
@@ -259,10 +259,4 @@ public class CommonMessagePO extends BasePO<CommonMessagePO> {
     private String equipmentMsg;
 
 
-    /**
-     * 关系id
-     */
-    @TableField("relation_id")
-    @ApiModelProperty(value = "关系id")
-    private String relationId;
 }
