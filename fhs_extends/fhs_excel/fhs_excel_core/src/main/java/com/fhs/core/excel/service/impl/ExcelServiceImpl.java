@@ -38,7 +38,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -609,34 +608,35 @@ public class ExcelServiceImpl implements ExcelService {
      * @param titleArray
      */
     private void validationFileTemplate(BaseService targetService, ExcelImportSett importSett, Object[] titleArray) throws Exception {
-        //获取PO注解的ImportExcelTemplate中的模板文件
-        String classLambdaName = importSett.getVoIniter().getClass().getName();
-        String className = classLambdaName.substring(0, classLambdaName.indexOf("$$"));
-        ImportExcelTemplate excelTemplate = Class.forName(className).getAnnotation(ImportExcelTemplate.class);;
-        if (excelTemplate != null) {
-            String template = excelTemplate.template();
-            InputStream templateStream = targetService.getClass().getResourceAsStream("/template/" + template);
-            String extension = template.lastIndexOf(".") == -1 ? "" : template.substring(template.lastIndexOf(".") + 1);
-            // 根据不同excel版本调用不同的excel类型
-            Object[] dataList = null;
-            if ("xls".equals(extension)) {
-                dataList = ExcelUtils.readExcelTitle03(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
-            } else if ("xlsx".equals(extension)) {
-                dataList = ExcelUtils.readExcelTitle07(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
-            } else {
-                log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
-            }
-            if(dataList == null || titleArray == null || dataList.length != titleArray.length){
+        //获取Controller注解的ImportExcelTemplate中的模板文件
+        Class controllerClass = importSett.getControllerClass();
+        if (controllerClass == null) {
+            throw new IllegalAccessException("ExcelImportSett没有设置controllerClass！");
+        }
+        ImportExcelTemplate excelTemplate = (ImportExcelTemplate) controllerClass.getAnnotation(ImportExcelTemplate.class);
+        if (excelTemplate == null) {
+            throw new IllegalAccessException("controller中没有添加ImportExcelTemplate注解！");
+        }
+        String template = excelTemplate.template();
+        InputStream templateStream = targetService.getClass().getResourceAsStream("/template/" + template);
+        String extension = template.lastIndexOf(".") == -1 ? "" : template.substring(template.lastIndexOf(".") + 1);
+        // 根据不同excel版本调用不同的excel类型
+        Object[] dataList = null;
+        if ("xls".equals(extension)) {
+            dataList = ExcelUtils.readExcelTitle03(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
+        } else if ("xlsx".equals(extension)) {
+            dataList = ExcelUtils.readExcelTitle07(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
+        } else {
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+        if (dataList == null || titleArray == null || dataList.length != titleArray.length) {
+            throw new ValidationException("导入数据文件和模板不一致！");
+        }
+        List<Object> titleList = Arrays.asList(titleArray);
+        for (Object data : dataList) {
+            if (!titleList.contains(data)) {
                 throw new ValidationException("导入数据文件和模板不一致！");
             }
-            List<Object> titleList = Arrays.asList(titleArray);
-            for (Object data : dataList) {
-                if(!titleList.contains(data)){
-                    throw new ValidationException("导入数据文件和模板不一致！");
-                }
-            }
-        }else{
-            throw new ValidationException("没有获取到配置的导入模板信息");
         }
     }
 }
