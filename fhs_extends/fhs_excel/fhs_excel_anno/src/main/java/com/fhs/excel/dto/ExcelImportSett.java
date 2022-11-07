@@ -38,4 +38,9 @@ public class ExcelImportSett<V> {
      */
     private V voModel;
 
+    /**
+     * 调用的Controller
+     */
+    private Class<?> controllerClass;
+
 }
