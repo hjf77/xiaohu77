@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.mapper.UcenterMsRoleMapper;
 import com.fhs.basics.service.UcenterMsRoleService;
@@ -10,6 +11,7 @@ import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.logger.Logger;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ import java.util.Map;
 @Primary
 @Service
 @DataSource("basic")
+@AutoTrans(namespace = "role", fields = {"roleName"}, defaultAlias = "role")
 public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, UcenterMsRolePO> implements UcenterMsRoleService {
 
     private static final Logger LOG = Logger.getLogger(UcenterMsRoleServiceImpl.class);
