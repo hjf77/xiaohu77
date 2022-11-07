@@ -7,4 +7,8 @@
         FROM t_ucenter_ms_organization
         WHERE parent_id = #{parentId}
     </select>
+
+    <select id="countPipelineNum" resultType="int">
+        select count(1) from t_pipeline_archives where is_delete = 0 and org_id = #{orgId}
+    </select>
 </mapper>
