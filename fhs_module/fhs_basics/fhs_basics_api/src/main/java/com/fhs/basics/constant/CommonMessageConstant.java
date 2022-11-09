@@ -55,4 +55,20 @@ public interface CommonMessageConstant {
      * 消息标题 -- 离开家庭
      */
     String REMOVE_FAMILY_MEMBER = "移除家庭成员";
+
+
+    /**
+     * 设备语言 -- 中文
+     */
+    String languag_zh_CN= "zh-CN";
+
+    /**
+     * 设备语言 -- 英文
+     */
+    String languag_en = "en";
+
+    /**
+     * 设备语言 -- 阿拉伯文
+     */
+    String languag_ar = "ar";
 }

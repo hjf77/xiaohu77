@@ -218,14 +218,9 @@ public class MsLoginController extends BaseController {
             sysUser.setIsAdmin(Constant.INT_FALSE);
             sysUser.setIsAppUser(Constant.INT_TRUE);
             sysUser.setRoleIds("1");
+            //统一设置国家码为中国
+            sysUser.setCountryCode("86");
             //注册时同步用户至涂鸦
-            //获取token {
-            //  "country_code": "86",
-            //  "username": "182*****678",
-            //  "password": "c7fb2740c5f******4ed765a479fa",
-            //  "username_type": 1,
-            //  "time_zone_id": "Asia/Shanghai"
-            //}
             Object get = RequestSignUtils.execute(this.tokenUrl, "GET", "", new HashMap(), sysUser.getCountryCode());
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>(), sysUser.getCountryCode()))).get("result")));
             Map<String, String> userMap = new HashMap<>();
@@ -234,9 +229,7 @@ public class MsLoginController extends BaseController {
             userMap.put("username", sysUser.getUserLoginName());
             userMap.put("password", sysUser.getPassword());
             userMap.put("username_type", "3");
-            //userMap.put("time_zone_id", "Asia/Shanghai");
             System.out.println(JsonUtils.map2json(userMap));
-            //{result={"uid":"ay16666699656006MUWe"}, t=1666675968062, success=true, tid=75c4f4a5542611ed9f2b629ef151a136}
             Map<String, Object> registerUserMap = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), registerSyncUser, "POST", JsonUtils.map2json(userMap), new HashMap<>(), sysUser.getCountryCode())));
             System.out.println("========涂鸦注册用户" + registerUserMap);
             if (registerUserMap.get("success").equals((false))) {
@@ -418,7 +411,7 @@ public class MsLoginController extends BaseController {
             //发送请求
             Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>(), sysUserInfo.getCountryCode());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));
-            System.out.println(userJsonMap);
+            System.out.println("用户修改密码修改tuya密码=====" + userJsonMap);
             if (userJsonMap.get("success").equals(false)) {
                 throw new BusinessException(ExceptionConstant.PASSWORD_MODIFY_FAIL);
             }

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Component
 public class DictRefresh implements ApplicationRunner {
 
-    private static final Set<String> support_Language = new HashSet<>(Arrays.asList("zh_CN", "en", "ar"));
+    private static final Set<String> support_Language = new HashSet<>(Arrays.asList("zh-CN", "en", "ar"));
 
 
     @Autowired
@@ -58,11 +58,11 @@ public class DictRefresh implements ApplicationRunner {
         Map<String, String> transMap = new HashMap<>();
         List<CommonLanguageVO> commonLanguageVOS = commonLanguageService.select();
         commonLanguageVOS.forEach(c -> {
-            transMap.put(c.getName() + "_zh_CN", c.getValuesZh());
+            transMap.put(c.getName() + "_zh-CN", c.getValuesZh());
             transMap.put(c.getName() + "_en", c.getValuesEn());
             transMap.put(c.getName() + "_ar", c.getValuesAr());
         });
-        dictionaryTransService.refreshCache("simple", transMap);
+        dictionaryTransService.refreshCache(TransType.SIMPLE, transMap);
         Map<String, CommonLanguageVO> languageVOMap = commonLanguageVOS.stream().collect(Collectors.toMap(CommonLanguageVO::getName, Function.identity()));
         List<ServiceDictItemVO> dictItemVOList = serviceDictItemService.selectListMP(new LambdaQueryWrapper<>());
         List<ServiceDictItemVO> dictItemVOListTemp = new ArrayList<>();
@@ -71,31 +71,27 @@ public class DictRefresh implements ApplicationRunner {
             if (languageVOMap.containsKey(code)) {
                 CommonLanguageVO languageVO = languageVOMap.get(code);
                 dictItemVOListTemp.add(serviceDictItemService.p2v(ServiceDictItemVO.builder().dictGroupCode(dictItem.getDictGroupCode())
-                        .dictCode(code + "_zh_CN").dictDesc(languageVO.getValuesZh()).build()));
+                        .dictCode(dictItem.getDictCode() + "_zh-CN").dictDesc(languageVO.getValuesZh()).build()));
                 dictItemVOListTemp.add(serviceDictItemService.p2v(ServiceDictItemVO.builder().dictGroupCode(dictItem.getDictGroupCode())
-                        .dictCode(code + "_en").dictDesc(languageVO.getValuesZh()).build()));
+                        .dictCode(dictItem.getDictCode() + "_en").dictDesc(languageVO.getValuesEn()).build()));
                 dictItemVOListTemp.add(serviceDictItemService.p2v(ServiceDictItemVO.builder().dictGroupCode(dictItem.getDictGroupCode())
-                        .dictCode(code + "_ar").dictDesc(languageVO.getValuesZh()).build()));
+                        .dictCode(dictItem.getDictCode() + "_ar").dictDesc(languageVO.getValuesAr()).build()));
             } else {
                 dictItemVOListTemp.add(serviceDictItemService.p2v(ServiceDictItemVO.builder().dictGroupCode(dictItem.getDictGroupCode())
-                        .dictCode(code + "_zh_CN").dictDesc("国际化未配置").build()));
+                        .dictCode(dictItem.getDictCode() + "_zh-CN").dictDesc("国际化未配置").build()));
                 dictItemVOListTemp.add(serviceDictItemService.p2v(ServiceDictItemVO.builder().dictGroupCode(dictItem.getDictGroupCode())
-                        .dictCode(code + "_en").dictDesc("国际化未配置").build()));
+                        .dictCode(dictItem.getDictCode() + "_en").dictDesc("国际化未配置").build()));
                 dictItemVOListTemp.add(serviceDictItemService.p2v(ServiceDictItemVO.builder().dictGroupCode(dictItem.getDictGroupCode())
-                        .dictCode(code + "_ar").dictDesc("国际化未配置").build()));
+                        .dictCode(dictItem.getDictCode() + "_ar").dictDesc("国际化未配置").build()));
             }
         }
         dictItemVOList.addAll(dictItemVOListTemp);
-        Map<String, List<ServiceDictItemVO>> dictGroupMapTemp = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
-
-        List<ServiceDictItemVO> itemVOListTemp = serviceDictItemService.selectListMP(new LambdaQueryWrapper<>());
-        Map<String,List<ServiceDictItemVO>> dictGroupMap = itemVOListTemp.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
-
+        Map<String, List<ServiceDictItemVO>> dictGroupMap = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
         for (String dictGroupCode : dictGroupMap.keySet()) {
             dictionaryTransService.refreshCache(dictGroupCode, dictGroupMap.get(dictGroupCode).stream().collect(Collectors
                     .toMap(ServiceDictItemVO::getDictCode, ServiceDictItemVO::getDictDesc)));
         }
-       /* dictionaryTransService.openI18n(new LocaleGetter() {
+        dictionaryTransService.openI18n(new LocaleGetter() {
             @Override
             public String getLanguageTag() {
                 Locale locale = LocaleContextHolder.getLocale();
@@ -105,7 +101,7 @@ public class DictRefresh implements ApplicationRunner {
                 }
                 return "en";
             }
-        });*/
+        });
     }
 
 }

@@ -94,5 +94,10 @@ public class ServiceDictItemPO extends BasePO<ServiceDictItemPO> {
     @ApiModelProperty("排序字段")
     private Integer orderNum;
 
-
+    /**
+     *国际化编码
+     */
+    @TableField("international_code")
+    @ApiModelProperty(value = "国际化编码")
+    private String internationalCode;
 }

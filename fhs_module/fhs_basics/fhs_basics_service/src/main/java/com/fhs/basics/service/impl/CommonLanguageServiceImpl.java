@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 
+import com.fhs.basics.constant.CommonMessageConstant;
 import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.mapper.CommonLanguageMapper;
 import com.fhs.basics.po.CommonLanguagePO;
@@ -12,13 +13,13 @@ import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.ParamException;
 import com.github.liaochong.myexcel.core.SaxExcelReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 语言设置表(CommonLanguage)表服务实现类
@@ -30,6 +31,7 @@ import java.util.List;
 @Namespace("common_language")
 public class CommonLanguageServiceImpl extends BaseServiceImpl<CommonLanguageVO, CommonLanguagePO> implements CommonLanguageService {
 
+    private static final Set<String> support_Language = new HashSet<>(Arrays.asList("zh-CN", "en", "ar"));
     @Autowired
     private CommonLanguageMapper commonLanguageMapper;
 
@@ -59,5 +61,20 @@ public class CommonLanguageServiceImpl extends BaseServiceImpl<CommonLanguageVO,
     @Override
     public int selectByCommonLanguageVO(CommonLanguageVO commonLanguageVO) {
         return commonLanguageMapper.selectByCommonLanguageVO(commonLanguageVO);
+    }
+
+    /**
+     * 获取当前语言环境
+     *
+     * @return
+     */
+    @Override
+    public String getLanguageTag() {
+        Locale locale = LocaleContextHolder.getLocale();
+        String language = locale.toLanguageTag();//springboot可以国际化可以通过这段代码告诉框架当前语言环境
+        if (support_Language.contains(language)) {
+            return language;
+        }
+        return CommonMessageConstant.languag_en;
     }
 }
