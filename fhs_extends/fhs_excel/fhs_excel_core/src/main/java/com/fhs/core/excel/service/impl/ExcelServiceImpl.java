@@ -247,7 +247,18 @@ public class ExcelServiceImpl implements ExcelService {
             fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
             return getFieldData(fieldName, data);
         }
-        return getGetMethod(data, fieldName);
+        Object obj = getGetMethod(data, fieldName);
+        if (obj instanceof Date) {
+            Field field = ReflectUtils.getDeclaredField(data.getClass(),fieldName);
+            //如果加了日期格式化则就按照格式化的来
+            if (field.isAnnotationPresent(JSONField.class) && CheckUtils.isNotEmpty(field.getAnnotation(JSONField.class).format())) {
+                obj = DateUtils.formartDate((Date) obj, field.getAnnotation(JSONField.class).format());
+            }else{
+                //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
+                obj = DateUtils.formartDate((Date) obj, DateUtils.DATETIME_PATTERN);
+            }
+        }
+        return obj;
     }
 
     /**
