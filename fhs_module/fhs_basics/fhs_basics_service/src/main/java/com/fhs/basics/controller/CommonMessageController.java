@@ -101,7 +101,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         commonMessagePO.setMessageAttach(JsonUtils.map2json(messageMap));
 
         commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
-        commonMessagePO.setArea(messageJsonMap.get("areaZh").toString());
+        commonMessagePO.setArea(messageJsonMap.get("area").toString());
         commonMessagePO.setIsRead(Constant.ZERO);
         commonMessagePO.setIsRelease(Constant.ZERO);
         commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
