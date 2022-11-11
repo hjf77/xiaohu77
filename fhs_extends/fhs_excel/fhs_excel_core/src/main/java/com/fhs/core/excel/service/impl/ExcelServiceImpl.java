@@ -249,11 +249,11 @@ public class ExcelServiceImpl implements ExcelService {
         }
         Object obj = getGetMethod(data, fieldName);
         if (obj instanceof Date) {
-            Field field = ReflectUtils.getDeclaredField(data.getClass(),fieldName);
+            Field field = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
             //如果加了日期格式化则就按照格式化的来
             if (field.isAnnotationPresent(JSONField.class) && CheckUtils.isNotEmpty(field.getAnnotation(JSONField.class).format())) {
                 obj = DateUtils.formartDate((Date) obj, field.getAnnotation(JSONField.class).format());
-            }else{
+            } else {
                 //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
                 obj = DateUtils.formartDate((Date) obj, DateUtils.DATETIME_PATTERN);
             }
@@ -372,10 +372,12 @@ public class ExcelServiceImpl implements ExcelService {
                                         QueryWrapper queryWrapper = new QueryWrapper();
                                         queryWrapper.eq(targetFieldName, data);
                                         VO vo = baseService.selectOneMP(queryWrapper);
-                                        if (vo != null) {
-                                            Object pkey = vo.getPkey();
-                                            ReflectUtils.setValue(objDo, field, pkey);
+                                        if (vo == null) {
+                                            valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                            continue;
                                         }
+                                        Object pkey = vo.getPkey();
+                                        ReflectUtils.setValue(objDo, field, pkey);
                                     }
                                 }
                             }
