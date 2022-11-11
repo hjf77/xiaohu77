@@ -3,4 +3,9 @@
 <mapper namespace="com.fhs.basics.mapper.SettUserColumnMapper">
 
 
+    <delete id="deleteById">
+        delete
+        from t_sett_user_column
+        where id = #{id}
+    </delete>
 </mapper>

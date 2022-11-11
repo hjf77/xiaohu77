@@ -30,13 +30,15 @@ public class SettUserColumnController {
 
     @PostMapping()
     @ApiOperation(value = "新增")
-    public HttpResult<Boolean> saveOrUpdate(@RequestBody @Validated SettUserColumnVO vo) {
+    public HttpResult<SettUserColumnVO> saveOrUpdate(@RequestBody @Validated SettUserColumnVO vo) {
         SettUserColumnPO queryParam = SettUserColumnPO.builder().namespace(vo.getNamespace()).build();
         queryParam.setCreateUser(UserContext.getSessionuser().getUserId());
-        //先删除一下然后插入
-        settUserColumnService.deleteBean(queryParam);
-        settUserColumnService.insert(vo);
-        return HttpResult.success(true);
+        if(vo.getId() == null){
+            settUserColumnService.insert(vo);
+        }else{
+            settUserColumnService.updateSelectiveById(vo);
+        }
+        return HttpResult.success(vo);
     }
 
     @GetMapping("/namespace/{namespace}")
