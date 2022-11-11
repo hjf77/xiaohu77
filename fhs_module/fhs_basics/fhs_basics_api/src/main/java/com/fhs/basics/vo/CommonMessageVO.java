@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 /**
  * 消息推送表(CommonMessage)实体类
  *
@@ -36,5 +38,8 @@ public class CommonMessageVO extends CommonMessagePO implements VO {
      */
     @ApiModelProperty(value = "手机型号")
     String phoneModel;
+
+
+    Map<String, CommonMessageVO> commonMessageVOMap;
 }
     

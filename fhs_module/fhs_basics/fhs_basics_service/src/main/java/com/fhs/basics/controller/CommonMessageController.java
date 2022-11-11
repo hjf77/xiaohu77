@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fhs.basics.api.anno.LogMethod;
@@ -13,7 +14,6 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.NotPremissionException;
-import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.google.gson.Gson;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 /**
@@ -69,59 +68,53 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         Map<String, Object> messageJsonMapTemp = JsonUtils.parseJSON2Map(messageJson);
         Map<String, Object> messageJsonMap = JsonUtils.parseJSON2Map(messageJsonMapTemp.get("messageJson").toString());
         CommonMessagePO commonMessagePO = new CommonMessagePO();
-        boolean idEnTemp = messageJsonMap.containsKey("idEn");
-        if (!idEnTemp) {
-            commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
-            commonMessagePO.setRelationId(UUID.randomUUID().toString());
-            commonMessagePO.setIsRead(Constant.ZERO);
-            commonMessagePO.setIsRelease(Constant.ZERO);
+        if (null != messageJsonMapTemp.get("id")) {
+            CommonMessageVO commonMessageVO = commonMessageService.selectById(Long.parseLong(messageJsonMapTemp.get("id").toString()));
+            commonMessagePO.setId(commonMessageVO.getId());
         }
+
 
         //英文
         CommonMessagePO commonMessageEn = new CommonMessagePO();
-        commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
-        BeanUtils.copyProperties(commonMessagePO, commonMessageEn);
-        boolean idEn = messageJsonMap.containsKey("idEn");
         commonMessageEn.setMsgLanguage(Constant.STR_NO);
         commonMessageEn.setTitle(messageJsonMap.get("titleEn").toString());
         commonMessageEn.setMsgContent(messageJsonMap.get("contentEn").toString());
-        commonMessageEn.setArea(messageJsonMap.get("areaEn").toString());
-        if (!idEn) {
-            commonMessageService.insert(commonMessageEn);
-        } else {
-            commonMessageEn.setId(Long.parseLong(messageJsonMap.get("idEn").toString()));
-            commonMessageService.updateById(commonMessageEn);
-        }
 
         //中文
         CommonMessagePO commonMessageZh = new CommonMessagePO();
-        BeanUtils.copyProperties(commonMessagePO, commonMessageZh);
-        boolean idZh = messageJsonMap.containsKey("idZh");
         commonMessageZh.setMsgLanguage(Constant.STR_YES);
         commonMessageZh.setTitle(messageJsonMap.get("titleZh").toString());
         commonMessageZh.setMsgContent(messageJsonMap.get("contentZh").toString());
-        commonMessageZh.setArea(messageJsonMap.get("areaZh").toString());
-        if (!idZh) {
-            commonMessageService.insert(commonMessageZh);
-        } else {
-            commonMessageZh.setId(Long.parseLong(messageJsonMap.get("idZh").toString()));
-            commonMessageService.updateById(commonMessageZh);
-        }
+
 
         //阿拉伯文
         CommonMessagePO commonMessageAr = new CommonMessagePO();
-        BeanUtils.copyProperties(commonMessagePO, commonMessageAr);
-        boolean idAr = messageJsonMap.containsKey("idAr");
         commonMessageAr.setMsgLanguage(Constant.CHECK_ING);
         commonMessageAr.setTitle(messageJsonMap.get("titleAr").toString());
         commonMessageAr.setMsgContent(messageJsonMap.get("contentAr").toString());
-        commonMessageAr.setArea(messageJsonMap.get("areaAr").toString());
-        if (!idAr) {
-            commonMessageService.insert(commonMessageAr);
-        } else {
-            commonMessageAr.setId(Long.parseLong(messageJsonMap.get("idAr").toString()));
-            commonMessageService.updateById(commonMessageAr);
+
+        BeanUtils.copyProperties(commonMessageZh, commonMessagePO);
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("messageCh", JsonUtils.bean2json(commonMessageZh));
+        messageMap.put("messageAr", JsonUtils.bean2json(commonMessageAr));
+        messageMap.put("messageEn", JsonUtils.bean2json(commonMessageEn));
+        commonMessagePO.setMessageAttach(JsonUtils.map2json(messageMap));
+
+        commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
+        commonMessagePO.setArea(messageJsonMap.get("areaZh").toString());
+        commonMessagePO.setIsRead(Constant.ZERO);
+        commonMessagePO.setIsRelease(Constant.ZERO);
+        commonMessagePO.setIsAlert(Integer.parseInt(messageJsonMap.get("isAlertName").toString()));
+        if (null != messageJsonMapTemp.get("id")) {
+            CommonMessageVO commonMessageVO = commonMessageService.selectById(Long.parseLong(messageJsonMapTemp.get("id").toString()));
+            commonMessagePO.setId(commonMessageVO.getId());
         }
+        if (null != commonMessagePO.getId()) {
+            commonMessageService.updateById(commonMessagePO);
+        } else {
+            commonMessageService.insert(commonMessagePO);
+        }
+
         return HttpResult.success(true);
     }
 
@@ -129,7 +122,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     /**
      * 根据ID集合查询对象数据
      *
-     * @param relationId relationId
+     * @param id
      * @return
      * @throws Exception
      */
@@ -137,21 +130,16 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
     @ResponseBody
     @GetMapping("findDetail")
     @ApiOperation("根据id获取单挑数据信息")
-    public Map<String, CommonMessageVO> info(@RequestParam("relationId") String relationId) {
+    public CommonMessageVO info(@RequestParam("id") Long id) {
+        CommonMessageVO commonMessageVO = commonMessageService.selectById(id);
+        String messageAttach = commonMessageVO.getMessageAttach();
+        Map<String, Object> messageMap = JsonUtils.parseJSON2Map(messageAttach);
         Map<String, CommonMessageVO> messageVOMap = new HashMap<>();
-        List<CommonMessageVO> commonMessageVOS = commonMessageService.findForList(CommonMessagePO.builder().relationId(relationId).build());
-        commonMessageVOS.forEach(c -> {
-            if (c.getMsgLanguage().equals("0")) {
-                messageVOMap.put("messageEn", c);
-            }
-            if (c.getMsgLanguage().equals("1")) {
-                messageVOMap.put("messageCh", c);
-            }
-            if (c.getMsgLanguage().equals("2")) {
-                messageVOMap.put("messageAr", c);
-            }
-        });
-        return messageVOMap;
+        messageVOMap.put("messageEn", JSON.parseObject(messageMap.get("messageEn").toString(), CommonMessageVO.class));
+        messageVOMap.put("messageCh", JSON.parseObject(messageMap.get("messageCh").toString(), CommonMessageVO.class));
+        messageVOMap.put("messageAr", JSON.parseObject(messageMap.get("messageAr").toString(), CommonMessageVO.class));
+        commonMessageVO.setCommonMessageVOMap(messageVOMap);
+        return commonMessageVO;
     }
 
 
