@@ -48,4 +48,14 @@ public class SettUserColumnController {
         return HttpResult.success(userColumnVOList.isEmpty() ? null : userColumnVOList.get(0));
     }
 
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "根据id删除配置数据")
+    public HttpResult deleteById(@PathVariable("id") Long id){
+        int i = settUserColumnService.deleteById(id);
+        if(i > 0){
+            return HttpResult.success();
+        }
+        return HttpResult.error(null,"删除自定义列数据失败");
+    }
+
 }
