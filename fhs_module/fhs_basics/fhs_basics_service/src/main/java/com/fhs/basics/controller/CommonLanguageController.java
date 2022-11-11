@@ -3,19 +3,17 @@ package com.fhs.basics.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
+import com.fhs.basics.constant.CommonMessageConstant;
 import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.po.CommonLanguagePO;
-import com.fhs.basics.po.CommonMessagePO;
 import com.fhs.basics.service.CommonLanguageService;
 import com.fhs.basics.vo.CommonLanguageExportVO;
 import com.fhs.basics.vo.CommonLanguageVO;
-import com.fhs.basics.vo.CommonMessageVO;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.core.exception.NotPremissionException;
-import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.module.base.controller.ModelSuperController;
@@ -93,9 +91,16 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
                 commonLanguageExportVOS.add(commonLanguageExportVO);
             });
             //导出
+            String languageTag = commonLanguageService.getLanguageTag();
             try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportVO.class)
                     .build(commonLanguageExportVOS)) {
-                AttachmentExportUtil.export(workbook, "语言信息一览表", response);
+                AttachmentExportUtil.export(workbook, "语言信息一览表_en", response);
+                if (languageTag.equals(CommonMessageConstant.languag_zh_CN)) {
+                    AttachmentExportUtil.export(workbook, "语言信息一览表", response);
+                } else if (languageTag.equals(CommonMessageConstant.languag_ar)) {
+                    AttachmentExportUtil.export(workbook, "语言信息一览表_ar", response);
+                }
+
             } catch (IOException e) {
                 throw new BusinessException(ExceptionConstant.EXPORT_FAIL);
             }
@@ -129,7 +134,13 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
     @PostMapping(value = "/downLoadExcelTemplate")
     public void downLoadExcelTemplate(HttpServletResponse response) {
         try {
-            String fileName = "App语言导入模板.xlsx";
+            String languageTag = commonLanguageService.getLanguageTag();
+            String fileName = "语言信息一览表_en.xlsx";
+            if (languageTag.equals(CommonMessageConstant.languag_zh_CN)) {
+                fileName = "语言信息一览表.xlsx";
+            } else if (languageTag.equals(CommonMessageConstant.languag_ar)) {
+                fileName = "语言信息一览表_ar.xlsx";
+            }
             response.setHeader("Content-disposition", "attachment;fileName=" + URLEncoder.encode(fileName, "UTF-8"));
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");
             String filePath = "/mapper/template/" + fileName;

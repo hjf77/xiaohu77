@@ -20,4 +20,6 @@ public interface CommonLanguageService extends BaseService<CommonLanguageVO, Com
     List<String> importCommonLanguageInfo(MultipartFile multipartFile, Long userId);
 
     int selectByCommonLanguageVO(CommonLanguageVO commonLanguageVO);
+
+    String getLanguageTag();
 }
