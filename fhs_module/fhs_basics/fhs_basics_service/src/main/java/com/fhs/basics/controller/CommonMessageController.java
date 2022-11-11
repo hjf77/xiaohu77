@@ -134,7 +134,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
         CommonMessageVO commonMessageVO = commonMessageService.selectById(id);
         String messageAttach = commonMessageVO.getMessageAttach();
         Map<String, Object> messageMap = JsonUtils.parseJSON2Map(messageAttach);
-        Map<String, CommonMessageVO> messageVOMap = new HashMap<>();
+        Map<String, CommonMessagePO> messageVOMap = new HashMap<>();
         messageVOMap.put("messageEn", JSON.parseObject(messageMap.get("messageEn").toString(), CommonMessageVO.class));
         messageVOMap.put("messageCh", JSON.parseObject(messageMap.get("messageCh").toString(), CommonMessageVO.class));
         messageVOMap.put("messageAr", JSON.parseObject(messageMap.get("messageAr").toString(), CommonMessageVO.class));

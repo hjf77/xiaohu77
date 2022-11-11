@@ -39,7 +39,7 @@ public class CommonMessageVO extends CommonMessagePO implements VO {
     @ApiModelProperty(value = "手机型号")
     String phoneModel;
 
-
-    Map<String, CommonMessageVO> commonMessageVOMap;
+    @ApiModelProperty(value = "手机型号")
+    Map<String, CommonMessagePO> commonMessageVOMap;
 }
     
