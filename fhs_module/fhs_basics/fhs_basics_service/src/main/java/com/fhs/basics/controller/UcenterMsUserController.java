@@ -6,16 +6,15 @@ import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.constant.LoggerConstant;
+import com.fhs.basics.po.ServiceCountryPO;
 import com.fhs.basics.po.UcenterAppUserSetPO;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.basics.service.ServiceCountryService;
 import com.fhs.basics.service.UcenterAppUserSetService;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsUserService;
-import com.fhs.basics.vo.SysUserOrgVO;
-import com.fhs.basics.vo.UcenterAppUserSetVO;
-import com.fhs.basics.vo.UcenterMsOrganizationVO;
-import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.ConverterUtils;
@@ -24,7 +23,6 @@ import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.BusinessException;
-import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
@@ -64,6 +62,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     private RedisCacheService redisCacheService;
     @Autowired
     private TransService transService;
+    @Autowired
+    private ServiceCountryService serviceCountryService;
 
     /**
      * 短信验证码
@@ -244,11 +244,13 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     public HttpResult<Map<String, Object>> getAppUserInfo(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         UcenterMsUserVO sysUser = sysUserService.selectById(super.getSessionuser().getUserId());
+        UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
+        ServiceCountryVO serviceCountryVO = serviceCountryService.selectBean(ServiceCountryPO.builder().countryCode(sysUser.getCountryCode()).build());
+        sysUser.setCountryName(serviceCountryVO.getFullCname());
         transService.transOne(sysUser);
         result.put("userInfo", sysUser);
         //获取APP用户设置信息
         if (sysUser.getIsAppUser().equals(Constant.INT_TRUE)) {
-            UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
             transService.transOne(ucenterAppUserSetVO);
             result.put("userSetInfo", ucenterAppUserSetVO);
         }

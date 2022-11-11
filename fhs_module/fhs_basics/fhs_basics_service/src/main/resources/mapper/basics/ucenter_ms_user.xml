@@ -21,7 +21,8 @@
         update_time AS updateTime,
         group_code AS groupCode,
         is_tuya_user AS isTuYaUser,
-               u_id AS uId
+               u_id AS uId,
+        country_code AS countryCode
         FROM t_ucenter_ms_user
         <where>
             <if test="userLoginName != null and userLoginName != ''">

@@ -1,10 +1,12 @@
 package com.fhs.basics.vo;
 
-import com.fhs.core.trans.vo.VO;
 import com.fhs.basics.po.UcenterMsUserPO;
+import com.fhs.core.trans.vo.VO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 用户vo
@@ -35,6 +37,9 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
 
     @ApiModelProperty("涂鸦用户注册类型(1 手机号 2邮箱 3其他)")
     private Integer usernameType;
+
+    @ApiModelProperty("国家名称")
+    private String countryName;
 
     @ApiModelProperty("设备名称")
     private String name;
