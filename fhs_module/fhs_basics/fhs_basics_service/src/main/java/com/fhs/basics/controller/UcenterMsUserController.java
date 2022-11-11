@@ -31,6 +31,7 @@ import com.fhs.module.base.swagger.anno.ApiGroup;
 import com.fhs.trans.service.impl.TransService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -321,7 +322,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             if (mobileCount > 0L) {
                 throw new BusinessException(ExceptionConstant.PHONE_NUMBER_USE);
             }
-            ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getMobile());
+            //ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getMobile());
             ucenterMsUserPO.setMobile(ucenterMsUserVO.getMobile());
         }
         if (!StringUtils.isEmpty(ucenterMsUserVO.getEmail())) {
@@ -339,7 +340,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             if (emailCount > 0L) {
                 throw new BusinessException(ExceptionConstant.MAILBOX_USE);
             }
-            ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getEmail());
+            //ucenterMsUserPO.setUserLoginName(ucenterMsUserVO.getEmail());
             ucenterMsUserPO.setEmail(ucenterMsUserVO.getEmail());
         }
         ucenterMsUserPO.setUpdateTime(new Date());

@@ -72,65 +72,33 @@ public class MsLoginController extends BaseController {
 
     @Value("${sa-token.timeout:3600}")
     private Integer sesstionTimeout;
-
     @Value("${fhs.vue.is-verification:true}")
     private Boolean isVerification;
-
     @Value("${fhs.smscode.timeout:300}")
     private Integer smscodeTimeout;
-
     // 校验涂鸦用户密码
     @Value("${tuyaconfig.checkUser}")
     private String checkUser;
-
     // 同步用户
     @Value("${tuyaconfig.syncUser}")
     private String syncUser;
-
     // 获取telo用户信息
     @Value("${tuyaconfig.getUsers}")
     private String getUsers;
-
     // 获取用户详细信息
     @Value("${tuyaconfig.getUser}")
     private String getUser;
-
     //获取token的url
     @Value("${tuyaconfig.tokenUrl}")
     private String tokenUrl;
-
     //注册时同步用户到tuya
     @Value("${tuyaconfig.registerSyncUser}")
     private String registerSyncUser;
-
-
-    private static final Gson gson = new Gson().newBuilder().create();
-
-    /**
-     * redis 缓存服务
-     */
-    @Autowired
-    private RedisCacheService redisCacheService;
-
-    /**
-     * 后台用户服务
-     */
-    @Autowired
-    private UcenterMsUserService sysUserService;
-
-
-    @Autowired
-    private UcenterMsRoleService roleService;
-
-    @Autowired
-    private LogLoginService logLoginService;
-
     /**
      * 登录地址
      */
     @Value("${fhs.login.url:http://default.fhs-opensource.com}")
     private String shrioLoginUrl;
-
     /**
      * 输入多少次密码锁定
      */
@@ -140,14 +108,32 @@ public class MsLoginController extends BaseController {
     @Value("${fhs.login.user-lock-seconds:300}")
     private int userLockSeconds;
 
+
+
+    private static final Gson gson = new Gson().newBuilder().create();
+
+    /**
+     * redis 缓存服务
+     */
+    @Autowired
+    private RedisCacheService redisCacheService;
+    /**
+     * 后台用户服务
+     */
+    @Autowired
+    private UcenterMsUserService sysUserService;
+    @Autowired
+    private UcenterMsRoleService roleService;
+    @Autowired
+    private LogLoginService logLoginService;
     @Autowired
     private StpInterfaceImpl stpInterface;
-
     @Autowired
     private UcenterAppUserSetService ucenterAppUserSetService;
-
     @Autowired
     private CommonMessageService commonMessageService;
+
+
 
     /**
      * 判断用户是否锁定
