@@ -94,13 +94,13 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
             String languageTag = commonLanguageService.getLanguageTag();
             try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportVO.class)
                     .build(commonLanguageExportVOS)) {
-                AttachmentExportUtil.export(workbook, "语言信息一览表_en", response);
                 if (languageTag.equals(CommonMessageConstant.languag_zh_CN)) {
                     AttachmentExportUtil.export(workbook, "语言信息一览表", response);
                 } else if (languageTag.equals(CommonMessageConstant.languag_ar)) {
                     AttachmentExportUtil.export(workbook, "语言信息一览表_ar", response);
+                } else {
+                    AttachmentExportUtil.export(workbook, "语言信息一览表_en", response);
                 }
-
             } catch (IOException e) {
                 throw new BusinessException(ExceptionConstant.EXPORT_FAIL);
             }
@@ -135,11 +135,13 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
     public void downLoadExcelTemplate(HttpServletResponse response) {
         try {
             String languageTag = commonLanguageService.getLanguageTag();
-            String fileName = "语言信息一览表_en.xlsx";
+            String fileName = "";
             if (languageTag.equals(CommonMessageConstant.languag_zh_CN)) {
-                fileName = "语言信息一览表.xlsx";
+                fileName = "App语言导入模板.xlsx";
             } else if (languageTag.equals(CommonMessageConstant.languag_ar)) {
-                fileName = "语言信息一览表_ar.xlsx";
+                fileName = "App语言导入模板_ar.xlsx";
+            } else {
+                fileName = "App语言导入模板_en.xlsx";
             }
             response.setHeader("Content-disposition", "attachment;fileName=" + URLEncoder.encode(fileName, "UTF-8"));
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");

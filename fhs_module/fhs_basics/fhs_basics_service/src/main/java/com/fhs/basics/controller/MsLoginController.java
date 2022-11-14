@@ -109,7 +109,6 @@ public class MsLoginController extends BaseController {
     private int userLockSeconds;
 
 
-
     private static final Gson gson = new Gson().newBuilder().create();
 
     /**
@@ -132,7 +131,6 @@ public class MsLoginController extends BaseController {
     private UcenterAppUserSetService ucenterAppUserSetService;
     @Autowired
     private CommonMessageService commonMessageService;
-
 
 
     /**
@@ -188,6 +186,7 @@ public class MsLoginController extends BaseController {
     @PostMapping("/registerUser")
     @ApiOperation(value = "APP用户注册")
     public HttpResult<UcenterMsUserVO> registerUser(@RequestBody UcenterMsUserVO sysUser) {
+        System.out.println("========用户注册参数=====" + sysUser.getCountryCode());
         // 添加用户信息
         sysUser.setIsAppUser(Constant.ONE);
         boolean notExist = sysUserService.validataLoginName(sysUser);
@@ -210,14 +209,14 @@ public class MsLoginController extends BaseController {
             Object get = RequestSignUtils.execute(this.tokenUrl, "GET", "", new HashMap(), sysUser.getCountryCode());
             Map<String, Object> tokenJsonMap = JsonUtils.parseJSON2Map(gson.toJson(JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenUrl, "GET", "", new HashMap<>(), sysUser.getCountryCode()))).get("result")));
             Map<String, String> userMap = new HashMap<>();
-            //userMap.put("country_code", sysUser.getCountryCode());
-            userMap.put("country_code", "86");
+            userMap.put("country_code", sysUser.getCountryCode());
+            //userMap.put("country_code", "86");
             userMap.put("username", sysUser.getUserLoginName());
             userMap.put("password", sysUser.getPassword());
             userMap.put("username_type", "3");
-            System.out.println(JsonUtils.map2json(userMap));
+            System.out.println("========涂鸦注册用户请求参数" + JsonUtils.map2json(userMap));
             Map<String, Object> registerUserMap = JsonUtils.parseJSON2Map(gson.toJson(RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), registerSyncUser, "POST", JsonUtils.map2json(userMap), new HashMap<>(), sysUser.getCountryCode())));
-            System.out.println("========涂鸦注册用户" + registerUserMap);
+            System.out.println("========涂鸦注册用户返回参数" + registerUserMap);
             if (registerUserMap.get("success").equals((false))) {
                 throw new ParamException("注册失败");
             } else {
@@ -251,6 +250,7 @@ public class MsLoginController extends BaseController {
     @PostMapping("/login")
     @ApiOperation("登录")
     public HttpResult<Map<String, Object>> login(@RequestBody LoginVO loginVO, HttpServletRequest request) {
+        System.out.println("========用户登录参数" + loginVO);
         ParamChecker.isNotNull(loginVO.getUserLoginName(), "用户名不能为空");
         if (loginVO.getIsCode().equals(Constant.INT_FALSE)) {
             ParamChecker.isNotNull(loginVO.getPassword(), "密码不能为空");
@@ -298,9 +298,10 @@ public class MsLoginController extends BaseController {
             map.put("country_code", ucenterMsUserVO.getCountryCode());
             map.put("username_type", 3);
             //发送请求
+            System.out.println("========用户登录参数去涂鸦校验传参" + JsonUtils.map2json(map));
             Object result = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), checkUser, "POST", JsonUtils.map2json(map), new HashMap<>(), ucenterMsUserVO.getCountryCode());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(result));
-            System.out.println("========校验用户名密码" + userJsonMap);
+            System.out.println("========校验用户名密码涂鸦返回参数" + userJsonMap);
             if (userJsonMap.get("success").equals((false))) {
                 throw new BusinessException(ExceptionConstant.ACCOUNT_NUMBER_ERROR);
             }
@@ -364,6 +365,7 @@ public class MsLoginController extends BaseController {
     @PostMapping("/updatePassword")
     @ApiOperation(value = "忘记密码验证码修改密码")
     public HttpResult<Integer> updatePassword(@RequestBody UcenterMsUserVO sysUser) {
+        System.out.println("========用户修改密码参数" + sysUser);
         //判断短信验证码
         ParamChecker.isNotNull(sysUser.getSmsCode(), "验证码不能为空");
         // 判断短信验证码是否正确过期
@@ -395,9 +397,10 @@ public class MsLoginController extends BaseController {
             map.put("country_code", sysUserInfo.getCountryCode());
             map.put("username_type", "3");
             //发送请求
+            System.out.println("========用户修改密码涂鸦传参" + map);
             Object resultJson = RequestSignUtils.execute(tokenJsonMap.get("access_token").toString(), syncUser, "POST", JsonUtils.map2json(map), new HashMap<>(), sysUserInfo.getCountryCode());
             Map<String, Object> userJsonMap = JsonUtils.parseJSON2Map(gson.toJson(resultJson));
-            System.out.println("用户修改密码修改tuya密码=====" + userJsonMap);
+            System.out.println("用户修改密码修改tuya密码返回参数=====" + userJsonMap);
             if (userJsonMap.get("success").equals(false)) {
                 throw new BusinessException(ExceptionConstant.PASSWORD_MODIFY_FAIL);
             }

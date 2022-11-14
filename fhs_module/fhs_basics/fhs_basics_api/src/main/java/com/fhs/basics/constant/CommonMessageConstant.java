@@ -13,6 +13,11 @@ public interface CommonMessageConstant {
     Integer NO = 0;
 
     /**
+     * 常量 6
+     */
+    Integer SIX = 6;
+
+    /**
      * 消息类型 -- 告警
      */
     Integer REPORT_EMERGENCY = 1;
@@ -60,7 +65,7 @@ public interface CommonMessageConstant {
     /**
      * 设备语言 -- 中文
      */
-    String languag_zh_CN= "zh-CN";
+    String languag_zh_CN = "zh-CN";
 
     /**
      * 设备语言 -- 英文

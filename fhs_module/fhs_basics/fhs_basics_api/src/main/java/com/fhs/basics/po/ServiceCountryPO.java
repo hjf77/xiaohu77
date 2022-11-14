@@ -107,4 +107,9 @@ public class ServiceCountryPO extends BasePO<ServiceCountryPO> {
     @ApiModelProperty(value = "是否是海湾7国成员(0否,1是)")
     private Integer isGulfCountry;
 
+    @TableField("international_code")
+    @ApiModelProperty(value = "国际化码")
+    private String internationalCode;
+
+
 }
