@@ -20,5 +20,5 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     @CloudMethod
     UcenterMsOrganizationVO selectById(Serializable primaryValue);
 
-
+    int countPipelineNum(String orgId);
 }

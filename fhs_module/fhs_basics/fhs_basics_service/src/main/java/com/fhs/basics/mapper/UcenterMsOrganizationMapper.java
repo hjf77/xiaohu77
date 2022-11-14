@@ -23,4 +23,11 @@ public interface UcenterMsOrganizationMapper extends FhsBaseMapper<UcenterMsOrga
      * @return 当前最大的排行
      */
     Integer findRank(@Param("parentId") String parentId);
+
+    /**
+     * 查询组织机构下是否存在管道
+     * @param orgId
+     * @return
+     */
+    int countPipelineNum(@Param("orgId") String orgId);
 }

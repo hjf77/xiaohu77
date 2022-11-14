@@ -909,7 +909,7 @@ public class ExcelUtils {
                 dataRow++;
             }
         }
-        return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
+        return Arrays.copyOfRange(dataArray, 0, rowNum - nullRows);
     }
 
 

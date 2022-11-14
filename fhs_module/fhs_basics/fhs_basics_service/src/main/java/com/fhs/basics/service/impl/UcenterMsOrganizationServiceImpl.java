@@ -136,6 +136,10 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         if (orgCount > 0) {
             throw new ParamException("该机构拥有子机构,不可删除!");
         }
+        int pipelineNum = this.countPipelineNum(ConverterUtils.toString(id));
+        if (pipelineNum > 0) {
+            throw new ParamException("该机构下存在管道，不可删除!");
+        }
         // 查询当前机构和下级机构人员
         Long userCount = sysUserService.findCount(UcenterMsUserPO.builder().organizationId(ConverterUtils.toString(id)).build());
         if (userCount > 0) {
@@ -147,5 +151,10 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     @Override
     public List<UcenterMsOrganizationVO> select() {
         return initCompanyName(super.select());
+    }
+
+    @Override
+    public int countPipelineNum(String orgId) {
+        return mapper.countPipelineNum(orgId);
     }
 }
