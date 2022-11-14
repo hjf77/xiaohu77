@@ -52,7 +52,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     @ApiOperation("下拉专用tree")
     @PostMapping("selectTree")
     public List<TreeNode<Treeable>> selectTree(@RequestBody QueryFilter<UcenterMsOrganizationPO> filter) {
-        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(filter.asWrapper(UcenterMsOrganizationPO.class));
+        List<UcenterMsOrganizationVO> orgs = sysOrganizationService.selectListMP(filter.asWrapper(UcenterMsOrganizationPO.class).orderByAsc(UcenterMsOrganizationPO::getId));
         Map<String, UcenterMsOrganizationVO> orgMap = orgs.stream().collect(Collectors
                 .toMap(UcenterMsOrganizationVO::getId, Function.identity()));
         for (UcenterMsOrganizationVO org : orgs) {
@@ -64,4 +64,9 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
         return TreeUtils.formartTree(orgs);
     }
 
+    @Override
+    public List<TreeNode<Treeable>> treeData(@RequestBody QueryFilter<UcenterMsOrganizationPO> queryFilter) throws IllegalAccessException {
+        List<UcenterMsOrganizationVO> datas = sysOrganizationService.selectListMP(queryFilter.asWrapper(getDOClass()).orderByAsc(UcenterMsOrganizationPO::getId));
+        return TreeUtils.formartTree(datas);
+    }
 }
