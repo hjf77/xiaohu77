@@ -1,12 +1,16 @@
 package com.fhs.basics.service.impl;
 
 
+import com.fhs.basics.mapper.SettUserColumnMapper;
 import com.fhs.basics.po.SettUserColumnPO;
 import com.fhs.basics.service.SettUserColumnService;
 import com.fhs.basics.vo.SettUserColumnVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.annotation.Namespace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
 
 /**
  * 用户自定义列信息配置(SettUserColumn)表服务实现类
@@ -18,4 +22,10 @@ import org.springframework.stereotype.Service;
 @Namespace("sett_user_column")
 public class SettUserColumnServiceImpl extends BaseServiceImpl<SettUserColumnVO, SettUserColumnPO> implements SettUserColumnService {
 
+    @Autowired
+    private SettUserColumnMapper settUserColumnMapper;
+
+    public int deleteById(Long id) {
+        return settUserColumnMapper.deleteById(id);
+    }
 }

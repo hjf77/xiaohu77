@@ -4,6 +4,8 @@ import com.fhs.basics.po.SettUserColumnPO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
+
 /**
  * 用户自定义列信息配置(SettUserColumn)表数据库访问层
  *
@@ -13,4 +15,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SettUserColumnMapper extends FhsBaseMapper<SettUserColumnPO> {
 
+    int deleteById(Long id);
 }

@@ -30,13 +30,15 @@ public class SettUserColumnController {
 
     @PostMapping()
     @ApiOperation(value = "新增")
-    public HttpResult<Boolean> saveOrUpdate(@RequestBody @Validated SettUserColumnVO vo) {
+    public HttpResult<SettUserColumnVO> saveOrUpdate(@RequestBody @Validated SettUserColumnVO vo) {
         SettUserColumnPO queryParam = SettUserColumnPO.builder().namespace(vo.getNamespace()).build();
         queryParam.setCreateUser(UserContext.getSessionuser().getUserId());
-        //先删除一下然后插入
-        settUserColumnService.deleteBean(queryParam);
-        settUserColumnService.insert(vo);
-        return HttpResult.success(true);
+        if(vo.getId() == null){
+            settUserColumnService.insert(vo);
+        }else{
+            settUserColumnService.updateSelectiveById(vo);
+        }
+        return HttpResult.success(vo);
     }
 
     @GetMapping("/namespace/{namespace}")
@@ -46,6 +48,16 @@ public class SettUserColumnController {
         queryParam.setCreateUser(UserContext.getSessionuser().getUserId());
         List<SettUserColumnVO> userColumnVOList = settUserColumnService.selectListMP(queryParam.asWrapper());
         return HttpResult.success(userColumnVOList.isEmpty() ? null : userColumnVOList.get(0));
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "根据id删除配置数据")
+    public HttpResult deleteById(@PathVariable("id") Long id){
+        int i = settUserColumnService.deleteById(id);
+        if(i > 0){
+            return HttpResult.success();
+        }
+        return HttpResult.error(null,"删除自定义列数据失败");
     }
 
 }
