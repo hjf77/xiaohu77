@@ -7,6 +7,7 @@ import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author qixiaobo
@@ -21,4 +22,10 @@ public interface UcenterMsOrganizationService extends BaseService<UcenterMsOrgan
     UcenterMsOrganizationVO selectById(Serializable primaryValue);
 
     int countPipelineNum(String orgId);
+
+    /**
+     *按id模糊查询
+     */
+    @CloudMethod
+    List<UcenterMsOrganizationVO> vagueById(String orgId);
 }

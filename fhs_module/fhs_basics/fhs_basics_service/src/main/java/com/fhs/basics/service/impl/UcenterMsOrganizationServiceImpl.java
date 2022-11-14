@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
@@ -19,6 +20,7 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.AutoTrans;
+import com.fhs.easycloud.anno.CloudMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,5 +158,14 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     @Override
     public int countPipelineNum(String orgId) {
         return mapper.countPipelineNum(orgId);
+    }
+    /**
+     *按id模糊查询
+     */
+    @CloudMethod
+    public List<UcenterMsOrganizationVO> vagueById(String orgId){
+        LambdaQueryWrapper<UcenterMsOrganizationPO> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.like(UcenterMsOrganizationPO ::getId, orgId);
+        return super.selectListMP(queryWrapper);
     }
 }
