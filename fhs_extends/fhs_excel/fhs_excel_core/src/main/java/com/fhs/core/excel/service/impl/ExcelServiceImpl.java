@@ -567,7 +567,7 @@ public class ExcelServiceImpl implements ExcelService {
             field.setAccessible(true);
             for (int i = 0; i < doList.size(); i++) {
                 if (CheckUtils.isNullOrEmpty(field.get(doList.get(i)))) {
-                    valiStr.append("第" + (i + 2) + "行第" + fieldName + "不可为空");
+                    valiStr.append("第" + (i + 2) + "行" + fieldName + "不可为空");
                 }
             }
         }
