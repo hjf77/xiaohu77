@@ -254,4 +254,9 @@ public interface ExceptionConstant {
      * 当前用户下只有一个家庭时 不能删除！
      */
     Integer FAMILY_NUM_LESS_THAN_ONE = 100154;
+
+    /**
+     * 用户无操作当前设备权限
+     */
+    Integer USER_NOT_OPERATION_AUTHORITY = 100155;
 }

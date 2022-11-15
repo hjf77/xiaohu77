@@ -546,6 +546,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return result;
     }
 
+    @Override
+    public UcenterMsUserPO selectUserById(Long userId) {
+        return sysUserMapper.selectUserById(userId);
+    }
+
     private List<String> getPermissionUrlAll() {
         return sysUserMapper.getPermissionUrlAll();
     }

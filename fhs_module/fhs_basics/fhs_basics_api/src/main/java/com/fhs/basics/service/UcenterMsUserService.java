@@ -208,4 +208,11 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper);
+
+    /**
+     * 根据id查询用户 不过滤isDelete =1
+     * @param userId
+     * @return
+     */
+    UcenterMsUserPO  selectUserById(Long userId);
 }

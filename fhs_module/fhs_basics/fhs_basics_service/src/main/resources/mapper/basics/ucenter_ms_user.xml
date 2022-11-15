@@ -683,6 +683,28 @@
         AND m.namespace=#{namespace} AND p.permission_code=#{permissonMethodCode}
 
     </select>
+    <select id="selectUserById" resultType="com.fhs.basics.po.UcenterMsUserPO" parameterType="java.lang.Long">
+        SELECT
+            user_name AS userName,
+            is_enable AS isEnable,
+            user_id AS userId,
+            user_login_name AS userLoginName,
+            is_admin AS isAdmin,
+            password AS password,
+            mobile,
+            email,
+            sex,
+            organization_id AS organizationId,
+            create_user AS createUser,
+            create_time AS createTime,
+            update_user AS updateUser,
+            update_time AS updateTime,
+            group_code AS groupCode,
+            is_tuya_user AS isTuYaUser,
+            u_id AS uId,
+            country_code AS countryCode
+        FROM t_ucenter_ms_user WHERE user_id = #{userId}
+    </select>
 
 </mapper>
 

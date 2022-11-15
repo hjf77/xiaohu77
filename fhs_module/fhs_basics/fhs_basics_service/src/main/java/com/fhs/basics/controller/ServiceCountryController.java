@@ -52,6 +52,20 @@ public class ServiceCountryController extends ModelSuperController<ServiceCountr
         return HttpResult.success(groupCountryList);
     }
 
+    /**
+     * 无分页查询bean列表数据
+     *
+     * @throws Exception
+     */
+    @Override
+    @ResponseBody
+    @GetMapping("findList")
+    @ApiOperation("后台-不分页查询集合-一般用于下拉")
+    public List<ServiceCountryVO> findList(ServiceCountryVO serviceCountryVO) {
+        List<ServiceCountryVO> serviceCountryVOS = baseService.findForList(serviceCountryVO);
+        return serviceCountryVOS;
+    }
+
     @Override
     @NotRepeat
     @ResponseBody

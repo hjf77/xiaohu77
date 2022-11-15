@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 系统用户mapper
@@ -265,4 +264,6 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      */
     List<UcenterMsUserPO> getUserByOrgAndPermission(@Param("companyId") String companyId, @Param("namespace") String namespace, @Param("permissonMethodCode") String permissonMethodCode);
+
+    UcenterMsUserPO selectUserById(@Param("userId") Long userId);
 }
