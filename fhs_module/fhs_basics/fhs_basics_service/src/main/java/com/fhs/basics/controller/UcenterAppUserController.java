@@ -54,6 +54,7 @@ public class UcenterAppUserController extends ModelSuperController<UcenterMsUser
             //这里的是1是DO的index
             List<UcenterMsUserVO> ucenterMsUserPOS = page.getRecords();
             ucenterMsUserPOS.forEach(u->{
+                u.setInternationalCode(serviceCountryService.selectBean(ServiceCountryPO.builder().countryCode(u.getCountryCode()).build()).getInternationalCode());
                 u.setCountryName(serviceCountryService.selectBean(ServiceCountryPO.builder().countryCode(u.getCountryCode()).build()).getFullCname());
             });
             return page;
@@ -79,6 +80,7 @@ public class UcenterAppUserController extends ModelSuperController<UcenterMsUser
         if (isPermitted("see")) {
             UcenterMsUserVO ucenterMsUserVO = baseService.selectById(id);
             ucenterMsUserVO.setCountryName(serviceCountryService.selectBean(ServiceCountryPO.builder().countryCode(ucenterMsUserVO.getCountryCode()).build()).getFullCname());
+            ucenterMsUserVO.setInternationalCode(serviceCountryService.selectBean(ServiceCountryPO.builder().countryCode(ucenterMsUserVO.getCountryCode()).build()).getInternationalCode());
             transService.transOne(ucenterMsUserVO);
             return ucenterMsUserVO;
         } else {

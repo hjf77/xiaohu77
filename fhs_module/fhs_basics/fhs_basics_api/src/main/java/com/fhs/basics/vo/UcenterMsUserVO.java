@@ -44,4 +44,7 @@ public class UcenterMsUserVO extends UcenterMsUserPO implements VO {
     @ApiModelProperty("设备名称")
     private String name;
 
+    @ApiModelProperty("国家化码")
+    private String internationalCode;
+
 }
