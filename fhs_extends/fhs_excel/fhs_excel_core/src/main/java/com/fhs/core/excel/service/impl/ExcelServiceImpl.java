@@ -334,7 +334,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     for (int k = 0; k < strs.length; k++) {
                                         String tran = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + strs[k]);
                                         if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tran)) {
-                                            valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                            valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                         }
                                         tranStr.append(tran).append(",");
                                     }
@@ -343,7 +343,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 } else {
                                     String tranStr = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + data);
                                     if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tranStr)) {
-                                        valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                         continue;
                                     }
                                     ReflectUtils.setValue(objDo, field, field.getGenericType().equals(String.class) ? tranStr : ConverterUtils.toInteger(tranStr));
@@ -373,7 +373,7 @@ public class ExcelServiceImpl implements ExcelService {
                                         queryWrapper.eq(targetFieldName, data);
                                         VO vo = baseService.selectOneMP(queryWrapper);
                                         if (vo == null) {
-                                            valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                            valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                             continue;
                                         }
                                         Object pkey = vo.getPkey();
