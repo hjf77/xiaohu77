@@ -896,12 +896,12 @@ public class ExcelUtils {
             // 是否是空行，如果为空行，则赋值的数组行数不会变，下一次循环会覆盖
             boolean isNullFlag = true;
             while (j < colNum) {
-
                 dataArray[dataRow][j] = getCellValue(row.getCell(j));
-                j++;
                 if (!"".equals(getCellValue(row.getCell(j)))) {
+
                     isNullFlag = false;
                 }
+                j++;
             }
             if (isNullFlag) {
                 nullRows++;
@@ -909,7 +909,7 @@ public class ExcelUtils {
                 dataRow++;
             }
         }
-        return Arrays.copyOfRange(dataArray, 0, rowNum - nullRows);
+        return Arrays.copyOfRange(dataArray, 0, rowNum - titleRowNum - nullRows);
     }
 
 
