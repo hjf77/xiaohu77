@@ -160,6 +160,7 @@ public class CommonMessageController extends ModelSuperController<CommonMessageV
                     break;
                 }
             }
+            wrapper.isNull("msg_type");
             this.setExportCache(wrapper);
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
