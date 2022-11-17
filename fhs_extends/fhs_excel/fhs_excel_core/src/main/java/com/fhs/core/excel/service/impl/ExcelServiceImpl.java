@@ -251,7 +251,7 @@ public class ExcelServiceImpl implements ExcelService {
         Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
         Trans trans = declaredField.getAnnotation(Trans.class);
         //排除调字典翻译的字段
-        if(trans == null || !trans.type().equals(TransType.DICTIONARY)){
+        if(trans == null || !TransType.DICTIONARY.equals(trans.type())){
             ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
             if (apiModelProperty != null) {
                 String value = apiModelProperty.value();
@@ -576,7 +576,15 @@ public class ExcelServiceImpl implements ExcelService {
             String fieldName = getFieldRemark(field);
             // excel模板中不包含的不校验
             if (!excelIncludeTitleSet.contains(fieldName)) {
-                continue;
+                ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
+                if(importExcelTitle != null){
+                    fieldName = importExcelTitle.value();
+                    if (!excelIncludeTitleSet.contains(fieldName)){
+                        continue;
+                    }
+                }else{
+                    continue;
+                }
             }
             field.setAccessible(true);
             for (int i = 0; i < doList.size(); i++) {
