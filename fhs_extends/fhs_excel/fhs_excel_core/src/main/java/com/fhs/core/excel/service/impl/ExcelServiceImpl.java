@@ -252,8 +252,8 @@ public class ExcelServiceImpl implements ExcelService {
         ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
         if (apiModelProperty != null) {
             String value = apiModelProperty.value();
-            if (apiModelProperty.value().contains("(")) {
-                String unit = value.substring(value.indexOf("(") + 1, value.indexOf(")"));
+            if (apiModelProperty.value().contains("（")) {
+                String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
                 obj = obj + unit;
             }
         }
