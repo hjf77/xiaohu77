@@ -55,7 +55,7 @@ public class SettUserColumnController {
     public HttpResult deleteById(@PathVariable("id") Long id){
         SettUserColumnPO settUserColumnPO = settUserColumnService.selectById(id);
         if(settUserColumnPO == null){
-            return HttpResult.error(null,"当前数据不存在或已经被删除！");
+            return HttpResult.error(null,"当前自定义列数据已经不存在或已经被恢复默认！");
         }
         int i = settUserColumnService.deleteById(id);
         if(i > 0){
