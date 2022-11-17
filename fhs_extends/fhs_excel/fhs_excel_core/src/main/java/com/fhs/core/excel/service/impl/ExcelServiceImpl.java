@@ -210,7 +210,7 @@ public class ExcelServiceImpl implements ExcelService {
         List<String> titles = fields.stream().map(FieldVO::getLabel).collect(Collectors.toList());
         List<String> names = fields.stream().map(FieldVO::getName).collect(Collectors.toList());
         List<Map> dataMapList = new ArrayList<>();
-        for (Object data : datas) {
+        for (V data : datas) {
             Map<String, Object> val = new HashMap<>();
             for (FieldVO field : fields) {
                 String fieldName = field.getName();
@@ -248,6 +248,15 @@ public class ExcelServiceImpl implements ExcelService {
             return getFieldData(fieldName, data);
         }
         Object obj = getGetMethod(data, fieldName);
+        Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
+        ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
+        if (apiModelProperty != null) {
+            String value = apiModelProperty.value();
+            if (apiModelProperty.value().contains("(")) {
+                String unit = value.substring(value.indexOf("(") + 1, value.indexOf(")"));
+                obj = obj + unit;
+            }
+        }
         if (obj instanceof Date) {
             Field field = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
             //如果加了日期格式化则就按照格式化的来
@@ -610,7 +619,7 @@ public class ExcelServiceImpl implements ExcelService {
             throw new ValidationException("获取文件IO流失败", e);
         }
 
-        if(dataArray == null || dataArray.length <= 0){
+        if (dataArray == null || dataArray.length <= 0) {
             throw new ValidationException("导入Excel文件没有数据");
         }
         importExcel(dataArray, titleArray, targetService, importSett);
