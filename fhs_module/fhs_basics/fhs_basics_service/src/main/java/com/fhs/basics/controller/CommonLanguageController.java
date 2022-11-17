@@ -7,6 +7,8 @@ import com.fhs.basics.constant.CommonMessageConstant;
 import com.fhs.basics.constant.ExceptionConstant;
 import com.fhs.basics.po.CommonLanguagePO;
 import com.fhs.basics.service.CommonLanguageService;
+import com.fhs.basics.vo.CommonLanguageExportArVO;
+import com.fhs.basics.vo.CommonLanguageExportEnVO;
 import com.fhs.basics.vo.CommonLanguageExportVO;
 import com.fhs.basics.vo.CommonLanguageVO;
 import com.fhs.core.base.po.BasePO;
@@ -84,15 +86,47 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
         if (this.isPermitted("add")) {
             List<CommonLanguageVO> commonLanguageVOS = commonLanguageService.selectListMP(new LambdaQueryWrapper<CommonLanguagePO>().orderByDesc(CommonLanguagePO::getCreateTime));
             List<CommonLanguageExportVO> commonLanguageExportVOS = new ArrayList<>();
+            List<CommonLanguageExportEnVO> commonLanguageExportEnVOS = new ArrayList<>();
+            List<CommonLanguageExportArVO> commonLanguageExportArVOS = new ArrayList<>();
             commonLanguageVOS.forEach(c -> {
                 CommonLanguageExportVO commonLanguageExportVO = new CommonLanguageExportVO();
                 commonLanguageExportVO.setIndex(commonLanguageExportVOS.size() + 1);
                 BeanUtils.copyProperties(c, commonLanguageExportVO);
                 commonLanguageExportVOS.add(commonLanguageExportVO);
+                CommonLanguageExportEnVO commonLanguageExportEnVO = new CommonLanguageExportEnVO();
+                BeanUtils.copyProperties(commonLanguageExportVO, commonLanguageExportEnVO);
+                commonLanguageExportEnVOS.add(commonLanguageExportEnVO);
+                CommonLanguageExportArVO commonLanguageExportArVO = new CommonLanguageExportArVO();
+                BeanUtils.copyProperties(commonLanguageExportVO, commonLanguageExportArVO);
+                commonLanguageExportArVOS.add(commonLanguageExportArVO);
             });
             //导出
             String languageTag = commonLanguageService.getLanguageTag();
-            try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportVO.class)
+            try {
+                if (languageTag.equals(CommonMessageConstant.languag_zh_CN)) {
+                    try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportVO.class)
+                            .build(commonLanguageExportVOS)) {
+                        AttachmentExportUtil.export(workbook, "语言信息一览表", response);
+                    }
+                } else if (languageTag.equals(CommonMessageConstant.languag_ar)) {
+                    try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportArVO.class)
+                            .build(commonLanguageExportArVOS)) {
+                        AttachmentExportUtil.export(workbook, "语言信息一览表_ar", response);
+                    }
+                } else {
+                    try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportEnVO.class)
+                            .build(commonLanguageExportEnVOS)) {
+                        AttachmentExportUtil.export(workbook, "语言信息一览表_en", response);
+                    }
+                }
+            } catch (IOException e) {
+                throw new BusinessException(ExceptionConstant.EXPORT_FAIL);
+            }
+        } else {
+            throw new NotPremissionException();
+        }
+
+            /*try (Workbook workbook = DefaultExcelBuilder.of(CommonLanguageExportVO.class)
                     .build(commonLanguageExportVOS)) {
                 if (languageTag.equals(CommonMessageConstant.languag_zh_CN)) {
                     AttachmentExportUtil.export(workbook, "语言信息一览表", response);
@@ -106,7 +140,7 @@ public class CommonLanguageController extends ModelSuperController<CommonLanguag
             }
         } else {
             throw new NotPremissionException();
-        }
+        }*/
     }
 
 
