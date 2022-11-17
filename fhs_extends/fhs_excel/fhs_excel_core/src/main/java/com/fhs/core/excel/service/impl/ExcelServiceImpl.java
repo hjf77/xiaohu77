@@ -249,14 +249,19 @@ public class ExcelServiceImpl implements ExcelService {
         }
         Object obj = getGetMethod(data, fieldName);
         Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
-        ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
-        if (apiModelProperty != null) {
-            String value = apiModelProperty.value();
-            if (apiModelProperty.value().contains("（")) {
-                String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
-                obj = obj + unit;
+        Trans trans = declaredField.getAnnotation(Trans.class);
+        //排除调字典翻译的字段
+        if(trans == null || !trans.type().equals(TransType.DICTIONARY)){
+            ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
+            if (apiModelProperty != null) {
+                String value = apiModelProperty.value();
+                if (apiModelProperty.value().contains("（")) {
+                    String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
+                    obj = obj + unit;
+                }
             }
         }
+
         if (obj instanceof Date) {
             Field field = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
             //如果加了日期格式化则就按照格式化的来
