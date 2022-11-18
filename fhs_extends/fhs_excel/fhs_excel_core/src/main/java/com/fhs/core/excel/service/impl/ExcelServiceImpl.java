@@ -251,7 +251,7 @@ public class ExcelServiceImpl implements ExcelService {
         Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
         Trans trans = declaredField.getAnnotation(Trans.class);
         //排除调字典翻译的字段
-        if(trans == null || !TransType.DICTIONARY.equals(trans.type())){
+        if (trans == null || !TransType.DICTIONARY.equals(trans.type())) {
             ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
             if (apiModelProperty != null) {
                 String value = apiModelProperty.value();
@@ -315,6 +315,7 @@ public class ExcelServiceImpl implements ExcelService {
         StringBuilder valiStr = new StringBuilder();
         //需要反翻译的名称
         Map<String, Set<String>> needTrans = new HashMap<>();
+        Map<Integer, Set<String>> valiMap = new HashMap<>();
 
         //初始化数据集合
         List<Object> doList = new ArrayList<>();
@@ -348,6 +349,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     for (int k = 0; k < strs.length; k++) {
                                         String tran = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + strs[k]);
                                         if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tran)) {
+                                            recordValidationField(valiMap,j + 2,fieldName);
                                             valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                         }
                                         tranStr.append(tran).append(",");
@@ -357,6 +359,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 } else {
                                     String tranStr = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + data);
                                     if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tranStr)) {
+                                        recordValidationField(valiMap,j + 2,fieldName);
                                         valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                         continue;
                                     }
@@ -387,6 +390,7 @@ public class ExcelServiceImpl implements ExcelService {
                                         queryWrapper.eq(targetFieldName, data);
                                         VO vo = baseService.selectOneMP(queryWrapper);
                                         if (vo == null) {
+                                            recordValidationField(valiMap,j + 2,fieldName);
                                             valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                             continue;
                                         }
@@ -404,10 +408,12 @@ public class ExcelServiceImpl implements ExcelService {
                             Length length = field.getAnnotation(Length.class);
                             if (length != null) {
                                 if (data.toString().length() > length.max()) {
+                                    recordValidationField(valiMap,j + 2,fieldName);
                                     valiStr.append(fieldName + "长度不能超过" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
                                 }
                                 if (data.toString().length() < length.min()) {
+                                    recordValidationField(valiMap,j + 2,fieldName);
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
                                 }
@@ -419,6 +425,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                                     boolean isMatch = java.util.regex.Pattern.matches(emailPattern, data.toString());
                                     if (!isMatch) {
+                                        recordValidationField(valiMap,j + 2,fieldName);
                                         valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                         continue;
                                     }
@@ -429,6 +436,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     String regexp = patternAnnotation.regexp();
                                     boolean isMatch = java.util.regex.Pattern.matches(regexp, data.toString());
                                     if (!isMatch) {
+                                        recordValidationField(valiMap,j + 2,fieldName);
                                         valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                         continue;
                                     }
@@ -445,6 +453,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 try {
                                     ReflectUtils.setValue(objDo, field, DateUtils.parseStr(data.toString()));
                                 } catch (Exception e) {
+                                    recordValidationField(valiMap,j + 2,fieldName);
                                     valiStr.append(fieldName + "列请输入正确的时间格式，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
                                 }
@@ -459,7 +468,7 @@ public class ExcelServiceImpl implements ExcelService {
 
         untransAuto(needTrans, doList, valiStr, importSett.getVoModel().getClass());
         if (doList.size() > 0) {
-            notNullNotEmptyCheck(doList, valiStr, titleArray);
+            notNullNotEmptyCheck(doList, valiStr, titleArray, valiMap);
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
             if (valiStr.length() != 0) {
                 throw new ValidationException(valiStr.toString());
@@ -472,6 +481,19 @@ public class ExcelServiceImpl implements ExcelService {
         } else {
             throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
         }
+    }
+
+    /**
+     * 记录校验不通过的行、列
+     * @param valiMap
+     * @param rowNum
+     * @param fieldName
+     */
+    private void recordValidationField(Map<Integer, Set<String>> valiMap, Integer rowNum, String fieldName) {
+        if (!valiMap.containsKey(rowNum)) {
+            valiMap.put(rowNum, new HashSet<>());
+        }
+        valiMap.get(rowNum).add(fieldName);
     }
 
     /**
@@ -559,9 +581,10 @@ public class ExcelServiceImpl implements ExcelService {
      *
      * @param doList
      * @param valiStr
+     * @param valiMap
      * @return
      */
-    public StringBuilder notNullNotEmptyCheck(List<Object> doList, StringBuilder valiStr, Object[] titleArray) throws IllegalAccessException {
+    public StringBuilder notNullNotEmptyCheck(List<Object> doList, StringBuilder valiStr, Object[] titleArray, Map<Integer, Set<String>> valiMap) throws IllegalAccessException {
         Set<Field> hasCheckField = new HashSet<>();
         List<Field> notEmptyFieldList = ReflectUtils.getAnnotationField(doList.get(0).getClass(), NotEmpty.class);
         if (!notEmptyFieldList.isEmpty()) {
@@ -577,17 +600,23 @@ public class ExcelServiceImpl implements ExcelService {
             // excel模板中不包含的不校验
             if (!excelIncludeTitleSet.contains(fieldName)) {
                 ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
-                if(importExcelTitle != null){
+                if (importExcelTitle != null) {
                     fieldName = importExcelTitle.value();
-                    if (!excelIncludeTitleSet.contains(fieldName)){
+                    if (!excelIncludeTitleSet.contains(fieldName)) {
                         continue;
                     }
-                }else{
+                } else {
                     continue;
                 }
             }
             field.setAccessible(true);
             for (int i = 0; i < doList.size(); i++) {
+                Set<String> valiSet = valiMap.get(i + 2);
+                if (valiSet != null) {
+                    if (valiSet.contains(fieldName)) {
+                        continue;
+                    }
+                }
                 if (CheckUtils.isNullOrEmpty(field.get(doList.get(i)))) {
                     valiStr.append("第" + (i + 2) + "行" + fieldName + "不可为空");
                 }
