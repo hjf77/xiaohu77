@@ -234,7 +234,7 @@ public class RequestSignUtils {
             sb.append(nonce);
         }
         sb.append(stringToSign);
-        System.out.println(sb.toString());
+       // System.out.println(sb.toString());
         return Sha256Util.sha256HMAC(sb.toString(), secret);
     }
 

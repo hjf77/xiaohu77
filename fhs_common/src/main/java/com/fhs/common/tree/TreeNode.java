@@ -40,6 +40,13 @@ public class TreeNode<T> {
      */
     @ApiModelProperty(value = "父节点id")
     private Serializable parentId;
+
+    /**
+     * 国际化码
+     */
+    @ApiModelProperty(value = "国际化码")
+    private String internationalCode;
+
     /**
      * 节点数据
      */
