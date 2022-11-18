@@ -9,6 +9,7 @@ import com.fhs.core.base.anno.NotRepeatDesc;
 import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.anno.TransDefaultSett;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
@@ -35,6 +36,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @TableName("t_ucenter_ms_organization")
 @NotRepeatDesc("同一个父部门下的子部门名称不可重复")
+@TransDefaultSett(defaultFields = "name",defaultAlias = "org",isUseCache = true,cacheSeconds = 1000)
 @ApiModel(value = "UcenterMsOrganizationDO", description = "UcenterMsOrganization参数")
 public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> implements Treeable {
 

@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.po.BasePO;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.anno.TransDefaultSett;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
@@ -47,6 +48,7 @@ import java.util.List;
 @AllArgsConstructor
 @TableName("t_ucenter_ms_user")
 @EqualsAndHashCode(callSuper = true)
+@TransDefaultSett(isUseCache = true,cacheSeconds = 100,isAccess = true)
 @ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
 public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
 
@@ -142,7 +144,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @TableField("organization_id")
-    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
+    @Trans(type = TransType.SIMPLE, target = UcenterMsOrganizationPO.class, ref = "orgName")
     @ApiModelProperty("组织机构编号")
     private String organizationId;
 

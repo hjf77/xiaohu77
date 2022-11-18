@@ -13,12 +13,15 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.trans.service.impl.DictionaryTransService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 字典分组
@@ -30,7 +33,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("basic")
-public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGroupVO, ServiceDictGroupPO> implements ServiceDictGroupService {
+public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGroupVO, ServiceDictGroupPO> implements ServiceDictGroupService, InitializingBean {
 
 
     @Autowired
@@ -39,12 +42,21 @@ public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGrou
     @Autowired
     private ServiceDictItemService dictItemService;
 
+    @Autowired
+    private DictionaryTransService dictionaryTransService;
+
     @Override
-    public boolean refreshRedisCache() {
-        //刷新字典缓存
-        Map<String,String> body = new HashMap<>();
-        body.put("transType", TransType.DICTIONARY);
-        redisCacheService.convertAndSend("trans", JsonUtil.map2json(body));
+    public boolean refreshRedisCache(String groupCode) {
+        LambdaQueryWrapper<ServiceDictItemPO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if(groupCode!=null){
+            lambdaQueryWrapper.eq(ServiceDictItemPO::getDictGroupCode,groupCode);
+        }
+        List<ServiceDictItemVO> dictItemVOList = dictItemService.selectListMP(lambdaQueryWrapper);
+        Map<String,List<ServiceDictItemVO>> dictGroupMap = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
+        for (String dictGroupCode : dictGroupMap.keySet()) {
+            dictionaryTransService.refreshCacheAndNoticeOtherService(dictGroupCode,dictGroupMap.get(dictGroupCode).stream().collect(Collectors
+                    .toMap(ServiceDictItemVO::getDictCode, ServiceDictItemVO::getDictDesc)));
+        }
         return true;
     }
 
@@ -59,5 +71,17 @@ public class ServiceDictGroupServiceImpl extends BaseServiceImpl<ServiceDictGrou
         dictItemService.batchUpdate(items);
         int result = super.updateById(entity);
         return result;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        //初始化所有数据
+        List<ServiceDictItemVO> dictItemVOList = dictItemService.selectListMP(new LambdaQueryWrapper());
+        Map<String,List<ServiceDictItemVO>> dictGroupMap = dictItemVOList.stream().collect(Collectors.groupingBy(ServiceDictItemVO::getDictGroupCode));
+        for (String dictGroupCode : dictGroupMap.keySet()) {
+            dictionaryTransService.refreshCache(dictGroupCode,dictGroupMap.get(dictGroupCode).stream().collect(Collectors
+                    .toMap(ServiceDictItemVO::getDictCode, ServiceDictItemVO::getDictDesc)));
+        }
     }
 }

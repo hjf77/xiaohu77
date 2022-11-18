@@ -87,7 +87,7 @@ public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("organization_id")
-    @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.ORG)
+    @Trans(type = TransType.SIMPLE, target = UcenterMsOrganizationPO.class)
     @ApiModelProperty("组织机构id")
     private String organizationId;
 

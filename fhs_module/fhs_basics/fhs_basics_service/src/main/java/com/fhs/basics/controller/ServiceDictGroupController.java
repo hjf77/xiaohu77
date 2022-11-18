@@ -43,7 +43,7 @@ public class ServiceDictGroupController extends ModelSuperController<ServiceDict
     @GetMapping("refreshRedisCache")
     @ApiOperation("刷新字典缓存")
     public HttpResult<Boolean> refreshRedisCache() {
-        wordbookAndGroupService.refreshRedisCache();
+        wordbookAndGroupService.refreshRedisCache(null);
         return HttpResult.success(true);
     }
 

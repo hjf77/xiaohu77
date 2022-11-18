@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.fhs.cache.service.TransCacheManager;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.anno.NotRepeatDesc;
@@ -102,6 +103,9 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     private RedisCacheService redisCacheService;
 
     @Autowired
+    private TransCacheManager transCacheManager;
+
+    @Autowired
     private AutoDelService autoDelService;
 
     public BaseServiceImpl() {
@@ -175,8 +179,9 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
      * @param entity 实体类
      */
     protected void addCache(P entity) {
+        String pkey = getPkeyVal(entity);
+        transCacheManager.clearCache(this.getPoClass(),pkey);
         if (this.isCacheable) {
-            String pkey = getPkeyVal(entity);
             this.poCache.put(namespace + ":" + pkey, entity);
         }
     }

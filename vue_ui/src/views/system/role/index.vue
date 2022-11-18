@@ -90,7 +90,7 @@ export default {
       columns: [
         {label: "角色名称", name: "roleName", minWidth: 140, type: 'popover'},
         {label: "状态", name: "isEnableName", width: 140, type: 'popover'},
-        {label: "所属机构", name: "transMap.orgName", width: 150},
+        {label: "所属机构", name: "orgName", width: 150},
         {label: "备注", name: "remark", width: 140, type: 'popover'},
         {label: "创建时间", name: "createTime", minWidth: 140, type: 'popover'},
         {
