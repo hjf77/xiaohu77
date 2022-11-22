@@ -53,6 +53,10 @@ public class SettUserColumnController {
     @DeleteMapping("/{id}")
     @ApiOperation(value = "根据id删除配置数据")
     public HttpResult deleteById(@PathVariable("id") Long id){
+        SettUserColumnPO settUserColumnPO = settUserColumnService.selectById(id);
+        if(settUserColumnPO == null){
+            return HttpResult.error(null,"当前自定义列数据已经不存在或已经被恢复默认！");
+        }
         int i = settUserColumnService.deleteById(id);
         if(i > 0){
             return HttpResult.success();
