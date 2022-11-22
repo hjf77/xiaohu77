@@ -21,7 +21,8 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
         SimpleDiscoveryClientAutoConfiguration.class,
         CompositeDiscoveryClientAutoConfiguration.class
 })
-@MapperScan(basePackages = {"com.fhs.*.mapper", "com.fhs.*.*.mapper"})
+@MapperScan(basePackages = {"com.fhs.*.mapper", "com.fhs.*.*.mapper", "com.fhs.flow.dal.mysql.definition"
+        , "com.fhs.flow.dal.mysql.oa","com.fhs.flow.dal.mysql.task"})
 @EnableConfigurationProperties
 @EnableRedisHttpSession
 @EnableMethodCache(basePackages = "com.fhs")
