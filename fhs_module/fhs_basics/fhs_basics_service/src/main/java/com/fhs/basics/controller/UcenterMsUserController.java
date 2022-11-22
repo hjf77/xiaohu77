@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
@@ -73,6 +74,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @Override
     @NotRepeat
     @PostMapping("/")
+    @SaCheckRole("sysUser:add")
     @ApiOperation(value = "新增-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD, voParamIndex = 0)
     public HttpResult<Object> add(@RequestBody @Validated(Add.class) UcenterMsUserVO sysUser) {
@@ -133,6 +135,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     @Override
     @PutMapping("/")
+    @SaCheckRole("sysUser:update")
     @ApiOperation(value = "修改-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_UPATE, voParamIndex = 0)
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) UcenterMsUserVO sysUser) {

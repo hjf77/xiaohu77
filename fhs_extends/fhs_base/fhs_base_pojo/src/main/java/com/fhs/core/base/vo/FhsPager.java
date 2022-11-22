@@ -56,6 +56,11 @@ public class FhsPager<T> implements IPage<T> {
     @ApiModelProperty("分页扩展字段")
     private Map<String, Object> extMap;
 
+    public FhsPager(List<T> records,long total){
+        this.records = records;
+        this.total = total;
+    }
+
 
     @Override
     public List<OrderItem> orders() {
