@@ -84,6 +84,7 @@ public class LogLoginServiceImpl extends BaseServiceImpl<LogLoginVO, LogLoginPO>
         if (typeOut) {
             logLoginVO.setType(LoggerConstant.LOG_LOGIN_OUT);
         }
+        logLoginVO.setOs("local");
         this.insert(logLoginVO);
     }
 
