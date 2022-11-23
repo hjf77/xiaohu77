@@ -3,12 +3,11 @@ package com.fhs.flow.dal.dataobject.definition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fhs.flow.base.po.BpmBasePO;
 import com.fhs.flow.core.mp.type.JsonLongSetTypeHandler;
+import com.fhs.flow.enums.CommonStatusEnum;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,7 +40,7 @@ public class BpmUserGroupPO extends BpmBasePO {
     /**
      * 状态
      *
-     * 枚举
+     * 枚举 {@link CommonStatusEnum}
      */
     private Integer status;
     /**
@@ -50,22 +49,4 @@ public class BpmUserGroupPO extends BpmBasePO {
     @TableField(typeHandler = JsonLongSetTypeHandler.class)
     private Set<Long> memberUserIds;
 
-
-
-    /**
-     * 表单的配置
-     */
-    private String conf;
-    /**
-     * 表单项的数组
-     *
-     * 目前直接将 https://github.com/JakHuang/form-generator 生成的 JSON 串，直接保存
-     * 定义：https://github.com/JakHuang/form-generator/issues/46
-     */
-    @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<String> fields;
-    /**
-     * 备注
-     */
-    private String remark;
 }
