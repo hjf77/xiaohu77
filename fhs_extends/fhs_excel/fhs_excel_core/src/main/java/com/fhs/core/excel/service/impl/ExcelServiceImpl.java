@@ -470,7 +470,7 @@ public class ExcelServiceImpl implements ExcelService {
         if (doList.size() > 0) {
             notNullNotEmptyCheck(doList, valiStr, titleArray, valiMap);
             //校验完成后执行自定义校验
-            if(importSett.getValidationAfter() != null){
+            if(Objects.nonNull(importSett.getValidationAfter())){
                 importSett.getValidationAfter().excelValidationAfter(doList, valiStr);
             }
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
