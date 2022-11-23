@@ -47,6 +47,6 @@ public class ExcelImportSett<V> {
     /**
      * 自定义校验
      */
-    private ValidationAfter validationAfter;
+    private ValidationAfter<V> validationAfter;
 
 }
