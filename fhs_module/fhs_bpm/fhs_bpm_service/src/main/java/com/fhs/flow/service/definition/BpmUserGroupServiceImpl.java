@@ -47,10 +47,9 @@ public class BpmUserGroupServiceImpl implements BpmUserGroupService {
     @Override
     public void updateUserGroup(BpmUserGroupUpdateReqVO updateReqVO) {
         // 校验存在
-        BpmUserGroupPO bpmUserGroupPO = this.validateUserGroupExists(updateReqVO.getId());
+        this.validateUserGroupExists(updateReqVO.getId());
         // 更新
         BpmUserGroupPO updateObj = BpmUserGroupConvert.INSTANCE.convert(updateReqVO);
-        updateObj.setCreateTime(bpmUserGroupPO.getCreateTime());
         userGroupMapper.updateById(updateObj);
     }
 
@@ -62,12 +61,10 @@ public class BpmUserGroupServiceImpl implements BpmUserGroupService {
         userGroupMapper.deleteById(id);
     }
 
-    private BpmUserGroupPO validateUserGroupExists(Long id) {
-        BpmUserGroupPO bpmUserGroupPO = userGroupMapper.selectById(id);
-        if (bpmUserGroupPO == null) {
+    private void validateUserGroupExists(Long id) {
+        if (userGroupMapper.selectById(id) == null) {
             throw exception(USER_GROUP_NOT_EXISTS);
         }
-        return bpmUserGroupPO;
     }
 
     @Override
