@@ -1,7 +1,6 @@
 package com.fhs.flow.service.definition;
 
 import cn.hutool.core.collection.CollUtil;
-import com.fhs.flow.comon.exception.util.ServiceExceptionUtil;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.comon.utils.CollectionUtils;
 import com.fhs.flow.controller.admin.definition.vo.group.BpmUserGroupCreateReqVO;
@@ -48,9 +47,10 @@ public class BpmUserGroupServiceImpl implements BpmUserGroupService {
     @Override
     public void updateUserGroup(BpmUserGroupUpdateReqVO updateReqVO) {
         // 校验存在
-        this.validateUserGroupExists(updateReqVO.getId());
+        BpmUserGroupPO bpmUserGroupPO = this.validateUserGroupExists(updateReqVO.getId());
         // 更新
         BpmUserGroupPO updateObj = BpmUserGroupConvert.INSTANCE.convert(updateReqVO);
+        updateObj.setCreateTime(bpmUserGroupPO.getCreateTime());
         userGroupMapper.updateById(updateObj);
     }
 
@@ -62,10 +62,12 @@ public class BpmUserGroupServiceImpl implements BpmUserGroupService {
         userGroupMapper.deleteById(id);
     }
 
-    private void validateUserGroupExists(Long id) {
-        if (userGroupMapper.selectById(id) == null) {
+    private BpmUserGroupPO validateUserGroupExists(Long id) {
+        BpmUserGroupPO bpmUserGroupPO = userGroupMapper.selectById(id);
+        if (bpmUserGroupPO == null) {
             throw exception(USER_GROUP_NOT_EXISTS);
         }
+        return bpmUserGroupPO;
     }
 
     @Override
