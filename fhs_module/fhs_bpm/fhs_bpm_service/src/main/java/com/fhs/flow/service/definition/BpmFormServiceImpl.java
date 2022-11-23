@@ -49,9 +49,10 @@ public class BpmFormServiceImpl implements BpmFormService {
     public void updateForm(BpmFormUpdateReqVO updateReqVO) {
         this.checkFields(updateReqVO.getFields());
         // 校验存在
-        this.validateFormExists(updateReqVO.getId());
+        BpmFormPO bpmFormPO = this.validateFormExists(updateReqVO.getId());
         // 更新
         BpmFormPO updateObj = BpmFormConvert.INSTANCE.convert(updateReqVO);
+        updateObj.setCreateTime(bpmFormPO.getCreateTime());
         formMapper.updateById(updateObj);
     }
 
@@ -63,10 +64,12 @@ public class BpmFormServiceImpl implements BpmFormService {
         formMapper.deleteById(id);
     }
 
-    private void validateFormExists(Long id) {
-        if (formMapper.selectById(id) == null) {
+    private BpmFormPO validateFormExists(Long id) {
+        BpmFormPO bpmFormPO = formMapper.selectById(id);
+        if (bpmFormPO == null) {
             throw exception(FORM_NOT_EXISTS);
         }
+        return bpmFormPO;
     }
 
     @Override
