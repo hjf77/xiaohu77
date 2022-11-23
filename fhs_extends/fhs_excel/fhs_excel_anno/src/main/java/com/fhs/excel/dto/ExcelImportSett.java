@@ -1,6 +1,7 @@
 package com.fhs.excel.dto;
 
 import com.fhs.excel.service.DoIniter;
+import com.fhs.excel.service.ValidationAfter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,5 +43,10 @@ public class ExcelImportSett<V> {
      * 调用的Controller
      */
     private Class<?> controllerClass;
+
+    /**
+     * 自定义校验
+     */
+    private ValidationAfter validationAfter;
 
 }

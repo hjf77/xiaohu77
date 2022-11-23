@@ -32,7 +32,7 @@ public interface ExcelService {
      *
      * @param file          文件
      * @param targetService baseservice
-     * @param voClass       do的类
+     * @param voClass       vo的类
      * @param importSett    其他配置
      * @throws ValidationException
      */
@@ -41,8 +41,8 @@ public interface ExcelService {
     /**
      * 导出excel
      *
-     * @param datas     需要导出的数据
-     * @param fields    需要导出的数据列
+     * @param datas  需要导出的数据
+     * @param fields 需要导出的数据列
      * @param <V>
      * @return
      */
