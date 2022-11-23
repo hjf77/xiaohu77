@@ -34,7 +34,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     /**
      * 登陆
      *
-     * @param adminUser
+     * @param loginVO
      * @return
      */
     UcenterMsUserVO login(LoginVO loginVO);
