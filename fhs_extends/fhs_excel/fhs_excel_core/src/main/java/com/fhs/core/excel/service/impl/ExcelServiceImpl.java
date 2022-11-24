@@ -667,9 +667,6 @@ public class ExcelServiceImpl implements ExcelService {
             throw new ValidationException("获取文件IO流失败", e);
         }
 
-        if (dataArray == null || dataArray.length <= 0) {
-            throw new ValidationException("导入Excel文件没有数据");
-        }
         importExcel(dataArray, titleArray, targetService, importSett);
     }
 
