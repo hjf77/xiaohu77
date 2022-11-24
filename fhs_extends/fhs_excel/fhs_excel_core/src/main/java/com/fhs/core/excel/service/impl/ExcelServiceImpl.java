@@ -470,7 +470,7 @@ public class ExcelServiceImpl implements ExcelService {
         if (doList.size() > 0) {
             notNullNotEmptyCheck(doList, valiStr, titleArray, valiMap);
             //校验完成后执行自定义校验
-            if(Objects.nonNull(importSett.getValidationAfter())){
+            if (Objects.nonNull(importSett.getValidationAfter())) {
                 importSett.getValidationAfter().excelValidationAfter(doList, valiStr);
             }
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
@@ -649,11 +649,11 @@ public class ExcelServiceImpl implements ExcelService {
     @Override
     public void importExcel(MultipartFile file, BaseService targetService, Class<?> voClass, ExcelImportSett importSett) throws Exception {
 
-        Object[][] dataArray = new Object[0][];
-        Object[] titleArray = new Object[0];
         try {
-            dataArray = ExcelUtils.importExcel(file, importSett.getTitleRowNum(), importSett.getColNum());
-            titleArray = ExcelUtils.getExcelTitleRow(file, importSett.getTitleRowNum(), importSett.getColNum());
+            Object[][] dataArray = ExcelUtils.importExcel(file, importSett.getTitleRowNum(), importSett.getColNum());
+            Object[] titleArray = ExcelUtils.getExcelTitleRow(file, importSett.getTitleRowNum(), importSett.getColNum());
+            dataArray = dataArray != null ? dataArray : new Object[0][];
+            titleArray = titleArray != null ? titleArray : new Object[0];
             //校验导入文件title和模板文件title是否一致
             validationFileTemplate(targetService, importSett, titleArray);
             for (int i = 0; i < titleArray.length; i++) {
@@ -663,11 +663,10 @@ public class ExcelServiceImpl implements ExcelService {
                     titleArray[i] = tempTitle.substring(0, tempTitle.indexOf("("));
                 }
             }
+            importExcel(dataArray, titleArray, targetService, importSett);
         } catch (IOException e) {
             throw new ValidationException("获取文件IO流失败", e);
         }
-
-        importExcel(dataArray, titleArray, targetService, importSett);
     }
 
     /**
