@@ -1,7 +1,7 @@
 package com.fhs.flow.controller.admin.definition;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.fhs.flow.comon.pojo.CommonResult;
+import com.fhs.core.result.HttpResult;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleCreateReqVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleRespVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleUpdateReqVO;
@@ -38,24 +38,24 @@ public class BpmTaskAssignRuleController {
             @ApiImplicitParam(name = "processDefinitionId", value = "流程定义的编号", example = "2048")
     })
     @SaCheckRole("task-assign-rule:see")
-    public CommonResult<List<BpmTaskAssignRuleRespVO>> getTaskAssignRuleList(
+    public List<BpmTaskAssignRuleRespVO> getTaskAssignRuleList(
             @RequestParam(value = "modelId", required = false) String modelId,
             @RequestParam(value = "processDefinitionId", required = false) String processDefinitionId) {
-        return success(taskAssignRuleService.getTaskAssignRuleList(modelId, processDefinitionId));
+        return taskAssignRuleService.getTaskAssignRuleList(modelId, processDefinitionId);
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "创建任务分配规则")
     @SaCheckRole("task-assign-rule:add")
-    public CommonResult<Long> createTaskAssignRule(@Valid @RequestBody BpmTaskAssignRuleCreateReqVO reqVO) {
-        return success(taskAssignRuleService.createTaskAssignRule(reqVO));
+    public HttpResult<Long> createTaskAssignRule(@Valid @RequestBody BpmTaskAssignRuleCreateReqVO reqVO) {
+        return success(taskAssignRuleService.createTaskAssignRule(reqVO)).toHttpResult();
     }
 
     @PutMapping("/update")
     @ApiOperation(value = "更新任务分配规则")
     @SaCheckRole("task-assign-rule:update")
-    public CommonResult<Boolean> updateTaskAssignRule(@Valid @RequestBody BpmTaskAssignRuleUpdateReqVO reqVO) {
+    public HttpResult<Boolean> updateTaskAssignRule(@Valid @RequestBody BpmTaskAssignRuleUpdateReqVO reqVO) {
         taskAssignRuleService.updateTaskAssignRule(reqVO);
-        return success(true);
+        return success(true).toHttpResult();
     }
 }
