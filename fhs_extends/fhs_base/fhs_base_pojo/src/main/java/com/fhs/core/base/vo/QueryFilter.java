@@ -1,8 +1,6 @@
 package com.fhs.core.base.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
@@ -18,9 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -54,7 +50,7 @@ public class QueryFilter<T> {
 
     private static final String OR = "OR";
 
-    static{
+    static {
         OPEARTOR_SET.add("=");
         OPEARTOR_SET.add(">");
         OPEARTOR_SET.add(">=");
@@ -153,14 +149,14 @@ public class QueryFilter<T> {
     }
 
 
-
     /**
      * 类似bean seacher的高级查询语法支持
+     *
      * @param currentModelClass
      * @param <Z>
      * @return
      */
-    public static <Z> QueryWrapper<Z> reqParam2Wrapper(Class<Z> currentModelClass){
+    public static <Z> QueryWrapper<Z> reqParam2Wrapper(Class<Z> currentModelClass) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Map<String, String> paramMap = new HashMap<>();
         Map<String, String[]> tempMap = request.getParameterMap();
@@ -172,12 +168,12 @@ public class QueryFilter<T> {
         QueryFilter<Z> queryFilter = new QueryFilter<>();
         for (String fieldName : fieldNames) {
             //有值并且不为空的才处理
-            if(paramMap.containsKey(fieldName) && !StringUtils.isEmpty(ConverterUtils.toString(paramMap.get(fieldName)))){
+            if (paramMap.containsKey(fieldName) && !StringUtils.isEmpty(ConverterUtils.toString(paramMap.get(fieldName)))) {
                 QueryField queryField = new QueryField();
                 //指定了运算符则使用指定的运算符，没有指定则使用=
-                if(paramMap.containsKey(fieldName + "-op")){
+                if (paramMap.containsKey(fieldName + "-op")) {
                     queryField.setOperation(ConverterUtils.toString(paramMap.get(fieldName + "-op")));
-                }else{
+                } else {
                     queryField.setOperation("=");
                 }
                 queryField.setProperty(fieldName);
@@ -187,10 +183,10 @@ public class QueryFilter<T> {
         }
         //处理is null和 not_null
         for (Map.Entry<String, String> paramEntry : paramMap.entrySet()) {
-            if("is_null".equals(paramEntry.getValue()) || "not_null".equals(paramEntry.getValue())){
+            if ("is_null".equals(paramEntry.getValue()) || "not_null".equals(paramEntry.getValue())) {
                 QueryField queryField = new QueryField();
                 queryField.setOperation(ConverterUtils.toString(paramEntry.getValue()));
-                queryField.setProperty(paramEntry.getKey().replace("-op",""));
+                queryField.setProperty(paramEntry.getKey().replace("-op", ""));
                 queryFilter.getQuerys().add(queryField);
             }
         }
@@ -202,7 +198,7 @@ public class QueryFilter<T> {
             safeFieldsSet = new HashSet<>(Arrays.asList(safeFields));
         }
         List<Field> safeFieldList = ReflectUtils.getAnnotationField(currentModelClass, SafeField.class);
-        if(!safeFieldList.isEmpty()){
+        if (!safeFieldList.isEmpty()) {
             safeFieldsSet.addAll(safeFieldList.stream().map(Field::getName).collect(Collectors.toList()));
         }
         QueryWrapper<T> queryWrapper = new QueryWrapper();
@@ -304,6 +300,7 @@ public class QueryFilter<T> {
 
     /**
      * 获取目标类
+     *
      * @param targetClassName 类全名
      * @return 类对象
      */
@@ -333,32 +330,32 @@ public class QueryFilter<T> {
             return;
         }
         String field = null;
-        if (!StringUtils.isEmpty(queryField.getTarget()) ) {
-            if(StringUtils.isEmpty(queryField.getField())){
+        if (!StringUtils.isEmpty(queryField.getTarget())) {
+            if (StringUtils.isEmpty(queryField.getField())) {
                 throw new ParamsInValidException("当target不为空的时候field也一定不可以为空，字段:" + queryField.getProperty());
             }
 
-            if(!OPEARTOR_SET.contains(queryField.getOperation())){
+            if (!OPEARTOR_SET.contains(queryField.getOperation())) {
                 throw new ParamsInValidException("操作符不受支持:" + queryField.getOperation());
             }
-            if(!isSqlValid(queryField.getValue() + "")){
+            if (!isSqlValid(queryField.getValue() + "")) {
                 throw new ParamsInValidException("字段值校验出SQL注入风险:" + queryField.getValue());
             }
 
             field = getField(queryField.getField(), currentModelClass);
 
             Object propValue = queryField.getValue();
-            if("like".equals(queryField.getOperation())){
+            if ("like".equals(queryField.getOperation())) {
                 propValue = "%" + propValue + "%";
             }
             //不是数字的时候加引号
-            if(!CheckUtils.isNumber(propValue)){
+            if (!CheckUtils.isNumber(propValue)) {
                 propValue = "'" + propValue + "'";
             }
             //目标标字段
             String targetField = getField(queryField.getProperty(), getTargetClass(queryField.getTarget()));
-            String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from "  + getTargetTableName(queryField.getTarget()) + " where " + targetField
-                     + " " + queryField.getOperation() + " " +  propValue + ")";
+            String sql = field + " in (select " + getTargetKeyColumn(queryField.getTarget()) + " from " + getTargetTableName(queryField.getTarget()) + " where " + targetField
+                    + " " + queryField.getOperation() + " " + propValue + ")";
             queryWrapper.apply(sql);
             return;
         }
@@ -442,6 +439,7 @@ public class QueryFilter<T> {
 
     /**
      * 处理特殊符号
+     *
      * @param str
      * @return
      */
@@ -461,15 +459,23 @@ public class QueryFilter<T> {
 
     /**
      * 参数校验
+     *
      * @param str ep: "or 1=1"
      */
     public static boolean isSqlValid(String str) {
         Matcher matcher = sqlPattern.matcher(str);
         if (matcher.find()) {
             //获取非法字符：or
-            log.info("参数存在非法字符，请确认："+matcher.group());
+            log.info("参数存在非法字符，请确认：" + matcher.group());
             return false;
         }
         return true;
+    }
+
+    public Map<String, Object> queryFieldsMap() {
+        if (this.querys == null) {
+            return new HashMap<>(0);
+        }
+        return this.querys.stream().collect(Collectors.toMap(QueryField::getProperty, QueryField::getValue));
     }
 }

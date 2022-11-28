@@ -1,8 +1,10 @@
 package com.fhs.flow.controller.admin.definition;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.fhs.flow.comon.pojo.CommonResult;
-import com.fhs.flow.comon.pojo.PageResult;
+import com.fhs.common.utils.ClassUtils;
+import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
+import com.fhs.core.result.HttpResult;
 import com.fhs.flow.controller.admin.definition.vo.process.BpmProcessDefinitionListReqVO;
 import com.fhs.flow.controller.admin.definition.vo.process.BpmProcessDefinitionPageItemRespVO;
 import com.fhs.flow.controller.admin.definition.vo.process.BpmProcessDefinitionPageReqVO;
@@ -13,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,28 +33,28 @@ public class BpmProcessDefinitionController {
     @Resource
     private BpmProcessDefinitionService bpmDefinitionService;
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @ApiOperation(value = "获得流程定义分页")
     @SaCheckRole("process-definition:see")
-    public CommonResult<PageResult<BpmProcessDefinitionPageItemRespVO>> getProcessDefinitionPage(
-            BpmProcessDefinitionPageReqVO pageReqVO) {
-        return success(bpmDefinitionService.getProcessDefinitionPage(pageReqVO));
+    public FhsPager<BpmProcessDefinitionPageItemRespVO> getProcessDefinitionPage(
+            @RequestBody QueryFilter<?> queryFilter) {
+        return bpmDefinitionService.getProcessDefinitionPage(ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmProcessDefinitionPageReqVO.class)).toFhsPager();
     }
 
     @GetMapping ("/list")
     @ApiOperation(value = "获得流程定义列表")
     @SaCheckRole("process-definition:see")
-    public CommonResult<List<BpmProcessDefinitionRespVO>> getProcessDefinitionList(
+    public List<BpmProcessDefinitionRespVO> getProcessDefinitionList(
             BpmProcessDefinitionListReqVO listReqVO) {
-        return success(bpmDefinitionService.getProcessDefinitionList(listReqVO));
+        return bpmDefinitionService.getProcessDefinitionList(listReqVO);
     }
 
     @GetMapping ("/get-bpmn-xml")
     @ApiOperation(value = "获得流程定义的 BPMN XML")
     @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024")
     @SaCheckRole("process-definition:see")
-    public CommonResult<String> getProcessDefinitionBpmnXML(@RequestParam("id") String id) {
+    public HttpResult<String> getProcessDefinitionBpmnXML(@RequestParam("id") String id) {
         String bpmnXML = bpmDefinitionService.getProcessDefinitionBpmnXML(id);
-        return success(bpmnXML);
+        return success(bpmnXML).toHttpResult();
     }
 }

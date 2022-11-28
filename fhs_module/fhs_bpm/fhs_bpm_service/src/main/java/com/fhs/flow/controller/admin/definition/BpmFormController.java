@@ -1,7 +1,10 @@
 package com.fhs.flow.controller.admin.definition;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.fhs.flow.comon.pojo.CommonResult;
+import com.fhs.common.utils.ClassUtils;
+import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
+import com.fhs.core.result.HttpResult;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.controller.admin.definition.vo.form.*;
 import com.fhs.flow.convert.definition.BpmFormConvert;
@@ -34,49 +37,49 @@ public class BpmFormController {
     @PostMapping("/create")
     @ApiOperation("创建动态表单")
     @SaCheckRole("form:add")
-    public CommonResult<Long> createForm(@Valid @RequestBody BpmFormCreateReqVO createReqVO) {
-        return success(formService.createForm(createReqVO));
+    public HttpResult<Long> createForm(@Valid @RequestBody BpmFormCreateReqVO createReqVO) {
+        return success(formService.createForm(createReqVO)).toHttpResult();
     }
 
     @PutMapping("/update")
     @ApiOperation("更新动态表单")
     @SaCheckRole("form:update")
-    public CommonResult<Boolean> updateForm(@Valid @RequestBody BpmFormUpdateReqVO updateReqVO) {
+    public HttpResult<Boolean> updateForm(@Valid @RequestBody BpmFormUpdateReqVO updateReqVO) {
         formService.updateForm(updateReqVO);
-        return success(true);
+        return success(true).toHttpResult();
     }
 
     @DeleteMapping("/delete")
     @ApiOperation("删除动态表单")
     @ApiImplicitParam(name = "id", value = "编号", required = true)
     @SaCheckRole("form:del")
-    public CommonResult<Boolean> deleteForm(@RequestParam("id") Long id) {
+    public HttpResult<Boolean> deleteForm(@RequestParam("id") Long id) {
         formService.deleteForm(id);
-        return success(true);
+        return success(true).toHttpResult();
     }
 
     @GetMapping("/get")
     @ApiOperation("获得动态表单")
     @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024")
     @SaCheckRole("form:see")
-    public CommonResult<BpmFormRespVO> getForm(@RequestParam("id") Long id) {
+    public HttpResult<BpmFormRespVO> getForm(@RequestParam("id") Long id) {
         BpmFormPO form = formService.getForm(id);
-        return success(BpmFormConvert.INSTANCE.convert(form));
+        return success(BpmFormConvert.INSTANCE.convert(form)).toHttpResult();
     }
 
     @GetMapping("/list-all-simple")
     @ApiOperation(value = "获得动态表单的精简列表", notes = "用于表单下拉框")
-    public CommonResult<List<BpmFormSimpleRespVO>> getSimpleForms() {
+    public List<BpmFormSimpleRespVO> getSimpleForms() {
         List<BpmFormPO> list = formService.getFormList();
-        return success(BpmFormConvert.INSTANCE.convertList2(list));
+        return BpmFormConvert.INSTANCE.convertList2(list);
     }
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @ApiOperation("获得动态表单分页")
     @SaCheckRole("form:see")
-    public CommonResult<PageResult<BpmFormRespVO>> getFormPage(@Valid BpmFormPageReqVO pageVO) {
-        PageResult<BpmFormPO> pageResult = formService.getFormPage(pageVO);
-        return success(BpmFormConvert.INSTANCE.convertPage(pageResult));
+    public FhsPager<BpmFormRespVO> getFormPage(@RequestBody QueryFilter<?> queryFilter) {
+        PageResult<BpmFormPO> pageResult = formService.getFormPage(ClassUtils.convert2Clz(queryFilter.queryFieldsMap(),BpmFormPageReqVO.class));
+        return BpmFormConvert.INSTANCE.convertPage(pageResult).toFhsPager();
     }
 
 }
