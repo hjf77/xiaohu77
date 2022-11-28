@@ -8,14 +8,13 @@
 	<parent>
 		<artifactId>fhs_framework</artifactId>
 		<groupId>com.fhs-opensource</groupId>
-		<version>3.0.0</version>
-
+		<version>3.0.0-energy</version>
 	</parent>
 
 	<groupId>com.fhs-opensource</groupId>
 	<artifactId>fhs_common</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.0</version>
+	<version>3.0.0-energy</version>
 	<name>fhs_common</name>
 	<url>https://gitee.com/fhs-opensource/fhs_common</url>
 
@@ -144,25 +143,11 @@
 		<developerConnection>scm:git@gitee.com:fhs-opensource/fhs-framework.git</developerConnection>
 		<url>git@gitee.com:fhs-opensource/fhs-framework.git</url>
 	</scm>
-
+	
 	<developers>
 		<developer>
 			<name>jackwong</name>
 			<email>921888199@qq.com</email>
 		</developer>
 	</developers>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>oss</id>
-			<name>OSS Snapshots Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-		</snapshotRepository>
-		<repository>
-			<id>oss</id>
-			<name>OSS Staging Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
-
 </project>

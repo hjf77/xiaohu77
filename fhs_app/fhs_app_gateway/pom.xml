@@ -6,13 +6,13 @@
     <parent>
         <artifactId>fhs_framework</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0</version>
+        <version>3.0.0-energy</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>com.fhs-opensource</groupId>
     <artifactId>fhs_app_gateway</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0-energy</version>
     <modelVersion>4.0.0</modelVersion>
     <description>网关默认不集成seata和Sentinel做分布式事务，如果有需要请自行集成(可以参考ruoyicloud https://gitee.com/y_project/RuoYi-Cloud/)
     </description>

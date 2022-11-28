@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.fhs-opensource</groupId>
         <artifactId>fhs_extends</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.0-energy</version>
 
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0</version>
+    <version>3.0.0-energy</version>
     <artifactId>fhs_log</artifactId>
 
     <properties>
