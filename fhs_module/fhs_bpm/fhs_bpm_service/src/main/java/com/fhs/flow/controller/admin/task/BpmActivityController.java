@@ -1,7 +1,6 @@
 package com.fhs.flow.controller.admin.task;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.fhs.flow.comon.pojo.CommonResult;
 import com.fhs.flow.controller.admin.task.vo.activity.BpmActivityRespVO;
 import com.fhs.flow.service.task.BpmActivityService;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -15,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-
 import java.util.List;
-
-import static com.fhs.flow.comon.pojo.CommonResult.success;
 
 @Api(tags = "管理后台 - 流程活动实例")
 @RestController
@@ -35,8 +31,8 @@ public class BpmActivityController {
             notes = "只高亮进行中的任务。不过要注意，该接口暂时没用，通过前端的 ProcessViewer.vue 界面的 highlightDiagram 方法生成")
     @ApiImplicitParam(name = "processInstanceId", value = "流程实例的编号", required = true)
     @SaCheckRole("task:query")
-    public CommonResult<List<BpmActivityRespVO>> getActivityList(
+    public List<BpmActivityRespVO> getActivityList(
             @RequestParam("processInstanceId") String processInstanceId) {
-        return success(activityService.getActivityListByProcessInstanceId(processInstanceId));
+        return activityService.getActivityListByProcessInstanceId(processInstanceId);
     }
 }

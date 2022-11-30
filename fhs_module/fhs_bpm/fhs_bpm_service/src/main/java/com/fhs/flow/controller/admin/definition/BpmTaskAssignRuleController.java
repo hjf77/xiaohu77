@@ -1,6 +1,7 @@
 package com.fhs.flow.controller.admin.definition;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleCreateReqVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleRespVO;
@@ -31,17 +32,22 @@ public class BpmTaskAssignRuleController {
     @Resource
     private BpmTaskAssignRuleService taskAssignRuleService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @ApiOperation(value = "获得任务分配规则列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "modelId", value = "模型编号", example = "1024"),
             @ApiImplicitParam(name = "processDefinitionId", value = "流程定义的编号", example = "2048")
     })
     @SaCheckRole("task-assign-rule:see")
-    public List<BpmTaskAssignRuleRespVO> getTaskAssignRuleList(
+    public FhsPager<BpmTaskAssignRuleRespVO> getTaskAssignRuleList(
             @RequestParam(value = "modelId", required = false) String modelId,
             @RequestParam(value = "processDefinitionId", required = false) String processDefinitionId) {
-        return taskAssignRuleService.getTaskAssignRuleList(modelId, processDefinitionId);
+        List<BpmTaskAssignRuleRespVO> taskAssignRuleList = taskAssignRuleService.getTaskAssignRuleList(modelId, processDefinitionId);
+        FhsPager<BpmTaskAssignRuleRespVO> result = new FhsPager<>();
+        result.setTotal(taskAssignRuleList.size());
+        result.setRecords(taskAssignRuleList);
+        return result;
+
     }
 
     @PostMapping("/create")

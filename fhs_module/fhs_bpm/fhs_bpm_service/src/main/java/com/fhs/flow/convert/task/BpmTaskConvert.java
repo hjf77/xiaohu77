@@ -1,6 +1,5 @@
 package com.fhs.flow.convert.task;
 
-import cn.hutool.core.date.LocalDateTimeUtil;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.utils.ConverterUtils;
@@ -154,7 +153,7 @@ public interface BpmTaskConvert {
         taskExtDO.setName(task.getName());
         taskExtDO.setProcessDefinitionId(task.getProcessDefinitionId());
         taskExtDO.setProcessInstanceId(task.getProcessInstanceId());
-        taskExtDO.setCreateTime(LocalDateTimeUtil.of(task.getCreateTime()));
+        taskExtDO.setCreateTime(task.getCreateTime());
         return taskExtDO;
     }
 
