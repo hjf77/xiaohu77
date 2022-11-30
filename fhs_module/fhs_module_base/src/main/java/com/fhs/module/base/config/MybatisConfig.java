@@ -76,8 +76,8 @@ public class MybatisConfig implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
-        this.setFieldValByName("createTime", LocalDateTime.now(), metaObject);
-        this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("createTime", new Date(), metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
         this.setFieldValByName("createUser", userId, metaObject);
         this.setFieldValByName("updateUser", userId, metaObject);
     }
@@ -91,7 +91,7 @@ public class MybatisConfig implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
-        this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
         this.setFieldValByName("updateUser", userId, metaObject);
     }
 }

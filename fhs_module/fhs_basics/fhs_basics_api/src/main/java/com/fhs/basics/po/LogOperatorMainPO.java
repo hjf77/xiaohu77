@@ -23,7 +23,7 @@ import lombok.*;
 @ApiModel(value = "LogOperatorMainDO", description = "LogOperatorMain参数")
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_log_operator_main")
+@TableName(value = "t_log_operator_main",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 public class LogOperatorMainPO extends BasePO<LogOperatorMainPO> {
     private static final long serialVersionUID = -83321483098557581L;

@@ -24,7 +24,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_sett_user_column")
+@TableName(value = "t_sett_user_column",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "SettUserColumnPO", description = "用户自定义列信息配置")
 public class SettUserColumnPO extends BasePO<SettUserColumnPO> {

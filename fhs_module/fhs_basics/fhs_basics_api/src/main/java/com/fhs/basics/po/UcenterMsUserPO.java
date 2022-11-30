@@ -46,7 +46,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_ucenter_ms_user")
+@TableName(value = "t_ucenter_ms_user",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @TransDefaultSett(isUseCache = true,cacheSeconds = 100,isAccess = true)
 @ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")

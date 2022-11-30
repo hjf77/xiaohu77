@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.fhs.cache.service.TransCacheManager;
 import com.fhs.common.constant.Constant;
@@ -128,7 +129,9 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     @Override
     public Long findCount(P bean) {
         bean.setIsDelete(Constant.INT_FALSE);
-        return baseMapper.selectCount(bean.asWrapper());
+        LambdaJoinQueryWrapper<P>  wrapper = bean.asWrapper();
+        wrapper.setIsCount(true);
+        return baseMapper.selectCount(wrapper);
     }
 
     @Override
@@ -230,6 +233,13 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
     public boolean batchInsert(List<P> list) {
         if (list == null || list.isEmpty()) {
             return false;
+        }
+        //如果po标记了重复数据校验,则进行重复数据校验
+        if (this.getPoClass().isAnnotationPresent(NotRepeatDesc.class)) {
+            Set<String> hasData = new HashSet<>();
+            List<Field> fields = ReflectUtils.getAnnotationField(this.getPoClass(), NotRepeatField.class);
+            StringBuilder errorMsg = new StringBuilder();
+            boolean isHasError = false;
         }
         for (P d : list) {
             initPkeyAndIsDel(d);
@@ -344,7 +354,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
 
     @Override
     public V selectBean(P param) {
-        return p2v(baseMapper.selectOne((QueryWrapper<P>) param.asWrapper()));
+        return p2v(baseMapper.selectOne((LambdaJoinQueryWrapper<P>) param.asWrapper()));
     }
 
 
@@ -612,7 +622,7 @@ public abstract class BaseServiceImpl<V extends VO, P extends BasePO> implements
                 }
                 fieldList.get(0).setAccessible(true);
                 TableId tableId = fieldList.get(0).getAnnotation(TableId.class);
-                wrapper.ne(tableId.value(), ConverterUtils.toString(fieldList.get(0).get(newData)));
+                wrapper.ne(tableId.value(), fieldList.get(0).get(newData));
             }
         } catch (IllegalAccessException e) {
             log.error("反射错误", e);
