@@ -1,5 +1,7 @@
 package com.fhs.flow.controller.admin.task.vo.task;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fhs.common.utils.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +17,9 @@ import java.time.LocalDateTime;
 public class BpmTaskDonePageItemRespVO extends BpmTaskTodoPageItemRespVO {
 
     @ApiModelProperty(value = "结束时间", required = true)
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     private LocalDateTime endTime;
+
     @ApiModelProperty(value = "持续时间", required = true, example = "1000")
     private Long durationInMillis;
 

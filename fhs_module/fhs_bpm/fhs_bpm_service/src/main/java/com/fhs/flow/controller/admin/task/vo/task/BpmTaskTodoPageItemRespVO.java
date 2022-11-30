@@ -1,5 +1,7 @@
 package com.fhs.flow.controller.admin.task.vo.task;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fhs.common.utils.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,6 +22,7 @@ public class BpmTaskTodoPageItemRespVO {
     private LocalDateTime claimTime;
 
     @ApiModelProperty(value = "创建时间", required = true)
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "激活状态", required = true, example = "1", notes = "参见 SuspensionState 枚举")
