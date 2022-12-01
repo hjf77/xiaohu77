@@ -251,7 +251,7 @@ public class ExcelServiceImpl implements ExcelService {
         Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
         Trans trans = declaredField.getAnnotation(Trans.class);
         //排除调字典翻译的字段
-        if (trans == null || !TransType.DICTIONARY.equals(trans.type())) {
+        if (obj != null && (trans == null || !TransType.DICTIONARY.equals(trans.type()))) {
             ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
             if (apiModelProperty != null) {
                 String value = apiModelProperty.value();
