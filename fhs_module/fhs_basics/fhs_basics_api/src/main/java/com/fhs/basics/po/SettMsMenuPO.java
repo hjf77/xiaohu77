@@ -42,7 +42,7 @@ import java.util.List;
  * @since [产品/模块版本]
  */
 @Data
-@TableName("t_sett_ms_menu")
+@TableName(value = "t_sett_ms_menu",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "SettMsMenuDO", description = "SettMsMenu参数")
 public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {

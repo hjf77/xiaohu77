@@ -19,9 +19,9 @@ public class SaTokenConfig  implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册Sa-Token的路由拦截器
-//        registry.addInterceptor(new SaRouteInterceptor((req, res, handler)->{
-//            // 根据路由划分模块，不同模块不同鉴权
-//            SaRouter.match("/ms/**", r -> StpUtil.checkLogin());
-//        })).addPathPatterns("/ms/**");
+        registry.addInterceptor(new SaRouteInterceptor((req, res, handler)->{
+            // 根据路由划分模块，不同模块不同鉴权
+            SaRouter.match("/ms/**", r -> StpUtil.checkLogin());
+        })).addPathPatterns("/ms/**");
     }
 }

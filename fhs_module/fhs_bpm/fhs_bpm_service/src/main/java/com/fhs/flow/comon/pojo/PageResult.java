@@ -1,5 +1,6 @@
 package com.fhs.flow.comon.pojo;
 
+import com.fhs.core.base.vo.FhsPager;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,6 +38,13 @@ public final class PageResult<T> implements Serializable {
 
     public static <T> PageResult<T> empty(Long total) {
         return new PageResult<>(total);
+    }
+
+    public FhsPager<T> toFhsPager(){
+        FhsPager<T> result = new FhsPager();
+        result.setRecords(this.list);
+        result.setTotal(this.total);
+        return result;
     }
 
 }

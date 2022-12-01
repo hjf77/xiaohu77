@@ -35,7 +35,8 @@ public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuP
     private SettMsMenuPermissionMapper mapper;
 
     @Override
-    public boolean addBaseMenuBatch(Map<String, Object> map) {
+    public boolean addBaseMenuBatch(Map<String, String> map) {
+        Map<String, Object> paramMap = new HashMap<>();
         if (map.containsKey("menuId")) {
             List<SettMsMenuPermissionPO> existsButtonList = mapper.selectList(new LambdaQueryWrapper<SettMsMenuPermissionPO>()
                     .eq(SettMsMenuPermissionPO::getMenuId,map.get("menuId")));
@@ -48,9 +49,10 @@ public class SettMsMenuPermissionServiceImpl extends BaseServiceImpl<SettMsMenuP
                 }
             }
             if (baseButtonMap.size() > 0) {
-                map.put("baseButtonList", new ArrayList<Map<String, Object>>(baseButtonMap.values()));
+                paramMap.putAll(map);
+                paramMap.put("baseButtonList", new ArrayList<Map<String, Object>>(baseButtonMap.values()));
                 // 一键添加增删改查菜单
-                mapper.addBaseMenuBatch(map);
+                mapper.addBaseMenuBatch(paramMap);
             }
         }
         return true;

@@ -41,7 +41,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_ucenter_ms_role")
+@TableName(value = "t_ucenter_ms_role",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "UcenterMsRoleDO", description = "UcenterMsRole参数")
 public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {

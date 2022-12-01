@@ -20,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("mysql表信息")
-@TableName(value = "information_schema.tables", excludeProperty = {"createUser",  "updateUser", "updateTime", "isDelete"})
+@TableName(value = "information_schema.tables",autoResultMap = true, excludeProperty = {"createUser",  "updateUser", "updateTime", "isDelete"})
 public class TableInfoPO extends BasePO<TableInfoPO> {
 
     @ApiModelProperty("表名字")
