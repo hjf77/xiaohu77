@@ -257,7 +257,7 @@ public class ExcelServiceImpl implements ExcelService {
                 String value = apiModelProperty.value();
                 if (apiModelProperty.value().contains("（")) {
                     String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
-                    obj = obj + unit;
+                    obj = obj + "（" + unit + "）";
                 }
             }
         }
@@ -384,7 +384,7 @@ public class ExcelServiceImpl implements ExcelService {
                                     ApiModelProperty apiModelProperty = targetField.getAnnotation(ApiModelProperty.class);
                                     //获取到导入翻译对应的字段
                                     ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
-                                    if (transFields.contains(targetFieldName) && apiModelProperty != null && (fieldName.equals(apiModelProperty.value()) || apiModelProperty.value().equals(importExcelTitle.value()) )) {
+                                    if (transFields.contains(targetFieldName) && apiModelProperty != null && (fieldName.equals(apiModelProperty.value()) || (importExcelTitle != null && apiModelProperty.value().equals(importExcelTitle.value())))) {
                                         //获取当前target的service
                                         BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, target.getName(), 1);
                                         QueryWrapper queryWrapper = new QueryWrapper();
