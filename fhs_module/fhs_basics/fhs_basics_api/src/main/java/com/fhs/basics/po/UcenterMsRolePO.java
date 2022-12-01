@@ -15,17 +15,19 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.po.BasePO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.constant.TransType;
+import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.excel.anno.ImportExcelTitle;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -86,8 +88,9 @@ public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("organization_id")
-    @Trans(type = TransType.SIMPLE, target = UcenterMsOrganizationPO.class)
-    @ApiModelProperty("组织机构id")
+    @ImportExcelTitle("机构名称")
+    @Trans(type = TransType.SIMPLE, target = UcenterMsOrganizationPO.class,fields = {"name"})
+    @ApiModelProperty("组织机构")
     private String organizationId;
 
     /**

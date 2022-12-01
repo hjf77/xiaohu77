@@ -14,6 +14,8 @@ import com.fhs.core.base.valid.group.Update;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
+import com.fhs.excel.anno.ImportExcelTemplate;
+import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
@@ -39,6 +41,7 @@ import java.util.Map;
 @Api(tags = {"角色"})
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysRole")
+@ImportExcelTemplate(template = "ucenterMsRole.xlsx")
 @LogNamespace(namespace = "sysRole", module = "角色管理")
 public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRolePO, Integer> {
 
@@ -139,5 +142,20 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         binder.setAutoGrowCollectionLimit(Integer.MAX_VALUE);
     }
 
-
+    /**
+     * 添加导入参数
+     *
+     * @param otherParam
+     * @return
+     */
+    @Override
+    protected ExcelImportSett getExcelImportSett(UcenterMsRoleVO otherParam) {
+        ExcelImportSett<UcenterMsRoleVO> result = new ExcelImportSett<>();
+        result.setColNum(11);
+        result.setTitleRowNum(0);
+        result.setControllerClass(this.getClass());
+        super.getExcelImportSett(otherParam);
+        result.setVoIniter(this::excelImportInitDo);
+        return result;
+    }
 }

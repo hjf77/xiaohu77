@@ -16,6 +16,7 @@ import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.base.vo.ExcelExportFieldVO;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
@@ -29,6 +30,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.trans.service.impl.TransService;
+import com.github.liaochong.myexcel.utils.FileExportUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,12 +45,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -101,6 +105,17 @@ public abstract class ModelSuperController<V extends VO, P extends BasePO, PT ex
         }
     }
 
+    /**
+     * 格式化返回结果
+     * 比如密码字段不给前端返回
+     *
+     * @param records 数据集合
+     * @param isPager 是否分页
+     */
+    public void parseRecords(List<V> records, boolean isPager, boolean isExport) {
+
+    }
+
 
     /**
      * 高级查询不分页
@@ -144,23 +159,16 @@ public abstract class ModelSuperController<V extends VO, P extends BasePO, PT ex
     @GetMapping("advanceExportExcel")
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcel(HttpServletResponse response, String fileName, String ids) throws IOException {
-        QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        wrapper = wrapper == null ? new QueryWrapper() : wrapper;
-        wrapper = (QueryWrapper) wrapper.clone();
-        if (CheckUtils.isNotEmpty(ids)) {
-            wrapper.in("id", ids.split(","));
-        }
-        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getPOClass());
+    public void exportExcelField(@RequestBody ExcelExportFieldVO excelExportFieldVO) throws Exception {
+        QueryWrapper<P> wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        //查询出需要导出的数据
+        List<V> data = this.baseService.selectListMP(wrapper);
+        transService.transMore(data);
+        parseRecords(data, false, true);
+        Workbook book = this.excelService.exportExcelField(data, excelExportFieldVO.getFieldVOList());
         String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID() + ".xlsx";
-        FileOutputStream os = new FileOutputStream(excelTempPath);
-        book.write(os);
-        try {
-            os.close();
-        } catch (Exception e) {
-            log.error("关闭流错误", e);
-        }
-        FileUtils.download(excelTempPath, response, fileName);
+        FileExportUtil.export(book, new File(excelTempPath));
+        FileUtils.download(excelTempPath, getResponse(), excelExportFieldVO.getFileName() + ".xlsx");
         FileUtils.deleteFile(excelTempPath);
     }
 
@@ -344,18 +352,18 @@ public abstract class ModelSuperController<V extends VO, P extends BasePO, PT ex
     @PostMapping("pubImportExcel")
     @ApiOperation("公共excel导入")
     @NotRepeat
-    public HttpResult<String> pubImportExcel(MultipartFile file, P otherParam) throws Exception {
-      /*  if (otherParam == null) {
-            otherParam = this.getPOClass().newInstance();
+    public HttpResult<String> pubImportExcel(MultipartFile file, V otherParam) throws Exception {
+        if (otherParam == null) {
+            otherParam = baseService.getVOClass().newInstance();
         }
         ExcelImportSett importSett = getExcelImportSett(otherParam);
         ParamChecker.isNotNull(importSett, "此接口后台没有配置导入参数，请联系后台");
         try {
-            importSett.setDoModel(otherParam);
-            this.excelService.importExcel(file, this.getBaseService(), this.getPOClass(), importSett);
+            importSett.setVoModel(otherParam);
+            this.excelService.importExcel(file, this.getBaseService(), baseService.getVOClass(), importSett);
         } catch (ValidationException e) {
             throw new ParamException(e.getMessage());
-        }*/
+        }
         return HttpResult.success("导入成功");
     }
 
@@ -364,8 +372,18 @@ public abstract class ModelSuperController<V extends VO, P extends BasePO, PT ex
      *
      * @return
      */
-    protected ExcelImportSett getExcelImportSett(P otherParam) {
+    protected ExcelImportSett getExcelImportSett(V otherParam) {
         return null;
     }
+
+    /**
+     * 设置do模板，本次excel导入的部分字段excel是不包含的，在这里初始默认值
+     *
+     * @param p
+     */
+    public void excelImportInitDo(P p) {
+        p.preInsert(UserContext.getSessionuser().getUserId());
+    }
+
 
 }
