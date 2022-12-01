@@ -123,7 +123,14 @@ export const constantRoutes = [
         path: 'processDetail',
         component: () => import('@/views/bpm/processInstance/components/processDetail.vue'),
         name: 'processDetail',
-        meta: {title: '流程详情', icon: ''}
+        meta: {title: '流程详情', icon: ''},
+        children:[{
+          path: ':type',
+          component: () => import('@/views/bpm/formManager/index.vue'),
+          name: 'processDetail',
+          meta: {title: '请假详情', icon: ''},
+
+        }]
       }
     ]
   },
