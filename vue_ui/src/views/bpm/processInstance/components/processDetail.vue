@@ -6,12 +6,7 @@
 
 <template>
   <div>
-    <!-- 添加或修改参数配置对话框 -->
-    <pagex-formDetail
-      :init="init"
-      :controls="controls"
-    >
-    </pagex-formDetail>
+    <router-view v-if="$route.params.type"></router-view>
     <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span class="el-icon-picture-outline">流程图</span>
@@ -24,9 +19,10 @@
 
 <script>
 import MyProcessViewer from "@/components/bpmnProcessDesigner/package/designer/ProcessViewer.vue";
+import formManagerVue from "../../formManager/formManager.vue";
 export default {
   name: "editForm",
-  components: { MyProcessViewer },
+  components: { MyProcessViewer,formManagerVue },
   props: {
     open: Boolean,
     init: Object,
@@ -34,29 +30,15 @@ export default {
   },
   data() {
     return {
+      id:'',
       activityList: [],
       processInstance: {},
-      id:'',
-      controls: [
-        {
-          type: 'text',
-          name: 'key',
-          label: '请假天数',
-          rule:'required',
-          placeholder: '请输入请假天数',
-          disabledOn: "disabled",
-          isValueNum: true,
-        },
-        {
-          type: 'text',
-          name: 'name',
-          label: '请假说明',
-          rule:'required',
-          placeholder: '请输入请假说明',
-          disabledOn: "disabled",
-          isValueNum: true,
-        },
-      ],
+      tasks: [],
+      // BPMN 数据
+      bpmnXML: null,
+      bpmnControlForm: {
+        prefix: "flowable"
+      },
     }
   },
   mounted() {
@@ -64,20 +46,49 @@ export default {
   created() {
     this.id = this.$route.query.id;
     if (this.id) {
+      // processInstance
       this.$pagexRequest({
         url: '/basic/ms/process-instance/get?id=' + this.id,
         method: 'get'
       }).then((res) => {
+        if (!res.data) {
+          this.$message.error('查询不到流程信息！');
+          return;
+        }
         this.processInstance = res.data;
-      })
-      console.log('this.processInstance',this.processInstance);
+
+        // bpmnXML
+        this.$pagexRequest({
+          url: '/basic/ms/process-definition/get-bpmn-xml?id=' + this.processInstance.processDefinition.id,
+          method: 'get'
+          }).then((res) => {
+          this.bpmnXML = res.data;
+        })
+
+        // activityList
+        this.$pagexRequest({
+          url: '/basic/ms/activity/list?processInstanceId=' + this.processInstance.id,
+          method: 'get'
+          }).then((res) => {
+          this.activityList = res;
+          })
+        })
+
+        // tasks
+        this.$pagexRequest({
+          url: '/basic/ms/task/list-by-process-instance-id?processInstanceId=' + this.id,
+          method: 'get'
+        }).then((res) => {
+            console.log('res',res);
+          this.tasks = [];
+          // 移除已取消的审批
+          res.forEach(task => {
+          if (task.result !== 4) {
+            this.tasks.push(task);
+          }
+        });
+        })
     }
-    this.$pagexRequest({
-    //   url: '/basic/ms/activity/list?id=' + this.processInstance.id,
-      method: 'get'
-    }).then((res) => {
-      this.activityList = res.data;
-    })
   },
   methods: {}
 }
