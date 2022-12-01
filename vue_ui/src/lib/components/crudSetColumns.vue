@@ -261,10 +261,10 @@ export default {
             );
           } else {
             const param = {};
-            for (const key in param) {
-              key = this.namespace;
-              param[key] = this.userSettColumn;
-            }
+            // for (const key in param) {
+            //   key = this.namespace;
+            //   param[key] = this.userSettColumn;
+            // }
             localStorage.setItem(
               'columnSett',
               JSON.stringify({ ...columnSettPermission, ...param })
