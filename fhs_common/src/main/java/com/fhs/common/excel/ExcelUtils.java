@@ -1090,9 +1090,9 @@ public class ExcelUtils {
         switch (cell.getCellType()) {
             // 数值型
             case NUMERIC:
-                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                if (DateUtil.isCellDateFormatted(cell)) {
                     // 如果是date类型则 ，获取该cell的date值
-                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+                    Date date = DateUtil.getJavaDate(cell.getNumericCellValue());
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     value = format.format(date);
                     ;
