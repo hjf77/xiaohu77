@@ -234,8 +234,8 @@ export default {
       }
       this.$emit("refreshOptions", {name: this.name, options: _options});
     },
-    _change() {
-      this.selectOn && this.selectOn(this.$attrs.value);
+    _change(row) {
+      this.selectOn && this.selectOn(row);
       this.$emit("change", this.$attrs.value);
     },
 

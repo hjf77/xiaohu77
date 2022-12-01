@@ -707,7 +707,11 @@ export default {
       this.$emit("rowClick", row[0]);
     },
     columnFormart(_row, _column) {
-      return handleStrParam(_column.formart, _row);
+      if(typeof(_column.formart) === 'string'){
+        return handleStrParam(_column.formart, _row);
+      }else{
+        return _column.formart.call(this,_row);
+      }
     },
     proxyClick(_row, _column) {
       let _this = this;
