@@ -2,6 +2,8 @@ package com.fhs.flow.controller.admin.task.vo.task;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fhs.common.utils.DateUtils;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,7 +26,9 @@ public class BpmTaskDonePageItemRespVO extends BpmTaskTodoPageItemRespVO {
     private Long durationInMillis;
 
     @ApiModelProperty(value = "任务结果", required = true, notes = "参见 bpm_process_instance_result", example = "2")
+    @Trans(type = TransType.DICTIONARY, key = "bpm_process_instance_result")
     private Integer result;
+
     @ApiModelProperty(value = "审批建议", required = true, example = "不请假了！")
     private String reason;
 

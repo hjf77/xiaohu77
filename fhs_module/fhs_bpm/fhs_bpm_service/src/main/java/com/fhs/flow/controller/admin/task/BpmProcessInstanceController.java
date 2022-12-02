@@ -2,7 +2,9 @@ package com.fhs.flow.controller.admin.task;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.context.UserContext;
+import com.fhs.common.utils.ClassUtils;
 import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.flow.controller.admin.task.vo.instance.*;
 import com.fhs.flow.service.task.BpmProcessInstanceService;
@@ -26,12 +28,11 @@ public class BpmProcessInstanceController {
     @Resource
     private BpmProcessInstanceService processInstanceService;
 
-    @GetMapping("/my-page")
+    @PostMapping("/my-page")
     @ApiOperation(value = "获得我的实例分页列表", notes = "在【我的流程】菜单中，进行调用")
     @SaCheckRole("process-instance:see")
-    public FhsPager<BpmProcessInstancePageItemRespVO> getMyProcessInstancePage(
-            @Valid BpmProcessInstanceMyPageReqVO pageReqVO) {
-        return processInstanceService.getMyProcessInstancePage(UserContext.getSessionuser().getUserId(), pageReqVO).toFhsPager();
+    public FhsPager<BpmProcessInstancePageItemRespVO> getMyProcessInstancePage(@RequestBody QueryFilter<?> queryFilter) {
+        return processInstanceService.getMyProcessInstancePage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmProcessInstanceMyPageReqVO.class)).toFhsPager();
     }
 
     @PostMapping("/create")

@@ -18,6 +18,8 @@ mybatis-plus:
     db-config:
       logic-delete-value: 1
       logic-not-delete-value: 0
+      # 数据库类型
+      #db-type: mysql
 #      update-strategy: IGNORED
 
 easy-trans:

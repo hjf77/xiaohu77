@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -27,6 +26,6 @@ public class BpmTaskAssignRuleBaseVO implements TransPojo {
     private Set<Long> options;
 
     @ApiModelProperty(value = "规则值数组", required = true, example = "1,2,3")
-    private Map<String,String> optionValues;
+    private String optionNames;
 
 }

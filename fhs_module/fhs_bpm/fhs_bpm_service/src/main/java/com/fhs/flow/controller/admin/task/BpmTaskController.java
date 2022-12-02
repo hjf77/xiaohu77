@@ -2,9 +2,10 @@ package com.fhs.flow.controller.admin.task;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.context.UserContext;
+import com.fhs.common.utils.ClassUtils;
 import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
-import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.controller.admin.task.vo.task.*;
 import com.fhs.flow.service.task.BpmTaskService;
 import com.fhs.module.base.swagger.anno.ApiGroup;
@@ -30,18 +31,18 @@ public class BpmTaskController {
     @Resource
     private BpmTaskService taskService;
 
-    @GetMapping("todo-page")
+    @PostMapping("todo-page")
     @ApiOperation("获取 Todo 待办任务分页")
     @SaCheckRole("task:see")
-    public HttpResult<PageResult<BpmTaskTodoPageItemRespVO>> getTodoTaskPage(@Valid BpmTaskTodoPageReqVO pageVO) {
-        return success(taskService.getTodoTaskPage(UserContext.getSessionuser().getUserId(), pageVO)).toHttpResult();
+    public FhsPager<BpmTaskTodoPageItemRespVO> getTodoTaskPage(@RequestBody QueryFilter<?> queryFilter) {
+        return taskService.getTodoTaskPage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmTaskTodoPageReqVO.class)).toFhsPager();
     }
 
-    @GetMapping("done-page")
+    @PostMapping("done-page")
     @ApiOperation("获取 Done 已办任务分页")
     @SaCheckRole("task:see")
-    public FhsPager<BpmTaskDonePageItemRespVO> getDoneTaskPage(@Valid BpmTaskDonePageReqVO pageVO) {
-        return taskService.getDoneTaskPage(UserContext.getSessionuser().getUserId(), pageVO).toFhsPager();
+    public FhsPager<BpmTaskDonePageItemRespVO> getDoneTaskPage(@RequestBody QueryFilter<?> queryFilter) {
+        return taskService.getDoneTaskPage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmTaskDonePageReqVO.class)).toFhsPager();
     }
 
     @GetMapping("/list-by-process-instance-id")

@@ -18,6 +18,8 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.BeanUtils;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +67,7 @@ public interface BpmTaskConvert {
                                                          Map<String, ProcessInstance> processInstanceMap, Map<Long, UcenterMsUserVO> userMap) {
         return CollectionUtils.convertList(tasks, task -> {
             BpmTaskTodoPageItemRespVO respVO = convert1(task);
+            respVO.setCreateTime(Instant.ofEpochMilli(task.getCreateTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             ProcessInstance processInstance = processInstanceMap.get(task.getProcessInstanceId());
             if (processInstance != null) {
                 UcenterMsUserVO startUser = userMap.get(ConverterUtils.toLong(processInstance.getStartUserId()));
@@ -75,6 +78,7 @@ public interface BpmTaskConvert {
     }
 
 
+    @Mapping(source = "suspended", target = "suspensionState", qualifiedByName = "convertSuspendedToSuspensionState")
     BpmTaskTodoPageItemRespVO convert1(Task bean);
 
     @Named("convertSuspendedToSuspensionState")

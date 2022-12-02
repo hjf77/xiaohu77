@@ -473,9 +473,14 @@ public class QueryFilter<T> {
     }
 
     public Map<String, Object> queryFieldsMap() {
-        if (this.querys == null) {
-            return new HashMap<>(0);
+        Map<String, Object> paramParams = new HashMap<>();
+        if (null != this.querys ) {
+            paramParams = this.querys.stream().collect(Collectors.toMap(QueryField::getProperty, QueryField::getValue));
         }
-        return this.querys.stream().collect(Collectors.toMap(QueryField::getProperty, QueryField::getValue));
+        if (null != pagerInfo) {
+            paramParams.put("pageNumber", pagerInfo.getPageNumber());
+            paramParams.put("pageSize", pagerInfo.getPageSize());
+        }
+        return paramParams;
     }
 }

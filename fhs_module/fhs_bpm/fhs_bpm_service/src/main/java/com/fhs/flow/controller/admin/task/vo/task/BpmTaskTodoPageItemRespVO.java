@@ -2,6 +2,9 @@ package com.fhs.flow.controller.admin.task.vo.task;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fhs.common.utils.DateUtils;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,7 +13,7 @@ import java.time.LocalDateTime;
 
 @ApiModel("管理后台 - 流程任务的 Running 进行中的分页项 Response VO")
 @Data
-public class BpmTaskTodoPageItemRespVO {
+public class BpmTaskTodoPageItemRespVO implements TransPojo {
 
     @ApiModelProperty(value = "任务编号", required = true, example = "1024")
     private String id;
@@ -19,6 +22,7 @@ public class BpmTaskTodoPageItemRespVO {
     private String name;
 
     @ApiModelProperty(value = "接收时间", required = true)
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     private LocalDateTime claimTime;
 
     @ApiModelProperty(value = "创建时间", required = true)
@@ -26,6 +30,7 @@ public class BpmTaskTodoPageItemRespVO {
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "激活状态", required = true, example = "1", notes = "参见 SuspensionState 枚举")
+    @Trans(type = TransType.DICTIONARY, key = "suspensionState")
     private Integer suspensionState;
 
     /**
