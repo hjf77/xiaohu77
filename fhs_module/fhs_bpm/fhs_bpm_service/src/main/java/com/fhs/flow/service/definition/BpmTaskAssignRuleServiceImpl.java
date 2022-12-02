@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.common.engine.api.FlowableException;
+import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -149,27 +150,28 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
             typeList.forEach(x -> finalOptionsAll.addAll(x.getOptions()));
             LambdaQueryWrapper<UcenterMsUserPO> userWrapper = new LambdaQueryWrapper<>();
             userWrapper.in(UcenterMsUserPO::getUserId, optionsAll).eq(UcenterMsUserPO::getIsDelete, Constant.INT_FALSE);
-            List<UcenterMsUserVO> userVOS = adminUserApi.selectListMP(userWrapper);
-            userNameMap = userVOS.stream().collect(Collectors.toMap(UcenterMsUserVO::getUserId, UcenterMsUserVO::getUserName));
+            List<UcenterMsUserVO> userVos = adminUserApi.selectListMP(userWrapper);
+            userNameMap = userVos.stream().collect(Collectors.toMap(UcenterMsUserVO::getUserId, UcenterMsUserVO::getUserName));
         }
-        Map<String, String> optionValues;
+        List<String> optionNames;
         for (BpmTaskAssignRuleRespVO vo : result) {
             if (CollUtil.isEmpty(vo.getOptions())) {
                 continue;
             }
-            optionValues = new HashMap<>(vo.getOptions().size());
+            optionNames = new ArrayList<>(vo.getOptions().size());
             if (FlowableConstant.TaskAssignRuleType.ROLE.equals(vo.getType()) && null != roleNameMap) {
                 for (Long option : vo.getOptions()) {
-                    optionValues.put(option.toString(), roleNameMap.get(option));
+                    optionNames.add(roleNameMap.get(option));
                 }
-
             }
             if (FlowableConstant.TaskAssignRuleType.USER.equals(vo.getType()) && null != userNameMap) {
                 for (Long option : vo.getOptions()) {
-                    optionValues.put(option.toString(), userNameMap.get(option));
+                    optionNames.add(userNameMap.get(option));
                 }
             }
-            vo.setOptionValues(optionValues);
+            if (CollUtil.isNotEmpty(optionNames)) {
+                vo.setOptionNames(String.join(",", optionNames));
+            }
         }
     }
 
@@ -248,7 +250,7 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
             rule.setCreateTime(null);
             rule.setUpdateTime(null);
         });
-        taskRuleMapper.insertBatch(newRules);
+        taskRuleMapper.insertBatchX(newRules);
     }
 
     @Override
@@ -338,6 +340,8 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
     }
 
     private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule) {
+        // 获取流程发起人
+        String authenticatedUserId = Authentication.getAuthenticatedUserId();
         //todo 根据角色查询用户id
         return new HashSet<>();
     }

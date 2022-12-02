@@ -47,7 +47,6 @@ public class BpmTaskAssignRuleController {
         result.setTotal(taskAssignRuleList.size());
         result.setRecords(taskAssignRuleList);
         return result;
-
     }
 
     @PostMapping("/create")

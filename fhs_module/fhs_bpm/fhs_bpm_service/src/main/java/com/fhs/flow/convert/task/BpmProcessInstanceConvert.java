@@ -3,7 +3,6 @@ package com.fhs.flow.convert.task;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.core.base.vo.FhsPager;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.controller.admin.task.vo.instance.BpmProcessInstancePageItemRespVO;
 import com.fhs.flow.controller.admin.task.vo.instance.BpmProcessInstanceRespVO;
@@ -59,7 +58,8 @@ public interface BpmProcessInstanceConvert {
         respVO.getProcessDefinition().setBpmnXml(bpmnXml);
         // user
         if (startUser != null) {
-            respVO.setStartUser(convert2(startUser));
+            BpmProcessInstanceRespVO.User user = convert2(startUser);
+            respVO.setStartUser(user);
             if (dept != null) {
                 respVO.getStartUser().setDeptName(dept.getName());
             }
@@ -77,6 +77,8 @@ public interface BpmProcessInstanceConvert {
     @Mapping(source = "from.id", target = "to.id", ignore = true)
     void copyTo(BpmProcessDefinitionExtPO from, @MappingTarget BpmProcessInstanceRespVO.ProcessDefinition to);
 
+    @Mapping(source = "userId", target = "id")
+    @Mapping(source = "userName", target = "nickname")
     BpmProcessInstanceRespVO.User convert2(UcenterMsUserVO bean);
 
     default BpmProcessInstanceResultEvent convert(Object source, HistoricProcessInstance instance, Integer result) {

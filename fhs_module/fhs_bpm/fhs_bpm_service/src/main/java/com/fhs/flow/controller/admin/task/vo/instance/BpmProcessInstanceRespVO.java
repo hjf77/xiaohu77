@@ -3,10 +3,13 @@ package com.fhs.flow.controller.admin.task.vo.instance;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+
+import static com.fhs.flow.comon.utils.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 
 @ApiModel("管理后台 - 流程实例的 Response VO")
 @Data
@@ -28,9 +31,11 @@ public class BpmProcessInstanceRespVO {
     private Integer result;
 
     @ApiModelProperty(value = "提交时间", required = true)
+    @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "结束时间", required = true)
+    @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime endTime;
 
     @ApiModelProperty(value = "提交的表单值", required = true)

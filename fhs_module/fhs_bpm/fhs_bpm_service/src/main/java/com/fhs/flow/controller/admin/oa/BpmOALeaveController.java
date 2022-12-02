@@ -2,7 +2,9 @@ package com.fhs.flow.controller.admin.oa;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.context.UserContext;
+import com.fhs.common.utils.ClassUtils;
 import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.controller.admin.oa.vo.BpmOALeaveCreateReqVO;
@@ -32,7 +34,7 @@ import static com.fhs.flow.comon.pojo.CommonResult.success;
 @Api(tags = "管理后台 - OA 请假申请")
 @ApiGroup(group ="bpm")
 @RestController
-@RequestMapping("/bpm/oa-leave")
+@RequestMapping("/ms/oa-leave")
 @Validated
 public class BpmOALeaveController {
 
@@ -55,11 +57,11 @@ public class BpmOALeaveController {
         return success(BpmOALeaveConvert.INSTANCE.convert(leave)).toHttpResult();
     }
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @SaCheckRole("oa-leave:see")
     @ApiOperation("获得请假申请分页")
-    public FhsPager<BpmOALeaveRespVO> getLeavePage(@Valid BpmOALeavePageReqVO pageVO) {
-        PageResult<BpmOALeavePO> pageResult = leaveService.getLeavePage(UserContext.getSessionuser().getUserId(), pageVO);
+    public FhsPager<BpmOALeaveRespVO> getLeavePage(@RequestBody QueryFilter<?> queryFilter) {
+        PageResult<BpmOALeavePO> pageResult = leaveService.getLeavePage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmOALeavePageReqVO.class));
         return BpmOALeaveConvert.INSTANCE.convertPage(pageResult).toFhsPager();
     }
 
