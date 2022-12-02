@@ -8,7 +8,7 @@
     <div>
       <!-- 添加或修改参数配置对话框 -->
       <pagex-form
-        addApi="/basic/ms/dictItem/"
+        addApi="/basic/ms/model/create"
         :controls="controls"
       >
       </pagex-form>
@@ -51,9 +51,7 @@
     },
     mounted() {
     },
-    created() {
-      console.log(this.isAdd)
-    },
+    created() {},
     methods: {}
   }
   </script>

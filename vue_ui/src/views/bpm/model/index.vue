@@ -19,14 +19,6 @@
           <addForm v-else :isAdd="isAdd">新增</addForm>
         </pagex-dialog>
       </template>
-      
-      <!-- <template v-slot:form="prop">
-        <pagex-dialog slot="form" :title="title"  v-if="addOpen" :visible.sync="addOpen"  class="pagex-dialog-theme">
-          <addForm :isAdd="isAdd"></addForm>
-        </pagex-dialog>
-      </template> -->
-
-
       <template v-slot:topSlot="prop">
         <pagex-dialog slot="topSlot" width="1200px" :title="ruleTitle" :namespace="namespace"
           v-if="openRules" :visible.sync="openRules" class="pagex-dialog-theme">
@@ -79,7 +71,7 @@ export default {
           title: '导入流程',
           type: 'primary',
           size: 'mini',
-          icon: 'el-icon-plus',
+          icon: 'el-icon-upload2',
           click: () => {
             this.title = '导入流程';
           }

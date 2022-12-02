@@ -73,7 +73,6 @@
             change: (_row, val) => {
               if (val) {
                 if (val == 1) {
-                  console.log('1111');
                   this.controls[5].isHide = false;
                   this.controls[6].isHide = true;
                   this.controls[7].isHide = true;
@@ -91,7 +90,9 @@
             label: "流程表单",
             rule:'required',
             isHide: false,
-            dictCode: "bpm_model_form_type",
+            url: '/basic/ms/form/list-all-simple',
+            labelField: "name",
+            valueField: "id"
           },
           {
             type: "text",
@@ -112,9 +113,7 @@
     },
     mounted() {
     },
-    created() {
-      console.log(this.isEdit)
-    },
+    created() {},
     methods: {}
   }
   </script>
