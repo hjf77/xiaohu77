@@ -59,11 +59,11 @@
         ],
         columns: [
           {label: '任务编号', name: 'id',width:'300'},
-          {label: '任务名称', name: 'name',width:'250'},
+          {label: '任务名称', name: 'name',width:'230'},
           {label: '所属流程', name: 'processInstance.name',width:'230'},
           {label: '流程发起人', name: 'processInstance.startUserNickname',width:'200' },
           {label: '创建时间', name: 'createTime',width:'200'},
-          {label: '状态', name: 'transMap.suspensionStateName',width:'250', type: "formart",
+          {label: '状态', name: 'transMap.suspensionStateName',width:'230', type: "formart",
           formart: function(row) {
             let color = "#13ce66";
             if (row.suspensionState == 1) {
@@ -81,7 +81,7 @@
             textBtn: [
               {
                 title: "审批",
-                icon: 'el-icon-delete',
+                // icon: 'el-icon-delete',
                 type: "text",
                 api: '/basic/ms/dictItem/',
                 size: 'mini',
