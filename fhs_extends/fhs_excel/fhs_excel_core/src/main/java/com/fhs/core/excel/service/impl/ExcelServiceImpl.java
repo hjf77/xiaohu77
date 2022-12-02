@@ -6,20 +6,22 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.common.excel.ExcelUtils;
 import com.fhs.common.spring.FhsSpringContextUtil;
+import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.*;
-import com.fhs.core.trans.vo.VO;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.base.vo.FieldVO;
 import com.fhs.core.excel.exception.ValidationException;
-import com.fhs.excel.anno.GroupUntrans;
-import com.fhs.excel.dto.ExcelImportSett;
-import com.fhs.excel.service.TransRpcService;
 import com.fhs.core.excel.register.TransRpcServiceRegister;
 import com.fhs.core.excel.service.ExcelService;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
-import com.fhs.excel.anno.IgnoreExport;
-import com.fhs.excel.anno.Order;
+import com.fhs.core.trans.vo.VO;
+import com.fhs.core.valid.checker.ParamChecker;
+import com.fhs.excel.anno.*;
+import com.fhs.excel.dto.ExcelImportSett;
+import com.fhs.excel.service.TransRpcService;
 import com.fhs.trans.service.impl.DictionaryTransService;
+import com.github.liaochong.myexcel.core.DefaultExcelBuilder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,14 +30,19 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-import com.fhs.core.valid.checker.ParamChecker;
+
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -188,6 +195,86 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     /**
+     * 导出Excel 根据选择的数据列导出数据
+     *
+     * @param datas  需要导出的数据
+     * @param fields 需要导出的数据列
+     * @return
+     */
+    @Override
+    public <V extends VO> Workbook exportExcelField(List<V> datas, List<FieldVO> fields) throws Exception {
+        if (CollectionUtils.isEmpty(datas) || CollectionUtils.isEmpty(fields)) {
+            return null;
+        }
+        List<String> titles = fields.stream().map(FieldVO::getLabel).collect(Collectors.toList());
+        List<String> names = fields.stream().map(FieldVO::getName).collect(Collectors.toList());
+        List<Map> dataMapList = new ArrayList<>();
+        for (V data : datas) {
+            Map<String, Object> val = new HashMap<>();
+            for (FieldVO field : fields) {
+                String fieldName = field.getName();
+                //处理字段解析数据
+                Object obj = getFieldData(fieldName, data);
+                val.put(field.getName(), obj);
+            }
+            dataMapList.add(val);
+        }
+        return DefaultExcelBuilder.of(Map.class).sheetName("sheet1").titles(titles).fieldDisplayOrder(names).build(dataMapList);
+    }
+
+    /**
+     * 解析指定字段的数据
+     *
+     * @param fieldName 字段名称
+     * @param data      需要解析的数据
+     * @return
+     */
+    private Object getFieldData(String fieldName, Object data) throws Exception {
+        if (data == null) {
+            return null;
+        }
+        if (fieldName.contains(".")) {
+            data = getGetMethod(data, fieldName.substring(0, fieldName.indexOf(".")));
+            //解析翻译好的数据
+            if (fieldName.startsWith("transMap")) {
+                fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
+                Map<String, Object> transMap = (Map<String, Object>) data;
+                if (transMap != null) {
+                    return transMap.get(fieldName);
+                }
+            }
+            fieldName = fieldName.substring(fieldName.indexOf(".") + 1);
+            return getFieldData(fieldName, data);
+        }
+        Object obj = getGetMethod(data, fieldName);
+        Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
+        Trans trans = declaredField.getAnnotation(Trans.class);
+        //排除调字典翻译的字段
+        if (trans == null || !TransType.DICTIONARY.equals(trans.type())) {
+            ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
+            if (apiModelProperty != null) {
+                String value = apiModelProperty.value();
+                if (apiModelProperty.value().contains("（")) {
+                    String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
+                    obj = obj + unit;
+                }
+            }
+        }
+
+        if (obj instanceof Date) {
+            Field field = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
+            //如果加了日期格式化则就按照格式化的来
+            if (field.isAnnotationPresent(JSONField.class) && CheckUtils.isNotEmpty(field.getAnnotation(JSONField.class).format())) {
+                obj = DateUtils.formartDate((Date) obj, field.getAnnotation(JSONField.class).format());
+            } else {
+                //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
+                obj = DateUtils.formartDate((Date) obj, DateUtils.DATETIME_PATTERN);
+            }
+        }
+        return obj;
+    }
+
+    /**
      * 获取列中文注释
      *
      * @param field
@@ -219,26 +306,32 @@ public class ExcelServiceImpl implements ExcelService {
      * @throws ValidationException 返回整个Excel验证结果
      */
     public void importExcel(Object[][] dataArray, Object[] titleArray, BaseService targetService, ExcelImportSett importSett) throws Exception {
-        importSett.getDoIniter().init(importSett.getDoModel());
+
         BaseService service = targetService;
-        List<Field> fields = ReflectUtils.getAnnotationField(importSett.getDoModel().getClass(), ApiModelProperty.class);
+        List<Field> fields = ReflectUtils.getAnnotationField(importSett.getVoModel().getClass(), ApiModelProperty.class);
         DictionaryTransService dictionaryTransService = FhsSpringContextUtil.getBeanByName(DictionaryTransService.class);
         //excel错误格式提醒
         StringBuilder valiStr = new StringBuilder();
         //需要反翻译的名称
         Map<String, Set<String>> needTrans = new HashMap<>();
+        Map<Integer, Set<String>> valiMap = new HashMap<>();
 
         //初始化数据集合
         List<Object> doList = new ArrayList<>();
         for (int i = 0; i < dataArray.length; i++) {
-            doList.add(JacksonUtil.jacksonDeserialize(JacksonUtil.jacksonSerialize(importSett.getDoModel()), importSett.getDoModel().getClass()));
+            doList.add(JacksonUtil.jacksonDeserialize(JacksonUtil.jacksonSerialize(importSett.getVoModel()), importSett.getVoModel().getClass()));
         }
 
         for (int i = 0; i < titleArray.length; i++) {
             for (Field field : fields) {
                 String fieldName = getFieldRemark(field);
-                if (fieldName.equals(titleArray[i])
-                        && field.getAnnotation(TableField.class).exist()) {
+                if (!fieldName.equals(titleArray[i])) {
+                    ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
+                    if (importExcelTitle != null) {
+                        fieldName = importExcelTitle.value();
+                    }
+                }
+                if (fieldName.equals(titleArray[i]) && field.getAnnotation(TableField.class).exist()) {
                     for (int j = 0; j < dataArray.length; j++) {
                         Object objDo = doList.get(j);
                         Object data = dataArray[j][i];
@@ -255,7 +348,8 @@ public class ExcelServiceImpl implements ExcelService {
                                     for (int k = 0; k < strs.length; k++) {
                                         String tran = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + strs[k]);
                                         if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tran)) {
-                                            valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                            recordValidationField(valiMap, j + 2, fieldName);
+                                            valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                         }
                                         tranStr.append(tran).append(",");
                                     }
@@ -264,7 +358,8 @@ public class ExcelServiceImpl implements ExcelService {
                                 } else {
                                     String tranStr = dictionaryTransService.getUnTransMap().get(trans.key() + "_" + data);
                                     if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(tranStr)) {
-                                        valiStr.append("不受支持的数据“" + data + "”，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        recordValidationField(valiMap, j + 2, fieldName);
+                                        valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
                                         continue;
                                     }
                                     ReflectUtils.setValue(objDo, field, field.getGenericType().equals(String.class) ? tranStr : ConverterUtils.toInteger(tranStr));
@@ -277,6 +372,36 @@ public class ExcelServiceImpl implements ExcelService {
                                 needTrans.get(namespace).add(ConverterUtils.toString(data));
                                 ReflectUtils.setValue(objDo, field, data);
                             }
+                            //SIMPLE类型的翻译
+                            if (TransType.SIMPLE.equals(trans.type())) {
+                                //获取翻译对应的Class
+                                Class<? extends VO> target = trans.target();
+                                List<Field> targetFields = ReflectUtils.getAnnotationField(target, ApiModelProperty.class);
+                                List<String> transFields = Arrays.asList(trans.fields());
+                                for (Field targetField : targetFields) {
+                                    String targetFieldName = targetField.getName();
+                                    ApiModelProperty apiModelProperty = targetField.getAnnotation(ApiModelProperty.class);
+                                    //获取到导入翻译对应的字段
+
+                                    if (transFields.contains(targetFieldName)) {
+                                        ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
+                                        if (apiModelProperty != null && (fieldName.equals(apiModelProperty.value()) || importExcelTitle != null && apiModelProperty.value().equals(importExcelTitle.value()))) {
+                                            //获取当前target的service
+                                            BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, target.getName(), 1);
+                                            QueryWrapper queryWrapper = new QueryWrapper();
+                                            queryWrapper.eq(targetFieldName, data);
+                                            VO vo = baseService.selectOneMP(queryWrapper);
+                                            if (vo == null) {
+                                                recordValidationField(valiMap, j + 2, fieldName);
+                                                valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
+                                                continue;
+                                            }
+                                            Object pkey = vo.getPkey();
+                                            ReflectUtils.setValue(objDo, field, pkey);
+                                        }
+                                    }
+                                }
+                            }
                         } else {
                             //不需要反翻译时进行非空和长度校验
                             if (field.getAnnotation(NotEmpty.class) != null
@@ -286,12 +411,38 @@ public class ExcelServiceImpl implements ExcelService {
                             Length length = field.getAnnotation(Length.class);
                             if (length != null) {
                                 if (data.toString().length() > length.max()) {
+                                    recordValidationField(valiMap, j + 2, fieldName);
                                     valiStr.append(fieldName + "长度不能超过" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
                                 }
                                 if (data.toString().length() < length.min()) {
+                                    recordValidationField(valiMap, j + 2, fieldName);
                                     valiStr.append(fieldName + "长度不能小于" + length.max() + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
+                                }
+                            }
+                            if (org.apache.commons.lang3.StringUtils.isNotEmpty(data.toString())) {
+                                // 邮箱校验
+                                Email emailAnnotation = field.getAnnotation(Email.class);
+                                if (null != emailAnnotation) {
+                                    String emailPattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+                                    boolean isMatch = java.util.regex.Pattern.matches(emailPattern, data.toString());
+                                    if (!isMatch) {
+                                        recordValidationField(valiMap, j + 2, fieldName);
+                                        valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
+                                }
+                                // 正则校验
+                                Pattern patternAnnotation = field.getAnnotation(Pattern.class);
+                                if (null != patternAnnotation) {
+                                    String regexp = patternAnnotation.regexp();
+                                    boolean isMatch = java.util.regex.Pattern.matches(regexp, data.toString());
+                                    if (!isMatch) {
+                                        recordValidationField(valiMap, j + 2, fieldName);
+                                        valiStr.append(fieldName + "格式错误" + "，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
+                                        continue;
+                                    }
                                 }
                             }
                             if (field.getGenericType().equals(Integer.class)) {
@@ -305,6 +456,7 @@ public class ExcelServiceImpl implements ExcelService {
                                 try {
                                     ReflectUtils.setValue(objDo, field, DateUtils.parseStr(data.toString()));
                                 } catch (Exception e) {
+                                    recordValidationField(valiMap, j + 2, fieldName);
                                     valiStr.append(fieldName + "列请输入正确的时间格式，请检查第" + (j + 2) + "行“" + fieldName + "”列;\r\n");
                                     continue;
                                 }
@@ -317,18 +469,43 @@ public class ExcelServiceImpl implements ExcelService {
             }
         }
 
-        untransAuto(needTrans, doList, valiStr, importSett.getDoModel().getClass());
+        untransAuto(needTrans, doList, valiStr, importSett.getVoModel().
 
+                getClass());
         if (doList.size() > 0) {
-            notNullNotEmptyCheck(doList, valiStr, titleArray);
+            notNullNotEmptyCheck(doList, valiStr, titleArray, valiMap);
+            //校验完成后执行自定义校验
+            if (Objects.nonNull(importSett.getValidationAfter())) {
+                importSett.getValidationAfter().excelValidationAfter(doList, valiStr);
+            }
             //如果Excel有数据验证错误，抛出异常并报告所有错误位置。
             if (valiStr.length() != 0) {
                 throw new ValidationException(valiStr.toString());
             }
+            for (Object o : doList) {
+                importSett.getVoIniter().init(o);
+            }
+
             service.batchInsert(doList);
         } else {
             throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
         }
+
+    }
+
+
+    /**
+     * 记录校验不通过的行、列
+     *
+     * @param valiMap
+     * @param rowNum
+     * @param fieldName
+     */
+    private void recordValidationField(Map<Integer, Set<String>> valiMap, Integer rowNum, String fieldName) {
+        if (!valiMap.containsKey(rowNum)) {
+            valiMap.put(rowNum, new HashSet<>());
+        }
+        valiMap.get(rowNum).add(fieldName);
     }
 
     /**
@@ -416,9 +593,10 @@ public class ExcelServiceImpl implements ExcelService {
      *
      * @param doList
      * @param valiStr
+     * @param valiMap
      * @return
      */
-    public StringBuilder notNullNotEmptyCheck(List<Object> doList, StringBuilder valiStr, Object[] titleArray) throws IllegalAccessException {
+    public StringBuilder notNullNotEmptyCheck(List<Object> doList, StringBuilder valiStr, Object[] titleArray, Map<Integer, Set<String>> valiMap) throws IllegalAccessException {
         Set<Field> hasCheckField = new HashSet<>();
         List<Field> notEmptyFieldList = ReflectUtils.getAnnotationField(doList.get(0).getClass(), NotEmpty.class);
         if (!notEmptyFieldList.isEmpty()) {
@@ -433,12 +611,26 @@ public class ExcelServiceImpl implements ExcelService {
             String fieldName = getFieldRemark(field);
             // excel模板中不包含的不校验
             if (!excelIncludeTitleSet.contains(fieldName)) {
-                continue;
+                ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
+                if (importExcelTitle != null) {
+                    fieldName = importExcelTitle.value();
+                    if (!excelIncludeTitleSet.contains(fieldName)) {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
             }
             field.setAccessible(true);
             for (int i = 0; i < doList.size(); i++) {
+                Set<String> valiSet = valiMap.get(i + 2);
+                if (valiSet != null) {
+                    if (valiSet.contains(fieldName)) {
+                        continue;
+                    }
+                }
                 if (CheckUtils.isNullOrEmpty(field.get(doList.get(i)))) {
-                    valiStr.append("第" + (i + 2) + "行第" + fieldName + "不可为空");
+                    valiStr.append("第" + (i + 2) + "行" + fieldName + "不可为空");
                 }
             }
         }
@@ -456,18 +648,20 @@ public class ExcelServiceImpl implements ExcelService {
      *
      * @param file          文件对象
      * @param targetService 对应的service
-     * @param doClass       对应的 DO Class
+     * @param voClass       对应的 DO Class
      * @param importSett    导入配置
      * @throws ValidationException 返回整个Excel验证结果
      */
     @Override
-    public void importExcel(MultipartFile file, BaseService targetService, Class<?> doClass, ExcelImportSett importSett) throws Exception {
+    public void importExcel(MultipartFile file, BaseService targetService, Class<?> voClass, ExcelImportSett importSett) throws Exception {
 
-        Object[][] dataArray = new Object[0][];
-        Object[] titleArray = new Object[0];
         try {
-            dataArray = ExcelUtils.importExcel(file, importSett.getTitleRowNum(), importSett.getColNum());
-            titleArray = ExcelUtils.getExcelTitleRow(file, importSett.getTitleRowNum(), importSett.getColNum());
+            Object[][] dataArray = ExcelUtils.importExcel(file, importSett.getTitleRowNum(), importSett.getColNum());
+            Object[] titleArray = ExcelUtils.getExcelTitleRow(file, importSett.getTitleRowNum(), importSett.getColNum());
+            dataArray = dataArray != null ? dataArray : new Object[0][];
+            titleArray = titleArray != null ? titleArray : new Object[0];
+            //校验导入文件title和模板文件title是否一致
+            validationFileTemplate(targetService, importSett, titleArray);
             for (int i = 0; i < titleArray.length; i++) {
                 // ParamChecker.isNotNullOrEmpty(titleArray[i], "模板格式有误, 请检查模板!");
                 String tempTitle = ConverterUtils.toString(titleArray[i]);
@@ -475,10 +669,50 @@ public class ExcelServiceImpl implements ExcelService {
                     titleArray[i] = tempTitle.substring(0, tempTitle.indexOf("("));
                 }
             }
+            importExcel(dataArray, titleArray, targetService, importSett);
         } catch (IOException e) {
             throw new ValidationException("获取文件IO流失败", e);
         }
+    }
 
-        importExcel(dataArray, titleArray, targetService, importSett);
+    /**
+     * 校验导入文件title和模板文件title是否一致
+     *
+     * @param targetService
+     * @param importSett
+     * @param titleArray
+     */
+    private void validationFileTemplate(BaseService targetService, ExcelImportSett importSett, Object[] titleArray) throws Exception {
+        //获取Controller注解的ImportExcelTemplate中的模板文件
+        Class controllerClass = importSett.getControllerClass();
+        if (controllerClass == null) {
+            throw new IllegalAccessException("ExcelImportSett没有设置controllerClass！");
+        }
+        ImportExcelTemplate excelTemplate = (ImportExcelTemplate) controllerClass.getAnnotation(ImportExcelTemplate.class);
+        if (excelTemplate == null) {
+            throw new IllegalAccessException("controller中没有添加ImportExcelTemplate注解！");
+        }
+        String template = excelTemplate.template();
+        InputStream templateStream = targetService.getClass().getResourceAsStream("/template/" + template);
+        String extension = template.lastIndexOf(".") == -1 ? "" : template.substring(template.lastIndexOf(".") + 1);
+        // 根据不同excel版本调用不同的excel类型
+        Object[] dataList = null;
+        if ("xls".equals(extension)) {
+            dataList = ExcelUtils.readExcelTitle03(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
+        } else if ("xlsx".equals(extension)) {
+            dataList = ExcelUtils.readExcelTitle07(templateStream, importSett.getTitleRowNum(), importSett.getColNum());
+        } else {
+            log.error("ExcelUtils.importExcel    不支持的文件类型或用户将xls文件后缀更改为xlsx");
+        }
+        if (dataList == null || titleArray == null || dataList.length != titleArray.length) {
+            throw new ValidationException("导入数据文件和模板不一致！");
+        }
+        List<Object> titleList = Arrays.asList(titleArray);
+        for (Object data : dataList) {
+            if (!titleList.contains(data)) {
+                log.error(data + "列和模板不一致");
+                throw new ValidationException("导入数据文件和模板不一致！");
+            }
+        }
     }
 }
