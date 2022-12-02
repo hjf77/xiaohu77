@@ -6,11 +6,13 @@
 <template>
   <div class="app-container">
     <pagex-crud
+      ref="crud"
       :filters="filters"
       :columns="columns"
       :api="api"
       :buttons="buttons"
       :namespace="namespace"
+      v-loading="loading"
     >
       <template v-slot:form="prop">
         <!-- 修改 弹框-->
@@ -55,6 +57,7 @@ export default {
       addOpen: false,
       init: {},
       ruleId: '',
+      loading: false,
       buttons: [
         {
           title: '新增流程',
@@ -108,7 +111,7 @@ export default {
           label: '操作',
           name: 'operation',
           type: 'textBtn',
-          width: '400px',
+          width: '420px',
           textBtn: [
             {
               title: "修改流程",
@@ -116,10 +119,10 @@ export default {
               type: "text",
               size: 'mini',
               click: (_row) => {
-                  this.$set(this, 'init', _row)
-                  this.title = '编辑';
-                  this.open = true;
-                  this.isEdit = true;
+                this.$set(this, 'init', _row)
+                this.title = '编辑';
+                this.open = true;
+                this.isEdit = true;
               }
             },
             {
@@ -163,7 +166,8 @@ export default {
                       url: '/basic/ms/model/deploy?id=' + _row.id,
                       method: 'POST',
                     }).then((res) => {
-                      done();
+                      this.loading = false;
+                      this.$refs.crud.search();
                     })
                   });
               }
@@ -185,9 +189,23 @@ export default {
               title: "删除",
               icon: 'el-icon-delete',
               type: "text",
-              api: '/basic/ms/dictItem/',
               size: 'mini',
-              idFieldName: 'dictId'
+              click: (_row) => {
+                this.$confirm("是否删除该流程！！",
+                  {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                  }
+                ).then(() => {
+                  this.$pagexRequest({
+                    url: '/basic/ms/model/delete?id=' + _row.id,
+                    method: 'DELETE',
+                  }).then((res) => {
+                    this.$refs.crud.search();
+                  })
+                }).catch(() => {});
+              }
             },
           ],
         }

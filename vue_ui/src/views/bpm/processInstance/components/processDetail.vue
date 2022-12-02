@@ -13,7 +13,7 @@
       <span class="el-icon-picture-outline">审批任务【老师审批】</span>
     </div>
     <el-col :span="16" :offset="6" >
-        <el-form :ref="'form' + index"  label-width="100px">
+        <el-form :ref="'form' + index"  label-width="100px" :rules="auditRule" :model="auditForms[index]">
           <el-form-item label="流程名">{{ processInstance.name }}</el-form-item>
           <el-form-item label="流程发起人" > {{ processInstance.startUser.nickname }}
             <el-tag type="info" size="mini">{{ processInstance.startUser.deptName }}</el-tag>
@@ -32,7 +32,7 @@
       </el-col>
    </el-card>
  <!-- 审批记录 -->
-    <el-card class="box-card" v-loading="tasksLoad">
+    <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span class="el-icon-picture-outline">审批记录</span>
       </div>
@@ -94,6 +94,15 @@ export default {
       bpmnXML: null,
       bpmnControlForm: {
         prefix: "flowable"
+      },
+      // 审批记录
+      // tasksLoad: true,
+      tasks: [],
+      // 审批表单
+      runningTasks: [],
+      auditForms: [],
+      auditRule: {
+        reason: [{ required: true, message: "审批建议不能为空", trigger: "blur" }],
       },
     }
   },

@@ -6,6 +6,7 @@
 <template>
   <div class="app-container">
     <pagex-crud
+      ref="crud"
       :filters="filters"
       :columns="columns"
       :api="api"
@@ -86,7 +87,7 @@ export default {
                     method: 'DELETE',
                     data: { id, reason}
                     }).then((res) => {
-                    this.$set(this, "init", res.data);
+                      this.$refs.crud.search();
                   })
                 }).then(() => {
                   this.$refs.crud.search();
@@ -123,7 +124,7 @@ export default {
       ],
       filters: [
           {label: '请假类型', name: 'type', type: 'select', dictCode: 'bpm_oa_leave_type'},
-          {label: '申请时间', name: 'createTime', type: 'text', type: 'daterange',},
+          {label: "申请时间", name: "createTime", type: "date-picker", operation: "between", },
           {label: '结果', name: 'result', type: 'select', dictCode: 'bpm_process_instance_result'},
           {label: '原因', name: 'reason', type: 'text'},
       ],
