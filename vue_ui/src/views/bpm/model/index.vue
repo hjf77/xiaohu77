@@ -150,21 +150,23 @@ export default {
               title: "发布流程",
               icon: 'el-icon-thumb',
               type: "text",
-              api: '/basic/ms/dictItem/',
               size: 'mini',
               click: (_row) => {
-                this.$confirm('是否部署该流程！！')
-                  .then(_ => {
+                this.$confirm("是否部署该流程！！",
+                  {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                  }
+                ).then(() => {
                     this.$pagexRequest({
                       url: '/basic/ms/model/deploy?id=' + _row.id,
-                      data: data,
                       method: 'POST',
                     }).then((res) => {
                       done();
                     })
-                  })
-                  .catch(_ => { });
-              },
+                  });
+              }
             },
             {
               title: "流程定义",
