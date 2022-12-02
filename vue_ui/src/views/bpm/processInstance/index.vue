@@ -6,6 +6,7 @@
 <template>
   <div class="app-container">
     <pagex-crud
+      ref="crud"
       :filters="filters"
       :columns="columns"
       :api="api"
@@ -73,6 +74,37 @@ export default {
           type: 'textBtn',
           width: '100px',
           textBtn: [
+            {
+              title: "取消",
+              icon: 'el-icon-view',
+              type: "text",
+              size: 'mini',
+              ifFun: (_row) => {
+                return _row.result === 1; // 运行中有取消权限
+              },
+              click: (_row) => {
+                this.$prompt('请输入取消原因？', "取消流程", {
+                  type: 'warning',
+                  confirmButtonText: "确定",
+                  cancelButtonText: "取消",
+                  inputPattern: /^[\s\S]*.*\S[\s\S]*$/, // 判断非空，且非空格
+                  inputErrorMessage: "取消原因不能为空",
+                }).then(({ value }) => {
+                  const id = _row.id;
+                  const reason = value;
+                  this.$pagexRequest({
+                    url: '/basic/ms/process-instance/cancel',
+                    method: 'DELETE',
+                    data: { id, reason}
+                    }).then((res) => {
+                      this.$refs.crud.search();
+                  })
+                }).then(() => {
+                  this.$refs.crud.search();
+                  this.$modal.msgSuccess("取消成功");
+                })
+              }
+            },
             {
               title: "详情",
               icon: 'el-icon-view',

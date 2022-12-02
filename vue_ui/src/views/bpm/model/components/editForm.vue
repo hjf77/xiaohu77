@@ -51,9 +51,7 @@
             name: 'category',
             label: '流程分类',
             rule:'required',
-            placeholder: '请选择流程名称',
             dictCode: 'categoryDictDatas',
-            isValueNum: true,
           },
           {
             type: 'textarea',
@@ -70,43 +68,43 @@
             rule:'required',
             dictCode: "bpm_model_form_type",
             isValueNum: true,
-            change: (_row, val) => {
-              if (val) {
-                if (val == 1) {
-                  this.controls[5].isHide = false;
-                  this.controls[6].isHide = true;
-                  this.controls[7].isHide = true;
-                }else{
-                  this.controls[5].isHide = true;
-                  this.controls[6].isHide = false;
-                  this.controls[7].isHide = false;
-                }
-              }
-            }
+            // change: (_row, val) => {
+            //   if (val) {
+            //     if (val == 1) {
+            //       this.controls[5].isHide = false;
+            //       this.controls[6].isHide = true;
+            //       this.controls[7].isHide = true;
+            //     }else{
+            //       this.controls[5].isHide = true;
+            //       this.controls[6].isHide = false;
+            //       this.controls[7].isHide = false;
+            //     }
+            //   }
+            // }
           },
-          {
-            type: "select",
-            name: "formId",
-            label: "流程表单",
-            rule:'required',
-            isHide: false,
-            url: '/basic/ms/form/list-all-simple',
-            labelField: "name",
-            valueField: "id"
-          },
+          // {
+          //   type: "select",
+          //   name: "formId",
+          //   label: "流程表单",
+          //   rule:'required',
+          //   isHide: false,
+          //   url: '/basic/ms/form/list-all-simple',
+          //   labelField: "name",
+          //   valueField: "id"
+          // },
           {
             type: "text",
             name: "formCustomCreatePath",
             label: "表单提交路由",
             rule:'required',
-            isHide: true,
+            // isHide: true,
           },
           {
             type: "text",
             name: "formCustomViewPath",
             label: "表单查看路由",
             rule:'required',
-            isHide: true,
+            // isHide: true,
           },
         ],
       }
