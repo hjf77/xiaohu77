@@ -225,18 +225,25 @@ by wanglei
             :fixed="item.fixed"
           >
             <template slot-scope="scope">
-              <el-button
-                v-for="(val, index) in item.textBtn"
-                v-if="proxyBtnIf(scope.row, index, val)"
-                :key="index"
-                :type="val.type"
-                :size="val.size || 'mini'"
-                :disabled="proxyBtnDisabled(scope.row, index, val)"
-                plain
-                @click="handleClick(scope.row, val)"
-              >
-                {{ val.title }}
-              </el-button>
+              <!--处理v-for与v-if写在一起，导致一个按钮ifFun为false时，整行都不显示的问题；-->
+              <div style="display:flex" class="button-wrap">
+                <div v-for="(val, index) in item.textBtn" class="btn_wrap">
+                  <el-button
+                    v-if="proxyBtnIf(scope.row, index, val)"
+                    :key="index"
+                    :type="val.type"
+                    :icon="val.icon"
+                    :size="val.size || 'mini'"
+                    :disabled="proxyBtnDisabled(scope.row, index, val)"
+                    plain
+                    @click="handleClick(scope.row, val)"
+                  >
+
+                    {{ val.title }}
+                  </el-button>
+                </div>
+              </div>
+
             </template>
           </el-table-column>
         </template>

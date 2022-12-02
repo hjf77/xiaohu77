@@ -15,8 +15,8 @@
       <template v-slot:form="prop">
         <!-- 修改 弹框-->
         <pagex-dialog slot="form" :title="title"  :visible.sync="open" :before-close="closeFn"  class="pagex-dialog-theme">
-          <editForm v-if="isEdit" :init="init" :isEdit="isEdit">编辑</editForm>
-          <addForm v-else :isAdd="isAdd">新增</addForm>
+          <editForm v-if="isEdit" :init="init" :isEdit="isEdit"></editForm>
+          <addForm v-else :isAdd="isAdd"></addForm>
         </pagex-dialog>
       </template>
       <template v-slot:topSlot="prop">
@@ -191,9 +191,9 @@ export default {
         }
       ],
       filters: [
-        {label: '流程标识', name: 'key', type: 'text'},
-        {label: '流程名称', name: 'name', type: 'text'},
-        {label: '流程分类', name: 'category', type: 'select', dictCode: 'categoryDictDatas'},
+        {label: '流程标识', name: 'key', type: 'text', operation: "like",},
+        {label: '流程名称', name: 'name', type: 'text', operation: "like",},
+        {label: '流程分类', name: 'category', type: 'select', dictCode: 'categoryDictDatas', operation: "in",},
       ]
     };
   },
