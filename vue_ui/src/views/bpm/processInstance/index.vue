@@ -12,20 +12,26 @@
       :buttons="buttons"
       :namespace="namespace"
     >
+      <template v-slot:form="prop">
+        <pagex-dialog slot="form" :title="title"  :visible.sync="open" :before-close="closeFn"  class="pagex-dialog-theme">
+          <processCreate v-if="isAdd"></processCreate>
+        </pagex-dialog>
+      </template>
     </pagex-crud>
   </div>
 </template>
 <script>
+import processCreate from './components/processCreate.vue'
 export default {
   name: "processInstance",
-  components: {},
+  components: { processCreate },
   data() {
     return {
       namespace: 'process-instance',
       api: '/basic/ms/process-instance/my-page',
-      isEdit: false,
+      isAdd: false,
       open: false,
-      ruleId: '',
+      title: '',
       buttons: [
         {
           title: '发起流程',
@@ -34,9 +40,11 @@ export default {
           icon: 'el-icon-plus',
           click: () => {
             this.title = '发起流程';
-            this.addOpen = true;
-            this.open = false;
+            this.open = true;
             this.isAdd = true;
+            // this.$router.push({
+            //   path: '/bpm/processDetail',
+            // });
           }
         },
       ],
@@ -83,9 +91,9 @@ export default {
       ],
       filters: [
         {label: '流程名', name: 'name', type: 'text'},
-        {label: '所属流程', name: 'processDefinitionId', type: 'text'},
+        {label: '所属流程', name: 'processDefinitionId', type: 'text', placeholder: '请输入流程定义的编号'},
         {label: '流程分类', name: 'category', type: 'select', dictCode: 'categoryDictDatas'},
-        {label: "提交时间", name: "testDate", type: "date-picker", operation: "between", },
+        {label: "提交时间", name: "createTime", type: "date-picker", operation: "between", },
         {label: '状态', name: 'status', type: 'select', dictCode: 'bpm_process_instance_status'},
         {label: '结果', name: 'result', type: 'select', dictCode: 'bpm_process_instance_result'},
       ]
@@ -94,6 +102,10 @@ export default {
   created() {
    
   },
-  methods: {}
+  methods: {
+    closeFn(){
+      this.open = false;
+    },
+  }
 };
 </script>
