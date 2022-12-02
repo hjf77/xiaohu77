@@ -46,7 +46,7 @@ public class SettMsMenuPermissionController extends ModelSuperController<SettMsM
     @PostMapping("addBaseMenuBatch")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_ADD)
     public void addBaseMenuBatch(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> map = super.getParameterMap();
+        Map<String, String> map = super.getParameterMap();
         boolean result = sysMenuPermissionService.addBaseMenuBatch(map);
         super.outToClient(result);
     }

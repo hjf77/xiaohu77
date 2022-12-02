@@ -34,7 +34,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_ucenter_ms_organization")
+@TableName(value = "t_ucenter_ms_organization",autoResultMap = true)
 @NotRepeatDesc("同一个父部门下的子部门名称不可重复")
 @TransDefaultSett(defaultFields = "name",defaultAlias = "org",isUseCache = true,cacheSeconds = 1000)
 @ApiModel(value = "UcenterMsOrganizationDO", description = "UcenterMsOrganization参数")

@@ -1,14 +1,14 @@
 package com.fhs.core.base.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.advance.query.QueryField;
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.pojo.SuperBean;
-import com.fhs.core.base.vo.QueryField;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
@@ -175,7 +175,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
      *
      * @return
      */
-    public QueryWrapper<T> asWrapper() {
+    public LambdaJoinQueryWrapper asWrapper() {
         List<Field> fields = ReflectUtils.getAnnotationField(this.getClass(), TableField.class);
         //过滤掉忽略字段
         fields = fields.stream().filter(field -> {
@@ -186,6 +186,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
             fields.addAll(idFields);
         }
         QueryFilter<T> filter = new QueryFilter<>();
+        filter.setQuerys(new ArrayList<>());
         Object value = null;
         for (Field field : fields) {
             field.setAccessible(true);
@@ -193,13 +194,14 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
                 value = field.get(this);
                 //不等于null不等于空的时候加入到条件里去
                 if (value != null && !"".equals(value)) {
-                    filter.getQuerys().add(QueryField.builder().property(field.getName()).value(value).operation("=").group("main").relation("AND").build());
+                    filter.getQuerys().add(QueryField.builder().property(field.getName()).value(value).operator("=").group("main").relation("AND").build());
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        return filter.asWrapper(this.getClass());
+        Class thisClass = this.getClass();
+        return filter.asWrapper(thisClass);
     }
 
 }

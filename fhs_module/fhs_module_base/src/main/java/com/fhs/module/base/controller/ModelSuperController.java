@@ -3,6 +3,7 @@ package com.fhs.module.base.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.context.UserContext;
@@ -15,6 +16,7 @@ import com.fhs.core.base.po.BasePO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.base.vo.ExcelExportFieldVO;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.excel.exception.ValidationException;
@@ -28,6 +30,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.trans.service.impl.TransService;
+import com.github.liaochong.myexcel.utils.FileExportUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,12 +45,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -60,7 +65,7 @@ import java.util.stream.Collectors;
  * @Author: jianbo.qin
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public abstract class ModelSuperController<V extends VO, D extends BasePO, PT extends Serializable> extends BaseController {
+public abstract class ModelSuperController<V extends VO, P extends BasePO, PT extends Serializable> extends BaseController {
     protected Logger log = Logger.getLogger(getClass());
 
     /**
@@ -69,7 +74,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     protected Cache<Long, QueryWrapper> exportParamCache = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     @Autowired
-    protected BaseService<V, D> baseService;
+    protected BaseService<V, P> baseService;
 
     @Autowired
     private ExcelService excelService;
@@ -77,7 +82,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @Autowired
     private TransService transService;
 
-    public BaseService<V, D> getBaseService() {
+    public BaseService<V, P> getBaseService() {
         return baseService;
     }
 
@@ -89,15 +94,26 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ResponseBody
     @PostMapping("pagerAdvance")
     @ApiOperation("后台-高级分页查询")
-    public IPage<V> findPagerAdvance(@RequestBody QueryFilter<D> filter) {
+    public IPage<V> findPagerAdvance(@RequestBody QueryFilter<P> filter) {
         if (isPermitted("see")) {
-            QueryWrapper wrapper = filter.asWrapper(getPOClass());
-            this.setExportCache(wrapper);
+            LambdaJoinQueryWrapper<P> wrapper = filter.asWrapper(getPOClass());
+            //this.setExportCache(wrapper);
             //这里的是1是DO的index
             return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
         } else {
             throw new NotPremissionException();
         }
+    }
+
+    /**
+     * 格式化返回结果
+     * 比如密码字段不给前端返回
+     *
+     * @param records 数据集合
+     * @param isPager 是否分页
+     */
+    public void parseRecords(List<V> records, boolean isPager, boolean isExport) {
+
     }
 
 
@@ -109,7 +125,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @ResponseBody
     @PostMapping("findListAdvance")
     @ApiOperation("后台-高级查询不分页一般用于下拉")
-    public List<V> findListAdvance(@RequestBody QueryFilter<D> filter) {
+    public List<V> findListAdvance(@RequestBody QueryFilter<P> filter) {
         if (isPermitted("see")) {
             //这里的是1是DO的index
             return baseService.selectListMP(filter.asWrapper(getPOClass()));
@@ -129,7 +145,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     public List<V> findList()
             throws Exception {
         if (isPermitted("see")) {
-            List<V> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()));
+            List<V> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass(),super.getParameterMap()));
             return dataList;
         } else {
             throw new NotPremissionException();
@@ -143,23 +159,16 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     @GetMapping("advanceExportExcel")
     @ApiOperation("配合高级搜索一起使用的excel导出")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_EXPORT)
-    public void exportExcel(HttpServletResponse response, String fileName, String ids) throws IOException {
-        QueryWrapper wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
-        wrapper = wrapper == null ? new QueryWrapper() : wrapper;
-        wrapper = (QueryWrapper) wrapper.clone();
-        if (CheckUtils.isNotEmpty(ids)) {
-            wrapper.in("id", ids.split(","));
-        }
-        Workbook book = this.excelService.exportExcel(wrapper, this.baseService, this.getPOClass());
+    public void exportExcelField(@RequestBody ExcelExportFieldVO excelExportFieldVO) throws Exception {
+        QueryWrapper<P> wrapper = this.exportParamCache.getIfPresent(UserContext.getSessionuser().getUserId());
+        //查询出需要导出的数据
+        List<V> data = this.baseService.selectListMP(wrapper);
+        transService.transMore(data);
+        parseRecords(data, false, true);
+        Workbook book = this.excelService.exportExcelField(data, excelExportFieldVO.getFieldVOList());
         String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID() + ".xlsx";
-        FileOutputStream os = new FileOutputStream(excelTempPath);
-        book.write(os);
-        try {
-            os.close();
-        } catch (Exception e) {
-            log.error("关闭流错误", e);
-        }
-        FileUtils.download(excelTempPath, response, fileName);
+        FileExportUtil.export(book, new File(excelTempPath));
+        FileUtils.download(excelTempPath, getResponse(), excelExportFieldVO.getFileName() + ".xlsx");
         FileUtils.deleteFile(excelTempPath);
     }
 
@@ -206,7 +215,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
                 }
             }
             beforSave(e, true);
-            baseService.insert((D) e);
+            baseService.insert((P) e);
             return HttpResult.success(e.getPkey());
 
         }
@@ -245,7 +254,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
     public HttpResult<Boolean> update(@RequestBody @Validated(Update.class) V e) {
         if (isPermitted("update")) {
             beforSave(e, false);
-            baseService.updateById((D) e);
+            baseService.updateById((P) e);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
@@ -295,12 +304,12 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             produces = {"application/json; charset=utf-8"}
     )
     @ApiOperation("获取tree格式的json数据")
-    public List<TreeNode<Treeable>> treeData(@ApiParam(name = "queryFilter", value = "过滤条件") @RequestBody QueryFilter<D> queryFilter) throws IllegalAccessException {
+    public List<TreeNode<Treeable>> treeData(@ApiParam(name = "queryFilter", value = "过滤条件") @RequestBody QueryFilter<P> queryFilter) throws IllegalAccessException {
         List<V> datas = this.baseService.selectListMP(queryFilter.asWrapper(getPOClass()));
         return TreeUtils.formartTree(datas);
     }
 
-    protected Class<D> getPOClass() {
+    protected Class<P> getPOClass() {
         return (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
@@ -317,7 +326,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
                 baseDo.preUpdate(getSessionuser().getUserId());
             }
             beforSave(e, false);
-            baseService.updateSelectiveById((D) e);
+            baseService.updateSelectiveById((P) e);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
@@ -325,9 +334,9 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
 
 
     @Override
-    public EMap<String, Object> getParameterMap() {
-        EMap<String, Object> result = super.getParameterMap();
-        result.put("loginUserId", getSessionuser().getUserId());
+    public EMap<String, String> getParameterMap() {
+        EMap<String, String> result = super.getParameterMap();
+        result.put("loginUserId", ConverterUtils.toString(getSessionuser().getUserId()));
         return result;
     }
 
@@ -336,22 +345,22 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
      *
      * @param wrapper 过滤条件
      */
-    protected void setExportCache(QueryWrapper<D> wrapper) {
+    protected void setExportCache(QueryWrapper<P> wrapper) {
         exportParamCache.put(UserContext.getSessionuser().getUserId(), wrapper);
     }
 
     @PostMapping("pubImportExcel")
     @ApiOperation("公共excel导入")
     @NotRepeat
-    public HttpResult<String> pubImportExcel(MultipartFile file, D otherParam) throws Exception {
+    public HttpResult<String> pubImportExcel(MultipartFile file, V otherParam) throws Exception {
         if (otherParam == null) {
-            otherParam = this.getPOClass().newInstance();
+            otherParam = baseService.getVOClass().newInstance();
         }
         ExcelImportSett importSett = getExcelImportSett(otherParam);
         ParamChecker.isNotNull(importSett, "此接口后台没有配置导入参数，请联系后台");
         try {
-            importSett.setDoModel(otherParam);
-            this.excelService.importExcel(file, this.getBaseService(), this.getPOClass(), importSett);
+            importSett.setVoModel(otherParam);
+            this.excelService.importExcel(file, this.getBaseService(), baseService.getVOClass(), importSett);
         } catch (ValidationException e) {
             throw new ParamException(e.getMessage());
         }
@@ -363,8 +372,18 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
      *
      * @return
      */
-    protected ExcelImportSett getExcelImportSett(D otherParam) {
+    protected ExcelImportSett getExcelImportSett(V otherParam) {
         return null;
     }
+
+    /**
+     * 设置do模板，本次excel导入的部分字段excel是不包含的，在这里初始默认值
+     *
+     * @param p
+     */
+    public void excelImportInitDo(P p) {
+        p.preInsert(UserContext.getSessionuser().getUserId());
+    }
+
 
 }

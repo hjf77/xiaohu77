@@ -1,6 +1,5 @@
 package com.fhs.flow.service.definition;
 
-import cn.hutool.core.collection.CollUtil;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.comon.utils.CollectionUtils;
 import com.fhs.flow.controller.admin.definition.vo.group.BpmUserGroupCreateReqVO;
@@ -10,6 +9,7 @@ import com.fhs.flow.convert.definition.BpmUserGroupConvert;
 import com.fhs.flow.dal.dataobject.definition.BpmUserGroupPO;
 import com.fhs.flow.dal.mysql.definition.BpmUserGroupMapper;
 import com.fhs.flow.enums.CommonStatusEnum;
+import org.flowable.common.engine.impl.util.CollectionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -90,7 +90,7 @@ public class BpmUserGroupServiceImpl implements BpmUserGroupService {
 
     @Override
     public void validUserGroups(Set<Long> ids) {
-        if (CollUtil.isEmpty(ids)) {
+        if (CollectionUtil.isEmpty(ids)) {
             return;
         }
         // 获得用户组信息

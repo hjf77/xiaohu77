@@ -36,7 +36,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_service_area")
+@TableName(value = "t_service_area",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ServiceAreaDO", description = "ServiceArea参数")
 public class ServiceAreaPO extends BasePO<ServiceAreaPO> {

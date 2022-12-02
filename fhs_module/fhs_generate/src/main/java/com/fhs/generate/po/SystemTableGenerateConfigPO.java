@@ -23,7 +23,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_system_table_generate_config")
+@TableName(value = "t_system_table_generate_config",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value ="SystemTableGenerateConfigPO",description ="表生成代码配置")
 public class SystemTableGenerateConfigPO extends BasePO<SystemTableGenerateConfigPO> {
