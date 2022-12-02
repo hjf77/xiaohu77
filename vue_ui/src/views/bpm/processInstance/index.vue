@@ -8,16 +8,10 @@
     <pagex-crud
       :filters="filters"
       :columns="columns"
-      :methodType="methodType"
       :api="api"
       :buttons="buttons"
       :namespace="namespace"
     >
-      <!-- <template v-slot:form="prop">
-        <pagex-dialog slot="form" :title="title"  v-if="open" :visible.sync="open"  class="pagex-dialog-theme">
-          <processDetail :init="init" :isEdit="isEdit"></processDetail>
-        </pagex-dialog>
-      </template> -->
     </pagex-crud>
   </div>
 </template>
@@ -29,7 +23,6 @@ export default {
     return {
       namespace: 'process-instance',
       api: '/basic/ms/process-instance/my-page',
-      methodType: 'GET',
       isEdit: false,
       open: false,
       ruleId: '',
@@ -51,7 +44,17 @@ export default {
         {label: '编号', name: 'id'},
         {label: '流程名', name: 'name'},
         {label: '流程分类', name: 'transMap.categoryName'},
-        {label: '当前审批任务', name: 'tasks',},
+        {label: '当前审批任务', name: 'tasks',type: "formart",
+          formart: ( row ) => {
+            if (row.tasks !== null) {
+              for (let i = 0; i < row.tasks.length; i++) {
+                const item = row.tasks[i];
+                return '<el-button><span>'+ item.name +'</span></el-button>'
+              }
+            } else {
+              return;
+            }
+          },},
         {label: '状态', name: 'transMap.statusName'},
         {label: '结果', name: 'transMap.resultName',},
         {label: '提交时间', name: 'createTime' },
@@ -64,7 +67,7 @@ export default {
           textBtn: [
             {
               title: "详情",
-              icon: 'el-icon-edit',
+              icon: 'el-icon-view',
               type: "text",
               size: 'mini',
               click: (_row) => {
@@ -82,8 +85,7 @@ export default {
         {label: '流程名', name: 'name', type: 'text'},
         {label: '所属流程', name: 'processDefinitionId', type: 'text'},
         {label: '流程分类', name: 'category', type: 'select', dictCode: 'categoryDictDatas'},
-        {label: '提交时间', name: 'createTime', type: 'daterange',},
-        
+        {label: "提交时间", name: "testDate", type: "date-picker", operation: "between", },
         {label: '状态', name: 'status', type: 'select', dictCode: 'bpm_process_instance_status'},
         {label: '结果', name: 'result', type: 'select', dictCode: 'bpm_process_instance_result'},
       ]
