@@ -24,7 +24,7 @@ import static com.fhs.flow.comon.pojo.CommonResult.success;
 @Api(tags = "管理后台 - 流程任务实例")
 @RestController
 @RequestMapping("/ms/task")
-@ApiGroup(group ="bpm")
+@ApiGroup(group = "bpm")
 @Validated
 public class BpmTaskController {
 
@@ -50,7 +50,7 @@ public class BpmTaskController {
     @ApiImplicitParam(name = "processInstanceId", value = "流程实例的编号", required = true)
     @SaCheckRole("task:see")
     public List<BpmTaskRespVO> getTaskListByProcessInstanceId(
-        @RequestParam("processInstanceId") String processInstanceId) {
+            @RequestParam("processInstanceId") String processInstanceId) {
         return taskService.getTaskListByProcessInstanceId(processInstanceId);
     }
 
@@ -78,4 +78,31 @@ public class BpmTaskController {
         return success(true).toHttpResult();
     }
 
+    /**
+     * 获取可驳回节点列表
+     *
+     * @param processInstanceId 流程实例id
+     * @return
+     */
+    @GetMapping(value = "/getBackNodesByProcessInstanceId")
+    @ApiOperation(value = "获取可驳回节点列表", notes = "获取可驳回节点列表")
+    public List<FlowNodeVo> getBackNodesByProcessInstanceId(
+            @RequestParam("processInstanceId") String processInstanceId
+            , @RequestParam("taskId") String taskId) {
+        return taskService.getBackNodesByProcessInstanceId(taskId, processInstanceId);
+    }
+
+
+    /**
+     * 驳回节点
+     * @param params 参数
+     * @return
+     */
+    @PostMapping(value = "/doBackStep")
+    @ApiOperation(value = "驳回节点", notes = "驳回节点")
+    public HttpResult<Boolean> doBackStep(BackTaskVo params) {
+        params.setUserId(UserContext.getSessionuser().getUserId());
+        taskService.backToStepTask(params);
+        return success(true).toHttpResult();
+    }
 }

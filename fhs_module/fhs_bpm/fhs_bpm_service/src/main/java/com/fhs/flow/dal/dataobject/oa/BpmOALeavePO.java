@@ -3,6 +3,8 @@ package com.fhs.flow.dal.dataobject.oa;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.flow.base.po.BpmBasePO;
 import com.fhs.flow.enums.task.BpmProcessInstanceResultEnum;
 import lombok.*;
@@ -38,6 +40,7 @@ public class BpmOALeavePO extends BpmBasePO {
      *
      * 关联 AdminUserDO 的 id 属性
      */
+    @Trans(type = TransType.RPC, targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "userId", fields = "userName", serviceName = "basic", dataSource = "basic")
     private Long userId;
     /**
      * 请假类型

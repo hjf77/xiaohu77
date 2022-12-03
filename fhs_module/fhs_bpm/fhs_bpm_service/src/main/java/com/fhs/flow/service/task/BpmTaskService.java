@@ -3,6 +3,7 @@ package com.fhs.flow.service.task;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.comon.utils.CollectionUtils;
 import com.fhs.flow.controller.admin.task.vo.task.*;
+import org.flowable.bpmn.model.FlowNode;
 import org.flowable.task.api.Task;
 
 import javax.validation.Valid;
@@ -127,4 +128,36 @@ public interface BpmTaskService {
      */
     void updateTaskExtAssign(Task task);
 
+
+    /**
+     * 获取可驳回节点列表
+     * @param taskId 任务id
+     * @param processInstanceId 流程实例id
+     * @return
+     */
+    List<FlowNodeVo> getBackNodesByProcessInstanceId(String taskId, String processInstanceId);
+
+    /**
+     * 驳回任意节点 暂时没有考虑子流程
+     *
+     * @param backTaskVo 参数
+     * @return
+     */
+    void backToStepTask(BackTaskVo backTaskVo);
+
+    /**
+     * 查找节点
+     * @param processDefId 流程定义id
+     * @param activityId 节点id
+     * @return
+     */
+    FlowNode findFlowNodeByActivityId(String processDefId, String activityId) ;
+
+    /**
+     * 判断节点是不是子流程的节点
+     * @param processDefId 流程定义id
+     * @param activityId 节点id
+     * @return
+     */
+    public boolean checkActivitySubprocessByActivityId(String processDefId, String activityId);
 }

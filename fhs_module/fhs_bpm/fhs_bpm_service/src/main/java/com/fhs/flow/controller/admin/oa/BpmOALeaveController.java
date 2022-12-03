@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 import static com.fhs.flow.comon.pojo.CommonResult.success;
 
 /**
@@ -62,7 +66,11 @@ public class BpmOALeaveController {
     @ApiOperation("获得请假申请分页")
     public FhsPager<BpmOALeaveRespVO> getLeavePage(@RequestBody QueryFilter<?> queryFilter) {
         PageResult<BpmOALeavePO> pageResult = leaveService.getLeavePage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmOALeavePageReqVO.class));
-        return BpmOALeaveConvert.INSTANCE.convertPage(pageResult).toFhsPager();
+        FhsPager<BpmOALeaveRespVO> result = BpmOALeaveConvert.INSTANCE.convertPage(pageResult).toFhsPager();
+        result.getRecords().forEach(x->{
+            x.setCreateTime(LocalDateTime.ofInstant(x.getCreateTime().toInstant(ZoneOffset.UTC), ZoneId.systemDefault()));
+        });
+        return result;
     }
 
 }
