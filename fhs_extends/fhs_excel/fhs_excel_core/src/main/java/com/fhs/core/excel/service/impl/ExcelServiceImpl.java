@@ -250,13 +250,13 @@ public class ExcelServiceImpl implements ExcelService {
         Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
         Trans trans = declaredField.getAnnotation(Trans.class);
         //排除调字典翻译的字段
-        if (trans == null || !TransType.DICTIONARY.equals(trans.type())) {
+        if (obj != null && (trans == null || !TransType.DICTIONARY.equals(trans.type()))) {
             ApiModelProperty apiModelProperty = declaredField.getAnnotation(ApiModelProperty.class);
             if (apiModelProperty != null) {
                 String value = apiModelProperty.value();
                 if (apiModelProperty.value().contains("（")) {
                     String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
-                    obj = obj + unit;
+                    obj = obj + "（" + unit + "）";
                 }
             }
         }
@@ -382,23 +382,21 @@ public class ExcelServiceImpl implements ExcelService {
                                     String targetFieldName = targetField.getName();
                                     ApiModelProperty apiModelProperty = targetField.getAnnotation(ApiModelProperty.class);
                                     //获取到导入翻译对应的字段
-
-                                    if (transFields.contains(targetFieldName)) {
-                                        ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
-                                        if (apiModelProperty != null && (fieldName.equals(apiModelProperty.value()) || importExcelTitle != null && apiModelProperty.value().equals(importExcelTitle.value()))) {
-                                            //获取当前target的service
-                                            BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, target.getName(), 1);
-                                            QueryWrapper queryWrapper = new QueryWrapper();
-                                            queryWrapper.eq(targetFieldName, data);
-                                            VO vo = baseService.selectOneMP(queryWrapper);
-                                            if (vo == null) {
-                                                recordValidationField(valiMap, j + 2, fieldName);
-                                                valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
-                                                continue;
-                                            }
-                                            Object pkey = vo.getPkey();
-                                            ReflectUtils.setValue(objDo, field, pkey);
+                                    ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
+                                    if (transFields.contains(targetFieldName) && apiModelProperty != null && (fieldName.equals(apiModelProperty.value()) || (importExcelTitle != null && apiModelProperty.value().equals(importExcelTitle.value())))) {
+                                        //获取当前target的service
+                                        TableField tableField = targetField.getAnnotation(TableField.class);
+                                        BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, target.getName(), 1);
+                                        QueryWrapper queryWrapper = new QueryWrapper();
+                                        queryWrapper.eq(tableField.value(), data);
+                                        VO vo = baseService.selectOneMP(queryWrapper);
+                                        if (vo == null) {
+                                            recordValidationField(valiMap, j + 2, fieldName);
+                                            valiStr.append("第" + (j + 2) + "行“" + fieldName + "”列不存在的数据“" + data + "”，请检查;\r\n");
+                                            continue;
                                         }
+                                        Object pkey = vo.getPkey();
+                                        ReflectUtils.setValue(objDo, field, pkey);
                                     }
                                 }
                             }
@@ -469,9 +467,7 @@ public class ExcelServiceImpl implements ExcelService {
             }
         }
 
-        untransAuto(needTrans, doList, valiStr, importSett.getVoModel().
-
-                getClass());
+        untransAuto(needTrans, doList, valiStr, importSett.getVoModel().getClass());
         if (doList.size() > 0) {
             notNullNotEmptyCheck(doList, valiStr, titleArray, valiMap);
             //校验完成后执行自定义校验
@@ -490,7 +486,6 @@ public class ExcelServiceImpl implements ExcelService {
         } else {
             throw new ValidationException("您选中的excel中不包含任何有效数据，请检查");
         }
-
     }
 
 
