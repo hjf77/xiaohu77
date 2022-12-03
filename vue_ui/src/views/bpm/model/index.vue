@@ -16,20 +16,26 @@
     >
       <template v-slot:form="prop">
         <!-- 修改 弹框-->
-        <pagex-dialog slot="form" :title="title"  :visible.sync="open" :before-close="closeFn"  class="pagex-dialog-theme">
+        <pagex-dialog slot="form" :title="title"  :visible.sync="open" :before-close="closeEdit"  class="pagex-dialog-theme">
           <editForm v-if="isEdit" :init="init" :isEdit="isEdit"></editForm>
-          <addForm v-else :isAdd="isAdd"></addForm>
+          <addForm v-else></addForm>
         </pagex-dialog>
       </template>
       <template v-slot:topSlot="prop">
-        <pagex-dialog slot="topSlot" width="1200px" :title="ruleTitle" :namespace="namespace"
+        <pagex-dialog slot="topSlot" width="800px" :title="title" :namespace="namespace" :before-close="closeRules"
           v-if="openRules" :visible.sync="openRules" class="pagex-dialog-theme">
           <div class="pagex-dialog-theme">
-            <allocationRules :ruleId="ruleId" :init="init"></allocationRules>
+            <allocationRules :init="init"></allocationRules>
           </div>
         </pagex-dialog>
       </template>
     </pagex-crud>
+    <pagex-dialog v-if="openEditor" width="1600px" :title="title" :namespace="namespace" :before-close="closeEditor"
+      :visible.sync="openEditor" class="pagex-dialog-theme">
+      <div class="pagex-dialog-theme">
+        <modelEditor :init="init" @closeEditor="closeEditor"></modelEditor>
+      </div>
+    </pagex-dialog>
   </div>
 </template>
 <script>
@@ -37,26 +43,25 @@ import crudMixins from "@/mixins/crudMixins";
 import editForm from "@/views/bpm/model/components/editForm.vue";
 import addForm from "@/views/bpm/model/components/addForm.vue";
 import allocationRules from "@/views/bpm/model/components/allocationRules.vue";
+import modelEditor from "@/views/bpm/model/components/modelEditor.vue";
 
 export default {
   name: "model",
   components: {
     editForm,
     addForm,
-    allocationRules
+    allocationRules,
+    modelEditor
   },
   mixins: [crudMixins],
   data() {
     return {
+      init: {},
       namespace: 'model',
       api: '/basic/ms/model/page',
-      openRules: false,
-      ruleTitle: '任务分配规则',
-      isEdit: false,
-      isAdd: false,
-      addOpen: false,
-      init: {},
-      ruleId: '',
+      isEdit: false,//编辑弹窗
+      openRules: false,//分配规则弹窗
+      openEditor: false,//设计流程弹窗
       loading: false,
       buttons: [
         {
@@ -131,10 +136,13 @@ export default {
               type: "text",
               size: 'mini',
               click: (_row) => {
-                this.$router.push({
-                  path: '/bpm/modelEditor',
-                  query:{modelId: _row.id}
-                });
+                this.title = '设计流程';
+                this.openEditor = true;
+                this.$set(this, 'init', _row)
+                // this.$router.push({
+                //   path: '/bpm/modelEditor',
+                //   query:{modelId: _row.id}
+                // });
               }
             },
             {
@@ -144,9 +152,9 @@ export default {
               api: '/basic/ms/dictItem/',
               size: 'mini',
               click: (_row) => {
-                this.$set(this, 'init', _row)
+                this.title = '任务分配规则';
                 this.openRules = true;
-                this.ruleId = _row.id
+                this.$set(this, 'init', _row)
               }
             },
             {
@@ -166,7 +174,6 @@ export default {
                       url: '/basic/ms/model/deploy?id=' + _row.id,
                       method: 'POST',
                     }).then((res) => {
-                      this.loading = false;
                       this.$refs.crud.search();
                     })
                   });
@@ -221,8 +228,17 @@ export default {
    
   },
   methods: {
-    closeFn(){
+    closeEdit(){
       this.open = false;
+      this.$refs.crud.search();
+    },
+    closeRules(){
+      this.openRules = false;
+      this.$refs.crud.search();
+    },
+    closeEditor(){
+      this.openEditor = false;
+      this.$refs.crud.search();
     },
   }
 };

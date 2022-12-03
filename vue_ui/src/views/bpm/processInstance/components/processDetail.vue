@@ -6,7 +6,12 @@
 
 <template>
   <div>
-    <router-view v-if="$route.params.type"></router-view>
+    <el-card v-if="$route.params.type">
+      <div slot="header" class="clearfix">
+        <span class="el-icon-document">申请信息【{{ processInstance.name }}】</span>
+      </div>
+      <router-view></router-view>
+    </el-card>
     <!-- 审批任务【老师审批】 -->
    <el-card>
     <div slot="header" class="clearfix">
@@ -73,6 +78,7 @@
 </template>
 
 <script>
+import {approveTask, rejectTask,} from "@/api/bpm/task";
 import MyProcessViewer from "@/components/bpmnProcessDesigner/package/designer/ProcessViewer.vue";
 import formManagerVue from "../../formManager/formManager.vue";
 export default {
@@ -143,7 +149,6 @@ export default {
           url: '/basic/ms/task/list-by-process-instance-id?processInstanceId=' + this.id,
           method: 'get'
         }).then((res) => {
-            console.log('res',res);
           this.tasks = [];
           // 移除已取消的审批
           res.forEach(task => {
@@ -156,18 +161,14 @@ export default {
   },
   methods: {
         /** 处理审批通过和不通过的操作 */
-        handleAudit(task, pass) {
-      const index = this.runningTasks.indexOf(task);
-      this.$refs['form' + index][0].validate(valid => {
-        if (!valid) {
-          return;
-        }
+      handleAudit(task, pass) {
         const data = {
-          id: task.id,
-          reason: this.auditForms[index].reason
+          id: this.processInstance.id,
+          reason: this.auditForms.reason
         }
         if (pass) {
           approveTask(data).then(response => {
+            console.log('response',response);
             this.$modal.msgSuccess("审批通过成功！");
             this.getDetail(); // 获得最新详情
           });
@@ -177,7 +178,6 @@ export default {
             this.getDetail(); // 获得最新详情
           });
         }
-      });
     },
        getDateStar(ms) {
       return getDate(ms);

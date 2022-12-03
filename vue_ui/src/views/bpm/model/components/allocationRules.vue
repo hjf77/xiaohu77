@@ -23,13 +23,12 @@ import processForm from './processForm.vue'
 export default {
   name: "",
   props: {
-    ruleId: String,
     init: Object,
   },
   components: { processForm },
   data() {
     return {
-      api: '/basic/ms/task-assign-rule/list?modelId='+ this.ruleId,
+      api: '/basic/ms/task-assign-rule/list?modelId='+ this.init.id,
       open: false,
       editInit: {},
       title: '修改任务规则',
@@ -66,7 +65,6 @@ export default {
     };
   },
   created() {
-    console.log(this.init)
   },
   methods: {}
 };
