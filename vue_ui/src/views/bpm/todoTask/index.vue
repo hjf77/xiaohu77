@@ -13,27 +13,6 @@
         :methodType="methodType"
         :namespace="namespace"
       >
-        <template v-slot:form="prop">
-          <!-- 修改 弹框-->
-          <pagex-dialog slot="form"
-           :title="title"  
-           :visible.sync="open" 
-           :before-close="closeFn" 
-            class="pagex-dialog-theme">
-            <editForm v-if="isEdit" :init="init" 
-            :isEdit="isEdit"></editForm>
-            <addForm v-else :isAdd="isAdd"></addForm>
-          </pagex-dialog>
-        </template>
-        
-        <!-- <template v-slot:topSlot="prop">
-          <pagex-dialog slot="topSlot" width="1200px" :title="ruleTitle" :namespace="namespace"
-            v-if="openRules" :visible.sync="openRules" class="pagex-dialog-theme">
-            <div class="pagex-dialog-theme">
-              <allocationRules :ruleId="ruleId" :init="init"></allocationRules>
-            </div>
-          </pagex-dialog>
-        </template> -->
       </pagex-crud>
     </div>
   </template>
@@ -47,14 +26,8 @@
       return {
         namespace: 'todo',
         api: '/basic/ms/task/todo-page',
-        openRules: false,
         methodType: 'post',
-        ruleTitle: '任务分配规则',
-        isEdit: false,
-        isAdd: false,
-        addOpen: false,
         init: {},
-        ruleId: '',
         buttons: [
         ],
         columns: [
@@ -74,35 +47,35 @@
             width: '180px',
             textBtn: [
               {
-              title: "审批",
-              icon: 'el-icon-edit',
-              type: "text",
-              size: 'mini',
-              click: (row) => {
-                // 点击审批按钮后，先调一次详情接口，获取到processDefinition.formCustomViewPath后，带type跳转页面
-                this.$pagexRequest({
-                  url: '/basic/ms/process-instance/get?id=' + row.processInstance.id,
-                  method: 'get',
-                  }).then((res) => {
-                    if (res.data) {
-                      const type = res.data.processDefinition.formCustomViewPath;
-                      if (type!==null && res.data.businessKey) {
-                        this.$router.push({
-                          path: '/bpm/processDetail/'+ type,
-                          query:{id: row.processInstance.id,
-                            businessKey: res.data.businessKey
-                          }
-                        });
-                      } else {
-                        this.$router.push({
-                          path: '/bpm/processDetail/',
-                          query:{id: row.processInstance.id}
-                        });
+                title: "审批",
+                icon: 'el-icon-edit',
+                type: "text",
+                size: 'mini',
+                click: (row) => {
+                  // 点击审批按钮后，先调一次详情接口，获取到processDefinition.formCustomViewPath后，带type跳转页面
+                  this.$pagexRequest({
+                    url: '/basic/ms/process-instance/get?id=' + row.processInstance.id,
+                    method: 'get',
+                    }).then((res) => {
+                      if (res.data) {
+                        const type = res.data.processDefinition.formCustomViewPath;
+                        if (type!==null && res.data.businessKey) {
+                          this.$router.push({
+                            path: '/bpm/processDetail/'+ type,
+                            query:{id: row.processInstance.id,
+                              businessKey: res.data.businessKey
+                            }
+                          });
+                        } else {
+                          this.$router.push({
+                            path: '/bpm/processDetail/',
+                            query:{id: row.processInstance.id}
+                          });
+                        }
                       }
-                    }
-                })
-              }
-            },
+                  })
+                }
+              },
             ],
           }
         ],
@@ -112,14 +85,8 @@
       ]
       };
     },
-    created() {
-     
-    },
-    methods: {
-      closeFn(){
-        this.open = false;
-      },
-    }
+    created() {},
+    methods: {}
   };
   </script>
  <style lang="scss" scoped>
