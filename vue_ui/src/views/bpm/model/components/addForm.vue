@@ -18,10 +18,6 @@
   <script>
   export default {
     name: "addForm",
-    props: {
-      addOpen: Boolean,
-      isAdd: Boolean,
-    },
     data() {
       return {
         controls: [

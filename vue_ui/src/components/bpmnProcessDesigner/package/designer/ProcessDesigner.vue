@@ -105,9 +105,9 @@ import camundaModdleExtension from "./plugins/extension-moddle/camunda/index.js"
 import activitiModdleExtension from "./plugins/extension-moddle/activiti/index.js";
 import flowableModdleExtension from "./plugins/extension-moddle/flowable/index.js";
 
-if(!window.Stream){
-  window.Stream = ()=>{}
-}
+// if(!window.Stream){
+//   window.Stream = ()=>{}
+// }
 
 // 引入json转换与高亮
 import convert from "xml-js";
