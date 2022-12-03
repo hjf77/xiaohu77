@@ -1,5 +1,8 @@
 package com.fhs.flow.comon.constants;
 
+/**
+ * @author tanyukun
+ */
 public interface FlowableConstant {
 
     /**
@@ -17,5 +20,23 @@ public interface FlowableConstant {
         public static final Integer USER = 30;
 
     }
+    /**
+     * 后加签
+     */
+    public static final String AFTER_ADDSIGN = "after";
+    //
+    /**
+     * 前加签
+     */
+    public static final String BEFORE_ADDSIGN = "before";
+
+    /**
+     * 提交人的变量名称
+     */
+    public static final String FLOW_SUBMITTER_VAR = "initiator";
+    /**
+     * 提交人节点名称
+     */
+    public static final String FLOW_SUBMITTER = "提交人";
 
 }
