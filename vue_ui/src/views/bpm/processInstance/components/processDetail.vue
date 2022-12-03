@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import {approveTask, rejectTask,} from "@/api/bpm/task";
 import MyProcessViewer from "@/components/bpmnProcessDesigner/package/designer/ProcessViewer.vue";
 import formManagerVue from "../../formManager/formManager.vue";
 export default {
@@ -156,18 +157,14 @@ export default {
   },
   methods: {
         /** 处理审批通过和不通过的操作 */
-        handleAudit(task, pass) {
-      const index = this.runningTasks.indexOf(task);
-      this.$refs['form' + index][0].validate(valid => {
-        if (!valid) {
-          return;
-        }
+      handleAudit(task, pass) {
         const data = {
-          id: task.id,
-          reason: this.auditForms[index].reason
+          id: this.processInstance.id,
+          reason: this.auditForms.reason
         }
         if (pass) {
           approveTask(data).then(response => {
+            console.log('response',response);
             this.$modal.msgSuccess("审批通过成功！");
             this.getDetail(); // 获得最新详情
           });
@@ -177,7 +174,6 @@ export default {
             this.getDetail(); // 获得最新详情
           });
         }
-      });
     },
        getDateStar(ms) {
       return getDate(ms);
