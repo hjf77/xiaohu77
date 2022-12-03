@@ -25,9 +25,14 @@ import CustomContentPadProvider from "@/components/bpmnProcessDesigner/package/d
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
 import CustomPaletteProvider from "@/components/bpmnProcessDesigner/package/designer/plugins/palette";
 import MyProcessPalette from "@/components/bpmnProcessDesigner/package/palette/ProcessPalette.vue";
+// import MyProcessDesigner from '@/components/bpmnProcessDesigner/package/designer/ProcessDesigner.vue';
+// import MyPropertiesPanel from '@/components/bpmnProcessDesigner/package/penal/PropertiesPanel.vue';
 
 export default {
   name: "modelEditor",
+  props: {
+    init: Object,
+  },
   components: { MyProcessPalette },
   data() {
     return {
@@ -54,8 +59,8 @@ export default {
   },
   created() {
     // 如果 modelId 非空，说明是修改流程模型
-    const modelId = this.$route.query && this.$route.query.modelId
-    console.log('modelId',modelId);
+    // const modelId = this.$route.query && this.$route.query.modelId
+    const modelId = this.init.id;
     if (modelId) {
       this.$pagexRequest({
         url: '/basic/ms/model/get?id=' + modelId,
@@ -101,8 +106,8 @@ export default {
     },
     /** 关闭按钮 */
     close() {
-      this.$router.push({path: '/flow/model',});
-      this.$refs.crud.search()
+      // this.$router.push({path: '/flow/model',});
+      this.$emit("closeEditor");
     },
   }
 };
