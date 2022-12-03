@@ -386,9 +386,10 @@ public class ExcelServiceImpl implements ExcelService {
                                     ImportExcelTitle importExcelTitle = field.getAnnotation(ImportExcelTitle.class);
                                     if (transFields.contains(targetFieldName) && apiModelProperty != null && (fieldName.equals(apiModelProperty.value()) || (importExcelTitle != null && apiModelProperty.value().equals(importExcelTitle.value())))) {
                                         //获取当前target的service
+                                        TableField tableField = targetField.getAnnotation(TableField.class);
                                         BaseService baseService = SpringContextUtil.getBeanByClass(BaseService.class, target.getName(), 1);
                                         QueryWrapper queryWrapper = new QueryWrapper();
-                                        queryWrapper.eq(targetFieldName, data);
+                                        queryWrapper.eq(tableField.value(), data);
                                         VO vo = baseService.selectOneMP(queryWrapper);
                                         if (vo == null) {
                                             recordValidationField(valiMap, j + 2, fieldName);
