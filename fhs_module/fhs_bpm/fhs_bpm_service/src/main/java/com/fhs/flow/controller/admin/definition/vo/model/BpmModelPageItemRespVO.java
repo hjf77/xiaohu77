@@ -1,5 +1,11 @@
 package com.fhs.flow.controller.admin.definition.vo.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fhs.common.utils.DateUtils;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,6 +27,7 @@ public class BpmModelPageItemRespVO extends BpmModelBaseVO {
     private String formName;
 
     @ApiModelProperty(value = "创建时间", required = true)
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     private LocalDateTime createTime;
 
     /**
@@ -30,7 +37,7 @@ public class BpmModelPageItemRespVO extends BpmModelBaseVO {
 
     @ApiModel("流程定义")
     @Data
-    public static class ProcessDefinition {
+    public static class ProcessDefinition implements TransPojo {
 
         @ApiModelProperty(value = "编号", required = true, example = "1024")
         private String id;
@@ -39,9 +46,11 @@ public class BpmModelPageItemRespVO extends BpmModelBaseVO {
         private Integer version;
 
         @ApiModelProperty(value = "部署时间", required = true)
+        @JSONField(format = DateUtils.DATETIME_PATTERN)
         private LocalDateTime deploymentTime;
 
         @ApiModelProperty(value = "中断状态", required = true, example = "1", notes = "参见 SuspensionState 枚举")
+        @Trans(type = TransType.DICTIONARY, key = "suspensionState")
         private Integer suspensionState;
 
     }

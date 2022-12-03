@@ -3,11 +3,17 @@ package com.fhs.flow.service.definition;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fhs.basics.po.UcenterMsRolePO;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.ServiceDictItemService;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.vo.UcenterMsRoleVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.common.constant.Constant;
+import com.fhs.flow.comon.constants.FlowableConstant;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleCreateReqVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleRespVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleUpdateReqVO;
@@ -30,6 +36,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.fhs.flow.comon.exception.util.ServiceExceptionUtil.exception;
@@ -106,7 +113,65 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
             return Collections.emptyList();
         }
         // 转换数据
-        return BpmTaskAssignRuleConvert.INSTANCE.convertList(userTasks, rules);
+        List<BpmTaskAssignRuleRespVO> result = BpmTaskAssignRuleConvert.INSTANCE.convertList(userTasks, rules);
+        this.transOptions(result);
+        return result;
+    }
+
+    /**
+     * 根据分配规则的类型翻译角色、用户名
+     *
+     * @param result
+     */
+    private void transOptions(List<BpmTaskAssignRuleRespVO> result) {
+        List<Long> optionsAll = new ArrayList<>();
+        Map<Integer, List<BpmTaskAssignRuleRespVO>> ruleTypeMap = result.stream().filter(x->null != x.getType()).collect(Collectors.groupingBy(BpmTaskAssignRuleRespVO::getType));
+        if (CollUtil.isEmpty(ruleTypeMap)) {
+            return;
+        }
+        List<BpmTaskAssignRuleRespVO> typeList = ruleTypeMap.get(FlowableConstant.TaskAssignRuleType.ROLE);
+        Map<Long, String> roleNameMap = null;
+        if (CollUtil.isNotEmpty(typeList)) {
+            // 角色翻译
+            List<Long> finalOptionsAll = optionsAll;
+            typeList.forEach(x -> finalOptionsAll.addAll(x.getOptions()));
+            LambdaQueryWrapper<UcenterMsRolePO> roleWrapper = new LambdaQueryWrapper<>();
+            roleWrapper.in(UcenterMsRolePO::getRoleId, optionsAll).eq(UcenterMsRolePO::getIsDelete, Constant.INT_FALSE);
+            List<UcenterMsRoleVO> roleVos = roleApi.selectListMP(roleWrapper);
+            roleNameMap = roleVos.stream().collect(Collectors.toMap(UcenterMsRoleVO::getRoleId, UcenterMsRoleVO::getRoleName));
+        }
+        typeList = ruleTypeMap.get(FlowableConstant.TaskAssignRuleType.USER);
+        Map<Long, String> userNameMap = null;
+        if (CollUtil.isNotEmpty(typeList)) {
+            optionsAll = new ArrayList<>();
+            // 用户名翻译
+            List<Long> finalOptionsAll = optionsAll;
+            typeList.forEach(x -> finalOptionsAll.addAll(x.getOptions()));
+            LambdaQueryWrapper<UcenterMsUserPO> userWrapper = new LambdaQueryWrapper<>();
+            userWrapper.in(UcenterMsUserPO::getUserId, optionsAll).eq(UcenterMsUserPO::getIsDelete, Constant.INT_FALSE);
+            List<UcenterMsUserVO> userVos = adminUserApi.selectListMP(userWrapper);
+            userNameMap = userVos.stream().collect(Collectors.toMap(UcenterMsUserVO::getUserId, UcenterMsUserVO::getUserName));
+        }
+        List<String> optionNames;
+        for (BpmTaskAssignRuleRespVO vo : result) {
+            if (CollUtil.isEmpty(vo.getOptions())) {
+                continue;
+            }
+            optionNames = new ArrayList<>(vo.getOptions().size());
+            if (FlowableConstant.TaskAssignRuleType.ROLE.equals(vo.getType()) && null != roleNameMap) {
+                for (Long option : vo.getOptions()) {
+                    optionNames.add(roleNameMap.get(option));
+                }
+            }
+            if (FlowableConstant.TaskAssignRuleType.USER.equals(vo.getType()) && null != userNameMap) {
+                for (Long option : vo.getOptions()) {
+                    optionNames.add(userNameMap.get(option));
+                }
+            }
+            if (CollUtil.isNotEmpty(optionNames)) {
+                vo.setOptionNames(String.join(",", optionNames));
+            }
+        }
     }
 
     @Override
@@ -184,7 +249,7 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
             rule.setCreateTime(null);
             rule.setUpdateTime(null);
         });
-        taskRuleMapper.insertBatch(newRules);
+        taskRuleMapper.insertBatchX(newRules);
     }
 
     @Override
@@ -275,7 +340,7 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
 
     private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule) {
         //todo 根据角色查询用户id
-        return new HashSet<>();
+        return rule.getOptions();
     }
 
     private Set<Long> calculateTaskCandidateUsersByDeptMember(BpmTaskAssignRulePO rule) {

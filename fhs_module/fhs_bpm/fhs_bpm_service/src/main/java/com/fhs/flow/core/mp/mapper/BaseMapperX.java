@@ -76,7 +76,9 @@ public interface BaseMapperX<T> extends BaseMapper<T> {
     }
 
 
-
+    default void insertBatchX(Collection<T> entities) {
+        entities.forEach(this::insert);
+    }
     default void updateBatch(T update) {
         update(update, new QueryWrapper<>());
     }

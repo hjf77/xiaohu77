@@ -14,9 +14,15 @@ import java.util.stream.Collectors;
 @ApiModel("用于自定义条件过滤")
 public class QueryFilter<T> extends com.baomidou.mybatisplus.advance.query.QueryFilter<T> {
     public Map<String, Object> queryFieldsMap() {
-        if (super.getQuerys() == null) {
-            return new HashMap<>(0);
+
+        Map<String, Object> paramParams = new HashMap<>();
+        if (null != super.getQuerys()) {
+            paramParams = super.getQuerys().stream().collect(Collectors.toMap(QueryField::getProperty, QueryField::getValue));
         }
-        return super.getQuerys().stream().collect(Collectors.toMap(QueryField::getProperty, QueryField::getValue));
+        if (null != super.getPagerInfo()) {
+            paramParams.put("pageNumber", super.getPagerInfo().getPageNumber());
+            paramParams.put("pageSize", super.getPagerInfo().getPageSize());
+        }
+        return paramParams;
     }
 }

@@ -1,5 +1,6 @@
 package com.fhs.flow.comon.exception;
 
+import com.fhs.core.exception.BusinessException;
 import com.fhs.flow.comon.exception.enums.ServiceErrorCodeRange;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public final class ServiceException extends RuntimeException {
+public final class ServiceException extends BusinessException {
 
     /**
      * 业务错误码
@@ -38,7 +39,8 @@ public final class ServiceException extends RuntimeException {
         this.message = message;
     }
 
-    public Integer getCode() {
+    @Override
+    public int getCode() {
         return code;
     }
 

@@ -61,11 +61,11 @@
         </dependency>
 
         <!--工作流模块，移植的ruoyi vue pro不需要的可以注释掉-->
-<!--        <dependency>-->
-<!--            <groupId>com.fhs-opensource</groupId>-->
-<!--            <artifactId>fhs_bpm_service</artifactId>-->
-<!--            <version>${fhs.release.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_bpm_service</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,5 +1,8 @@
 package com.fhs.flow.controller.admin.definition.vo.model;
 
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
 */
 @Data
-public class BpmModelBaseVO {
+public class BpmModelBaseVO implements TransPojo {
 
     @ApiModelProperty(value = "流程标识", required = true, example = "process_yudao")
     @NotEmpty(message = "流程标识不能为空")
@@ -25,6 +28,7 @@ public class BpmModelBaseVO {
 
     @ApiModelProperty(value = "流程分类", notes = "参见 bpm_model_category 数据字典", example = "1")
     @NotEmpty(message = "流程分类不能为空")
+    @Trans(type = TransType.DICTIONARY,key = "categoryDictDatas")
     private String category;
 
     @ApiModelProperty(value = "表单类型", notes = "参见 bpm_model_form_type 数据字典", example = "1")

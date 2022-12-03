@@ -2,7 +2,10 @@ package com.fhs.flow.controller.admin.oa;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.fhs.basics.context.UserContext;
-import com.fhs.flow.comon.pojo.CommonResult;
+import com.fhs.common.utils.ClassUtils;
+import com.fhs.core.base.vo.FhsPager;
+import com.fhs.core.base.vo.QueryFilter;
+import com.fhs.core.result.HttpResult;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.controller.admin.oa.vo.BpmOALeaveCreateReqVO;
 import com.fhs.flow.controller.admin.oa.vo.BpmOALeavePageReqVO;
@@ -31,7 +34,7 @@ import static com.fhs.flow.comon.pojo.CommonResult.success;
 @Api(tags = "管理后台 - OA 请假申请")
 @ApiGroup(group ="bpm")
 @RestController
-@RequestMapping("/bpm/oa-leave")
+@RequestMapping("/ms/oa-leave")
 @Validated
 public class BpmOALeaveController {
 
@@ -41,25 +44,25 @@ public class BpmOALeaveController {
     @PostMapping("/create")
     @SaCheckRole("oa-leave:add")
     @ApiOperation("创建请求申请")
-    public CommonResult<Long> createLeave(@Valid @RequestBody BpmOALeaveCreateReqVO createReqVO) {
-        return success(leaveService.createLeave(UserContext.getSessionuser().getUserId(), createReqVO));
+    public HttpResult<Long> createLeave(@Valid @RequestBody BpmOALeaveCreateReqVO createReqVO) {
+        return success(leaveService.createLeave(UserContext.getSessionuser().getUserId(), createReqVO)).toHttpResult();
     }
 
     @GetMapping("/get")
     @SaCheckRole("oa-leave:see")
     @ApiOperation("获得请假申请")
     @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024")
-    public CommonResult<BpmOALeaveRespVO> getLeave(@RequestParam("id") Long id) {
+    public HttpResult<BpmOALeaveRespVO> getLeave(@RequestParam("id") Long id) {
         BpmOALeavePO leave = leaveService.getLeave(id);
-        return success(BpmOALeaveConvert.INSTANCE.convert(leave));
+        return success(BpmOALeaveConvert.INSTANCE.convert(leave)).toHttpResult();
     }
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @SaCheckRole("oa-leave:see")
     @ApiOperation("获得请假申请分页")
-    public CommonResult<PageResult<BpmOALeaveRespVO>> getLeavePage(@Valid BpmOALeavePageReqVO pageVO) {
-        PageResult<BpmOALeavePO> pageResult = leaveService.getLeavePage(UserContext.getSessionuser().getUserId(), pageVO);
-        return success(BpmOALeaveConvert.INSTANCE.convertPage(pageResult));
+    public FhsPager<BpmOALeaveRespVO> getLeavePage(@RequestBody QueryFilter<?> queryFilter) {
+        PageResult<BpmOALeavePO> pageResult = leaveService.getLeavePage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmOALeavePageReqVO.class));
+        return BpmOALeaveConvert.INSTANCE.convertPage(pageResult).toFhsPager();
     }
 
 }

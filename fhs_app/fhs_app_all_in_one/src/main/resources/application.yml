@@ -18,6 +18,8 @@ mybatis-plus:
     db-config:
       logic-delete-value: 1
       logic-not-delete-value: 0
+      # 数据库类型
+      db-type: mysql
 #      update-strategy: IGNORED
 
 easy-trans:
@@ -30,7 +32,7 @@ easy-trans:
   #启用全局翻译(拦截所有responseBody进行自动翻译)，如果对于性能要求很高可关闭此配置
   is-enable-global: true
   #启用平铺模式
-  is-enable-tile: true
+  is-enable-tile: false
   #关闭springcloud支持
   is-enable-cloud: false
 fhs:
