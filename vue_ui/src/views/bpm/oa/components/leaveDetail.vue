@@ -22,11 +22,13 @@ export default {
   name: "leaveDetail",
   props: {
     id: String,
+    bpmleaveId: String,
   },
   created() {
-    if (this.id) {
+    const leaveId = this.id || this.bpmleaveId;
+    if (leaveId) {
       this.$pagexRequest({
-        url: '/basic/ms/oa-leave/get?id=' + this.id,
+        url: '/basic/ms/oa-leave/get?id=' + leaveId,
         method: 'get'
         }).then((res) => {
           this.$set(this, "init", res.data);
