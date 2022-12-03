@@ -78,11 +78,28 @@
               type: "text",
               size: 'mini',
               click: (row) => {
-                // this.$set(this, "init", _row);
-                this.$router.push({
-                  path: '/bpm/processDetail',
-                  query:{id: row.processInstance.id}
-                });
+                // 点击审批按钮后，先调一次详情接口，获取到processDefinition.formCustomViewPath后，带type跳转页面
+                this.$pagexRequest({
+                  url: '/basic/ms/process-instance/get?id=' + row.processInstance.id,
+                  method: 'get',
+                  }).then((res) => {
+                    if (res.data) {
+                      const type = res.data.processDefinition.formCustomViewPath;
+                      if (type!==null && res.data.businessKey) {
+                        this.$router.push({
+                          path: '/bpm/processDetail/'+ type,
+                          query:{id: row.processInstance.id,
+                            businessKey: res.data.businessKey
+                          }
+                        });
+                      } else {
+                        this.$router.push({
+                          path: '/bpm/processDetail/',
+                          query:{id: row.processInstance.id}
+                        });
+                      }
+                    }
+                })
               }
             },
           ],

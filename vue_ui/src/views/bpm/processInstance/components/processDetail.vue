@@ -6,7 +6,12 @@
 
 <template>
   <div>
-    <router-view v-if="$route.params.type"></router-view>
+    <el-card v-if="$route.params.type">
+      <div slot="header" class="clearfix">
+        <span class="el-icon-document">申请信息【{{ processInstance.name }}】</span>
+      </div>
+      <router-view></router-view>
+    </el-card>
     <!-- 审批任务【老师审批】 -->
    <el-card>
     <div slot="header" class="clearfix">
@@ -143,7 +148,6 @@ export default {
           url: '/basic/ms/task/list-by-process-instance-id?processInstanceId=' + this.id,
           method: 'get'
         }).then((res) => {
-            console.log('res',res);
           this.tasks = [];
           // 移除已取消的审批
           res.forEach(task => {
