@@ -1,7 +1,7 @@
 <!--
-  模块名称：已办任务
+  模块名称：待办任务
   开发人员：chuyemiao
-  创建时间:2022/12/2 
+  创建时间:2022/12/1 
 -->
 <template>
     <div class="app-container">
@@ -20,60 +20,61 @@
            :visible.sync="open" 
            :before-close="closeFn" 
             class="pagex-dialog-theme">
-            <!-- <editForm v-if="isEdit" :init="init" 
+            <editForm v-if="isEdit" :init="init" 
             :isEdit="isEdit">编辑</editForm>
-            <addForm v-else :isAdd="isAdd">新增</addForm> -->
+            <addForm v-else :isAdd="isAdd">新增</addForm>
           </pagex-dialog>
         </template>
+        
+        <!-- <template v-slot:topSlot="prop">
+          <pagex-dialog slot="topSlot" width="1200px" :title="ruleTitle" :namespace="namespace"
+            v-if="openRules" :visible.sync="openRules" class="pagex-dialog-theme">
+            <div class="pagex-dialog-theme">
+              <allocationRules :ruleId="ruleId" :init="init"></allocationRules>
+            </div>
+          </pagex-dialog>
+        </template> -->
       </pagex-crud>
     </div>
   </template>
   <script>
+  
   export default {
-    name: "done",
+    name: "todo",
     components: {
     },
     data() {
       return {
-        namespace: 'done',
-        api: '/basic/ms/task/done-page',
+        namespace: 'todo',
+        api: '/basic/ms/task/todo-page',
+        openRules: false,
         methodType: 'post',
+        ruleTitle: '任务分配规则',
         isEdit: false,
         isAdd: false,
+        addOpen: false,
         init: {},
         ruleId: '',
         buttons: [
         ],
         columns: [
           {label: '任务编号', name: 'id',width:'300'},
-          {label: '任务名称', name: 'name',width:'130'},
-          {label: '所属流程', name: 'processInstance.name',width:'130'},
-          {label: '流程发起人', name: 'processInstance.startUserNickname',width:'130' },
-          {label: '结果', name: 'transMap.resultName',type:'formart', 
+          {label: '任务名称', name: 'name',width:'180'},
+          {label: '所属流程', name: 'processInstance.name',width:'160'},
+          {label: '流程发起人', name: 'processInstance.startUserNickname',width:'180' },
+          {label: '创建时间', name: 'createTime',width:'200'},
+          {label: '状态', name: 'transMap.suspensionStateName',width:'200', type: "formart",
           formart: function(row) {
-            let color = "#13ce66";
-            if (row.result == 2) {
-              color = "#09DD84";
-            }
-            if (row.result == 4) {
-              color = "#ff4949";
-            }
-            return ( "<div style='color:" + color + ";'>" + row.transMap.resultName + "</div>" );
+             return row.suspensionState === 1 ?  `<span style="color: #13ce66">${row.transMap.suspensionStateName} </span>`  : ""
           },},
-          {label: '审批意见', name: 'reason', type: '',width:'200'}, 
-          {label: '创建时间', name: 'createTime',width:'150'},
-          {label: '审批时间', name: 'endTime',width:'150'},
-          {label: '耗时', name: 'durationInMillis',
-          },
           {
             label: '操作',
             name: 'operation',
             type: 'textBtn',
-            width: '100px',
+            width: '180px',
             textBtn: [
-            {
-              
-              title: "详情",
+              {
+              title: "审批",
               icon: 'el-icon-edit',
               type: "text",
               size: 'mini',
@@ -85,7 +86,7 @@
                 });
               }
             },
-          ],
+            ],
           }
         ],
         filters: [
@@ -99,14 +100,14 @@
     },
     methods: {
       closeFn(){
-        this.open = true;
+        this.open = false;
       },
     }
   };
   </script>
-  <style lang="scss" scoped>
-  ::v-deep .button-wrap{
-      display: block !important;
-  }
-</style>
+ <style lang="scss" scoped>
+    ::v-deep .button-wrap{
+        display: block !important;
+    }
+ </style>
   

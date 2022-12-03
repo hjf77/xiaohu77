@@ -14,12 +14,12 @@
     </div>
     <el-col :span="16" :offset="6" >
         <el-form :ref="'form' + index"  label-width="100px" :rules="auditRule" :model="auditForms[index]">
-          <el-form-item label="流程名">{{ processInstance.name }}</el-form-item>
+          <el-form-item label="流程名" v-if="processInstance && processInstance.name">{{ processInstance.name }}</el-form-item>
           <el-form-item label="流程发起人" > {{ processInstance.startUser.nickname }}
             <el-tag type="info" size="mini">{{ processInstance.startUser.deptName }}</el-tag>
           </el-form-item>
-          <el-form-item label="审批建议" prop="reason">
-            <el-input type="textarea"  placeholder="请输入审批建议" />
+          <el-form-item label="审批建议" prop="reason" >
+            <el-input type="textarea"  placeholder="请输入审批建议"  v-model="auditForms.reason"/>
           </el-form-item>
         </el-form>
         <div style="margin-left: 10%; margin-bottom: 20px; font-size: 14px;">
@@ -39,8 +39,7 @@
       <el-col :span="16" :offset="4" >
         <div class="block">
           <el-timeline>
-            <el-timeline-item v-for="(item, index) in tasks" :key="index"
-                              :icon="getTimelineItemIcon(item)" :type="getTimelineItemType(item)">
+            <el-timeline-item v-for="(item, index) in tasks" :key="index" :icon="getTimelineItemIcon(item)" :type="getTimelineItemType(item)">
               <p style="font-weight: 700">任务：{{ item.name }}</p>
               <el-card :body-style="{ padding: '10px' }">
                 <label v-if="item.assigneeUser" style="font-weight: normal; margin-right: 30px;">
@@ -225,4 +224,5 @@ export default {
   width: 100%;
   margin-bottom: 20px;
 }
+
 </style>
