@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.common.engine.api.FlowableException;
-import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -340,10 +339,8 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
     }
 
     private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule) {
-        // 获取流程发起人
-        String authenticatedUserId = Authentication.getAuthenticatedUserId();
         //todo 根据角色查询用户id
-        return new HashSet<>();
+        return rule.getOptions();
     }
 
     private Set<Long> calculateTaskCandidateUsersByDeptMember(BpmTaskAssignRulePO rule) {

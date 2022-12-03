@@ -23,10 +23,6 @@ public class BpmTaskDonePageReqVO extends PageParam {
 
     @ApiModelProperty(value = "开始的创建收间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
-    private LocalDateTime beginCreateTime;
-
-    @ApiModelProperty(value = "结束的创建时间")
-    @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
-    private LocalDateTime endCreateTime;
+    private LocalDateTime[] createTime;
 
 }
