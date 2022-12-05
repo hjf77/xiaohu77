@@ -48,7 +48,7 @@ export default {
               type: "text",
               size: 'mini',
               click: (_row) => {
-                  _row.modelId = this.ruleId;
+                  _row.modelId = this.init.id;
                   this.$set(this, 'editInit', _row)
                   this.title = '编辑';
                   this.open = true;
