@@ -10,7 +10,6 @@ import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.flow.comon.constants.FlowableConstant;
-import com.fhs.flow.comon.enums.CommentTypeEnum;
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.comon.utils.DateUtils;
 import com.fhs.flow.comon.utils.PageUtils;
@@ -19,10 +18,10 @@ import com.fhs.flow.controller.admin.task.vo.task.*;
 import com.fhs.flow.convert.task.BpmTaskConvert;
 import com.fhs.flow.dal.dataobject.task.BpmTaskExtPO;
 import com.fhs.flow.dal.mysql.task.BpmTaskExtMapper;
+import com.fhs.flow.dal.mysql.task.HisFlowableActinstMapper;
+import com.fhs.flow.dal.mysql.task.RunFlowableActinstMapper;
 import com.fhs.flow.enums.task.BpmProcessInstanceDeleteReasonEnum;
 import com.fhs.flow.enums.task.BpmProcessInstanceResultEnum;
-import com.fhs.flow.mapper.HisFlowableActinstMapper;
-import com.fhs.flow.mapper.RunFlowableActinstMapper;
 import com.fhs.flow.service.message.BpmMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
@@ -96,6 +95,8 @@ public class BpmTaskServiceImpl implements BpmTaskService {
     private BpmTaskExtMapper taskExtMapper;
     @Resource
     private BpmMessageService messageService;
+    @Resource
+    private BpmTaskExtMapper bpmTaskExtMapper;
 
     @Override
     public PageResult<BpmTaskTodoPageItemRespVO> getTodoTaskPage(Long userId, BpmTaskTodoPageReqVO pageVO) {
@@ -453,7 +454,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
                         new TreeSet<>(Comparator.comparing(nodeVo -> nodeVo.getNodeId()))), ArrayList::new));
 
         //排序
-        datas.sort(Comparator.comparing(FlowNodeVo::getEndTime));
+        datas.sort(Comparator.comparing(FlowNodeVo::getEndTime).reversed());
         return datas;
     }
 
@@ -489,18 +490,23 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         return applyMap;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void backToStepTask(BackTaskVo backTaskVo) {
         TaskEntity taskEntity = (TaskEntity) checkTask(backTaskVo.getUserId(), backTaskVo.getTaskId());
+        ProcessInstance instance = processInstanceService.getProcessInstance(taskEntity.getProcessInstanceId());
+        if (instance == null) {
+            throw exception(PROCESS_INSTANCE_NOT_EXISTS);
+        }
         //1.把当前的节点设置为空
         //2.设置审批人
         taskEntity.setAssignee(backTaskVo.getUserId().toString());
         taskService.saveTask(taskEntity);
         //3.添加驳回意见
         managementService.executeCommand(new AddHisCommentCmd(backTaskVo.getTaskId(), backTaskVo.getUserId().toString(), backTaskVo.getProcessInstanceId(),
-                CommentTypeEnum.BH.toString(), backTaskVo.getMessage()));
+                BpmProcessInstanceResultEnum.BACK.getResult().toString(), backTaskVo.getReason()));
         //4.处理提交人节点
-        FlowNode distActivity = this.findFlowNodeByActivityId(taskEntity.getProcessDefinitionId(), backTaskVo.getDistFlowElementId());
+        FlowNode distActivity = this.findFlowNodeByActivityId(taskEntity.getProcessDefinitionId(), backTaskVo.getDefinitionKey());
         if (distActivity != null) {
             if (FlowableConstant.FLOW_SUBMITTER.equals(distActivity.getName())) {
                 ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(taskEntity.getProcessInstanceId()).singleResult();
@@ -508,11 +514,11 @@ public class BpmTaskServiceImpl implements BpmTaskService {
             }
         }
         //5.删除节点
-        this.deleteActivity(backTaskVo.getDistFlowElementId(), taskEntity.getProcessInstanceId());
+        this.deleteActivity(backTaskVo.getDefinitionKey(), taskEntity.getProcessInstanceId());
         List<String> executionIds = new ArrayList<>();
         //6.判断节点是不是子流程内部的节点
         if (this.checkActivitySubprocessByActivityId(taskEntity.getProcessDefinitionId(),
-                backTaskVo.getDistFlowElementId())
+                backTaskVo.getDefinitionKey())
                 && this.checkActivitySubprocessByActivityId(taskEntity.getProcessDefinitionId(),
                 taskEntity.getTaskDefinitionKey())) {
             //6.1 子流程内部驳回
@@ -520,13 +526,24 @@ public class BpmTaskServiceImpl implements BpmTaskService {
             String parentId = executionTask.getParentId();
             List<Execution> executions = runtimeService.createExecutionQuery().parentId(parentId).list();
             executions.forEach(execution -> executionIds.add(execution.getId()));
-            this.moveExecutionsToSingleActivityId(executionIds, backTaskVo.getDistFlowElementId());
+            this.moveExecutionsToSingleActivityId(executionIds, backTaskVo.getDefinitionKey());
         } else {
             //6.2 普通驳回
             List<Execution> executions = runtimeService.createExecutionQuery().parentId(taskEntity.getProcessInstanceId()).list();
             executions.forEach(execution -> executionIds.add(execution.getId()));
-            this.moveExecutionsToSingleActivityId(executionIds, backTaskVo.getDistFlowElementId());
+            this.moveExecutionsToSingleActivityId(executionIds, backTaskVo.getDefinitionKey());
         }
+        // 扩展表字段修改
+        processInstanceService.updateProcessInstanceExtBACK(instance);
+        BpmTaskExtPO toUpdate = new BpmTaskExtPO();
+        toUpdate.setTaskId(taskEntity.getId());
+        toUpdate.setResult(BpmProcessInstanceResultEnum.REJECT.getResult());
+        toUpdate.setEndTime(LocalDateTime.now());
+        toUpdate.setReason(backTaskVo.getReason());
+        // 更新任务拓展表为驳回
+        taskExtMapper.updateByTaskId(
+                new BpmTaskExtPO().setTaskId(taskEntity.getId()).setResult(BpmProcessInstanceResultEnum.BACK.getResult())
+                        .setEndTime(LocalDateTime.now()).setReason(backTaskVo.getReason()));
     }
 
     @Override

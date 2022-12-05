@@ -1,5 +1,8 @@
 package com.fhs.flow.controller.admin.definition.vo.process;
 
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.trans.vo.TransPojo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +12,7 @@ import java.util.List;
 
 @ApiModel("管理后台 - 流程定义 Response VO")
 @Data
-public class BpmProcessDefinitionRespVO {
+public class BpmProcessDefinitionRespVO implements TransPojo {
 
     @ApiModelProperty(value = "编号", required = true, example = "1024")
     private String id;
@@ -26,6 +29,7 @@ public class BpmProcessDefinitionRespVO {
 
     @ApiModelProperty(value = "流程分类", notes = "参见 bpm_model_category 数据字典", example = "1")
     @NotEmpty(message = "流程分类不能为空")
+    @Trans(type = TransType.DICTIONARY,key = "categoryDictDatas")
     private String category;
 
     @ApiModelProperty(value = "表单类型", notes = "参见 bpm_model_form_type 数据字典", example = "1")

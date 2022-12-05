@@ -100,7 +100,7 @@ public class BpmTaskController {
      */
     @PostMapping(value = "/doBackStep")
     @ApiOperation(value = "驳回节点", notes = "驳回节点")
-    public HttpResult<Boolean> doBackStep(BackTaskVo params) {
+    public HttpResult<Boolean> doBackStep(@Valid @RequestBody BackTaskVo params) {
         params.setUserId(UserContext.getSessionuser().getUserId());
         taskService.backToStepTask(params);
         return success(true).toHttpResult();

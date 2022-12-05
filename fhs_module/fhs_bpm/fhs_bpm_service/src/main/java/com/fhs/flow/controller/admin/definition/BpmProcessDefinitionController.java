@@ -41,12 +41,13 @@ public class BpmProcessDefinitionController {
         return bpmDefinitionService.getProcessDefinitionPage(ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmProcessDefinitionPageReqVO.class)).toFhsPager();
     }
 
-    @GetMapping ("/list")
+    @PostMapping ("/list")
     @ApiOperation(value = "获得流程定义列表")
     @SaCheckRole("process-definition:see")
-    public List<BpmProcessDefinitionRespVO> getProcessDefinitionList(
+    public FhsPager<BpmProcessDefinitionRespVO> getProcessDefinitionList(
             BpmProcessDefinitionListReqVO listReqVO) {
-        return bpmDefinitionService.getProcessDefinitionList(listReqVO);
+        List<BpmProcessDefinitionRespVO> list = bpmDefinitionService.getProcessDefinitionList(listReqVO);
+        return new FhsPager(list,list.size());
     }
 
     @GetMapping ("/get-bpmn-xml")

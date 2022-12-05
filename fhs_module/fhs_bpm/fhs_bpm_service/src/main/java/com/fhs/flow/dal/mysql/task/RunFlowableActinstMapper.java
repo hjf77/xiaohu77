@@ -1,7 +1,7 @@
-package com.fhs.flow.mapper;
+package com.fhs.flow.dal.mysql.task;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,12 +12,11 @@ import java.util.List;
  * @date : 2019/12/417:55
  */
 @Mapper
-@Repository
 public interface RunFlowableActinstMapper {
 
     /**
      * 删除节点信息
      * @param ids ids
      */
-    void deleteRunActinstsByIds(List<String> ids) ;
+    void deleteRunActinstsByIds(@Param("ids") List<String> ids) ;
 }
