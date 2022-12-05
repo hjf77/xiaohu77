@@ -31,12 +31,12 @@
         buttons: [
         ],
         columns: [
-          {label: '任务编号', name: 'id',width:'300'},
-          {label: '任务名称', name: 'name',width:'180'},
-          {label: '所属流程', name: 'processInstance.name',width:'160'},
-          {label: '流程发起人', name: 'processInstance.startUserNickname',width:'180' },
-          {label: '创建时间', name: 'createTime',width:'200'},
-          {label: '状态', name: 'transMap.suspensionStateName',width:'200', type: "formart",
+          {label: '任务编号', name: 'id'},
+          {label: '任务名称', name: 'name',},
+          {label: '所属流程', name: 'processInstance.name'},
+          {label: '流程发起人', name: 'processInstance.startUserNickname' },
+          {label: '创建时间', name: 'createTime'},
+          {label: '状态', name: 'transMap.suspensionStateName', type: "formart",
           formart: function(row) {
              return row.suspensionState === 1 ?  `<span style="color: #13ce66">${row.transMap.suspensionStateName} </span>`  : ""
           },},
@@ -44,7 +44,6 @@
             label: '操作',
             name: 'operation',
             type: 'textBtn',
-            width: '180px',
             textBtn: [
               {
                 title: "审批",
