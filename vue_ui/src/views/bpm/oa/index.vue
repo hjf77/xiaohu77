@@ -91,7 +91,7 @@ export default {
                   })
                 }).then(() => {
                   this.$refs.crud.search();
-                  this.$modal.msgSuccess("取消成功");
+                  this.msgSuccess("取消成功");
                 })
               }
             },

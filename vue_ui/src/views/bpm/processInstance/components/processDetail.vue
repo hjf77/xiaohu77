@@ -80,7 +80,7 @@
       <el-form ref="updateAssigneeForm" :model="updateAssignee.form" :rules="updateAssignee.rules" label-width="110px">
         <el-form-item label="新审批人" prop="assigneeUserId">
           <el-select v-model="updateAssignee.form.assigneeUserId" clearable style="width: 100%">
-            <el-option v-for="item in userOptions" :key="parseInt(item.id)" :label="item.nickname" :value="parseInt(item.id)" />
+            <el-option v-for="item in userOptions" :key="parseInt(item.userId)" :label="item.userName" :value="parseInt(item.userId)" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -93,11 +93,10 @@
 </template>
 
 <script>
-import {approveTask, rejectTask,} from "@/api/bpm/task";
 import MyProcessViewer from "@/components/bpmnProcessDesigner/package/designer/ProcessViewer.vue";
 import formManagerVue from "../../formManager/formManager.vue";
 export default {
-  name: "editForm",
+  name: "processDetail",
   components: { MyProcessViewer,formManagerVue },
   props: {
     open: Boolean,
@@ -148,6 +147,15 @@ export default {
     }
     this.getDetail();
 
+    // 获得用户列表
+    this.userOptions = [];
+    this.$pagexRequest({
+      url: '/basic/ms/sysUser/findList',
+      method: 'get'
+    }).then((res) => {
+      this.userOptions.push(...res);
+    })
+    console.log('this.userOptions',this.userOptions);
   },
   methods: {
     /** 获得流程实例 */
@@ -213,6 +221,7 @@ export default {
         // 需要审核的记录
         // const userId = store.getters.userId;
         const userId = this.$store.state.user.user.userId;
+        console.log(this.tasks);
         this.tasks.forEach(item => {
           if (item.result !== 1) { // 只有待处理才需要
             return;
@@ -245,7 +254,7 @@ export default {
             method: "PUT",
             data: data,
           }).then((res) => {
-            this.$modal.msgSuccess("审批通过成功！");
+            this.msgSuccess("审批通过成功！");
             this.getDetail(); // 获得最新详情
           });
         } else {
@@ -254,7 +263,7 @@ export default {
             method: "PUT",
             data: data,
           }).then((res) => {
-            this.$modal.msgSuccess("审批不通过成功！");
+            this.msgSuccess("审批不通过成功！");
             this.getDetail(); // 获得最新详情
           });
         }
@@ -312,7 +321,7 @@ export default {
             method: "PUT",
             data: this.updateAssignee.form,
           }).then((res) => {
-            this.$modal.msgSuccess("转派任务成功！");
+            this.msgSuccess("转派任务成功！");
             this.updateAssignee.open = false;
             this.getDetail(); // 获得最新详情
           });
@@ -333,11 +342,11 @@ export default {
     },
     /** 处理审批退回的操作 */
     handleDelegate(task) {
-      this.$modal.msgError("暂不支持【委派】功能，可以使用【转派】替代！");
+      this.msgError("暂不支持【委派】功能，可以使用【转派】替代！");
     },
     /** 处理审批退回的操作 */
     handleBack(task) {
-      this.$modal.msgError("暂不支持【退回】功能！");
+      this.msgError("暂不支持【退回】功能！");
     }
   }
 }
