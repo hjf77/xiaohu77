@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @Description: 驳回的实体VO
  * @Author: Bruce.liu
@@ -22,6 +24,7 @@ public class BackTaskVo extends BaseProcessVo {
      * 需要驳回的节点id 必填
      */
     @ApiModelProperty(value = "需要驳回的节点id", required = true, example = "1024")
-    private String distFlowElementId;
+    @NotBlank(message = "请选择驳回的节点")
+    private String definitionKey;
 
 }

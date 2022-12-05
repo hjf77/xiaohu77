@@ -19,6 +19,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.BeanUtils;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
@@ -93,6 +94,7 @@ public interface BpmTaskConvert {
             BpmTaskDonePageItemRespVO respVO = convert2(task);
             BpmTaskExtPO taskExtDO = BpmTaskExtPOMap.get(task.getId());
             copyTo(taskExtDO, respVO);
+            respVO.setCreateTime(LocalDateTime.ofInstant(task.getCreateTime().toInstant(), ZoneId.systemDefault()));
             HistoricProcessInstance processInstance = historicProcessInstanceMap.get(task.getProcessInstanceId());
             if (processInstance != null) {
                 UcenterMsUserVO startUser = userMap.get(ConverterUtils.toLong(processInstance.getStartUserId()));
@@ -128,6 +130,7 @@ public interface BpmTaskConvert {
                 UcenterMsOrganizationVO dept = deptMap.get(assignUser.getOrganizationId());
                 if (dept != null) {
                     respVO.getAssigneeUser().setDeptName(dept.getName());
+                    respVO.getAssigneeUser().setDeptId(Long.valueOf(dept.getId()));
                 }
             }
             return respVO;
@@ -137,6 +140,8 @@ public interface BpmTaskConvert {
     @Mapping(source = "taskDefinitionKey", target = "definitionKey")
     BpmTaskRespVO convert3(HistoricTaskInstance bean);
 
+    @Mapping(source = "userId", target = "id")
+    @Mapping(source = "userName", target = "nickname")
     BpmTaskRespVO.User convert3(UcenterMsUserVO bean);
 
     @Mapping(target = "id", ignore = true)
@@ -165,8 +170,11 @@ public interface BpmTaskConvert {
                                                         Task task) {
         BpmMessageSendWhenTaskCreatedReqDTO reqDTO = new BpmMessageSendWhenTaskCreatedReqDTO();
         reqDTO.setProcessInstanceId(processInstance.getProcessInstanceId());
-        reqDTO .setProcessInstanceName(processInstance.getName());reqDTO.setStartUserId(startUser.getUserId());
-        reqDTO.setStartUserNickname(startUser.getUserName());reqDTO.setTaskId(task.getId());reqDTO.setTaskName(task.getName());
+        reqDTO.setProcessInstanceName(processInstance.getName());
+        reqDTO.setStartUserId(startUser.getUserId());
+        reqDTO.setStartUserNickname(startUser.getUserName());
+        reqDTO.setTaskId(task.getId());
+        reqDTO.setTaskName(task.getName());
         reqDTO.setAssigneeUserId(ConverterUtils.toLong(task.getAssignee()));
         return reqDTO;
     }

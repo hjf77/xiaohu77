@@ -137,6 +137,13 @@ public interface BpmProcessInstanceService {
     void updateProcessInstanceExtComplete(ProcessInstance instance);
 
     /**
+     * 更新 ProcessInstance 拓展记录为驳回
+     *
+     * @param instance 流程任务
+     */
+    void updateProcessInstanceExtBACK(ProcessInstance instance);
+
+    /**
      * 更新 ProcessInstance 拓展记录为不通过
      *
      * @param id 流程编号
