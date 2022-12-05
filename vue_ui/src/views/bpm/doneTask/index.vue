@@ -13,18 +13,6 @@
         :methodType="methodType"
         :namespace="namespace"
       >
-        <template v-slot:form="prop">
-          <!-- 修改 弹框-->
-          <pagex-dialog slot="form"
-           :title="title"  
-           :visible.sync="open" 
-           :before-close="closeFn" 
-            class="pagex-dialog-theme">
-            <!-- <editForm v-if="isEdit" :init="init" 
-            :isEdit="isEdit">编辑</editForm>
-            <addForm v-else :isAdd="isAdd">新增</addForm> -->
-          </pagex-dialog>
-        </template>
       </pagex-crud>
     </div>
   </template>
@@ -38,10 +26,7 @@
         namespace: 'done',
         api: '/basic/ms/task/done-page',
         methodType: 'post',
-        isEdit: false,
-        isAdd: false,
         init: {},
-        ruleId: '',
         buttons: [
         ],
         columns: [
@@ -115,9 +100,6 @@
      
     },
     methods: {
-      closeFn(){
-        this.open = true;
-      },
     }
   };
   </script>

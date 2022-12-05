@@ -113,7 +113,7 @@ export default {
               click: (_row) => {
                 // 点击审批按钮后，先调一次详情接口，获取到processDefinition.formCustomViewPath后，带type跳转页面
                 this.$pagexRequest({
-                  url: '/basic/ms/process-instance/get?id=' + row.processInstance.id,
+                  url: '/basic/ms/process-instance/get?id=' + _row.id,
                   method: 'get',
                   }).then((res) => {
                     if (res.data) {
@@ -121,14 +121,14 @@ export default {
                       if (type!==null && res.data.businessKey) {
                         this.$router.push({
                           path: '/bpm/processDetail/'+ type,
-                          query:{id: row.processInstance.id,
+                          query:{id: _row.id,
                             businessKey: res.data.businessKey
                           }
                         });
                       } else {
                         this.$router.push({
                           path: '/bpm/processDetail/',
-                          query:{id: row.processInstance.id}
+                          query:{id: _row.id}
                         });
                       }
                     }

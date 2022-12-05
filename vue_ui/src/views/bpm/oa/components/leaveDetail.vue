@@ -52,10 +52,12 @@ export default {
           detail: "endTime",
         },
         {
-          type: "text",
+          type: "select",
           name: "type",
           label: "请假类型",
-          detail: "transMap.typeName",
+          dictCode: 'bpm_oa_leave_type',
+          // detail: "transMap.typeName",
+          isValueNum: true,
         },
         {
           type: "text",
