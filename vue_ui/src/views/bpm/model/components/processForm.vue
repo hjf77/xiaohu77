@@ -45,6 +45,7 @@
             name: "taskDefinitionName",
             label: '任务名称',
             disabledOn: "disabled",
+            isValueNum: true,
             placeholder: '请输入任务名称'
           },
           {

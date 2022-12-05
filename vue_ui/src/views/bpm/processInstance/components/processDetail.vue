@@ -346,7 +346,32 @@ export default {
     },
     /** 处理审批退回的操作 */
     handleBack(task) {
-      this.msgError("暂不支持【退回】功能！");
+      const reason = this.auditForms[this.auditForms.length-1].reason;
+      let data = {
+        taskId: task.id,
+        processInstanceId: task.processInstance.id,
+        reason: reason,
+      }
+      this.$pagexRequest({
+        url: `/basic/ms/task/getBackNodesByProcessInstanceId?taskId=${ task.id }&processInstanceId=${ task.processInstance.id }`,
+        method: 'GET',
+      }).then((res) => {
+        console.log(res,'res');
+        if (res.length) {
+          res.forEach((item,i) => {
+            data.definitionKey = res[0].definitionKey
+          });
+          this.$pagexRequest({
+            url: `/basic/ms/task/doBackStep`,
+            method: 'POST',
+            data: data,
+          }).then((res) => {
+            this.getDetail(); // 获得最新详情
+            this.msgSuccess("任务驳回成功！");
+          })
+        }
+      })
+
     }
   }
 }
