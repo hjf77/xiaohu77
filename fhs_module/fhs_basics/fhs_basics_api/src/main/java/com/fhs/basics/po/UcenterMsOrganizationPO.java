@@ -8,12 +8,12 @@ import com.fhs.common.tree.Treeable;
 import com.fhs.core.base.anno.NotRepeatDesc;
 import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.po.BasePO;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.anno.TransDefaultSett;
-import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.anno.TransDefaultSett;
+import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -36,7 +36,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @TableName("t_ucenter_ms_organization")
 @NotRepeatDesc("同一个父部门下的子部门名称不可重复")
-@TransDefaultSett(defaultFields = "name",defaultAlias = "org",isUseCache = true,cacheSeconds = 1000)
+@TransDefaultSett(defaultFields = "name", defaultAlias = "org", isUseCache = true, cacheSeconds = 1000)
 @ApiModel(value = "UcenterMsOrganizationDO", description = "UcenterMsOrganization参数")
 public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> implements Treeable {
 
@@ -107,6 +107,19 @@ public class UcenterMsOrganizationPO extends BasePO<UcenterMsOrganizationPO> imp
     @TableField("company_id")
     @ApiModelProperty(value = "所属单位id")
     private String companyId;
+
+    @TableField("is_grade")
+    @ApiModelProperty(value = "级别(1:省级,2:市级,3:县级)")
+    @Trans(type = TransType.DICTIONARY, key = "is_grade")
+    private Integer isGrade;
+
+    @TableField("region_code")
+    @ApiModelProperty(value = "区域编码")
+    private String regionCode;
+
+    @TableField("asuperiorst_id")
+    @ApiModelProperty(value = "上级id")
+    private String asuperiorstId;
 
     @Override
     public Serializable getTreeNodeParentId() {

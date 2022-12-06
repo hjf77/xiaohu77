@@ -83,7 +83,9 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
             UcenterMsUserVO loginSysUser = super.getSessionuser();
             sysUser.setUpdateTime(new Date());
             sysUser.setUpdateUser(loginSysUser.getUserId());
+            UcenterMsOrganizationVO ucenterMsOrganizationVO = sysOrganizationService.selectById(sysUser.getOrganizationId());
             if (sysUser.getUserId() == null) { //新增
+                sysUser.setIsGrade(ucenterMsOrganizationVO.getIsGrade());
                 sysUser.setCreateTime(new Date());
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());

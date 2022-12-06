@@ -104,6 +104,13 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private String groupCode;
 
     /**
+     * 级别(1:省级,2:市级,3:县级)
+     */
+    @TableField("is_grade")
+    @ApiModelProperty("级别(1:省级,2:市级,3:县级)")
+    private Integer isGrade;
+
+    /**
      * 邮箱
      */
     @NotNull(message = "邮箱不能为空", groups = {Update.class, Add.class})

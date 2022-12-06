@@ -1,6 +1,7 @@
 package com.fhs.basics.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.basics.constant.BaseTransConstant;
@@ -95,6 +96,7 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> {
     @Min(message = "{area的areaParentId字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.AUTO_TRANS, key = BaseTransConstant.AREA + "#area")
     @ApiModelProperty("上级主键")
+    @TableField("area_parent_id")
     private Integer areaParentId;
 
     /**
