@@ -312,6 +312,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = LeftMenuVO.builder().id(adminMenu.getMenuId()).name(adminMenu.getMenuName())
                     .icon(adminMenu.getIcon())
+                    .orderIndex(adminMenu.getOrderIndex())
                     .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).sonMenu(new ArrayList<>()).build();
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
@@ -344,7 +345,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             converterMenu2Router(menu, tempRouter, true);
             result.add(tempRouter);
         }
-        return result;
+        return result.stream().sorted(Comparator.comparing(VueRouterVO::getOrderIndex)).collect(Collectors.toList());
     }
 
     /**
@@ -361,6 +362,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         String component = null;
         component = menu.getUrl();
         vueRouterVO.setComponent(isFirst ? "Layout" : component);
+        vueRouterVO.setOrderIndex(menu.getOrderIndex());
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
         vueRouterVO.getMeta().put("title", menu.getName());
         vueRouterVO.getMeta().put("icon", menu.getIcon());

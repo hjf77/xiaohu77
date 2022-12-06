@@ -52,6 +52,11 @@ public class VueRouterVO extends BaseObject<VueRouterVO> {
     private Boolean alwaysShow = true;
 
     /**
+     * 排序.
+     */
+    private int orderIndex;
+
+    /**
      * 扩展信息
      */
     private Map<String, String> meta = new HashMap<>();
