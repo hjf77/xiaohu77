@@ -130,7 +130,8 @@
         order_index AS orderIndex,
         namespace,
         is_show AS isShow,
-        system_id AS systemId
+        system_id AS systemId,
+        international_code AS internationalCode
         FROM
         t_sett_ms_menu m
         <where>

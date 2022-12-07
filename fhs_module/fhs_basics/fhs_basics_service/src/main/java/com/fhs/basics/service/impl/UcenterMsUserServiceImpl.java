@@ -18,7 +18,6 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.BusinessException;
-import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -315,7 +314,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = LeftMenuVO.builder().id(adminMenu.getMenuId()).name(adminMenu.getMenuName())
-                    .icon(adminMenu.getIcon())
+                    .icon(adminMenu.getIcon()).internationalCode(adminMenu.getInternationalCode())
                     .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).sonMenu(new ArrayList<>()).build();
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
@@ -368,6 +367,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
         vueRouterVO.getMeta().put("title", menu.getName());
         vueRouterVO.getMeta().put("icon", menu.getIcon());
+        vueRouterVO.getMeta().put("internationalCode", menu.getInternationalCode());
         if (menu.getSonMenu() != null && !menu.getSonMenu().isEmpty()) {
             for (LeftMenuVO sonMenu : menu.getSonMenu()) {
                 VueRouterVO sunRouter = new VueRouterVO();

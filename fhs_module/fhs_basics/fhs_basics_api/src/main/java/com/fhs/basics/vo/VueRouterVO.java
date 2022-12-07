@@ -1,6 +1,8 @@
 package com.fhs.basics.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fhs.core.base.pojo.BaseObject;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -45,6 +47,11 @@ public class VueRouterVO extends BaseObject<VueRouterVO> {
      * 组件类型
      */
     private String component;
+
+    /**
+     *国际化编码
+     */
+    private String internationalCode;
 
     /**
      * 一直展示
