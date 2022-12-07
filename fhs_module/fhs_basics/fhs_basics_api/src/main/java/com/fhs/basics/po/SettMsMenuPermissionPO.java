@@ -48,7 +48,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_sett_ms_menu_permission")
+@TableName(value = "t_sett_ms_menu_permission",autoResultMap = true)
 @ApiModel(value = "SettMsMenuPermissionDO", description = "SettMsMenuPermission参数")
 public class SettMsMenuPermissionPO extends BasePO<SettMsMenuPermissionPO> {
 

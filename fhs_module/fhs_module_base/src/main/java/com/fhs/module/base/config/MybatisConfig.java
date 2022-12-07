@@ -12,7 +12,6 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.apache.ibatis.binding.MapperRegistry;
@@ -23,7 +22,10 @@ import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
+
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -37,6 +39,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+
 /**
  * mybatis jpa 配置
  *
@@ -73,10 +76,10 @@ public class MybatisConfig implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
-        this.setFieldValByName("createTime",new Date(),metaObject);
-        this.setFieldValByName("updateTime",new Date(),metaObject);
-        this.setFieldValByName("createUser", userId,metaObject);
-        this.setFieldValByName("updateUser",userId,metaObject);
+        this.setFieldValByName("createTime", new Date(), metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
+        this.setFieldValByName("createUser", userId, metaObject);
+        this.setFieldValByName("updateUser", userId, metaObject);
     }
 
     /**
@@ -88,19 +91,19 @@ public class MybatisConfig implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         Long userId = UserContext.getSessionuser() != null ? UserContext.getSessionuser().getUserId() : null;
         //字段填充
-        this.setFieldValByName("updateTime",new Date(),metaObject);
-        this.setFieldValByName("updateUser",userId,metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
+        this.setFieldValByName("updateUser", userId, metaObject);
     }
 }
 
 
-
 /**
  * xml mp 热加载支持 by wanglei
+ *
  * @ 本代码由https://my.oschina.net/houke/blog/901909 copy修改
  */
 @Slf4j
- class XMLMapperLoader implements DisposableBean, InitializingBean, ApplicationContextAware {
+class XMLMapperLoader implements DisposableBean, InitializingBean, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(XMLMapperLoader.class);
 
@@ -140,8 +143,6 @@ public class MybatisConfig implements MetaObjectHandler {
             }
         }
     }
-
-
 
 
     class Scanner implements Runnable {
@@ -356,6 +357,7 @@ public class MybatisConfig implements MetaObjectHandler {
             executorService.shutdownNow();
         }
     }
+
     public void setInitialDelay(Long initialDelay) {
         this.initialDelay = initialDelay;
     }

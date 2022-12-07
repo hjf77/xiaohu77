@@ -1,11 +1,11 @@
 package com.fhs.excel.service;
 
 @FunctionalInterface
-public interface DoIniter<P> {
+public interface DoIniter<V> {
     /**
      * 初始化do的一些属性
      *
      * @param d
      */
-    void init(P d);
+    void init(V v);
 }

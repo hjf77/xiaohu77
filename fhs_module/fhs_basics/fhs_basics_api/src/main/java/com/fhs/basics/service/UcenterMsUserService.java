@@ -8,6 +8,7 @@ import com.fhs.core.base.service.BaseService;
 import com.fhs.easycloud.anno.CloudApi;
 import com.fhs.easycloud.anno.CloudMethod;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,10 @@ import java.util.Set;
 @CloudApi(serviceName = "basic")
 public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, UcenterMsUserPO> {
 
+    @Override
+    @CloudMethod
+    UcenterMsUserVO selectById(Serializable primaryValue);
+
     /**
      * 超管用户标识
      */
@@ -29,7 +34,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
     /**
      * 登陆
      *
-     * @param adminUser
+     * @param loginVO
      * @return
      */
     UcenterMsUserVO login(LoginVO loginVO);
@@ -203,4 +208,13 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper);
+
+
+    /**
+     * 获取用户机构下有指定权限的所有用户
+     * @param userId    用户id
+     * @param roleId    角色id
+     * @return
+     */
+    List<Long> getUserByRoleOrg(String userId, String roleId);
 }

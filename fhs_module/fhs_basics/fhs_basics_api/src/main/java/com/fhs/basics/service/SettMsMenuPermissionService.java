@@ -21,7 +21,7 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
      * @param map
      * @return
      */
-    boolean addBaseMenuBatch(Map<String, Object> map);
+    boolean addBaseMenuBatch(Map<String, String> map);
 
 
 }

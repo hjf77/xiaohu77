@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_log_operator_sys_log")
+@TableName(value = "t_log_operator_sys_log",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value ="LogOperatorSysLogPO",description ="系统日志")
 public class LogOperatorSysLogPO extends BasePO<LogOperatorSysLogPO> {

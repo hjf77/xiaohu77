@@ -36,7 +36,7 @@ import java.text.DecimalFormat;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_pub_file")
+@TableName(value = "t_pub_file",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "PubFileDO", description = "PubFile参数")
 public class PubFilePO extends BasePO<PubFilePO> implements Serializable {

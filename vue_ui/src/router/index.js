@@ -107,6 +107,33 @@ export const constantRoutes = [
       }
     ]
   },
+
+  {
+    path: '/bpm',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'modelEditor',
+        component: () => import('@/views/bpm/model/components/modelEditor.vue'),
+        name: 'modelEditor',
+        meta: {title: '设计流程', icon: ''}
+      },
+      {
+        path: 'processDetail',
+        component: () => import('@/views/bpm/processInstance/components/processDetail.vue'),
+        name: 'processDetail',
+        meta: {title: '流程详情', icon: ''},
+        children:[{
+          path: ':type',
+          component: () => import('@/views/bpm/formManager/index.vue'),
+          name: 'processDetail',
+          meta: {title: '请假详情', icon: ''},
+
+        }]
+      }
+    ]
+  },
 ]
 
 export default new Router({

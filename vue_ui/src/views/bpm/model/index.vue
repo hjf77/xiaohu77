@@ -1,0 +1,245 @@
+<!--
+  模块名称：流程模型
+  开发人员：彭梦倩
+  创建时间:2022/11/24 8:00
+-->
+<template>
+  <div class="app-container">
+    <pagex-crud
+      ref="crud"
+      :filters="filters"
+      :columns="columns"
+      :api="api"
+      :buttons="buttons"
+      :namespace="namespace"
+      v-loading="loading"
+    >
+      <template v-slot:form="prop">
+        <!-- 修改 弹框-->
+        <pagex-dialog slot="form" :title="title"  :visible.sync="open" :before-close="closeEdit"  class="pagex-dialog-theme">
+          <editForm v-if="isEdit" :init="init" :isEdit="isEdit"></editForm>
+          <addForm v-else></addForm>
+        </pagex-dialog>
+      </template>
+      <template v-slot:topSlot="prop">
+        <pagex-dialog slot="topSlot" width="800px" :title="title" :namespace="namespace" :before-close="closeRules"
+          v-if="openRules" :visible.sync="openRules" class="pagex-dialog-theme">
+          <div class="pagex-dialog-theme">
+            <allocationRules :init="init"></allocationRules>
+          </div>
+        </pagex-dialog>
+      </template>
+    </pagex-crud>
+    <pagex-dialog v-if="openEditor" width="1600px" :title="title" :namespace="namespace" :before-close="closeEditor"
+      :visible.sync="openEditor" class="pagex-dialog-theme">
+      <div class="pagex-dialog-theme">
+        <modelEditor :init="init" @closeEditor="closeEditor"></modelEditor>
+      </div>
+    </pagex-dialog>
+  </div>
+</template>
+<script>
+import crudMixins from "@/mixins/crudMixins";
+import editForm from "@/views/bpm/model/components/editForm.vue";
+import addForm from "@/views/bpm/model/components/addForm.vue";
+import allocationRules from "@/views/bpm/model/components/allocationRules.vue";
+import modelEditor from "@/views/bpm/model/components/modelEditor.vue";
+
+export default {
+  name: "model",
+  components: {
+    editForm,
+    addForm,
+    allocationRules,
+    modelEditor
+  },
+  mixins: [crudMixins],
+  data() {
+    return {
+      init: {},
+      namespace: 'model',
+      api: '/basic/ms/model/page',
+      isEdit: false,//编辑弹窗
+      openRules: false,//分配规则弹窗
+      openEditor: false,//设计流程弹窗
+      loading: false,
+      buttons: [
+        {
+          title: '新增流程',
+          type: 'primary',
+          size: 'mini',
+          icon: 'el-icon-plus',
+          click: () => {
+            this.title = '新增流程';
+            this.open = true;
+            this.isEdit = false;
+          }
+        },
+        {
+          title: '导入流程',
+          type: 'primary',
+          size: 'mini',
+          icon: 'el-icon-upload2',
+          click: () => {
+            this.title = '导入流程';
+          }
+        }
+      ],
+      columns: [
+        {label: '流程标识', name: 'key'},
+        {label: '流程名称', name: 'name'},
+        {label: '流程分类', name: 'transMap.categoryName'},
+        {label: '表单信息', name: 'formType', type: 'formart',
+          formart: (row) => {
+            if (row.formId) {
+              return row.formName;
+            } else if(row.formCustomCreatePath) {
+              return row.formCustomCreatePath;
+            } else {
+              return '暂无表单';
+            }
+          }
+        },
+        {label: '创建时间', name: 'createTime'},
+        {label: '流程版本', name: 'processDefinition.version', type: 'formart',
+          formart: (row) => {
+            if (row.processDefinition) {
+              return "v" + row.processDefinition.version;
+            } else {
+              return '未部署';
+            }
+          }
+        },
+        {label: '激活状态', name: 'processDefinition.transMap.suspensionStateName' },
+        {label: '部署时间', name: 'deploymentTime'},
+        {
+          label: '操作',
+          name: 'operation',
+          type: 'textBtn',
+          width: '420px',
+          textBtn: [
+            {
+              title: "修改流程",
+              icon: 'el-icon-edit',
+              type: "text",
+              size: 'mini',
+              click: (_row) => {
+                this.$set(this, 'init', _row)
+                this.title = '编辑';
+                this.open = true;
+                this.isEdit = true;
+              }
+            },
+            {
+              title: "设计流程",
+              icon: 'el-icon-setting',
+              type: "text",
+              size: 'mini',
+              click: (_row) => {
+                this.title = '设计流程';
+                this.openEditor = true;
+                this.$set(this, 'init', _row)
+                // this.$router.push({
+                //   path: '/bpm/modelEditor',
+                //   query:{modelId: _row.id}
+                // });
+              }
+            },
+            {
+              title: "分配规则",
+              icon: 'el-icon-s-custom',
+              type: "text",
+              api: '/basic/ms/dictItem/',
+              size: 'mini',
+              click: (_row) => {
+                this.title = '任务分配规则';
+                this.openRules = true;
+                this.$set(this, 'init', _row)
+              }
+            },
+            {
+              title: "发布流程",
+              icon: 'el-icon-thumb',
+              type: "text",
+              size: 'mini',
+              click: (_row) => {
+                this.$confirm("是否部署该流程！！",
+                  {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                  }
+                ).then(() => {
+                    this.$pagexRequest({
+                      url: '/basic/ms/model/deploy?id=' + _row.id,
+                      method: 'POST',
+                    }).then((res) => {
+                      this.$refs.crud.search();
+                    })
+                  });
+              }
+            },
+            {
+              title: "流程定义",
+              icon: 'el-icon-ice-cream-round',
+              type: "text",
+              api: '/basic/ms/dictItem/',
+              size: 'mini',
+              click: (_row) => {
+                this.$router.push({
+                  // path: '/bpm/modelEditor',
+                  query:{modelId: _row.id}
+                });
+              }
+            },
+            {
+              title: "删除",
+              icon: 'el-icon-delete',
+              type: "text",
+              size: 'mini',
+              click: (_row) => {
+                this.$confirm("是否删除该流程！！",
+                  {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                  }
+                ).then(() => {
+                  this.$pagexRequest({
+                    url: '/basic/ms/model/delete?id=' + _row.id,
+                    method: 'DELETE',
+                  }).then((res) => {
+                    this.$refs.crud.search();
+                  })
+                }).catch(() => {});
+              }
+            },
+          ],
+        }
+      ],
+      filters: [
+        {label: '流程标识', name: 'key', type: 'text', operation: "like",},
+        {label: '流程名称', name: 'name', type: 'text', operation: "like",},
+        {label: '流程分类', name: 'category', type: 'select', dictCode: 'categoryDictDatas', operation: "in",},
+      ]
+    };
+  },
+  created() {
+   
+  },
+  methods: {
+    closeEdit(){
+      this.open = false;
+      this.$refs.crud.search();
+    },
+    closeRules(){
+      this.openRules = false;
+      this.$refs.crud.search();
+    },
+    closeEditor(){
+      this.openEditor = false;
+      this.$refs.crud.search();
+    },
+  }
+};
+</script>

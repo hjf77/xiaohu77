@@ -110,9 +110,9 @@ public abstract class BaseController {
      *
      * @return 参数map
      */
-    public EMap<String, Object> getParameterMap() {
+    public EMap<String, String> getParameterMap() {
         HttpServletRequest request = getRequest();
-        EMap<String, Object> resultMap = new EMap<>();
+        EMap<String, String> resultMap = new EMap<>();
         Map<String, String[]> tempMap = request.getParameterMap();
         Set<String> keys = tempMap.keySet();
         for (String key : keys) {
@@ -127,8 +127,8 @@ public abstract class BaseController {
      * @return 计算好分页起始行的参数map
      */
     protected EMap<String, Object> getPageTurnNum() {
-
-        EMap<String, Object> paramMap = this.getParameterMap();
+        EMap<String, Object> paramMap = new EMap<>();
+        paramMap.putAll(this.getParameterMap());
         PageSizeInfo pageSizeInfo = getPageSizeInfo(paramMap.getInteger(Constant.PAGE, 0), paramMap.getInteger(Constant.ROWS, 0));
         paramMap.put(Constant.START, pageSizeInfo.getPageStart());
         paramMap.put(Constant.END, pageSizeInfo.getPageSize());

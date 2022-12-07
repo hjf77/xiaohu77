@@ -46,7 +46,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_ucenter_ms_user")
+@TableName(value = "t_ucenter_ms_user",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @TransDefaultSett(isUseCache = true,cacheSeconds = 100,isAccess = true)
 @ApiModel(value = "UcenterMsUserDO", description = "UcenterMsUser参数")
@@ -150,7 +150,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
      */
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
-    @TableField("organization_id")
+    @TableField(value = "organization_id",target = UcenterMsOrganizationPO.class)
     @Trans(type = TransType.SIMPLE, target = UcenterMsOrganizationPO.class, ref = "orgName")
     @ApiModelProperty("组织机构编号")
     private String organizationId;

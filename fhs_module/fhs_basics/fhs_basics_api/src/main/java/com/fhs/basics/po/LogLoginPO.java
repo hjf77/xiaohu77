@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "LogLoginDO", description = "LogLogin参数")
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_log_login")
+@TableName(value = "t_log_login",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 public class LogLoginPO extends BasePO<LogLoginPO> {
     private static final long serialVersionUID = 330446860714574816L;
