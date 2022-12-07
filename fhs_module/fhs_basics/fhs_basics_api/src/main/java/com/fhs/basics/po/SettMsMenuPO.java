@@ -41,6 +41,7 @@ import java.util.List;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Entity
 @Data
 @TableName("t_sett_ms_menu")
 @EqualsAndHashCode(callSuper = true)
@@ -126,7 +127,7 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
      */
     @NotNull(message = "isEnable不能为空", groups = {Update.class, Add.class})
     @ApiModelProperty("是否禁用")
-    @Trans(type = TransType.DICTIONARY, key = "isEnable")
+    @Trans(type = TransType.DICTIONARY, key = "is_enable")
     private Integer isEnable;
 
 
@@ -159,6 +160,12 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
      */
     @ApiModelProperty("图标")
     private String icon;
+
+    /**
+     * 排序
+     */
+    @TableField(exist = false)
+    private String internationalCode;
 
 
     @Override

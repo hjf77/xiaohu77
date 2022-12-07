@@ -8,9 +8,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
@@ -92,6 +90,52 @@ public class HttpUtils {
         return doGet(url, new HashMap<String, Object>());
     }
 
+    /**
+     * 发送 DELETE 请求（HTTP），不带输入数据
+     *
+     * @param url
+     * @return
+     */
+    public static String doDelete(String url) {
+        return doDelete(url, new HashMap<String, Object>());
+    }
+    /**
+     * 发送 GET 请求（HTTP），K-V形式
+     *
+     * @param url
+     * @param params
+     * @return
+     */
+    public static String doDelete(String url, Map<String, Object> params) {
+        String apiUrl = url;
+        StringBuffer param = new StringBuffer();
+        int i = 0;
+        for (String key : params.keySet()) {
+            if (i == 0) {
+                param.append("?");
+            } else {
+                param.append("&");
+            }
+            param.append(key).append("=").append(params.get(key));
+            i++;
+        }
+        apiUrl += param;
+        String result = null;
+        try {
+            HttpDelete httpDelete = new HttpDelete(apiUrl);
+            setThreadKey(apiUrl, params);
+            HttpResponse response = httpClient.execute(httpDelete);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream instream = entity.getContent();
+                result = IOUtils.toString(instream, "UTF-8");
+            }
+            log.info("请求结果 : {}", result);
+        } catch (IOException e) {
+            log.error("请求失败，IOException ： " + e.getMessage());
+        }
+        return result;
+    }
     /**
      * 发送 GET 请求（HTTP），K-V形式
      *
@@ -185,6 +229,59 @@ public class HttpUtils {
         return getData(httpPost);
     }
 
+    /**
+     * 发送 PUT 请求（HTTP），JSON形式
+     *
+     * @param apiUrl
+     * @param json   json对象
+     * @return
+     */
+    public static String doPut(String apiUrl, Object json) {
+        if (apiUrl.startsWith("https")) {
+            return doPostSSL(apiUrl, json);
+        }
+        HttpPut httpPut = new HttpPut(apiUrl);
+
+        // 解决中文乱码问题
+        StringEntity stringEntity = new StringEntity(json.toString(), "UTF-8");
+        stringEntity.setContentEncoding("UTF-8");
+        stringEntity.setContentType("application/json");
+        httpPut.setEntity(stringEntity);
+        setThreadKey(apiUrl, json);
+
+        return getDataPut(httpPut);
+    }
+    /**
+     * POST发送请求，处理数据
+     *
+     * @param httpPut 请求实例
+     * @return
+     */
+    private static String getDataPut(HttpPut httpPut) {
+        String httpStr = null;
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpPut);
+            int statusCode = response.getStatusLine().getStatusCode();
+            log.info("请求成功,请求返回状态码:{}", statusCode);
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                httpStr = EntityUtils.toString(entity, "UTF-8");
+            }
+            log.info("请求结果:{}", httpStr);
+        } catch (Exception e) {
+            log.error("请求失败, Exception : " + e.getMessage());
+        } finally {
+            if (response != null) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException e) {
+                    log.error("请求失败, IOException : " + e.getMessage());
+                }
+            }
+        }
+        return httpStr;
+    }
     /**
      * 发送 POST 请求（HTTP），JSON形式,携带header
      *

@@ -1,6 +1,7 @@
 package com.fhs.basics.vo;
 
 import com.fhs.core.base.pojo.BaseObject;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,6 +65,11 @@ public class LeftMenuVO extends BaseObject<LeftMenuVO> {
      * 图标-自己上传
      */
     private String image;
+
+    /**
+     * 国家化码
+     */
+    private String internationalCode;
 
     /**
      * iframe模式 服务器url

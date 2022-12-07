@@ -19,10 +19,13 @@ import lombok.*;
 public class UcenterMsOrganizationVO extends UcenterMsOrganizationPO implements VO {
 
 
-    @ApiModelProperty("类型")
+    /**
+     * 类型
+     */
     private Integer type;
 
-
-    @ApiModelProperty("区域编码")
+    /**
+     * 地区编码
+     */
     private String code;
 }

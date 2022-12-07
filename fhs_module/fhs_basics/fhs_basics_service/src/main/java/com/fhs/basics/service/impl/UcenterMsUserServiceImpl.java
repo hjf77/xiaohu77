@@ -1,15 +1,13 @@
 package com.fhs.basics.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
-import com.fhs.basics.po.UcenterMsUserPO;
-import com.fhs.basics.po.UcenterMsTenantPO;
 import com.fhs.basics.mapper.SettMsMenuMapper;
 import com.fhs.basics.mapper.UcenterMsUserMapper;
+import com.fhs.basics.po.UcenterMsTenantPO;
+import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.*;
 import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
@@ -21,8 +19,6 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.google.common.collect.HashMultimap;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -266,7 +262,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         if (tempUser.getIsAdmin() == ADMIN) {
             adminMenus = ListUtils.copyListToList(sysMenuMapper.findForAllList(paramMap), SettMsMenuVO.class);
         } else {
-            paramMap.put("userLoginName",tempUser.getUserLoginName());
+            paramMap.put("userLoginName", tempUser.getUserLoginName());
             adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap), SettMsMenuVO.class);
         }
         return readPermissionSet(adminMenus);
@@ -312,6 +308,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = LeftMenuVO.builder().id(adminMenu.getMenuId()).name(adminMenu.getMenuName())
                     .icon(adminMenu.getIcon())
+                    .orderIndex(adminMenu.getOrderIndex())
                     .namespace(adminMenu.getNamespace()).url(adminMenu.getMenuUrl()).sonMenu(new ArrayList<>()).build();
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
@@ -344,7 +341,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             converterMenu2Router(menu, tempRouter, true);
             result.add(tempRouter);
         }
-        return result;
+        return result.stream().sorted(Comparator.comparing(VueRouterVO::getOrderIndex)).collect(Collectors.toList());
     }
 
     /**
@@ -362,6 +359,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         component = menu.getUrl();
         vueRouterVO.setComponent(isFirst ? "Layout" : component);
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
+        vueRouterVO.setOrderIndex(menu.getOrderIndex());
         vueRouterVO.getMeta().put("title", menu.getName());
         vueRouterVO.getMeta().put("icon", menu.getIcon());
         if (menu.getSonMenu() != null && !menu.getSonMenu().isEmpty()) {
