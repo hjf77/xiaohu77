@@ -3,6 +3,7 @@ package com.fhs.flow.convert.task;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.flow.comon.utils.CollectionUtils;
 import com.fhs.flow.controller.admin.task.vo.task.BpmTaskDonePageItemRespVO;
 import com.fhs.flow.controller.admin.task.vo.task.BpmTaskRespVO;
@@ -133,6 +134,8 @@ public interface BpmTaskConvert {
                     respVO.getAssigneeUser().setDeptId(Long.valueOf(dept.getId()));
                 }
             }
+            respVO.setCreateTime(LocalDateTime.ofInstant(task.getCreateTime().toInstant(), ZoneId.systemDefault()));
+            respVO.setElapsedTime(DateUtils.getDistanceTime(respVO.getCreateTime(),respVO.getEndTime()));
             return respVO;
         });
     }

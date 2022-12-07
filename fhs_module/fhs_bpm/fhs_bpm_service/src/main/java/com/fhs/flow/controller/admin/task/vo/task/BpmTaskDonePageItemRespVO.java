@@ -32,4 +32,7 @@ public class BpmTaskDonePageItemRespVO extends BpmTaskTodoPageItemRespVO {
     @ApiModelProperty(value = "审批建议", required = true, example = "不请假了！")
     private String reason;
 
+    @ApiModelProperty(value = "耗时", required = true, example = "1天1分钟1秒")
+    private String elapsedTime;
+
 }
