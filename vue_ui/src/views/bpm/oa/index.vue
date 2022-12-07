@@ -101,6 +101,7 @@ export default {
               type: "text",
               size: 'mini',
               click: (_row) => {
+                console.log(_row);
                 this.$set(this, "id", _row.id);
                 this.title = '查看OA请假';
                 this.open = true;
@@ -115,7 +116,7 @@ export default {
               click: (_row) => {
                 this.$router.push({
                   path: '/bpm/processDetail',
-                  query:{id: _row.id}
+                  query:{id: _row.processInstanceId}
                 });
               }
             },
@@ -137,6 +138,7 @@ export default {
   methods: {
   closeFn(){
     this.open = false;
+    this.$refs.crud.search();
   },
 }
 };

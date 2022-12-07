@@ -285,7 +285,7 @@ export default {
         if (element.type === 'bpmn:StartEvent' && this.processInstance) {
           html = `<p>发起人：${this.processInstance.startUser.nickname}</p>
                   <p>部门：${this.processInstance.startUser.deptName}</p>
-                  <p>创建时间：${this.parseTime(this.processInstance.createTime)}`;
+                  <p>创建时间：${this.processInstance.createTime}`;
         } else if (element.type === 'bpmn:UserTask') {
           // debugger
           let task = this.taskList.find(m => m.id === activity.taskId); // 找到活动对应的 taskId
@@ -294,26 +294,26 @@ export default {
           }
           html = `<p>审批人：${task.assigneeUser.nickname}</p>
                   <p>部门：${task.assigneeUser.deptName}</p>
-                  <p>结果：${this.getDictDataLabel(this.DICT_TYPE.BPM_PROCESS_INSTANCE_RESULT, task.result)}</p>
-                  <p>创建时间：${this.parseTime(task.createTime)}</p>`;
+                  <p>结果：${task.transMap.resultName}</p>
+                  <p>创建时间：${task.createTime}</p>`;
           if (task.endTime) {
-            html += `<p>结束时间：${this.parseTime(task.endTime)}</p>`
+            html += `<p>结束时间：${task.endTime}</p>`
           }
           if (task.reason) {
             html += `<p>审批建议：${task.reason}</p>`
           }
         } else if (element.type === 'bpmn:ServiceTask' && this.processInstance) {
           if(activity.startTime>0){
-            html = `<p>创建时间：${this.parseTime(activity.startTime)}</p>`;
+            html = `<p>创建时间：${activity.startTime}</p>`;
           }
           if(activity.endTime>0){
-            html += `<p>结束时间：${this.parseTime(activity.endTime)}</p>`
+            html += `<p>结束时间：${activity.endTime}</p>`
           }
           console.log(html)
         } else if (element.type === 'bpmn:EndEvent' && this.processInstance) {
           html = `<p>结果：${this.getDictDataLabel(this.DICT_TYPE.BPM_PROCESS_INSTANCE_RESULT, this.processInstance.result)}</p>`;
           if (this.processInstance.endTime) {
-            html += `<p>结束时间：${this.parseTime(this.processInstance.endTime)}</p>`
+            html += `<p>结束时间：${this.processInstance.endTime}</p>`
           }
         }
         this.elementOverlayIds[element.id] = this.overlays.add(element, {
