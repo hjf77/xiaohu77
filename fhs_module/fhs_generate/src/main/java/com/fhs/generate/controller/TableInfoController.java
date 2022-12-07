@@ -3,6 +3,7 @@ package com.fhs.generate.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.generate.constant.GenerateConstant;
@@ -59,8 +60,7 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
     @PostMapping("pagerAdvance")
     @ApiOperation("后台-高级分页查询")
     public IPage<TableInfoVO> findPagerAdvance(@RequestBody QueryFilter<TableInfoPO> filter) {
-        QueryWrapper wrapper = filter.asWrapper(getPOClass());
-        this.setExportCache(wrapper);
+        LambdaJoinQueryWrapper<TableInfoPO> wrapper = filter.asWrapper(getPOClass());
         //这里的是1是DO的index
         return baseService.selectPageMP(filter.getPagerInfo(), wrapper);
     }
@@ -69,7 +69,7 @@ public class TableInfoController extends ModelSuperController<TableInfoVO, Table
     @GetMapping("findList")
     @ApiOperation("后台-不分页查询")
     public List<TableInfoVO> findList() throws Exception {
-        List<TableInfoVO> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass()));
+        List<TableInfoVO> dataList = baseService.selectListMP(QueryFilter.reqParam2Wrapper(baseService.getPoClass(),super.getParameterMap()));
         return dataList;
     }
 

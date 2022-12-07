@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>com.fhs-opensource</groupId>
                 <artifactId>mybatis-plus-advance</artifactId>
-                <version>4.0.1</version>
+                <version>${fhs.mp.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fhs-opensource</groupId>

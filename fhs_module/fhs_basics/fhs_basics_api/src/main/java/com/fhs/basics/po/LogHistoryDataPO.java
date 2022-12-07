@@ -21,7 +21,7 @@ import lombok.*;
 @ApiModel(value = "LogHistoryDataDO", description = "LogHistoryData参数")
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_log_history_data")
+@TableName(value = "t_log_history_data",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 public class LogHistoryDataPO extends BasePO<LogHistoryDataPO> {
     private static final long serialVersionUID = 312083419921410582L;

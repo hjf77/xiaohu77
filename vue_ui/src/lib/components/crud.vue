@@ -564,7 +564,7 @@ export default {
         ) {
           result.querys.push({
             group: item.group || "main",
-            operation: item.operation,
+            operator: item.operation,
             property: item.name,
             target: item.target,
             field: item.field,

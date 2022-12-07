@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_service_dict_item")
+@TableName(value = "t_service_dict_item",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 @NotRepeatDesc("字典编码不可重复")
 @ApiModel(description = "字典项")

@@ -25,7 +25,7 @@ import lombok.*;
 @ApiModel(value = "LogOperatorExtParamDO", description = "LogOperatorExtParam参数")
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_log_operator_ext_param")
+@TableName(value = "t_log_operator_ext_param",autoResultMap = true)
 @EqualsAndHashCode(callSuper = true)
 public class LogOperatorExtParamPO extends BasePO<LogOperatorExtParamPO> {
     private static final long serialVersionUID = -88643840123395899L;
