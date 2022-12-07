@@ -40,7 +40,7 @@
 		t_ucenter_ms_role_user_rela arur ON
 		ar.role_id=arur.role_id
 		WHERE
-		arur.user_id = #{userId}
+		arur.user_id = ${userId}
 	</select>
 
     <!-- 获取角色集合 -->

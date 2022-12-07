@@ -15,18 +15,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.po.BasePO;
-import com.fhs.core.trans.anno.Trans;
-import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Delete;
 import com.fhs.core.base.valid.group.Update;
-import com.fhs.basics.constant.BaseTransConstant;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -51,7 +50,7 @@ public class UcenterMsRolePO extends BasePO<UcenterMsRolePO> {
     /**
      * 角色id
      */
-    @TableId(value="role_id",type = IdType.ASSIGN_ID)
+    @TableId(value = "role_id", type = IdType.ASSIGN_ID)
     @ApiModelProperty("角色id")
     private Long roleId;
 
