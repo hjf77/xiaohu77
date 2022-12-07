@@ -27,12 +27,12 @@ public class FlowNodeVo implements Serializable {
      * 节点id
      */
     @ApiModelProperty(value = "节点id", required = true, example = "1024")
-    private String nodeId;
+    private String definitionKey;
     /**
      * 节点名称
      */
     @ApiModelProperty(value = "节点名称", required = true, example = "1024")
-    private String nodeName;
+    private String definitionName;
     /**
      * 执行人的code
      */
