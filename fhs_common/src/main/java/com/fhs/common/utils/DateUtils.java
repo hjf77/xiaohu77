@@ -14,10 +14,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -427,6 +424,37 @@ public class DateUtils {
         // min = ((diff / (60 * 1000)) - day * 24 * 60 - hour * 60);
         sec = (diff / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
         return sec + "";
+    }
+
+    /**
+     * 两个时间相差距离多少天多少小时多少分多少秒
+     *
+     * @param str1 开始时间
+     * @param str2 结束时间
+     * @return String 返回值为：xx天xx小时xx分xx秒
+     */
+    public static String getDistanceTime(LocalDateTime str1, LocalDateTime str2) {
+        if (null == str1 || null == str2) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        Duration duration = Duration.between(str1, str2);
+        long seconds = duration.getSeconds();
+        long day = seconds / (60 * 60 * 24);
+        if (0 < day) {
+            result.append(day).append("天");
+        }
+        long hour = seconds % (60 * 60 * 24) / (60 * 60);
+        if (org.apache.commons.lang.StringUtils.isNotBlank(result.toString()) || 0 < hour) {
+            result.append(hour).append("小时");
+        }
+        long minute = seconds % (60 * 60) / 60;
+        if (org.apache.commons.lang.StringUtils.isNotBlank(result.toString()) || 0 < minute) {
+            result.append(minute).append("分钟");
+        }
+        long second = seconds % 60;
+        result.append(second).append("秒");
+        return result.toString();
     }
 
     /**

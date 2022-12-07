@@ -203,4 +203,12 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     List<TreeNode> getUserCompanyTree(QueryWrapper<UcenterMsUserPO> wrapper);
+
+    /**
+     * 获取用户机构下有指定权限的所有用户
+     * @param userId    用户id
+     * @param roleId    角色id
+     * @return
+     */
+    List<Long> getUserByRoleOrg(String userId, String roleId);
 }

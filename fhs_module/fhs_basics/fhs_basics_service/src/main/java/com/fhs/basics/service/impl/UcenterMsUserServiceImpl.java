@@ -543,6 +543,16 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     }
 
 
+    @Override
+    public List<Long> getUserByRoleOrg(String userId, String roleId) {
+        UcenterMsUserVO ucenterMsUserVO = this.selectById(userId);
+        if (null == ucenterMsUserVO) {
+            return new ArrayList<>(0);
+        }
+        return sysUserMapper.getUserByRoleOrg(ucenterMsUserVO.getOrganizationId(), roleId);
+    }
+
+
     private List<String> getPermissionUrlAll() {
         return sysUserMapper.getPermissionUrlAll();
     }

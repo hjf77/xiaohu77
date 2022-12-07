@@ -108,4 +108,9 @@ public class FhsPager<T> implements IPage<T> {
         return this;
     }
 
+    public FhsPager(List<T> records,long total){
+        this.records = records;
+        this.total = total;
+    }
+
 }

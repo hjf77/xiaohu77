@@ -472,4 +472,17 @@ public class QueryFilter<T> {
         }
         return true;
     }
+
+    public Map<String, Object> queryFieldsMap() {
+
+        Map<String, Object> paramParams = new HashMap<>();
+        if (null != this.getQuerys()) {
+            paramParams = this.getQuerys().stream().collect(Collectors.toMap(QueryField::getProperty, QueryField::getValue));
+        }
+        if (null != this.getPagerInfo()) {
+            paramParams.put("pageNumber", this.getPagerInfo().getPageNumber());
+            paramParams.put("pageSize", this.getPagerInfo().getPageSize());
+        }
+        return paramParams;
+    }
 }
