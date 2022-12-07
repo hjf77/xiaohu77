@@ -20,13 +20,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <fhs.release.version>3.0.0-energy</fhs.release.version>
-        <fhs.easytrans.version>2.0.10</fhs.easytrans.version>
+        <fhs.easytrans.version>2.0.11</fhs.easytrans.version>
         <fhs.easycloud.version>1.0.1</fhs.easycloud.version>
         <fhs.swagger.version>2.6.1</fhs.swagger.version>
         <fhs.jetcache.version>2.5.16</fhs.jetcache.version>
         <fhs.spring-cloud-starter.version>3.0.4</fhs.spring-cloud-starter.version>
         <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
-        <fhs.mp.version>4.0.3</fhs.mp.version>
+        <fhs.mp.version>4.0.4</fhs.mp.version>
         <fhs.fastjson.version>1.2.83</fhs.fastjson.version>
         <fhs.sa-token.version>1.27.0</fhs.sa-token.version>
         <fhs.swagger-anno.version>1.5.10</fhs.swagger-anno.version>
@@ -69,7 +69,7 @@
             <dependency>
                 <groupId>com.fhs-opensource</groupId>
                 <artifactId>mybatis-plus-advance</artifactId>
-                <version>4.0.1</version>
+                <version>${fhs.mp.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fhs-opensource</groupId>
@@ -128,7 +128,7 @@
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
-                <version>2.17.0</version>
+                <version>2.17.2</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>

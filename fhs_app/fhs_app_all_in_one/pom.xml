@@ -5,11 +5,11 @@
     <parent>
         <artifactId>fhs_app</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0-energy</version>
+        <version>3.0.0</version>
 
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0-energy</version>
+    <version>3.0.0</version>
     <artifactId>fhs_app_all_in_one</artifactId>
     <description>
         本项目把所有的依赖都加到一个里面了,适用于非分布式部署模式,同时也没有使用Ncos等，也不需要网关
@@ -60,6 +60,12 @@
             <version>${fhs.release.version}</version>
         </dependency>
 
+        <!--工作流模块，移植的ruoyi vue pro不需要的可以注释掉-->
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_bpm_service</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,21 +78,21 @@
         </dependency>
 
         <!--demo使用-->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
-            <version>2.2.6</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.poi</groupId>-->
+<!--            <artifactId>poi-ooxml</artifactId>-->
+<!--            <version>4.1.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.poi</groupId>-->
+<!--            <artifactId>poi</artifactId>-->
+<!--            <version>4.1.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>easyexcel</artifactId>-->
+<!--            <version>2.2.6</version>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>
