@@ -26,6 +26,10 @@ public class BpmTaskAssignRuleBaseVO implements TransPojo {
     private Set<Long> options;
 
     @ApiModelProperty(value = "规则值数组", required = true, example = "1,2,3")
+    @NotNull(message = "规则值数组不能为空")
+    private Set<String> optionStr;
+
+    @ApiModelProperty(value = "规则值数组", required = true, example = "1,2,3")
     private String optionNames;
 
 }
