@@ -67,11 +67,6 @@ public class LeftMenuVO extends BaseObject<LeftMenuVO> {
     private String image;
 
     /**
-     * 国家化码
-     */
-    private String internationalCode;
-
-    /**
      * iframe模式 服务器url
      */
     private String serverUrl;

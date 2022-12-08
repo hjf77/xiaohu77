@@ -161,11 +161,6 @@ public class SettMsMenuPO extends BasePO<SettMsMenuPO> implements Treeable {
     @ApiModelProperty("图标")
     private String icon;
 
-    /**
-     * 排序
-     */
-    @TableField(exist = false)
-    private String internationalCode;
 
 
     @Override
