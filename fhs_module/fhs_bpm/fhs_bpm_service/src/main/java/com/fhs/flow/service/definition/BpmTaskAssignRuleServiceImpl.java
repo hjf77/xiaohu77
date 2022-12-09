@@ -35,6 +35,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -170,6 +171,7 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
             }
             if (CollUtil.isNotEmpty(optionNames)) {
                 vo.setOptionNames(String.join(",", optionNames));
+                vo.setOptionStr(vo.getOptions().stream().map(String::valueOf).collect(Collectors.toSet()));
             }
         }
     }
