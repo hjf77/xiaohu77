@@ -106,17 +106,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
 
-    /**
-     * 获取密码
-     *
-     * @param sysUser
-     */
-    @PostMapping("readPass")
-    public void readPass(UcenterMsUserVO sysUser) {
-        String isSuccess = sysUserService.readPass(sysUser.getUserName());
-        super.outWrite(isSuccess);
-    }
-
 
     @GetMapping("getUserByCompanyId")
     @ApiOperation("根据单位id获取单位下的用户集合")
