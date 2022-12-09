@@ -43,34 +43,13 @@ public class SuperBean<T extends SuperBean> extends BaseObject<T> {
     @JsonIgnore
     private Map<String, String> dataPermissin = new HashMap<>();
 
-    /**
-     * 配合mybatis jpa between注解过滤条件使用
-     */
-    @TableField(exist = false)
-    @JSONField(serialize = false)
-    @JsonIgnore
-    private Map<String, String> between = new HashMap<>();
 
-    /**
-     * 配合mybatis jpa in注解使用
-     */
-    @TableField(exist = false)
-    @JSONField(serialize = false)
-    @JsonIgnore
-    private Map<String, String> inFilter = new HashMap<>();
 
     @TableField(exist = false)
     @JSONField(serialize = false)
     @JsonIgnore
     private Map<String, Object> userInfo = new HashMap<>();
 
-    /**
-     * 高级搜索过滤条件
-     */
-    @TableField(exist = false)
-    @JSONField(serialize = false)
-    @JsonIgnore
-    private String extAdvanceFilterParam;
 
     @TableField(exist = false)
     @JSONField(serialize = false)
