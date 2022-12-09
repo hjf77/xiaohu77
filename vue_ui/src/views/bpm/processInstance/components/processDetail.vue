@@ -52,11 +52,11 @@
                   <el-tag type="info" size="mini">{{ item.assigneeUser.deptName }}</el-tag>
                 </label>
                 <label style="font-weight: normal" v-if="item.createTime">创建时间：</label>
-                <label style="color:#8a909c; font-weight: normal">{{ parseTime(item.createTime) }}</label>
+                <label style="color:#8a909c; font-weight: normal">{{ item.createTime }}</label>
                 <label v-if="item.endTime" style="margin-left: 30px;font-weight: normal">审批时间：</label>
-                <label v-if="item.endTime" style="color:#8a909c;font-weight: normal"> {{ parseTime(item.endTime) }}</label>
-                <label v-if="item.durationInMillis" style="margin-left: 30px;font-weight: normal">耗时：</label>
-                <label v-if="item.durationInMillis" style="color:#8a909c;font-weight: normal"> {{ getDateStar(item.durationInMillis) }} </label>
+                <label v-if="item.endTime" style="color:#8a909c;font-weight: normal"> {{ item.endTime }}</label>
+                <label v-if="item.elapsedTime" style="margin-left: 30px;font-weight: normal">耗时：</label>
+                <label v-if="item.elapsedTime" style="color:#8a909c;font-weight: normal">{{ item.elapsedTime }}</label>
                 <p v-if="item.reason">
                   <el-tag :type="getTimelineItemType(item)">{{ item.reason }}</el-tag>
                 </p>
@@ -80,13 +80,28 @@
       <el-form ref="updateAssigneeForm" :model="updateAssignee.form" :rules="updateAssignee.rules" label-width="110px">
         <el-form-item label="新审批人" prop="assigneeUserId">
           <el-select v-model="updateAssignee.form.assigneeUserId" clearable style="width: 100%">
-            <el-option v-for="item in userOptions" :key="parseInt(item.userId)" :label="item.userName" :value="parseInt(item.userId)" />
+            <el-option v-for="item in userOptions" :key="item.userId" :label="item.userName" :value="item.userId" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitUpdateAssigneeForm">确 定</el-button>
         <el-button @click="cancelUpdateAssigneeForm">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 对话框（驳回-审批人列表） -->
+    <el-dialog title="审批人列表" :visible.sync="back.open" width="500px" append-to-body>
+      <el-form ref="backForm" :model="back.form" :rules="back.rules" label-width="110px">
+        <el-form-item label="新审批人" prop="assigneeUserId">
+          <el-select v-model="back.form.assigneeUserId" clearable style="width: 100%" @change="backChange">
+            <el-option v-for="item in backUserOptions" :key="item.definitionKey" :label="item.definitionName" :value="item.definitionKey" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitBackForm">确 定</el-button>
+        <el-button @click="cancelBackForm">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -135,6 +150,20 @@ export default {
           assigneeUserId: [{ required: true, message: "新审批人不能为空", trigger: "change" }],
         }
       },
+
+      // 驳回-审批人列表
+      backUserOptions: [],
+      back: {
+        open: false,
+        form: {
+          assigneeUserId: undefined,
+        },
+        rules: {
+          assigneeUserId: [{ required: true, message: "新审批人不能为空", trigger: "change" }],
+        }
+      },
+      // 驳回传参
+      backQurey: {},
     }
   },
   mounted() {
@@ -155,7 +184,6 @@ export default {
     }).then((res) => {
       this.userOptions.push(...res);
     })
-    console.log('this.userOptions',this.userOptions);
   },
   methods: {
     /** 获得流程实例 */
@@ -170,6 +198,7 @@ export default {
           return;
         }
         this.processInstance = res.data;
+        console.log(this.processInstance,'1111111111');
 
         // 加载流程图
         this.$pagexRequest({
@@ -202,6 +231,15 @@ export default {
             this.tasks.push(item);
           }
         });
+        console.log('resresres',res[0]);
+
+        // 驳回节点列表
+        this.$pagexRequest({
+          url: `/basic/ms/task/getBackNodesByProcessInstanceId?taskId=${ res[0].id }&processInstanceId=${ res[0].processInstance.id }`,
+          method: 'GET',
+        }).then((res) => {
+          this.backUserOptions = res;
+        })
       
         // 排序，将未完成的排在前面，已完成的排在后面；
         this.tasks.sort((a, b) => {
@@ -346,33 +384,49 @@ export default {
     },
     /** 处理审批退回的操作 */
     handleBack(task) {
+      this.resetBackForm();
+      this.back.form.id = task.id;
+      // 打开弹窗
+      this.back.open = true;
       const reason = this.auditForms[this.auditForms.length-1].reason;
-      let data = {
+      this.backQurey = {
         taskId: task.id,
         processInstanceId: task.processInstance.id,
         reason: reason,
       }
-      this.$pagexRequest({
-        url: `/basic/ms/task/getBackNodesByProcessInstanceId?taskId=${ task.id }&processInstanceId=${ task.processInstance.id }`,
-        method: 'GET',
-      }).then((res) => {
-        console.log(res,'res');
-        if (res.length) {
-          res.forEach((item,i) => {
-            data.definitionKey = res[0].definitionKey
-          });
-          this.$pagexRequest({
-            url: `/basic/ms/task/doBackStep`,
-            method: 'POST',
-            data: data,
-          }).then((res) => {
-            this.getDetail(); // 获得最新详情
-            this.msgSuccess("任务驳回成功！");
-          })
+    },
+    /** 下拉框change事件 */
+    backChange(val){
+      this.backQurey.definitionKey = val;
+      console.log(this.backQurey,'this.backQurey');
+    },
+    resetBackForm() {
+      this.back.form = {
+        id: undefined,
+        assigneeUserId: undefined,
+      };
+      this.resetForm("backForm");
+    },
+    submitBackForm(){
+      this.$refs['backForm'].validate(valid => {
+        if (!valid) {
+          return;
         }
-      })
-
-    }
+        this.$pagexRequest({
+          url: `/basic/ms/task/doBackStep`,
+          method: 'POST',
+          data: this.backQurey,
+        }).then((res) => {
+          this.back.open = false;
+          this.getDetail(); // 获得最新详情
+          this.msgSuccess("任务驳回成功！");
+        }).catch(() => console.info("操作取消！"));
+      });
+    },
+    cancelBackForm(){
+      this.back.open = false;
+      this.resetBackForm();
+    },
   }
 }
 </script>

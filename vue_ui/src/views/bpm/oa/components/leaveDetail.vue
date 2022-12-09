@@ -43,27 +43,24 @@ export default {
           type: "text",
           name: "startTime",
           label: "开始时间",
-          detail: "startTime",
         },
         {
           type: "text",
           name: "endTime",
           label: "结束时间",
-          detail: "endTime",
         },
         {
-          type: "select",
+          type: "text",
           name: "type",
           label: "请假类型",
-          dictCode: 'bpm_oa_leave_type',
-          // detail: "transMap.typeName",
+          // dictCode: 'bpm_oa_leave_type',
+          detail: "transMap.typeName",
           isValueNum: true,
         },
         {
           type: "text",
           name: "reason",
           label: "原因",
-          detail: "reason",
         },
       ]
     };

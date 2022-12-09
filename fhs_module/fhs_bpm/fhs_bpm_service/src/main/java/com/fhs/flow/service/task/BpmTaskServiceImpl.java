@@ -2,6 +2,7 @@ package com.fhs.flow.service.task;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.service.UcenterMsOrganizationService;
@@ -95,8 +96,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
     private BpmTaskExtMapper taskExtMapper;
     @Resource
     private BpmMessageService messageService;
-    @Resource
-    private BpmTaskExtMapper bpmTaskExtMapper;
+
 
     @Override
     public PageResult<BpmTaskTodoPageItemRespVO> getTodoTaskPage(Long userId, BpmTaskTodoPageReqVO pageVO) {
@@ -281,6 +281,25 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         BpmTaskExtPO taskExtDO =
                 BpmTaskConvert.INSTANCE.convert2TaskExt(task).setResult(BpmProcessInstanceResultEnum.PROCESS.getResult());
         taskExtMapper.insert(taskExtDO);
+        if (FlowableConstant.FLOW_SUBMITTER.equals(task.getName())) {
+
+            // 如果是提交步骤就自动通过
+            taskExtDO.setResult(BpmProcessInstanceResultEnum.APPROVE.getResult());
+            taskExtDO.setReason("提交");
+            // 通过任务
+            HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+                    .processInstanceId(task.getProcessInstanceId())
+                    .singleResult();
+            if (StringUtils.isEmpty(hi.getStartUserId())) {
+                return;
+            }
+            // 设置提交人
+            taskExtDO.setAssigneeUserId(Long.valueOf(hi.getStartUserId()));
+            BpmTaskApproveReqVO reqVo = new BpmTaskApproveReqVO();
+            reqVo.setId(task.getId());
+            taskService.setAssignee(taskExtDO.getTaskId(),taskExtDO.getAssigneeUserId().toString());
+            this.approveTask(taskExtDO.getAssigneeUserId(), reqVo);
+        }
     }
 
     @Override
@@ -422,8 +441,8 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         if (CollectionUtils.isNotEmpty(userTasks)) {
             userTasks.forEach(activityInstance -> {
                 FlowNodeVo node = new FlowNodeVo();
-                node.setNodeId(activityInstance.getActivityId());
-                node.setNodeName(activityInstance.getActivityName());
+                node.setDefinitionKey(activityInstance.getActivityId());
+                node.setDefinitionName(activityInstance.getActivityName());
                 node.setEndTime(activityInstance.getEndTime());
                 node.setUserName(activityIdUserNames.get(activityInstance.getActivityId()));
                 backNods.add(node);
@@ -433,7 +452,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         if (MapUtils.isNotEmpty(taskInstanceMap)) {
             parallelGatewayUserTasks.forEach((activity, activities) -> {
                 FlowNodeVo node = new FlowNodeVo();
-                node.setNodeId(activity.getActivityId());
+                node.setDefinitionKey(activity.getActivityId());
                 node.setEndTime(activity.getEndTime());
                 StringBuffer nodeNames = new StringBuffer("会签:");
                 StringBuffer userNames = new StringBuffer("审批人员:");
@@ -442,7 +461,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
                         nodeNames.append(activityInstance.getActivityName()).append(",");
                         userNames.append(activityIdUserNames.get(activityInstance.getActivityId())).append(",");
                     });
-                    node.setNodeName(nodeNames.toString());
+                    node.setDefinitionName(nodeNames.toString());
                     node.setUserName(userNames.toString());
                     backNods.add(node);
                 }
@@ -451,7 +470,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         //去重合并
         List<FlowNodeVo> datas = backNods.stream().collect(
                 Collectors.collectingAndThen(Collectors.toCollection(() ->
-                        new TreeSet<>(Comparator.comparing(nodeVo -> nodeVo.getNodeId()))), ArrayList::new));
+                        new TreeSet<>(Comparator.comparing(nodeVo -> nodeVo.getDefinitionKey()))), ArrayList::new));
 
         //排序
         datas.sort(Comparator.comparing(FlowNodeVo::getEndTime).reversed());
