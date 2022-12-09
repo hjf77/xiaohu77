@@ -108,10 +108,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     }
 
-    @Override
-    public String readPass(String userName) {
-        return ENCodeUtils.encodeByMD5(userName + passsalt).toLowerCase();
-    }
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override

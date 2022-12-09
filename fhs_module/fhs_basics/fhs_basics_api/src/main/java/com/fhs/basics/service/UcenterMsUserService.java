@@ -46,13 +46,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     void sendMail(UcenterMsUserPO adminUser, String pas);
 
-    /***
-     * 获取密码
-     *
-     * @param userName
-     * @return
-     */
-    String readPass(String userName);
+
 
     /**
      * 添加用户角色
