@@ -46,7 +46,7 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRolePO> {
      * @param roleId
      * @return
      */
-    public List<String> getRolePermissionButtons(@Param("roleId") Integer roleId);
+    public List<String> getRolePermissionButtons(@Param("roleId") Long roleId);
 
     public List<String> searchButtonId(Map<String, Object> map);
 

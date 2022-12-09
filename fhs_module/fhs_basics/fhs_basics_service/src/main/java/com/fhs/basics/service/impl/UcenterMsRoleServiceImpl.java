@@ -186,7 +186,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
      * 查询角色的按钮信息
      */
     @Override
-    public String[] getRolePermissionButtons(Integer id) {
+    public String[] getRolePermissionButtons(Long id) {
         List<String> rolePermissionButtons = mapper.getRolePermissionButtons(id);
         return rolePermissionButtons.toArray(new String[rolePermissionButtons.size()]);
     }

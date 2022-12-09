@@ -78,7 +78,7 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
      * @param roleId
      * @return
      */
-    String[] getRolePermissionButtons(Integer roleId);
+    String[] getRolePermissionButtons(Long roleId);
 
     /**
      * 根据角色查询按钮id

@@ -183,7 +183,7 @@
 			LEFT JOIN t_ucenter_ms_role_permission ro ON ro.permission_id = b.permission_id
 			LEFT JOIN t_ucenter_ms_role r ON r.role_id = ro.role_id
 		WHERE
-		r.role_id = #{roleId}
+		r.role_id = ${roleId}
     </select>
 
 </mapper>
