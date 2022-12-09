@@ -303,6 +303,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
         List<SettMsMenuVO> menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(paramMap), SettMsMenuVO.class);
         menuList = menuFilter(user, menuList);
+
         Map<String, LeftMenuVO> leftMenuMap = new HashMap<>();
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
@@ -321,6 +322,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
                     }
+
                 }
                 // 如果是一级菜单则挂写到result去
                 else if (adminMenu.getFatherMenuId() != null && BasicsMenuConstant.MENU_ROOT_STR.equals(adminMenu.getFatherMenuId())) {
@@ -339,9 +341,22 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         for (LeftMenuVO menu : menus) {
             tempRouter = new VueRouterVO();
             converterMenu2Router(menu, tempRouter, true);
+            initSon(tempRouter);
             result.add(tempRouter);
         }
         return result.stream().sorted(Comparator.comparing(VueRouterVO::getOrderIndex)).collect(Collectors.toList());
+    }
+
+    private void initSon(VueRouterVO tempRouter) {
+        if (!tempRouter.getChildren().isEmpty()) {
+            List<VueRouterVO> vueRouterVOS = tempRouter.getChildren().stream().sorted(Comparator.comparing(VueRouterVO::getOrderIndex)).collect(Collectors.toList());
+            tempRouter.setChildren(vueRouterVOS);
+            for (VueRouterVO vueRouterVO : vueRouterVOS) {
+                if (!vueRouterVO.getChildren().isEmpty()) {
+                    initSon(vueRouterVO);
+                }
+            }
+        }
     }
 
     /**
@@ -386,7 +401,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             userMenuIds = sysUserMapper.selectMenuIdByUserId(user);
         }
 
-        Map<String, SettMsMenuVO> menuMap = new HashMap<>();
+        Map<String, SettMsMenuVO> menuMap = new LinkedHashMap<>();
         menuList.forEach(menu -> {
             menuMap.put(menu.getMenuId(), menu);
         });
