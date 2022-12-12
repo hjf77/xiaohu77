@@ -74,5 +74,5 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
      */
     @TableField("is_freeze")
     @ApiModelProperty("是否冻结")
-    protected Integer isDelete;
+    protected Integer isFreeze;
 }
