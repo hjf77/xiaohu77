@@ -99,5 +99,5 @@ public class ServiceDictItemPO extends BasePO<ServiceDictItemPO> {
      */
     @TableField("is_freeze")
     @ApiModelProperty("是否冻结")
-    protected Integer isDelete;
+    protected Integer isFreeze;
 }
