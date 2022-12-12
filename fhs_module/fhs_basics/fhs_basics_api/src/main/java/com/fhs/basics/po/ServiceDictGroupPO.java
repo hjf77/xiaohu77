@@ -7,19 +7,17 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.anno.NotRepeatDesc;
 import com.fhs.core.base.anno.NotRepeatField;
 import com.fhs.core.base.po.BasePO;
+import com.fhs.core.base.valid.group.Add;
+import com.fhs.core.base.valid.group.Delete;
+import com.fhs.core.base.valid.group.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import com.fhs.core.base.valid.group.Add;
-import com.fhs.core.base.valid.group.Delete;
-import com.fhs.core.base.valid.group.Update;
 import org.apache.ibatis.type.JdbcType;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -71,4 +69,10 @@ public class ServiceDictGroupPO extends BasePO<ServiceDictGroupPO> {
     @NotRepeatField
     private String groupCode;
 
+    /**
+     * 是否冻结
+     */
+    @TableField("is_freeze")
+    @ApiModelProperty("是否冻结")
+    protected Integer isDelete;
 }

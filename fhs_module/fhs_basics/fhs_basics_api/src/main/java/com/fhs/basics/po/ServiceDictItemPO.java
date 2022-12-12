@@ -94,5 +94,10 @@ public class ServiceDictItemPO extends BasePO<ServiceDictItemPO> {
     @ApiModelProperty("排序字段")
     private Integer orderNum;
 
-
+    /**
+     * 是否冻结
+     */
+    @TableField("is_freeze")
+    @ApiModelProperty("是否冻结")
+    protected Integer isDelete;
 }
