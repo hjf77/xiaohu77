@@ -398,6 +398,13 @@ public class QueryFilter<T> {
                 Object[] values = this.convert2ObjectArray(queryField.getValue());
                 if (values != null && values.length > 0) {
                     queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
+                    queryWrapper.notIn(field,this.convert2ObjectArray(queryField.getValue()));
+                }
+                break;
+            case "not_in":
+                Object[] vals = this.convert2ObjectArray(queryField.getValue());
+                if (vals != null && vals.length > 0) {
+                    queryWrapper.notIn(field,this.convert2ObjectArray(queryField.getValue()));
                 }
                 break;
             case "between"://前端经常用的是 时间过滤，比如查询 2020-01-01 到2020-01-02 如果用between会是 >   2020-01-01 and 2020-01-02<
