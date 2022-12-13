@@ -282,7 +282,6 @@ public class BpmTaskServiceImpl implements BpmTaskService {
                 BpmTaskConvert.INSTANCE.convert2TaskExt(task).setResult(BpmProcessInstanceResultEnum.PROCESS.getResult());
         taskExtMapper.insert(taskExtDO);
         if (FlowableConstant.FLOW_SUBMITTER.equals(task.getName())) {
-
             // 如果是提交步骤就自动通过
             taskExtDO.setResult(BpmProcessInstanceResultEnum.APPROVE.getResult());
             taskExtDO.setReason("提交");

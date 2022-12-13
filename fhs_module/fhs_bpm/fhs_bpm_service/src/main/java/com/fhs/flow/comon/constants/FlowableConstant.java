@@ -38,5 +38,9 @@ public interface FlowableConstant {
      * 提交人节点名称
      */
     public static final String FLOW_SUBMITTER = "提交";
+    /**
+     * 提交人节点标识
+     */
+    public static final String FLOW_SUBMITTER_KEY = "auto";
 
 }

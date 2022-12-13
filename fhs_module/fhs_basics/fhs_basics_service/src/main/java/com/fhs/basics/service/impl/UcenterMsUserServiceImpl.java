@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
+import com.fhs.basics.context.UserContext;
 import com.fhs.basics.mapper.SettMsMenuMapper;
 import com.fhs.basics.mapper.UcenterMsUserMapper;
 import com.fhs.basics.po.UcenterMsTenantPO;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -563,6 +565,22 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             return new ArrayList<>(0);
         }
         return sysUserMapper.getUserByRoleOrg(ucenterMsUserVO.getOrganizationId(), roleId);
+    }
+
+    @Override
+    public Set<Long> getFatherOrgUser(Set<Long> userIds,Long startUserId) {
+        if (CollectionUtils.isEmpty(userIds)) {
+            return new HashSet<>(0);
+        }
+        return sysUserMapper.selectParentUser(startUserId, userIds);
+    }
+
+    @Override
+    public Set<Long> getFatherOrgRoleUser(Set<Long> roleIds,Long startUserId) {
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return new HashSet<>(0);
+        }
+        return sysUserMapper.selectParentRoleUser(startUserId, roleIds);
     }
 
 

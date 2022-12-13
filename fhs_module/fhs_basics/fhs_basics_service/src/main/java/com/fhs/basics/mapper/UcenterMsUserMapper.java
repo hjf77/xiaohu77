@@ -274,4 +274,22 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserPO> {
      * @return
      */
     List<Long> getUserByRoleOrg(@Param("orgId") String orgId, @Param("roleId") String roleId);
+
+    /**
+     * 根据指定用户获取父级机构
+     *
+     * @param userId
+     * @param userIds
+     * @return
+     */
+    Set<Long> selectParentUser(@Param("userId") Long userId, @Param("userIds") Set<Long> userIds);
+
+
+    /**
+     * 获取指定用户父级机构的审核人
+     * @param userId
+     * @param roleIds
+     * @return
+     */
+    Set<Long> selectParentRoleUser(@Param("userId") Long userId,@Param("roleIds") Set<Long> roleIds);
 }

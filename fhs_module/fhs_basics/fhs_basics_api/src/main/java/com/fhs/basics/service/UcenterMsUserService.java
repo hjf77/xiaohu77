@@ -211,4 +211,18 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @return
      */
     List<Long> getUserByRoleOrg(String userId, String roleId);
+
+    /**
+     * 根据当前登录人过滤指定集合中不是父级机构的审核人
+     * @param userIds
+     * @return
+     */
+    Set<Long> getFatherOrgUser(Set<Long> userIds,Long startUserId);
+
+    /**
+     * 根据当前登录人过滤指定集合中不是父级机构的审核人
+     * @param roleIds
+     * @return
+     */
+    Set<Long> getFatherOrgRoleUser(Set<Long> roleIds,Long startUserId);
 }
