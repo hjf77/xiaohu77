@@ -1097,8 +1097,9 @@ public class ExcelUtils {
                     value = format.format(date);
                     ;
                 } else {// 纯数字
-                    BigDecimal big = new BigDecimal(cell.getNumericCellValue());
-                    value = big.toString();
+                    Double numericCellValue = cell.getNumericCellValue();
+//                    BigDecimal big = new BigDecimal(cell.getNumericCellValue());
+                    value = numericCellValue.toString();
                     // 解决1234.0 去掉后面的.0
                     if (null != value && !"".equals(value.trim())) {
                         String[] item = value.split("[.]");
