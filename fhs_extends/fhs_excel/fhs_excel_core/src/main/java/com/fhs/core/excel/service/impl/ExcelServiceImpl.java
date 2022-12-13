@@ -22,6 +22,7 @@ import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.fhs.trans.service.impl.DictionaryTransService;
 import com.github.liaochong.myexcel.core.DefaultExcelBuilder;
+import com.github.liaochong.myexcel.core.strategy.WidthStrategy;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -220,7 +221,11 @@ public class ExcelServiceImpl implements ExcelService {
             }
             dataMapList.add(val);
         }
-        return DefaultExcelBuilder.of(Map.class).sheetName("sheet1").titles(titles).fieldDisplayOrder(names).build(dataMapList);
+        int[] widths = new int[titles.size()];
+        for (int i = 0; i < widths.length; i++) {
+            widths[i] = 15;
+        }
+        return DefaultExcelBuilder.of(Map.class).sheetName("sheet1").titles(titles).fieldDisplayOrder(names).widths(widths).build(dataMapList);
     }
 
     /**
