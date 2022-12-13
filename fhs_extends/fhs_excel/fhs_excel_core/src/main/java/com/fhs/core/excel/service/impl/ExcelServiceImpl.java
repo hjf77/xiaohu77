@@ -661,8 +661,8 @@ public class ExcelServiceImpl implements ExcelService {
             for (int i = 0; i < titleArray.length; i++) {
                 // ParamChecker.isNotNullOrEmpty(titleArray[i], "模板格式有误, 请检查模板!");
                 String tempTitle = ConverterUtils.toString(titleArray[i]);
-                if (tempTitle.contains("(")) {
-                    titleArray[i] = tempTitle.substring(0, tempTitle.indexOf("("));
+                if (tempTitle.contains("*")) {
+                    titleArray[i] = tempTitle.substring(0, tempTitle.indexOf("*") - 1);
                 }
             }
             importExcel(dataArray, titleArray, targetService, importSett);
