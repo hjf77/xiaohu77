@@ -32,6 +32,7 @@ import com.fhs.core.trans.vo.VO;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.excel.dto.ExcelImportSett;
 import com.fhs.trans.service.impl.TransService;
+import com.github.liaochong.myexcel.utils.AttachmentExportUtil;
 import com.github.liaochong.myexcel.utils.FileExportUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -194,6 +195,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
 
     /**
      * 格式化返回列
+     *
      * @param records
      */
     public void parseFields(LinkedHashMap<String, String> records) {
@@ -216,10 +218,8 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         transService.transMore(data);
         parseRecords(data, false, true);
         Workbook book = this.excelService.exportExcelField(data, excelExportFieldVO.getFieldVOList());
-        String excelTempPath = EConfig.getPathPropertiesValue("fileSavePath") + "/" + StringUtils.getUUID() + ".xlsx";
-        FileExportUtil.export(book, new File(excelTempPath));
-        FileUtils.download(excelTempPath, getResponse(), excelExportFieldVO.getFileName() + ".xlsx");
-        FileUtils.deleteFile(excelTempPath);
+        //使用myExcel工具类导出数据
+        AttachmentExportUtil.export(book, excelExportFieldVO.getFileName(), getResponse());
     }
 
 
@@ -321,11 +321,11 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         String path = super.getRequest().getServletPath();
         String namespace = path.split("/")[2];
         boolean bool = StpUtil.hasPermission(namespace + ":" + permitName);
-        if(!bool){
+        if (!bool) {
             LogNamespace annotation = this.getClass().getAnnotation(LogNamespace.class);
             List<String> namespaces = Arrays.asList(annotation.namespace());
             for (String ns : namespaces) {
-                if(StpUtil.hasPermission(ns + ":" + permitName)){
+                if (StpUtil.hasPermission(ns + ":" + permitName)) {
                     return true;
                 }
             }
