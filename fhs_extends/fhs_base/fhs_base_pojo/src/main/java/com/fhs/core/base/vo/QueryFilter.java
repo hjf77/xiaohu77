@@ -398,7 +398,6 @@ public class QueryFilter<T> {
                 Object[] values = this.convert2ObjectArray(queryField.getValue());
                 if (values != null && values.length > 0) {
                     queryWrapper.in(field, this.convert2ObjectArray(queryField.getValue()));
-                    queryWrapper.notIn(field,this.convert2ObjectArray(queryField.getValue()));
                 }
                 break;
             case "not_in":
