@@ -160,4 +160,10 @@ public interface BpmTaskService {
      * @return
      */
     public boolean checkActivitySubprocessByActivityId(String processDefId, String activityId);
+
+    /**
+     * 获取登陆人待办任务数量
+     * @return
+     */
+    Long getTodoTaskCount();
 }

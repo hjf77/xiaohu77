@@ -617,6 +617,11 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         return flag;
     }
 
+    @Override
+    public Long getTodoTaskCount() {
+        return taskService.createTaskQuery().taskAssignee(String.valueOf(UserContext.getSessionuser().getUserId())).count();
+    }
+
     public List<FlowNode> findFlowNodesByActivityId(String processDefId, String activityId) {
         List<FlowNode> activities = new ArrayList<>();
         BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefId);

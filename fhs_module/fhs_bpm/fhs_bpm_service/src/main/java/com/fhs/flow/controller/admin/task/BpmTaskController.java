@@ -38,6 +38,13 @@ public class BpmTaskController {
         return taskService.getTodoTaskPage(UserContext.getSessionuser().getUserId(), ClassUtils.convert2Clz(queryFilter.queryFieldsMap(), BpmTaskTodoPageReqVO.class)).toFhsPager();
     }
 
+    @GetMapping("todo-page-count")
+    @ApiOperation("获取 Todo 待办任务数量")
+    @SaCheckRole("task:see")
+    public HttpResult<Long> getTodoTaskCount() {
+        return HttpResult.success(taskService.getTodoTaskCount());
+    }
+
     @PostMapping("done-page")
     @ApiOperation("获取 Done 已办任务分页")
     @SaCheckRole("task:see")
