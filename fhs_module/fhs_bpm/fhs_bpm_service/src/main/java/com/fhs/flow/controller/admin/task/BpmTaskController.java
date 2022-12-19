@@ -6,11 +6,13 @@ import com.fhs.common.utils.ClassUtils;
 import com.fhs.core.base.vo.FhsPager;
 import com.fhs.core.base.vo.QueryFilter;
 import com.fhs.core.result.HttpResult;
+import com.fhs.flow.controller.admin.task.vo.instance.BpmProcessInstanceCreateBusVO;
 import com.fhs.flow.controller.admin.task.vo.task.*;
 import com.fhs.flow.service.task.BpmTaskService;
 import com.fhs.module.base.swagger.anno.ApiGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +104,7 @@ public class BpmTaskController {
 
     /**
      * 驳回节点
+     *
      * @param params 参数
      * @return
      */
@@ -110,6 +113,28 @@ public class BpmTaskController {
     public HttpResult<Boolean> doBackStep(@Valid @RequestBody BackTaskVo params) {
         params.setUserId(UserContext.getSessionuser().getUserId());
         taskService.backToStepTask(params);
+        return success(true).toHttpResult();
+    }
+
+    @GetMapping("/list-by-process-definition-key")
+    @ApiOperation(value = "根据流程定义key和业务id获取审批记录", notes = "包括完成的、未完成的")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "businessKey", value = "业务id", required = true),
+            @ApiImplicitParam(name = "processDefinitionKey", value = "流程定义的Key", required = true)
+    })
+    @SaCheckRole("task:see")
+    public List<BpmTaskRespVO> getTaskListByProcessDefinitionKey(
+            @RequestParam("businessKey") String businessKey
+            , @RequestParam("processDefinitionKey") String processDefinitionKey) {
+        return taskService.getTaskListByProcessDefinitionKey(businessKey,processDefinitionKey);
+    }
+
+
+    @PutMapping("/resubmit")
+    @ApiOperation("重新提交")
+    @SaCheckRole("task:update")
+    public HttpResult<Boolean> resubmit(@Valid @RequestBody BpmProcessInstanceCreateBusVO busVO) {
+        taskService.resubmit(UserContext.getSessionuser().getUserId(), busVO);
         return success(true).toHttpResult();
     }
 }

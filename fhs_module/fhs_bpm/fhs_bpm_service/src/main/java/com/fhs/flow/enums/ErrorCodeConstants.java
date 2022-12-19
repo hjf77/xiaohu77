@@ -44,6 +44,7 @@ public interface ErrorCodeConstants {
 
     // ========== 流程任务 1-009-005-000 ==========
     ErrorCode TASK_COMPLETE_FAIL_NOT_EXISTS = new ErrorCode(1009005000, "审批任务失败，原因：该任务不处于未审批");
+    ErrorCode TASK_FAIL_NOT_EXISTS = new ErrorCode(1009005000, "提交失败，原因：不存在提交任务");
     ErrorCode TASK_COMPLETE_FAIL_ASSIGN_NOT_SELF = new ErrorCode(1009005001, "审批任务失败，原因：该任务的审批人不是你");
 
     // ========== 流程任务分配规则 1-009-006-000 ==========

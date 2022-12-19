@@ -15,6 +15,7 @@ import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.comon.utils.DateUtils;
 import com.fhs.flow.comon.utils.PageUtils;
 import com.fhs.flow.controller.admin.task.cmd.AddHisCommentCmd;
+import com.fhs.flow.controller.admin.task.vo.instance.BpmProcessInstanceCreateBusVO;
 import com.fhs.flow.controller.admin.task.vo.task.*;
 import com.fhs.flow.convert.task.BpmTaskConvert;
 import com.fhs.flow.dal.dataobject.task.BpmTaskExtPO;
@@ -281,24 +282,34 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         BpmTaskExtPO taskExtDO =
                 BpmTaskConvert.INSTANCE.convert2TaskExt(task).setResult(BpmProcessInstanceResultEnum.PROCESS.getResult());
         taskExtMapper.insert(taskExtDO);
-        if (FlowableConstant.FLOW_SUBMITTER.equals(task.getName())) {
-            // 如果是提交步骤就自动通过
-            taskExtDO.setResult(BpmProcessInstanceResultEnum.APPROVE.getResult());
-            taskExtDO.setReason("提交");
-            // 通过任务
-            HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
-                    .processInstanceId(task.getProcessInstanceId())
-                    .singleResult();
-            if (StringUtils.isEmpty(hi.getStartUserId())) {
-                return;
-            }
-            // 设置提交人
-            taskExtDO.setAssigneeUserId(Long.valueOf(hi.getStartUserId()));
-            BpmTaskApproveReqVO reqVo = new BpmTaskApproveReqVO();
-            reqVo.setId(task.getId());
-            taskService.setAssignee(taskExtDO.getTaskId(),taskExtDO.getAssigneeUserId().toString());
-            this.approveTask(taskExtDO.getAssigneeUserId(), reqVo);
+        this.autoCommit(task);
+    }
+
+    private void autoCommit(Task task) {
+        if (!FlowableConstant.FLOW_SUBMITTER.equals(task.getName())) {
+            // 任务标识为 auto 的才自动提交
+            return;
         }
+        // 判断是否是驳回过来的
+        long historicTaskCount = historyService.createHistoricTaskInstanceQuery().processInstanceId(task.getProcessInstanceId()).count();
+        if (0 < historicTaskCount) {
+            // 驳回到提交节点的有审批记录，不需要自动审批
+            return;
+        }
+        // 如果是提交步骤就自动通过
+        // 通过任务
+        HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+        if (StringUtils.isEmpty(hi.getStartUserId())) {
+            return;
+        }
+        // 设置提交人
+        BpmTaskApproveReqVO reqVo = new BpmTaskApproveReqVO();
+        reqVo.setId(task.getId());
+        reqVo.setReason("提交");
+        taskService.setAssignee(task.getId(), Long.valueOf(hi.getStartUserId()).toString());
+        this.approveTask(Long.valueOf(hi.getStartUserId()), reqVo);
     }
 
     @Override
@@ -620,6 +631,38 @@ public class BpmTaskServiceImpl implements BpmTaskService {
     @Override
     public Long getTodoTaskCount() {
         return taskService.createTaskQuery().taskAssignee(String.valueOf(UserContext.getSessionuser().getUserId())).count();
+    }
+
+    @Override
+    public List<BpmTaskRespVO> getTaskListByProcessDefinitionKey(String businessKey, String processDefinitionKey) {
+        // 获取流程实例
+        List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey, processDefinitionKey).list();
+        if (CollUtil.isEmpty(processInstances)) {
+            return Collections.emptyList();
+        }
+        return this.getTaskListByProcessInstanceId(processInstances.get(0).getProcessInstanceId());
+    }
+
+    @Override
+    public void resubmit(Long userId, BpmProcessInstanceCreateBusVO busVO) {
+        // 1. 根据流程key和业务id获取流程实例
+        // 获取流程实例
+        List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(busVO.getBusinessKey(), busVO.getProcessDefinitionKey()).list();
+        if (CollUtil.isEmpty(processInstances)) {
+            throw exception(PROCESS_INSTANCE_NOT_EXISTS);
+        }
+        // 2. 根据流程实例获取审批任务列表
+        List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstances.get(0).getProcessInstanceId()).orderByTaskCreateTime().desc().list();
+        if (CollUtil.isEmpty(taskList) || FlowableConstant.FLOW_SUBMITTER_KEY.equals(taskList.get(0).getTaskDefinitionKey())) {
+            // 3. 获取最近的审批任务，如果不是提交任务则报个错，
+            throw exception(TASK_FAIL_NOT_EXISTS);
+        }
+        // 是提交就调通过接口
+        BpmTaskApproveReqVO reqVO = new BpmTaskApproveReqVO();
+        reqVO.setReason("重新提交");
+        reqVO.setId(taskList.get(0).getId());
+        this.approveTask(userId,reqVO);
+
     }
 
     public List<FlowNode> findFlowNodesByActivityId(String processDefId, String activityId) {

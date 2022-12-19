@@ -151,4 +151,10 @@ public interface BpmProcessInstanceService {
      */
     void updateProcessInstanceExtReject(String id, String reason);
 
+    /**
+     * 创建业务流程实例
+     * @param createBusVO
+     * @return
+     */
+    String createBusinessInstance(BpmProcessInstanceCreateBusVO createBusVO);
 }

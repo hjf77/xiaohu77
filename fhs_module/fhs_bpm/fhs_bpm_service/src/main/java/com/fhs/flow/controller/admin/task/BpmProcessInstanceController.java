@@ -56,4 +56,12 @@ public class BpmProcessInstanceController {
         processInstanceService.cancelProcessInstance(UserContext.getSessionuser().getUserId(), cancelReqVO);
         return HttpResult.success(true);
     }
+
+
+    @PostMapping("/create-business-instance")
+    @ApiOperation("新建业务流程实例")
+    @SaCheckRole("process-instance:add")
+    public HttpResult<String> createBusinessInstance(@Valid @RequestBody BpmProcessInstanceCreateBusVO createBusVO) {
+        return HttpResult.success(processInstanceService.createBusinessInstance(createBusVO));
+    }
 }

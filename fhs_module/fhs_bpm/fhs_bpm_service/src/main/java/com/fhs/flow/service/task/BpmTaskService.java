@@ -2,6 +2,7 @@ package com.fhs.flow.service.task;
 
 import com.fhs.flow.comon.pojo.PageResult;
 import com.fhs.flow.comon.utils.CollectionUtils;
+import com.fhs.flow.controller.admin.task.vo.instance.BpmProcessInstanceCreateBusVO;
 import com.fhs.flow.controller.admin.task.vo.task.*;
 import org.flowable.bpmn.model.FlowNode;
 import org.flowable.task.api.Task;
@@ -166,4 +167,19 @@ public interface BpmTaskService {
      * @return
      */
     Long getTodoTaskCount();
+
+    /**
+     * 根据业务id和流程定义key获取审批历史
+     * @param businessKey
+     * @param processDefinitionKey
+     * @return
+     */
+    List<BpmTaskRespVO> getTaskListByProcessDefinitionKey(String businessKey, String processDefinitionKey);
+
+    /**
+     * 根据流程key和业务id获取提交任务并通过
+     * @param userId
+     * @param busVO
+     */
+    void resubmit(Long userId, BpmProcessInstanceCreateBusVO busVO);
 }
