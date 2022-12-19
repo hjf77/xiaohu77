@@ -653,7 +653,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         }
         // 2. 根据流程实例获取审批任务列表
         List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstances.get(0).getProcessInstanceId()).orderByTaskCreateTime().desc().list();
-        if (CollUtil.isEmpty(taskList) || FlowableConstant.FLOW_SUBMITTER_KEY.equals(taskList.get(0).getTaskDefinitionKey())) {
+        if (CollUtil.isEmpty(taskList) || !FlowableConstant.FLOW_SUBMITTER_KEY.equals(taskList.get(0).getTaskDefinitionKey())) {
             // 3. 获取最近的审批任务，如果不是提交任务则报个错，
             throw exception(TASK_FAIL_NOT_EXISTS);
         }
