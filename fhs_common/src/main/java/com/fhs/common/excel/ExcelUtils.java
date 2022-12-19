@@ -1085,8 +1085,6 @@ public class ExcelUtils {
     public static String getCellValue(Cell cell) {
         String value = "";
         if (null == cell) {
-            cell.getColumnIndex();
-            cell.getRowIndex();
             return value;
         }
         switch (cell.getCellType()) {
