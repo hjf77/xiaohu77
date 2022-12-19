@@ -1085,6 +1085,8 @@ public class ExcelUtils {
     public static String getCellValue(Cell cell) {
         String value = "";
         if (null == cell) {
+            cell.getColumnIndex();
+            cell.getRowIndex();
             return value;
         }
         switch (cell.getCellType()) {
@@ -1295,7 +1297,20 @@ public class ExcelUtils {
         Object[] titleArray = new Object[colNum];
 
         for (int i = 0; i < colNum; i++) {
-            titleArray[i] = getCellValue(row.getCell(i));
+            XSSFCell cell = row.getCell(i);
+            Object cellValue = getCellValue(cell);
+            if(StringUtils.isEmpty(cellValue.toString())){
+                int num = sheet.getNumMergedRegions() - 1;
+                for (int i1 = num - 1; i1 >= 0; i1--) {
+                    CellRangeAddress range = sheet.getMergedRegion(i1);
+                    if(range.getFirstRow() <= titleRowNum && range.getLastRow() >= titleRowNum
+                    && range.getFirstColumn() <= i && range.getLastColumn() >= i){
+                        titleArray[i] = getCellValue(sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()));
+                    }
+                }
+            }else{
+                titleArray[i] = getCellValue(row.getCell(i));
+            }
         }
         closeInputStream();
         return titleArray;
