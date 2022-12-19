@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
@@ -10,6 +11,7 @@ import com.fhs.common.tree.TreeNode;
 import com.fhs.common.tree.Treeable;
 import com.fhs.common.utils.TreeUtils;
 import com.fhs.core.base.vo.QueryFilter;
+import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.module.base.controller.ModelSuperController;
@@ -68,5 +70,26 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     public List<TreeNode<Treeable>> treeData(@RequestBody QueryFilter<UcenterMsOrganizationPO> queryFilter) throws IllegalAccessException {
         List<UcenterMsOrganizationVO> datas = sysOrganizationService.selectListMP(queryFilter.asWrapper(getDOClass()).orderByAsc(UcenterMsOrganizationPO::getId));
         return TreeUtils.formartTree(datas);
+    }
+
+
+    /**
+     * 无分页查询bean列表数据
+     *
+     * @throws Exception
+     */
+    @ResponseBody
+    @GetMapping("findListTree")
+    @ApiOperation("后台-不分页查询集合-一般用于下拉")
+    public List<TreeNode<Treeable>> findListTreeable()
+            throws Exception {
+        if (isPermitted("see")) {
+            LambdaJoinQueryWrapper<UcenterMsOrganizationPO> wrapper = QueryFilter.reqParam2Wrapper(UcenterMsOrganizationPO.class);
+            initQueryWrapper(wrapper, null, false);
+            List<UcenterMsOrganizationVO> datas = sysOrganizationService.selectListMP(wrapper);
+            return TreeUtils.formartTree(datas);
+        } else {
+            throw new NotPremissionException();
+        }
     }
 }

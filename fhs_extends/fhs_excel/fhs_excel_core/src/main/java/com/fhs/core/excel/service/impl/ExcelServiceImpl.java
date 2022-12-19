@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -253,6 +254,33 @@ public class ExcelServiceImpl implements ExcelService {
             return getFieldData(fieldName, data);
         }
         Object obj = getGetMethod(data, fieldName);
+
+        if (obj instanceof Date) {
+            Field field = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
+            //如果加了日期格式化则就按照格式化的来
+            if (field.isAnnotationPresent(JSONField.class) && CheckUtils.isNotEmpty(field.getAnnotation(JSONField.class).format())) {
+                obj = DateUtils.formartDate((Date) obj, field.getAnnotation(JSONField.class).format());
+            } else {
+                //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
+                obj = DateUtils.formartDate((Date) obj, DateUtils.DATETIME_PATTERN);
+            }
+        }
+
+        if (obj instanceof Number) {
+            BigDecimal big = new BigDecimal(obj.toString());
+            obj = big.toPlainString();
+            // 解决1234.0 去掉后面的.0
+            if (null != obj && !"".equals(obj.toString().trim())) {
+                String[] item = obj.toString().split("[.]");
+                if (1 < item.length && "0".equals(item[1])) {
+                    obj = item[0];
+                } else {
+                    if ('0' == obj.toString().charAt(obj.toString().length() - 1)) {
+                        obj = obj.toString().substring(0, obj.toString().length() - 1);
+                    }
+                }
+            }
+        }
         Field declaredField = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
         Trans trans = declaredField.getAnnotation(Trans.class);
         //排除调字典翻译的字段
@@ -264,17 +292,6 @@ public class ExcelServiceImpl implements ExcelService {
                     String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
                     obj = obj + "（" + unit + "）";
                 }
-            }
-        }
-
-        if (obj instanceof Date) {
-            Field field = ReflectUtils.getDeclaredField(data.getClass(), fieldName);
-            //如果加了日期格式化则就按照格式化的来
-            if (field.isAnnotationPresent(JSONField.class) && CheckUtils.isNotEmpty(field.getAnnotation(JSONField.class).format())) {
-                obj = DateUtils.formartDate((Date) obj, field.getAnnotation(JSONField.class).format());
-            } else {
-                //如果没加格式化代码则就直接导出yyyy-MM-dd HH:mm:ss
-                obj = DateUtils.formartDate((Date) obj, DateUtils.DATETIME_PATTERN);
             }
         }
         return obj;

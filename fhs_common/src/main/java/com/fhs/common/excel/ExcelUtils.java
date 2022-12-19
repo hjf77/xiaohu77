@@ -1098,13 +1098,17 @@ public class ExcelUtils {
                     ;
                 } else {// 纯数字
                     Double numericCellValue = cell.getNumericCellValue();
-//                    BigDecimal big = new BigDecimal(cell.getNumericCellValue());
-                    value = numericCellValue.toString();
+                    BigDecimal big = new BigDecimal(numericCellValue.toString());
+                    value = big.toPlainString();
                     // 解决1234.0 去掉后面的.0
                     if (null != value && !"".equals(value.trim())) {
                         String[] item = value.split("[.]");
                         if (1 < item.length && "0".equals(item[1])) {
                             value = item[0];
+                        } else {
+                            if ('0' == value.charAt(value.length() - 1)) {
+                                value = value.substring(0, value.length() - 1);
+                            }
                         }
                     }
                 }
@@ -1297,16 +1301,16 @@ public class ExcelUtils {
         for (int i = 0; i < colNum; i++) {
             XSSFCell cell = row.getCell(i);
             Object cellValue = getCellValue(cell);
-            if(StringUtils.isEmpty(cellValue.toString())){
+            if (StringUtils.isEmpty(cellValue.toString())) {
                 int num = sheet.getNumMergedRegions() - 1;
                 for (int i1 = num - 1; i1 >= 0; i1--) {
                     CellRangeAddress range = sheet.getMergedRegion(i1);
-                    if(range.getFirstRow() <= titleRowNum && range.getLastRow() >= titleRowNum
-                    && range.getFirstColumn() <= i && range.getLastColumn() >= i){
+                    if (range.getFirstRow() <= titleRowNum && range.getLastRow() >= titleRowNum
+                            && range.getFirstColumn() <= i && range.getLastColumn() >= i) {
                         titleArray[i] = getCellValue(sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()));
                     }
                 }
-            }else{
+            } else {
                 titleArray[i] = getCellValue(row.getCell(i));
             }
         }
