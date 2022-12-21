@@ -43,13 +43,6 @@ public class RequestSignUtils {
     // Tuya云endpoint中欧数据中心
     @Value("${tuyaconfig.endpointCentralEurope}")
     private String endpointCentralEurope;
-
-    /* // 开发者accessId
-     private static String accessId = "nyjfprpm8k43dqv9rc53";
-     // 开发者accessKey
-     private static String accessKey = "36e0cdd5460d4d01b7e8d47d9a25dd8c";
-     // Tuya云endpoint
-     private static String endpoint = "https://openapi.tuyacn.com";*/
     @PostConstruct
     void init() {
         Constant.CONTAINER.put(Constant.ENDPOINT_CHINA, endpointChina);
@@ -57,16 +50,6 @@ public class RequestSignUtils {
         Constant.CONTAINER.put(Constant.ACCESS_ID, accessId);
         Constant.CONTAINER.put(Constant.ACCESS_KEY, accessKey);
     }
-
-    /*public static void main(String[] args) {
-
-        String getTokenPath = "/v1.0/token?grant_type=1";
-        Object result = RequestSignUtils.execute(getTokenPath, "GET", "", new HashMap<>());
-        Map<String, Object> stringObjectMap = JsonUtils.parseJSON2Map(gson.toJson(result));
-        System.out.println(gson.toJson(result));
-        System.out.println(stringObjectMap);
-    }*/
-
     private static final MediaType CONTENT_TYPE = MediaType.parse("application/json");
     private static final String EMPTY_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
     private static final String SING_HEADER_NAME = "Signature-Headers";

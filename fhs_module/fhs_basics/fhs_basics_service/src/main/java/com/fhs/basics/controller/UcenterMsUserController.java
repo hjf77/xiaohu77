@@ -248,6 +248,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         UcenterAppUserSetVO ucenterAppUserSetVO = ucenterAppUserSetService.selectBean(UcenterAppUserSetPO.builder().userId(sysUser.getUserId()).build());
         ServiceCountryVO serviceCountryVO = serviceCountryService.selectBean(ServiceCountryPO.builder().countryCode(sysUser.getCountryCode()).build());
         sysUser.setCountryName(serviceCountryVO.getFullCname());
+        sysUser.setInternationalCode(serviceCountryVO.getInternationalCode());
         transService.transOne(sysUser);
         result.put("userInfo", sysUser);
         //获取APP用户设置信息
