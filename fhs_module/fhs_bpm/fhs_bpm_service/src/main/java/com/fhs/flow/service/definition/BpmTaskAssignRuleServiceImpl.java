@@ -357,8 +357,8 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
     }
 
     private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule,Long startUserId) {
-        //todo 根据角色查询用户id
-        // 获取发起人上级机构，取上级机构的角色跟选择的角色对比 取交集查用户
+        //todo tanyukun 根据角色查询用户id
+        // 获取上次审批任务的审核人的上级机构，取上级机构的角色跟选择的角色对比 取交集查用户
         return adminUserApi.getFatherOrgRoleUser(rule.getOptions(),startUserId);
     }
 

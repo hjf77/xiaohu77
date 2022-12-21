@@ -636,23 +636,23 @@ public class BpmTaskServiceImpl implements BpmTaskService {
     @Override
     public List<BpmTaskRespVO> getTaskListByProcessDefinitionKey(String businessKey, String processDefinitionKey) {
         // 获取流程实例
-        List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey, processDefinitionKey).list();
+        List<HistoricProcessInstance> processInstances = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(businessKey).list();
         if (CollUtil.isEmpty(processInstances)) {
             return Collections.emptyList();
         }
-        return this.getTaskListByProcessInstanceId(processInstances.get(0).getProcessInstanceId());
+        return this.getTaskListByProcessInstanceId(processInstances.get(0).getId());
     }
 
     @Override
     public void resubmit(Long userId, BpmProcessInstanceCreateBusVO busVO) {
         // 1. 根据流程key和业务id获取流程实例
         // 获取流程实例
-        List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(busVO.getBusinessKey(), busVO.getProcessDefinitionKey()).list();
+        List<HistoricProcessInstance> processInstances = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(busVO.getBusinessKey()).list();
         if (CollUtil.isEmpty(processInstances)) {
             throw exception(PROCESS_INSTANCE_NOT_EXISTS);
         }
         // 2. 根据流程实例获取审批任务列表
-        List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstances.get(0).getProcessInstanceId()).orderByTaskCreateTime().desc().list();
+        List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstances.get(0).getId()).orderByTaskCreateTime().desc().list();
         if (CollUtil.isEmpty(taskList) || !FlowableConstant.FLOW_SUBMITTER_KEY.equals(taskList.get(0).getTaskDefinitionKey())) {
             // 3. 获取最近的审批任务，如果不是提交任务则报个错，
             throw exception(TASK_FAIL_NOT_EXISTS);
