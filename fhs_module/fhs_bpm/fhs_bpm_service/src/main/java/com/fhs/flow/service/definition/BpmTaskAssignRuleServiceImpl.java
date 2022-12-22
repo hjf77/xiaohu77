@@ -8,16 +8,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.context.UserContext;
 import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.po.UcenterMsUserPO;
-import com.fhs.basics.service.ServiceDictItemService;
-import com.fhs.basics.service.UcenterMsOrganizationService;
 import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.UcenterMsRoleVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
-import com.fhs.core.exception.ParamException;
 import com.fhs.flow.comon.constants.FlowableConstant;
-import com.fhs.flow.comon.utils.CollectionUtils;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleCreateReqVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleRespVO;
 import com.fhs.flow.controller.admin.definition.vo.rule.BpmTaskAssignRuleUpdateReqVO;
@@ -32,10 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.common.engine.api.FlowableException;
-import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.task.api.history.HistoricTaskInstance;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -69,16 +65,10 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
     @Lazy // 解决循环依赖
     private BpmProcessDefinitionService processDefinitionService;
     @Resource
-    private BpmUserGroupService userGroupService;
-    @Resource
     private UcenterMsRoleService roleApi;
-    @Resource
-    private UcenterMsOrganizationService deptApi;
 
     @Resource
     private UcenterMsUserService adminUserApi;
-    @Resource
-    private ServiceDictItemService dictDataApi;
     /**
      * 任务分配脚本
      */
@@ -324,13 +314,26 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
     @VisibleForTesting
     Set<Long> calculateTaskCandidateUsers(DelegateExecution execution, BpmTaskAssignRulePO rule) {
         Set<Long> assigneeUserIds = null;
-        // 获取流程发起人
-        HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+        String userId;
+        // 获得任务列表
+        List<HistoricTaskInstance> tasks = SpringUtil.getBean(HistoryService.class).createHistoricTaskInstanceQuery()
                 .processInstanceId(execution.getProcessInstanceId())
-                .singleResult();
+                .orderByHistoricTaskInstanceStartTime().desc() // 创建时间倒序
+                .list();
+        if (CollUtil.isNotEmpty(tasks)) {
+            // 有审批流程任务代表已经手动审批过，需要从上个节点的审批人的上级机构有来获取的审批人
+            userId = tasks.get(0).getAssignee();
+        } else {
+            // 没有审批流程任务代表 提交流程后提交人节点的下一个节点
+            // 所以要从流程提交人的上级机构取审批人
+            HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+                    .processInstanceId(execution.getProcessInstanceId())
+                    .singleResult();
+            userId = hi.getStartUserId();
+        }
 
         if (Objects.equals(BpmTaskAssignRuleTypeEnum.ROLE.getType(), rule.getType())) {
-            assigneeUserIds = calculateTaskCandidateUsersByRole(rule, Long.valueOf(hi.getStartUserId()));
+            assigneeUserIds = calculateTaskCandidateUsersByRole(rule, Long.valueOf(userId));
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.DEPT_MEMBER.getType(), rule.getType())) {
             assigneeUserIds = calculateTaskCandidateUsersByDeptMember(rule);
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.DEPT_LEADER.getType(), rule.getType())) {
@@ -338,7 +341,7 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.POST.getType(), rule.getType())) {
             assigneeUserIds = calculateTaskCandidateUsersByPost(rule);
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.USER.getType(), rule.getType())) {
-            assigneeUserIds = calculateTaskCandidateUsersByUser(rule, Long.valueOf(hi.getStartUserId()));
+            assigneeUserIds = calculateTaskCandidateUsersByUser(rule, Long.valueOf(userId));
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.USER_GROUP.getType(), rule.getType())) {
             assigneeUserIds = calculateTaskCandidateUsersByUserGroup(rule);
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.SCRIPT.getType(), rule.getType())) {
@@ -356,10 +359,10 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
         return assigneeUserIds;
     }
 
-    private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule,Long startUserId) {
+    private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule, Long startUserId) {
         //todo tanyukun 根据角色查询用户id
         // 获取上次审批任务的审核人的上级机构，取上级机构的角色跟选择的角色对比 取交集查用户
-        return adminUserApi.getFatherOrgRoleUser(rule.getOptions(),startUserId);
+        return adminUserApi.getFatherOrgRoleUser(rule.getOptions(), startUserId);
     }
 
     private Set<Long> calculateTaskCandidateUsersByDeptMember(BpmTaskAssignRulePO rule) {
@@ -377,9 +380,9 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
         return new HashSet<>();
     }
 
-    private Set<Long> calculateTaskCandidateUsersByUser(BpmTaskAssignRulePO rule,Long startUserId) {
+    private Set<Long> calculateTaskCandidateUsersByUser(BpmTaskAssignRulePO rule, Long startUserId) {
         // todo tanyukun 获取发起人上级机构 ，过滤掉非上级机构的审核人
-        return adminUserApi.getFatherOrgUser(rule.getOptions(),startUserId);
+        return adminUserApi.getFatherOrgUser(rule.getOptions(), startUserId);
     }
 
     private Set<Long> calculateTaskCandidateUsersByUserGroup(BpmTaskAssignRulePO rule) {
