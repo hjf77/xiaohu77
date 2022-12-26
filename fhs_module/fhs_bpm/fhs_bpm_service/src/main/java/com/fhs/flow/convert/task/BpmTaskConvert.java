@@ -111,6 +111,7 @@ public interface BpmTaskConvert {
             @Mapping(source = "processInstance.name", target = "name"),
             @Mapping(source = "processInstance.startUserId", target = "startUserId"),
             @Mapping(source = "processInstance.processDefinitionId", target = "processDefinitionId"),
+            @Mapping(source = "processInstance.businessKey", target = "businessKey"),
             @Mapping(source = "startUser.userName", target = "startUserNickname")})
     BpmTaskTodoPageItemRespVO.ProcessInstance convert(ProcessInstance processInstance, UcenterMsUserVO startUser);
 

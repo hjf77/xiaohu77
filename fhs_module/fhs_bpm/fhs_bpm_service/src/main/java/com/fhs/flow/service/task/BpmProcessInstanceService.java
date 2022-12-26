@@ -157,4 +157,11 @@ public interface BpmProcessInstanceService {
      * @return
      */
     String createBusinessInstance(BpmProcessInstanceCreateBusVO createBusVO);
+
+    /**
+     * 获取指定用户发起的流程
+     * @param startUserIds
+     * @return
+     */
+    List<String> getProInstByStartUser(List<Long> startUserIds);
 }

@@ -57,6 +57,9 @@ public class BpmTaskTodoPageItemRespVO implements TransPojo {
         @ApiModelProperty(value = "流程定义的编号", required = true, example = "2048")
         private String processDefinitionId;
 
+        @ApiModelProperty(value = "业务id", required = true, example = "2048")
+        private String businessKey;
+
     }
 
 }

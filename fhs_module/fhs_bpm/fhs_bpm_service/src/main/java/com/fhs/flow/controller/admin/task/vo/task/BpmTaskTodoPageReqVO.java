@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.fhs.flow.comon.utils.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 
@@ -20,6 +21,9 @@ public class BpmTaskTodoPageReqVO extends PageParam {
 
     @ApiModelProperty(value = "流程任务名", example = "芋道")
     private String name;
+
+    @ApiModelProperty(value = "流程任务名", example = "芋道")
+    private List<Long> startUserIds;
 
     @ApiModelProperty(value = "创建收间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
