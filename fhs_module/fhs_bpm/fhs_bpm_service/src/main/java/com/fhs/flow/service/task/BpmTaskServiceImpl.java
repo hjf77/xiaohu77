@@ -290,6 +290,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
     }
 
     private void autoCommit(Task task) {
+
         if (!FlowableConstant.FLOW_SUBMITTER.equals(task.getName())) {
             // 任务标识为 auto 的才自动提交
             return;
@@ -305,7 +306,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
                 .processInstanceId(task.getProcessInstanceId())
                 .singleResult();
-        if (StringUtils.isEmpty(hi.getStartUserId())) {
+        if (null == hi || StringUtils.isEmpty(hi.getStartUserId())) {
             return;
         }
         // 设置提交人
@@ -362,6 +363,11 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         BpmTaskExtPO taskExtDO =
                 new BpmTaskExtPO().setAssigneeUserId(ConverterUtils.toLong(task.getAssignee())).setTaskId(task.getId());
         taskExtMapper.updateByTaskId(taskExtDO);
+        if (FlowableConstant.FLOW_SUBMITTER.equals(task.getName())) {
+            // 提交任务不需要发送消息
+            return;
+        }
+
         // 发送通知。在事务提交时，批量执行操作，所以直接查询会无法查询到 ProcessInstance，所以这里是通过监听事务的提交来实现。
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
