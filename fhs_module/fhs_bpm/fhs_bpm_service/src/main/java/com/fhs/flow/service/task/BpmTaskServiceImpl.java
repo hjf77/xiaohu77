@@ -301,20 +301,26 @@ public class BpmTaskServiceImpl implements BpmTaskService {
             // 驳回到提交节点的有审批记录，不需要自动审批
             return;
         }
-        // 如果是提交步骤就自动通过
-        // 通过任务
-        HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
-                .processInstanceId(task.getProcessInstanceId())
-                .singleResult();
-        if (null == hi || StringUtils.isEmpty(hi.getStartUserId())) {
-            return;
-        }
-        // 设置提交人
-        BpmTaskApproveReqVO reqVo = new BpmTaskApproveReqVO();
-        reqVo.setId(task.getId());
-        reqVo.setReason("提交");
-        taskService.setAssignee(task.getId(), Long.valueOf(hi.getStartUserId()).toString());
-        this.approveTask(Long.valueOf(hi.getStartUserId()), reqVo);
+        // 事务提交后才自动通过任务，否则事务没提交，创建流程后设置流程名称那会查不到流程报空指针
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                // 如果是提交步骤就自动通过
+                // 通过任务
+                HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+                        .processInstanceId(task.getProcessInstanceId())
+                        .singleResult();
+                if (null == hi || StringUtils.isEmpty(hi.getStartUserId())) {
+                    return;
+                }
+                // 设置提交人
+                BpmTaskApproveReqVO reqVo = new BpmTaskApproveReqVO();
+                reqVo.setId(task.getId());
+                reqVo.setReason("提交");
+                taskService.setAssignee(task.getId(), Long.valueOf(hi.getStartUserId()).toString());
+                approveTask(Long.valueOf(hi.getStartUserId()), reqVo);
+            }
+        });
     }
 
     @Override
