@@ -1121,9 +1121,14 @@ public class ExcelUtils {
             // 公式类型
             case FORMULA:
                 // 读公式计算值
-                value = String.valueOf(cell.getNumericCellValue());
-                if (value.equals("NaN")) {// 如果获取的数据值为非法值,则转换为获取字符串
-                    value = cell.getStringCellValue().toString();
+                try {
+                    value = String.valueOf(cell.getNumericCellValue());
+                    if (value.equals("NaN")) {// 如果获取的数据值为非法值,则转换为获取字符串
+                        value = cell.getStringCellValue().toString();
+                    }
+                }catch (Exception e){
+                    log.error("公式计算错误！");
+                    e.printStackTrace();
                 }
                 break;
             // 布尔类型
