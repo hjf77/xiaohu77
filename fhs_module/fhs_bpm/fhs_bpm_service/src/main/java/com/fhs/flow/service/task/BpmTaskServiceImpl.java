@@ -471,6 +471,7 @@ public class BpmTaskServiceImpl implements BpmTaskService {
                 node.setDefinitionName(activityInstance.getActivityName());
                 node.setEndTime(activityInstance.getEndTime());
                 node.setUserName(activityIdUserNames.get(activityInstance.getActivityId()));
+                node.setUserId(Long.valueOf(activityInstance.getAssignee()));
                 backNods.add(node);
             });
         }
