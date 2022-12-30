@@ -23,6 +23,6 @@ public class BpmProcessInstanceServiceImpl implements com.fhs.flow.service.BpmPr
 
     @Override
     public String createProcessInstance(Long userId, @Valid BpmProcessInstanceCreateReqDTO reqDTO) {
-        return processInstanceService.createProcessInstance(userId, reqDTO);
+        return processInstanceService.createProcessInstance(userId, reqDTO, null);
     }
 }
