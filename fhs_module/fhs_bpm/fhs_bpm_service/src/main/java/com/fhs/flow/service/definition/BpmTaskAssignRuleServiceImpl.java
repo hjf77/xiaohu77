@@ -289,9 +289,13 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
     @Override
     public Set<Long> calculateTaskCandidateUsers(DelegateExecution execution) {
         BpmTaskAssignRulePO rule = getTaskRule(execution);
-        // 提交人节点设置审批人为自己
+        // 提交人节点设置审批人为流程发起人
         if (FlowableConstant.FLOW_SUBMITTER_KEY.equals(rule.getTaskDefinitionKey())) {
-            return Collections.singleton(UserContext.getSessionuser().getUserId());
+            // 获取流程发起人
+            HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+                    .processInstanceId(execution.getProcessInstanceId())
+                    .singleResult();
+            return Collections.singleton(Long.valueOf(hi.getStartUserId()));
         }
         return calculateTaskCandidateUsers(execution, rule);
     }
