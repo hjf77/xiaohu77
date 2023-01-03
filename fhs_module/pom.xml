@@ -15,7 +15,6 @@
         <module>fhs_basics</module>
         <module>fhs_module_base</module>
         <module>fhs_generate</module>
-        <module>fhs_bpm</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 

@@ -225,25 +225,18 @@ by wanglei
             :fixed="item.fixed"
           >
             <template slot-scope="scope">
-              <!--处理v-for与v-if写在一起，导致一个按钮ifFun为false时，整行都不显示的问题；-->
-              <div style="display:flex" class="button-wrap">
-                <div v-for="(val, index) in item.textBtn" class="btn_wrap">
-                  <el-button
-                    v-if="proxyBtnIf(scope.row, index, val)"
-                    :key="index"
-                    :type="val.type"
-                    :icon="val.icon"
-                    :size="val.size || 'mini'"
-                    :disabled="proxyBtnDisabled(scope.row, index, val)"
-                    plain
-                    @click="handleClick(scope.row, val)"
-                  >
-
-                    {{ val.title }}
-                  </el-button>
-                </div>
-              </div>
-
+              <el-button
+                v-for="(val, index) in item.textBtn"
+                v-if="proxyBtnIf(scope.row, index, val)"
+                :key="index"
+                :type="val.type"
+                :size="val.size || 'mini'"
+                :disabled="proxyBtnDisabled(scope.row, index, val)"
+                plain
+                @click="handleClick(scope.row, val)"
+              >
+                {{ val.title }}
+              </el-button>
             </template>
           </el-table-column>
         </template>
@@ -571,7 +564,7 @@ export default {
         ) {
           result.querys.push({
             group: item.group || "main",
-            operator: item.operation,
+            operation: item.operation,
             property: item.name,
             target: item.target,
             field: item.field,
@@ -714,11 +707,7 @@ export default {
       this.$emit("rowClick", row[0]);
     },
     columnFormart(_row, _column) {
-      if(typeof(_column.formart) === 'string'){
-        return handleStrParam(_column.formart, _row);
-      }else{
-        return _column.formart.call(this,_row);
-      }
+      return handleStrParam(_column.formart, _row);
     },
     proxyClick(_row, _column) {
       let _this = this;

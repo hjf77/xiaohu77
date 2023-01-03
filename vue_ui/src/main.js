@@ -114,18 +114,6 @@ Vue.use(Element, {
 })
 
 
-
-// bpmnProcessDesigner 需要引入
-import MyPD from "@/components/bpmnProcessDesigner/package/index.js";
-Vue.use(MyPD);
-import "@/components/bpmnProcessDesigner/package/theme/index.scss";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-
-
-
 import VeeElement from 'vee-element'
 import VeeValidate,{ Validator } from 'vee-validate'
 import zh_CN from "vee-validate/dist/locale/zh_CN";

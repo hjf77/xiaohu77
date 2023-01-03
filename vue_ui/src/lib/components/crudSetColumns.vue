@@ -1,6 +1,6 @@
 <template>
   <div>
-   
+
     <el-dialog title="自定义列" :visible.sync="open" class="pagex-dialog-theme"  >
       <base-container>
         <div class="columns-header">
@@ -261,10 +261,7 @@ export default {
             );
           } else {
             const param = {};
-            // for (const key in param) {
-            //   key = this.namespace;
-            //   param[key] = this.userSettColumn;
-            // }
+            param[this.namespace] = this.userSettColumn;
             localStorage.setItem(
               'columnSett',
               JSON.stringify({ ...columnSettPermission, ...param })
