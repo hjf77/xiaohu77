@@ -109,7 +109,11 @@ public class BpmTaskServiceImpl implements BpmTaskService {
         }
         if (CollUtil.isNotEmpty(pageVO.getStartUserIds())) {
             // 发起人过滤
-            taskQuery.processInstanceIdIn(processInstanceService.getProInstByStartUser(pageVO.getStartUserIds()));
+            List<String> proInstByStartUser = processInstanceService.getProInstByStartUser(pageVO.getStartUserIds());
+            if (CollUtil.isEmpty(proInstByStartUser)) {
+                return PageResult.empty(0L);
+            }
+            taskQuery.processInstanceIdIn(proInstByStartUser);
         }
         if (pageVO.getCreateTime() != null) {
             taskQuery.taskCreatedAfter(DateUtils.of(pageVO.getCreateTime()[0]));
