@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
@@ -1120,9 +1121,14 @@ public class ExcelUtils {
             // 公式类型
             case FORMULA:
                 // 读公式计算值
-                value = String.valueOf(cell.getNumericCellValue());
-                if (value.equals("NaN")) {// 如果获取的数据值为非法值,则转换为获取字符串
-                    value = cell.getStringCellValue().toString();
+                try {
+                    value = String.valueOf(cell.getNumericCellValue());
+                    if (value.equals("NaN")) {// 如果获取的数据值为非法值,则转换为获取字符串
+                        value = cell.getStringCellValue().toString();
+                    }
+                }catch (Exception e){
+                    log.error("公式计算错误！");
+                    e.printStackTrace();
                 }
                 break;
             // 布尔类型
@@ -1297,24 +1303,60 @@ public class ExcelUtils {
 
         //表头
         Object[] titleArray = new Object[colNum];
+        //获取表头行的数据
+        short lastCellNum = row.getLastCellNum();
+        List<Object> titles = Lists.newArrayList();
+        for (int i = 0; i < lastCellNum; i++) {
+            titles.add(getCellValue(row.getCell(i)));
+        }
 
         for (int i = 0; i < colNum; i++) {
             XSSFCell cell = row.getCell(i);
-            Object cellValue = getCellValue(cell);
-            if (StringUtils.isEmpty(cellValue.toString())) {
-                int num = sheet.getNumMergedRegions() - 1;
-                for (int i1 = num - 1; i1 >= 0; i1--) {
-                    CellRangeAddress range = sheet.getMergedRegion(i1);
-                    if (range.getFirstRow() <= titleRowNum && range.getLastRow() >= titleRowNum
-                            && range.getFirstColumn() <= i && range.getLastColumn() >= i) {
-                        titleArray[i] = getCellValue(sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()));
+            Object cellValue = getCellValue(cell, sheet, titleRowNum, i);
+            Object finalCellValue = cellValue;
+            long count = titles.stream().filter(title -> finalCellValue.equals(title)).count();
+            //出现表头行数据出现重复数据与上行同列数据拼接
+            if (count > 1 && titleRowNum > 0) {
+                XSSFRow upRow = sheet.getRow(titleRowNum - 1);
+                if (null != upRow) {
+                    XSSFCell upCell = upRow.getCell(i);
+                    Object upCellValue = getCellValue(upCell, sheet, titleRowNum - 1, i);
+                    if (upCellValue != null) {
+                        cellValue = upCellValue.toString() + cellValue;
                     }
                 }
-            } else {
-                titleArray[i] = getCellValue(row.getCell(i));
             }
+            titleArray[i] = cellValue;
         }
         closeInputStream();
         return titleArray;
+    }
+
+    /**
+     * 获取当前单元个数据，出现合并单元格取合并的第一个单元格数据
+     *
+     * @param cell
+     * @param sheet
+     * @param titleRowNum
+     * @param colNum
+     * @return
+     */
+    private static Object getCellValue(XSSFCell cell, XSSFSheet sheet, int titleRowNum, int colNum) {
+        Object cellValue = getCellValue(cell);
+        //当前行数据为空需要看当前单元格是否已经合并
+        if (StringUtils.isEmpty(cellValue.toString())) {
+            int num = sheet.getNumMergedRegions() - 1;
+            for (int i1 = num; i1 >= 0; i1--) {
+                CellRangeAddress range = sheet.getMergedRegion(i1);
+                //已经合并取合并的第一个单元格的数据
+                if (range.getFirstRow() <= titleRowNum && range.getLastRow() >= titleRowNum
+                        && range.getFirstColumn() <= colNum && range.getLastColumn() >= colNum) {
+                    return getCellValue(sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()));
+                }
+            }
+        } else {
+            return cellValue;
+        }
+        return "";
     }
 }

@@ -289,7 +289,7 @@ public class ExcelServiceImpl implements ExcelService {
             if (apiModelProperty != null) {
                 String value = apiModelProperty.value();
                 if (apiModelProperty.value().contains("（")) {
-                    String unit = value.substring(value.indexOf("（") + 1, value.indexOf("）"));
+                    String unit = value.substring(value.lastIndexOf("（") + 1, value.lastIndexOf("）"));
                     obj = obj + "（" + unit + "）";
                 }
             }
