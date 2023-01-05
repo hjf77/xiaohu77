@@ -94,4 +94,10 @@ public interface BpmTaskAssignRuleService {
      */
     Set<Long> calculateTaskCandidateUsers(DelegateExecution execution);
 
+    /**
+     * 根据流程标识获取流程分配规则
+     * @param modelKey
+     * @return
+     */
+    List<BpmTaskAssignRuleRespVO> listByModelKey(String modelKey);
 }

@@ -49,6 +49,20 @@ public class BpmTaskAssignRuleController {
         return result;
     }
 
+    @PostMapping("/listByModelKey")
+    @ApiOperation(value = "根据流程标识获得任务分配规则列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "modelKey", value = "流程标识", example = "1024"),
+    })
+    public FhsPager<BpmTaskAssignRuleRespVO> listByModelKey(
+            @RequestParam(value = "modelKey", required = false) String modelKey) {
+        List<BpmTaskAssignRuleRespVO> taskAssignRuleList = taskAssignRuleService.listByModelKey(modelKey);
+        FhsPager<BpmTaskAssignRuleRespVO> result = new FhsPager<>();
+        result.setTotal(taskAssignRuleList.size());
+        result.setRecords(taskAssignRuleList);
+        return result;
+    }
+
     @PostMapping("/create")
     @ApiOperation(value = "创建任务分配规则")
     @SaCheckRole("task-assign-rule:add")

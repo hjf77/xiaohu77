@@ -25,29 +25,22 @@ import com.fhs.flow.dal.mysql.definition.BpmTaskAssignRuleMapper;
 import com.fhs.flow.dal.mysql.task.BpmProcessInstanceExtMapper;
 import com.fhs.flow.enums.definition.BpmTaskAssignRuleTypeEnum;
 import com.fhs.flow.framework.flowable.core.behavior.script.BpmTaskAssignScript;
-import com.fhs.flow.service.task.BpmProcessInstanceService;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.common.engine.api.FlowableException;
 import org.flowable.engine.HistoryService;
-import org.flowable.engine.RuntimeService;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.history.HistoricProcessInstance;
-import org.flowable.engine.runtime.ProcessInstance;
-import org.flowable.task.api.history.HistoricTaskInstance;
-import org.flowable.variable.api.persistence.entity.VariableInstance;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -308,6 +301,15 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
             return Collections.singleton(Long.valueOf(hi.getStartUserId()));
         }
         return calculateTaskCandidateUsers(execution, rule);
+    }
+
+    @Override
+    public List<BpmTaskAssignRuleRespVO> listByModelKey(String modelKey) {
+        ProcessDefinition definition = processDefinitionService.getActiveProcessDefinition(modelKey);
+        if (null == definition) {
+            throw exception(PROCESS_DEFINITION_NOT_EXISTS);
+        }
+        return this.getTaskAssignRuleList(null, definition.getId());
     }
 
     @VisibleForTesting
