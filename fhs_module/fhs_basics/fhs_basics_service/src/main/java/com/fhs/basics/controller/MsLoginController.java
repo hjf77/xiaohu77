@@ -1,6 +1,7 @@
 package com.fhs.basics.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.po.SettUserColumnPO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.SettUserColumnService;
@@ -24,7 +25,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -66,6 +69,9 @@ public class MsLoginController extends BaseController {
 
     @Value("${fhs.vue.is-verification:true}")
     private Boolean isVerification;
+
+    @Value("${user.ssourl}")
+    private String ssourl;
 
     /**
      * redis 缓存服务
@@ -192,6 +198,48 @@ public class MsLoginController extends BaseController {
         result.put("userInfo", sysUser);
         logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
         return HttpResult.success(result);
+    }
+
+    /**
+     * 单点登录
+     * @param loginVO
+     * @param request
+     * @return
+     */
+    @PostMapping("/autoLogin")
+    @ApiOperation("登录")
+    public HttpResult<Map<String, Object>> autoLogin(@RequestBody LoginVO loginVO, HttpServletRequest request) {
+        String jwt = loginVO.getJwt();
+        //远程调用接口返回hrCode查询
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("Authorization","Bearer " + jwt);
+        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        RestTemplate restClient = new RestTemplate();
+        ResponseEntity<String> response = restClient.exchange(ssourl, HttpMethod.GET, entity, String.class);
+        LOGGER.info("response" + response);
+        JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+        LOGGER.info("jsonObject" + jsonObject);
+        if(jsonObject.getString("code").equals("success")){
+            JSONObject jsonData = JSONObject.parseObject(jsonObject.get("data").toString());
+            loginVO.setHrCode(jsonData.getString("hrCode"));
+            UcenterMsUserPO sysUser = sysUserService.login(loginVO);
+            if (sysUser == null) {
+                throw new ParamException("该用户不存在请在系统中新增！");
+            }
+            clearLockKey(sysUser.getUserLoginName());
+            StpUtil.login(sysUser.getUserId());
+            String tokenStr = StpUtil.getTokenValue();
+            stpInterface.clearCache(sysUser.getUserId());
+            StpUtil.getTokenSession().set(Constant.SESSION_USER,sysUser);
+            Map<String, Object> result = new HashMap<>();
+            result.put("token", tokenStr);
+            result.put("tokenName", StpUtil.getTokenName());
+            result.put("userInfo", sysUser);
+            logLoginService.addLoginUserInfo(request, sysUser.getUserLoginName(), false, null, sysUser.getUserId(), false);
+            return HttpResult.success(result);
+        }
+        throw new ParamException(jsonObject.getString("msg"));
     }
 
     /**

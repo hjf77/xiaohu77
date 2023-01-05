@@ -17,5 +17,8 @@ public class LoginVO {
     private String uuid;
     @ApiModelProperty("租户编码")
     private String groupCode;
-
+    @ApiModelProperty("单点登录参数")
+    private String jwt;
+    @ApiModelProperty("用户编号")
+    private String hrCode;
 }
