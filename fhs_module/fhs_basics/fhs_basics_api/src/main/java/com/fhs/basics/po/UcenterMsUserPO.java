@@ -79,6 +79,13 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     private String userName;
 
     /**
+     * 用户编号
+     */
+    @TableField("hr_code")
+    @ApiModelProperty("用户编号")
+    private String hrCode;
+
+    /**
      * 密码
      */
     @TableField("password")

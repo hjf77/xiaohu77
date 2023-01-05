@@ -23,12 +23,17 @@
         FROM
         t_ucenter_ms_user
         <where>
-            AND
-            user_login_name =
-            #{userLoginName}
-            AND password = #{password}
+            <if test="userLoginName != null and userLoginName != ''">
+                AND user_login_name = #{userLoginName}
+            </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
             <if test="groupCode !=null and groupCode!=''">
                 AND group_code = #{groupCode}
+            </if>
+            <if test="hrCode !=null and hrCode!=''">
+                AND hr_code = #{hrCode}
             </if>
             AND is_enable=1
             AND is_delete=0
