@@ -224,6 +224,14 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     @ApiModelProperty("角色")
     private List<UcenterMsRolePO> roles;
 
+    /**
+     * 部门id
+     */
+    @TableId(value = "department_id")
+    @ApiModelProperty("部门id")
+    @Trans(type = TransType.RPC, targetClassName = "com.xhb.business.po.DepartmentPO", fields = {"name"})
+    private Long departmentId;
+
     public String[] getRoleList() {
         if (CheckUtils.isNullOrEmpty(this.roleIds)) {
             return new String[]{};
