@@ -8,13 +8,13 @@
 	<parent>
 		<artifactId>fhs_framework</artifactId>
 		<groupId>com.fhs-opensource</groupId>
-		<version>3.0.0-water</version>
+		<version>3.0.1-water</version>
 	</parent>
 
 	<groupId>com.fhs-opensource</groupId>
 	<artifactId>fhs_common</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.0-water</version>
+	<version>3.0.1-water</version>
 	<name>fhs_common</name>
 	<url>https://gitee.com/fhs-opensource/fhs_common</url>
 
