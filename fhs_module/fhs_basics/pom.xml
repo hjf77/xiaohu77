@@ -5,10 +5,10 @@
     <parent>
         <artifactId>fhs_module</artifactId>
         <groupId>com.fhs-opensource</groupId>
-        <version>3.0.0-water</version>
+        <version>3.0.1-water</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>3.0.0-water</version>
+    <version>3.0.1-water</version>
     <artifactId>fhs_basics</artifactId>
     <packaging>pom</packaging>
     <dependencies>

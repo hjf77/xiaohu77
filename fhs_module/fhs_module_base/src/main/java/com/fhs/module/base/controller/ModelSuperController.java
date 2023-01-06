@@ -207,6 +207,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             }
             beforSave(e, true);
             baseService.insert((D) e);
+            afterSave(e, true);
             return HttpResult.success(e.getPkey());
 
         }
@@ -246,6 +247,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
         if (isPermitted("update")) {
             beforSave(e, false);
             baseService.updateById((D) e);
+            afterSave(e,false);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
@@ -285,6 +287,16 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
 
     }
 
+    /**
+     * 在保存之前执行部分自定义业务逻辑
+     *
+     * @param e     对象
+     * @param isAdd 是否是添加
+     */
+    protected void afterSave(V e, boolean isAdd) {
+
+    }
+
 
     /**
      * @param queryFilter
@@ -318,6 +330,7 @@ public abstract class ModelSuperController<V extends VO, D extends BasePO, PT ex
             }
             beforSave(e, false);
             baseService.updateSelectiveById((D) e);
+            afterSave(e,false);
             return HttpResult.success(true);
         }
         throw new NotPremissionException();
