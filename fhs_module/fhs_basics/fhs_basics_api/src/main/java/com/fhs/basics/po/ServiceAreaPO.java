@@ -128,4 +128,9 @@ public class ServiceAreaPO extends BasePO<ServiceAreaPO> implements Treeable {
     public Serializable getTreeNodeId() {
         return this.id;
     }
+
+    @Override
+    public String getTreeNodeName() {
+        return Treeable.super.getTreeNodeName();
+    }
 }
