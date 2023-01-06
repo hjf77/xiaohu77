@@ -227,7 +227,7 @@ public class UcenterMsUserPO extends BasePO<UcenterMsUserPO> {
     /**
      * 部门id
      */
-    @TableId(value = "department_id")
+    @TableField("department_id")
     @ApiModelProperty("部门id")
     @Trans(type = TransType.RPC, targetClassName = "com.xhb.business.po.DepartmentPO", fields = {"name"})
     private Long departmentId;
