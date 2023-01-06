@@ -35,6 +35,7 @@ import org.flowable.engine.HistoryService;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.task.api.history.HistoricTaskInstance;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -332,7 +333,7 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
         Set<Long> assigneeUserIds = null;
 
         if (Objects.equals(BpmTaskAssignRuleTypeEnum.ROLE.getType(), rule.getType())) {
-            assigneeUserIds = calculateTaskCandidateUsersByRole(rule, null);
+            assigneeUserIds = calculateTaskCandidateUsersByRole(rule, execution);
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.DEPT_MEMBER.getType(), rule.getType())) {
             assigneeUserIds = calculateTaskCandidateUsersByDeptMember(rule);
         } else if (Objects.equals(BpmTaskAssignRuleTypeEnum.DEPT_LEADER.getType(), rule.getType())) {
@@ -358,11 +359,25 @@ public class BpmTaskAssignRuleServiceImpl implements BpmTaskAssignRuleService {
         return assigneeUserIds;
     }
 
-    private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule, Long startUserId) {
-        //todo tanyukun 根据角色查询用户id
-        // 获取上次审批任务的审核人的上级机构，取上级机构的角色跟选择的角色对比 取交集查用户
-//        Set<Long> fatherOrgRoleUser = adminUserApi.getFatherOrgRoleUser(rule.getOptions(), startUserId);
-        return new HashSet<>();
+    private Set<Long> calculateTaskCandidateUsersByRole(BpmTaskAssignRulePO rule, DelegateExecution execution) {
+        String userId;
+        // 获得任务列表
+        List<HistoricTaskInstance> tasks = SpringUtil.getBean(HistoryService.class).createHistoricTaskInstanceQuery()
+                .processInstanceId(execution.getProcessInstanceId())
+                .orderByHistoricTaskInstanceStartTime().desc() // 创建时间倒序
+                .list();
+        if (CollUtil.isNotEmpty(tasks)) {
+            // 有审批流程任务代表已经手动审批过，需要从上个节点的审批人的上级机构有来获取的审批人
+            userId = tasks.get(0).getAssignee();
+        } else {
+            // 没有审批流程任务代表 提交流程后提交人节点的下一个节点
+            // 所以要从流程提交人的上级机构取审批人
+            HistoricProcessInstance hi = SpringUtil.getBean(HistoryService.class).createHistoricProcessInstanceQuery()
+                    .processInstanceId(execution.getProcessInstanceId())
+                    .singleResult();
+            userId = hi.getStartUserId();
+        }
+        return adminUserApi.getFatherOrgRoleUser(rule.getOptions(), Long.valueOf(userId));
     }
 
     private Set<Long> calculateTaskCandidateUsersByDeptMember(BpmTaskAssignRulePO rule) {
