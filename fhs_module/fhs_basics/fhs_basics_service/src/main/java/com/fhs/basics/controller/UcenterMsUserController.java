@@ -6,8 +6,10 @@ import com.fhs.basics.api.anno.LogMethod;
 import com.fhs.basics.api.anno.LogNamespace;
 import com.fhs.basics.constant.LoggerConstant;
 import com.fhs.basics.po.UcenterMsOrganizationPO;
+import com.fhs.basics.po.UcenterMsRolePO;
 import com.fhs.basics.po.UcenterMsUserPO;
 import com.fhs.basics.service.UcenterMsOrganizationService;
+import com.fhs.basics.service.UcenterMsRoleService;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.SysUserOrgVO;
 import com.fhs.basics.vo.UcenterMsOrganizationVO;
@@ -17,12 +19,16 @@ import com.fhs.common.tree.TreeNode;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.base.valid.group.Add;
 import com.fhs.core.base.valid.group.Update;
+import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.module.base.controller.ModelSuperController;
 import com.fhs.module.base.swagger.anno.ApiGroup;
+import com.fhs.trans.service.impl.TransService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -53,6 +59,12 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @Autowired
     private UcenterMsUserService sysUserService;
 
+    @Autowired
+    private TransService transService;
+
+    @Autowired
+    private UcenterMsRoleService ucenterMsRoleService;
+
     /**
      * 机构服务
      */
@@ -67,6 +79,33 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @ApiOperation("获取用户组织tree")
     public List<SysUserOrgVO> getUserTree() {
         return sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode());
+    }
+
+    /**
+     * 根据ID集合查询对象数据
+     *
+     * @param id      id
+     * @param request request
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @LogMethod
+    @ResponseBody
+    @GetMapping("{id}")
+    @ApiOperation("根据id获取单挑数据信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "path")}
+    )
+    public UcenterMsUserVO info(@PathVariable("id") Long id, HttpServletRequest request)
+            throws Exception {
+        if (isPermitted("see")) {
+            UcenterMsUserVO ucenterMsUserVO = baseService.selectById(id);
+            transService.transOne(ucenterMsUserVO);
+            return ucenterMsUserVO;
+        } else {
+            throw new NotPremissionException();
+        }
     }
 
 

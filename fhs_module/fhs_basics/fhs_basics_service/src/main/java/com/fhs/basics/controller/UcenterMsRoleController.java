@@ -40,7 +40,7 @@ import java.util.Map;
 @ApiGroup(group = "group_default")
 @RequestMapping("ms/sysRole")
 @LogNamespace(namespace = "sysRole", module = "角色管理")
-public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRolePO, Integer> {
+public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleVO, UcenterMsRolePO, Long> {
 
     /**
      * 角色服务
@@ -119,7 +119,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @SaCheckRole("sysRole:del")
     @ApiOperation(value = "删除-vue专用")
     @LogMethod(type = LoggerConstant.METHOD_TYPE_DEL, pkeyParamIndex = 0)
-    public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable Integer id) {
+    public HttpResult<Boolean> del(@ApiParam(name = "id", value = "实体id") @PathVariable Long id) {
 
         sysRoleService.deleteById(id);
         return HttpResult.success(true);
