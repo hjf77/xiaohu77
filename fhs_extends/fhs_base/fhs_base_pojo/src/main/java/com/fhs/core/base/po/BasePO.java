@@ -2,7 +2,6 @@ package com.fhs.core.base.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaJoinQueryWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fhs.common.constant.Constant;
@@ -53,7 +52,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     /**
      * 创建人
      */
-    @TableField(value = "create_user", fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NOT_NULL)
+    @TableField(value = "create_user", fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty("创建人")
     @Trans(type = TransType.RPC, targetClassName = "com.fhs.basics.po.UcenterMsUserPO", alias = "createUser", fields = "userName", serviceName = "basic", dataSource = "basic")
     protected Long createUser;
@@ -61,7 +60,7 @@ public abstract class BasePO<T extends BasePO> extends SuperBean<T> implements V
     /**
      * 创建时间
      */
-    @TableField(value = "create_time", fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NOT_NULL)
+    @TableField(value = "create_time", fill = FieldFill.INSERT,updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty("创建时间")
     @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date createTime;
