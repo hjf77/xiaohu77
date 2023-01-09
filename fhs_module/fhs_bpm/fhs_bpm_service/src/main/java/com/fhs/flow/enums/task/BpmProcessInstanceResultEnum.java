@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum BpmProcessInstanceResultEnum {
 
-    TODO(0, "待提交"),
+    TOSUBMIT(0, "待提交"),
     PROCESS(1, "处理中"),
     APPROVE(2, "通过"),
     REJECT(3, "不通过"),
