@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fhs.basics.po.ServiceDictItemPO;
 import com.fhs.basics.service.ServiceDictItemService;
 import com.fhs.basics.vo.ServiceDictItemVO;
@@ -31,5 +32,10 @@ public class ServiceWordBookServiceImpl extends BaseServiceImpl<ServiceDictItemV
         bean.setIsDelete(Constant.INT_FALSE);
         List<ServiceDictItemPO> dos = baseMapper.selectList(bean.asWrapper());
         return pos2vos(dos);
+    }
+
+    @Override
+    public List<ServiceDictItemPO> selectItemListMP(Wrapper<ServiceDictItemPO> queryWrapper) {
+        return baseMapper.selectList(queryWrapper);
     }
 }
